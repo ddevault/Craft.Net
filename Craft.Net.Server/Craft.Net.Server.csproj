@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E00C6FF6-BCD8-44E0-BCD8-5F1BDF201617}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Craft.Net.Server</RootNamespace>
+    <AssemblyName>Craft.Net.Server</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>False</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Externalconsole>True</Externalconsole>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>False</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>False</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Core" />
+    <Reference Include="BouncyCastle.Crypto">
+      <HintPath>..\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="MinecraftServer.cs" />
+    <Compile Include="World.cs" />
+    <Compile Include="MinecraftClient.cs" />
+    <Compile Include="PacketReader.cs" />
+    <Compile Include="Packets\Packet.cs" />
+    <Compile Include="PriorityQueue.cs" />
+    <Compile Include="Packets\DisconnectPacket.cs" />
+    <Compile Include="Packets\ServerListPingPacket.cs" />
+    <Compile Include="Priority.cs" />
+    <Compile Include="Packets\HandshakePacket.cs" />
+    <Compile Include="ILogProvider.cs" />
+    <Compile Include="Packets\EncryptionKeyRequestPacket.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Packets\" />
+  </ItemGroup>
+</Project>
