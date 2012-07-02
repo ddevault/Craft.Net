@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Craft.Net.Server
 {
@@ -283,13 +284,18 @@ namespace Craft.Net.Server
             List<Packet> results = new List<Packet>();
             while (Length != 0)
             {
+                byte[] data = Client.RecieveBuffer.Take(Length).ToArray();
+                if (Client.EncryptionEnabled)
+                    data = Client.Decrypter.ProcessBytes(data);
+
                 // Try to read in the next packet
-                var packetType = PacketTypes[Client.RecieveBuffer[0]];
+                var packetType = PacketTypes[data[0]];
+                Console.WriteLine("Processing packet 0x" + data[0].ToString("x"));
                 if (packetType == null)
                     throw new InvalidOperationException();
 
                 var workingPacket = (Packet)Activator.CreateInstance(packetType);
-                int length = workingPacket.TryReadPacket(Client.RecieveBuffer, Length);
+                int length = workingPacket.TryReadPacket(data, Length);
                 if (length == -1)
                 {
                     length = Length;

@@ -38,7 +38,7 @@ namespace Craft.Net.Server
         public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
         {
             byte[] buffer = new byte[] { PacketID }.Concat(CreateString(Reason)).ToArray();
-            Client.Socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, null, null);
+            Client.SendData(buffer);
             Client.IsDisconnected = true;
         }
     }

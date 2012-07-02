@@ -5,6 +5,7 @@ using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Modes;
 using Org.BouncyCastle.Crypto.Parameters;
 using javax.crypto.spec;
+using System.Linq;
 
 namespace Craft.Net.Server
 {
@@ -14,6 +15,8 @@ namespace Craft.Net.Server
 
         public EncryptionKeyResponsePacket()
         {
+            SharedSecret = new byte[0];
+            VerifyToken = new byte[0];
         }
 
         public override byte PacketID
@@ -41,28 +44,34 @@ namespace Craft.Net.Server
 
         public override void HandlePacket(MinecraftServer Server, ref MinecraftClient Client)
         {
-            Console.WriteLine("Preparing encryption.");
             Cipher cipher = Cipher.getInstance("RSA");
             cipher.init(Cipher.DECRYPT_MODE, Server.KeyPair.getPrivate());
             Client.SharedKey = new SecretKeySpec(cipher.doFinal(SharedSecret), "AES-128");
-            Console.WriteLine("Decrypted shared key, preparing encrypter.");
+
             Client.Encrypter = new BufferedBlockCipher(new CfbBlockCipher(new AesEngine(), 8));
             Client.Encrypter.Init(true,
                    new ParametersWithIV(new KeyParameter(Client.SharedKey.getEncoded()), 
                    Client.SharedKey.getEncoded(), 0, 16));
-            Console.WriteLine("Encrypter ready, preparing decrypter.");
+
             Client.Decrypter = new BufferedBlockCipher(new CfbBlockCipher(new AesEngine(), 8));
             Client.Decrypter.Init(false,
                    new ParametersWithIV(new KeyParameter(Client.SharedKey.getEncoded()), 
                    Client.SharedKey.getEncoded(), 0, 16));
 
             Client.SendPacket(new EncryptionKeyResponsePacket());
-            Console.WriteLine("Encryption ready.");
+            Server.ProcessSendQueue();
         }
 
         public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
         {
             // Send packet and enable encryption
+            byte[] buffer = new byte[] { PacketID }.Concat(
+                CreateShort((short)SharedSecret.Length)).Concat(
+                SharedSecret).Concat(
+                CreateShort((short)VerifyToken.Length)).Concat(
+                VerifyToken).ToArray();
+            Client.SendData(buffer);
+            Client.EncryptionEnabled = true;
         }
     }
 }

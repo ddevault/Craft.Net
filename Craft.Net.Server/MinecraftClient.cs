@@ -43,6 +43,13 @@ namespace Craft.Net.Server
         {
             this.SendQueue.Enqueue(packet);
         }
+
+        internal void SendData(byte[] Data)
+        {
+            if (this.EncryptionEnabled)
+                Data = Encrypter.ProcessBytes(Data);
+            this.Socket.BeginSend(Data, 0, Data.Length, SocketFlags.None, null, null);
+        }
     }
 }
 
