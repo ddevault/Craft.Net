@@ -12,6 +12,7 @@ using Org.BouncyCastle.Security;
 using Org.BouncyCastle.X509;
 using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.Math;
+using java.security;
 
 namespace Craft.Net.Server
 {
@@ -28,8 +29,6 @@ namespace Craft.Net.Server
         public string MotD;
         public int MaxPlayers;
         public bool OnlineMode;
-        public AsymmetricCipherKeyPair KeyPair;
-        public X509Certificate PublicCertificate;
         
         #endregion
         
@@ -40,6 +39,7 @@ namespace Craft.Net.Server
         private AutoResetEvent SendQueueReset;
 
         internal Random Random;
+        internal KeyPair KeyPair;
 
         #endregion
         
@@ -53,20 +53,9 @@ namespace Craft.Net.Server
             OnlineMode = false;
             Random = new Random();
 
-            RsaKeyPairGenerator pairGenerator = new RsaKeyPairGenerator();
-            pairGenerator.Init(new KeyGenerationParameters(new SecureRandom(), 1024));
-            KeyPair = pairGenerator.GenerateKeyPair();
-
-            X509V3CertificateGenerator x509 = new X509V3CertificateGenerator();
-            x509.SetSerialNumber(BigInteger.One);
-            x509.SetSubjectDN(new X509Name("CN=Craft.Net"));
-            x509.SetIssuerDN(new X509Name("CN=Craft.Net"));
-            x509.SetNotAfter(DateTime.MaxValue);
-            x509.SetNotBefore(DateTime.MinValue);
-            x509.SetSignatureAlgorithm("sha512WithRSA");
-            x509.SetPublicKey(KeyPair.Public);
-
-            PublicCertificate = x509.Generate(KeyPair.Private);
+            KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
+            keyGen.initialize(1024);
+            KeyPair = keyGen.generateKeyPair();
  
 			socket = new Socket(AddressFamily.InterNetwork,
                                 SocketType.Stream, ProtocolType.Tcp);

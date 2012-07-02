@@ -55,7 +55,8 @@ namespace Craft.Net.Server
             // Respond with encryption request
             Client.AuthenticationHash = CreateHash();
             EncryptionKeyRequestPacket keyRequest = 
-                new EncryptionKeyRequestPacket(Client.AuthenticationHash, Server.KeyPair);
+                new EncryptionKeyRequestPacket(Client.AuthenticationHash,
+                                               Server.KeyPair.getPublic());
             Client.SendPacket(keyRequest);
             Server.ProcessSendQueue();
         }

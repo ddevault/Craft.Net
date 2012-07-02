@@ -3,22 +3,23 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Security.Cryptography;
 using Org.BouncyCastle.Crypto;
+using java.security;
 
 namespace Craft.Net.Server
 {
     public class EncryptionKeyRequestPacket : Packet
     {
         public string AuthenticationHash;
-        public AsymmetricCipherKeyPair KeyPair;
+        public PublicKey PublicKey;
 
         public EncryptionKeyRequestPacket()
         {
         }
 
-        public EncryptionKeyRequestPacket(string AuthenticationHash, AsymmetricCipherKeyPair KeyPair)
+        public EncryptionKeyRequestPacket(string AuthenticationHash, PublicKey PublicKey)
         {
             this.AuthenticationHash = AuthenticationHash;
-            this.KeyPair = KeyPair;
+            this.PublicKey = PublicKey;
         }
 
         public override byte PacketID
@@ -45,7 +46,7 @@ namespace Craft.Net.Server
             RNGCryptoServiceProvider csp = new RNGCryptoServiceProvider();
             csp.GetBytes(verifyToken); // TODO: Encrypt this
 
-            byte[] certificate = Server.PublicCertificate.GetEncoded();
+            byte[] certificate = PublicKey.getEncoded();
 
             byte[] buffer = new byte[] { PacketID }
                 .Concat(CreateString(AuthenticationHash))
