@@ -32,6 +32,7 @@ namespace Craft.Net.Server
         public string MotD;
         public byte MaxPlayers;
         public bool OnlineMode;
+        public List<ILogProvider> LogProviders;
         
         #endregion
         
@@ -69,10 +70,7 @@ namespace Craft.Net.Server
             Random = new Random();
             DefaultWorldIndex = 0;
             Worlds = new List<World>();
-
-            KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
-            keyGen.initialize(1024);
-            KeyPair = keyGen.generateKeyPair();
+            LogProviders = new List<ILogProvider>();
  
 			socket = new Socket(AddressFamily.InterNetwork,
                                 SocketType.Stream, ProtocolType.Tcp);
@@ -85,15 +83,23 @@ namespace Craft.Net.Server
         
 		public void Start()
 		{
-            socket.Listen(10); // TODO: Customizable
+            Log("Starting Craft.Net server...");
+            KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
+            keyGen.initialize(1024);
+            KeyPair = keyGen.generateKeyPair();
+
+            socket.Listen(10);
             SendQueueReset = new AutoResetEvent(false);
             SendQueueThread = new Thread(SendQueueWorker);
             SendQueueThread.Start();
             socket.BeginAccept(AcceptConnectionAsync, null);
+
+            Log("Server started.");
 		}
 
         public void Stop()
         {
+            Log("Stopping server...");
             if (SendQueueThread != null)
             {
                 SendQueueThread.Abort();
@@ -105,11 +111,28 @@ namespace Craft.Net.Server
                     socket.Shutdown(SocketShutdown.Both);
                 socket = null;
             }
+            Log("Server stopped.");
         }
 
         public void ProcessSendQueue()
         {
             SendQueueReset.Set();
+        }
+
+        public void AddLogProvider(ILogProvider LogProvider)
+        {
+            LogProviders.Add(LogProvider);
+        }
+
+        public void Log(string Text)
+        {
+            Log(Text, LogLevel.Console);
+        }
+
+        public void Log(string Text, LogLevel LogLevel)
+        {
+            foreach (var provider in LogProviders)
+                provider.Log(Text, LogLevel);
         }
 
         public void AddWorld(World World)

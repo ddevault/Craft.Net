@@ -82,6 +82,7 @@
     <Compile Include="Worlds\Entity.cs" />
     <Compile Include="Worlds\Entities\PlayerEntity.cs" />
     <Compile Include="GameMode.cs" />
+    <Compile Include="ConsoleLogWriter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

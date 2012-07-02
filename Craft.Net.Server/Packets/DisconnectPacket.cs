@@ -37,6 +37,8 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
         {
+            if (!Reason.Contains("§"))
+                Server.Log("Disconnected client with reason " + Reason);
             byte[] buffer = new byte[] { PacketID }.Concat(CreateString(Reason)).ToArray();
             Client.SendData(buffer);
             Client.IsDisconnected = true;

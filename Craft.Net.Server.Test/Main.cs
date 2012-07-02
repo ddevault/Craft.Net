@@ -9,12 +9,12 @@ namespace Craft.Net.Server.Test
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("Starting Craft.Net Test Server");
             MinecraftServer minecraftServer = new MinecraftServer(
 		        new IPEndPoint(IPAddress.Any, 25565));
+            minecraftServer.AddLogProvider(new ConsoleLogWriter());
             minecraftServer.AddWorld(new World());
             minecraftServer.Start();
-            Console.WriteLine("Server started. Press any key to exit.");
+            Console.WriteLine("Press any key to exit.");
             Console.ReadKey(true);
             minecraftServer.Stop();
         }

@@ -67,6 +67,7 @@ namespace Craft.Net.Server.Packets
                         Client.SendPacket(new DisconnectPacket("Failed to verify username!"));
                     else
                     {
+                        Server.Log(Client.Username + " logged in.");
                         // Spawn player
                         Client.Entity = new PlayerEntity();
                         Client.Entity.Position = Server.DefaultWorld.SpawnPoint;
