@@ -1,0 +1,12 @@
+using System;
+
+namespace Craft.Net.Server
+{
+    public class IWorldGenerator
+    {
+        public IWorldGenerator()
+        {
+        }
+    }
+}
+
