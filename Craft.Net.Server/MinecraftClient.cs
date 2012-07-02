@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Collections.Generic;
 using Org.BouncyCastle.Crypto;
 using java.security;
+using Craft.Net.Server.Packets;
 
 namespace Craft.Net.Server
 {
@@ -18,6 +19,7 @@ namespace Craft.Net.Server
         public Queue<Packet> SendQueue;
         public bool IsDisconnected;
         public bool IsLoggedIn;
+        public DateTime LastKeepAlive;
 
         internal BufferedBlockCipher Encrypter, Decrypter;
         internal Key SharedKey;
@@ -41,6 +43,7 @@ namespace Craft.Net.Server
 
         public void SendPacket(Packet packet)
         {
+            packet.PacketContext = PacketContext.ServerToClient;
             this.SendQueue.Enqueue(packet);
         }
 

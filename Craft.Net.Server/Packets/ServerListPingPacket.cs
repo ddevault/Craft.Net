@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace Craft.Net.Server
+namespace Craft.Net.Server.Packets
 {
     public class ServerListPingPacket : Packet
     {

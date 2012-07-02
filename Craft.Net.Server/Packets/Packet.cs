@@ -3,10 +3,18 @@ using System.Net;
 using System.Text;
 using System.Linq;
 
-namespace Craft.Net.Server
+namespace Craft.Net.Server.Packets
 {
+    public enum PacketContext
+    {
+        ClientToServer,
+        ServerToClient
+    }
+
     public abstract class Packet
     {
+        public PacketContext PacketContext;
+
         public abstract byte PacketID { get; }
         public abstract int TryReadPacket(byte[] Buffer, int Length);
         public abstract void HandlePacket(MinecraftServer Server, ref MinecraftClient Client);
@@ -21,6 +29,11 @@ namespace Craft.Net.Server
         }
 
         protected static byte[] CreateShort(short Value)
+        {
+            return BitConverter.GetBytes(IPAddress.HostToNetworkOrder(Value));
+        }
+
+        protected static byte[] CreateInt(int Value)
         {
             return BitConverter.GetBytes(IPAddress.HostToNetworkOrder(Value));
         }

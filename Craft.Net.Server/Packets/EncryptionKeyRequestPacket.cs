@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using Org.BouncyCastle.Crypto;
 using java.security;
 
-namespace Craft.Net.Server
+namespace Craft.Net.Server.Packets
 {
     public class EncryptionKeyRequestPacket : Packet
     {

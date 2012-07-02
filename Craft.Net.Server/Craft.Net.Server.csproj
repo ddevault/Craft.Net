@@ -55,7 +55,6 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="MinecraftServer.cs" />
-    <Compile Include="World.cs" />
     <Compile Include="MinecraftClient.cs" />
     <Compile Include="PacketReader.cs" />
     <Compile Include="Packets\Packet.cs" />
@@ -67,9 +66,32 @@
     <Compile Include="ILogProvider.cs" />
     <Compile Include="Packets\EncryptionKeyRequestPacket.cs" />
     <Compile Include="Packets\EncryptionKeyResponsePacket.cs" />
+    <Compile Include="Packets\ClientStatusPacket.cs" />
+    <Compile Include="Packets\LoginPacket.cs" />
+    <Compile Include="World\World.cs" />
+    <Compile Include="World\Section.cs" />
+    <Compile Include="World\Chunk.cs" />
+    <Compile Include="World\Region.cs" />
+    <Compile Include="Blocks\Block.cs" />
+    <Compile Include="Items\Item.cs" />
+    <Compile Include="World\Vector3.cs" />
+    <Compile Include="Packets\KeepAlivePacket.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Packets\" />
+    <Folder Include="World\" />
+    <Folder Include="Blocks\" />
+    <Folder Include="Items\" />
   </ItemGroup>
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <TextStylePolicy inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/x-csharp" />
+          <CSharpFormattingPolicy IndentSwitchBody="True" AnonymousMethodBraceStyle="NextLine" PropertyBraceStyle="NextLine" PropertyGetBraceStyle="NextLine" PropertySetBraceStyle="NextLine" EventBraceStyle="NextLine" EventAddBraceStyle="NextLine" EventRemoveBraceStyle="NextLine" StatementBraceStyle="NextLine" ArrayInitializerBraceStyle="NextLine" BeforeMethodDeclarationParentheses="False" BeforeMethodCallParentheses="False" BeforeConstructorDeclarationParentheses="False" BeforeDelegateDeclarationParentheses="False" NewParentheses="False" inheritsSet="Mono" inheritsScope="text/x-csharp" scope="text/x-csharp" />
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
 </Project>

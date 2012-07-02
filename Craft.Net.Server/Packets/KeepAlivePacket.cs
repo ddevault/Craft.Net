@@ -1,45 +1,42 @@
 using System;
 using System.Linq;
-using System.Net.Sockets;
 
 namespace Craft.Net.Server.Packets
 {
-    public class DisconnectPacket : Packet
+    public class KeepAlivePacket : Packet
     {
-        public string Reason;
-        
-        public DisconnectPacket()
+        public int KeepAlive;
+
+        public KeepAlivePacket()
         {
-        }
-        
-        public DisconnectPacket(string Reason)
-        {
-            this.Reason = Reason;
         }
 
         public override byte PacketID
         {
             get
             {
-                return 0xFF;
+                return 0x00;
             }
         }
 
         public override int TryReadPacket(byte[] Buffer, int Length)
         {
-            throw new NotImplementedException();
+            int offset = 1;
+            if (!TryReadInt(Buffer, ref offset, out KeepAlive))
+                return -1;
+            return offset;
         }
 
         public override void HandlePacket(MinecraftServer Server, ref MinecraftClient Client)
         {
-            Client.IsDisconnected = true;
+            Client.LastKeepAlive = DateTime.Now;
         }
 
         public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
         {
-            byte[] buffer = new byte[] { PacketID }.Concat(CreateString(Reason)).ToArray();
+            byte[] buffer = new byte[] { PacketID }.Concat(
+                CreateInt(KeepAlive)).ToArray();
             Client.SendData(buffer);
-            Client.IsDisconnected = true;
         }
     }
 }

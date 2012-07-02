@@ -113,6 +113,7 @@ namespace Craft.Net.Server
                         {
                             int oldCount = Clients.Count;
                             var packet = Clients[i].SendQueue.Dequeue();
+                            Console.WriteLine("Sending packet 0x" + packet.PacketID.ToString("x"));
                             packet.SendPacket(this, Clients[i]);
                             if (Clients.Count < oldCount) // In case this client is disconnected
                                 break;
@@ -170,6 +171,7 @@ namespace Craft.Net.Server
                 if (client.Socket.Connected)
                     client.Socket.BeginDisconnect(false, null, null);
                 Clients.Remove(client);
+                Console.WriteLine("Disconnected client.");
             }
         }
         

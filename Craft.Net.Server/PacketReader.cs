@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Craft.Net.Server.Packets;
 
 namespace Craft.Net.Server
 {
@@ -14,7 +15,7 @@ namespace Craft.Net.Server
         private static readonly Type[] PacketTypes =
         {
             null, // 0x0
-            null, // 0x1
+            typeof(LoginPacket), // 0x1
             typeof(HandshakePacket), // 0x2
             null, // 0x3
             null, // 0x4
@@ -218,7 +219,7 @@ namespace Craft.Net.Server
             null, // 0xca
             null, // 0xcb
             null, // 0xcc
-            null, // 0xcd
+            typeof(ClientStatusPacket), // 0xcd
             null, // 0xce
             null, // 0xcf
             null, // 0xd0
@@ -268,7 +269,7 @@ namespace Craft.Net.Server
             typeof(EncryptionKeyResponsePacket), // 0xfc
             typeof(EncryptionKeyRequestPacket), // 0xfd
             typeof(ServerListPingPacket), // 0xfe
-            null, // 0xff
+            typeof(DisconnectPacket) // 0xff
         };
         #endregion
         
@@ -290,11 +291,11 @@ namespace Craft.Net.Server
 
                 // Try to read in the next packet
                 var packetType = PacketTypes[data[0]];
-                Console.WriteLine("Processing packet 0x" + data[0].ToString("x"));
                 if (packetType == null)
                     throw new InvalidOperationException();
-
+                Console.WriteLine("Handling packet 0x" + data[0].ToString("x"));
                 var workingPacket = (Packet)Activator.CreateInstance(packetType);
+                workingPacket.PacketContext = PacketContext.ClientToServer;
                 int length = workingPacket.TryReadPacket(data, Length);
                 if (length == -1)
                 {

@@ -7,7 +7,7 @@ using Org.BouncyCastle.Crypto.Parameters;
 using javax.crypto.spec;
 using System.Linq;
 
-namespace Craft.Net.Server
+namespace Craft.Net.Server.Packets
 {
     public class EncryptionKeyResponsePacket : Packet
     {

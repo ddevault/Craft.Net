@@ -2,7 +2,7 @@ using System;
 using System.Security.Cryptography;
 using System.Net;
 
-namespace Craft.Net.Server
+namespace Craft.Net.Server.Packets
 {
     public class HandshakePacket : Packet
     {
@@ -52,6 +52,8 @@ namespace Craft.Net.Server
                 Server.ProcessSendQueue();
                 return;
             }
+            Client.Username = Username;
+            Client.Hostname = Hostname + ":" + Port.ToString();
             // Respond with encryption request
             Client.AuthenticationHash = CreateHash();
             EncryptionKeyRequestPacket keyRequest = 
