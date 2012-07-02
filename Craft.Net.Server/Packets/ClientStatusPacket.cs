@@ -44,16 +44,17 @@ namespace Craft.Net.Server.Packets
 
         public override void HandlePacket(MinecraftServer Server, ref MinecraftClient Client)
         {
-            Console.WriteLine("Client status: " + ClientStatus.ToString());
             switch (ClientStatus)
             {
                 case ClientStatus.InitialSpawn:
+                    // Create a hash for session verification
                     SHA1 sha1 = SHA1.Create();
                     byte[] shaData = Encoding.UTF8.GetBytes(Client.AuthenticationHash)
                         .Concat(Client.SharedKey.getEncoded())
                         .Concat(Server.KeyPair.getPublic().getEncoded()).ToArray();
                     byte[] hash = sha1.ComputeHash(shaData);
 
+                    // Talk to session.minecraft.net
                     WebClient webClient = new WebClient();
                     StreamReader webReader = new StreamReader(webClient.OpenRead(
                             new Uri(string.Format(SessionCheckUri,
@@ -61,16 +62,24 @@ namespace Craft.Net.Server.Packets
                     string response = webReader.ReadToEnd();
                     webReader.Close();
 
-                    Console.WriteLine(string.Format(SessionCheckUri,
-                            Client.Username, GetHashString(hash)) + "\n" + response);
-
+                    // Kick or login player accordingly
                     if (response != "YES")
                         Client.SendPacket(new DisconnectPacket("Failed to verify username!"));
                     else
-                        Client.SendPacket(new LoginPacket());
+                    {
+                        // Spawn player
+                        Client.Entity = new PlayerEntity();
+                        Client.Entity.Position = Server.DefaultWorld.SpawnPoint;
+                        Server.DefaultWorld.EntityManager.SpawnEntity(Client.Entity);
+                        Client.SendPacket(new LoginPacket(Client.Entity.Id,
+                               Server.DefaultWorld.LevelType, Server.DefaultWorld.GameMode,
+                               Client.Entity.Dimension, Server.DefaultWorld.Difficulty,
+                               Server.MaxPlayers));
+                    }
                     Server.ProcessSendQueue();
                     break;
                 case ClientStatus.Respawn:
+                    // TODO
                     break;
                 default:
                     throw new InvalidOperationException();

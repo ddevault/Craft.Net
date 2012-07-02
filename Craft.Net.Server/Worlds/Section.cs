@@ -1,6 +1,6 @@
 using System;
 
-namespace Craft.Net.Server.World
+namespace Craft.Net.Server.Worlds
 {
     public class Section
     {

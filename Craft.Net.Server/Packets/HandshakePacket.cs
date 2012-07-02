@@ -38,8 +38,6 @@ namespace Craft.Net.Server.Packets
 
         public override void HandlePacket(MinecraftServer Server, ref MinecraftClient Client)
         {
-            Console.WriteLine(Username + " logged into " + Hostname + ":" + Port +
-                " with protocol version " + ProtocolVersion);
             if (ProtocolVersion < MinecraftServer.ProtocolVersion)
             {
                 Client.SendPacket(new DisconnectPacket("Outdated client!"));

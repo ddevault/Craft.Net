@@ -68,21 +68,28 @@
     <Compile Include="Packets\EncryptionKeyResponsePacket.cs" />
     <Compile Include="Packets\ClientStatusPacket.cs" />
     <Compile Include="Packets\LoginPacket.cs" />
-    <Compile Include="World\World.cs" />
-    <Compile Include="World\Section.cs" />
-    <Compile Include="World\Chunk.cs" />
-    <Compile Include="World\Region.cs" />
     <Compile Include="Blocks\Block.cs" />
     <Compile Include="Items\Item.cs" />
-    <Compile Include="World\Vector3.cs" />
     <Compile Include="Packets\KeepAlivePacket.cs" />
+    <Compile Include="Difficulty.cs" />
+    <Compile Include="Worlds\World.cs" />
+    <Compile Include="Worlds\Section.cs" />
+    <Compile Include="Worlds\Chunk.cs" />
+    <Compile Include="Worlds\Region.cs" />
+    <Compile Include="Worlds\Vector3.cs" />
+    <Compile Include="Worlds\Dimension.cs" />
+    <Compile Include="Worlds\EntityManager.cs" />
+    <Compile Include="Worlds\Entity.cs" />
+    <Compile Include="Worlds\Entities\PlayerEntity.cs" />
+    <Compile Include="GameMode.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Packets\" />
-    <Folder Include="World\" />
     <Folder Include="Blocks\" />
     <Folder Include="Items\" />
+    <Folder Include="Worlds\" />
+    <Folder Include="Worlds\Entities\" />
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>

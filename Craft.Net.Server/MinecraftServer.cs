@@ -12,6 +12,7 @@ using Org.BouncyCastle.Security;
 using Org.BouncyCastle.X509;
 using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.Math;
+using Craft.Net.Server.Worlds;
 using java.security;
 
 namespace Craft.Net.Server
@@ -26,8 +27,10 @@ namespace Craft.Net.Server
         public const int ProtocolVersion = 37;
 
         public List<MinecraftClient> Clients;
+        public List<World> Worlds;
+        public int DefaultWorldIndex;
         public string MotD;
-        public int MaxPlayers;
+        public byte MaxPlayers;
         public bool OnlineMode;
         
         #endregion
@@ -42,6 +45,18 @@ namespace Craft.Net.Server
         internal KeyPair KeyPair;
 
         #endregion
+
+        #region Public Properties
+
+        public World DefaultWorld
+        {
+            get
+            {
+                return Worlds[DefaultWorldIndex];
+            }
+        }
+
+        #endregion
         
         #region Constructor
 		
@@ -52,6 +67,8 @@ namespace Craft.Net.Server
             MotD = "Craft.Net Server";
             OnlineMode = false;
             Random = new Random();
+            DefaultWorldIndex = 0;
+            Worlds = new List<World>();
 
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
             keyGen.initialize(1024);
@@ -94,6 +111,21 @@ namespace Craft.Net.Server
         {
             SendQueueReset.Set();
         }
+
+        public void AddWorld(World World)
+        {
+            Worlds.Add(World);
+        }
+
+        public World GetClientWorld(MinecraftClient Client)
+        {
+            foreach (World world in this.Worlds)
+            {
+                if (world.EntityManager.Entities.Contains(Client.Entity))
+                    return world;
+            }
+            return null;
+        }
         
         #endregion
         
@@ -113,7 +145,6 @@ namespace Craft.Net.Server
                         {
                             int oldCount = Clients.Count;
                             var packet = Clients[i].SendQueue.Dequeue();
-                            Console.WriteLine("Sending packet 0x" + packet.PacketID.ToString("x"));
                             packet.SendPacket(this, Clients[i]);
                             if (Clients.Count < oldCount) // In case this client is disconnected
                                 break;
@@ -171,7 +202,6 @@ namespace Craft.Net.Server
                 if (client.Socket.Connected)
                     client.Socket.BeginDisconnect(false, null, null);
                 Clients.Remove(client);
-                Console.WriteLine("Disconnected client.");
             }
         }
         

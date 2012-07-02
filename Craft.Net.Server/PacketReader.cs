@@ -293,7 +293,7 @@ namespace Craft.Net.Server
                 var packetType = PacketTypes[data[0]];
                 if (packetType == null)
                     throw new InvalidOperationException();
-                Console.WriteLine("Handling packet 0x" + data[0].ToString("x"));
+
                 var workingPacket = (Packet)Activator.CreateInstance(packetType);
                 workingPacket.PacketContext = PacketContext.ClientToServer;
                 int length = workingPacket.TryReadPacket(data, Length);

@@ -20,9 +20,11 @@ namespace Craft.Net.Server
         public bool IsDisconnected;
         public bool IsLoggedIn;
         public DateTime LastKeepAlive;
+        public PlayerEntity Entity;
 
         internal BufferedBlockCipher Encrypter, Decrypter;
         internal Key SharedKey;
+        internal int VerificationKey;
         internal int RecieveBufferIndex;
         internal byte[] RecieveBuffer;
         internal string AuthenticationHash;
