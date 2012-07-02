@@ -5,6 +5,7 @@ using System.Linq;
 using Org.BouncyCastle.Math;
 using System.Net;
 using System.IO;
+using Craft.Net.Server.Worlds.Entities;
 
 namespace Craft.Net.Server.Packets
 {

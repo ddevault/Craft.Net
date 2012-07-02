@@ -1,9 +1,16 @@
 using System;
 
-namespace Craft.Net.Server
+namespace Craft.Net.Server.Blocks
 {
-    public class Block
+    public abstract class Block
     {
+        public byte Metadata, BlockLight, SkyLight;
+
+        public abstract byte BlockId
+        {
+            get;
+        }
+
         public Block()
         {
         }

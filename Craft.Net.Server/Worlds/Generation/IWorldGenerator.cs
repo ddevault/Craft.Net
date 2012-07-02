@@ -1,12 +1,14 @@
 using System;
 
-namespace Craft.Net.Server
+namespace Craft.Net.Server.Worlds.Generation
 {
-    public class IWorldGenerator
+    public interface IWorldGenerator
     {
-        public IWorldGenerator()
-        {
-        }
+        string LevelType { get; }
+        /// <summary>
+        /// Generates one chunk at the given position.
+        /// </summary>
+        Chunk CreateChunk(Vector3 Position);
     }
 }
 

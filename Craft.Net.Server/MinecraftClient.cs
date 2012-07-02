@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Org.BouncyCastle.Crypto;
 using java.security;
 using Craft.Net.Server.Packets;
+using Craft.Net.Server.Worlds.Entities;
 
 namespace Craft.Net.Server
 {

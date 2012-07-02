@@ -51,6 +51,9 @@
     <Reference Include="IKVM.Runtime">
       <HintPath>..\IKVM.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
@@ -84,6 +87,13 @@
     <Compile Include="GameMode.cs" />
     <Compile Include="ConsoleLogWriter.cs" />
     <Compile Include="Packets\LocaleAndViewDistancePacket.cs" />
+    <Compile Include="Worlds\Generation\IWorldGenerator.cs" />
+    <Compile Include="Worlds\NibbleArray.cs" />
+    <Compile Include="Worlds\Generation\FlatlandGenerator.cs" />
+    <Compile Include="Blocks\GrassBlock.cs" />
+    <Compile Include="Blocks\DirtBlock.cs" />
+    <Compile Include="Blocks\BedrockBlock.cs" />
+    <Compile Include="Blocks\AirBlock.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -92,6 +102,7 @@
     <Folder Include="Items\" />
     <Folder Include="Worlds\" />
     <Folder Include="Worlds\Entities\" />
+    <Folder Include="Worlds\Generation\" />
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>
