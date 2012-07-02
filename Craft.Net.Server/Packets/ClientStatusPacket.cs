@@ -49,9 +49,9 @@ namespace Craft.Net.Server.Packets
             {
                 case ClientStatus.InitialSpawn:
                     SHA1 sha1 = SHA1.Create();
-                    byte[] shaData = Encoding.ASCII.GetBytes(Client.AuthenticationHash)
-                        .Concat(Server.KeyPair.getPublic().getEncoded())
-                        .Concat(Client.SharedKey.getEncoded()).ToArray();
+                    byte[] shaData = Encoding.UTF8.GetBytes(Client.AuthenticationHash)
+                        .Concat(Client.SharedKey.getEncoded())
+                        .Concat(Server.KeyPair.getPublic().getEncoded()).ToArray();
                     byte[] hash = sha1.ComputeHash(shaData);
 
                     WebClient webClient = new WebClient();
