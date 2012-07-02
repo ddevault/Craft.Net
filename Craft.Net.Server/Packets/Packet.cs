@@ -47,6 +47,16 @@ namespace Craft.Net.Server.Packets
             return IPAddress.NetworkToHostOrder(BitConverter.ToInt16(buffer, offset));
         }
 
+        protected static bool TryReadBoolean(byte[] buffer, ref int offset, out bool value)
+        {
+            value = false;
+            if (buffer.Length - offset >= 1)
+                value = buffer[offset++] == 1;
+            else
+                return false;
+            return true;
+        }
+
         protected static bool TryReadByte(byte[] buffer, ref int offset, out byte value)
         {
             value = 0;

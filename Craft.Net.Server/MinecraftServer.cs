@@ -209,15 +209,15 @@ namespace Craft.Net.Server
                                                client.RecieveBuffer.Length - client.RecieveBufferIndex,
                                                SocketFlags.None, SocketRecieveAsync, client);
                 }
-                catch (InvalidOperationException)
+                catch (InvalidOperationException e)
                 {
                     client.IsDisconnected = true;
-                    Console.WriteLine("Disconnected client with protocol error.");
+                    Log("Disconnected client with protocol error. " + e.Message);
                 }
                 catch (NotImplementedException)
                 {
                     client.IsDisconnected = true;
-                    Console.WriteLine("Disconnected client using unsupported features.");
+                    Log("Disconnected client using unsupported features.");
                 }
             }
             if (client.IsDisconnected)

@@ -83,6 +83,7 @@
     <Compile Include="Worlds\Entities\PlayerEntity.cs" />
     <Compile Include="GameMode.cs" />
     <Compile Include="ConsoleLogWriter.cs" />
+    <Compile Include="Packets\LocaleAndViewDistancePacket.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

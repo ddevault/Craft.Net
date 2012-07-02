@@ -218,7 +218,7 @@ namespace Craft.Net.Server
             null, // 0xc9
             null, // 0xca
             null, // 0xcb
-            null, // 0xcc
+            typeof(LocaleAndViewDistancePacket), // 0xcc
             typeof(ClientStatusPacket), // 0xcd
             null, // 0xce
             null, // 0xcf
@@ -292,7 +292,8 @@ namespace Craft.Net.Server
                 // Try to read in the next packet
                 var packetType = PacketTypes[data[0]];
                 if (packetType == null)
-                    throw new InvalidOperationException();
+                    throw new InvalidOperationException("Invalid packet ID 0x" +
+                        data[0].ToString("x").ToUpper());
 
                 var workingPacket = (Packet)Activator.CreateInstance(packetType);
                 workingPacket.PacketContext = PacketContext.ClientToServer;

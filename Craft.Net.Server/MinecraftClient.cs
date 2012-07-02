@@ -21,6 +21,13 @@ namespace Craft.Net.Server
         public bool IsLoggedIn;
         public DateTime LastKeepAlive;
         public PlayerEntity Entity;
+        public string Locale;
+        /// <summary>
+        /// The view distance in chunks.
+        /// </summary>
+        public int ViewDistance;
+        public bool ChatEnabled, ColorsEnabled;
+        public Dictionary<string, object> Tags;
 
         internal BufferedBlockCipher Encrypter, Decrypter;
         internal Key SharedKey;
@@ -41,6 +48,8 @@ namespace Craft.Net.Server
             this.IsDisconnected = false;
             this.IsLoggedIn = false;
             this.EncryptionEnabled = false;
+            this.Locale = "en_US";
+            this.ViewDistance = 8;
         }
 
         public void SendPacket(Packet packet)
