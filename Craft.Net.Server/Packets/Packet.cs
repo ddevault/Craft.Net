@@ -44,6 +44,19 @@ namespace Craft.Net.Server
             return true;
         }
 
+        protected static bool TryReadShort(byte[] buffer, ref int offset, out short value)
+        {
+            value = -1;
+            if (buffer.Length - offset >= 2)
+            {
+                value = IPAddress.NetworkToHostOrder(BitConverter.ToInt16(buffer, offset));
+                offset += 2;
+                return true;
+            }
+            else
+                return false;
+        }
+
         protected static bool TryReadInt(byte[] buffer, ref int offset, out int value)
         {
             value = -1;
@@ -74,6 +87,20 @@ namespace Craft.Net.Server
             }
             else
                 return false;
+        }
+
+        protected static bool TryReadArray(byte[] buffer, short length, ref int offset, out byte[] value)
+        {
+            value = null;
+            if (buffer.Length - offset < length)
+                return false;
+            else
+            {
+                value = new byte[length];
+                Array.Copy(buffer, offset, value, 0, length);
+                offset += length;
+                return true;
+            }
         }
 
         #endregion

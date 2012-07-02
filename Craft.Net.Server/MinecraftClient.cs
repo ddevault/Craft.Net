@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Collections.Generic;
 using Org.BouncyCastle.Crypto;
+using java.security;
 
 namespace Craft.Net.Server
 {
@@ -18,7 +19,8 @@ namespace Craft.Net.Server
         public bool IsDisconnected;
         public bool IsLoggedIn;
 
-        internal BufferedBlockCipher Decrypter;
+        internal BufferedBlockCipher Encrypter, Decrypter;
+        internal Key SharedKey;
         internal int RecieveBufferIndex;
         internal byte[] RecieveBuffer;
         internal string AuthenticationHash;
