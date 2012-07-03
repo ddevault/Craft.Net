@@ -13,6 +13,7 @@ namespace Craft.Net.Server.Test
             // Create a server on 0.0.0.0:25565
             MinecraftServer minecraftServer = new MinecraftServer(
 		        new IPEndPoint(IPAddress.Any, 25565));
+            minecraftServer.OnlineMode = false;
             // Add a console logger
             minecraftServer.AddLogProvider(new ConsoleLogWriter());
             // Add a flatland world

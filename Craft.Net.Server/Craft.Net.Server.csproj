@@ -61,10 +61,8 @@
     <Compile Include="MinecraftClient.cs" />
     <Compile Include="PacketReader.cs" />
     <Compile Include="Packets\Packet.cs" />
-    <Compile Include="PriorityQueue.cs" />
     <Compile Include="Packets\DisconnectPacket.cs" />
     <Compile Include="Packets\ServerListPingPacket.cs" />
-    <Compile Include="Priority.cs" />
     <Compile Include="Packets\HandshakePacket.cs" />
     <Compile Include="ILogProvider.cs" />
     <Compile Include="Packets\EncryptionKeyRequestPacket.cs" />
@@ -94,6 +92,11 @@
     <Compile Include="Blocks\DirtBlock.cs" />
     <Compile Include="Blocks\BedrockBlock.cs" />
     <Compile Include="Blocks\AirBlock.cs" />
+    <Compile Include="Packets\PlayerPositionAndLookPacket.cs" />
+    <Compile Include="Packets\ChatMessagePacket.cs" />
+    <Compile Include="Packets\PlayerPacket.cs" />
+    <Compile Include="Packets\PlayerPositionPacket.cs" />
+    <Compile Include="Packets\PlayerLookPacket.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

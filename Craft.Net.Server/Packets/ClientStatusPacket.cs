@@ -64,7 +64,7 @@ namespace Craft.Net.Server.Packets
                     webReader.Close();
 
                     // Kick or login player accordingly
-                    if (response != "YES")
+                    if (response != "YES" && Server.OnlineMode)
                         Client.SendPacket(new DisconnectPacket("Failed to verify username!"));
                     else
                     {

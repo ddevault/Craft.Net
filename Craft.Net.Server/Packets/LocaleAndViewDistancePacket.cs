@@ -57,7 +57,7 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
         {
-            throw new System.NotImplementedException();
+            throw new InvalidOperationException();
         }
     }
 }

@@ -93,6 +93,34 @@ namespace Craft.Net.Server.Packets
                 return false;
         }
 
+        protected static bool TryReadFloat(byte[] buffer, ref int offset, out float value)
+        {
+            value = -1;
+            if (buffer.Length - offset >= 4)
+            {
+                Array.Reverse(buffer, offset, 4);
+                value = BitConverter.ToSingle(buffer, offset);
+                offset += 4;
+                return true;
+            }
+            else
+                return false;
+        }
+
+        protected static bool TryReadDouble(byte[] buffer, ref int offset, out double value)
+        {
+            value = -1;
+            if (buffer.Length - offset >= 8)
+            {
+                Array.Reverse(buffer, offset, 8);
+                value = BitConverter.ToDouble(buffer, offset);
+                offset += 8;
+                return true;
+            }
+            else
+                return false;
+        }
+
         protected static bool TryReadString(byte[] buffer, ref int offset, out string value)
         {
             value = null;

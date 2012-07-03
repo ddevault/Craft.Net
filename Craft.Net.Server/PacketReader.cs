@@ -14,7 +14,7 @@ namespace Craft.Net.Server
         /// </summary>
         private static readonly Type[] PacketTypes =
         {
-            null, // 0x0
+            typeof(KeepAlivePacket), // 0x0
             typeof(LoginPacket), // 0x1
             typeof(HandshakePacket), // 0x2
             null, // 0x3
@@ -24,10 +24,10 @@ namespace Craft.Net.Server
             null, // 0x7
             null, // 0x8
             null, // 0x9
-            null, // 0xa
-            null, // 0xb
-            null, // 0xc
-            null, // 0xd
+            typeof(PlayerPacket), // 0xa
+            typeof(PlayerPositionPacket), // 0xb
+            typeof(PlayerLookPacket), // 0xc
+            typeof(PlayerPositionAndLookPacket), // 0xd
             null, // 0xe
             null, // 0xf
             null, // 0x10

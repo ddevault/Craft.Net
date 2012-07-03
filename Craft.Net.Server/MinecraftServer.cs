@@ -42,7 +42,7 @@ namespace Craft.Net.Server
         private Thread SendQueueThread;
         private AutoResetEvent SendQueueReset;
 
-        internal Random Random;
+        internal static Random Random;
         internal KeyPair KeyPair;
 
         #endregion

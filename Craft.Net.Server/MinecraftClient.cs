@@ -36,7 +36,7 @@ namespace Craft.Net.Server
         internal int RecieveBufferIndex;
         internal byte[] RecieveBuffer;
         internal string AuthenticationHash;
-        internal bool EncryptionEnabled;
+        internal bool EncryptionEnabled, ReadyToSpawn;
         
         #endregion
         
@@ -51,6 +51,7 @@ namespace Craft.Net.Server
             this.EncryptionEnabled = false;
             this.Locale = "en_US";
             this.ViewDistance = 8;
+            this.ReadyToSpawn = false;
         }
 
         public void SendPacket(Packet packet)

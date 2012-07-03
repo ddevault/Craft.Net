@@ -19,15 +19,22 @@ namespace Craft.Net.Server.Worlds
         public GameMode GameMode;
         public Difficulty Difficulty;
         public IWorldGenerator WorldGenerator;
+        public long Seed;
 
         public World(IWorldGenerator WorldGenerator)
         {
             EntityManager = new EntityManager();
             Name = "world";
-            SpawnPoint = Vector3.Zero;
             GameMode = GameMode.Creative;
             Difficulty = Difficulty.Peaceful;
             this.WorldGenerator = WorldGenerator;
+            SpawnPoint = WorldGenerator.SpawnPoint;
+            Seed = MinecraftServer.Random.Next();
+        }
+
+        public World(IWorldGenerator WorldGenerator, long Seed) : this(WorldGenerator)
+        {
+            this.Seed = Seed;
         }
     }
 }

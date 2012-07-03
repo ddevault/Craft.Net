@@ -32,6 +32,16 @@ namespace Craft.Net.Server.Worlds.Generation
                 return "FLAT";
             }
         }
+
+        public double Seed { get; set; }
+
+        public Vector3 SpawnPoint
+        {
+            get
+            {
+                return new Vector3(0, 16, 0);
+            }
+        }
     }
 }
 
