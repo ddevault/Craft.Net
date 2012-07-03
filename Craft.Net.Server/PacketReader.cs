@@ -64,8 +64,8 @@ namespace Craft.Net.Server
             null, // 0x2f
             null, // 0x30
             null, // 0x31
-            null, // 0x32
-            null, // 0x33
+            typeof(ChunkAllocationPacket), // 0x32
+            typeof(ChunkDataPacket), // 0x33
             null, // 0x34
             null, // 0x35
             null, // 0x36

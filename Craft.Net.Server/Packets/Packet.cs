@@ -28,6 +28,19 @@ namespace Craft.Net.Server.Packets
                 .Concat(Encoding.BigEndianUnicode.GetBytes(Text)).ToArray();
         }
 
+        protected static byte[] CreateBoolean(bool Value)
+        {
+            return new byte[]
+            {
+                (byte)(Value ? 1 : 0)
+            };
+        }
+
+        protected static byte[] CreateUShort(ushort Value)
+        {
+            return BitConverter.GetBytes((ushort)IPAddress.HostToNetworkOrder((short)Value));
+        }
+
         protected static byte[] CreateShort(short Value)
         {
             return BitConverter.GetBytes(IPAddress.HostToNetworkOrder(Value));
