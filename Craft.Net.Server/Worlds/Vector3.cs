@@ -23,6 +23,8 @@ namespace Craft.Net.Server.Worlds
             return new Vector3((int)X, (int)Y, (int)Z);
         }
 
+        #region Constants
+
         public static Vector3 Zero
         {
             get
@@ -30,6 +32,96 @@ namespace Craft.Net.Server.Worlds
                 return new Vector3(0);
             }
         }
+
+        public static Vector3 One
+        {
+            get
+            {
+                return new Vector3(1);
+            }
+        }
+
+        public static Vector3 Up
+        {
+            get
+            {
+                return new Vector3(0, 1, 0);
+            }
+        }
+
+        public static Vector3 Down
+        {
+            get
+            {
+                return new Vector3(0, -1, 0);
+            }
+        }
+
+        public static Vector3 Left
+        {
+            get
+            {
+                return new Vector3(-1, 0, 0);
+            }
+        }
+
+        public static Vector3 Right
+        {
+            get
+            {
+                return new Vector3(1, 0, 0);
+            }
+        }
+
+        public static Vector3 Backwards
+        {
+            get
+            {
+                return new Vector3(0, 0, -1);
+            }
+        }
+
+        public static Vector3 Forwards
+        {
+            get
+            {
+                return new Vector3(0, 0, 1);
+            }
+        }
+
+        public static Vector3 South
+        {
+            get
+            {
+                return new Vector3(0, 0, 1);
+            }
+        }
+
+        public static Vector3 North
+        {
+            get
+            {
+                return new Vector3(0, 0, -1);
+            }
+        }
+
+        public static Vector3 West
+        {
+            get
+            {
+                return new Vector3(-1, 0, 0);
+            }
+        }
+
+        public static Vector3 East
+        {
+            get
+            {
+                return new Vector3(1, 0, 0);
+            }
+        }
+
+        #endregion
     }
 }
 
