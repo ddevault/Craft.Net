@@ -1,5 +1,6 @@
 using System;
 using Craft.Net.Server.Worlds.Generation;
+using Craft.Net.Server.Blocks;
 
 namespace Craft.Net.Server.Worlds
 {
@@ -35,6 +36,11 @@ namespace Craft.Net.Server.Worlds
         public World(IWorldGenerator WorldGenerator, long Seed) : this(WorldGenerator)
         {
             this.Seed = Seed;
+        }
+
+        public Block GetBlock(Vector3 position)
+        {
+            return null;
         }
     }
 }

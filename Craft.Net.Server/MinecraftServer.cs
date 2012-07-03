@@ -82,7 +82,13 @@ namespace Craft.Net.Server
         #region Public Methods
         
 		public void Start()
-		{
+        {
+            if (Worlds.Count == 0)
+            {
+                Log("Unable to start server with no worlds loaded.");
+                throw new InvalidOperationException("Unable to start server with no worlds loaded.");
+            }
+
             Log("Starting Craft.Net server...");
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
             keyGen.initialize(1024);
