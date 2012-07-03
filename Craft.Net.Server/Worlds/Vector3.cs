@@ -23,6 +23,11 @@ namespace Craft.Net.Server.Worlds
             return new Vector3((int)X, (int)Y, (int)Z);
         }
 
+        public override string ToString()
+        {
+            return string.Format("{0}, {1}, {2}", X, Y, Z);
+        }
+
         #region Constants
 
         public static Vector3 Zero

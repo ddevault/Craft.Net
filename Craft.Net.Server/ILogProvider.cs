@@ -2,21 +2,16 @@ using System;
 
 namespace Craft.Net.Server
 {
-    public enum LogLevel
+    public enum LogImportance
     {
-        /// <summary>
-        /// This text should be output to the console and the log file.
-        /// </summary>
-        Console,
-        /// <summary>
-        /// This text should be output to the log file.
-        /// </summary>
-        LogFile,
+        Low = 0,
+        Medium = 1,
+        High = 2
     }
 
     public interface ILogProvider
     {
-        void Log(string text, LogLevel Level);
+        void Log(string text, LogImportance Level);
     }
 }
 

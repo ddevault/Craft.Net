@@ -14,11 +14,17 @@ namespace Craft.Net.Server.Worlds
         public NibbleArray Metadata;
         public NibbleArray BlockLight;
         public NibbleArray SkyLight;
-        public bool IsAir;
+        private int NonairCount;
+        public bool IsAir
+        {
+            get
+            {
+                return NonairCount == 0;
+            }
+        }
 
         public Section(byte Y)
         {
-            this.IsAir = true;
             this.Y = Y;
             this.Blocks = new byte[Width * Height * Depth];
             this.Metadata = new NibbleArray(Width * Height * Depth);
@@ -26,6 +32,7 @@ namespace Craft.Net.Server.Worlds
             this.SkyLight = new NibbleArray(Width * Height * Depth);
             for (int i = 0; i < this.SkyLight.Data.Length; i++)
                 this.SkyLight.Data[i] = 0xFF;
+            this.NonairCount = 0;
         }
 
         /// <summary>
@@ -41,18 +48,10 @@ namespace Craft.Net.Server.Worlds
             this.Metadata[index] = value.Metadata;
             this.BlockLight[index] = value.BlockLight;
             this.SkyLight[index] = value.SkyLight;
-        }
-
-        public void SetBlock(Vector3 position, byte value)
-        {
-            int x = (int)position.X;
-            int y = (int)position.Y;
-            int z = (int)position.Z;
-            int index = x + (z * Width) + (y * Height * Width);
-            this.Blocks[index] = value;
-            this.Metadata[index] = 0;
-            this.BlockLight[index] = 0;
-            this.SkyLight[index] = 0xF;
+            if (value is AirBlock)
+                NonairCount--;
+            else
+                NonairCount++;
         }
 
         public Block GetBlock(Vector3 position)

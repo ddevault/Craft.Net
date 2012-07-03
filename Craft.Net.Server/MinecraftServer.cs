@@ -133,10 +133,10 @@ namespace Craft.Net.Server
 
         public void Log(string Text)
         {
-            Log(Text, LogLevel.Console);
+            Log(Text, LogImportance.High);
         }
 
-        public void Log(string Text, LogLevel LogLevel)
+        public void Log(string Text, LogImportance LogLevel)
         {
             foreach (var provider in LogProviders)
                 provider.Log(Text, LogLevel);
@@ -175,6 +175,9 @@ namespace Craft.Net.Server
                         {
                             int oldCount = Clients.Count;
                             var packet = Clients[i].SendQueue.Dequeue();
+                            Log("[SERVER->CLIENT] " + Clients[i].Socket.RemoteEndPoint.ToString(),
+                                LogImportance.Low);
+                            Log(packet.ToString(), LogImportance.Low);
                             packet.SendPacket(this, Clients[i]);
                             if (Clients.Count < oldCount) // In case this client is disconnected
                                 break;
@@ -188,7 +191,7 @@ namespace Craft.Net.Server
         private void AcceptConnectionAsync(IAsyncResult result)
         {
             Socket connection = socket.EndAccept(result);
-            MinecraftClient client = new MinecraftClient(connection);
+            MinecraftClient client = new MinecraftClient(connection, this);
             Clients.Add(client);
             client.Socket.SendTimeout = 5000;
             client.Socket.BeginReceive(client.RecieveBuffer, client.RecieveBufferIndex,
@@ -210,7 +213,9 @@ namespace Craft.Net.Server
                 {
                     var packets = PacketReader.TryReadPackets(ref client, length);
                     foreach (var packet in packets)
+                    {
                         packet.HandlePacket(this, ref client);
+                    }
 
                     client.Socket.BeginReceive(client.RecieveBuffer, client.RecieveBufferIndex,
                                                client.RecieveBuffer.Length - client.RecieveBufferIndex,

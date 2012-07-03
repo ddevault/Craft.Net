@@ -1,4 +1,6 @@
 using System;
+using Craft.Net.Server.Worlds;
+using System.Linq;
 
 namespace Craft.Net.Server.Packets
 {
@@ -9,6 +11,10 @@ namespace Craft.Net.Server.Packets
         public bool OnGround;
 
         public PlayerPositionAndLookPacket()
+        {
+        }
+
+        public PlayerPositionAndLookPacket(Vector3 Position, float Yaw, float Pitch, bool OnGround)
         {
         }
 
@@ -49,7 +55,15 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
         {
-            throw new System.NotImplementedException();
+            byte[] buffer = new byte[] { PacketID }
+                .Concat(CreateDouble(X))
+                .Concat(CreateDouble(Stance))
+                .Concat(CreateDouble(Y))
+                .Concat(CreateDouble(Z))
+                .Concat(CreateFloat(Yaw))
+                .Concat(CreateFloat(Pitch))
+                .Concat(CreateBoolean(OnGround)).ToArray();
+            Client.SendData(buffer);
         }
     }
 }

@@ -1,20 +1,24 @@
 using System;
+using System.IO;
 
 namespace Craft.Net.Server
 {
-    public class ConsoleLogWriter : ILogProvider
+    public class FileLogWriter : ILogProvider
     {
         public LogImportance MinimumImportance;
+        private StreamWriter LogWriter;
 
-        public ConsoleLogWriter(LogImportance MinimumImportance)
+        public FileLogWriter(string File, LogImportance MinimumImportance)
         {
             this.MinimumImportance = MinimumImportance;
+            LogWriter = new StreamWriter(File, true);
         }
 
         public void Log(string text, LogImportance Level)
         {
             if (Level >= MinimumImportance)
-                Console.WriteLine(text);
+                LogWriter.WriteLine(text);
+            LogWriter.Flush();
         }
     }
 }

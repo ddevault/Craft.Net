@@ -2,6 +2,7 @@ using System;
 using System.Net;
 using System.Text;
 using System.Linq;
+using System.Reflection;
 
 namespace Craft.Net.Server.Packets
 {
@@ -13,14 +14,26 @@ namespace Craft.Net.Server.Packets
 
     public abstract class Packet
     {
-        public PacketContext PacketContext;
+        public PacketContext PacketContext { get; set; }
 
         public abstract byte PacketID { get; }
         public abstract int TryReadPacket(byte[] Buffer, int Length);
         public abstract void HandlePacket(MinecraftServer Server, ref MinecraftClient Client);
         public abstract void SendPacket(MinecraftServer Server, MinecraftClient Client);
 
-        #region Packet Builder Methods
+        public override string ToString()
+        {
+            Type type = this.GetType();
+            string value = type.Name + " (0x" + this.PacketID.ToString("x") + ")\n";
+            var fields = type.GetFields();
+            foreach (var field in fields)
+            {
+                value += "\t" + field.Name + ": " + field.GetValue(this).ToString() + "\n";
+            }
+            return value.Remove(value.Length - 1);
+        }
+
+        #region Packet Writer Methods
 
         protected static byte[] CreateString(string Text)
         {
@@ -49,6 +62,16 @@ namespace Craft.Net.Server.Packets
         protected static byte[] CreateInt(int Value)
         {
             return BitConverter.GetBytes(IPAddress.HostToNetworkOrder(Value));
+        }
+
+        protected static byte[] CreateFloat(float Value)
+        {
+            return BitConverter.GetBytes(Value).Reverse().ToArray();
+        }
+
+        protected static byte[] CreateDouble(double Value)
+        {
+            return BitConverter.GetBytes(Value).Reverse().ToArray();
         }
 
         #endregion

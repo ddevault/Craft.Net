@@ -12,12 +12,6 @@ namespace Craft.Net.Server.Blocks
     /// <remarks></remarks>
     public abstract class StairsBlock : Block
     {
-        public override bool BlockPlaced(World world, Vector3 position, Vector3 blockClicked, byte facing, Entity placedBy)
-        {
-            // TODO
-            return true;
-        }
-
         public override BlockOpacity Transparent
         {
             get { return BlockOpacity.NonCubeSolid; }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Craft.Net.Server.Worlds.Entities;
 
 namespace Craft.Net.Server.Worlds
 {

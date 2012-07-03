@@ -77,6 +77,11 @@ namespace Craft.Net.Server.Packets
                                Server.DefaultWorld.LevelType, Server.DefaultWorld.GameMode,
                                Client.Entity.Dimension, Server.DefaultWorld.Difficulty,
                                Server.MaxPlayers));
+
+                        // Send initial chunks
+                        Client.UpdateChunks();
+                        Client.SendPacket(new PlayerPositionAndLookPacket(
+                            Client.Entity.Position, Client.Entity.Yaw, Client.Entity.Pitch, true));
                     }
                     Server.ProcessSendQueue();
                     break;

@@ -79,7 +79,6 @@
     <Compile Include="Worlds\Vector3.cs" />
     <Compile Include="Worlds\Dimension.cs" />
     <Compile Include="Worlds\EntityManager.cs" />
-    <Compile Include="Worlds\Entity.cs" />
     <Compile Include="Worlds\Entities\PlayerEntity.cs" />
     <Compile Include="GameMode.cs" />
     <Compile Include="ConsoleLogWriter.cs" />
@@ -224,6 +223,8 @@
     <Compile Include="Blocks\AirBlock.cs" />
     <Compile Include="Packets\ChunkAllocationPacket.cs" />
     <Compile Include="Packets\ChunkDataPacket.cs" />
+    <Compile Include="Worlds\Entities\Entity.cs" />
+    <Compile Include="FileLogWriter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

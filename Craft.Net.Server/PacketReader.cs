@@ -306,6 +306,12 @@ namespace Craft.Net.Server
                 }
                 Client.Socket.ReceiveTimeout = 30000; // Loosen up timeout
                 results.Add(workingPacket);
+#if DEBUG
+                Client.Server.Log("[CLIENT->SERVER] " + Client.Socket.RemoteEndPoint.ToString(),
+                    LogImportance.Low);
+                Client.Server.Log(workingPacket.ToString(), LogImportance.Low);
+                Client.Server.Log(MinecraftClient.DumpArray(data.Take(length).ToArray()), LogImportance.Low);
+#endif
                 Length -= length;
                 // Shift the array over to the next packet
                 Array.Copy(Client.RecieveBuffer, length, Client.RecieveBuffer, 

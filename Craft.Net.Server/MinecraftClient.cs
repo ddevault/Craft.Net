@@ -1,11 +1,11 @@
 using System;
-using System.Net;
 using System.Net.Sockets;
 using System.Collections.Generic;
 using Org.BouncyCastle.Crypto;
 using java.security;
 using Craft.Net.Server.Packets;
 using Craft.Net.Server.Worlds.Entities;
+using Craft.Net.Server.Worlds;
 
 namespace Craft.Net.Server
 {
@@ -26,9 +26,11 @@ namespace Craft.Net.Server
         /// <summary>
         /// The view distance in chunks.
         /// </summary>
-        public int ViewDistance;
+        public int ViewDistance, MaxViewDistance;
         public bool ChatEnabled, ColorsEnabled;
+        public List<Vector3> LoadedChunks;
         public Dictionary<string, object> Tags;
+        public MinecraftServer Server;
 
         internal BufferedBlockCipher Encrypter, Decrypter;
         internal Key SharedKey;
@@ -40,7 +42,7 @@ namespace Craft.Net.Server
         
         #endregion
         
-        public MinecraftClient(Socket Socket)
+        public MinecraftClient(Socket Socket, MinecraftServer Server)
         {
             this.Socket = Socket;
             this.RecieveBuffer = new byte[1024];
@@ -52,6 +54,7 @@ namespace Craft.Net.Server
             this.Locale = "en_US";
             this.ViewDistance = 8;
             this.ReadyToSpawn = false;
+            this.Server = Server;
         }
 
         public void SendPacket(Packet packet)
@@ -60,11 +63,43 @@ namespace Craft.Net.Server
             this.SendQueue.Enqueue(packet);
         }
 
-        internal void SendData(byte[] Data)
+        public void SendData(byte[] Data)
         {
+#if DEBUG
+            Server.Log(DumpArray(Data), LogImportance.Low);
+#endif
             if (this.EncryptionEnabled)
                 Data = Encrypter.ProcessBytes(Data);
             this.Socket.BeginSend(Data, 0, Data.Length, SocketFlags.None, null, null);
+        }
+
+        public static string DumpArray(byte[] array)
+        {
+            if (array.Length == 0)
+                return "[]";
+            string dump = "[";
+            foreach (byte b in array)
+            {
+                dump += "0x" + b.ToString("x") + ",";
+            }
+            return dump.Remove(dump.Length - 1) + "]";
+        }
+
+        public void UpdateChunks()
+        {
+            UpdateChunks(false);
+        }
+
+        public void UpdateChunks(bool ForceUpdate)
+        {
+            if ((int)(this.Entity.Position.X) >> 4 != (int)(this.Entity.OldPosition.X) >> 4 ||
+                (int)(this.Entity.Position.Z) >> 4 != (int)(this.Entity.OldPosition.Z) >> 4 ||
+                ForceUpdate)
+            {
+
+                if (ViewDistance < MaxViewDistance)
+                    ViewDistance++;
+            }
         }
     }
 }

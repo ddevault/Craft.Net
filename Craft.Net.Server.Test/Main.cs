@@ -15,7 +15,8 @@ namespace Craft.Net.Server.Test
 		        new IPEndPoint(IPAddress.Any, 25565));
             minecraftServer.OnlineMode = false;
             // Add a console logger
-            minecraftServer.AddLogProvider(new ConsoleLogWriter());
+            minecraftServer.AddLogProvider(new ConsoleLogWriter(LogImportance.High));
+            minecraftServer.AddLogProvider(new FileLogWriter("packetLog.txt", LogImportance.Low));
             // Add a flatland world
             minecraftServer.AddWorld(new World(new FlatlandGenerator()));
             // Start the server
