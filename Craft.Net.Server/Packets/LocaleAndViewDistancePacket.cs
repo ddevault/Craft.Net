@@ -2,11 +2,19 @@ using System;
 
 namespace Craft.Net.Server.Packets
 {
+    public enum ChatMode
+    {
+        Hidden = 2,
+        CommandsOnly = 1,
+        Enabled = 0
+    }
+
     public class LocaleAndViewDistancePacket : Packet
     {
         public string Locale;
         public int ViewDistance;
-        public bool ChatEnabled, ColorsEnabled;
+        public ChatMode ChatMode;
+        public bool ColorsEnabled;
         public Difficulty Difficulty;
 
         public LocaleAndViewDistancePacket()
@@ -37,21 +45,18 @@ namespace Craft.Net.Server.Packets
 
             // Adds an extra 2 chunk buffer to make loading look nice
             this.ViewDistance = 16 >> viewDistance + 2;
-
-            this.ChatEnabled = (chatFlags & 0x1) == 0x1;
-            this.ColorsEnabled = (chatFlags & 0x2) == 0x2;
-
+            this.ChatMode = (ChatMode)(chatFlags & 0x3);
+            this.ColorsEnabled = (chatFlags & 0x8) == 0x8;
             this.Difficulty = (Difficulty)difficulty;
-
             return offset;
         }
 
         public override void HandlePacket(MinecraftServer Server, ref MinecraftClient Client)
         {
-            Client.ChatEnabled = this.ChatEnabled;
-            Client.ColorsEnabled = this.ColorsEnabled;
+            Client.ChatMode = this.ChatMode;
             Client.Locale = this.Locale;
             Client.ViewDistance = this.ViewDistance;
+            Client.ColorsEnabled = this.ColorsEnabled;
             // Difficulty is discarded
         }
 

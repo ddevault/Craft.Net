@@ -27,7 +27,8 @@ namespace Craft.Net.Server
         /// The view distance in chunks.
         /// </summary>
         public int ViewDistance, MaxViewDistance;
-        public bool ChatEnabled, ColorsEnabled;
+        public ChatMode ChatMode;
+        public bool ColorsEnabled;
         public List<Vector3> LoadedChunks;
         public Dictionary<string, object> Tags;
         public MinecraftServer Server;
