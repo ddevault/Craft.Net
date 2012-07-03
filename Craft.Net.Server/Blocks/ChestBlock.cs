@@ -23,21 +23,6 @@ namespace Craft.Net.Server.Blocks
         }
 
         /// <summary>
-        /// Variable to tell the server what square are adjacent to the chest to allow them to combine
-        /// </summary>
-        static Vector3[] adjacentLocations = new Vector3[]
-        {
-            new Vector3(1, 0, 0),
-            new Vector3(-1, 0, 0),
-            new Vector3(0, 0, 1),
-            new Vector3(0, 0, -1),
-            new Vector3(1, 0, 1),
-            new Vector3(1, 0, -1),
-            new Vector3(-1, 0, 1),
-            new Vector3(-1, 0, -1),
-        };
-
-        /// <summary>
         /// Called when this block is placed
         /// </summary>
         /// <param name="world">The world it was placed in</param>

@@ -14,6 +14,7 @@ using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.Math;
 using Craft.Net.Server.Worlds;
 using java.security;
+using Craft.Net.Server.Blocks;
 
 namespace Craft.Net.Server
 {

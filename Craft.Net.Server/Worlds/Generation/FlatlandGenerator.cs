@@ -9,7 +9,7 @@ namespace Craft.Net.Server.Worlds.Generation
         {
         }
 
-        public Chunk CreateChunk(Vector3 Position)
+        public Chunk GenerateChunk(Vector3 Position)
         {
             Chunk chunk = new Chunk();
             for (int x = 0; x < 16; x++)

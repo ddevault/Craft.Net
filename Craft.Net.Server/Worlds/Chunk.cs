@@ -13,6 +13,8 @@ namespace Craft.Net.Server.Worlds
         public Chunk()
         {
             Sections = new Section[16];
+            for (int i = 0; i < Sections.Length; i++)
+                Sections[i] = new Section((byte)i);
         }
 
         /// <summary>
@@ -22,7 +24,7 @@ namespace Craft.Net.Server.Worlds
         {
             byte y = (byte)position.Y;
             y /= 16;
-            position.Y = y % 16;
+            position.Y = position.Y % 16;
             Sections[y].SetBlock(position, value);
         }
 

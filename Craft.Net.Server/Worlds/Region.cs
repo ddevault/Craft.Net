@@ -34,9 +34,27 @@ namespace Craft.Net.Server.Worlds
             relativePosition.Z = (int)(relativePosition.Z) % Chunk.Height;
 
             if (!Chunks.ContainsKey(position))
-                Chunks.Add(position, WorldGenerator.CreateChunk(position));
+                Chunks.Add(position, WorldGenerator.GenerateChunk(position));
 
             return Chunks[position].GetBlock(relativePosition);
+        }
+
+        public void SetBlock(Vector3 position, Block value)
+        {
+            position = position.Floor();
+            Vector3 relativePosition = position;
+            position.X = (int)(position.X) / Chunk.Width;
+            position.Y = 0;
+            position.Z = (int)(position.Z) / Chunk.Height;
+            
+            relativePosition.X = (int)(relativePosition.X) % Chunk.Width;
+            relativePosition.Y = 0;
+            relativePosition.Z = (int)(relativePosition.Z) % Chunk.Height;
+            
+            if (!Chunks.ContainsKey(position))
+                Chunks.Add(position, WorldGenerator.GenerateChunk(position));
+            
+            Chunks[position].SetBlock(relativePosition, value);
         }
     }
 }

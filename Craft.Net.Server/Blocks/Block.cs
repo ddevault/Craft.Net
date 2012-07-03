@@ -180,17 +180,6 @@ namespace Craft.Net.Server.Blocks
         public virtual byte BlockLight { get; set; }
 
         /// <summary>
-        /// The instant breakability of a block, or -1
-        /// </summary>
-        public virtual bool InstantBreak
-        {
-            get
-            {
-                return GetTimeToBreak(null) == -1;
-            }
-        }
-
-        /// <summary>
         /// Return the type of transparency of a block. The default is opaque.
         /// See types in BlockOpacity enum.
         /// </summary>
@@ -200,14 +189,6 @@ namespace Craft.Net.Server.Blocks
             {
                 return BlockOpacity.Opaque;
             }
-        }
-
-        /// <summary>
-        /// Returns -1 for instant-break, and -2 for unbreakable
-        /// </summary>
-        public virtual double GetTimeToBreak(Item tool)
-        {
-            return 0; // Default time is instant-break
         }
 
         /// <summary>
@@ -280,13 +261,6 @@ namespace Craft.Net.Server.Blocks
         /// <param name="world">The world the update occured in</param>
         /// <param name="position">The location of the updated block</param>
         public virtual void BlockUpdate(World world, Vector3 position)
-        {
-        }
-
-        /// <summary>
-        /// Called when a scheduled update occurs
-        /// </summary>
-        public virtual void ScheduledUpdate(World world, Vector3 position)
         {
         }
 
