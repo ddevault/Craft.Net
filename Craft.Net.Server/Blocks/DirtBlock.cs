@@ -1,20 +1,23 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace Craft.Net.Server.Blocks
 {
+    /// <summary>
+    /// The Dirt Block
+    /// </summary>
+    /// <remarks></remarks>
     public class DirtBlock : Block
     {
-        public DirtBlock()
+        /// <summary>
+        /// The Block ID for this block
+        /// </summary>
+        /// <remarks></remarks>
+        public override byte BlockID
         {
-        }
-
-        public override byte BlockId
-        {
-            get
-            {
-                return 3;
-            }
+            get { return 3; }
         }
     }
 }
-

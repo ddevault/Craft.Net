@@ -1,20 +1,21 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace Craft.Net.Server.Blocks
 {
+    /// <summary>
+    /// A Bedrock block (ID = 7)
+    /// </summary>
     public class BedrockBlock : Block
     {
-        public BedrockBlock()
+        /// <summary>
+        /// This block's ID (7)
+        /// </summary>
+        public override byte BlockID
         {
-        }
-
-        public override byte BlockId
-        {
-            get
-            {
-                return 7;
-            }
+            get { return 0x07; }
         }
     }
 }
-

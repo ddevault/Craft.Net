@@ -1,6 +1,7 @@
 using System;
 using Craft.Net.Server.Worlds.Generation;
 using Craft.Net.Server.Blocks;
+using System.Collections.Generic;
 
 namespace Craft.Net.Server.Worlds
 {
@@ -13,7 +14,8 @@ namespace Craft.Net.Server.Worlds
                 return WorldGenerator.LevelType;
             }
         }
-        public Region[] Regions;
+
+        public Dictionary<Vector3, Region> Regions;
         public EntityManager EntityManager;
         public string Name;
         public Vector3 SpawnPoint;
@@ -40,6 +42,7 @@ namespace Craft.Net.Server.Worlds
 
         public Block GetBlock(Vector3 position)
         {
+            position = position.Floor();
             return null;
         }
     }

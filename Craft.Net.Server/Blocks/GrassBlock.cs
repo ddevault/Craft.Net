@@ -1,20 +1,23 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace Craft.Net.Server.Blocks
 {
+    /// <summary>
+    /// A Grass block (ID = 2)
+    /// </summary>
+    /// <remarks></remarks>
     public class GrassBlock : Block
     {
-        public GrassBlock()
+        /// <summary>
+        /// The Block ID for this block (2)
+        /// </summary>
+        /// <remarks></remarks>
+        public override byte BlockID
         {
-        }
-
-        public override byte BlockId
-        {
-            get
-            {
-                return 2;
-            }
+            get { return 0x02; }
         }
     }
 }
-

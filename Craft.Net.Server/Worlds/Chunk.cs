@@ -5,7 +5,10 @@ namespace Craft.Net.Server.Worlds
 {
     public class Chunk
     {
+        public const int Width = 16, Height = 256, Depth = 16;
+
         public Section[] Sections;
+        public Vector3 RelativePosition;
 
         public Chunk()
         {
@@ -23,12 +26,12 @@ namespace Craft.Net.Server.Worlds
             Sections[y].SetBlock(position, value);
         }
 
-        public void SetBlock(Vector3 position, byte value)
+        public Block GetBlock(Vector3 position)
         {
             byte y = (byte)position.Y;
             y /= 16;
             position.Y = y % 16;
-            Sections[y].SetBlock(position, value);
+            return Sections[y].GetBlock(position);
         }
     }
 }

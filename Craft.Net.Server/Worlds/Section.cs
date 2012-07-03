@@ -37,7 +37,7 @@ namespace Craft.Net.Server.Worlds
             int y = (int)position.Y;
             int z = (int)position.Z;
             int index = x + (z * Width) + (y * Height * Width);
-            this.Blocks[index] = value.BlockId;
+            this.Blocks[index] = value.BlockID;
             this.Metadata[index] = value.Metadata;
             this.BlockLight[index] = value.BlockLight;
             this.SkyLight[index] = value.SkyLight;
@@ -53,6 +53,19 @@ namespace Craft.Net.Server.Worlds
             this.Metadata[index] = 0;
             this.BlockLight[index] = 0;
             this.SkyLight[index] = 0xF;
+        }
+
+        public Block GetBlock(Vector3 position)
+        {
+            int x = (int)position.X;
+            int y = (int)position.Y;
+            int z = (int)position.Z;
+            int index = x + (z * Width) + (y * Height * Width);
+            Block block = (Block)this.Blocks[index];
+            block.Metadata = this.Metadata[index];
+            block.SkyLight = this.SkyLight[index];
+            block.BlockLight = this.BlockLight[index];
+            return block;
         }
     }
 }

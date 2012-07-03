@@ -4,11 +4,7 @@ namespace Craft.Net.Server.Blocks
 {
     public class AirBlock : Block
     {
-        public AirBlock()
-        {
-        }
-
-        public override byte BlockId
+        public override byte BlockID
         {
             get
             {
