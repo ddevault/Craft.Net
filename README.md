@@ -1,9 +1,11 @@
 Craft.Net
 ========
 
-Craft.Net is a library for .Net that implements the Minecraft 12w26a server protocol
+Craft.Net is a library for .Net that implements the Minecraft 12w26a server protocol.
 It also contains functionality for manipulating Anvil worlds, simulating block interactions,
 and simulating entity interactions.
+
+Craft.Net runs well on Microsoft.Net or [Mono](https://github.com/mono/mono).
 
 Features
 -------
