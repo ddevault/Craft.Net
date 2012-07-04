@@ -19,6 +19,7 @@ namespace Craft.Net.Server.Packets
             this.X = Position.X;
             this.Y = Position.Y;
             this.Z = Position.Z;
+            this.Stance = this.Y + 1.5;
             this.Yaw = Yaw;
             this.Pitch = Pitch;
             this.OnGround = OnGround;

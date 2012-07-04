@@ -34,7 +34,6 @@ namespace Craft.Net.Server.Packets
                 return -1;
             if (!TryReadByte(Buffer, ref offset, out FlyingSpeed))
                 return -1;
-            Console.WriteLine("0xCA Flags: 0x" + flags.ToString("x"));
             return offset;
         }
 
