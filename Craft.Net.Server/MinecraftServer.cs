@@ -15,6 +15,7 @@ using Org.BouncyCastle.Math;
 using Craft.Net.Server.Worlds;
 using java.security;
 using Craft.Net.Server.Blocks;
+using System.IO;
 
 namespace Craft.Net.Server
 {
@@ -178,7 +179,8 @@ namespace Craft.Net.Server
                             Log("[SERVER->CLIENT] " + Clients[i].Socket.RemoteEndPoint.ToString(),
                                 LogImportance.Low);
                             Log(packet.ToString(), LogImportance.Low);
-                            packet.SendPacket(this, Clients[i]);
+                            if (Clients.Count >= oldCount)
+                                packet.SendPacket(this, Clients[i]);
                             if (Clients.Count < oldCount) // In case this client is disconnected
                                 break;
                         }
@@ -199,7 +201,7 @@ namespace Craft.Net.Server
                                        SocketFlags.None, SocketRecieveAsync, client);
             socket.BeginAccept(AcceptConnectionAsync, null);
         }
-        
+
         private void SocketRecieveAsync(IAsyncResult result)
         {
             MinecraftClient client = (MinecraftClient)result.AsyncState;
@@ -236,6 +238,7 @@ namespace Craft.Net.Server
             {
                 if (client.Socket.Connected)
                     client.Socket.BeginDisconnect(false, null, null);
+                client.KeepAliveTimer = null;
                 Clients.Remove(client);
             }
         }

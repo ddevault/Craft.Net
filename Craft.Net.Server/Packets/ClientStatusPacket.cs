@@ -6,6 +6,7 @@ using Org.BouncyCastle.Math;
 using System.Net;
 using System.IO;
 using Craft.Net.Server.Worlds.Entities;
+using System.Threading;
 
 namespace Craft.Net.Server.Packets
 {
@@ -79,9 +80,15 @@ namespace Craft.Net.Server.Packets
                                Server.MaxPlayers));
 
                         // Send initial chunks
-                        Client.UpdateChunks();
+                        Client.UpdateChunks(true);
                         Client.SendPacket(new PlayerPositionAndLookPacket(
                             Client.Entity.Position, Client.Entity.Yaw, Client.Entity.Pitch, true));
+                        Client.KeepAliveTimer = new Timer((object o) =>
+                            {
+                                ((MinecraftClient)o).SendPacket(new KeepAlivePacket());
+                                Server.ProcessSendQueue();
+                            }, Client, 30000, 30000);
+                        Client.ReadyToSpawn = true;
                     }
                     Server.ProcessSendQueue();
                     break;

@@ -16,6 +16,12 @@ namespace Craft.Net.Server.Packets
 
         public PlayerPositionAndLookPacket(Vector3 Position, float Yaw, float Pitch, bool OnGround)
         {
+            this.X = Position.X;
+            this.Y = Position.Y;
+            this.Z = Position.Z;
+            this.Yaw = Yaw;
+            this.Pitch = Pitch;
+            this.OnGround = OnGround;
         }
 
         public override byte PacketID

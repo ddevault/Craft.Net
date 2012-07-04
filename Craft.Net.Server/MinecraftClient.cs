@@ -6,6 +6,7 @@ using java.security;
 using Craft.Net.Server.Packets;
 using Craft.Net.Server.Worlds.Entities;
 using Craft.Net.Server.Worlds;
+using System.Threading;
 
 namespace Craft.Net.Server
 {
@@ -32,6 +33,7 @@ namespace Craft.Net.Server
         public List<Vector3> LoadedChunks;
         public Dictionary<string, object> Tags;
         public MinecraftServer Server;
+        public byte WalkingSpeed, FlyingSpeed;
 
         internal BufferedBlockCipher Encrypter, Decrypter;
         internal Key SharedKey;
@@ -40,6 +42,7 @@ namespace Craft.Net.Server
         internal byte[] RecieveBuffer;
         internal string AuthenticationHash;
         internal bool EncryptionEnabled, ReadyToSpawn;
+        internal Timer KeepAliveTimer;
         
         #endregion
         
@@ -53,9 +56,13 @@ namespace Craft.Net.Server
             this.IsLoggedIn = false;
             this.EncryptionEnabled = false;
             this.Locale = "en_US";
-            this.ViewDistance = 8;
+            this.MaxViewDistance = 10;
+            this.ViewDistance = 3;
             this.ReadyToSpawn = false;
+            this.LoadedChunks = new List<Vector3>();
             this.Server = Server;
+            this.WalkingSpeed = 12;
+            this.FlyingSpeed = 25;
         }
 
         public void SendPacket(Packet packet)
@@ -97,10 +104,50 @@ namespace Craft.Net.Server
                 (int)(this.Entity.Position.Z) >> 4 != (int)(this.Entity.OldPosition.Z) >> 4 ||
                 ForceUpdate)
             {
-
+                List<Vector3> newChunks = new List<Vector3>();
+                for (int x = -this.ViewDistance; x < this.ViewDistance; x++)
+                    for (int z = -this.ViewDistance; z < this.ViewDistance; z++)
+                {
+                    newChunks.Add(new Vector3(
+                        ((int)this.Entity.Position.X >> 4) + x,
+                        0,
+                        ((int)this.Entity.Position.Z >> 4) + z));
+                }
+                // Unload extraneous columns
+                List<Vector3> currentChunks = new List<Vector3>(this.LoadedChunks);
+                foreach (Vector3 chunk in currentChunks)
+                {
+                    if (!newChunks.Contains(chunk))
+                        UnloadChunk(chunk);
+                }
+                // Load new columns
+                foreach (Vector3 chunk in newChunks)
+                {
+                    if (!this.LoadedChunks.Contains(chunk))
+                    {
+                        Console.WriteLine("Loading chunk: " + chunk);
+                        LoadChunk(chunk);
+                    }
+                }
                 if (ViewDistance < MaxViewDistance)
                     ViewDistance++;
+                if (ViewDistance > MaxViewDistance)
+                    ViewDistance--;
+                Server.ProcessSendQueue();
             }
+        }
+
+        public void LoadChunk(Vector3 position)
+        {
+            World world = Server.GetClientWorld(this);
+            Chunk chunk = world.GetChunk(position);
+            ChunkDataPacket dataPacket = new ChunkDataPacket(ref chunk);
+            // TODO: Move chunk compression to second thread
+            this.SendPacket(dataPacket);
+        }
+
+        public void UnloadChunk(Vector3 position)
+        {
         }
     }
 }

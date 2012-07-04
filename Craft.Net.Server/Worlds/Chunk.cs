@@ -9,15 +9,20 @@ namespace Craft.Net.Server.Worlds
 
         public Section[] Sections;
         public byte[] Biomes;
-        public Vector3 RelativePosition;
+        public Vector3 RelativePosition, AbsolutePosition;
+        public Region ParentRegion;
 
-        public Chunk(Vector3 RelativePosition)
+        public Chunk(Vector3 RelativePosition, Region ParentRegion)
         {
             Sections = new Section[16];
             for (int i = 0; i < Sections.Length; i++)
                 Sections[i] = new Section((byte)i);
             this.RelativePosition = RelativePosition;
             this.Biomes = new byte[Width * Depth];
+            this.ParentRegion = ParentRegion;
+            this.AbsolutePosition = 
+                (ParentRegion.Position * new Vector3(Region.Width, 0, Region.Depth)) 
+                + RelativePosition;
         }
 
         /// <summary>

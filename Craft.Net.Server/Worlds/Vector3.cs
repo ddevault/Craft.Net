@@ -28,6 +28,42 @@ namespace Craft.Net.Server.Worlds
             return string.Format("{0}, {1}, {2}", X, Y, Z);
         }
 
+        #region Operators
+
+        public static Vector3 operator +(Vector3 a, Vector3 b)
+        {
+            return new Vector3(
+                a.X + b.X,
+                a.Y + b.Y,
+                a.Z + b.Z);
+        }
+
+        public static Vector3 operator -(Vector3 a, Vector3 b)
+        {
+            return new Vector3(
+                a.X - b.X,
+                a.Y - b.Y,
+                a.Z - b.Z);
+        }
+
+        public static Vector3 operator *(Vector3 a, Vector3 b)
+        {
+            return new Vector3(
+                a.X * b.X,
+                a.Y * b.Y,
+                a.Z * b.Z);
+        }
+
+        public static Vector3 operator /(Vector3 a, Vector3 b)
+        {
+            return new Vector3(
+                a.X / b.X,
+                a.Y / b.Y,
+                a.Z / b.Z);
+        }
+
+        #endregion
+
         #region Constants
 
         public static Vector3 Zero

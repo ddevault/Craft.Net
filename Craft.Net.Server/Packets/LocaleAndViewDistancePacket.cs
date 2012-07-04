@@ -55,7 +55,7 @@ namespace Craft.Net.Server.Packets
         {
             Client.ChatMode = this.ChatMode;
             Client.Locale = this.Locale;
-            Client.ViewDistance = this.ViewDistance;
+            Client.MaxViewDistance = this.ViewDistance;
             Client.ColorsEnabled = this.ColorsEnabled;
             // Difficulty is discarded
         }

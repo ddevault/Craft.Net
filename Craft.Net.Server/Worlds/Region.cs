@@ -21,6 +21,13 @@ namespace Craft.Net.Server.Worlds
             this.WorldGenerator = WorldGenerator;
         }
 
+        public Chunk GetChunk(Vector3 position)
+        {
+            if (!Chunks.ContainsKey(position))
+                Chunks.Add(position, WorldGenerator.GenerateChunk(position, this));
+            return Chunks[position];
+        }
+
         public Block GetBlock(Vector3 position)
         {
             position = position.Floor();
@@ -34,7 +41,7 @@ namespace Craft.Net.Server.Worlds
             relativePosition.Z = (int)(relativePosition.Z) % Chunk.Height;
 
             if (!Chunks.ContainsKey(position))
-                Chunks.Add(position, WorldGenerator.GenerateChunk(position));
+                Chunks.Add(position, WorldGenerator.GenerateChunk(position, this));
 
             return Chunks[position].GetBlock(relativePosition);
         }
@@ -52,7 +59,7 @@ namespace Craft.Net.Server.Worlds
             relativePosition.Z = (int)(relativePosition.Z) % Chunk.Height;
             
             if (!Chunks.ContainsKey(position))
-                Chunks.Add(position, WorldGenerator.GenerateChunk(position));
+                Chunks.Add(position, WorldGenerator.GenerateChunk(position, this));
             
             Chunks[position].SetBlock(relativePosition, value);
         }

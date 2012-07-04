@@ -27,11 +27,15 @@ namespace Craft.Net.Server.Packets
 
         public override int TryReadPacket(byte[] Buffer, int Length)
         {
-            throw new NotImplementedException();
+            int offset = 1;
+            if (!TryReadString(Buffer, ref offset, out Reason))
+                return -1;
+            return offset;
         }
 
         public override void HandlePacket(MinecraftServer Server, ref MinecraftClient Client)
         {
+            Server.Log(Client.Username + " disconnected (" + Reason + ")");
             Client.IsDisconnected = true;
         }
 

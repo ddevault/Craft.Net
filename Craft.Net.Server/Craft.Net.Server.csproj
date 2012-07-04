@@ -225,6 +225,7 @@
     <Compile Include="Packets\ChunkDataPacket.cs" />
     <Compile Include="Worlds\Entities\Entity.cs" />
     <Compile Include="FileLogWriter.cs" />
+    <Compile Include="Packets\PlayerAbilitiesPacket.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

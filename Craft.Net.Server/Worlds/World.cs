@@ -41,6 +41,35 @@ namespace Craft.Net.Server.Worlds
             this.Seed = Seed;
         }
 
+        public Chunk GetChunk(Vector3 position)
+        {
+            // TODO: I really hate this code
+            int X = (int)position.X;
+            int Z = (int)position.Z;
+            bool negX = X < 0;
+            bool negZ = Z < 0;
+            X = negX ? -X : X;
+            Z = negZ ? -Z : Z;
+            // abs(n)/width+1
+            X = (X / Region.Width) + (negX ? 1 : 0);
+            Z = (Z / Region.Depth) + (negZ ? 1 : 0);
+            X = negX ? -X : X;
+            Z = negZ ? -Z : Z;
+            Vector3 region = new Vector3(X, 0, Z);
+            if (!Regions.ContainsKey(region))
+                Regions.Add(region, new Region(region, WorldGenerator));
+            // Create relative coordinates
+            X = (int)position.X;
+            Z = (int)position.Z;
+            X = negX ? -X : X;
+            Z = negZ ? -Z : Z;
+            X = X % Region.Width;
+            Z = Z % Region.Depth;
+            X = negX ? Region.Width - X : X;
+            Z = negZ ? Region.Depth - Z : Z;
+            return Regions[region].GetChunk(new Vector3(X, 0, Z));
+        }
+
         public Block GetBlock(Vector3 position)
         {
             position = position.Floor();

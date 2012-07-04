@@ -165,6 +165,8 @@ namespace Craft.Net.Server.Packets
                 length = ReadShort(buffer, offset);
             else
                 return false;
+            if (length < 0)
+                throw new ArgumentOutOfRangeException("length", "String length is less than zero");
             offset += 2;
             if (buffer.Length - offset >= length)
             {

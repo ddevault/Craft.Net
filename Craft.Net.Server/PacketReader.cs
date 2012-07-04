@@ -64,7 +64,7 @@ namespace Craft.Net.Server
             null, // 0x2f
             null, // 0x30
             null, // 0x31
-            typeof(ChunkAllocationPacket), // 0x32
+            null, // 0x32
             typeof(ChunkDataPacket), // 0x33
             null, // 0x34
             null, // 0x35
@@ -216,7 +216,7 @@ namespace Craft.Net.Server
             null, // 0xc7
             null, // 0xc8
             null, // 0xc9
-            null, // 0xca
+            typeof(PlayerAbilitiesPacket), // 0xca
             null, // 0xcb
             typeof(LocaleAndViewDistancePacket), // 0xcc
             typeof(ClientStatusPacket), // 0xcd
@@ -282,42 +282,35 @@ namespace Craft.Net.Server
         /// </returns>
         public static IEnumerable<Packet> TryReadPackets(ref MinecraftClient Client, int Length)
         {
+            // Partial packets are broken
             List<Packet> results = new List<Packet>();
-            while (Length != 0)
+            byte[] buffer = Client.RecieveBuffer.Take(Length).ToArray();
+            if (Client.EncryptionEnabled)
+                buffer = Client.Decrypter.ProcessBytes(buffer);
+
+            while (buffer.Length != 0)
             {
-                byte[] data = Client.RecieveBuffer.Take(Length).ToArray();
-                if (Client.EncryptionEnabled)
-                    data = Client.Decrypter.ProcessBytes(data);
-
-                // Try to read in the next packet
-                var packetType = PacketTypes[data[0]];
+                var packetType = PacketTypes[buffer[0]];
                 if (packetType == null)
+                {
                     throw new InvalidOperationException("Invalid packet ID 0x" +
-                        data[0].ToString("x").ToUpper());
-
+                        buffer[0].ToString("x").ToUpper());
+                }
                 var workingPacket = (Packet)Activator.CreateInstance(packetType);
                 workingPacket.PacketContext = PacketContext.ClientToServer;
-                int length = workingPacket.TryReadPacket(data, Length);
-                if (length == -1)
+                int length = workingPacket.TryReadPacket(buffer, Length);
+                if (length == -1) // Incomplete packet
                 {
-                    length = Length;
-                    Client.Socket.ReceiveTimeout = 500; // Tighten up timeout
-                    break;
+                    Array.Copy(buffer, Client.RecieveBuffer, buffer.Length);
+                    Client.RecieveBufferIndex = buffer.Length;
+                    Client.Socket.ReceiveTimeout = 500;
+                    return results;
                 }
-                Client.Socket.ReceiveTimeout = 30000; // Loosen up timeout
+                Client.Socket.ReceiveTimeout = 30000;
                 results.Add(workingPacket);
-#if DEBUG
-                Client.Server.Log("[CLIENT->SERVER] " + Client.Socket.RemoteEndPoint.ToString(),
-                    LogImportance.Low);
-                Client.Server.Log(workingPacket.ToString(), LogImportance.Low);
-                Client.Server.Log(MinecraftClient.DumpArray(data.Take(length).ToArray()), LogImportance.Low);
-#endif
-                Length -= length;
-                // Shift the array over to the next packet
-                Array.Copy(Client.RecieveBuffer, length, Client.RecieveBuffer, 
-                           0, Client.RecieveBuffer.Length - length);
+                buffer = buffer.Skip(length).ToArray();
             }
-            Client.RecieveBufferIndex = Length;
+
             return results;
         }
     }

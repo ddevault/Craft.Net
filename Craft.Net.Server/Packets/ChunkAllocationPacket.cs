@@ -12,6 +12,13 @@ namespace Craft.Net.Server.Packets
         {
         }
 
+        public ChunkAllocationPacket(int X, int Z, bool Allocate)
+        {
+            this.X = X;
+            this.Z = Z;
+            this.Allocate = Allocate;
+        }
+
         public override byte PacketID
         {
             get
