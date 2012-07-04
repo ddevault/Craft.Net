@@ -1,4 +1,5 @@
 using System;
+using Craft.Net.Server.Worlds;
 
 namespace Craft.Net.Server.Packets
 {
@@ -39,7 +40,15 @@ namespace Craft.Net.Server.Packets
         {
             if (!Client.ReadyToSpawn)
                 return;
-            // TODO
+            Client.Entity.Position = new Vector3(X, Y, Z);
+            if (Client.Entity.Position.DistanceTo(Client.Entity.OldPosition) > 
+                MinecraftClient.MaxMoveDistance)
+            {
+                Client.SendPacket(new DisconnectPacket("Hacking: You moved too fast!"));
+                Server.ProcessSendQueue();
+                return;
+            }
+            Client.UpdateChunks();
         }
 
         public override void SendPacket(MinecraftServer Server, MinecraftClient Client)

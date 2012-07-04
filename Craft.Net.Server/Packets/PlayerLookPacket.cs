@@ -35,7 +35,8 @@ namespace Craft.Net.Server.Packets
         {
             if (!Client.ReadyToSpawn)
                 return;
-            // TODO
+            Client.Entity.Pitch = Pitch;
+            Client.Entity.Yaw = Yaw;
         }
 
         public override void SendPacket(MinecraftServer Server, MinecraftClient Client)

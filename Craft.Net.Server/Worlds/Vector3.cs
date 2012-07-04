@@ -18,15 +18,26 @@ namespace Craft.Net.Server.Worlds
             this.Z = Z;
         }
 
+        public override string ToString()
+        {
+            return string.Format("{0}, {1}, {2}", X, Y, Z);
+        }
+
+        #region Math
+
         public Vector3 Floor()
         {
             return new Vector3((int)X, (int)Y, (int)Z);
         }
 
-        public override string ToString()
+        public double DistanceTo(Vector3 other)
         {
-            return string.Format("{0}, {1}, {2}", X, Y, Z);
+            return Math.Sqrt(Math.Pow(other.Z - Z, 2) +
+                             Math.Sqrt(Math.Pow(other.X - X, 2)) +
+                             Math.Pow(other.Y - Y, 2));
         }
+
+        #endregion
 
         #region Operators
 

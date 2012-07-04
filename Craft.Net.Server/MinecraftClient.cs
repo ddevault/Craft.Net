@@ -13,6 +13,12 @@ namespace Craft.Net.Server
     public class MinecraftClient
     {
         private const int BufferSize = 1024;
+
+        #region Constants
+
+        public const double MaxMoveDistance = 4;
+
+        #endregion
         
         #region Fields
         
@@ -126,10 +132,10 @@ namespace Craft.Net.Server
                     if (!this.LoadedChunks.Contains(chunk))
                         LoadChunk(chunk);
                 }
-                if (ViewDistance < MaxViewDistance)
-                    ViewDistance++;
-                if (ViewDistance > MaxViewDistance)
-                    ViewDistance--;
+//                if (ViewDistance < MaxViewDistance)
+//                    ViewDistance++;
+//                if (ViewDistance > MaxViewDistance)
+//                    ViewDistance--;
                 Server.ProcessSendQueue();
             }
         }
@@ -145,6 +151,14 @@ namespace Craft.Net.Server
 
         public void UnloadChunk(Vector3 position)
         {
+            ChunkDataPacket dataPacket = new ChunkDataPacket();
+            dataPacket.AddBitMap = 0;
+            dataPacket.GroundUpContiguous = false;
+            dataPacket.PrimaryBitMap = 0;
+            dataPacket.X = (int)position.X;
+            dataPacket.Z = (int)position.Z;
+            dataPacket.CompressedData = new byte[0];
+            this.SendPacket(dataPacket);
         }
     }
 }

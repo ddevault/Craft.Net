@@ -1,6 +1,6 @@
 using System;
 
-namespace Craft.Net.Server.Worlds.Entities
+namespace Craft.Net.Server.Worlds
 {
     public struct Size
     {
