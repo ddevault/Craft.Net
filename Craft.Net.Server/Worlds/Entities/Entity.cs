@@ -2,7 +2,7 @@ using System;
 
 namespace Craft.Net.Server.Worlds.Entities
 {
-    public class Entity
+    public abstract class Entity
     {
         public int Id;
         public Vector3 _Position;
@@ -22,6 +22,11 @@ namespace Craft.Net.Server.Worlds.Entities
         public float Yaw, Pitch;
         public bool OnGround;
         public Dimension Dimension;
+
+        public abstract Size Size
+        {
+            get;
+        }
 
         public Entity()
         {

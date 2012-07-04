@@ -7,6 +7,7 @@ using System.Net;
 using System.IO;
 using Craft.Net.Server.Worlds.Entities;
 using System.Threading;
+using Craft.Net.Server.Worlds;
 
 namespace Craft.Net.Server.Packets
 {
@@ -73,6 +74,7 @@ namespace Craft.Net.Server.Packets
                         // Spawn player
                         Client.Entity = new PlayerEntity();
                         Client.Entity.Position = Server.DefaultWorld.SpawnPoint;
+                        Client.Entity.Position += new Vector3(0, PlayerEntity.Height, 0);
                         Server.DefaultWorld.EntityManager.SpawnEntity(Client.Entity);
                         Client.SendPacket(new LoginPacket(Client.Entity.Id,
                                Server.DefaultWorld.LevelType, Server.DefaultWorld.GameMode,

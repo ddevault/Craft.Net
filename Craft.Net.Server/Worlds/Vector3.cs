@@ -4,14 +4,14 @@ namespace Craft.Net.Server.Worlds
 {
     public struct Vector3
     {
-        public float X, Y, Z;
+        public double X, Y, Z;
 
         public Vector3(float Value)
         {
             X = Y = Z = Value;
         }
 
-        public Vector3(float X, float Y, float Z)
+        public Vector3(double X, double Y, double Z)
         {
             this.X = X;
             this.Y = Y;

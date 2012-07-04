@@ -124,10 +124,7 @@ namespace Craft.Net.Server
                 foreach (Vector3 chunk in newChunks)
                 {
                     if (!this.LoadedChunks.Contains(chunk))
-                    {
-                        Console.WriteLine("Loading chunk: " + chunk);
                         LoadChunk(chunk);
-                    }
                 }
                 if (ViewDistance < MaxViewDistance)
                     ViewDistance++;

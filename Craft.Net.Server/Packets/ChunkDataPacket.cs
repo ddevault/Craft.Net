@@ -23,8 +23,6 @@ namespace Craft.Net.Server.Packets
 
         public ChunkDataPacket(ref Chunk Chunk) : this()
         {
-            Console.WriteLine("Preparing chunk: " + Chunk.AbsolutePosition.ToString());
-
             this.X = (int)Chunk.AbsolutePosition.X;
             this.Z = (int)Chunk.AbsolutePosition.Z;
 

@@ -226,6 +226,7 @@
     <Compile Include="Worlds\Entities\Entity.cs" />
     <Compile Include="FileLogWriter.cs" />
     <Compile Include="Packets\PlayerAbilitiesPacket.cs" />
+    <Compile Include="Size.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
