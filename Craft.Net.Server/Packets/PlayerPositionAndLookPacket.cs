@@ -67,7 +67,7 @@ namespace Craft.Net.Server.Packets
                 Server.ProcessSendQueue();
                 return;
             }
-            Client.UpdateChunks();
+            Client.UpdateChunksAsync();
         }
 
         public override void SendPacket(MinecraftServer Server, MinecraftClient Client)

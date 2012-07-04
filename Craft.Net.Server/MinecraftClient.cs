@@ -99,6 +99,16 @@ namespace Craft.Net.Server
             return dump.Remove(dump.Length - 1) + "]";
         }
 
+        public void UpdateChunksAsync()
+        {
+            if ((int)(this.Entity.Position.X) >> 4 != (int)(this.Entity.OldPosition.X) >> 4 ||
+                (int)(this.Entity.Position.Z) >> 4 != (int)(this.Entity.OldPosition.Z) >> 4)
+            {
+                Thread t = new Thread(UpdateChunks);
+                t.Start();
+            }
+        }
+
         public void UpdateChunks()
         {
             UpdateChunks(false);
@@ -132,10 +142,6 @@ namespace Craft.Net.Server
                     if (!this.LoadedChunks.Contains(chunk))
                         LoadChunk(chunk);
                 }
-//                if (ViewDistance < MaxViewDistance)
-//                    ViewDistance++;
-//                if (ViewDistance > MaxViewDistance)
-//                    ViewDistance--;
                 Server.ProcessSendQueue();
             }
         }
@@ -145,7 +151,6 @@ namespace Craft.Net.Server
             World world = Server.GetClientWorld(this);
             Chunk chunk = world.GetChunk(position);
             ChunkDataPacket dataPacket = new ChunkDataPacket(ref chunk);
-            // TODO: Move chunk compression to second thread
             this.SendPacket(dataPacket);
         }
 

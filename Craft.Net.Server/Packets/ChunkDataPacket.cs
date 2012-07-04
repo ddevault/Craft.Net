@@ -11,16 +11,19 @@ namespace Craft.Net.Server.Packets
         static Deflater zLibDeflater;
         public static byte[] ChunkRemovalSequence =
             new byte[] { 0x78, 0x9C, 0x63, 0x64, 0x1C, 0xD9, 0x00, 0x00, 0x81, 0x80, 0x01, 0x01 };
-
         public int X, Z;
         public bool GroundUpContiguous;
         public ushort PrimaryBitMap, AddBitMap;
         public byte[] CompressedData;
 
+        private static object LockObject;
+
         public ChunkDataPacket()
         {
             if (zLibDeflater == null)
                 zLibDeflater = new Deflater(CompressionLevel);
+            if (LockObject == null)
+                LockObject = new object();
         }
 
         public ChunkDataPacket(ref Chunk Chunk) : this()
@@ -37,7 +40,7 @@ namespace Craft.Net.Server.Packets
             bool nonAir = true;
             for (int i = 15; i >= 0; i--)
             {
-                Section s = Chunk.Sections[chunkY++];
+                Section s = Chunk.Sections [chunkY++];
 
                 if (s.IsAir)
                     nonAir = false;
@@ -56,12 +59,14 @@ namespace Craft.Net.Server.Packets
 
             byte[] data = blockData.Concat(metadata).Concat(blockLight)
                 .Concat(skyLight).Concat(Chunk.Biomes).ToArray();
-            zLibDeflater.SetInput(data);
-            zLibDeflater.Finish();
-            int uncompressed = data.Length;
-            int length = zLibDeflater.Deflate(data);
-            Console.WriteLine("Before compression: " + uncompressed + ", after: " + length);
-            zLibDeflater.Reset();
+            int length;
+            lock (LockObject)
+            {
+                zLibDeflater.SetInput(data);
+                zLibDeflater.Finish();
+                length = zLibDeflater.Deflate(data);
+                zLibDeflater.Reset();
+            }
 
             this.GroundUpContiguous = true;
 
