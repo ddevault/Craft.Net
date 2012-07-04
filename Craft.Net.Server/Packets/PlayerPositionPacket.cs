@@ -42,7 +42,7 @@ namespace Craft.Net.Server.Packets
                 return;
             Client.Entity.Position = new Vector3(X, Y, Z);
             if (Client.Entity.Position.DistanceTo(Client.Entity.OldPosition) > 
-                MinecraftClient.MaxMoveDistance)
+                Client.MaxMoveDistance)
             {
                 Client.SendPacket(new DisconnectPacket("Hacking: You moved too fast!"));
                 Server.ProcessSendQueue();

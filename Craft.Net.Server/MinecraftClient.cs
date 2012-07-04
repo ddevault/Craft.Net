@@ -13,12 +13,6 @@ namespace Craft.Net.Server
     public class MinecraftClient
     {
         private const int BufferSize = 1024;
-
-        #region Constants
-
-        public const double MaxMoveDistance = 4;
-
-        #endregion
         
         #region Fields
         
@@ -51,6 +45,15 @@ namespace Craft.Net.Server
         internal Timer KeepAliveTimer;
         
         #endregion
+
+        public double MaxMoveDistance
+        {
+            get
+            {
+                // TODO: Base this on speed
+                return 4;
+            }
+        }
         
         public MinecraftClient(Socket Socket, MinecraftServer Server)
         {
@@ -89,6 +92,8 @@ namespace Craft.Net.Server
 
         public static string DumpArray(byte[] array)
         {
+            // TODO: There's probably somewhere better to put this
+            // Maybe a general utility class?
             if (array.Length == 0)
                 return "[]";
             string dump = "[";
