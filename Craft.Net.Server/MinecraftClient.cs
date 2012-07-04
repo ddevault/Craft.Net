@@ -153,11 +153,11 @@ namespace Craft.Net.Server
         {
             ChunkDataPacket dataPacket = new ChunkDataPacket();
             dataPacket.AddBitMap = 0;
-            dataPacket.GroundUpContiguous = false;
+            dataPacket.GroundUpContiguous = true;
             dataPacket.PrimaryBitMap = 0;
             dataPacket.X = (int)position.X;
             dataPacket.Z = (int)position.Z;
-            dataPacket.CompressedData = new byte[0];
+            dataPacket.CompressedData = ChunkDataPacket.ChunkRemovalSequence;
             this.SendPacket(dataPacket);
         }
     }

@@ -9,6 +9,8 @@ namespace Craft.Net.Server.Packets
     {
         public static int CompressionLevel = 5;
         static Deflater zLibDeflater;
+        public static byte[] ChunkRemovalSequence =
+            new byte[] { 0x78, 0x9C, 0x63, 0x64, 0x1C, 0xD9, 0x00, 0x00, 0x81, 0x80, 0x01, 0x01 };
 
         public int X, Z;
         public bool GroundUpContiguous;
