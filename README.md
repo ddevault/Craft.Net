@@ -19,10 +19,10 @@ If there are any additional features you would like, or any problems you encount
 using Craft.Net, please do not hesitate to
 [create an issue](https://github.com/SirCmpwn/Craft.Net/issues).
 
-Some cool technical things about Craft.Net:
+Some cool technical things about Craft.Net that are already implemented:
 
-* Asynchronous I/O: *Minimizes CPU load and increases speed*
-* Threaded Chunk Management *Offloads chunk compression and sending to short-lived threads*
+* **Asynchronous I/O:** *Minimizes CPU load and increases speed*
+* **Threaded Chunk Management:** *Offloads chunk compression and sending to short-lived threads*
 
 Usage
 ----
