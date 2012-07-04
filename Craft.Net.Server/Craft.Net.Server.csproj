@@ -382,6 +382,7 @@
     <Compile Include="Items\WoodenShovelItem.cs" />
     <Compile Include="Items\WoodenSwordItem.cs" />
     <Compile Include="Packets\PlayerListItemPacket.cs" />
+    <Compile Include="Events\ChatMessageEventArgs.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -391,6 +392,7 @@
     <Folder Include="Worlds\" />
     <Folder Include="Worlds\Entities\" />
     <Folder Include="Worlds\Generation\" />
+    <Folder Include="Events\" />
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>

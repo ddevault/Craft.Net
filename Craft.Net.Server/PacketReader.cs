@@ -17,7 +17,7 @@ namespace Craft.Net.Server
             typeof(KeepAlivePacket), // 0x0
             typeof(LoginPacket), // 0x1
             typeof(HandshakePacket), // 0x2
-            null, // 0x3
+            typeof(ChatMessagePacket), // 0x3
             null, // 0x4
             null, // 0x5
             null, // 0x6

@@ -36,6 +36,8 @@ namespace Craft.Net.Server
         public byte MaxPlayers;
         public bool OnlineMode;
         public List<ILogProvider> LogProviders;
+
+        public event EventHandler<ChatMessageEventArgs> OnChatMessage;
         
         #endregion
         
@@ -162,6 +164,13 @@ namespace Craft.Net.Server
             }
             return null;
         }
+
+        public void SendChat(string message)
+        {
+            for (int i = 0; i < Clients.Count; i++)
+                Clients[i].SendPacket(new ChatMessagePacket(message));
+            this.ProcessSendQueue();
+        }
         
         #endregion
         
@@ -268,6 +277,16 @@ namespace Craft.Net.Server
             this.ProcessSendQueue();
         }
         
+        #endregion
+
+        #region Internal Methods
+
+        internal void FireOnChatMessage(ChatMessageEventArgs e)
+        {
+            if (OnChatMessage != null)
+                OnChatMessage(this, e);
+        }
+
         #endregion
 	}
 }

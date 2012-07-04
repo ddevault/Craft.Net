@@ -34,7 +34,11 @@ namespace Craft.Net.Server.Packets
 
         public override void HandlePacket(MinecraftServer Server, ref MinecraftClient Client)
         {
-            Console.WriteLine(Message);
+            Server.Log("<" + Client.Username + "> " + Message);
+            ChatMessageEventArgs args = new ChatMessageEventArgs(Client, Message);
+            Server.FireOnChatMessage(args);
+            if (!args.Handled)
+                Server.SendChat("<" + Client.Username + "> " + Message);
         }
 
         public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
