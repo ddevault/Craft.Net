@@ -85,14 +85,10 @@ namespace Craft.Net.Server.Packets
                         Client.UpdateChunks(true);
                         Client.SendPacket(new PlayerPositionAndLookPacket(
                             Client.Entity.Position, Client.Entity.Yaw, Client.Entity.Pitch, true));
-                        Client.KeepAliveTimer = new Timer((object o) =>
-                            {
-                                ((MinecraftClient)o).SendPacket(new KeepAlivePacket());
-                                Server.ProcessSendQueue();
-                            }, Client, 30000, 30000);
+                        Client.KeepAliveTimer = new Timer(Client.KeepAlive, Client, 30000, 30000);
                         Client.ReadyToSpawn = true;
                     }
-                    Server.ProcessSendQueue();
+                    Server.UpdatePlayerList(null); // Should also process send queue
                     break;
                 case ClientStatus.Respawn:
                     // TODO

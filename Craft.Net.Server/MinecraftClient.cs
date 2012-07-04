@@ -21,13 +21,13 @@ namespace Craft.Net.Server
         public Queue<Packet> SendQueue;
         public bool IsDisconnected;
         public bool IsLoggedIn;
-        public DateTime LastKeepAlive;
         public PlayerEntity Entity;
         public string Locale;
         /// <summary>
         /// The view distance in chunks.
         /// </summary>
         public int ViewDistance, MaxViewDistance;
+        public short Ping;
         public ChatMode ChatMode;
         public bool ColorsEnabled;
         public List<Vector3> LoadedChunks;
@@ -43,7 +43,9 @@ namespace Craft.Net.Server
         internal string AuthenticationHash;
         internal bool EncryptionEnabled, ReadyToSpawn;
         internal Timer KeepAliveTimer;
-        
+        internal DateTime LastKeepAlive, LastKeepAliveSent;
+        internal int ExpectedKeepAlive;
+
         #endregion
 
         public double MaxMoveDistance
@@ -169,6 +171,18 @@ namespace Craft.Net.Server
             dataPacket.Z = (int)position.Z;
             dataPacket.CompressedData = ChunkDataPacket.ChunkRemovalSequence;
             this.SendPacket(dataPacket);
+        }
+
+        internal void KeepAlive(object unused)
+        {
+            if (LastKeepAlive.AddSeconds(30) < DateTime.Now)
+                this.IsDisconnected = true;
+            else
+            {
+                this.SendPacket(new KeepAlivePacket(MinecraftServer.Random.Next()));
+                this.Server.ProcessSendQueue();
+                this.LastKeepAliveSent = DateTime.Now;
+            }
         }
     }
 }

@@ -381,6 +381,7 @@
     <Compile Include="Items\WoodenPickaxeItem.cs" />
     <Compile Include="Items\WoodenShovelItem.cs" />
     <Compile Include="Items\WoodenSwordItem.cs" />
+    <Compile Include="Packets\PlayerListItemPacket.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

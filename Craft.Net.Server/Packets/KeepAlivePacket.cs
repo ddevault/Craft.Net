@@ -11,6 +11,11 @@ namespace Craft.Net.Server.Packets
         {
         }
 
+        public KeepAlivePacket(int KeepAlive)
+        {
+            this.KeepAlive = KeepAlive;
+        }
+
         public override byte PacketID
         {
             get
@@ -30,6 +35,7 @@ namespace Craft.Net.Server.Packets
         public override void HandlePacket(MinecraftServer Server, ref MinecraftClient Client)
         {
             Client.LastKeepAlive = DateTime.Now;
+            Client.Ping = (short)(Client.LastKeepAlive - Client.LastKeepAliveSent).TotalMilliseconds;
         }
 
         public override void SendPacket(MinecraftServer Server, MinecraftClient Client)

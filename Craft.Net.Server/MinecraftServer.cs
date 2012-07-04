@@ -16,6 +16,7 @@ using Craft.Net.Server.Worlds;
 using java.security;
 using Craft.Net.Server.Blocks;
 using System.IO;
+using Craft.Net.Server.Packets;
 
 namespace Craft.Net.Server
 {
@@ -42,6 +43,7 @@ namespace Craft.Net.Server
 
 		private Socket socket;
         private Thread SendQueueThread;
+        private Timer UpdatePlayerListTimer;
         private AutoResetEvent SendQueueReset;
 
         internal static Random Random;
@@ -102,6 +104,8 @@ namespace Craft.Net.Server
             SendQueueThread.Start();
             socket.BeginAccept(AcceptConnectionAsync, null);
 
+            UpdatePlayerListTimer = new Timer(UpdatePlayerList, null, 60000, 60000);
+
             Log("Server started.");
 		}
 
@@ -119,6 +123,7 @@ namespace Craft.Net.Server
                     socket.Shutdown(SocketShutdown.Both);
                 socket = null;
             }
+            UpdatePlayerListTimer.Dispose();
             Log("Server stopped.");
         }
 
@@ -240,7 +245,27 @@ namespace Craft.Net.Server
                     client.Socket.BeginDisconnect(false, null, null);
                 client.KeepAliveTimer = null;
                 Clients.Remove(client);
+                foreach (var remainingClient in Clients)
+                {
+                    remainingClient.SendPacket(new PlayerListItemPacket(
+                        client.Username, false, 0));
+                }
+                this.ProcessSendQueue();
             }
+        }
+
+        public void UpdatePlayerList(object unused)
+        {
+            if (Clients.Count != 0)
+            {
+                for (int i = 0; i < Clients.Count; i++)
+                {
+                    foreach (var client in Clients)
+                        Clients[i].SendPacket(new PlayerListItemPacket(
+                            client.Username, true, client.Ping));
+                }
+            }
+            this.ProcessSendQueue();
         }
         
         #endregion
