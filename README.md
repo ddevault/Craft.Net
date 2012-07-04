@@ -19,6 +19,11 @@ If there are any additional features you would like, or any problems you encount
 using Craft.Net, please do not hesitate to
 [create an issue](https://github.com/SirCmpwn/Craft.Net/issues).
 
+Some cool technical things about Craft.Net:
+
+* Asynchronous I/O: *Minimizes CPU load and increases speed*
+* Threaded Chunk Management *Offloads chunk compression and sending to short-lived threads*
+
 Usage
 ----
 
@@ -38,6 +43,14 @@ InvalidOperationException will be thrown if an attempt is made to start the serv
 Additionally, each world must have a terrain generator, which implements IWorldGenerator.
 FlatlandGenerator is a clone of the vanilla Minecraft flatland generator.
 
+You should also consider adding an ILogProvider to the server with
+MinecraftServer.AddLogProvider. Included in Craft.Net is ConsoleLogWriter, and FileLogWriter,
+which output logs to the command line or a file, respectively. Craft.Net logs messages with
+a given LogImportance. High importance is for things like server starting and new clients
+logging in. Medium importance is for things like chat and player deaths. Low importance is a
+log of all communication on the server, and all packets are logged with a low importance.
+Packet logging is only enabled in DEBUG builds.
+
 Contributing
 ----------
 
@@ -49,7 +62,7 @@ sweeping changes. For such changes, it would be better to create an issue instea
 Dependencies
 -----------
 
-Craft.Net depends on the following tools and assemlies, which are included in the repository:
+Craft.Net depends on the following tools and assemblies, which are included in the repository:
 
 * [IKVM](http://www.ikvm.net/) is used to work with Java-like encryption.
 * [BouncyCastle](http://www.bouncycastle.org/) is also used for encryption.
