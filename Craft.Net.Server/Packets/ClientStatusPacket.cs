@@ -86,10 +86,11 @@ namespace Craft.Net.Server.Packets
 
                     // Send initial chunks
                     Client.UpdateChunks(true);
+                    MinecraftClient client = Client;
+                    Client.SendQueue.Last().OnPacketSent += (sender, e) => { client.ReadyToSpawn = true; };
                     Client.SendPacket(new PlayerPositionAndLookPacket(
                         Client.Entity.Position, Client.Entity.Yaw, Client.Entity.Pitch, true));
                     Client.KeepAliveTimer = new Timer(Client.KeepAlive, Client, 30000, 30000);
-                    Client.ReadyToSpawn = true;
 
                     Server.UpdatePlayerList(null); // Should also process send queue
                     break;

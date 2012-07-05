@@ -1,5 +1,6 @@
 using System;
 using Craft.Net.Server.Worlds;
+using Craft.Net.Server.Blocks;
 
 namespace Craft.Net.Server.Packets
 {
@@ -13,6 +14,8 @@ namespace Craft.Net.Server.Packets
 
     public class PlayerDiggingPacket : Packet
     {
+        public static double MaxDigDistance = 6;
+
         public PlayerAction Action;
         public Vector3 Position;
         public byte Face;
@@ -51,7 +54,19 @@ namespace Craft.Net.Server.Packets
 
         public override void HandlePacket(MinecraftServer Server, ref MinecraftClient Client)
         {
-            // TODO
+            if (Client.Entity.Position.DistanceTo(Position) <= MaxDigDistance)
+            {
+                switch (Action)
+                {
+                    case PlayerAction.StartedDigging:
+                        // if (creative)
+                        Server.GetClientWorld(Client).SetBlock(Position, new AirBlock());
+                        break;
+                    case PlayerAction.FinishedDigging:
+                        Server.GetClientWorld(Client).SetBlock(Position, new AirBlock());
+                        break;
+                }
+            }
         }
 
         public override void SendPacket(MinecraftServer Server, MinecraftClient Client)

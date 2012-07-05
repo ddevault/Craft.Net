@@ -133,7 +133,8 @@ namespace Craft.Net.Server
 
         public void ProcessSendQueue()
         {
-            SendQueueReset.Set();
+            if (SendQueueReset != null)
+                SendQueueReset.Set();
         }
 
         public void AddLogProvider(ILogProvider LogProvider)
@@ -161,6 +162,8 @@ namespace Craft.Net.Server
 
         private void HandleOnBlockChanged(object sender, BlockChangedEventArgs e)
         {
+            Console.WriteLine("Block changed");
+
             foreach (var client in GetClientsInWorld(e.World))
                 client.SendPacket(new BlockChangePacket(e.Position, e.Value));
             this.ProcessSendQueue();
@@ -216,7 +219,10 @@ namespace Craft.Net.Server
                                 LogImportance.Low);
                             Log(packet.ToString(), LogImportance.Low);
                             if (Clients.Count >= oldCount)
+                            {
                                 packet.SendPacket(this, Clients[i]);
+                                packet.FirePacketSent();
+                            }
                             if (Clients.Count < oldCount) // In case this client is disconnected
                                 break;
                         }

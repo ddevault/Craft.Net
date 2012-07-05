@@ -16,6 +16,13 @@ namespace Craft.Net.Server.Packets
     {
         public PacketContext PacketContext { get; set; }
 
+        public event EventHandler OnPacketSent;
+        public void FirePacketSent()
+        {
+            if (OnPacketSent != null)
+                OnPacketSent(this, null);
+        }
+
         public abstract byte PacketID { get; }
         public abstract int TryReadPacket(byte[] Buffer, int Length);
         public abstract void HandlePacket(MinecraftServer Server, ref MinecraftClient Client);

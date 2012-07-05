@@ -75,72 +75,69 @@ namespace Craft.Net.Server.Worlds
 
         public Block GetBlock(Vector3 position)
         {
-            position = position.Floor();
-            // TODO: Is there a better way of doing this?
-            bool xNegative = position.X < 0;
-            bool zNegative = position.Z < 0;
-            if (xNegative)
-                position.X = -position.X;
-            if (zNegative)
-                position.Z = -position.Z;
-
+            int X = (int)position.X;
+            int Z = (int)position.Z;
+            bool negX = X < 0;
+            bool negZ = Z < 0;
+            X = negX ? -X : X;
+            Z = negZ ? -Z : Z;
+            // abs(n)/width+1
+            X = (X / Region.Width) + (negX ? 1 : 0);
+            Z = (Z / Region.Depth) + (negZ ? 1 : 0);
+            X = negX ? -X : X;
+            Z = negZ ? -Z : Z;
+            Vector3 region = new Vector3(X, 0, Z);
+            if (!Regions.ContainsKey(region))
+                Regions.Add(region, new Region(region, WorldGenerator));
+            
             Vector3 relativePosition = position;
-
-            position.X = (int)(position.X) % (Region.Width * Chunk.Width);
-            position.Y = 0;
-            position.Z = (int)(position.Z) % (Region.Depth * Chunk.Depth);
-
-            if (xNegative)
-                position.X = -position.X;
-            if (zNegative)
-                position.Z = -position.Z;
-
-            if (!Regions.ContainsKey(position))
-                Regions.Add(position, new Region(position, WorldGenerator));
-
-            if (xNegative)
+            if (negX)
+                relativePosition.X = -relativePosition.X;
+            if (negZ)
+                relativePosition.Z = -relativePosition.Z;
+            relativePosition.X = (int)(relativePosition.X) % Region.Width;
+            relativePosition.Z = (int)(relativePosition.Z) % Region.Depth;
+            if (negX)
                 relativePosition.X = (Region.Width * Chunk.Width) - relativePosition.X;
-            if (zNegative)
+            if (negZ)
                 relativePosition.Z = (Region.Depth * Chunk.Depth) - relativePosition.Z;
 
-            return Regions[position].GetBlock(relativePosition);
+            return Regions[region].GetBlock(relativePosition);
         }
 
         public void SetBlock(Vector3 position, Block value)
         {
-            position = position.Floor();
-            Vector3 target = position; // TODO: Don't change position
-            // TODO: Is there a better way of doing this?
-            bool xNegative = position.X < 0;
-            bool zNegative = position.Z < 0;
-            if (xNegative)
-                position.X = -position.X;
-            if (zNegative)
-                position.Z = -position.Z;
+            int X = (int)position.X;
+            int Z = (int)position.Z;
+            bool negX = X < 0;
+            bool negZ = Z < 0;
+            X = negX ? -X : X;
+            Z = negZ ? -Z : Z;
+            // abs(n)/width+1
+            X = (X / Region.Width) + (negX ? 1 : 0);
+            Z = (Z / Region.Depth) + (negZ ? 1 : 0);
+            X = negX ? -X : X;
+            Z = negZ ? -Z : Z;
+            Vector3 region = new Vector3(X, 0, Z);
+            if (!Regions.ContainsKey(region))
+                Regions.Add(region, new Region(region, WorldGenerator));
             
             Vector3 relativePosition = position;
-            
-            position.X = (int)(position.X) % (Region.Width * Chunk.Width);
-            position.Y = 0;
-            position.Z = (int)(position.Z) % (Region.Depth * Chunk.Depth);
-            
-            if (xNegative)
-                position.X = -position.X;
-            if (zNegative)
-                position.Z = -position.Z;
-            
-            if (!Regions.ContainsKey(position))
-                Regions.Add(position, new Region(position, WorldGenerator));
-            
-            if (xNegative)
+            if (negX)
+                relativePosition.X = -relativePosition.X;
+            if (negZ)
+                relativePosition.Z = -relativePosition.Z;
+            relativePosition.X = (int)(relativePosition.X) % Region.Width;
+            relativePosition.Z = (int)(relativePosition.Z) % Region.Depth;
+            if (negX)
                 relativePosition.X = (Region.Width * Chunk.Width) - relativePosition.X;
-            if (zNegative)
+            if (negZ)
                 relativePosition.Z = (Region.Depth * Chunk.Depth) - relativePosition.Z;
             
-            Regions[position].SetBlock(relativePosition, value);
+            Regions[region].SetBlock(relativePosition, value);
 
             if (OnBlockChanged != null)
-                OnBlockChanged(this, new BlockChangedEventArgs(this, target, value));
+                OnBlockChanged(this, new BlockChangedEventArgs(this, position, value));
         }
     }
 }

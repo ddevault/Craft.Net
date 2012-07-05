@@ -34,11 +34,11 @@ namespace Craft.Net.Server.Worlds
             Vector3 relativePosition = position;
             position.X = (int)(position.X) / Chunk.Width;
             position.Y = 0;
-            position.Z = (int)(position.Z) / Chunk.Height;
+            position.Z = (int)(position.Z) / Chunk.Depth;
 
             relativePosition.X = (int)(relativePosition.X) % Chunk.Width;
             relativePosition.Y = 0;
-            relativePosition.Z = (int)(relativePosition.Z) % Chunk.Height;
+            relativePosition.Z = (int)(relativePosition.Z) % Chunk.Depth;
 
             if (!Chunks.ContainsKey(position))
                 Chunks.Add(position, WorldGenerator.GenerateChunk(position, this));
@@ -52,11 +52,10 @@ namespace Craft.Net.Server.Worlds
             Vector3 relativePosition = position;
             position.X = (int)(position.X) / Chunk.Width;
             position.Y = 0;
-            position.Z = (int)(position.Z) / Chunk.Height;
+            position.Z = (int)(position.Z) / Chunk.Depth;
             
             relativePosition.X = (int)(relativePosition.X) % Chunk.Width;
-            relativePosition.Y = 0;
-            relativePosition.Z = (int)(relativePosition.Z) % Chunk.Height;
+            relativePosition.Z = (int)(relativePosition.Z) % Chunk.Depth;
             
             if (!Chunks.ContainsKey(position))
                 Chunks.Add(position, WorldGenerator.GenerateChunk(position, this));

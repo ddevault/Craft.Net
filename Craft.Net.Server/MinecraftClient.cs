@@ -152,7 +152,6 @@ namespace Craft.Net.Server
                     if (!this.LoadedChunks.Contains(chunk))
                         LoadChunk(chunk);
                 }
-                Server.ProcessSendQueue();
             }
         }
 
