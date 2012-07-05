@@ -58,36 +58,39 @@ namespace Craft.Net.Server.Packets
                     byte[] hash = sha1.ComputeHash(shaData);
 
                     // Talk to session.minecraft.net
-                    WebClient webClient = new WebClient();
-                    StreamReader webReader = new StreamReader(webClient.OpenRead(
-                            new Uri(string.Format(SessionCheckUri,
-                            Client.Username, GetHashString(hash)))));
-                    string response = webReader.ReadToEnd();
-                    webReader.Close();
-
-                    // Kick or login player accordingly
-                    if (response != "YES" && Server.OnlineMode)
-                        Client.SendPacket(new DisconnectPacket("Failed to verify username!"));
-                    else
+                    if (Server.OnlineMode)
                     {
-                        Server.Log(Client.Username + " logged in.");
-                        // Spawn player
-                        Client.Entity = new PlayerEntity(Client);
-                        Client.Entity.Position = Server.DefaultWorld.SpawnPoint;
-                        Client.Entity.Position += new Vector3(0, PlayerEntity.Height, 0);
-                        Server.DefaultWorld.EntityManager.SpawnEntity(Client.Entity);
-                        Client.SendPacket(new LoginPacket(Client.Entity.Id,
-                               Server.DefaultWorld.LevelType, Server.DefaultWorld.GameMode,
-                               Client.Entity.Dimension, Server.DefaultWorld.Difficulty,
-                               Server.MaxPlayers));
-
-                        // Send initial chunks
-                        Client.UpdateChunks(true);
-                        Client.SendPacket(new PlayerPositionAndLookPacket(
-                            Client.Entity.Position, Client.Entity.Yaw, Client.Entity.Pitch, true));
-                        Client.KeepAliveTimer = new Timer(Client.KeepAlive, Client, 30000, 30000);
-                        Client.ReadyToSpawn = true;
+                        WebClient webClient = new WebClient();
+                        StreamReader webReader = new StreamReader(webClient.OpenRead(
+                                new Uri(string.Format(SessionCheckUri,
+                                Client.Username, GetHashString(hash)))));
+                        string response = webReader.ReadToEnd();
+                        webReader.Close();
+                        if (response != "YES")
+                        {
+                            Client.SendPacket(new DisconnectPacket("Failed to verify username!"));
+                            return;
+                        }
                     }
+
+                    Server.Log(Client.Username + " logged in.");
+                    // Spawn player
+                    Client.Entity = new PlayerEntity(Client);
+                    Client.Entity.Position = Server.DefaultWorld.SpawnPoint;
+                    Client.Entity.Position += new Vector3(0, PlayerEntity.Height, 0);
+                    Server.DefaultWorld.EntityManager.SpawnEntity(Client.Entity);
+                    Client.SendPacket(new LoginPacket(Client.Entity.Id,
+                           Server.DefaultWorld.LevelType, Server.DefaultWorld.GameMode,
+                           Client.Entity.Dimension, Server.DefaultWorld.Difficulty,
+                           Server.MaxPlayers));
+
+                    // Send initial chunks
+                    Client.UpdateChunks(true);
+                    Client.SendPacket(new PlayerPositionAndLookPacket(
+                        Client.Entity.Position, Client.Entity.Yaw, Client.Entity.Pitch, true));
+                    Client.KeepAliveTimer = new Timer(Client.KeepAlive, Client, 30000, 30000);
+                    Client.ReadyToSpawn = true;
+
                     Server.UpdatePlayerList(null); // Should also process send queue
                     break;
                 case ClientStatus.Respawn:

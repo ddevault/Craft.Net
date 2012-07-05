@@ -155,7 +155,15 @@ namespace Craft.Net.Server
         public void AddWorld(World World)
         {
             World.EntityManager.Server = this;
+            World.OnBlockChanged += HandleOnBlockChanged;
             Worlds.Add(World);
+        }
+
+        private void HandleOnBlockChanged(object sender, BlockChangedEventArgs e)
+        {
+            foreach (var client in GetClientsInWorld(e.World))
+                client.SendPacket(new BlockChangePacket(e.Position, e.Value));
+            this.ProcessSendQueue();
         }
 
         public World GetClientWorld(MinecraftClient Client)

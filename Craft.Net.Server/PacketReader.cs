@@ -28,9 +28,9 @@ namespace Craft.Net.Server
             typeof(PlayerPositionPacket), // 0xb
             typeof(PlayerLookPacket), // 0xc
             typeof(PlayerPositionAndLookPacket), // 0xd
-            null, // 0xe
-            null, // 0xf
-            null, // 0x10
+            typeof(PlayerDiggingPacket), // 0xe
+            typeof(BlockPlacementPacket), // 0xf
+            typeof(HeldItemChangePacket), // 0x10
             null, // 0x11
             typeof(AnimationPacket), // 0x12
             typeof(EntityActionPacket), // 0x13
@@ -115,7 +115,7 @@ namespace Craft.Net.Server
             null, // 0x62
             null, // 0x63
             null, // 0x64
-            null, // 0x65
+            typeof(CloseWindowPacket), // 0x65
             null, // 0x66
             null, // 0x67
             null, // 0x68

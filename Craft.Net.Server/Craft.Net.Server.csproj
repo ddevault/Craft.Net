@@ -391,6 +391,12 @@
     <Compile Include="Packets\AnimationPacket.cs" />
     <Compile Include="Packets\CreativeInventoryActionPacket.cs" />
     <Compile Include="Slot.cs" />
+    <Compile Include="Packets\CloseWindowPacket.cs" />
+    <Compile Include="Packets\BlockPlacementPacket.cs" />
+    <Compile Include="Packets\HeldItemChangePacket.cs" />
+    <Compile Include="Packets\PlayerDiggingPacket.cs" />
+    <Compile Include="Events\BlockChangedEventArgs.cs" />
+    <Compile Include="Packets\BlockChangePacket.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

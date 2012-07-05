@@ -53,7 +53,10 @@ namespace Craft.Net.Server.Packets
             Client.Username = Username;
             Client.Hostname = Hostname + ":" + Port.ToString();
             // Respond with encryption request
-            Client.AuthenticationHash = CreateHash();
+            if (Server.OnlineMode)
+                Client.AuthenticationHash = CreateHash();
+            else
+                Client.AuthenticationHash = "-";
             EncryptionKeyRequestPacket keyRequest = 
                 new EncryptionKeyRequestPacket(Client.AuthenticationHash,
                                                Server.KeyPair.getPublic());

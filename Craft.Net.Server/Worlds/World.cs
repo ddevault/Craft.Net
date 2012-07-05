@@ -2,6 +2,7 @@ using System;
 using Craft.Net.Server.Worlds.Generation;
 using Craft.Net.Server.Blocks;
 using System.Collections.Generic;
+using Craft.Net.Server.Events;
 
 namespace Craft.Net.Server.Worlds
 {
@@ -23,6 +24,8 @@ namespace Craft.Net.Server.Worlds
         public Difficulty Difficulty;
         public IWorldGenerator WorldGenerator;
         public long Seed;
+
+        public event EventHandler<BlockChangedEventArgs> OnBlockChanged;
 
         public World(IWorldGenerator WorldGenerator)
         {
@@ -106,6 +109,7 @@ namespace Craft.Net.Server.Worlds
         public void SetBlock(Vector3 position, Block value)
         {
             position = position.Floor();
+            Vector3 target = position; // TODO: Don't change position
             // TODO: Is there a better way of doing this?
             bool xNegative = position.X < 0;
             bool zNegative = position.Z < 0;
@@ -134,6 +138,9 @@ namespace Craft.Net.Server.Worlds
                 relativePosition.Z = (Region.Depth * Chunk.Depth) - relativePosition.Z;
             
             Regions[position].SetBlock(relativePosition, value);
+
+            if (OnBlockChanged != null)
+                OnBlockChanged(this, new BlockChangedEventArgs(this, target, value));
         }
     }
 }
