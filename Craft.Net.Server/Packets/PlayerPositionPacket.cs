@@ -49,6 +49,7 @@ namespace Craft.Net.Server.Packets
                 return;
             }
             Client.UpdateChunksAsync();
+            Server.GetClientWorld(Client).EntityManager.UpdateEntity(Client.Entity);
         }
 
         public override void SendPacket(MinecraftServer Server, MinecraftClient Client)

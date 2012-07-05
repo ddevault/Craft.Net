@@ -72,7 +72,7 @@ namespace Craft.Net.Server.Packets
                     {
                         Server.Log(Client.Username + " logged in.");
                         // Spawn player
-                        Client.Entity = new PlayerEntity();
+                        Client.Entity = new PlayerEntity(Client);
                         Client.Entity.Position = Server.DefaultWorld.SpawnPoint;
                         Client.Entity.Position += new Vector3(0, PlayerEntity.Height, 0);
                         Server.DefaultWorld.EntityManager.SpawnEntity(Client.Entity);

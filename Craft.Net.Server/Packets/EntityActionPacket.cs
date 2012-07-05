@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace Craft.Net.Server.Packets
 {
@@ -60,7 +61,8 @@ namespace Craft.Net.Server.Packets
             if (Action != EntityAction.LeaveBed) // NOTE: Does this matter?
             {
                 this.EntityId = Client.Entity.Id;
-                for (int i = 0; i < Server.Clients.Count; i++)
+                for (int i = 0; i < 
+                     Server.GetClientsInWorld(Server.GetClientWorld(Client)).Count(); i++)
                 {
                     if (Server.Clients [i] != Client)
                         Server.Clients [i].SendPacket(this);

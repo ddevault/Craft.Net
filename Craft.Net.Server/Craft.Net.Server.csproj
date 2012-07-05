@@ -54,6 +54,9 @@
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="LibNbt">
+      <HintPath>..\LibNbt.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
@@ -384,6 +387,10 @@
     <Compile Include="Packets\PlayerListItemPacket.cs" />
     <Compile Include="Events\ChatMessageEventArgs.cs" />
     <Compile Include="Packets\EntityActionPacket.cs" />
+    <Compile Include="Packets\SpawnNamedEntityPacket.cs" />
+    <Compile Include="Packets\AnimationPacket.cs" />
+    <Compile Include="Packets\CreativeInventoryActionPacket.cs" />
+    <Compile Include="Slot.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

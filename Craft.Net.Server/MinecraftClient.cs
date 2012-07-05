@@ -35,6 +35,7 @@ namespace Craft.Net.Server
         public MinecraftServer Server;
         public byte WalkingSpeed, FlyingSpeed;
         public bool IsCrouching, IsSprinting;
+        public Slot[] Inventory;
 
         internal BufferedBlockCipher Encrypter, Decrypter;
         internal Key SharedKey;
@@ -75,6 +76,7 @@ namespace Craft.Net.Server
             this.Server = Server;
             this.WalkingSpeed = 12;
             this.FlyingSpeed = 25;
+            this.Inventory = new Slot[44];
         }
 
         public void SendPacket(Packet packet)

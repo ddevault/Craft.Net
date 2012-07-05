@@ -18,6 +18,7 @@ using Craft.Net.Server.Blocks;
 using System.IO;
 using Craft.Net.Server.Packets;
 using Craft.Net.Server.Events;
+using Craft.Net.Server.Worlds.Entities;
 
 namespace Craft.Net.Server
 {
@@ -153,6 +154,7 @@ namespace Craft.Net.Server
 
         public void AddWorld(World World)
         {
+            World.EntityManager.Server = this;
             Worlds.Add(World);
         }
 
@@ -164,6 +166,17 @@ namespace Craft.Net.Server
                     return world;
             }
             return null;
+        }
+
+        public MinecraftClient[] GetClientsInWorld(World world)
+        {
+            List<MinecraftClient> clients = new List<MinecraftClient>();
+            foreach (var client in Clients)
+            {
+                if (world.EntityManager.Entities.Contains(client.Entity))
+                    clients.Add(client);
+            }
+            return clients.ToArray();
         }
 
         public void SendChat(string message)

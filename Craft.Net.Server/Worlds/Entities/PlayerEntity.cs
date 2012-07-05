@@ -5,8 +5,15 @@ namespace Craft.Net.Server.Worlds.Entities
 {
     public class PlayerEntity : Entity
     {
+        public MinecraftClient Client;
+
         public PlayerEntity()
         {
+        }
+
+        public PlayerEntity(MinecraftClient Client)
+        {
+            this.Client = Client;
         }
 
         #region Properties

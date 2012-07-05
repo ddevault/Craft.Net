@@ -26,7 +26,7 @@ namespace Craft.Net.Server.Worlds
 
         public World(IWorldGenerator WorldGenerator)
         {
-            EntityManager = new EntityManager();
+            EntityManager = new EntityManager(this);
             Name = "world";
             GameMode = GameMode.Creative;
             Difficulty = Difficulty.Peaceful;
