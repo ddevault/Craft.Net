@@ -33,7 +33,7 @@ namespace Craft.Net.Server
             null, // 0x10
             null, // 0x11
             null, // 0x12
-            null, // 0x13
+            typeof(EntityActionPacket), // 0x13
             null, // 0x14
             null, // 0x15
             null, // 0x16

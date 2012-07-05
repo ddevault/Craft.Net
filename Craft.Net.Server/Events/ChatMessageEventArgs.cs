@@ -1,6 +1,6 @@
 using System;
 
-namespace Craft.Net.Server
+namespace Craft.Net.Server.Events
 {
     public class ChatMessageEventArgs : EventArgs
     {

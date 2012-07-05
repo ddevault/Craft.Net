@@ -34,6 +34,7 @@ namespace Craft.Net.Server
         public Dictionary<string, object> Tags;
         public MinecraftServer Server;
         public byte WalkingSpeed, FlyingSpeed;
+        public bool IsCrouching, IsSprinting;
 
         internal BufferedBlockCipher Encrypter, Decrypter;
         internal Key SharedKey;

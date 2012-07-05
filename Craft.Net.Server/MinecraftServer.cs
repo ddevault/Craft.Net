@@ -17,6 +17,7 @@ using java.security;
 using Craft.Net.Server.Blocks;
 using System.IO;
 using Craft.Net.Server.Packets;
+using Craft.Net.Server.Events;
 
 namespace Craft.Net.Server
 {

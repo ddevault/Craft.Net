@@ -383,6 +383,7 @@
     <Compile Include="Items\WoodenSwordItem.cs" />
     <Compile Include="Packets\PlayerListItemPacket.cs" />
     <Compile Include="Events\ChatMessageEventArgs.cs" />
+    <Compile Include="Packets\EntityActionPacket.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
