@@ -296,8 +296,6 @@ namespace Craft.Net.Server
                     client.KeepAliveTimer.Dispose();
                 }
                 Clients.Remove(client);
-                if (client.IsLoggedIn)
-                    Log(client.Username + " disconnceted");
                 foreach (var remainingClient in Clients)
                 {
                     remainingClient.SendPacket(new PlayerListItemPacket(

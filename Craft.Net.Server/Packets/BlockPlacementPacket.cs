@@ -43,7 +43,7 @@ namespace Craft.Net.Server.Packets
 
         public override void HandlePacket(MinecraftServer Server, ref MinecraftClient Client)
         {
-            if (HeldItem.Id < 256)
+            if (HeldItem.Id < 0x80)
             {
                 Block block = (Block)HeldItem.Id;
                 if (block != null)
