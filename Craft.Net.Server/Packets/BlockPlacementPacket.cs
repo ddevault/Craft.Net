@@ -38,6 +38,9 @@ namespace Craft.Net.Server.Packets
             if (!Slot.TryReadSlot(Buffer, ref offset, out HeldItem))
                 return -1;
             Position = new Vector3(x, y, z);
+            Console.WriteLine(Position.ToString() + ":" + Direction + ";" +
+                ((Block)((byte)HeldItem.Id)).GetType().Name + "[" +
+                HeldItem.Count + ":" + HeldItem.Metadata + "]");
             return offset;
         }
 
@@ -47,7 +50,8 @@ namespace Craft.Net.Server.Packets
             {
                 Block block = (Block)HeldItem.Id;
                 if (block != null)
-                    Console.WriteLine(block.GetType().Name);
+                {
+                }
             }
         }
 

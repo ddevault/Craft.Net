@@ -120,9 +120,16 @@ namespace Craft.Net.Server
             }
         }
 
+        public void ForceUpdateChunksAsync()
+        {
+            Thread t = new Thread(() => UpdateChunks(true));
+            t.Start();
+        }
+
         public void UpdateChunks()
         {
             UpdateChunks(false);
+            this.Server.ProcessSendQueue();
         }
 
         public void UpdateChunks(bool ForceUpdate)
@@ -189,6 +196,13 @@ namespace Craft.Net.Server
 
         internal void KeepAlive(object unused)
         {
+            // Keep alive timer is also responsible for trickling in chunks
+            // early in the session.
+            if (this.ReadyToSpawn && this.ViewDistance < this.MaxViewDistance)
+            {
+                this.ViewDistance++;
+                this.ForceUpdateChunksAsync();
+            }
             if (LastKeepAlive.AddSeconds(60) < DateTime.Now)
             {
                 Server.Log("Client timed out");
