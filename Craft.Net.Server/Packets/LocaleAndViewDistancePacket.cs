@@ -45,7 +45,6 @@ namespace Craft.Net.Server.Packets
 
             // Adds an extra 2 chunk buffer to make loading look nice
             this.ViewDistance = (8 << viewDistance) + 2;
-            Console.WriteLine(this.ViewDistance + " from " + viewDistance);
             this.ChatMode = (ChatMode)(chatFlags & 0x3);
             this.ColorsEnabled = (chatFlags & 0x8) == 0x8;
             this.Difficulty = (Difficulty)difficulty;
