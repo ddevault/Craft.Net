@@ -52,6 +52,9 @@ namespace Craft.Net.Server.Test
                         }
                         catch { }
                         break;
+                    case "ping":
+                        e.Origin.SendChat("Pong");
+                        break;
                 }
             }
         }

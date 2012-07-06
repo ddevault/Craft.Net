@@ -31,7 +31,7 @@ namespace Craft.Net.Server.Worlds
             this.BlockLight = new NibbleArray(Width * Height * Depth);
             this.SkyLight = new NibbleArray(Width * Height * Depth);
             for (int i = 0; i < this.SkyLight.Data.Length; i++)
-                this.SkyLight.Data[i] = 0xFF;
+                this.SkyLight.Data[i] = this.BlockLight.Data[i] = 0xFF;
             this.NonairCount = 0;
         }
 
