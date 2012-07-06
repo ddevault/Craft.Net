@@ -16,10 +16,10 @@ namespace Craft.Net.Server.Worlds.Generation
             {
                 for (int z = 0; z < 16; z++)
                 {
-                    for (int y = 1; y < 15; y++)
+                    for (int y = 1; y < 3; y++)
                         chunk.SetBlock(new Vector3(x, y, z), new DirtBlock());
                     chunk.SetBlock(new Vector3(x, 0, z), new BedrockBlock());
-                    chunk.SetBlock(new Vector3(x, 15, z), new GrassBlock());
+                    chunk.SetBlock(new Vector3(x, 3, z), new GrassBlock());
                 }
             }
             return chunk;
@@ -39,7 +39,7 @@ namespace Craft.Net.Server.Worlds.Generation
         {
             get
             {
-                return new Vector3(0, 16, 0);
+                return new Vector3(0, 4, 0);
             }
         }
     }

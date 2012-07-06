@@ -176,6 +176,12 @@ namespace Craft.Net.Server
             this.SendPacket(dataPacket);
         }
 
+        public void SendChat(string Message)
+        {
+            this.SendPacket(new ChatMessagePacket(Message));
+            this.Server.ProcessSendQueue();
+        }
+
         internal void StartKeepAliveTimer()
         {
             KeepAliveTimer = new Timer(KeepAlive, null, 30000, 30000);

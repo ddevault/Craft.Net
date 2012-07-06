@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Craft.Net.Server.Worlds;
 using ICSharpCode.SharpZipLib.Zip.Compression;
+using Craft.Net.Server.Blocks;
 
 namespace Craft.Net.Server.Packets
 {
@@ -60,18 +61,18 @@ namespace Craft.Net.Server.Packets
             byte[] data = blockData.Concat(metadata).Concat(blockLight)
                 .Concat(skyLight).Concat(Chunk.Biomes).ToArray();
             int length;
+            byte[] result = new byte[data.Length];
             lock (LockObject)
             {
                 zLibDeflater.SetInput(data);
                 zLibDeflater.Finish();
-                length = zLibDeflater.Deflate(data);
+                length = zLibDeflater.Deflate(result);
                 zLibDeflater.Reset();
             }
 
             this.GroundUpContiguous = true;
 
-            CompressedData = new byte[length];
-            Array.Copy(data, CompressedData, length);
+            CompressedData = result.Take(length).ToArray();
         }
 
         public override byte PacketID
