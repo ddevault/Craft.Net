@@ -1,6 +1,7 @@
 using System;
 using System.Security.Cryptography;
 using System.Net;
+using System.Threading;
 
 namespace Craft.Net.Server.Packets
 {
@@ -62,6 +63,7 @@ namespace Craft.Net.Server.Packets
                                                Server.KeyPair.getPublic());
             Client.SendPacket(keyRequest);
             Server.ProcessSendQueue();
+            Client.StartKeepAliveTimer();
         }
 
         public override void SendPacket(MinecraftServer Server, MinecraftClient Client)

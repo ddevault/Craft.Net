@@ -250,7 +250,11 @@ namespace Craft.Net.Server
             SocketError error;
             int length = client.Socket.EndReceive(result, out error);
             if (error != SocketError.Success || !client.Socket.Connected || length == 0)
+            {
+                if (error != SocketError.Success)
+                    Log("Socket error: " + error);
                 client.IsDisconnected = true;
+            }
             else
             {
                 try
@@ -279,9 +283,18 @@ namespace Craft.Net.Server
             if (client.IsDisconnected)
             {
                 if (client.Socket.Connected)
+                {
+                    Log("Forcefully disconnecting.");
                     client.Socket.BeginDisconnect(false, null, null);
-                client.KeepAliveTimer = null;
+                }
+                if (client.KeepAliveTimer != null)
+                {
+                    client.KeepAliveTimer.Change(Timeout.Infinite, Timeout.Infinite);
+                    client.KeepAliveTimer.Dispose();
+                }
                 Clients.Remove(client);
+                if (client.IsLoggedIn)
+                    Log(client.Username + " disconnceted");
                 foreach (var remainingClient in Clients)
                 {
                     remainingClient.SendPacket(new PlayerListItemPacket(

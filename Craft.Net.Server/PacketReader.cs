@@ -282,13 +282,12 @@ namespace Craft.Net.Server
         /// </returns>
         public static IEnumerable<Packet> TryReadPackets(ref MinecraftClient Client, int Length)
         {
-            // Partial packets are broken
             List<Packet> results = new List<Packet>();
             byte[] buffer = Client.RecieveBuffer.Take(Length).ToArray();
             if (Client.EncryptionEnabled)
                 buffer = Client.Decrypter.ProcessBytes(buffer);
 
-            while (buffer.Length != 0)
+            while (buffer.Length > 0)
             {
                 var packetType = PacketTypes[buffer[0]];
                 if (packetType == null)

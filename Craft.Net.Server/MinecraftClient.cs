@@ -77,6 +77,7 @@ namespace Craft.Net.Server
             this.WalkingSpeed = 12;
             this.FlyingSpeed = 25;
             this.Inventory = new Slot[44];
+            this.LastKeepAlive = DateTime.MaxValue.AddSeconds(-120);
         }
 
         public void SendPacket(Packet packet)
@@ -175,10 +176,18 @@ namespace Craft.Net.Server
             this.SendPacket(dataPacket);
         }
 
+        internal void StartKeepAliveTimer()
+        {
+            KeepAliveTimer = new Timer(KeepAlive, null, 30000, 30000);
+        }
+
         internal void KeepAlive(object unused)
         {
-            if (LastKeepAlive.AddSeconds(30) < DateTime.Now)
+            if (LastKeepAlive.AddSeconds(60) < DateTime.Now)
+            {
+                Server.Log("Client timed out");
                 this.IsDisconnected = true;
+            }
             else
             {
                 this.SendPacket(new KeepAlivePacket(MinecraftServer.Random.Next()));

@@ -74,6 +74,7 @@ namespace Craft.Net.Server.Packets
                     }
 
                     Server.Log(Client.Username + " logged in.");
+                    Client.IsLoggedIn = true;
                     // Spawn player
                     Client.Entity = new PlayerEntity(Client);
                     Client.Entity.Position = Server.DefaultWorld.SpawnPoint;
@@ -90,7 +91,6 @@ namespace Craft.Net.Server.Packets
                     Client.SendQueue.Last().OnPacketSent += (sender, e) => { client.ReadyToSpawn = true; };
                     Client.SendPacket(new PlayerPositionAndLookPacket(
                         Client.Entity.Position, Client.Entity.Yaw, Client.Entity.Pitch, true));
-                    Client.KeepAliveTimer = new Timer(Client.KeepAlive, Client, 30000, 30000);
 
                     Server.UpdatePlayerList(null); // Should also process send queue
                     break;
