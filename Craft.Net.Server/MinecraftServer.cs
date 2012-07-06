@@ -162,8 +162,6 @@ namespace Craft.Net.Server
 
         private void HandleOnBlockChanged(object sender, BlockChangedEventArgs e)
         {
-            Console.WriteLine("Block changed");
-
             foreach (var client in GetClientsInWorld(e.World))
                 client.SendPacket(new BlockChangePacket(e.Position, e.Value));
             this.ProcessSendQueue();
@@ -213,18 +211,26 @@ namespace Craft.Net.Server
                     {
                         while (Clients[i].SendQueue.Count != 0)
                         {
-                            int oldCount = Clients.Count;
                             var packet = Clients[i].SendQueue.Dequeue();
                             Log("[SERVER->CLIENT] " + Clients[i].Socket.RemoteEndPoint.ToString(),
                                 LogImportance.Low);
                             Log(packet.ToString(), LogImportance.Low);
-                            if (Clients.Count >= oldCount)
+                            try
                             {
                                 packet.SendPacket(this, Clients[i]);
                                 packet.FirePacketSent();
                             }
-                            if (Clients.Count < oldCount) // In case this client is disconnected
+                            catch
+                            {
+                                // Occasionally, the client will disconnect while
+                                // processing the packet to be sent, which causes
+                                // a fatal exception.
+                                Clients[i].IsDisconnected = true;
+                                if (Clients[i].Socket.Connected)
+                                    Clients[i].Socket.BeginDisconnect(false, null, null);
+                                i--;
                                 break;
+                            }
                         }
                     }
                 }
@@ -283,10 +289,7 @@ namespace Craft.Net.Server
             if (client.IsDisconnected)
             {
                 if (client.Socket.Connected)
-                {
-                    Log("Forcefully disconnecting.");
                     client.Socket.BeginDisconnect(false, null, null);
-                }
                 if (client.KeepAliveTimer != null)
                 {
                     client.KeepAliveTimer.Change(Timeout.Infinite, Timeout.Infinite);
