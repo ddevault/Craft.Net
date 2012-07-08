@@ -76,4 +76,15 @@ Craft.Net depends on the following tools and assemblies, which are included in t
 * [BouncyCastle](http://www.bouncycastle.org/) is also used for encryption.
 * [SharpZipLib](http://www.icsharpcode.net/opensource/sharpziplib/) is used for data compression.
 
+Licensing
+---------
+
+Craft.Net uses the permissive [MIT license](http://www.opensource.org/licenses/mit-license.php/).
+
+In a nutshell:
+
+* You are not restricted on usage of Craft.Net; commercial, private, etc, all fine.
+* The developers are not liable for what you do with it.
+* Craft.Net is provided "as is" with no warranty.
+
 [Minecraft](http://minecraft.net) is not officially affiliated with Craft.Net.
