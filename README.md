@@ -1,7 +1,7 @@
 Craft.Net
 ========
 
-Craft.Net is a library for .Net that implements the Minecraft 12w26a server protocol.
+Craft.Net is a library for .Net that implements the Minecraft 12w27a server protocol.
 It also contains functionality for manipulating Anvil worlds, simulating block interactions,
 and simulating entity interactions.
 
@@ -28,7 +28,7 @@ Usage
 ----
 
 Craft.Net is a library, and will not work as a standalone server. However, the basic usage
-is simple. To get started, the following code will create a Minecraft 12w26a server:
+is simple. To get started, the following code will create a Minecraft 12w27a server:
 
     MinecraftServer server = new MinecraftServer(new IPEndPoint(IPAddress.Any, 25565));
     server.AddWorld(new World(new FlatlandGenerator()));
@@ -58,6 +58,14 @@ If you wish to contribute your own code to Craft.Net, please create a fork. You 
 encouraged to follow the code standards currently in use, and pull requests that do not will
 be rejected. You are also encouraged to make small, focused pull requests, rather than large,
 sweeping changes. For such changes, it would be better to create an issue instead.
+
+Getting Help
+------------
+
+You can get help by making an [issue on GitHub](https://github.com/SirCmpwn/Craft.Net/issues),
+or joining #craft.net on irc.freenode.net.  If you are already knowledgable about using
+Craft.Net, consider contributing to the [wiki](https://github.com/SirCmpwn/Craft.Net/wiki) for
+the sake of others.
 
 Dependencies
 -----------

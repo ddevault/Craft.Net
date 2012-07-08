@@ -29,7 +29,7 @@ namespace Craft.Net.Server
 	{
         #region Public Fields
 
-        public const int ProtocolVersion = 37;
+        public const int ProtocolVersion = 38;
 
         public List<MinecraftClient> Clients;
         public List<World> Worlds;
@@ -291,10 +291,7 @@ namespace Craft.Net.Server
                 if (client.Socket.Connected)
                     client.Socket.BeginDisconnect(false, null, null);
                 if (client.KeepAliveTimer != null)
-                {
-                    client.KeepAliveTimer.Change(Timeout.Infinite, Timeout.Infinite);
                     client.KeepAliveTimer.Dispose();
-                }
                 Clients.Remove(client);
                 foreach (var remainingClient in Clients)
                 {

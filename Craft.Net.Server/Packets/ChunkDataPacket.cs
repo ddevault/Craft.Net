@@ -102,7 +102,6 @@ namespace Craft.Net.Server.Packets
                 .Concat(CreateUShort(PrimaryBitMap))
                 .Concat(CreateUShort(AddBitMap))
                 .Concat(CreateInt(CompressedData.Length))
-                .Concat(CreateInt(0))
                 .Concat(CompressedData).ToArray();
             Client.SendData(buffer);
         }
