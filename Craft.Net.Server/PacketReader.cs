@@ -305,6 +305,8 @@ namespace Craft.Net.Server
                     Client.Socket.ReceiveTimeout = 500;
                     return results;
                 }
+                Client.Server.Log("[CLIENT->SERVER] " + Client.Socket.RemoteEndPoint.ToString(), LogImportance.Low);
+                Client.Server.Log(workingPacket.ToString(), LogImportance.Low);
                 Client.Socket.ReceiveTimeout = 30000;
                 results.Add(workingPacket);
                 buffer = buffer.Skip(length).ToArray();

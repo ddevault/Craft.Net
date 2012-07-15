@@ -267,9 +267,7 @@ namespace Craft.Net.Server
                 {
                     var packets = PacketReader.TryReadPackets(ref client, length);
                     foreach (var packet in packets)
-                    {
                         packet.HandlePacket(this, ref client);
-                    }
 
                     client.Socket.BeginReceive(client.RecieveBuffer, client.RecieveBufferIndex,
                                                client.RecieveBuffer.Length - client.RecieveBufferIndex,
