@@ -2,23 +2,11 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Threading;
-using System.Linq;
-using System.Security.Cryptography;
-using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Crypto.Generators;
-using Org.BouncyCastle.Security;
-using Org.BouncyCastle.X509;
-using Org.BouncyCastle.Asn1.X509;
-using Org.BouncyCastle.Math;
 using Craft.Net.Server.Worlds;
 using java.security;
-using Craft.Net.Server.Blocks;
-using System.IO;
 using Craft.Net.Server.Packets;
 using Craft.Net.Server.Events;
-using Craft.Net.Server.Worlds.Entities;
 
 namespace Craft.Net.Server
 {
@@ -29,7 +17,7 @@ namespace Craft.Net.Server
 	{
         #region Public Fields
 
-        public const int ProtocolVersion = 38;
+        public const int ProtocolVersion = 39;
 
         public List<MinecraftClient> Clients;
         public List<World> Worlds;

@@ -40,7 +40,8 @@ namespace Craft.Net.Server.Packets
                 .Concat(CreateInt((int)Position.X))
                 .Concat(new byte[] { (byte)Position.Y })
                 .Concat(CreateInt((int)Position.Z))
-                .Concat(new byte[] { Value.BlockID, Value.Metadata }).ToArray();
+                .Concat(CreateShort((short)Value.BlockID))
+                .Concat(new byte[] { Value.Metadata }).ToArray();
             Client.SendData(buffer);
         }
     }

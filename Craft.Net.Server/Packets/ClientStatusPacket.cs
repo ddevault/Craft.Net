@@ -2,11 +2,9 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 using System.Linq;
-using Org.BouncyCastle.Math;
 using System.Net;
 using System.IO;
 using Craft.Net.Server.Worlds.Entities;
-using System.Threading;
 using Craft.Net.Server.Worlds;
 
 namespace Craft.Net.Server.Packets
@@ -55,7 +53,7 @@ namespace Craft.Net.Server.Packets
                     byte[] shaData = Encoding.UTF8.GetBytes(Client.AuthenticationHash)
                         .Concat(Client.SharedKey.getEncoded())
                         .Concat(Server.KeyPair.getPublic().getEncoded()).ToArray();
-                    byte[] hash = sha1.ComputeHash(shaData);
+                    string hash = Cryptography.JavaHexDigest(shaData);
 
                     // Talk to session.minecraft.net
                     if (Server.OnlineMode)
@@ -63,7 +61,7 @@ namespace Craft.Net.Server.Packets
                         WebClient webClient = new WebClient();
                         StreamReader webReader = new StreamReader(webClient.OpenRead(
                                 new Uri(string.Format(SessionCheckUri,
-                                Client.Username, GetHashString(hash)))));
+                                Client.Username, hash))));
                         string response = webReader.ReadToEnd();
                         webReader.Close();
                         if (response != "YES")
@@ -105,12 +103,6 @@ namespace Craft.Net.Server.Packets
         public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
         {
             throw new InvalidOperationException();
-        }
-
-        private string GetHashString(byte[] data)
-        {
-            BigInteger bigInt = new BigInteger(data);
-            return bigInt.ToString(16);
         }
     }
 }
