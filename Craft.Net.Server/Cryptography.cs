@@ -37,14 +37,15 @@ namespace Craft.Net.Server
         private static byte[] TwosCompliment(byte[] p) // little endian
         {
             int i;
-            for (i = 0; i < p.Length; i++)
-                p[i] = (byte)~p[i];
             bool carry = true;
-            i = p.Length - 1;
-            while (carry)
+            for (i = p.Length - 1; i >= 0; i--)
             {
-                carry = p[i] == 0xFF;
-                p[i--]++;
+                p[i] = (byte)~p[i];
+                if (carry)
+                {
+                    carry = p[i] == 0xFF;
+                    p[i]++;
+                }
             }
             return p;
         }
