@@ -71,26 +71,28 @@ namespace Craft.Net.Server.Packets
                         }
                     }
 
-                    Server.Log(Client.Username + " logged in.");
-                    Client.IsLoggedIn = true;
-                    // Spawn player
-                    Client.Entity = new PlayerEntity(Client);
-                    Client.Entity.Position = Server.DefaultWorld.SpawnPoint;
-                    Client.Entity.Position += new Vector3(0, PlayerEntity.Height, 0);
-                    Server.DefaultWorld.EntityManager.SpawnEntity(Client.Entity);
-                    Client.SendPacket(new LoginPacket(Client.Entity.Id,
-                           Server.DefaultWorld.LevelType, Server.DefaultWorld.GameMode,
-                           Client.Entity.Dimension, Server.DefaultWorld.Difficulty,
-                           Server.MaxPlayers));
+                    Server.LogInPlayer(Client);
 
-                    // Send initial chunks
-                    Client.UpdateChunks(true);
-                    MinecraftClient client = Client;
-                    Client.SendQueue.Last().OnPacketSent += (sender, e) => { client.ReadyToSpawn = true; };
-                    Client.SendPacket(new PlayerPositionAndLookPacket(
-                        Client.Entity.Position, Client.Entity.Yaw, Client.Entity.Pitch, true));
+                    //Server.Log(Client.Username + " logged in.");
+                    //Client.IsLoggedIn = true;
+                    //// Spawn player
+                    //Client.Entity = new PlayerEntity(Client);
+                    //Client.Entity.Position = Server.DefaultWorld.SpawnPoint;
+                    //Client.Entity.Position += new Vector3(0, PlayerEntity.Height, 0);
+                    //Server.DefaultWorld.EntityManager.SpawnEntity(Client.Entity);
+                    //Client.SendPacket(new LoginPacket(Client.Entity.Id,
+                    //       Server.DefaultWorld.LevelType, Server.DefaultWorld.GameMode,
+                    //       Client.Entity.Dimension, Server.DefaultWorld.Difficulty,
+                    //       Server.MaxPlayers));
 
-                    Server.UpdatePlayerList(null); // Should also process send queue
+                    //// Send initial chunks
+                    //Client.UpdateChunks(true);
+                    //MinecraftClient client = Client;
+                    //Client.SendQueue.Last().OnPacketSent += (sender, e) => { client.ReadyToSpawn = true; };
+                    //Client.SendPacket(new PlayerPositionAndLookPacket(
+                    //    Client.Entity.Position, Client.Entity.Yaw, Client.Entity.Pitch, true));
+
+                    //Server.UpdatePlayerList(null); // Should also process send queue
                     break;
                 case ClientStatus.Respawn:
                     // TODO

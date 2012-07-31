@@ -1,9 +1,11 @@
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Collections.Generic;
 using System.Threading;
 using Craft.Net.Server.Worlds;
+using Craft.Net.Server.Worlds.Entities;
 using java.security;
 using Craft.Net.Server.Packets;
 using Craft.Net.Server.Events;
@@ -24,7 +26,7 @@ namespace Craft.Net.Server
         public int DefaultWorldIndex;
         public string MotD;
         public byte MaxPlayers;
-        public bool OnlineMode;
+        public bool OnlineMode, EncryptionEnabled;
         public List<ILogProvider> LogProviders;
 
         public event EventHandler<ChatMessageEventArgs> OnChatMessage;
@@ -62,7 +64,7 @@ namespace Craft.Net.Server
             Clients = new List<MinecraftClient>();
             MaxPlayers = 25;
             MotD = "Craft.Net Server";
-            OnlineMode = false;
+		    OnlineMode = EncryptionEnabled = true;
             Random = new Random();
             DefaultWorldIndex = 0;
             Worlds = new List<World>();
@@ -310,6 +312,30 @@ namespace Craft.Net.Server
         {
             if (OnChatMessage != null)
                 OnChatMessage(this, e);
+        }
+
+        internal void LogInPlayer(MinecraftClient Client)
+        {
+            this.Log(Client.Username + " logged in.");
+            Client.IsLoggedIn = true;
+            // Spawn player
+            Client.Entity = new PlayerEntity(Client);
+            Client.Entity.Position = this.DefaultWorld.SpawnPoint;
+            Client.Entity.Position += new Vector3(0, PlayerEntity.Height, 0);
+            this.DefaultWorld.EntityManager.SpawnEntity(Client.Entity);
+            Client.SendPacket(new LoginPacket(Client.Entity.Id,
+                   this.DefaultWorld.LevelType, this.DefaultWorld.GameMode,
+                   Client.Entity.Dimension, this.DefaultWorld.Difficulty,
+                   this.MaxPlayers));
+
+            // Send initial chunks
+            Client.UpdateChunks(true);
+            MinecraftClient client = Client;
+            Client.SendQueue.Last().OnPacketSent += (sender, e) => { client.ReadyToSpawn = true; };
+            Client.SendPacket(new PlayerPositionAndLookPacket(
+                Client.Entity.Position, Client.Entity.Yaw, Client.Entity.Pitch, true));
+
+            this.UpdatePlayerList(null); // Should also process send queue
         }
 
         #endregion

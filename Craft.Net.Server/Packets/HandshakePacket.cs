@@ -58,11 +58,17 @@ namespace Craft.Net.Server.Packets
                 Client.AuthenticationHash = CreateHash();
             else
                 Client.AuthenticationHash = "-";
-            EncryptionKeyRequestPacket keyRequest = 
-                new EncryptionKeyRequestPacket(Client.AuthenticationHash,
-                                               Server.KeyPair.getPublic());
-            Client.SendPacket(keyRequest);
-            Server.ProcessSendQueue();
+            if (Server.EncryptionEnabled)
+            {
+                EncryptionKeyRequestPacket keyRequest =
+                    new EncryptionKeyRequestPacket(Client.AuthenticationHash,
+                                                   Server.KeyPair.getPublic());
+                Client.SendPacket(keyRequest);
+                Server.ProcessSendQueue();
+            }
+            else
+                Server.LogInPlayer(Client);
+
             Client.StartKeepAliveTimer();
         }
 
