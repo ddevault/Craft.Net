@@ -264,7 +264,7 @@ namespace Craft.Net.Server
             null, // 0xf7
             null, // 0xf8
             null, // 0xf9
-            null, // 0xfa
+            typeof(PluginMessagePacket), // 0xfa
             null, // 0xfb
             typeof(EncryptionKeyResponsePacket), // 0xfc
             typeof(EncryptionKeyRequestPacket), // 0xfd

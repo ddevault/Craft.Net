@@ -40,6 +40,7 @@ namespace Craft.Net.Server
         private Timer UpdatePlayerListTimer;
         private AutoResetEvent SendQueueReset;
 
+	    internal Dictionary<string, PluginChannel> PluginChannels;
         internal static Random Random;
 	    internal RSAParameters ServerKey;
 	    internal RSACryptoServiceProvider CryptoServiceProvider;
@@ -70,6 +71,7 @@ namespace Craft.Net.Server
             DefaultWorldIndex = 0;
             Worlds = new List<World>();
             LogProviders = new List<ILogProvider>();
+            PluginChannels = new Dictionary<string, PluginChannel>();
  
 			socket = new Socket(AddressFamily.InterNetwork,
                                 SocketType.Stream, ProtocolType.Tcp);
@@ -184,6 +186,12 @@ namespace Craft.Net.Server
             for (int i = 0; i < Clients.Count; i++)
                 Clients[i].SendPacket(new ChatMessagePacket(message));
             this.ProcessSendQueue();
+        }
+
+        public void RegisterPluginChannel(PluginChannel channel)
+        {
+            PluginChannels.Add(channel.Channel, channel);
+            channel.ChannelRegistered(this);
         }
         
         #endregion
