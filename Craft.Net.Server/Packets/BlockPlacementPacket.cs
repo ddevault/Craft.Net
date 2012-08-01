@@ -9,6 +9,7 @@ namespace Craft.Net.Server.Packets
         public Vector3 Position;
         public byte Direction;
         public Slot HeldItem;
+        public Vector3 CursorPosition;
 
         public BlockPlacementPacket()
         {
@@ -27,6 +28,7 @@ namespace Craft.Net.Server.Packets
             int offset = 1;
             int x = 0, z = 0;
             byte y = 0;
+            byte curX, curY, curZ;
             if (!TryReadInt(Buffer, ref offset, out x))
                 return -1;
             if (!TryReadByte(Buffer, ref offset, out y))
@@ -37,17 +39,28 @@ namespace Craft.Net.Server.Packets
                 return -1;
             if (!Slot.TryReadSlot(Buffer, ref offset, out HeldItem))
                 return -1;
+            if (!TryReadByte(Buffer, ref offset, out curX))
+                return -1;
+            if (!TryReadByte(Buffer, ref offset, out curY))
+                return -1;
+            if (!TryReadByte(Buffer, ref offset, out curZ))
+                return -1;
             Position = new Vector3(x, y, z);
+            CursorPosition = new Vector3(curX, curY, curZ);
             return offset;
         }
 
         public override void HandlePacket(MinecraftServer Server, ref MinecraftClient Client)
         {
+            if (Client.Entity.Position.DistanceTo(Position) > 6)
+                return;
             if (HeldItem.Id < 0x80)
             {
                 Block block = (Block)HeldItem.Id;
                 if (block != null)
                 {
+                    // TODO: More stuff here
+                    Server.GetClientWorld(Client).SetBlock(Position, block);
                 }
             }
         }
