@@ -62,7 +62,7 @@ namespace Craft.Net.Server.Packets
             {
                 EncryptionKeyRequestPacket keyRequest =
                     new EncryptionKeyRequestPacket(Client.AuthenticationHash,
-                                                   Server.KeyPair.getPublic());
+                                                   Server.ServerKey);
                 Client.SendPacket(keyRequest);
                 Server.ProcessSendQueue();
             }

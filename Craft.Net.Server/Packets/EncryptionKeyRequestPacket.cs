@@ -2,24 +2,22 @@ using System;
 using System.Linq;
 using System.Net.Sockets;
 using System.Security.Cryptography;
-using Org.BouncyCastle.Crypto;
-using java.security;
 
 namespace Craft.Net.Server.Packets
 {
     public class EncryptionKeyRequestPacket : Packet
     {
         public string AuthenticationHash;
-        public PublicKey PublicKey;
+        public RSAParameters ServerKey;
 
         public EncryptionKeyRequestPacket()
         {
         }
 
-        public EncryptionKeyRequestPacket(string AuthenticationHash, PublicKey PublicKey)
+        public EncryptionKeyRequestPacket(string AuthenticationHash, RSAParameters ServerKey)
         {
             this.AuthenticationHash = AuthenticationHash;
-            this.PublicKey = PublicKey;
+            this.ServerKey = ServerKey;
         }
 
         public override byte PacketID
@@ -46,12 +44,12 @@ namespace Craft.Net.Server.Packets
             RNGCryptoServiceProvider csp = new RNGCryptoServiceProvider();
             csp.GetBytes(verifyToken); // TODO: Encrypt this
 
-            byte[] certificate = PublicKey.getEncoded();
+            AsnKeyBuilder.AsnMessage encodedKey = AsnKeyBuilder.PublicKeyToX509(ServerKey);
 
             byte[] buffer = new byte[] { PacketID }
                 .Concat(CreateString(AuthenticationHash))
-                .Concat(CreateShort((short)certificate.Length))
-                .Concat(certificate)
+                .Concat(CreateShort((short)encodedKey.GetBytes().Length))
+                .Concat(encodedKey.GetBytes())
                 .Concat(CreateShort((short)verifyToken.Length))
                 .Concat(verifyToken).ToArray();
             Client.Socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, null, null);

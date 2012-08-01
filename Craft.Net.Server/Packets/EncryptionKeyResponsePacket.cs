@@ -1,11 +1,10 @@
 using System;
-using javax.crypto;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Modes;
 using Org.BouncyCastle.Crypto.Parameters;
-using javax.crypto.spec;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace Craft.Net.Server.Packets
 {
@@ -44,19 +43,15 @@ namespace Craft.Net.Server.Packets
 
         public override void HandlePacket(MinecraftServer Server, ref MinecraftClient Client)
         {
-            Cipher cipher = Cipher.getInstance("RSA");
-            cipher.init(Cipher.DECRYPT_MODE, Server.KeyPair.getPrivate());
-            Client.SharedKey = new SecretKeySpec(cipher.doFinal(SharedSecret), "AES-128");
+            Client.SharedKey = Server.CryptoServiceProvider.Decrypt(SharedSecret, false);
 
             Client.Encrypter = new BufferedBlockCipher(new CfbBlockCipher(new AesEngine(), 8));
             Client.Encrypter.Init(true,
-                   new ParametersWithIV(new KeyParameter(Client.SharedKey.getEncoded()), 
-                   Client.SharedKey.getEncoded(), 0, 16));
+                   new ParametersWithIV(new KeyParameter(Client.SharedKey), Client.SharedKey, 0, 16));
 
             Client.Decrypter = new BufferedBlockCipher(new CfbBlockCipher(new AesEngine(), 8));
             Client.Decrypter.Init(false,
-                   new ParametersWithIV(new KeyParameter(Client.SharedKey.getEncoded()), 
-                   Client.SharedKey.getEncoded(), 0, 16));
+                   new ParametersWithIV(new KeyParameter(Client.SharedKey), Client.SharedKey, 0, 16));
 
             Client.SendPacket(new EncryptionKeyResponsePacket());
             Server.ProcessSendQueue();

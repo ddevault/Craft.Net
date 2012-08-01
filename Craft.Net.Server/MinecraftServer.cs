@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using System.Threading;
 using Craft.Net.Server.Worlds;
 using Craft.Net.Server.Worlds.Entities;
-using java.security;
 using Craft.Net.Server.Packets;
 using Craft.Net.Server.Events;
+using System.Security.Cryptography;
 
 namespace Craft.Net.Server
 {
@@ -41,7 +41,8 @@ namespace Craft.Net.Server
         private AutoResetEvent SendQueueReset;
 
         internal static Random Random;
-        internal KeyPair KeyPair;
+	    internal RSAParameters ServerKey;
+	    internal RSACryptoServiceProvider CryptoServiceProvider;
 
         #endregion
 
@@ -76,10 +77,10 @@ namespace Craft.Net.Server
 		}
         
         #endregion
-		
+
         #region Public Methods
-        
-		public void Start()
+
+        public void Start()
         {
             if (Worlds.Count == 0)
             {
@@ -88,9 +89,9 @@ namespace Craft.Net.Server
             }
 
             Log("Starting Craft.Net server...");
-            KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
-            keyGen.initialize(1024);
-            KeyPair = keyGen.generateKeyPair();
+
+            CryptoServiceProvider = new RSACryptoServiceProvider(1024);
+            ServerKey = CryptoServiceProvider.ExportParameters(true);
 
             socket.Listen(10);
             SendQueueReset = new AutoResetEvent(false);

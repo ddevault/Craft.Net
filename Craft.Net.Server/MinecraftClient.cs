@@ -2,11 +2,11 @@ using System;
 using System.Net.Sockets;
 using System.Collections.Generic;
 using Org.BouncyCastle.Crypto;
-using java.security;
 using Craft.Net.Server.Packets;
 using Craft.Net.Server.Worlds.Entities;
 using Craft.Net.Server.Worlds;
 using System.Threading;
+using System.Security.Cryptography;
 
 namespace Craft.Net.Server
 {
@@ -38,7 +38,7 @@ namespace Craft.Net.Server
         public Slot[] Inventory;
 
         internal BufferedBlockCipher Encrypter, Decrypter;
-        internal Key SharedKey;
+        internal byte[] SharedKey;
         internal int VerificationKey;
         internal int RecieveBufferIndex;
         internal byte[] RecieveBuffer;

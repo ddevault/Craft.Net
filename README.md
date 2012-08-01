@@ -72,8 +72,7 @@ Dependencies
 
 Craft.Net depends on the following tools and assemblies, which are included in the repository:
 
-* [IKVM](http://www.ikvm.net/) is used to work with Java-like encryption.
-* [BouncyCastle](http://www.bouncycastle.org/) is also used for encryption.
+* [BouncyCastle](http://www.bouncycastle.org/) is used for encryption.
 * [SharpZipLib](http://www.icsharpcode.net/opensource/sharpziplib/) is used for data compression.
 
 Licensing

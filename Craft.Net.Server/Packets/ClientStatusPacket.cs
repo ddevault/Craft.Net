@@ -50,9 +50,10 @@ namespace Craft.Net.Server.Packets
                 case ClientStatus.InitialSpawn:
                     // Create a hash for session verification
                     SHA1 sha1 = SHA1.Create();
+                    AsnKeyBuilder.AsnMessage encodedKey = AsnKeyBuilder.PublicKeyToX509(Server.ServerKey);
                     byte[] shaData = Encoding.UTF8.GetBytes(Client.AuthenticationHash)
-                        .Concat(Client.SharedKey.getEncoded())
-                        .Concat(Server.KeyPair.getPublic().getEncoded()).ToArray();
+                        .Concat(Client.SharedKey)
+                        .Concat(encodedKey.GetBytes()).ToArray();
                     string hash = Cryptography.JavaHexDigest(shaData);
 
                     // Talk to session.minecraft.net
