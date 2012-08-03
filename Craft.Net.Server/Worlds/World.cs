@@ -44,33 +44,26 @@ namespace Craft.Net.Server.Worlds
             this.Seed = Seed;
         }
 
+        /// <summary>
+        /// Returns the chunk at the specific position
+        /// </summary>
+        /// <param name="position">Position in chunks</param>
+        /// <returns></returns>
         public Chunk GetChunk(Vector3 position)
         {
-            // TODO: I really hate this code
-            int X = (int)position.X;
-            int Z = (int)position.Z;
-            bool negX = X < 0;
-            bool negZ = Z < 0;
-            X = negX ? -X : X;
-            Z = negZ ? -Z : Z;
-            // abs(n)/width+1
-            X = (X / Region.Width) + (negX ? 1 : 0);
-            Z = (Z / Region.Depth) + (negZ ? 1 : 0);
-            X = negX ? -X : X;
-            Z = negZ ? -Z : Z;
-            Vector3 region = new Vector3(X, 0, Z);
+            //In chunks
+            int x = (int)position.X;
+            int z = (int)position.Z;
+
+            //In regions
+            int regionX = x / Region.Width - ((x < 0) ? 1 : 0);
+            int regionZ = z / Region.Depth - ((z < 0) ? 1 : 0);
+
+            Vector3 region = new Vector3(regionX, 0, regionZ);
             if (!Regions.ContainsKey(region))
                 Regions.Add(region, new Region(region, WorldGenerator));
-            // Create relative coordinates
-            X = (int)position.X;
-            Z = (int)position.Z;
-            X = negX ? -X : X;
-            Z = negZ ? -Z : Z;
-            X = X % Region.Width;
-            Z = Z % Region.Depth;
-            X = negX ? Region.Width - X : X;
-            Z = negZ ? Region.Depth - Z : Z;
-            return Regions[region].GetChunk(new Vector3(X, 0, Z));
+
+            return Regions[region].GetChunk(new Vector3(x - regionX * 32, 0, z - regionZ * 32));
         }
 
         public Block GetBlock(Vector3 position)
