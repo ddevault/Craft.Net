@@ -44,100 +44,60 @@ namespace Craft.Net.Server.Worlds
             this.Seed = Seed;
         }
 
+        /// <summary>
+        /// Returns the chunk at the specific position
+        /// </summary>
+        /// <param name="position">Position in chunks</param>
+        /// <returns></returns>
         public Chunk GetChunk(Vector3 position)
         {
-            // TODO: I really hate this code
-            int X = (int)position.X;
-            int Z = (int)position.Z;
-            bool negX = X < 0;
-            bool negZ = Z < 0;
-            X = negX ? -X : X;
-            Z = negZ ? -Z : Z;
-            // abs(n)/width+1
-            X = (X / Region.Width) + (negX ? 1 : 0);
-            Z = (Z / Region.Depth) + (negZ ? 1 : 0);
-            X = negX ? -X : X;
-            Z = negZ ? -Z : Z;
-            Vector3 region = new Vector3(X, 0, Z);
+            //In chunks
+            int x = (int)position.X;
+            int z = (int)position.Z;
+
+            //In regions
+            int regionX = x / Region.Width - ((x < 0) ? 1 : 0);
+            int regionZ = z / Region.Depth - ((z < 0) ? 1 : 0);
+
+            Vector3 region = new Vector3(regionX, 0, regionZ);
             if (!Regions.ContainsKey(region))
                 Regions.Add(region, new Region(region, WorldGenerator));
-            // Create relative coordinates
-            X = (int)position.X;
-            Z = (int)position.Z;
-            X = negX ? -X : X;
-            Z = negZ ? -Z : Z;
-            X = X % Region.Width;
-            Z = Z % Region.Depth;
-            X = negX ? Region.Width - X : X;
-            Z = negZ ? Region.Depth - Z : Z;
-            return Regions[region].GetChunk(new Vector3(X, 0, Z));
+
+            return Regions[region].GetChunk(new Vector3(x - regionX * 32, 0, z - regionZ * 32));
         }
 
         public Block GetBlock(Vector3 position)
         {
-            int X = (int)position.X;
-            int Z = (int)position.Z;
-            bool negX = X < 0;
-            bool negZ = Z < 0;
-            X = negX ? -X : X;
-            Z = negZ ? -Z : Z;
-            // abs(n)/width+1
-            X = (X / Region.Width) + (negX ? 1 : 0);
-            Z = (Z / Region.Depth) + (negZ ? 1 : 0);
-            X = negX ? -X : X;
-            Z = negZ ? -Z : Z;
-            Vector3 region = new Vector3(X, 0, Z);
-            if (!Regions.ContainsKey(region))
-                Regions.Add(region, new Region(region, WorldGenerator));
-            
-            Vector3 relativePosition = position;
-            if (negX)
-                relativePosition.X = -relativePosition.X;
-            if (negZ)
-                relativePosition.Z = -relativePosition.Z;
-            relativePosition.X = (int)(relativePosition.X) % Region.Width;
-            relativePosition.Z = (int)(relativePosition.Z) % Region.Depth;
-            if (negX)
-                relativePosition.X = (Region.Width * Chunk.Width) - relativePosition.X;
-            if (negZ)
-                relativePosition.Z = (Region.Depth * Chunk.Depth) - relativePosition.Z;
+            Chunk chunk;
+            Vector3 blockPosition = FindBlockPosition(position, out chunk);
 
-            return Regions[region].GetBlock(relativePosition);
+            return chunk.GetBlock(blockPosition);
         }
 
         public void SetBlock(Vector3 position, Block value)
         {
-            int X = (int)position.X;
-            int Z = (int)position.Z;
-            bool negX = X < 0;
-            bool negZ = Z < 0;
-            X = negX ? -X : X;
-            Z = negZ ? -Z : Z;
-            // abs(n)/width+1
-            X = (X / Region.Width) + (negX ? 1 : 0);
-            Z = (Z / Region.Depth) + (negZ ? 1 : 0);
-            X = negX ? -X : X;
-            Z = negZ ? -Z : Z;
-            Vector3 region = new Vector3(X, 0, Z);
-            if (!Regions.ContainsKey(region))
-                Regions.Add(region, new Region(region, WorldGenerator));
-            
-            Vector3 relativePosition = position;
-            if (negX)
-                relativePosition.X = -relativePosition.X;
-            if (negZ)
-                relativePosition.Z = -relativePosition.Z;
-            relativePosition.X = (int)(relativePosition.X) % Region.Width;
-            relativePosition.Z = (int)(relativePosition.Z) % Region.Depth;
-            if (negX)
-                relativePosition.X = (Region.Width * Chunk.Width) - relativePosition.X;
-            if (negZ)
-                relativePosition.Z = (Region.Depth * Chunk.Depth) - relativePosition.Z;
-            
-            Regions[region].SetBlock(relativePosition, value);
+            Chunk chunk;
+            Vector3 blockPosition = FindBlockPosition(position, out chunk);
+
+            chunk.SetBlock(blockPosition, value);
 
             if (OnBlockChanged != null)
                 OnBlockChanged(this, new BlockChangedEventArgs(this, position, value));
+        }
+
+        private Vector3 FindBlockPosition(Vector3 position, out Chunk chunk)
+        {
+            int x = (int)position.X;
+            int y = (int)position.Y;
+            int z = (int)position.Z;
+
+            if (y < 0 || y >= Chunk.Height) throw new ArgumentOutOfRangeException("Block is out of range");
+
+            int chunkX = x / (Chunk.Width) - ((x < 0) ? 1 : 0);
+            int chunkZ = z / (Chunk.Depth) - ((z < 0) ? 1 : 0);
+
+            chunk = GetChunk(new Vector3(chunkX, 0, chunkZ));
+            return new Vector3(x - chunkX * Chunk.Width, y, z - chunkZ * Chunk.Depth);;
         }
     }
 }

@@ -40,7 +40,7 @@ namespace Craft.Net.Server.Worlds
         {
             byte y = (byte)position.Y;
             y /= 16;
-            position.Y = y % 16;
+            position.Y = position.Y % 16;
             return Sections[y].GetBlock(position);
         }
     }
