@@ -33,7 +33,7 @@ namespace Craft.Net.Server.Worlds.Generation
             }
         }
 
-        public double Seed { get; set; }
+        public long Seed { get; set; }
 
         public Vector3 SpawnPoint
         {
