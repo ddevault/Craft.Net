@@ -21,7 +21,7 @@ namespace Craft.Net.Server.Test
             minecraftServer.AddLogProvider(new ConsoleLogWriter(LogImportance.High));
             minecraftServer.AddLogProvider(new FileLogWriter("packetLog.txt", LogImportance.Low));
             // Add a flatland world
-            minecraftServer.AddWorld(new World(new FlatlandGenerator()));
+            minecraftServer.AddWorld(new World(new DebugGenerator()));
             // Register the chat handler
             minecraftServer.OnChatMessage += HandleOnChatMessage;
             // Start the server

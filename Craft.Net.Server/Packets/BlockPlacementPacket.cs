@@ -57,10 +57,13 @@ namespace Craft.Net.Server.Packets
             if (HeldItem.Id < 0x80)
             {
                 Block block = (Block)HeldItem.Id;
+                Vector3 clickedBlock = Position;
+                Vector3 placedBlock = Position;
+                placedBlock += AdjustByDirection(Direction);
                 if (block != null)
                 {
                     // TODO: More stuff here
-                    Server.GetClientWorld(Client).SetBlock(Position, block);
+                    Server.GetClientWorld(Client).SetBlock(placedBlock, block);
                 }
             }
         }
@@ -68,6 +71,25 @@ namespace Craft.Net.Server.Packets
         public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
         {
             throw new System.NotImplementedException();
+        }
+
+        private static Vector3 AdjustByDirection(byte Direction)
+        {
+            switch (Direction)
+            {
+                case 0:
+                    return Vector3.Down;
+                case 1:
+                    return Vector3.Up;
+                case 2:
+                    return Vector3.Backwards;
+                case 3:
+                    return Vector3.Forwards;
+                case 4:
+                    return Vector3.Left;
+                default:
+                    return Vector3.Right;
+            }
         }
     }
 }

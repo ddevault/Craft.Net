@@ -27,8 +27,10 @@ namespace Craft.Net.Server
             set
             {
                 value &= 0xF;
-                Data[index / 2] &= (byte)(0xF << (index % 2 * 4));
-                Data[index / 2] |= (byte)(value << ((index + 1) % 2 * 4));
+                //Data[index / 2] &= (byte)(0xF << (index % 2 * 4));
+                //Data[index / 2] |= (byte)(value << ((index + 1) % 2 * 4));
+                Data[index / 2] &= (byte)(0xF << ((index + 1) % 2 * 4));
+                Data[index / 2] |= (byte)(value << (index % 2 * 4));
             }
         }
     }
