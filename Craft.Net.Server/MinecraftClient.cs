@@ -7,6 +7,7 @@ using Craft.Net.Server.Worlds.Entities;
 using Craft.Net.Server.Worlds;
 using System.Threading;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace Craft.Net.Server
 {
@@ -54,7 +55,7 @@ namespace Craft.Net.Server
             get
             {
                 // TODO: Base this on speed
-                return 4;
+                return 1000;
             }
         }
         
@@ -101,12 +102,12 @@ namespace Craft.Net.Server
             // Maybe a general utility class?
             if (array.Length == 0)
                 return "[]";
-            string dump = "[";
+            StringBuilder sb = new StringBuilder((array.Length * 2) + 2);
             foreach (byte b in array)
             {
-                dump += "0x" + b.ToString("x") + ",";
+                sb.AppendFormat("0x{0},", b.ToString("x"));
             }
-            return dump.Remove(dump.Length - 1) + "]";
+            return sb.ToString().Remove(sb.Length - 1) + "]";
         }
 
         public void UpdateChunksAsync()

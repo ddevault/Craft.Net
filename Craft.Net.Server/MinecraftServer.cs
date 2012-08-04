@@ -224,10 +224,16 @@ namespace Craft.Net.Server
                                 // Occasionally, the client will disconnect while
                                 // processing the packet to be sent, which causes
                                 // a fatal exception.
-                                Clients[i].IsDisconnected = true;
-                                if (Clients[i].Socket.Connected)
-                                    Clients[i].Socket.BeginDisconnect(false, null, null);
-                                i--;
+                                lock (Clients)
+                                {
+                                    if (i < Clients.Count)
+                                    {
+                                        Clients[i].IsDisconnected = true;
+                                        if (Clients[i].Socket.Connected)
+                                            Clients[i].Socket.BeginDisconnect(false, null, null);
+                                    }
+                                    i--;
+                                }
                                 break;
                             }
                         }
@@ -289,11 +295,20 @@ namespace Craft.Net.Server
                     client.Socket.BeginDisconnect(false, null, null);
                 if (client.KeepAliveTimer != null)
                     client.KeepAliveTimer.Dispose();
-                Clients.Remove(client);
-                foreach (var remainingClient in Clients)
+                if (client.IsLoggedIn)
                 {
-                    remainingClient.SendPacket(new PlayerListItemPacket(
-                        client.Username, false, 0));
+                    foreach (var remainingClient in Clients)
+                    {
+                        if (remainingClient.IsLoggedIn)
+                        {
+                            remainingClient.SendPacket(new PlayerListItemPacket(
+                                client.Username, false, 0));
+                        }
+                    }
+                }
+                lock (Clients)
+                {
+                    Clients.Remove(client);
                 }
                 this.ProcessSendQueue();
             }

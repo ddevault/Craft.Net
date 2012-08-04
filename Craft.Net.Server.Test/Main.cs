@@ -17,6 +17,7 @@ namespace Craft.Net.Server.Test
             minecraftServer = new MinecraftServer(
 		        new IPEndPoint(IPAddress.Any, 25565));
             minecraftServer.OnlineMode = false;
+            minecraftServer.EncryptionEnabled = false;
             // Add a console logger
             minecraftServer.AddLogProvider(new ConsoleLogWriter(LogImportance.High));
             minecraftServer.AddLogProvider(new FileLogWriter("packetLog.txt", LogImportance.Low));

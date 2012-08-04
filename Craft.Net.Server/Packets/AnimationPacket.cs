@@ -57,7 +57,11 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
         {
-            throw new System.NotImplementedException();
+            return;
+            byte[] data = new byte[] { PacketID }
+                .Concat(CreateInt(EntityId))
+                .Concat(new byte[] { (byte)Animation }).ToArray();
+            Client.SendData(data);
         }
     }
 }

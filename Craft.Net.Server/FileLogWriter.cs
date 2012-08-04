@@ -16,9 +16,12 @@ namespace Craft.Net.Server
 
         public void Log(string text, LogImportance Level)
         {
-            if (Level >= MinimumImportance)
-                LogWriter.WriteLine(text);
-            LogWriter.Flush();
+            lock (LogWriter)
+            {
+                if (Level >= MinimumImportance)
+                    LogWriter.WriteLine(text);
+                LogWriter.Flush();
+            }
         }
     }
 }
