@@ -28,6 +28,13 @@ namespace Craft.Net.Server.Worlds
             return Chunks[position];
         }
 
+        internal void SetChunk(Vector3 position, Chunk chunk)
+        {
+            if (!Chunks.ContainsKey(position))
+                Chunks.Add(position, chunk);
+            Chunks[position] = chunk;
+        }
+
         public Block GetBlock(Vector3 position)
         {
             position = position.Floor();

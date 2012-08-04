@@ -11,6 +11,7 @@ namespace Craft.Net.Server.Worlds.Generation
         /// Generates one chunk at the given position.
         /// </summary>
         Chunk GenerateChunk(Vector3 Position, Region ParentRegion);
+        Chunk GenerateChunk(Vector3 Position);
     }
 }
 

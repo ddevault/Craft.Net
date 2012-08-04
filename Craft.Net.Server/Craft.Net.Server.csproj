@@ -65,6 +65,7 @@
     <Compile Include="Packets\KeepAlivePacket.cs" />
     <Compile Include="Difficulty.cs" />
     <Compile Include="PluginChannel.cs" />
+    <Compile Include="Worlds\Generation\DebugGenerator.cs" />
     <Compile Include="Worlds\World.cs" />
     <Compile Include="Worlds\Section.cs" />
     <Compile Include="Worlds\Chunk.cs" />

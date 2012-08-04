@@ -25,6 +25,15 @@ namespace Craft.Net.Server.Worlds
                 + RelativePosition;
         }
 
+        public Chunk(Vector3 RelativePosition)
+        {
+            Sections = new Section[16];
+            for (int i = 0; i < Sections.Length; i++)
+                Sections[i] = new Section((byte)i);
+            this.RelativePosition = RelativePosition;
+            this.Biomes = new byte[Width * Depth];
+        }
+
         /// <summary>
         /// Sets the value of the block at the given position, relative to this chunk.
         /// </summary>

@@ -46,7 +46,6 @@ namespace Craft.Net.Server
         internal bool EncryptionEnabled, ReadyToSpawn;
         internal Timer KeepAliveTimer;
         internal DateTime LastKeepAlive, LastKeepAliveSent;
-        internal int ExpectedKeepAlive;
 
         #endregion
 

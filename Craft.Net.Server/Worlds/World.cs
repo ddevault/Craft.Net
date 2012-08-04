@@ -47,7 +47,7 @@ namespace Craft.Net.Server.Worlds
         /// <summary>
         /// Returns the chunk at the specific position
         /// </summary>
-        /// <param name="position">Position in chunks</param>
+        /// <param name="position">Position in chunk coordinates</param>
         /// <returns></returns>
         public Chunk GetChunk(Vector3 position)
         {
@@ -64,6 +64,27 @@ namespace Craft.Net.Server.Worlds
                 Regions.Add(region, new Region(region, WorldGenerator));
 
             return Regions[region].GetChunk(new Vector3(x - regionX * 32, 0, z - regionZ * 32));
+        }
+
+        /// <summary>
+        /// Sets the chunk at the given position to the chunk provided.
+        /// </summary>
+        /// <param name="position">Position in chunk coordinates</param>
+        public void SetChunk(Vector3 position, Chunk chunk)
+        {
+            //In chunks
+            int x = (int)position.X;
+            int z = (int)position.Z;
+
+            //In regions
+            int regionX = x / Region.Width - ((x < 0) ? 1 : 0);
+            int regionZ = z / Region.Depth - ((z < 0) ? 1 : 0);
+
+            Vector3 region = new Vector3(regionX, 0, regionZ);
+            if (!Regions.ContainsKey(region))
+                Regions.Add(region, new Region(region, WorldGenerator));
+
+            Regions[region].SetChunk(new Vector3(x - regionX * 32, 0, z - regionZ * 32), chunk);
         }
 
         public Block GetBlock(Vector3 position)
