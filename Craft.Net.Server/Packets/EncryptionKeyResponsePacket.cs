@@ -45,11 +45,11 @@ namespace Craft.Net.Server.Packets
         {
             Client.SharedKey = Server.CryptoServiceProvider.Decrypt(SharedSecret, false);
 
-            Client.Encrypter = new BufferedBlockCipher(new CfbBlockCipher(new AesEngine(), 8));
+            Client.Encrypter = new BufferedBlockCipher(new CfbBlockCipher(new AesFastEngine(), 8));
             Client.Encrypter.Init(true,
                    new ParametersWithIV(new KeyParameter(Client.SharedKey), Client.SharedKey, 0, 16));
 
-            Client.Decrypter = new BufferedBlockCipher(new CfbBlockCipher(new AesEngine(), 8));
+            Client.Decrypter = new BufferedBlockCipher(new CfbBlockCipher(new AesFastEngine(), 8));
             Client.Decrypter.Init(false,
                    new ParametersWithIV(new KeyParameter(Client.SharedKey), Client.SharedKey, 0, 16));
 
