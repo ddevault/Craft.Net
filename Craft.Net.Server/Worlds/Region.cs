@@ -20,6 +20,14 @@ namespace Craft.Net.Server.Worlds
             this.Position = Position;
             this.WorldGenerator = WorldGenerator;
         }
+        
+        //Create new region without IWorldGenerator
+        public Region(Vector3 Position)
+        {
+            Chunks = new Dictionary<Vector3, Chunk>();
+            this.Position = Position;
+            this.WorldGenerator = null;
+        }
 
         public Chunk GetChunk(Vector3 position)
         {
