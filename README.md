@@ -72,7 +72,6 @@ Dependencies
 
 Craft.Net depends on the following tools and assemblies, which are included in the repository:
 
-* [BouncyCastle](http://www.bouncycastle.org/) is used for encryption.
 * [SharpZipLib](http://www.icsharpcode.net/opensource/sharpziplib/) is used for data compression.
 
 Licensing

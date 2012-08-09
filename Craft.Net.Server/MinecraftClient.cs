@@ -1,7 +1,6 @@
 using System;
 using System.Net.Sockets;
 using System.Collections.Generic;
-using Org.BouncyCastle.Crypto;
 using Craft.Net.Server.Packets;
 using Craft.Net.Server.Worlds.Entities;
 using Craft.Net.Server.Worlds;
@@ -38,7 +37,7 @@ namespace Craft.Net.Server
         public bool IsCrouching, IsSprinting;
         public Slot[] Inventory;
 
-        internal BufferedBlockCipher Encrypter, Decrypter;
+        internal ICryptoTransform Encrypter, Decrypter;
         internal byte[] SharedKey;
         internal int VerificationKey;
         internal int RecieveBufferIndex;
@@ -92,8 +91,15 @@ namespace Craft.Net.Server
             Server.Log(DumpArray(Data), LogImportance.Low);
 #endif
             if (this.EncryptionEnabled)
-                Data = Encrypter.ProcessBytes(Data);
-            this.Socket.BeginSend(Data, 0, Data.Length, SocketFlags.None, null, null);
+            {
+                byte[] output = new byte[Data.Length];
+                Encrypter.TransformBlock(Data, 0, output.Length, output, 0);
+                this.Socket.BeginSend(output, 0, output.Length, SocketFlags.None, null, null);
+            }
+            else
+            {
+                this.Socket.BeginSend(Data, 0, Data.Length, SocketFlags.None, null, null);
+            }
         }
 
         public static string DumpArray(byte[] array)
