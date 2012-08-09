@@ -13,6 +13,19 @@ namespace Craft.Net.Server
 {
     public static class Cryptography
     {
+        public static RijndaelManaged GenerateAES(byte[] key)
+        {
+            RijndaelManaged cipher = new RijndaelManaged();
+            cipher.Mode = CipherMode.CFB;
+            cipher.Padding = PaddingMode.None;
+            cipher.KeySize = 128;
+            cipher.FeedbackSize = 8;
+            cipher.Key = key;
+            cipher.IV = key;
+
+            return cipher;
+        }
+
         public static string JavaHexDigest(byte[] data)
         {
             var sha1 = SHA1.Create();
