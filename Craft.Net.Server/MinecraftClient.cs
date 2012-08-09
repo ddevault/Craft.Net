@@ -7,6 +7,7 @@ using Craft.Net.Server.Worlds;
 using System.Threading;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Craft.Net.Server
 {
@@ -126,16 +127,19 @@ namespace Craft.Net.Server
             }
         }
 
-        public void ForceUpdateChunksAsync()
+        public Task UpdateChunksAsync()
         {
-            Thread t = new Thread(() => UpdateChunks(true));
-            t.Start();
+            if ((int)(this.Entity.Position.X) >> 4 != (int)(this.Entity.OldPosition.X) >> 4 ||
+                (int)(this.Entity.Position.Z) >> 4 != (int)(this.Entity.OldPosition.Z) >> 4)
+            {
+                return Task.Factory.StartNew(UpdateChunks);
+            }
+            return Task.Factory.StartNew(() => { });
         }
 
-        public void UpdateChunks()
+        public Task ForceUpdateChunksAsync()
         {
-            UpdateChunks(false);
-            this.Server.ProcessSendQueue();
+			return Task.Factory.StartNew(UpdateChunks(true));
         }
 
         public void UpdateChunks(bool ForceUpdate)
