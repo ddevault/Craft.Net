@@ -7,8 +7,8 @@ namespace Craft.Net.Server.Packets
 {
     public class EncryptionKeyRequestPacket : Packet
     {
-        public string AuthenticationHash;
-        public RSAParameters ServerKey;
+        private string AuthenticationHash;
+        private RSAParameters ServerKey;
 
         public EncryptionKeyRequestPacket()
         {
