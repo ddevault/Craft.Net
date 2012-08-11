@@ -117,36 +117,27 @@ namespace Craft.Net.Server
             return sb.ToString().Remove(sb.Length - 1) + "]";
         }
 
-        public void UpdateChunksAsync()
-        {
-            if ((int)(this.Entity.Position.X) >> 4 != (int)(this.Entity.OldPosition.X) >> 4 ||
-                (int)(this.Entity.Position.Z) >> 4 != (int)(this.Entity.OldPosition.Z) >> 4)
-            {
-                Thread t = new Thread(UpdateChunks);
-                t.Start();
-            }
-        }
-
         public Task UpdateChunksAsync()
         {
             if ((int)(this.Entity.Position.X) >> 4 != (int)(this.Entity.OldPosition.X) >> 4 ||
                 (int)(this.Entity.Position.Z) >> 4 != (int)(this.Entity.OldPosition.Z) >> 4)
             {
-                return Task.Factory.StartNew(UpdateChunks);
+                return Task.Factory.StartNew(() => UpdateChunks(true));
             }
-            return Task.Factory.StartNew(() => { });
+            return null;
         }
 
         public Task ForceUpdateChunksAsync()
         {
-			return Task.Factory.StartNew(UpdateChunks(true));
+            return Task.Factory.StartNew(() => UpdateChunks(true));
         }
 
         public void UpdateChunks(bool ForceUpdate)
         {
-            if ((int)(this.Entity.Position.X) >> 4 != (int)(this.Entity.OldPosition.X) >> 4 ||
-                (int)(this.Entity.Position.Z) >> 4 != (int)(this.Entity.OldPosition.Z) >> 4 ||
-                ForceUpdate)
+            if (ForceUpdate ||
+                (int)(this.Entity.Position.X) >> 4 != (int)(this.Entity.OldPosition.X) >> 4 ||
+                (int)(this.Entity.Position.Z) >> 4 != (int)(this.Entity.OldPosition.Z) >> 4
+                )
             {
                 List<Vector3> newChunks = new List<Vector3>();
                 for (int x = -this.ViewDistance; x < this.ViewDistance; x++)
@@ -211,7 +202,7 @@ namespace Craft.Net.Server
             if (this.ReadyToSpawn && this.ViewDistance < this.MaxViewDistance)
             {
                 this.ViewDistance++;
-                this.ForceUpdateChunksAsync();
+                this.ForceUpdateChunksAsync(); // TODO: Move this to its own timer
             }
             if (LastKeepAlive.AddSeconds(60) < DateTime.Now)
             {

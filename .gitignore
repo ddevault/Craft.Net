@@ -3,4 +3,5 @@ obj/
 *.user
 *.userprefs
 *.suo
+*.pidb
 _ReSharper*/
