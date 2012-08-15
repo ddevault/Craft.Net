@@ -1,6 +1,6 @@
 #Craft.Net
 
-Craft.Net is a library for .Net that implements the Minecraft 1.3.1 server protocol.
+Craft.Net is a library for .Net that implements the Minecraft 12w32a server protocol.
 It also contains functionality for manipulating Anvil worlds, simulating block interactions,
 and simulating entity interactions.
 
@@ -26,7 +26,7 @@ Some cool technical things about Craft.Net that are already implemented:
 ##Usage
 
 Craft.Net is a library, and will not work as a standalone server. However, the basic usage
-is simple. To get started, the following code will create a Minecraft 1.3.1 server:
+is simple. To get started, the following code will create a Minecraft 12w32a server:
 
     MinecraftServer server = new MinecraftServer(new IPEndPoint(IPAddress.Any, 25565));
     server.AddWorld(new World(new FlatlandGenerator()));
