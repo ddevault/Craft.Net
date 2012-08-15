@@ -18,9 +18,9 @@
         {
         }
 
-        public LadderBlock(LadderFacing Facing)
+        public LadderBlock(LadderFacing facing)
         {
-            Metadata = (byte) Facing;
+            Metadata = (byte)facing;
         }
 
         /// <summary>

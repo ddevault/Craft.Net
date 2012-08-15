@@ -4,24 +4,24 @@ namespace Craft.Net.Server
 {
     public class FileLogWriter : ILogProvider
     {
-        private readonly StreamWriter LogWriter;
+        private readonly StreamWriter logWriter;
         public LogImportance MinimumImportance;
 
-        public FileLogWriter(string File, LogImportance MinimumImportance)
+        public FileLogWriter(string file, LogImportance minimumImportance)
         {
-            this.MinimumImportance = MinimumImportance;
-            LogWriter = new StreamWriter(File, true);
+            this.MinimumImportance = minimumImportance;
+            logWriter = new StreamWriter(file, true);
         }
 
         #region ILogProvider Members
 
-        public void Log(string text, LogImportance Level)
+        public void Log(string text, LogImportance level)
         {
-            lock (LogWriter)
+            lock (logWriter)
             {
-                if (Level >= MinimumImportance)
-                    LogWriter.WriteLine(text);
-                LogWriter.Flush();
+                if (level >= MinimumImportance)
+                    logWriter.WriteLine(text);
+                logWriter.Flush();
             }
         }
 

@@ -8,10 +8,10 @@ namespace Craft.Net.Server.Events
         public MinecraftClient Origin;
         public string RawMessage;
 
-        public ChatMessageEventArgs(MinecraftClient Origin, string RawMessage)
+        public ChatMessageEventArgs(MinecraftClient origin, string rawMessage)
         {
-            this.RawMessage = RawMessage;
-            this.Origin = Origin;
+            this.RawMessage = rawMessage;
+            this.Origin = origin;
             Handled = false;
         }
     }

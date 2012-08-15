@@ -13,7 +13,7 @@ namespace Craft.Net.Server.Packets
         public static byte[] ChunkRemovalSequence =
             new byte[] {0x78, 0x9C, 0x63, 0x64, 0x1C, 0xD9, 0x00, 0x00, 0x81, 0x80, 0x01, 0x01};
 
-        private static object LockObject;
+        private static object lockObject;
 
         public ushort AddBitMap;
         public byte[] CompressedData;
@@ -25,14 +25,14 @@ namespace Craft.Net.Server.Packets
         {
             if (zLibDeflater == null)
                 zLibDeflater = new Deflater(CompressionLevel);
-            if (LockObject == null)
-                LockObject = new object();
+            if (lockObject == null)
+                lockObject = new object();
         }
 
-        public ChunkDataPacket(ref Chunk Chunk) : this()
+        public ChunkDataPacket(ref Chunk chunk) : this()
         {
-            X = (int) Chunk.AbsolutePosition.X;
-            Z = (int) Chunk.AbsolutePosition.Z;
+            X = (int)chunk.AbsolutePosition.X;
+            Z = (int)chunk.AbsolutePosition.Z;
 
             var blockData = new byte[0];
             var metadata = new byte[0];
@@ -43,7 +43,7 @@ namespace Craft.Net.Server.Packets
             bool nonAir = true;
             for (int i = 15; i >= 0; i--)
             {
-                Section s = Chunk.Sections[chunkY++];
+                Section s = chunk.Sections[chunkY++];
 
                 if (s.IsAir)
                     nonAir = false;
@@ -61,10 +61,10 @@ namespace Craft.Net.Server.Packets
             }
 
             byte[] data = blockData.Concat(metadata).Concat(blockLight)
-                .Concat(skyLight).Concat(Chunk.Biomes).ToArray();
+                .Concat(skyLight).Concat(chunk.Biomes).ToArray();
             int length;
             var result = new byte[data.Length];
-            lock (LockObject)
+            lock (lockObject)
             {
                 zLibDeflater.SetInput(data);
                 zLibDeflater.Finish();
@@ -82,17 +82,17 @@ namespace Craft.Net.Server.Packets
             get { return 0x33; }
         }
 
-        public override int TryReadPacket(byte[] Buffer, int Length)
+        public override int TryReadPacket(byte[] buffer, int length)
         {
             throw new InvalidOperationException();
         }
 
-        public override void HandlePacket(MinecraftServer Server, ref MinecraftClient Client)
+        public override void HandlePacket(MinecraftServer server, ref MinecraftClient client)
         {
             throw new InvalidOperationException();
         }
 
-        public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
+        public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
             byte[] buffer = new[] {PacketID}
                 .Concat(CreateInt(X))
@@ -102,7 +102,7 @@ namespace Craft.Net.Server.Packets
                 .Concat(CreateUShort(AddBitMap))
                 .Concat(CreateInt(CompressedData.Length))
                 .Concat(CompressedData).ToArray();
-            Client.SendData(buffer);
+            client.SendData(buffer);
         }
     }
 }

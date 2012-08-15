@@ -10,10 +10,10 @@ namespace Craft.Net.Server.Packets
         public Vector3 Position;
         public Block Value;
 
-        public BlockChangePacket(Vector3 Position, Block Value)
+        public BlockChangePacket(Vector3 position, Block value)
         {
-            this.Position = Position;
-            this.Value = Value;
+            this.Position = position;
+            this.Value = value;
         }
 
         public override byte PacketID
@@ -21,25 +21,25 @@ namespace Craft.Net.Server.Packets
             get { return 0x35; }
         }
 
-        public override int TryReadPacket(byte[] Buffer, int Length)
+        public override int TryReadPacket(byte[] buffer, int length)
         {
             throw new InvalidOperationException();
         }
 
-        public override void HandlePacket(MinecraftServer Server, ref MinecraftClient Client)
+        public override void HandlePacket(MinecraftServer server, ref MinecraftClient client)
         {
             throw new InvalidOperationException();
         }
 
-        public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
+        public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
             byte[] buffer = new[] {PacketID}
-                .Concat(CreateInt((int) Position.X))
-                .Concat(new[] {(byte) Position.Y})
-                .Concat(CreateInt((int) Position.Z))
+                .Concat(CreateInt((int)Position.X))
+                .Concat(new[] {(byte)Position.Y})
+                .Concat(CreateInt((int)Position.Z))
                 .Concat(CreateShort(Value.BlockID))
                 .Concat(new[] {Value.Metadata}).ToArray();
-            Client.SendData(buffer);
+            client.SendData(buffer);
         }
     }
 }

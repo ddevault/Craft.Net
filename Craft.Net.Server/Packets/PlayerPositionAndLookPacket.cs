@@ -16,15 +16,15 @@ namespace Craft.Net.Server.Packets
         {
         }
 
-        public PlayerPositionAndLookPacket(Vector3 Position, float Yaw, float Pitch, bool OnGround)
+        public PlayerPositionAndLookPacket(Vector3 position, float yaw, float pitch, bool onGround)
         {
-            X = Position.X;
-            Y = Position.Y;
-            Z = Position.Z;
+            X = position.X;
+            Y = position.Y;
+            Z = position.Z;
             Stance = Y + 1.5;
-            this.Yaw = Yaw;
-            this.Pitch = Pitch;
-            this.OnGround = OnGround;
+            this.Yaw = yaw;
+            this.Pitch = pitch;
+            this.OnGround = onGround;
         }
 
         public override byte PacketID
@@ -32,46 +32,46 @@ namespace Craft.Net.Server.Packets
             get { return 0xD; }
         }
 
-        public override int TryReadPacket(byte[] Buffer, int Length)
+        public override int TryReadPacket(byte[] buffer, int length)
         {
             int offset = 1;
-            if (!TryReadDouble(Buffer, ref offset, out X))
+            if (!TryReadDouble(buffer, ref offset, out X))
                 return -1;
-            if (!TryReadDouble(Buffer, ref offset, out Y))
+            if (!TryReadDouble(buffer, ref offset, out Y))
                 return -1;
-            if (!TryReadDouble(Buffer, ref offset, out Stance))
+            if (!TryReadDouble(buffer, ref offset, out Stance))
                 return -1;
-            if (!TryReadDouble(Buffer, ref offset, out Z))
+            if (!TryReadDouble(buffer, ref offset, out Z))
                 return -1;
-            if (!TryReadFloat(Buffer, ref offset, out Yaw))
+            if (!TryReadFloat(buffer, ref offset, out Yaw))
                 return -1;
-            if (!TryReadFloat(Buffer, ref offset, out Pitch))
+            if (!TryReadFloat(buffer, ref offset, out Pitch))
                 return -1;
-            if (!TryReadBoolean(Buffer, ref offset, out OnGround))
+            if (!TryReadBoolean(buffer, ref offset, out OnGround))
                 return -1;
             return offset;
         }
 
-        public override void HandlePacket(MinecraftServer Server, ref MinecraftClient Client)
+        public override void HandlePacket(MinecraftServer server, ref MinecraftClient client)
         {
-            if (!Client.ReadyToSpawn)
+            if (!client.ReadyToSpawn)
                 return;
-            Client.Entity.Position = new Vector3(X, Y, Z);
-            Client.Entity.Pitch = Pitch;
-            Client.Entity.Yaw = Yaw;
-            if (Client.Entity.Position.DistanceTo(Client.Entity.OldPosition) >
-                Client.MaxMoveDistance)
+            client.Entity.Position = new Vector3(X, Y, Z);
+            client.Entity.Pitch = Pitch;
+            client.Entity.Yaw = Yaw;
+            if (client.Entity.Position.DistanceTo(client.Entity.OldPosition) >
+                client.MaxMoveDistance)
             {
-                Client.SendPacket(new DisconnectPacket("Hacking: You moved too fast!"));
-                Server.ProcessSendQueue();
+                client.SendPacket(new DisconnectPacket("Hacking: You moved too fast!"));
+                server.ProcessSendQueue();
                 return;
             }
-            Client.UpdateChunksAsync();
-            Server.GetClientWorld(Client).EntityManager.UpdateEntity(Client.Entity);
-            Server.ProcessSendQueue();
+            client.UpdateChunksAsync();
+            server.GetClientWorld(client).EntityManager.UpdateEntity(client.Entity);
+            server.ProcessSendQueue();
         }
 
-        public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
+        public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
             byte[] buffer = new[] {PacketID}
                 .Concat(CreateDouble(X))
@@ -81,7 +81,7 @@ namespace Craft.Net.Server.Packets
                 .Concat(CreateFloat(Yaw))
                 .Concat(CreateFloat(Pitch))
                 .Concat(CreateBoolean(OnGround)).ToArray();
-            Client.SendData(buffer);
+            client.SendData(buffer);
         }
     }
 }

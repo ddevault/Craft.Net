@@ -282,12 +282,12 @@ namespace Craft.Net.Server
         /// <returns>
         /// The read packets.
         /// </returns>
-        public static IEnumerable<Packet> TryReadPackets(ref MinecraftClient Client, int Length)
+        public static IEnumerable<Packet> TryReadPackets(ref MinecraftClient client, int length)
         {
             var results = new List<Packet>();
-            byte[] buffer = Client.RecieveBuffer.Take(Length).ToArray();
-            if (Client.EncryptionEnabled)
-                buffer = Client.Decrypter.ProcessBytes(buffer);
+            byte[] buffer = client.RecieveBuffer.Take(length).ToArray();
+            if (client.EncryptionEnabled)
+                buffer = client.Decrypter.ProcessBytes(buffer);
 
             while (buffer.Length > 0)
             {
@@ -297,22 +297,22 @@ namespace Craft.Net.Server
                     throw new InvalidOperationException("Invalid packet ID 0x" +
                                                         buffer[0].ToString("x").ToUpper());
                 }
-                var workingPacket = (Packet) Activator.CreateInstance(packetType);
+                var workingPacket = (Packet)Activator.CreateInstance(packetType);
                 workingPacket.PacketContext = PacketContext.ClientToServer;
-                int length = workingPacket.TryReadPacket(buffer, Length);
-                if (length == -1) // Incomplete packet
+                int workingLength = workingPacket.TryReadPacket(buffer, length);
+                if (workingLength == -1) // Incomplete packet
                 {
-                    Array.Copy(buffer, Client.RecieveBuffer, buffer.Length);
-                    Client.RecieveBufferIndex = buffer.Length;
-                    Client.Socket.ReceiveTimeout = 500;
+                    Array.Copy(buffer, client.RecieveBuffer, buffer.Length);
+                    client.RecieveBufferIndex = buffer.Length;
+                    client.Socket.ReceiveTimeout = 500;
                     return results;
                 }
-                Client.Server.Log("[CLIENT->SERVER] " + Client.Socket.RemoteEndPoint, LogImportance.Low);
-                Client.Server.Log("Raw: " + MinecraftClient.DumpArray(buffer.Take(length).ToArray()), LogImportance.Low);
-                Client.Server.Log(workingPacket.ToString(), LogImportance.Low);
-                Client.Socket.ReceiveTimeout = 30000;
+                client.Server.Log("[CLIENT->SERVER] " + client.Socket.RemoteEndPoint, LogImportance.Low);
+                client.Server.Log("Raw: " + MinecraftClient.DumpArray(buffer.Take(workingLength).ToArray()), LogImportance.Low);
+                client.Server.Log(workingPacket.ToString(), LogImportance.Low);
+                client.Socket.ReceiveTimeout = 30000;
                 results.Add(workingPacket);
-                buffer = buffer.Skip(length).ToArray();
+                buffer = buffer.Skip(workingLength).ToArray();
             }
 
             return results;

@@ -6,16 +6,16 @@ namespace Craft.Net.Server
     {
         public LogImportance MinimumImportance;
 
-        public ConsoleLogWriter(LogImportance MinimumImportance)
+        public ConsoleLogWriter(LogImportance minimumImportance)
         {
-            this.MinimumImportance = MinimumImportance;
+            this.MinimumImportance = minimumImportance;
         }
 
         #region ILogProvider Members
 
-        public void Log(string text, LogImportance Level)
+        public void Log(string text, LogImportance level)
         {
-            if (Level >= MinimumImportance)
+            if (level >= MinimumImportance)
                 Console.WriteLine(text);
         }
 

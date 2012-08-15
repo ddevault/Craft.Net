@@ -9,15 +9,15 @@ namespace Craft.Net.Server.Worlds.Entities
         public bool OnGround;
         public float Pitch;
         public float Yaw;
-        public Vector3 _Position;
 
+        private Vector3 position;
         public Vector3 Position
         {
-            get { return _Position; }
+            get { return position; }
             set
             {
-                OldPosition = _Position;
-                _Position = value;
+                OldPosition = position;
+                position = value;
             }
         }
 

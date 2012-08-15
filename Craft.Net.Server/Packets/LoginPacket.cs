@@ -16,16 +16,16 @@ namespace Craft.Net.Server.Packets
         {
         }
 
-        public LoginPacket(int EntityId, string LevelType,
-                           GameMode GameMode, Dimension Dimension,
-                           Difficulty Difficulty, byte MaxPlayers)
+        public LoginPacket(int entityId, string levelType,
+                           GameMode gameMode, Dimension dimension,
+                           Difficulty difficulty, byte maxPlayers)
         {
-            this.EntityId = EntityId;
-            this.LevelType = LevelType;
-            this.GameMode = GameMode;
-            this.Dimension = Dimension;
-            this.Difficulty = Difficulty;
-            this.MaxPlayers = MaxPlayers;
+            this.EntityId = entityId;
+            this.LevelType = levelType;
+            this.GameMode = gameMode;
+            this.Dimension = dimension;
+            this.Difficulty = difficulty;
+            this.MaxPlayers = maxPlayers;
         }
 
         public override byte PacketID
@@ -33,29 +33,29 @@ namespace Craft.Net.Server.Packets
             get { return 0x1; }
         }
 
-        public override int TryReadPacket(byte[] Buffer, int Length)
+        public override int TryReadPacket(byte[] buffer, int length)
         {
             return 1;
         }
 
-        public override void HandlePacket(MinecraftServer Server, ref MinecraftClient Client)
+        public override void HandlePacket(MinecraftServer server, ref MinecraftClient client)
         {
             // TODO: Send world, etc
         }
 
-        public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
+        public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
             byte[] buffer = new[] {PacketID}
                 .Concat(CreateInt(EntityId))
                 .Concat(CreateString(LevelType))
                 .Concat(new byte[]
                             {
-                                (byte) GameMode,
-                                (byte) Dimension,
-                                (byte) Difficulty,
+                                (byte)GameMode,
+                                (byte)Dimension,
+                                (byte)Difficulty,
                                 0, MaxPlayers
                             }).ToArray();
-            Client.SendData(buffer);
+            client.SendData(buffer);
         }
     }
 }

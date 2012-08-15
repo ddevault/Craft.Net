@@ -6,25 +6,25 @@ namespace Craft.Net.Server.Worlds
 {
     public class EntityManager
     {
-        private static int NextEntityId;
+        private static int nextEntityId;
         public List<Entity> Entities;
         public MinecraftServer Server;
         public World World;
 
-        public EntityManager(World World)
+        public EntityManager(World world)
         {
-            NextEntityId = 0;
+            nextEntityId = 0;
             Entities = new List<Entity>();
-            this.World = World;
+            this.World = world;
         }
 
-        public void SpawnEntity(Entity Entity)
+        public void SpawnEntity(Entity entity)
         {
-            Entity.Id = NextEntityId++;
-            Entities.Add(Entity);
-            if (Entity is PlayerEntity)
+            entity.Id = nextEntityId++;
+            Entities.Add(entity);
+            if (entity is PlayerEntity)
             {
-                var player = (PlayerEntity) Entity;
+                var player = (PlayerEntity)entity;
                 foreach (MinecraftClient client in Server.GetClientsInWorld(World))
                 {
                     if (client != player.Client)

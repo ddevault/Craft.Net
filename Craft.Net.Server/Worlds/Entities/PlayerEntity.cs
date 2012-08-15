@@ -8,9 +8,9 @@ namespace Craft.Net.Server.Worlds.Entities
         {
         }
 
-        public PlayerEntity(MinecraftClient Client)
+        public PlayerEntity(MinecraftClient client)
         {
-            this.Client = Client;
+            this.Client = client;
         }
 
         #region Properties

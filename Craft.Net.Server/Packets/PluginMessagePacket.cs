@@ -11,10 +11,10 @@ namespace Craft.Net.Server.Packets
         {
         }
 
-        public PluginMessagePacket(string Channel, byte[] Message)
+        public PluginMessagePacket(string channel, byte[] message)
         {
-            this.Channel = Channel;
-            this.Message = Message;
+            this.Channel = channel;
+            this.Message = message;
         }
 
         public override byte PacketID
@@ -22,32 +22,32 @@ namespace Craft.Net.Server.Packets
             get { return 0xFA; }
         }
 
-        public override int TryReadPacket(byte[] Buffer, int Length)
+        public override int TryReadPacket(byte[] buffer, int length)
         {
             int offset = 0;
-            short length = 0;
-            if (!TryReadString(Buffer, ref offset, out Channel))
+            short messageLength = 0;
+            if (!TryReadString(buffer, ref offset, out Channel))
                 return -1;
-            if (!TryReadShort(Buffer, ref offset, out length))
+            if (!TryReadShort(buffer, ref offset, out messageLength))
                 return -1;
-            if (!TryReadArray(Buffer, length, ref offset, out Message))
+            if (!TryReadArray(buffer, messageLength, ref offset, out Message))
                 return -1;
             return offset;
         }
 
-        public override void HandlePacket(MinecraftServer Server, ref MinecraftClient Client)
+        public override void HandlePacket(MinecraftServer server, ref MinecraftClient client)
         {
-            if (Server.PluginChannels.ContainsKey(Channel))
-                Server.PluginChannels[Channel].MessageRecieved(Message);
+            if (server.PluginChannels.ContainsKey(Channel))
+                server.PluginChannels[Channel].MessageRecieved(Message);
         }
 
-        public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
+        public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
             byte[] data = new[] {PacketID}
                 .Concat(CreateString(Channel))
-                .Concat(CreateShort((short) Message.Length))
+                .Concat(CreateShort((short)Message.Length))
                 .Concat(Message).ToArray();
-            Client.SendData(data);
+            client.SendData(data);
         }
     }
 }

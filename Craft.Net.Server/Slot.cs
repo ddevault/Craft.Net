@@ -56,13 +56,13 @@ namespace Craft.Net.Server
         /// <summary>
         /// Initializes a new instance of the <see cref="Slot"/> class.
         /// </summary>
-        /// <param name="ID">The ID.</param>
-        /// <param name="Count">The count.</param>
+        /// <param name="id">The ID.</param>
+        /// <param name="count">The count.</param>
         /// <remarks></remarks>
-        public Slot(short ID, byte Count)
+        public Slot(short id, byte count)
         {
-            Id = ID;
-            this.Count = Count;
+            Id = id;
+            this.Count = count;
             Metadata = 0;
             Nbt = new NbtFile();
         }
@@ -70,15 +70,15 @@ namespace Craft.Net.Server
         /// <summary>
         /// Initializes a new instance of the <see cref="Slot"/> class.
         /// </summary>
-        /// <param name="ID">The ID.</param>
-        /// <param name="Count">The count.</param>
-        /// <param name="Metadata">The metadata.</param>
+        /// <param name="id">The ID.</param>
+        /// <param name="count">The count.</param>
+        /// <param name="metadata">The metadata.</param>
         /// <remarks></remarks>
-        public Slot(short ID, byte Count, short Metadata)
+        public Slot(short id, byte count, short metadata)
         {
-            Id = ID;
-            this.Count = Count;
-            this.Metadata = Metadata;
+            Id = id;
+            this.Count = count;
+            this.Metadata = metadata;
             Nbt = new NbtFile();
         }
 
@@ -94,7 +94,7 @@ namespace Craft.Net.Server
             s.Id = ReadShort(stream);
             if (s.Id == -1)
                 return s;
-            s.Count = (byte) stream.ReadByte();
+            s.Count = (byte)stream.ReadByte();
             s.Metadata = ReadShort(stream);
 
             short length = ReadShort(stream);
@@ -164,7 +164,7 @@ namespace Craft.Net.Server
             Nbt.SaveFile(gzs);
             gzs.Close();
             byte[] b = ms.GetBuffer();
-            data = data.Concat(Packet.CreateShort((short) b.Length)).Concat(b).ToArray();
+            data = data.Concat(Packet.CreateShort((short)b.Length)).Concat(b).ToArray();
             return data;
         }
 
@@ -185,7 +185,7 @@ namespace Craft.Net.Server
             Nbt.SaveFile(gzs);
             gzs.Close();
             byte[] b = ms.GetBuffer();
-            data = data.Concat(Packet.CreateShort((short) b.Length)).Concat(b).ToArray();
+            data = data.Concat(Packet.CreateShort((short)b.Length)).Concat(b).ToArray();
 
             return data;
         }
@@ -194,7 +194,7 @@ namespace Craft.Net.Server
         {
             var buffer = new byte[2];
             stream.Read(buffer, 0, 2);
-            buffer.Reverse();
+            Array.Reverse(buffer);
             return BitConverter.ToInt16(buffer, 0);
         }
     }

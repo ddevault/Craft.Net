@@ -10,9 +10,9 @@ namespace Craft.Net.Server.Packets
         {
         }
 
-        public DisconnectPacket(string Reason)
+        public DisconnectPacket(string reason)
         {
-            this.Reason = Reason;
+            this.Reason = reason;
         }
 
         public override byte PacketID
@@ -20,27 +20,27 @@ namespace Craft.Net.Server.Packets
             get { return 0xFF; }
         }
 
-        public override int TryReadPacket(byte[] Buffer, int Length)
+        public override int TryReadPacket(byte[] buffer, int length)
         {
             int offset = 1;
-            if (!TryReadString(Buffer, ref offset, out Reason))
+            if (!TryReadString(buffer, ref offset, out Reason))
                 return -1;
             return offset;
         }
 
-        public override void HandlePacket(MinecraftServer Server, ref MinecraftClient Client)
+        public override void HandlePacket(MinecraftServer server, ref MinecraftClient client)
         {
-            Server.Log(Client.Username + " disconnected (" + Reason + ")");
-            Client.IsDisconnected = true;
+            server.Log(client.Username + " disconnected (" + Reason + ")");
+            client.IsDisconnected = true;
         }
 
-        public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
+        public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
             if (!Reason.Contains("§"))
-                Server.Log("Disconnected client: " + Reason);
+                server.Log("Disconnected client: " + Reason);
             byte[] buffer = new[] {PacketID}.Concat(CreateString(Reason)).ToArray();
-            Client.SendData(buffer);
-            Client.IsDisconnected = true;
+            client.SendData(buffer);
+            client.IsDisconnected = true;
         }
     }
 }

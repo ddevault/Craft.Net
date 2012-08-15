@@ -25,44 +25,44 @@ namespace Craft.Net.Server.Packets
             get { return 0xE; }
         }
 
-        public override int TryReadPacket(byte[] Buffer, int Length)
+        public override int TryReadPacket(byte[] buffer, int length)
         {
             int offset = 1;
             byte action, y;
             int x, z;
-            if (!TryReadByte(Buffer, ref offset, out action))
+            if (!TryReadByte(buffer, ref offset, out action))
                 return -1;
-            if (!TryReadInt(Buffer, ref offset, out x))
+            if (!TryReadInt(buffer, ref offset, out x))
                 return -1;
-            if (!TryReadByte(Buffer, ref offset, out y))
+            if (!TryReadByte(buffer, ref offset, out y))
                 return -1;
-            if (!TryReadInt(Buffer, ref offset, out z))
+            if (!TryReadInt(buffer, ref offset, out z))
                 return -1;
-            if (!TryReadByte(Buffer, ref offset, out Face))
+            if (!TryReadByte(buffer, ref offset, out Face))
                 return -1;
             Position = new Vector3(x, y, z);
-            Action = (PlayerAction) action;
+            Action = (PlayerAction)action;
             return offset;
         }
 
-        public override void HandlePacket(MinecraftServer Server, ref MinecraftClient Client)
+        public override void HandlePacket(MinecraftServer server, ref MinecraftClient client)
         {
-            if (Client.Entity.Position.DistanceTo(Position) <= MaxDigDistance)
+            if (client.Entity.Position.DistanceTo(Position) <= MaxDigDistance)
             {
                 switch (Action)
                 {
                     case PlayerAction.StartedDigging:
                         // if (creative)
-                        Server.GetClientWorld(Client).SetBlock(Position, new AirBlock());
+                        server.GetClientWorld(client).SetBlock(Position, new AirBlock());
                         break;
                     case PlayerAction.FinishedDigging:
-                        Server.GetClientWorld(Client).SetBlock(Position, new AirBlock());
+                        server.GetClientWorld(client).SetBlock(Position, new AirBlock());
                         break;
                 }
             }
         }
 
-        public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
+        public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
             throw new InvalidOperationException();
         }

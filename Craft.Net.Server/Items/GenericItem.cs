@@ -4,9 +4,9 @@
     {
         private readonly short internalItemID;
 
-        public GenericItem(short ItemID)
+        public GenericItem(short itemID)
         {
-            internalItemID = ItemID;
+            internalItemID = itemID;
         }
 
         public override short ItemID

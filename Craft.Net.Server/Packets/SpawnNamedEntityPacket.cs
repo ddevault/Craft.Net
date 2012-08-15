@@ -13,13 +13,13 @@ namespace Craft.Net.Server.Packets
         public Vector3 Position;
         public float Yaw;
 
-        public SpawnNamedEntityPacket(MinecraftClient Client)
+        public SpawnNamedEntityPacket(MinecraftClient client)
         {
-            EntityId = Client.Entity.Id;
-            PlayerName = Client.Username;
-            Position = Client.Entity.Position;
-            Yaw = Client.Entity.Yaw;
-            Pitch = Client.Entity.Pitch;
+            EntityId = client.Entity.Id;
+            PlayerName = client.Username;
+            Position = client.Entity.Position;
+            Yaw = client.Entity.Yaw;
+            Pitch = client.Entity.Pitch;
             CurrentItem = 0; // TODO
         }
 
@@ -28,28 +28,28 @@ namespace Craft.Net.Server.Packets
             get { return 0x14; }
         }
 
-        public override int TryReadPacket(byte[] Buffer, int Length)
+        public override int TryReadPacket(byte[] buffer, int length)
         {
             throw new InvalidOperationException();
         }
 
-        public override void HandlePacket(MinecraftServer Server, ref MinecraftClient Client)
+        public override void HandlePacket(MinecraftServer server, ref MinecraftClient client)
         {
             throw new InvalidOperationException();
         }
 
-        public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
+        public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
             byte[] buffer = new[] {PacketID}
                 .Concat(CreateInt(EntityId))
                 .Concat(CreateString(PlayerName))
-                .Concat(CreateInt((int) Position.X))
-                .Concat(CreateInt((int) Position.Y))
-                .Concat(CreateInt((int) Position.Z))
+                .Concat(CreateInt((int)Position.X))
+                .Concat(CreateInt((int)Position.Y))
+                .Concat(CreateInt((int)Position.Z))
                 .Concat(CreatePackedByte(Yaw))
                 .Concat(CreatePackedByte(Pitch))
                 .Concat(CreateShort(CurrentItem)).ToArray();
-            Client.SendData(buffer);
+            client.SendData(buffer);
         }
     }
 }

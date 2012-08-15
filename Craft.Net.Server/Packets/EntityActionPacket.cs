@@ -22,51 +22,51 @@ namespace Craft.Net.Server.Packets
             get { return 0x13; }
         }
 
-        public override int TryReadPacket(byte[] Buffer, int Length)
+        public override int TryReadPacket(byte[] buffer, int length)
         {
             int offset = 1;
             byte action = 0;
-            if (!TryReadInt(Buffer, ref offset, out EntityId))
+            if (!TryReadInt(buffer, ref offset, out EntityId))
                 return -1;
-            if (!TryReadByte(Buffer, ref offset, out action))
+            if (!TryReadByte(buffer, ref offset, out action))
                 return -1;
-            Action = (EntityAction) action;
+            Action = (EntityAction)action;
             return offset;
         }
 
-        public override void HandlePacket(MinecraftServer Server, ref MinecraftClient Client)
+        public override void HandlePacket(MinecraftServer server, ref MinecraftClient client)
         {
             switch (Action)
             {
                 case EntityAction.Crouch:
-                    Client.IsCrouching = true;
+                    client.IsCrouching = true;
                     break;
                 case EntityAction.Uncrouch:
-                    Client.IsCrouching = false;
+                    client.IsCrouching = false;
                     break;
                 case EntityAction.StartSprinting:
-                    Client.IsSprinting = true;
+                    client.IsSprinting = true;
                     break;
                 case EntityAction.StopSprinting:
-                    Client.IsSprinting = false;
+                    client.IsSprinting = false;
                     break;
             }
             if (Action != EntityAction.LeaveBed) // NOTE: Does this matter?
             {
-                EntityId = Client.Entity.Id;
+                EntityId = client.Entity.Id;
                 for (int i = 0;
                      i <
-                     Server.GetClientsInWorld(Server.GetClientWorld(Client)).Count();
+                     server.GetClientsInWorld(server.GetClientWorld(client)).Count();
                      i++)
                 {
-                    if (Server.Clients[i] != Client)
-                        Server.Clients[i].SendPacket(this);
+                    if (server.Clients[i] != client)
+                        server.Clients[i].SendPacket(this);
                 }
-                Server.ProcessSendQueue();
+                server.ProcessSendQueue();
             }
         }
 
-        public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
+        public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
             throw new InvalidOperationException();
         }

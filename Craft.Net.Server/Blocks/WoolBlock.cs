@@ -30,9 +30,9 @@
         {
         }
 
-        public WoolBlock(WoolColor Color)
+        public WoolBlock(WoolColor color)
         {
-            Metadata = (byte) Color;
+            Metadata = (byte)color;
         }
 
         /// <summary>

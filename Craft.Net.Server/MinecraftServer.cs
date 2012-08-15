@@ -39,10 +39,10 @@ namespace Craft.Net.Server
         internal static Random Random;
         internal RSACryptoServiceProvider CryptoServiceProvider;
         internal Dictionary<string, PluginChannel> PluginChannels;
-        private AutoResetEvent SendQueueReset;
-        private Thread SendQueueThread;
+        private AutoResetEvent sendQueueReset;
+        private Thread sendQueueThread;
         internal RSAParameters ServerKey;
-        private Timer UpdatePlayerListTimer;
+        private Timer updatePlayerListTimer;
         private Socket socket;
 
         #endregion
@@ -58,7 +58,7 @@ namespace Craft.Net.Server
 
         #region Constructor
 
-        public MinecraftServer(IPEndPoint EndPoint)
+        public MinecraftServer(IPEndPoint endPoint)
         {
             Clients = new List<MinecraftClient>();
             MaxPlayers = 25;
@@ -72,7 +72,7 @@ namespace Craft.Net.Server
 
             socket = new Socket(AddressFamily.InterNetwork,
                                 SocketType.Stream, ProtocolType.Tcp);
-            socket.Bind(EndPoint);
+            socket.Bind(endPoint);
         }
 
         #endregion
@@ -93,12 +93,12 @@ namespace Craft.Net.Server
             ServerKey = CryptoServiceProvider.ExportParameters(true);
 
             socket.Listen(10);
-            SendQueueReset = new AutoResetEvent(false);
-            SendQueueThread = new Thread(SendQueueWorker);
-            SendQueueThread.Start();
+            sendQueueReset = new AutoResetEvent(false);
+            sendQueueThread = new Thread(SendQueueWorker);
+            sendQueueThread.Start();
             socket.BeginAccept(AcceptConnectionAsync, null);
 
-            UpdatePlayerListTimer = new Timer(UpdatePlayerList, null, 60000, 60000);
+            updatePlayerListTimer = new Timer(UpdatePlayerList, null, 60000, 60000);
 
             Log("Server started.");
         }
@@ -106,10 +106,10 @@ namespace Craft.Net.Server
         public void Stop()
         {
             Log("Stopping server...");
-            if (SendQueueThread != null)
+            if (sendQueueThread != null)
             {
-                SendQueueThread.Abort();
-                SendQueueThread = null;
+                sendQueueThread.Abort();
+                sendQueueThread = null;
             }
             if (socket != null)
             {
@@ -117,37 +117,37 @@ namespace Craft.Net.Server
                     socket.Shutdown(SocketShutdown.Both);
                 socket = null;
             }
-            UpdatePlayerListTimer.Dispose();
+            updatePlayerListTimer.Dispose();
             Log("Server stopped.");
         }
 
         public void ProcessSendQueue()
         {
-            if (SendQueueReset != null)
-                SendQueueReset.Set();
+            if (sendQueueReset != null)
+                sendQueueReset.Set();
         }
 
-        public void AddLogProvider(ILogProvider LogProvider)
+        public void AddLogProvider(ILogProvider logProvider)
         {
-            LogProviders.Add(LogProvider);
+            LogProviders.Add(logProvider);
         }
 
-        public void Log(string Text)
+        public void Log(string text)
         {
-            Log(Text, LogImportance.High);
+            Log(text, LogImportance.High);
         }
 
-        public void Log(string Text, LogImportance LogLevel)
+        public void Log(string text, LogImportance logLevel)
         {
             foreach (ILogProvider provider in LogProviders)
-                provider.Log(Text, LogLevel);
+                provider.Log(text, logLevel);
         }
 
-        public void AddWorld(World World)
+        public void AddWorld(World world)
         {
-            World.EntityManager.Server = this;
-            World.OnBlockChanged += HandleOnBlockChanged;
-            Worlds.Add(World);
+            world.EntityManager.Server = this;
+            world.OnBlockChanged += HandleOnBlockChanged;
+            Worlds.Add(world);
         }
 
         private void HandleOnBlockChanged(object sender, BlockChangedEventArgs e)
@@ -157,11 +157,11 @@ namespace Craft.Net.Server
             ProcessSendQueue();
         }
 
-        public World GetClientWorld(MinecraftClient Client)
+        public World GetClientWorld(MinecraftClient client)
         {
             foreach (World world in Worlds)
             {
-                if (world.EntityManager.Entities.Contains(Client.Entity))
+                if (world.EntityManager.Entities.Contains(client.Entity))
                     return world;
             }
             return null;
@@ -199,8 +199,8 @@ namespace Craft.Net.Server
         {
             while (true)
             {
-                SendQueueReset.Reset();
-                SendQueueReset.WaitOne();
+                sendQueueReset.Reset();
+                sendQueueReset.WaitOne();
                 if (Clients.Count != 0)
                 {
                     for (int i = 0; i < Clients.Count; i++)
@@ -254,7 +254,7 @@ namespace Craft.Net.Server
 
         private void SocketRecieveAsync(IAsyncResult result)
         {
-            var client = (MinecraftClient) result.AsyncState;
+            var client = (MinecraftClient)result.AsyncState;
             SocketError error;
             int length = client.Socket.EndReceive(result, out error) + client.RecieveBufferIndex;
             if (error != SocketError.Success || !client.Socket.Connected || length == client.RecieveBufferIndex)
@@ -335,26 +335,25 @@ namespace Craft.Net.Server
                 OnChatMessage(this, e);
         }
 
-        internal void LogInPlayer(MinecraftClient Client)
+        internal void LogInPlayer(MinecraftClient client)
         {
-            Log(Client.Username + " logged in.");
-            Client.IsLoggedIn = true;
+            Log(client.Username + " logged in.");
+            client.IsLoggedIn = true;
             // Spawn player
-            Client.Entity = new PlayerEntity(Client);
-            Client.Entity.Position = DefaultWorld.SpawnPoint;
-            Client.Entity.Position += new Vector3(0, PlayerEntity.Height, 0);
-            DefaultWorld.EntityManager.SpawnEntity(Client.Entity);
-            Client.SendPacket(new LoginPacket(Client.Entity.Id,
+            client.Entity = new PlayerEntity(client);
+            client.Entity.Position = DefaultWorld.SpawnPoint;
+            client.Entity.Position += new Vector3(0, PlayerEntity.Height, 0);
+            DefaultWorld.EntityManager.SpawnEntity(client.Entity);
+            client.SendPacket(new LoginPacket(client.Entity.Id,
                                               DefaultWorld.LevelType, DefaultWorld.GameMode,
-                                              Client.Entity.Dimension, DefaultWorld.Difficulty,
+                                              client.Entity.Dimension, DefaultWorld.Difficulty,
                                               MaxPlayers));
 
             // Send initial chunks
-            Client.UpdateChunks(true);
-            MinecraftClient client = Client;
-            Client.SendQueue.Last().OnPacketSent += (sender, e) => { client.ReadyToSpawn = true; };
-            Client.SendPacket(new PlayerPositionAndLookPacket(
-                                  Client.Entity.Position, Client.Entity.Yaw, Client.Entity.Pitch, true));
+            client.UpdateChunks(true);
+            client.SendQueue.Last().OnPacketSent += (sender, e) => { client.ReadyToSpawn = true; };
+            client.SendPacket(new PlayerPositionAndLookPacket(
+                                  client.Entity.Position, client.Entity.Yaw, client.Entity.Pitch, true));
 
             UpdatePlayerList(null); // Should also process send queue
         }

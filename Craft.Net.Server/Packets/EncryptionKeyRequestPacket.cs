@@ -7,17 +7,17 @@ namespace Craft.Net.Server.Packets
 {
     public class EncryptionKeyRequestPacket : Packet
     {
-        private readonly string AuthenticationHash;
-        private readonly RSAParameters ServerKey;
+        private readonly string authenticationHash;
+        private readonly RSAParameters serverKey;
 
         public EncryptionKeyRequestPacket()
         {
         }
 
-        public EncryptionKeyRequestPacket(string AuthenticationHash, RSAParameters ServerKey)
+        public EncryptionKeyRequestPacket(string authenticationHash, RSAParameters serverKey)
         {
-            this.AuthenticationHash = AuthenticationHash;
-            this.ServerKey = ServerKey;
+            this.authenticationHash = authenticationHash;
+            this.serverKey = serverKey;
         }
 
         public override byte PacketID
@@ -25,31 +25,31 @@ namespace Craft.Net.Server.Packets
             get { return 0xFD; }
         }
 
-        public override int TryReadPacket(byte[] Buffer, int Length)
+        public override int TryReadPacket(byte[] buffer, int length)
         {
             throw new InvalidOperationException();
         }
 
-        public override void HandlePacket(MinecraftServer Server, ref MinecraftClient Client)
+        public override void HandlePacket(MinecraftServer server, ref MinecraftClient client)
         {
             throw new InvalidOperationException();
         }
 
-        public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
+        public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
             var verifyToken = new byte[4];
             var csp = new RNGCryptoServiceProvider();
             csp.GetBytes(verifyToken); // TODO: Encrypt this
 
-            AsnKeyBuilder.AsnMessage encodedKey = AsnKeyBuilder.PublicKeyToX509(ServerKey);
+            AsnKeyBuilder.AsnMessage encodedKey = AsnKeyBuilder.PublicKeyToX509(serverKey);
 
             byte[] buffer = new[] {PacketID}
-                .Concat(CreateString(AuthenticationHash))
-                .Concat(CreateShort((short) encodedKey.GetBytes().Length))
+                .Concat(CreateString(authenticationHash))
+                .Concat(CreateShort((short)encodedKey.GetBytes().Length))
                 .Concat(encodedKey.GetBytes())
-                .Concat(CreateShort((short) verifyToken.Length))
+                .Concat(CreateShort((short)verifyToken.Length))
                 .Concat(verifyToken).ToArray();
-            Client.Socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, null, null);
+            client.Socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, null, null);
         }
     }
 }

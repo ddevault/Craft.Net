@@ -11,9 +11,9 @@ namespace Craft.Net.Server.Packets
         {
         }
 
-        public ChatMessagePacket(string Message)
+        public ChatMessagePacket(string message)
         {
-            this.Message = Message;
+            this.Message = message;
         }
 
         public override byte PacketID
@@ -21,28 +21,28 @@ namespace Craft.Net.Server.Packets
             get { return 0x3; }
         }
 
-        public override int TryReadPacket(byte[] Buffer, int Length)
+        public override int TryReadPacket(byte[] buffer, int length)
         {
             int offset = 1;
-            if (!TryReadString(Buffer, ref offset, out Message))
+            if (!TryReadString(buffer, ref offset, out Message))
                 return -1;
             return offset;
         }
 
-        public override void HandlePacket(MinecraftServer Server, ref MinecraftClient Client)
+        public override void HandlePacket(MinecraftServer server, ref MinecraftClient client)
         {
-            Server.Log("<" + Client.Username + "> " + Message);
-            var args = new ChatMessageEventArgs(Client, Message);
-            Server.FireOnChatMessage(args);
+            server.Log("<" + client.Username + "> " + Message);
+            var args = new ChatMessageEventArgs(client, Message);
+            server.FireOnChatMessage(args);
             if (!args.Handled)
-                Server.SendChat("<" + Client.Username + "> " + Message);
+                server.SendChat("<" + client.Username + "> " + Message);
         }
 
-        public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
+        public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
             byte[] buffer = new[] {PacketID}
                 .Concat(CreateString(Message)).ToArray();
-            Client.SendData(buffer);
+            client.SendData(buffer);
         }
     }
 }

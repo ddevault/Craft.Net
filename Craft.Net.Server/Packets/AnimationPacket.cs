@@ -23,39 +23,39 @@ namespace Craft.Net.Server.Packets
             get { return 0x12; }
         }
 
-        public override int TryReadPacket(byte[] Buffer, int Length)
+        public override int TryReadPacket(byte[] buffer, int length)
         {
             int offset = 1;
             byte animation = 0;
-            if (!TryReadInt(Buffer, ref offset, out EntityId))
+            if (!TryReadInt(buffer, ref offset, out EntityId))
                 return -1;
-            if (!TryReadByte(Buffer, ref offset, out animation))
+            if (!TryReadByte(buffer, ref offset, out animation))
                 return -1;
-            Animation = (Animation) animation;
+            Animation = (Animation)animation;
             return offset;
         }
 
-        public override void HandlePacket(MinecraftServer Server, ref MinecraftClient Client)
+        public override void HandlePacket(MinecraftServer server, ref MinecraftClient client)
         {
-            EntityId = Client.Entity.Id;
+            EntityId = client.Entity.Id;
             for (int i = 0;
                  i <
-                 Server.GetClientsInWorld(Server.GetClientWorld(Client)).Count();
+                 server.GetClientsInWorld(server.GetClientWorld(client)).Count();
                  i++) // TODO: Better way
             {
-                if (Server.Clients[i] != Client)
-                    Server.Clients[i].SendPacket(this);
+                if (server.Clients[i] != client)
+                    server.Clients[i].SendPacket(this);
             }
-            Server.ProcessSendQueue();
+            server.ProcessSendQueue();
         }
 
-        public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
+        public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
             return;
             byte[] data = new byte[] {PacketID}
                 .Concat(CreateInt(EntityId))
-                .Concat(new byte[] {(byte) Animation}).ToArray();
-            Client.SendData(data);
+                .Concat(new byte[] {(byte)Animation}).ToArray();
+            client.SendData(data);
         }
     }
 }

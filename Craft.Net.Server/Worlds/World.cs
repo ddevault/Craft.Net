@@ -17,21 +17,21 @@ namespace Craft.Net.Server.Worlds
         public Vector3 SpawnPoint;
         public IWorldGenerator WorldGenerator;
 
-        public World(IWorldGenerator WorldGenerator)
+        public World(IWorldGenerator worldGenerator)
         {
             EntityManager = new EntityManager(this);
             Name = "world";
             GameMode = GameMode.Creative;
             Difficulty = Difficulty.Peaceful;
-            this.WorldGenerator = WorldGenerator;
-            SpawnPoint = WorldGenerator.SpawnPoint;
+            this.WorldGenerator = worldGenerator;
+            SpawnPoint = worldGenerator.SpawnPoint;
             Seed = MinecraftServer.Random.Next();
             Regions = new Dictionary<Vector3, Region>();
         }
 
-        public World(IWorldGenerator WorldGenerator, long Seed) : this(WorldGenerator)
+        public World(IWorldGenerator worldGenerator, long seed) : this(worldGenerator)
         {
-            this.Seed = Seed;
+            this.Seed = seed;
         }
 
         public string LevelType
@@ -49,8 +49,8 @@ namespace Craft.Net.Server.Worlds
         public Chunk GetChunk(Vector3 position)
         {
             //In chunks
-            var x = (int) position.X;
-            var z = (int) position.Z;
+            var x = (int)position.X;
+            var z = (int)position.Z;
 
             //In regions
             int regionX = x/Region.Width - ((x < 0) ? 1 : 0);
@@ -70,8 +70,8 @@ namespace Craft.Net.Server.Worlds
         public void SetChunk(Vector3 position, Chunk chunk)
         {
             //In chunks
-            var x = (int) position.X;
-            var z = (int) position.Z;
+            var x = (int)position.X;
+            var z = (int)position.Z;
 
             //In regions
             int regionX = x/Region.Width - ((x < 0) ? 1 : 0);
@@ -105,9 +105,9 @@ namespace Craft.Net.Server.Worlds
 
         private Vector3 FindBlockPosition(Vector3 position, out Chunk chunk)
         {
-            var x = (int) position.X;
-            var y = (int) position.Y;
-            var z = (int) position.Z;
+            var x = (int)position.X;
+            var y = (int)position.Y;
+            var z = (int)position.Z;
 
             if (y < 0 || y >= Chunk.Height) throw new ArgumentOutOfRangeException("Block is out of range");
 

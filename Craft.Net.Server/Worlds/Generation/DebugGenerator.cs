@@ -22,9 +22,9 @@ namespace Craft.Net.Server.Worlds.Generation
             get { return new Vector3(0, 1, 1); }
         }
 
-        public Chunk GenerateChunk(Vector3 Position, Region ParentRegion)
+        public Chunk GenerateChunk(Vector3 position, Region parentRegion)
         {
-            var chunk = new Chunk(Position, ParentRegion);
+            var chunk = new Chunk(position, parentRegion);
 
             for (int y = 0; y < Chunk.Height; y++)
             {
@@ -44,9 +44,9 @@ namespace Craft.Net.Server.Worlds.Generation
             return chunk;
         }
 
-        public Chunk GenerateChunk(Vector3 Position)
+        public Chunk GenerateChunk(Vector3 position)
         {
-            var chunk = new Chunk(Position);
+            var chunk = new Chunk(position);
             for (int x = 0; x < Chunk.Width; x++)
                 for (int z = 0; z < Chunk.Width; z++)
                 {

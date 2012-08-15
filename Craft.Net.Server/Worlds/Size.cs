@@ -6,11 +6,11 @@ namespace Craft.Net.Server.Worlds
         public double Height;
         public double Width;
 
-        public Size(double Width, double Height, double Depth)
+        public Size(double width, double height, double depth)
         {
-            this.Width = Width;
-            this.Height = Height;
-            this.Depth = Depth;
+            this.Width = width;
+            this.Height = height;
+            this.Depth = depth;
         }
     }
 }

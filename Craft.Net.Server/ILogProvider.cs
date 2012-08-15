@@ -9,6 +9,6 @@ namespace Craft.Net.Server
 
     public interface ILogProvider
     {
-        void Log(string text, LogImportance Level);
+        void Log(string text, LogImportance level);
     }
 }

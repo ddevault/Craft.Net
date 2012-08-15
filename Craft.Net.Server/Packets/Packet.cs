@@ -24,9 +24,9 @@ namespace Craft.Net.Server.Packets
                 OnPacketSent(this, null);
         }
 
-        public abstract int TryReadPacket(byte[] Buffer, int Length);
-        public abstract void HandlePacket(MinecraftServer Server, ref MinecraftClient Client);
-        public abstract void SendPacket(MinecraftServer Server, MinecraftClient Client);
+        public abstract int TryReadPacket(byte[] buffer, int length);
+        public abstract void HandlePacket(MinecraftServer server, ref MinecraftClient client);
+        public abstract void SendPacket(MinecraftServer server, MinecraftClient client);
 
         public override string ToString()
         {
@@ -42,85 +42,83 @@ namespace Craft.Net.Server.Packets
 
         #region Packet Writer Methods
 
-        protected internal static byte[] CreateString(string Text)
+        protected internal static byte[] CreateString(string text)
         {
-            if (Text.Length > 240)
-                throw new ArgumentOutOfRangeException("Text", "Text.Lenght can't be > 240.");
-                    //regarding to http://www.wiki.vg/Data_Types, 
+            if (text.Length > 240)
+                throw new ArgumentOutOfRangeException("text", "String length cannot be greater 240 characters.");
 
-            return CreateShort((short) Text.Length)
-                .Concat(Encoding.BigEndianUnicode.GetBytes(Text)).ToArray();
+            return CreateShort((short)text.Length)
+                .Concat(Encoding.BigEndianUnicode.GetBytes(text)).ToArray();
         }
 
-        protected internal static byte[] CreateBoolean(bool Value)
+        protected internal static byte[] CreateBoolean()
+        {
+            return CreateBoolean(false);
+        }
+
+        protected internal static byte[] CreateBoolean(bool value)
         {
             return new[]
                        {
-                           unchecked((byte) (Value ? 1 : 0))
+                           unchecked((byte)(value ? 1 : 0))
                        };
         }
 
-        protected internal static byte[] CreateUShort(ushort Value)
+        protected internal static byte[] CreateUShort(ushort value)
         {
             unchecked
             {
-                return new[] {(byte) (Value >> 8), (byte) (Value)};
+                return new[] {(byte)(value >> 8), (byte)(value)};
             }
-//            return BitConverter.GetBytes((ushort)IPAddress.HostToNetworkOrder((short)Value));
         }
 
-        protected internal static byte[] CreateShort(short Value)
+        protected internal static byte[] CreateShort(short value)
         {
             unchecked
             {
-                return new[] {(byte) (Value >> 8), (byte) (Value)};
+                return new[] {(byte)(value >> 8), (byte)(value)};
             }
-
-//            return BitConverter.GetBytes(IPAddress.HostToNetworkOrder(Value));
         }
 
-        protected internal static byte[] CreateInt(int Value)
+        protected internal static byte[] CreateInt(int value)
         {
             unchecked
             {
                 return new[]
                            {
-                               (byte) (Value >> 24), (byte) (Value >> 16),
-                               (byte) (Value >> 8), (byte) (Value)
+                               (byte)(value >> 24), (byte)(value >> 16),
+                               (byte)(value >> 8), (byte)(value)
                            };
             }
-//            return BitConverter.GetBytes(IPAddress.HostToNetworkOrder(Value));
         }
 
-        protected internal static byte[] CreateLong(long Value)
+        protected internal static byte[] CreateLong(long value)
         {
             unchecked
             {
-                //byte[] v = BitConverter.GetBytes(IPAddress.HostToNetworkOrder(value));
                 return new[]
                            {
-                               (byte) (Value >> 56), (byte) (Value >> 48),
-                               (byte) (Value >> 40), (byte) (Value >> 32),
-                               (byte) (Value >> 24), (byte) (Value >> 16),
-                               (byte) (Value >> 8), (byte) (Value)
+                               (byte)(value >> 56), (byte)(value >> 48),
+                               (byte)(value >> 40), (byte)(value >> 32),
+                               (byte)(value >> 24), (byte)(value >> 16),
+                               (byte)(value >> 8), (byte)(value)
                            };
             }
         }
 
-        protected internal static unsafe byte[] CreateFloat(float Value)
+        protected internal static unsafe byte[] CreateFloat(float value)
         {
-            return CreateInt(*(int*) &Value);
+            return CreateInt(*(int*)&value);
         }
 
-        protected internal static byte[] CreatePackedByte(float Value)
+        protected internal static byte[] CreatePackedByte(float value)
         {
-            return new[] {(byte) (((Math.Floor(Value)%360)/360)*256)};
+            return new[] {(byte)(((Math.Floor(value)%360)/360)*256)};
         }
 
-        protected internal static unsafe byte[] CreateDouble(double Value)
+        protected internal static unsafe byte[] CreateDouble(double value)
         {
-            return CreateLong(*(long*) &Value);
-            //for reference see Mono implementation of BitConverter.DoubleToInt64Bits(double)
+            return CreateLong(*(long*)&value);
         }
 
         #endregion
@@ -129,8 +127,7 @@ namespace Craft.Net.Server.Packets
 
         protected static short ReadShort(byte[] buffer, int offset)
         {
-            return unchecked((short) (buffer[0 + offset] << 8 | buffer[1 + offset]));
-//            return IPAddress.NetworkToHostOrder(BitConverter.ToInt16(buffer, offset));
+            return unchecked((short)(buffer[0 + offset] << 8 | buffer[1 + offset]));
         }
 
         protected internal static bool TryReadBoolean(byte[] buffer, ref int offset, out bool value)
@@ -141,8 +138,7 @@ namespace Craft.Net.Server.Packets
                 value = buffer[offset++] == 1;
                 return true;
             }
-            else
-                return false;
+            return false;
         }
 
         protected internal static bool TryReadByte(byte[] buffer, ref int offset, out byte value)
@@ -153,8 +149,7 @@ namespace Craft.Net.Server.Packets
                 value = buffer[offset++];
                 return true;
             }
-            else
-                return false;
+            return false;
         }
 
         protected internal static bool TryReadShort(byte[] buffer, ref int offset, out short value)
@@ -162,13 +157,11 @@ namespace Craft.Net.Server.Packets
             value = -1;
             if (buffer.Length - offset >= 2)
             {
-//                value = IPAddress.NetworkToHostOrder(BitConverter.ToInt16(buffer, offset));
-                value = unchecked((short) (buffer[0 + offset] << 8 | buffer[1 + offset]));
+                value = unchecked((short)(buffer[0 + offset] << 8 | buffer[1 + offset]));
                 offset += 2;
                 return true;
             }
-            else
-                return false;
+            return false;
         }
 
         protected internal static bool TryReadInt(byte[] buffer, ref int offset, out int value)
@@ -176,7 +169,6 @@ namespace Craft.Net.Server.Packets
             value = -1;
             if (buffer.Length - offset >= 4)
             {
-//                value = IPAddress.NetworkToHostOrder(BitConverter.ToInt32(buffer, offset));
                 value = unchecked(buffer[0 + offset] << 24 |
                                   buffer[1 + offset] << 16 |
                                   buffer[2 + offset] << 8 |
@@ -184,8 +176,7 @@ namespace Craft.Net.Server.Packets
                 offset += 4;
                 return true;
             }
-            else
-                return false;
+            return false;
         }
 
         protected internal static bool TryReadLong(byte[] buffer, ref int offset, out long value)
@@ -195,23 +186,20 @@ namespace Craft.Net.Server.Packets
                 unchecked
                 {
                     value = 0;
-                    value |= (long) buffer[0 + offset] << 56;
-                    value |= (long) buffer[1 + offset] << 48;
-                    value |= (long) buffer[2 + offset] << 40;
-                    value |= (long) buffer[3 + offset] << 32;
-                    value |= (long) buffer[4 + offset] << 24;
-                    value |= (long) buffer[5 + offset] << 16;
-                    value |= (long) buffer[6 + offset] << 8;
+                    value |= (long)buffer[0 + offset] << 56;
+                    value |= (long)buffer[1 + offset] << 48;
+                    value |= (long)buffer[2 + offset] << 40;
+                    value |= (long)buffer[3 + offset] << 32;
+                    value |= (long)buffer[4 + offset] << 24;
+                    value |= (long)buffer[5 + offset] << 16;
+                    value |= (long)buffer[6 + offset] << 8;
                     value |= buffer[7 + offset];
                 }
                 offset += 8;
                 return true;
             }
-            else
-            {
-                value = -1;
-                return false;
-            }
+            value = -1;
+            return false;
         }
 
         protected internal static unsafe bool TryReadFloat(byte[] buffer, ref int offset, out float value)
@@ -221,7 +209,7 @@ namespace Craft.Net.Server.Packets
 
             if (TryReadInt(buffer, ref offset, out i))
             {
-                value = *(float*) &i;
+                value = *(float*)&i;
                 return true;
             }
 
@@ -235,7 +223,7 @@ namespace Craft.Net.Server.Packets
 
             if (TryReadLong(buffer, ref offset, out l))
             {
-                value = *(double*) &l;
+                value = *(double*)&l;
                 return true;
             }
 
@@ -253,7 +241,7 @@ namespace Craft.Net.Server.Packets
                 return false;
 
             if (length < 0)
-                throw new ArgumentOutOfRangeException("length", "String length is less than zero");
+                throw new ArgumentOutOfRangeException("value", "String length is less than zero");
 
             offset += 2;
             if (buffer.Length - offset >= length)
@@ -271,13 +259,10 @@ namespace Craft.Net.Server.Packets
             value = null;
             if (buffer.Length - offset < length)
                 return false;
-            else
-            {
-                value = new byte[length];
-                Array.Copy(buffer, offset, value, 0, length);
-                offset += length;
-                return true;
-            }
+            value = new byte[length];
+            Array.Copy(buffer, offset, value, 0, length);
+            offset += length;
+            return true;
         }
 
         #endregion

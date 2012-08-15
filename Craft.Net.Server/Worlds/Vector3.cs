@@ -6,16 +6,16 @@ namespace Craft.Net.Server.Worlds
     {
         public double X, Y, Z;
 
-        public Vector3(float Value)
+        public Vector3(float value)
         {
-            X = Y = Z = Value;
+            X = Y = Z = value;
         }
 
-        public Vector3(double X, double Y, double Z)
+        public Vector3(double x, double y, double z)
         {
-            this.X = X;
-            this.Y = Y;
-            this.Z = Z;
+            this.X = x;
+            this.Y = y;
+            this.Z = z;
         }
 
         public override string ToString()
@@ -27,7 +27,7 @@ namespace Craft.Net.Server.Worlds
 
         public Vector3 Floor()
         {
-            return new Vector3((int) X, (int) Y, (int) Z);
+            return new Vector3((int)X, (int)Y, (int)Z);
         }
 
         public double DistanceTo(Vector3 other)

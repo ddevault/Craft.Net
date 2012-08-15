@@ -195,16 +195,16 @@ namespace Craft.Net.Server.Blocks
         public static implicit operator Block(byte b)
         {
             Block bl = Blocks[b];
-            return (Block) Activator.CreateInstance(bl.GetType());
+            return (Block)Activator.CreateInstance(bl.GetType());
         }
 
         /// <summary>
         /// Allows libraries to implement their own version
         /// of any block's logic.
         /// </summary>
-        public static void OverrideBlock(Block Block)
+        public static void OverrideBlock(Block block)
         {
-            Blocks[Block.BlockID] = Block;
+            Blocks[block.BlockID] = block;
         }
 
         #region Overrides

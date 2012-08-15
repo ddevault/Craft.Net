@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,14 +13,13 @@ namespace Craft.Net.Server
 {
     public class MinecraftClient
     {
-        private const int BufferSize = 1024;
-
         #region Fields
 
         internal string AuthenticationHash;
         public ChatMode ChatMode;
         public bool ColorsEnabled;
-        internal BufferedBlockCipher Encrypter, Decrypter;
+        internal BufferedBlockCipher Decrypter;
+        internal BufferedBlockCipher Encrypter;
         internal bool EncryptionEnabled;
         public PlayerEntity Entity;
         public byte FlyingSpeed;
@@ -62,9 +60,9 @@ namespace Craft.Net.Server
 
         #endregion
 
-        public MinecraftClient(Socket Socket, MinecraftServer Server)
+        public MinecraftClient(Socket socket, MinecraftServer server)
         {
-            this.Socket = Socket;
+            this.Socket = socket;
             RecieveBuffer = new byte[1024];
             RecieveBufferIndex = 0;
             SendQueue = new Queue<Packet>();
@@ -76,7 +74,7 @@ namespace Craft.Net.Server
             ViewDistance = 3;
             ReadyToSpawn = false;
             LoadedChunks = new List<Vector3>();
-            this.Server = Server;
+            this.Server = server;
             WalkingSpeed = 12;
             FlyingSpeed = 25;
             Inventory = new Slot[44];
@@ -98,14 +96,14 @@ namespace Craft.Net.Server
             SendQueue.Enqueue(packet);
         }
 
-        public void SendData(byte[] Data)
+        public void SendData(byte[] data)
         {
 #if DEBUG
-            Server.Log(DumpArray(Data), LogImportance.Low);
+            Server.Log(DumpArray(data), LogImportance.Low);
 #endif
             if (EncryptionEnabled)
-                Data = Encrypter.ProcessBytes(Data);
-            Socket.BeginSend(Data, 0, Data.Length, SocketFlags.None, null, null);
+                data = Encrypter.ProcessBytes(data);
+            Socket.BeginSend(data, 0, data.Length, SocketFlags.None, null, null);
         }
 
         public static string DumpArray(byte[] array)
@@ -124,8 +122,8 @@ namespace Craft.Net.Server
 
         public Task UpdateChunksAsync()
         {
-            if ((int) (Entity.Position.X) >> 4 != (int) (Entity.OldPosition.X) >> 4 ||
-                (int) (Entity.Position.Z) >> 4 != (int) (Entity.OldPosition.Z) >> 4)
+            if ((int)(Entity.Position.X) >> 4 != (int)(Entity.OldPosition.X) >> 4 ||
+                (int)(Entity.Position.Z) >> 4 != (int)(Entity.OldPosition.Z) >> 4)
             {
                 return Task.Factory.StartNew(() => UpdateChunks(true));
             }
@@ -137,11 +135,11 @@ namespace Craft.Net.Server
             return Task.Factory.StartNew(() => UpdateChunks(true));
         }
 
-        public void UpdateChunks(bool ForceUpdate)
+        public void UpdateChunks(bool forceUpdate)
         {
-            if (ForceUpdate ||
-                (int) (Entity.Position.X) >> 4 != (int) (Entity.OldPosition.X) >> 4 ||
-                (int) (Entity.Position.Z) >> 4 != (int) (Entity.OldPosition.Z) >> 4
+            if (forceUpdate ||
+                (int)(Entity.Position.X) >> 4 != (int)(Entity.OldPosition.X) >> 4 ||
+                (int)(Entity.Position.Z) >> 4 != (int)(Entity.OldPosition.Z) >> 4
                 )
             {
                 var newChunks = new List<Vector3>();
@@ -149,9 +147,9 @@ namespace Craft.Net.Server
                     for (int z = -ViewDistance; z < ViewDistance; z++)
                     {
                         newChunks.Add(new Vector3(
-                                          ((int) Entity.Position.X >> 4) + x,
+                                          ((int)Entity.Position.X >> 4) + x,
                                           0,
-                                          ((int) Entity.Position.Z >> 4) + z));
+                                          ((int)Entity.Position.Z >> 4) + z));
                     }
                 // Unload extraneous columns
                 var currentChunks = new List<Vector3>(LoadedChunks);
@@ -183,15 +181,15 @@ namespace Craft.Net.Server
             dataPacket.AddBitMap = 0;
             dataPacket.GroundUpContiguous = true;
             dataPacket.PrimaryBitMap = 0;
-            dataPacket.X = (int) position.X;
-            dataPacket.Z = (int) position.Z;
+            dataPacket.X = (int)position.X;
+            dataPacket.Z = (int)position.Z;
             dataPacket.CompressedData = ChunkDataPacket.ChunkRemovalSequence;
             SendPacket(dataPacket);
         }
 
-        public void SendChat(string Message)
+        public void SendChat(string message)
         {
-            SendPacket(new ChatMessagePacket(Message));
+            SendPacket(new ChatMessagePacket(message));
             Server.ProcessSendQueue();
         }
 

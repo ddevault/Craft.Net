@@ -9,10 +9,10 @@ namespace Craft.Net.Server.Packets
         {
         }
 
-        public PlayerAbilitiesPacket(byte WalkingSpeed, byte FlyingSpeed)
+        public PlayerAbilitiesPacket(byte walkingSpeed, byte flyingSpeed)
         {
-            this.WalkingSpeed = WalkingSpeed;
-            this.FlyingSpeed = FlyingSpeed;
+            this.WalkingSpeed = walkingSpeed;
+            this.FlyingSpeed = flyingSpeed;
         }
 
         public override byte PacketID
@@ -20,25 +20,25 @@ namespace Craft.Net.Server.Packets
             get { return 0xCA; }
         }
 
-        public override int TryReadPacket(byte[] Buffer, int Length)
+        public override int TryReadPacket(byte[] buffer, int length)
         {
             byte flags = 0;
             int offset = 1;
-            if (!TryReadByte(Buffer, ref offset, out flags))
+            if (!TryReadByte(buffer, ref offset, out flags))
                 return -1;
-            if (!TryReadByte(Buffer, ref offset, out WalkingSpeed))
+            if (!TryReadByte(buffer, ref offset, out WalkingSpeed))
                 return -1;
-            if (!TryReadByte(Buffer, ref offset, out FlyingSpeed))
+            if (!TryReadByte(buffer, ref offset, out FlyingSpeed))
                 return -1;
             return offset;
         }
 
-        public override void HandlePacket(MinecraftServer Server, ref MinecraftClient Client)
+        public override void HandlePacket(MinecraftServer server, ref MinecraftClient client)
         {
             // TODO
         }
 
-        public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
+        public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
             // TODO
         }

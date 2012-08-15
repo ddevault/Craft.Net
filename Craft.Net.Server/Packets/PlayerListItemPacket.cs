@@ -13,11 +13,11 @@ namespace Craft.Net.Server.Packets
         {
         }
 
-        public PlayerListItemPacket(string PlayerName, bool Online, short Ping)
+        public PlayerListItemPacket(string playerName, bool online, short ping)
         {
-            this.PlayerName = PlayerName;
-            this.Online = Online;
-            this.Ping = Ping;
+            this.PlayerName = playerName;
+            this.Online = online;
+            this.Ping = ping;
         }
 
         public override byte PacketID
@@ -25,23 +25,23 @@ namespace Craft.Net.Server.Packets
             get { return 0xC9; }
         }
 
-        public override int TryReadPacket(byte[] Buffer, int Length)
+        public override int TryReadPacket(byte[] buffer, int length)
         {
             throw new InvalidOperationException();
         }
 
-        public override void HandlePacket(MinecraftServer Server, ref MinecraftClient Client)
+        public override void HandlePacket(MinecraftServer server, ref MinecraftClient client)
         {
             throw new InvalidOperationException();
         }
 
-        public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
+        public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
             byte[] buffer = new[] {PacketID}
                 .Concat(CreateString(PlayerName))
                 .Concat(CreateBoolean(Online))
                 .Concat(CreateShort(Ping)).ToArray();
-            Client.SendData(buffer);
+            client.SendData(buffer);
         }
     }
 }

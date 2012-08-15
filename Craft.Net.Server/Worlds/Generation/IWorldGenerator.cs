@@ -9,8 +9,8 @@ namespace Craft.Net.Server.Worlds.Generation
         /// <summary>
         /// Generates one chunk at the given position.
         /// </summary>
-        Chunk GenerateChunk(Vector3 Position, Region ParentRegion);
+        Chunk GenerateChunk(Vector3 position, Region parentRegion);
 
-        Chunk GenerateChunk(Vector3 Position);
+        Chunk GenerateChunk(Vector3 position);
     }
 }

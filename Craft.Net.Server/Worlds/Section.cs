@@ -11,25 +11,25 @@ namespace Craft.Net.Server.Worlds
 
         public byte[] Blocks;
         public NibbleArray Metadata;
-        private int NonairCount;
+        private int nonAirCount;
         public NibbleArray SkyLight;
         public byte Y;
 
-        public Section(byte Y)
+        public Section(byte y)
         {
-            this.Y = Y;
+            this.Y = y;
             Blocks = new byte[Width*Height*Depth];
             Metadata = new NibbleArray(Width*Height*Depth);
             BlockLight = new NibbleArray(Width*Height*Depth);
             SkyLight = new NibbleArray(Width*Height*Depth);
             for (int i = 0; i < SkyLight.Data.Length; i++)
                 SkyLight.Data[i] = BlockLight.Data[i] = 0xFF;
-            NonairCount = 0;
+            nonAirCount = 0;
         }
 
         public bool IsAir
         {
-            get { return NonairCount == 0; }
+            get { return nonAirCount == 0; }
         }
 
         /// <summary>
@@ -37,25 +37,25 @@ namespace Craft.Net.Server.Worlds
         /// </summary>
         public void SetBlock(Vector3 position, Block value)
         {
-            var x = (int) position.X;
-            var y = (int) position.Y;
-            var z = (int) position.Z;
+            var x = (int)position.X;
+            var y = (int)position.Y;
+            var z = (int)position.Z;
             int index = x + (z*Width) + (y*Height*Width);
             Blocks[index] = value.BlockID;
             Metadata[index] = value.Metadata;
             BlockLight[index] = value.BlockLight;
             SkyLight[index] = value.SkyLight;
             if (value is AirBlock)
-                NonairCount--;
+                nonAirCount--;
             else
-                NonairCount++;
+                nonAirCount++;
         }
 
         public Block GetBlock(Vector3 position)
         {
-            var x = (int) position.X;
-            var y = (int) position.Y;
-            var z = (int) position.Z;
+            var x = (int)position.X;
+            var y = (int)position.Y;
+            var z = (int)position.Z;
             int index = x + (z*Width) + (y*Height*Width);
             Block block = Blocks[index];
             block.Metadata = Metadata[index];

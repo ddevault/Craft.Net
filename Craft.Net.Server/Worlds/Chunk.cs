@@ -12,25 +12,25 @@ namespace Craft.Net.Server.Worlds
         public Vector3 RelativePosition;
         public Section[] Sections;
 
-        public Chunk(Vector3 RelativePosition, Region ParentRegion)
+        public Chunk(Vector3 relativePosition, Region parentRegion)
         {
             Sections = new Section[16];
             for (int i = 0; i < Sections.Length; i++)
-                Sections[i] = new Section((byte) i);
-            this.RelativePosition = RelativePosition;
+                Sections[i] = new Section((byte)i);
+            this.RelativePosition = relativePosition;
             Biomes = new byte[Width*Depth];
-            this.ParentRegion = ParentRegion;
+            this.ParentRegion = parentRegion;
             AbsolutePosition =
-                (ParentRegion.Position*new Vector3(Region.Width, 0, Region.Depth))
-                + RelativePosition;
+                (parentRegion.Position*new Vector3(Region.Width, 0, Region.Depth))
+                + relativePosition;
         }
 
-        public Chunk(Vector3 RelativePosition)
+        public Chunk(Vector3 relativePosition)
         {
             Sections = new Section[16];
             for (int i = 0; i < Sections.Length; i++)
-                Sections[i] = new Section((byte) i);
-            this.RelativePosition = RelativePosition;
+                Sections[i] = new Section((byte)i);
+            this.RelativePosition = relativePosition;
             Biomes = new byte[Width*Depth];
         }
 
@@ -39,7 +39,7 @@ namespace Craft.Net.Server.Worlds
         /// </summary>
         public void SetBlock(Vector3 position, Block value)
         {
-            var y = (byte) position.Y;
+            var y = (byte)position.Y;
             y /= 16;
             position.Y = position.Y%16;
             Sections[y].SetBlock(position, value);
@@ -47,7 +47,7 @@ namespace Craft.Net.Server.Worlds
 
         public Block GetBlock(Vector3 position)
         {
-            var y = (byte) position.Y;
+            var y = (byte)position.Y;
             y /= 16;
             position.Y = position.Y%16;
             return Sections[y].GetBlock(position);

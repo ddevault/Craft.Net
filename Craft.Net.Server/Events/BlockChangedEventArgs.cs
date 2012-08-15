@@ -10,11 +10,11 @@ namespace Craft.Net.Server.Events
         public Block Value;
         public World World;
 
-        public BlockChangedEventArgs(World World, Vector3 Position, Block Value)
+        public BlockChangedEventArgs(World world, Vector3 position, Block value)
         {
-            this.World = World;
-            this.Position = Position;
-            this.Value = Value;
+            this.World = world;
+            this.Position = position;
+            this.Value = value;
         }
     }
 }
