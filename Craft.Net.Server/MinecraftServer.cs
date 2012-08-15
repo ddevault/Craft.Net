@@ -19,7 +19,7 @@ namespace Craft.Net.Server
 	{
         #region Public Fields
 
-        public const int ProtocolVersion = 39;
+        public const int ProtocolVersion = 40;
 
         public List<MinecraftClient> Clients;
         public List<World> Worlds;
