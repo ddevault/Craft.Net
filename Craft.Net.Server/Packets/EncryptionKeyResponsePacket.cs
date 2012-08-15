@@ -1,4 +1,8 @@
 using System.Linq;
+using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto.Engines;
+using Org.BouncyCastle.Crypto.Modes;
+using Org.BouncyCastle.Crypto.Parameters;
 
 namespace Craft.Net.Server.Packets
 {
@@ -36,9 +40,13 @@ namespace Craft.Net.Server.Packets
         {
             Client.SharedKey = Server.CryptoServiceProvider.Decrypt(SharedSecret, false);
 
-            Client.Encrypter = Cryptography.GenerateAES(Client.SharedKey).CreateEncryptor();
+            Client.Encrypter = new BufferedBlockCipher(new CfbBlockCipher(new AesFastEngine(), 8));
+            Client.Encrypter.Init(true,
+                   new ParametersWithIV(new KeyParameter(Client.SharedKey), Client.SharedKey, 0, 16));
 
-            Client.Decrypter = Cryptography.GenerateAES(Client.SharedKey).CreateDecryptor();
+            Client.Decrypter = new BufferedBlockCipher(new CfbBlockCipher(new AesFastEngine(), 8));
+            Client.Decrypter.Init(false,
+                   new ParametersWithIV(new KeyParameter(Client.SharedKey), Client.SharedKey, 0, 16));
 
             Client.SendPacket(new EncryptionKeyResponsePacket());
             Server.ProcessSendQueue();

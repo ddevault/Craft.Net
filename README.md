@@ -68,6 +68,7 @@ the sake of others.
 Craft.Net depends on the following tools and assemblies, which are included in the repository:
 
 * [SharpZipLib](http://www.icsharpcode.net/opensource/sharpziplib/) is used for data compression.
+* [BouncyCastle](http://www.bouncycastle.org/) is used for encryption.
 
 ##Licensing
 

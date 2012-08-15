@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Craft.Net.Server.Packets;
 using Craft.Net.Server.Worlds;
 using Craft.Net.Server.Worlds.Entities;
+using Org.BouncyCastle.Crypto;
 
 namespace Craft.Net.Server
 {
@@ -20,8 +21,7 @@ namespace Craft.Net.Server
         internal string AuthenticationHash;
         public ChatMode ChatMode;
         public bool ColorsEnabled;
-        internal ICryptoTransform Decrypter;
-        internal ICryptoTransform Encrypter;
+        internal BufferedBlockCipher Encrypter, Decrypter;
         internal bool EncryptionEnabled;
         public PlayerEntity Entity;
         public byte FlyingSpeed;
@@ -104,15 +104,8 @@ namespace Craft.Net.Server
             Server.Log(DumpArray(Data), LogImportance.Low);
 #endif
             if (EncryptionEnabled)
-            {
-                var output = new byte[Data.Length];
-                Encrypter.TransformBlock(Data, 0, output.Length, output, 0);
-                Socket.BeginSend(output, 0, output.Length, SocketFlags.None, null, null);
-            }
-            else
-            {
-                Socket.BeginSend(Data, 0, Data.Length, SocketFlags.None, null, null);
-            }
+                Data = Encrypter.ProcessBytes(Data);
+            Socket.BeginSend(Data, 0, Data.Length, SocketFlags.None, null, null);
         }
 
         public static string DumpArray(byte[] array)

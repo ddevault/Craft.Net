@@ -256,8 +256,8 @@ namespace Craft.Net.Server
         {
             var client = (MinecraftClient) result.AsyncState;
             SocketError error;
-            int length = client.Socket.EndReceive(result, out error);
-            if (error != SocketError.Success || !client.Socket.Connected || length == 0)
+            int length = client.Socket.EndReceive(result, out error) + client.RecieveBufferIndex;
+            if (error != SocketError.Success || !client.Socket.Connected || length == client.RecieveBufferIndex)
             {
                 if (error != SocketError.Success)
                     Log("Socket error: " + error);

@@ -287,7 +287,7 @@ namespace Craft.Net.Server
             var results = new List<Packet>();
             byte[] buffer = Client.RecieveBuffer.Take(Length).ToArray();
             if (Client.EncryptionEnabled)
-                Client.Decrypter.TransformBlock(buffer, 0, buffer.Length, buffer, 0);
+                buffer = Client.Decrypter.ProcessBytes(buffer);
 
             while (buffer.Length > 0)
             {

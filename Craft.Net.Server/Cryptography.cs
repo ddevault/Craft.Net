@@ -2,28 +2,20 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
+using System.Text;
 using System.Security.Cryptography;
 
 namespace Craft.Net.Server
 {
     public static class Cryptography
     {
-        public static RijndaelManaged GenerateAES(byte[] key)
-        {
-            var cipher = new RijndaelManaged();
-            cipher.Mode = CipherMode.CFB;
-            cipher.Padding = PaddingMode.None;
-            cipher.KeySize = 128;
-            cipher.FeedbackSize = 8;
-            cipher.Key = key;
-            cipher.IV = key;
-
-            return cipher;
-        }
-
         public static string JavaHexDigest(byte[] data)
         {
-            SHA1 sha1 = SHA1.Create();
+            var sha1 = SHA1.Create();
             byte[] hash = sha1.ComputeHash(data);
             bool negative = (hash[0] & 0x80) == 0x80;
             if (negative) // check for negative hashes
@@ -53,7 +45,7 @@ namespace Craft.Net.Server
             bool carry = true;
             for (i = p.Length - 1; i >= 0; i--)
             {
-                p[i] = (byte) ~p[i];
+                p[i] = (byte)~p[i];
                 if (carry)
                 {
                     carry = p[i] == 0xFF;
@@ -66,8 +58,237 @@ namespace Craft.Net.Server
 
     public class AsnKeyBuilder
     {
-        private static readonly byte[] ZERO = new byte[] {0};
-        private static readonly byte[] EMPTY = new byte[] {};
+        internal class AsnMessage
+        {
+            private byte[] m_octets;
+            private String m_format;
+
+            internal int Length
+            {
+                get
+                {
+                    if (null == m_octets) { return 0; }
+                    return m_octets.Length;
+                }
+                // set { m_length = value; }
+            }
+
+            internal AsnMessage(byte[] octets, String format)
+            {
+                m_octets = octets;
+                m_format = format;
+            }
+
+            internal byte[] GetBytes()
+            {
+                if (null == m_octets)
+                { return new byte[] { }; }
+
+                return m_octets;
+            }
+            internal String GetFormat()
+            { return m_format; }
+        }
+
+        internal class AsnType
+        {
+            // Constructors
+            // No default - must specify tag and data
+
+            public AsnType(byte tag, byte octet)
+            {
+                m_raw = false;
+                m_tag = new byte[] { tag };
+                m_octets = new byte[] { octet };
+            }
+
+            public AsnType(byte tag, byte[] octets)
+            {
+                m_raw = false;
+                m_tag = new byte[] { tag };
+                m_octets = octets;
+            }
+
+            public AsnType(byte tag, byte[] length, byte[] octets)
+            {
+                m_raw = true;
+                m_tag = new byte[] { tag };
+                m_length = length;
+                m_octets = octets;
+            }
+
+            private bool m_raw;
+
+            private bool Raw
+            {
+                get { return m_raw; }
+                set { m_raw = value; }
+            }
+
+            // Setters and Getters
+            private byte[] m_tag;
+            public byte[] Tag
+            {
+                get
+                {
+                    if (null == m_tag)
+                        return EMPTY;
+                    return m_tag;
+                }
+                // set { m_tag = value; }
+            }
+
+            private byte[] m_length;
+            public byte[] Length
+            {
+                get
+                {
+                    if (null == m_length)
+                        return EMPTY;
+                    return m_length;
+                }
+                // set { m_length = value; }
+            }
+
+            private byte[] m_octets;
+            public byte[] Octets
+            {
+                get
+                {
+                    if (null == m_octets)
+                    { return EMPTY; }
+                    return m_octets;
+                }
+                set
+                { m_octets = value; }
+            }
+
+            // Methods
+            internal byte[] GetBytes()
+            {
+                // Created raw by user
+                // return the bytes....
+                if (true == m_raw)
+                {
+                    return Concatenate(
+                      new byte[][] { m_tag, m_length, m_octets }
+                    );
+                }
+
+                SetLength();
+
+                // Special case
+                // Null does not use length
+                if (0x05 == m_tag[0])
+                {
+                    return Concatenate(
+                      new byte[][] { m_tag, m_octets }
+                    );
+                }
+
+                return Concatenate(
+                  new byte[][] { m_tag, m_length, m_octets }
+                );
+            }
+
+            private void SetLength()
+            {
+                if (null == m_octets)
+                {
+                    m_length = ZERO;
+                    return;
+                }
+
+                // Special case
+                // Null does not use length
+                if (0x05 == m_tag[0])
+                {
+                    m_length = EMPTY;
+                    return;
+                }
+
+                byte[] length = null;
+
+                // Length: 0 <= l < 0x80
+                if (m_octets.Length < 0x80)
+                {
+                    length = new byte[1];
+                    length[0] = (byte)m_octets.Length;
+                }
+                // 0x80 < length <= 0xFF
+                else if (m_octets.Length <= 0xFF)
+                {
+                    length = new byte[2];
+                    length[0] = 0x81;
+                    length[1] = (byte)((m_octets.Length & 0xFF));
+                }
+
+                //
+                // We should almost never see these...
+                //
+
+                // 0xFF < length <= 0xFFFF
+                else if (m_octets.Length <= 0xFFFF)
+                {
+                    length = new byte[3];
+                    length[0] = 0x82;
+                    length[1] = (byte)((m_octets.Length & 0xFF00) >> 8);
+                    length[2] = (byte)((m_octets.Length & 0xFF));
+                }
+
+                // 0xFFFF < length <= 0xFFFFFF
+                else if (m_octets.Length <= 0xFFFFFF)
+                {
+                    length = new byte[4];
+                    length[0] = 0x83;
+                    length[1] = (byte)((m_octets.Length & 0xFF0000) >> 16);
+                    length[2] = (byte)((m_octets.Length & 0xFF00) >> 8);
+                    length[3] = (byte)((m_octets.Length & 0xFF));
+                }
+                // 0xFFFFFF < length <= 0xFFFFFFFF
+                else
+                {
+                    length = new byte[5];
+                    length[0] = 0x84;
+                    length[1] = (byte)((m_octets.Length & 0xFF000000) >> 24);
+                    length[2] = (byte)((m_octets.Length & 0xFF0000) >> 16);
+                    length[3] = (byte)((m_octets.Length & 0xFF00) >> 8);
+                    length[4] = (byte)((m_octets.Length & 0xFF));
+                }
+
+                m_length = length;
+            }
+
+            private byte[] Concatenate(byte[][] values)
+            {
+                // Nothing in, nothing out
+                if (IsEmpty(values))
+                    return new byte[] { };
+
+                int length = 0;
+                foreach (byte[] b in values)
+                {
+                    if (null != b) length += b.Length;
+                }
+
+                byte[] cated = new byte[length];
+
+                int current = 0;
+                foreach (byte[] b in values)
+                {
+                    if (null != b)
+                    {
+                        Array.Copy(b, 0, cated, current, b.Length);
+                        current += b.Length;
+                    }
+                }
+
+                return cated;
+            }
+        };
+
+        private static byte[] ZERO = new byte[] { 0 };
+        private static byte[] EMPTY = new byte[] { };
 
         // PublicKeyInfo (X.509 compatible) message
         /// <summary>
@@ -102,14 +323,14 @@ namespace Craft.Net.Server
             AsnType g = CreateIntegerPos(publicKey.G);
 
             // Sequence - DSA-Params
-            AsnType dssParams = CreateSequence(new[] {p, q, g});
+            AsnType dssParams = CreateSequence(new AsnType[] { p, q, g });
 
             // OID - packed 1.2.840.10040.4.1
             //   { 0x2A, 0x86, 0x48, 0xCE, 0x38, 0x04, 0x01 }
             AsnType oid = CreateOid("1.2.840.10040.4.1");
 
             // Sequence
-            AsnType algorithmID = CreateSequence(new[] {oid, dssParams});
+            AsnType algorithmID = CreateSequence(new AsnType[] { oid, dssParams });
 
             // Public Key Y
             AsnType y = CreateIntegerPos(publicKey.Y);
@@ -117,7 +338,7 @@ namespace Craft.Net.Server
 
             // Sequence 'A'
             AsnType publicKeyInfo =
-                CreateSequence(new[] {algorithmID, key});
+              CreateSequence(new AsnType[] { algorithmID, key });
 
             return new AsnMessage(publicKeyInfo.GetBytes(), "X.509");
         }
@@ -152,16 +373,16 @@ namespace Craft.Net.Server
             //   { 0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x01 }
             AsnType oid = CreateOid("1.2.840.113549.1.1.1");
             AsnType algorithmID =
-                CreateSequence(new[] {oid, CreateNull()});
+              CreateSequence(new AsnType[] { oid, CreateNull() });
 
             AsnType n = CreateIntegerPos(publicKey.Modulus);
             AsnType e = CreateIntegerPos(publicKey.Exponent);
             AsnType key = CreateBitString(
-                CreateSequence(new[] {n, e})
-                );
+              CreateSequence(new AsnType[] { n, e })
+            );
 
             AsnType publicKeyInfo =
-                CreateSequence(new[] {algorithmID, key});
+              CreateSequence(new AsnType[] { algorithmID, key });
 
             return new AsnMessage(publicKeyInfo.GetBytes(), "X.509");
         }
@@ -204,14 +425,14 @@ namespace Craft.Net.Server
             AsnType q = CreateIntegerPos(privateKey.Q);
             AsnType g = CreateIntegerPos(privateKey.G);
 
-            AsnType dssParams = CreateSequence(new[] {p, q, g});
+            AsnType dssParams = CreateSequence(new AsnType[] { p, q, g });
 
             // OID - packed 1.2.840.10040.4.1
             //   { 0x2A, 0x86, 0x48, 0xCE, 0x38, 0x04, 0x01 }
             AsnType oid = CreateOid("1.2.840.10040.4.1");
 
             // AlgorithmIdentifier
-            AsnType algorithmID = CreateSequence(new[] {oid, dssParams});
+            AsnType algorithmID = CreateSequence(new AsnType[] { oid, dssParams });
 
             // Private Key X
             AsnType x = CreateIntegerPos(privateKey.X);
@@ -219,7 +440,7 @@ namespace Craft.Net.Server
 
             // Sequence
             AsnType privateKeyInfo =
-                CreateSequence(new[] {version, algorithmID, key});
+              CreateSequence(new AsnType[] { version, algorithmID, key });
 
             return new AsnMessage(privateKeyInfo.GetBytes(), "PKCS#8");
         }
@@ -270,21 +491,21 @@ namespace Craft.Net.Server
             AsnType iq = CreateIntegerPos(privateKey.InverseQ);
 
             // Version - 0 (v1998)
-            AsnType version = CreateInteger(new byte[] {0});
+            AsnType version = CreateInteger(new byte[] { 0 });
 
             // octstring = OCTETSTRING(SEQUENCE(INTEGER(0)INTEGER(N)...))
             AsnType key = CreateOctetString(
-                CreateSequence(new[] {version, n, e, d, p, q, dp, dq, iq})
-                );
+              CreateSequence(new AsnType[] { version, n, e, d, p, q, dp, dq, iq })
+            );
 
             // OID - packed 1.2.840.113549.1.1.1
             //   { 0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x01 }
-            AsnType algorithmID = CreateSequence(new[] {CreateOid("1.2.840.113549.1.1.1"), CreateNull()}
-                );
+            AsnType algorithmID = CreateSequence(new AsnType[] { CreateOid("1.2.840.113549.1.1.1"), CreateNull() }
+            );
 
             // PrivateKeyInfo
             AsnType privateKeyInfo =
-                CreateSequence(new[] {version, algorithmID, key});
+              CreateSequence(new AsnType[] { version, algorithmID, key });
 
             return new AsnMessage(privateKeyInfo.GetBytes(), "PKCS#8");
         }
@@ -314,9 +535,7 @@ namespace Craft.Net.Server
 
             // One or more required
             if (IsEmpty(value))
-            {
-                throw new ArgumentException("A sequence requires at least one value.");
-            }
+            { throw new ArgumentException("A sequence requires at least one value."); }
 
             // Sequence: Tag 0x30 (16, Universal, Constructed)
             return new AsnType(0x30, value.GetBytes());
@@ -347,9 +566,7 @@ namespace Craft.Net.Server
 
             // One or more required
             if (IsEmpty(values))
-            {
-                throw new ArgumentException("A sequence requires at least one value.");
-            }
+            { throw new ArgumentException("A sequence requires at least one value."); }
 
             // Sequence: Tag 0x30 (16, Universal, Constructed)
             return new AsnType((0x10 | 0x20), Concatenate(values));
@@ -377,9 +594,7 @@ namespace Craft.Net.Server
         {
             // From the ASN.1 Mailing List
             if (IsEmpty(value))
-            {
-                return new AsnType(0x30, EMPTY);
-            }
+            { return new AsnType(0x30, EMPTY); }
 
             // Sequence: Tag 0x30 (16, Universal, Constructed)
             return new AsnType(0x30, value.GetBytes());
@@ -407,9 +622,7 @@ namespace Craft.Net.Server
         {
             // From the ASN.1 Mailing List
             if (IsEmpty(values))
-            {
-                return new AsnType(0x30, EMPTY);
-            }
+            { return new AsnType(0x30, EMPTY); }
 
             // Sequence: Tag 0x30 (16, Universal, Constructed)
             return new AsnType(0x30, Concatenate(values));
@@ -471,11 +684,9 @@ namespace Craft.Net.Server
             }
 
             if (!(unusedBits < 8))
-            {
-                throw new ArgumentException("Unused bits must be less than 8.");
-            }
+            { throw new ArgumentException("Unused bits must be less than 8."); }
 
-            byte[] b = Concatenate(new[] {(byte) unusedBits}, octets);
+            byte[] b = Concatenate(new byte[] { (byte)unusedBits }, octets);
             // BitString: Tag 0x03 (3, Universal, Primitive)
             return new AsnType(0x03, b);
         }
@@ -500,9 +711,7 @@ namespace Craft.Net.Server
         internal static AsnType CreateBitString(AsnType value)
         {
             if (IsEmpty(value))
-            {
-                return new AsnType(0x03, EMPTY);
-            }
+            { return new AsnType(0x03, EMPTY); }
 
             // BitString: Tag 0x03 (3, Universal, Primitive)
             return CreateBitString(value.GetBytes(), 0x00);
@@ -528,9 +737,7 @@ namespace Craft.Net.Server
         internal static AsnType CreateBitString(AsnType[] values)
         {
             if (IsEmpty(values))
-            {
-                return new AsnType(0x03, EMPTY);
-            }
+            { return new AsnType(0x03, EMPTY); }
 
             // BitString: Tag 0x03 (3, Universal, Primitive)
             return CreateBitString(Concatenate(values), 0x00);
@@ -560,53 +767,36 @@ namespace Craft.Net.Server
         internal static AsnType CreateBitString(String value)
         {
             if (IsEmpty(value))
-            {
-                return CreateBitString(EMPTY);
-            }
+            { return CreateBitString(EMPTY); }
 
             // Any unused bits?
             int lstrlen = value.Length;
-            int unusedBits = 8 - (lstrlen%8);
-            if (8 == unusedBits)
-            {
-                unusedBits = 0;
-            }
+            int unusedBits = 8 - (lstrlen % 8);
+            if (8 == unusedBits) { unusedBits = 0; }
 
             for (int i = 0; i < unusedBits; i++)
-            {
-                value += "0";
-            }
+            { value += "0"; }
 
             // Determine number of octets
-            int loctlen = (lstrlen + 7)/8;
+            int loctlen = (lstrlen + 7) / 8;
 
-            var octets = new List<byte>();
+            List<byte> octets = new List<byte>();
             for (int i = 0; i < loctlen; i++)
             {
-                String s = value.Substring(i*8, 8);
+                String s = value.Substring(i * 8, 8);
                 byte b = 0x00;
 
                 try
-                {
-                    b = Convert.ToByte(s, 2);
-                }
+                { b = Convert.ToByte(s, 2); }
 
-                catch (FormatException /*e*/)
-                {
-                    unusedBits = 0;
-                    break;
-                }
-                catch (OverflowException /*e*/)
-                {
-                    unusedBits = 0;
-                    break;
-                }
+                catch (FormatException /*e*/) { unusedBits = 0; break; }
+                catch (OverflowException /*e*/) { unusedBits = 0; break; }
 
                 octets.Add(b);
             }
 
             // BitString: Tag 0x03 (3, Universal, Primitive)
-            return CreateBitString(octets.ToArray(), (uint) unusedBits);
+            return CreateBitString(octets.ToArray(), (uint)unusedBits);
         }
 
         /// <summary>
@@ -716,31 +906,21 @@ namespace Craft.Net.Server
         internal static AsnType CreateOctetString(String value)
         {
             if (IsEmpty(value))
-            {
-                return CreateOctetString(EMPTY);
-            }
+            { return CreateOctetString(EMPTY); }
 
             // Determine number of octets
-            int len = (value.Length + 255)/256;
+            int len = (value.Length + 255) / 256;
 
-            var octets = new List<byte>();
+            List<byte> octets = new List<byte>();
             for (int i = 0; i < len; i++)
             {
-                String s = value.Substring(i*2, 2);
+                String s = value.Substring(i * 2, 2);
                 byte b = 0x00;
 
                 try
-                {
-                    b = Convert.ToByte(s, 16);
-                }
-                catch (FormatException /*e*/)
-                {
-                    break;
-                }
-                catch (OverflowException /*e*/)
-                {
-                    break;
-                }
+                { b = Convert.ToByte(s, 16); }
+                catch (FormatException /*e*/) { break; }
+                catch (OverflowException /*e*/) { break; }
 
                 octets.Add(b);
             }
@@ -777,9 +957,7 @@ namespace Craft.Net.Server
             //   drop the Integer? Dropping integers
             //   is probably not te best choice...
             if (IsEmpty(value))
-            {
-                return CreateInteger(ZERO);
-            }
+            { return CreateInteger(ZERO); }
 
             return new AsnType(0x02, value);
         }
@@ -813,10 +991,7 @@ namespace Craft.Net.Server
         {
             byte[] i = null, d = Duplicate(value);
 
-            if (IsEmpty(d))
-            {
-                d = ZERO;
-            }
+            if (IsEmpty(d)) { d = ZERO; }
 
             // Mediate the 2's compliment representation.
             // If the first byte has its high bit set, we will
@@ -884,16 +1059,12 @@ namespace Craft.Net.Server
             //   drop the Integer? Dropping integers
             //   is probably not te best choice...
             if (IsEmpty(value))
-            {
-                return CreateInteger(ZERO);
-            }
+            { return CreateInteger(ZERO); }
 
             // No Trimming
             // The byte[] may be that way for a reason
             if (IsZero(value))
-            {
-                return CreateInteger(value);
-            }
+            { return CreateInteger(value); }
 
             //
             // At this point, we know we have at least 1 octet
@@ -901,10 +1072,8 @@ namespace Craft.Net.Server
 
             // Is this integer already negative?
             if (value[0] >= 0x80)
-                // Pass through with no modifications
-            {
-                return CreateInteger(value);
-            }
+            // Pass through with no modifications
+            { return CreateInteger(value); }
 
             // No need to Duplicate - Compliment2s
             // performs the action
@@ -920,7 +1089,7 @@ namespace Craft.Net.Server
         /// encoded null.</returns>
         internal static AsnType CreateNull()
         {
-            return new AsnType(0x05, new byte[] {0x00});
+            return new AsnType(0x05, new byte[] { 0x00 });
         }
 
         /// <summary>
@@ -932,9 +1101,7 @@ namespace Craft.Net.Server
         internal static byte[] TrimStart(byte[] octets)
         {
             if (IsEmpty(octets) || IsZero(octets))
-            {
-                return new byte[] {};
-            }
+            { return new byte[] { }; }
 
             byte[] d = Duplicate(octets);
 
@@ -942,21 +1109,16 @@ namespace Craft.Net.Server
             int pos = 0;
             foreach (byte b in d)
             {
-                if (0 != b)
-                {
-                    break;
-                }
+                if (0 != b) { break; }
                 pos++;
             }
 
             // Nothing to trim
             if (pos == d.Length)
-            {
-                return octets;
-            }
+            { return octets; }
 
             // Allocate trimmed array
-            var t = new byte[d.Length - pos];
+            byte[] t = new byte[d.Length - pos];
 
             // Copy
             Array.Copy(d, pos, t, 0, t.Length);
@@ -973,9 +1135,7 @@ namespace Craft.Net.Server
         internal static byte[] TrimEnd(byte[] octets)
         {
             if (IsEmpty(octets) || IsZero(octets))
-            {
-                return EMPTY;
-            }
+            { return EMPTY; }
 
             byte[] d = Duplicate(octets);
 
@@ -1009,7 +1169,7 @@ namespace Craft.Net.Server
             if (IsEmpty(value))
                 return null;
 
-            String[] tokens = value.Split(new[] {' ', '.'});
+            String[] tokens = value.Split(new Char[] { ' ', '.' });
 
             // Punt?
             if (IsEmpty(tokens))
@@ -1019,28 +1179,16 @@ namespace Craft.Net.Server
             UInt64 a = 0;
 
             // One or more strings are available
-            var arcs = new List<UInt64>();
+            List<UInt64> arcs = new List<UInt64>();
 
             foreach (String t in tokens)
             {
                 // No empty or ill-formed strings...
-                if (t.Length == 0)
-                {
-                    break;
-                }
+                if (t.Length == 0) { break; }
 
-                try
-                {
-                    a = Convert.ToUInt64(t, CultureInfo.InvariantCulture);
-                }
-                catch (FormatException /*e*/)
-                {
-                    break;
-                }
-                catch (OverflowException /*e*/)
-                {
-                    break;
-                }
+                try { a = Convert.ToUInt64(t, CultureInfo.InvariantCulture); }
+                catch (FormatException /*e*/) { break; }
+                catch (OverflowException /*e*/) { break; }
 
                 arcs.Add(a);
             }
@@ -1050,25 +1198,19 @@ namespace Craft.Net.Server
                 return null;
 
             // Octets to be returned to caller
-            var octets = new List<byte>();
+            List<byte> octets = new List<byte>();
 
             // Guard the case of a small list
             // The list has at least 1 item...    
-            if (arcs.Count >= 1)
-            {
-                a = arcs[0]*40;
-            }
-            if (arcs.Count >= 2)
-            {
-                a += arcs[1];
-            }
-            octets.Add((byte) (a));
+            if (arcs.Count >= 1) { a = arcs[0] * 40; }
+            if (arcs.Count >= 2) { a += arcs[1]; }
+            octets.Add((byte)(a));
 
             // Add remaining arcs (subidentifiers)
             for (int i = 2; i < arcs.Count; i++)
             {
                 // Scratch list builder for this arc
-                var temp = new List<byte>();
+                List<byte> temp = new List<byte>();
 
                 // The current arc (subidentifier)
                 UInt64 arc = arcs[i];
@@ -1080,7 +1222,7 @@ namespace Craft.Net.Server
                     // Each entry is formed from the low 7 bits (0x7F).
                     // Set high bit of all entries (0x80) per X.680. We
                     // will unset the high bit of the final byte later.
-                    temp.Add((byte) (0x80 | (arc & 0x7F)));
+                    temp.Add((byte)(0x80 | (arc & 0x7F)));
                     arc >>= 7;
                 } while (0 != arc);
 
@@ -1090,16 +1232,14 @@ namespace Craft.Net.Server
 
                 // Unset high bit of byte t[0]
                 // t[0] will be LSB after the array is reversed.
-                t[0] = (byte) (0x7F & t[0]);
+                t[0] = (byte)(0x7F & t[0]);
 
                 // MSB first...
                 Array.Reverse(t);
 
                 // Add to the resulting array
                 foreach (byte b in t)
-                {
-                    octets.Add(b);
-                }
+                { octets.Add(b); }
             }
 
             return CreateOid(octets.ToArray());
@@ -1126,9 +1266,7 @@ namespace Craft.Net.Server
         {
             // Punt...
             if (IsEmpty(value))
-            {
-                return null;
-            }
+            { return null; }
 
             // OID: Tag 0x06 (6, Universal, Primitive)
             return new AsnType(0x06, value);
@@ -1137,9 +1275,7 @@ namespace Craft.Net.Server
         private static byte[] Compliment1s(byte[] value)
         {
             if (IsEmpty(value))
-            {
-                return EMPTY;
-            }
+            { return EMPTY; }
 
             // Make a copy of octet array
             byte[] c = Duplicate(value);
@@ -1147,7 +1283,7 @@ namespace Craft.Net.Server
             for (int i = c.Length - 1; i >= 0; i--)
             {
                 // Compliment
-                c[i] = (byte) ~c[i];
+                c[i] = (byte)~c[i];
             }
 
             return c;
@@ -1156,15 +1292,11 @@ namespace Craft.Net.Server
         private static byte[] Compliment2s(byte[] value)
         {
             if (IsEmpty(value))
-            {
-                return EMPTY;
-            }
+            { return EMPTY; }
 
             // 2s Compliment of 0 is 0
             if (IsZero(value))
-            {
-                return Duplicate(value);
-            }
+            { return Duplicate(value); }
 
             // Make a copy of octet array
             byte[] d = Duplicate(value);
@@ -1173,23 +1305,19 @@ namespace Craft.Net.Server
             for (int i = d.Length - 1; i >= 0; i--)
             {
                 // Compliment
-                d[i] = (byte) ~d[i];
+                d[i] = (byte)~d[i];
 
                 // Add
                 int j = d[i] + carry;
 
                 // Write Back
-                d[i] = (byte) (j & 0xFF);
+                d[i] = (byte)(j & 0xFF);
 
                 // Determine Next Carry
                 if (0x100 == (j & 0x100))
-                {
-                    carry = 1;
-                }
+                { carry = 1; }
                 else
-                {
-                    carry = 0;
-                }
+                { carry = 0; }
             }
 
             // Carry Array (we may need to carry out of 'd'
@@ -1199,7 +1327,7 @@ namespace Craft.Net.Server
                 c = new byte[d.Length + 1];
 
                 // Sign Extend....
-                c[0] = 0xFF;
+                c[0] = (byte)0xFF;
 
                 Array.Copy(d, 0, c, 1, d.Length);
             }
@@ -1215,18 +1343,16 @@ namespace Craft.Net.Server
         {
             // Nothing in, nothing out
             if (IsEmpty(values))
-                return new byte[] {};
+                return new byte[] { };
 
             int length = 0;
             foreach (AsnType t in values)
             {
                 if (null != t)
-                {
-                    length += t.GetBytes().Length;
-                }
+                { length += t.GetBytes().Length; }
             }
 
-            var cated = new byte[length];
+            byte[] cated = new byte[length];
 
             int current = 0;
             foreach (AsnType t in values)
@@ -1245,28 +1371,26 @@ namespace Craft.Net.Server
 
         private static byte[] Concatenate(byte[] first, byte[] second)
         {
-            return Concatenate(new[] {first, second});
+            return Concatenate(new byte[][] { first, second });
         }
 
         private static byte[] Concatenate(byte[][] values)
         {
             // Nothing in, nothing out
             if (IsEmpty(values))
-                return new byte[] {};
+                return new byte[] { };
 
             int length = 0;
-            foreach (var b in values)
+            foreach (byte[] b in values)
             {
                 if (null != b)
-                {
-                    length += b.Length;
-                }
+                { length += b.Length; }
             }
 
-            var cated = new byte[length];
+            byte[] cated = new byte[length];
 
             int current = 0;
-            foreach (var b in values)
+            foreach (byte[] b in values)
             {
                 if (null != b)
                 {
@@ -1281,11 +1405,9 @@ namespace Craft.Net.Server
         private static byte[] Duplicate(byte[] b)
         {
             if (IsEmpty(b))
-            {
-                return EMPTY;
-            }
+            { return EMPTY; }
 
-            var d = new byte[b.Length];
+            byte[] d = new byte[b.Length];
             Array.Copy(b, d, b.Length);
 
             return d;
@@ -1294,18 +1416,13 @@ namespace Craft.Net.Server
         private static bool IsZero(byte[] octets)
         {
             if (IsEmpty(octets))
-            {
-                return false;
-            }
+            { return false; }
 
             bool allZeros = true;
             for (int i = 0; i < octets.Length; i++)
             {
                 if (0 != octets[i])
-                {
-                    allZeros = false;
-                    break;
-                }
+                { allZeros = false; break; }
             }
             return allZeros;
         }
@@ -1313,9 +1430,7 @@ namespace Craft.Net.Server
         private static bool IsEmpty(byte[] octets)
         {
             if (null == octets || 0 == octets.Length)
-            {
-                return true;
-            }
+            { return true; }
 
             return false;
         }
@@ -1323,9 +1438,7 @@ namespace Craft.Net.Server
         private static bool IsEmpty(String s)
         {
             if (null == s || 0 == s.Length)
-            {
-                return true;
-            }
+            { return true; }
 
             return false;
         }
@@ -1341,9 +1454,7 @@ namespace Craft.Net.Server
         private static bool IsEmpty(AsnType value)
         {
             if (null == value)
-            {
-                return true;
-            }
+            { return true; }
 
             return false;
         }
@@ -1363,252 +1474,5 @@ namespace Craft.Net.Server
 
             return false;
         }
-
-        #region Nested type: AsnMessage
-
-        internal class AsnMessage
-        {
-            private readonly String m_format;
-            private readonly byte[] m_octets;
-
-            internal AsnMessage(byte[] octets, String format)
-            {
-                m_octets = octets;
-                m_format = format;
-            }
-
-            internal int Length
-            {
-                get
-                {
-                    if (null == m_octets)
-                    {
-                        return 0;
-                    }
-                    return m_octets.Length;
-                }
-                // set { m_length = value; }
-            }
-
-            internal byte[] GetBytes()
-            {
-                if (null == m_octets)
-                {
-                    return new byte[] {};
-                }
-
-                return m_octets;
-            }
-
-            internal String GetFormat()
-            {
-                return m_format;
-            }
-        }
-
-        #endregion
-
-        #region Nested type: AsnType
-
-        internal class AsnType
-        {
-            // Constructors
-            // No default - must specify tag and data
-
-            private readonly byte[] m_tag;
-            private byte[] m_length;
-            private byte[] m_octets;
-            private bool m_raw;
-
-            public AsnType(byte tag, byte octet)
-            {
-                m_raw = false;
-                m_tag = new[] {tag};
-                m_octets = new[] {octet};
-            }
-
-            public AsnType(byte tag, byte[] octets)
-            {
-                m_raw = false;
-                m_tag = new[] {tag};
-                m_octets = octets;
-            }
-
-            public AsnType(byte tag, byte[] length, byte[] octets)
-            {
-                m_raw = true;
-                m_tag = new[] {tag};
-                m_length = length;
-                m_octets = octets;
-            }
-
-            private bool Raw
-            {
-                get { return m_raw; }
-                set { m_raw = value; }
-            }
-
-            // Setters and Getters
-
-            public byte[] Tag
-            {
-                get
-                {
-                    if (null == m_tag)
-                        return EMPTY;
-                    return m_tag;
-                }
-                // set { m_tag = value; }
-            }
-
-            public byte[] Length
-            {
-                get
-                {
-                    if (null == m_length)
-                        return EMPTY;
-                    return m_length;
-                }
-                // set { m_length = value; }
-            }
-
-            public byte[] Octets
-            {
-                get
-                {
-                    if (null == m_octets)
-                    {
-                        return EMPTY;
-                    }
-                    return m_octets;
-                }
-                set { m_octets = value; }
-            }
-
-            // Methods
-            internal byte[] GetBytes()
-            {
-                // Created raw by user
-                // return the bytes....
-                if (m_raw)
-                {
-                    return Concatenate(
-                        new[] {m_tag, m_length, m_octets}
-                        );
-                }
-
-                SetLength();
-
-                // Special case
-                // Null does not use length
-                if (0x05 == m_tag[0])
-                {
-                    return Concatenate(
-                        new[] {m_tag, m_octets}
-                        );
-                }
-
-                return Concatenate(
-                    new[] {m_tag, m_length, m_octets}
-                    );
-            }
-
-            private void SetLength()
-            {
-                if (null == m_octets)
-                {
-                    m_length = ZERO;
-                    return;
-                }
-
-                // Special case
-                // Null does not use length
-                if (0x05 == m_tag[0])
-                {
-                    m_length = EMPTY;
-                    return;
-                }
-
-                byte[] length = null;
-
-                // Length: 0 <= l < 0x80
-                if (m_octets.Length < 0x80)
-                {
-                    length = new byte[1];
-                    length[0] = (byte) m_octets.Length;
-                }
-                    // 0x80 < length <= 0xFF
-                else if (m_octets.Length <= 0xFF)
-                {
-                    length = new byte[2];
-                    length[0] = 0x81;
-                    length[1] = (byte) ((m_octets.Length & 0xFF));
-                }
-
-                    //
-                    // We should almost never see these...
-                    //
-
-                    // 0xFF < length <= 0xFFFF
-                else if (m_octets.Length <= 0xFFFF)
-                {
-                    length = new byte[3];
-                    length[0] = 0x82;
-                    length[1] = (byte) ((m_octets.Length & 0xFF00) >> 8);
-                    length[2] = (byte) ((m_octets.Length & 0xFF));
-                }
-
-                    // 0xFFFF < length <= 0xFFFFFF
-                else if (m_octets.Length <= 0xFFFFFF)
-                {
-                    length = new byte[4];
-                    length[0] = 0x83;
-                    length[1] = (byte) ((m_octets.Length & 0xFF0000) >> 16);
-                    length[2] = (byte) ((m_octets.Length & 0xFF00) >> 8);
-                    length[3] = (byte) ((m_octets.Length & 0xFF));
-                }
-                    // 0xFFFFFF < length <= 0xFFFFFFFF
-                else
-                {
-                    length = new byte[5];
-                    length[0] = 0x84;
-                    length[1] = (byte) ((m_octets.Length & 0xFF000000) >> 24);
-                    length[2] = (byte) ((m_octets.Length & 0xFF0000) >> 16);
-                    length[3] = (byte) ((m_octets.Length & 0xFF00) >> 8);
-                    length[4] = (byte) ((m_octets.Length & 0xFF));
-                }
-
-                m_length = length;
-            }
-
-            private byte[] Concatenate(byte[][] values)
-            {
-                // Nothing in, nothing out
-                if (IsEmpty(values))
-                    return new byte[] {};
-
-                int length = 0;
-                foreach (var b in values)
-                {
-                    if (null != b) length += b.Length;
-                }
-
-                var cated = new byte[length];
-
-                int current = 0;
-                foreach (var b in values)
-                {
-                    if (null != b)
-                    {
-                        Array.Copy(b, 0, cated, current, b.Length);
-                        current += b.Length;
-                    }
-                }
-
-                return cated;
-            }
-        };
-
-        #endregion
     }
 }
