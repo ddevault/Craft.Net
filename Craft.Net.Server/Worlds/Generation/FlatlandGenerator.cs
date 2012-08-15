@@ -1,17 +1,14 @@
-using System;
 using Craft.Net.Server.Blocks;
 
 namespace Craft.Net.Server.Worlds.Generation
 {
     public class FlatlandGenerator : IWorldGenerator
     {
-        public FlatlandGenerator()
-        {
-        }
+        #region IWorldGenerator Members
 
         public Chunk GenerateChunk(Vector3 Position, Region ParentRegion)
         {
-            Chunk chunk = new Chunk(Position, ParentRegion);
+            var chunk = new Chunk(Position, ParentRegion);
             for (int x = 0; x < 16; x++)
             {
                 for (int z = 0; z < 16; z++)
@@ -27,7 +24,7 @@ namespace Craft.Net.Server.Worlds.Generation
 
         public Chunk GenerateChunk(Vector3 Position)
         {
-            Chunk chunk = new Chunk(Position);
+            var chunk = new Chunk(Position);
             for (int x = 0; x < 16; x++)
             {
                 for (int z = 0; z < 16; z++)
@@ -43,21 +40,16 @@ namespace Craft.Net.Server.Worlds.Generation
 
         public string LevelType
         {
-            get
-            {
-                return "FLAT";
-            }
+            get { return "FLAT"; }
         }
 
         public long Seed { get; set; }
 
         public Vector3 SpawnPoint
         {
-            get
-            {
-                return new Vector3(0, 4, 0);
-            }
+            get { return new Vector3(0, 4, 0); }
         }
+
+        #endregion
     }
 }
-

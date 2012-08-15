@@ -1,26 +1,19 @@
 using System;
-using Craft.Net.Server.Worlds;
 using Craft.Net.Server.Blocks;
+using Craft.Net.Server.Worlds;
 
 namespace Craft.Net.Server.Packets
 {
     public class BlockPlacementPacket : Packet
     {
-        public Vector3 Position;
+        public Vector3 CursorPosition;
         public byte Direction;
         public Slot HeldItem;
-        public Vector3 CursorPosition;
-
-        public BlockPlacementPacket()
-        {
-        }
+        public Vector3 Position;
 
         public override byte PacketID
         {
-            get
-            {
-                return 0xF;
-            }
+            get { return 0xF; }
         }
 
         public override int TryReadPacket(byte[] Buffer, int Length)
@@ -56,7 +49,7 @@ namespace Craft.Net.Server.Packets
                 return;
             if (HeldItem.Id < 0x80)
             {
-                Block block = (Block)HeldItem.Id;
+                var block = (Block) HeldItem.Id;
                 Vector3 clickedBlock = Position;
                 Vector3 placedBlock = Position;
                 placedBlock += AdjustByDirection(Direction);
@@ -70,7 +63,7 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         private static Vector3 AdjustByDirection(byte Direction)
@@ -93,4 +86,3 @@ namespace Craft.Net.Server.Packets
         }
     }
 }
-

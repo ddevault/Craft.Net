@@ -1,5 +1,3 @@
-using System;
-
 namespace Craft.Net.Server
 {
     public enum LogImportance
@@ -14,4 +12,3 @@ namespace Craft.Net.Server
         void Log(string text, LogImportance Level);
     }
 }
-

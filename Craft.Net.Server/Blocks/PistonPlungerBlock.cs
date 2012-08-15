@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Craft.Net.Server.Blocks
+﻿namespace Craft.Net.Server.Blocks
 {
     /// <summary>
     /// A Piston Plunger block (ID = 33)
@@ -20,16 +15,11 @@ namespace Craft.Net.Server.Blocks
         {
             get { return 33; }
         }
+
         public override byte Metadata
         {
-            get
-            {
-                return base.Metadata;
-            }
-            set
-            {
-                base.Metadata = value;
-            }
+            get { return base.Metadata; }
+            set { base.Metadata = value; }
         }
     }
 }

@@ -6,16 +6,9 @@ namespace Craft.Net.Server.Packets
     {
         public bool OnGround;
 
-        public PlayerPacket()
-        {
-        }
-
         public override byte PacketID
         {
-            get
-            {
-                return 0xA;
-            }
+            get { return 0xA; }
         }
 
         public override int TryReadPacket(byte[] Buffer, int Length)
@@ -37,4 +30,3 @@ namespace Craft.Net.Server.Packets
         }
     }
 }
-

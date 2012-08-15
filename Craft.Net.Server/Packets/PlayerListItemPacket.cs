@@ -5,9 +5,9 @@ namespace Craft.Net.Server.Packets
 {
     public class PlayerListItemPacket : Packet
     {
-        public string PlayerName;
         public bool Online;
         public short Ping;
+        public string PlayerName;
 
         public PlayerListItemPacket()
         {
@@ -22,10 +22,7 @@ namespace Craft.Net.Server.Packets
 
         public override byte PacketID
         {
-            get
-            {
-                return 0xC9;
-            }
+            get { return 0xC9; }
         }
 
         public override int TryReadPacket(byte[] Buffer, int Length)
@@ -40,7 +37,7 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
         {
-            byte[] buffer = new byte[] { PacketID }
+            byte[] buffer = new[] {PacketID}
                 .Concat(CreateString(PlayerName))
                 .Concat(CreateBoolean(Online))
                 .Concat(CreateShort(Ping)).ToArray();
@@ -48,4 +45,3 @@ namespace Craft.Net.Server.Packets
         }
     }
 }
-

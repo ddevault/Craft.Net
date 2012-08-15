@@ -1,6 +1,6 @@
 using System;
-using Craft.Net.Server.Worlds;
 using Craft.Net.Server.Blocks;
+using Craft.Net.Server.Worlds;
 
 namespace Craft.Net.Server.Packets
 {
@@ -17,19 +17,12 @@ namespace Craft.Net.Server.Packets
         public static double MaxDigDistance = 6;
 
         public PlayerAction Action;
-        public Vector3 Position;
         public byte Face;
-
-        public PlayerDiggingPacket()
-        {
-        }
+        public Vector3 Position;
 
         public override byte PacketID
         {
-            get
-            {
-                return 0xE;
-            }
+            get { return 0xE; }
         }
 
         public override int TryReadPacket(byte[] Buffer, int Length)
@@ -48,7 +41,7 @@ namespace Craft.Net.Server.Packets
             if (!TryReadByte(Buffer, ref offset, out Face))
                 return -1;
             Position = new Vector3(x, y, z);
-            Action = (PlayerAction)action;
+            Action = (PlayerAction) action;
             return offset;
         }
 
@@ -75,4 +68,3 @@ namespace Craft.Net.Server.Packets
         }
     }
 }
-

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Craft.Net.Server.Blocks
+﻿namespace Craft.Net.Server.Blocks
 {
     /// <summary>
     /// A Gold block (ID = 41)
@@ -21,4 +16,3 @@ namespace Craft.Net.Server.Blocks
         }
     }
 }
-

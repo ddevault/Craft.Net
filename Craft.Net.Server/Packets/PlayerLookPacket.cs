@@ -4,19 +4,12 @@ namespace Craft.Net.Server.Packets
 {
     public class PlayerLookPacket : Packet
     {
-        public float Pitch, Yaw;
         public bool OnGround;
-
-        public PlayerLookPacket()
-        {
-        }
+        public float Pitch, Yaw;
 
         public override byte PacketID
         {
-            get
-            {
-                return 0xC;
-            }
+            get { return 0xC; }
         }
 
         public override int TryReadPacket(byte[] Buffer, int Length)
@@ -45,4 +38,3 @@ namespace Craft.Net.Server.Packets
         }
     }
 }
-

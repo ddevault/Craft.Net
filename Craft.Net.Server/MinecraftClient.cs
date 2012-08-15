@@ -1,54 +1,87 @@
 using System;
-using System.Net.Sockets;
 using System.Collections.Generic;
-using Craft.Net.Server.Packets;
-using Craft.Net.Server.Worlds.Entities;
-using Craft.Net.Server.Worlds;
-using System.Threading;
+using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using Craft.Net.Server.Packets;
+using Craft.Net.Server.Worlds;
+using Craft.Net.Server.Worlds.Entities;
 
 namespace Craft.Net.Server
 {
     public class MinecraftClient
     {
         private const int BufferSize = 1024;
-        
+
         #region Fields
-        
-        public Socket Socket;
-        public string Username, Hostname;
-        public Queue<Packet> SendQueue;
+
+        internal string AuthenticationHash;
+        public ChatMode ChatMode;
+        public bool ColorsEnabled;
+        internal ICryptoTransform Decrypter;
+        internal ICryptoTransform Encrypter;
+        internal bool EncryptionEnabled;
+        public PlayerEntity Entity;
+        public byte FlyingSpeed;
+        public string Hostname;
+        public Slot[] Inventory;
+        public bool IsCrouching;
         public bool IsDisconnected;
         public bool IsLoggedIn;
-        public PlayerEntity Entity;
+        public bool IsSprinting;
+        internal Timer KeepAliveTimer;
+        internal DateTime LastKeepAlive, LastKeepAliveSent;
+        public List<Vector3> LoadedChunks;
         public string Locale;
+
         /// <summary>
         /// The view distance in chunks.
         /// </summary>
-        public int ViewDistance, MaxViewDistance;
-        public short Ping;
-        public ChatMode ChatMode;
-        public bool ColorsEnabled;
-        public List<Vector3> LoadedChunks;
-        public Dictionary<string, object> Tags;
-        public MinecraftServer Server;
-        public byte WalkingSpeed, FlyingSpeed;
-        public bool IsCrouching, IsSprinting;
-        public Slot[] Inventory;
+        public int MaxViewDistance;
 
-        internal ICryptoTransform Encrypter, Decrypter;
-        internal byte[] SharedKey;
-        internal int VerificationKey;
-        internal int RecieveBufferIndex;
+        public short Ping;
+        internal bool ReadyToSpawn;
         internal byte[] RecieveBuffer;
-        internal string AuthenticationHash;
-        internal bool EncryptionEnabled, ReadyToSpawn;
-        internal Timer KeepAliveTimer;
-        internal DateTime LastKeepAlive, LastKeepAliveSent;
+        internal int RecieveBufferIndex;
+        public Queue<Packet> SendQueue;
+        public MinecraftServer Server;
+        internal byte[] SharedKey;
+        public Socket Socket;
+        public Dictionary<string, object> Tags;
+        public string Username;
+        internal int VerificationKey;
+
+        /// <summary>
+        /// The view distance in chunks.
+        /// </summary>
+        public int ViewDistance;
+
+        public byte WalkingSpeed;
 
         #endregion
+
+        public MinecraftClient(Socket Socket, MinecraftServer Server)
+        {
+            this.Socket = Socket;
+            RecieveBuffer = new byte[1024];
+            RecieveBufferIndex = 0;
+            SendQueue = new Queue<Packet>();
+            IsDisconnected = false;
+            IsLoggedIn = false;
+            EncryptionEnabled = false;
+            Locale = "en_US";
+            MaxViewDistance = 10;
+            ViewDistance = 3;
+            ReadyToSpawn = false;
+            LoadedChunks = new List<Vector3>();
+            this.Server = Server;
+            WalkingSpeed = 12;
+            FlyingSpeed = 25;
+            Inventory = new Slot[44];
+            LastKeepAlive = DateTime.MaxValue.AddSeconds(-120);
+        }
 
         public double MaxMoveDistance
         {
@@ -58,32 +91,11 @@ namespace Craft.Net.Server
                 return 1000;
             }
         }
-        
-        public MinecraftClient(Socket Socket, MinecraftServer Server)
-        {
-            this.Socket = Socket;
-            this.RecieveBuffer = new byte[1024];
-            this.RecieveBufferIndex = 0;
-            this.SendQueue = new Queue<Packet>();
-            this.IsDisconnected = false;
-            this.IsLoggedIn = false;
-            this.EncryptionEnabled = false;
-            this.Locale = "en_US";
-            this.MaxViewDistance = 10;
-            this.ViewDistance = 3;
-            this.ReadyToSpawn = false;
-            this.LoadedChunks = new List<Vector3>();
-            this.Server = Server;
-            this.WalkingSpeed = 12;
-            this.FlyingSpeed = 25;
-            this.Inventory = new Slot[44];
-            this.LastKeepAlive = DateTime.MaxValue.AddSeconds(-120);
-        }
 
         public void SendPacket(Packet packet)
         {
             packet.PacketContext = PacketContext.ServerToClient;
-            this.SendQueue.Enqueue(packet);
+            SendQueue.Enqueue(packet);
         }
 
         public void SendData(byte[] Data)
@@ -91,15 +103,15 @@ namespace Craft.Net.Server
 #if DEBUG
             Server.Log(DumpArray(Data), LogImportance.Low);
 #endif
-            if (this.EncryptionEnabled)
+            if (EncryptionEnabled)
             {
-                byte[] output = new byte[Data.Length];
+                var output = new byte[Data.Length];
                 Encrypter.TransformBlock(Data, 0, output.Length, output, 0);
-                this.Socket.BeginSend(output, 0, output.Length, SocketFlags.None, null, null);
+                Socket.BeginSend(output, 0, output.Length, SocketFlags.None, null, null);
             }
             else
             {
-                this.Socket.BeginSend(Data, 0, Data.Length, SocketFlags.None, null, null);
+                Socket.BeginSend(Data, 0, Data.Length, SocketFlags.None, null, null);
             }
         }
 
@@ -109,7 +121,7 @@ namespace Craft.Net.Server
             // Maybe a general utility class?
             if (array.Length == 0)
                 return "[]";
-            StringBuilder sb = new StringBuilder((array.Length * 2) + 2);
+            var sb = new StringBuilder((array.Length*2) + 2);
             foreach (byte b in array)
             {
                 sb.AppendFormat("0x{0},", b.ToString("x"));
@@ -119,8 +131,8 @@ namespace Craft.Net.Server
 
         public Task UpdateChunksAsync()
         {
-            if ((int)(this.Entity.Position.X) >> 4 != (int)(this.Entity.OldPosition.X) >> 4 ||
-                (int)(this.Entity.Position.Z) >> 4 != (int)(this.Entity.OldPosition.Z) >> 4)
+            if ((int) (Entity.Position.X) >> 4 != (int) (Entity.OldPosition.X) >> 4 ||
+                (int) (Entity.Position.Z) >> 4 != (int) (Entity.OldPosition.Z) >> 4)
             {
                 return Task.Factory.StartNew(() => UpdateChunks(true));
             }
@@ -135,21 +147,21 @@ namespace Craft.Net.Server
         public void UpdateChunks(bool ForceUpdate)
         {
             if (ForceUpdate ||
-                (int)(this.Entity.Position.X) >> 4 != (int)(this.Entity.OldPosition.X) >> 4 ||
-                (int)(this.Entity.Position.Z) >> 4 != (int)(this.Entity.OldPosition.Z) >> 4
+                (int) (Entity.Position.X) >> 4 != (int) (Entity.OldPosition.X) >> 4 ||
+                (int) (Entity.Position.Z) >> 4 != (int) (Entity.OldPosition.Z) >> 4
                 )
             {
-                List<Vector3> newChunks = new List<Vector3>();
-                for (int x = -this.ViewDistance; x < this.ViewDistance; x++)
-                    for (int z = -this.ViewDistance; z < this.ViewDistance; z++)
-                {
-                    newChunks.Add(new Vector3(
-                        ((int)this.Entity.Position.X >> 4) + x,
-                        0,
-                        ((int)this.Entity.Position.Z >> 4) + z));
-                }
+                var newChunks = new List<Vector3>();
+                for (int x = -ViewDistance; x < ViewDistance; x++)
+                    for (int z = -ViewDistance; z < ViewDistance; z++)
+                    {
+                        newChunks.Add(new Vector3(
+                                          ((int) Entity.Position.X >> 4) + x,
+                                          0,
+                                          ((int) Entity.Position.Z >> 4) + z));
+                    }
                 // Unload extraneous columns
-                List<Vector3> currentChunks = new List<Vector3>(this.LoadedChunks);
+                var currentChunks = new List<Vector3>(LoadedChunks);
                 foreach (Vector3 chunk in currentChunks)
                 {
                     if (!newChunks.Contains(chunk))
@@ -158,7 +170,7 @@ namespace Craft.Net.Server
                 // Load new columns
                 foreach (Vector3 chunk in newChunks)
                 {
-                    if (!this.LoadedChunks.Contains(chunk))
+                    if (!LoadedChunks.Contains(chunk))
                         LoadChunk(chunk);
                 }
             }
@@ -168,26 +180,26 @@ namespace Craft.Net.Server
         {
             World world = Server.GetClientWorld(this);
             Chunk chunk = world.GetChunk(position);
-            ChunkDataPacket dataPacket = new ChunkDataPacket(ref chunk);
-            this.SendPacket(dataPacket);
+            var dataPacket = new ChunkDataPacket(ref chunk);
+            SendPacket(dataPacket);
         }
 
         public void UnloadChunk(Vector3 position)
         {
-            ChunkDataPacket dataPacket = new ChunkDataPacket();
+            var dataPacket = new ChunkDataPacket();
             dataPacket.AddBitMap = 0;
             dataPacket.GroundUpContiguous = true;
             dataPacket.PrimaryBitMap = 0;
-            dataPacket.X = (int)position.X;
-            dataPacket.Z = (int)position.Z;
+            dataPacket.X = (int) position.X;
+            dataPacket.Z = (int) position.Z;
             dataPacket.CompressedData = ChunkDataPacket.ChunkRemovalSequence;
-            this.SendPacket(dataPacket);
+            SendPacket(dataPacket);
         }
 
         public void SendChat(string Message)
         {
-            this.SendPacket(new ChatMessagePacket(Message));
-            this.Server.ProcessSendQueue();
+            SendPacket(new ChatMessagePacket(Message));
+            Server.ProcessSendQueue();
         }
 
         internal void StartKeepAliveTimer()
@@ -199,23 +211,22 @@ namespace Craft.Net.Server
         {
             // Keep alive timer is also responsible for trickling in chunks
             // early in the session.
-            if (this.ReadyToSpawn && this.ViewDistance < this.MaxViewDistance)
+            if (ReadyToSpawn && ViewDistance < MaxViewDistance)
             {
-                this.ViewDistance++;
-                this.ForceUpdateChunksAsync(); // TODO: Move this to its own timer
+                ViewDistance++;
+                ForceUpdateChunksAsync(); // TODO: Move this to its own timer
             }
             if (LastKeepAlive.AddSeconds(60) < DateTime.Now)
             {
                 Server.Log("Client timed out");
-                this.IsDisconnected = true;
+                IsDisconnected = true;
             }
             else
             {
-                this.SendPacket(new KeepAlivePacket(MinecraftServer.Random.Next()));
-                this.Server.ProcessSendQueue();
-                this.LastKeepAliveSent = DateTime.Now;
+                SendPacket(new KeepAlivePacket(MinecraftServer.Random.Next()));
+                Server.ProcessSendQueue();
+                LastKeepAliveSent = DateTime.Now;
             }
         }
     }
 }
-

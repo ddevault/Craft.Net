@@ -27,7 +27,7 @@ namespace Craft.Net.Server.Worlds
 
         public Vector3 Floor()
         {
-            return new Vector3((int)X, (int)Y, (int)Z);
+            return new Vector3((int) X, (int) Y, (int) Z);
         }
 
         public double DistanceTo(Vector3 other)
@@ -60,17 +60,17 @@ namespace Craft.Net.Server.Worlds
         public static Vector3 operator *(Vector3 a, Vector3 b)
         {
             return new Vector3(
-                a.X * b.X,
-                a.Y * b.Y,
-                a.Z * b.Z);
+                a.X*b.X,
+                a.Y*b.Y,
+                a.Z*b.Z);
         }
 
         public static Vector3 operator /(Vector3 a, Vector3 b)
         {
             return new Vector3(
-                a.X / b.X,
-                a.Y / b.Y,
-                a.Z / b.Z);
+                a.X/b.X,
+                a.Y/b.Y,
+                a.Z/b.Z);
         }
 
         #endregion
@@ -79,101 +79,64 @@ namespace Craft.Net.Server.Worlds
 
         public static Vector3 Zero
         {
-            get
-            {
-                return new Vector3(0);
-            }
+            get { return new Vector3(0); }
         }
 
         public static Vector3 One
         {
-            get
-            {
-                return new Vector3(1);
-            }
+            get { return new Vector3(1); }
         }
 
         public static Vector3 Up
         {
-            get
-            {
-                return new Vector3(0, 1, 0);
-            }
+            get { return new Vector3(0, 1, 0); }
         }
 
         public static Vector3 Down
         {
-            get
-            {
-                return new Vector3(0, -1, 0);
-            }
+            get { return new Vector3(0, -1, 0); }
         }
 
         public static Vector3 Left
         {
-            get
-            {
-                return new Vector3(-1, 0, 0);
-            }
+            get { return new Vector3(-1, 0, 0); }
         }
 
         public static Vector3 Right
         {
-            get
-            {
-                return new Vector3(1, 0, 0);
-            }
+            get { return new Vector3(1, 0, 0); }
         }
 
         public static Vector3 Backwards
         {
-            get
-            {
-                return new Vector3(0, 0, -1);
-            }
+            get { return new Vector3(0, 0, -1); }
         }
 
         public static Vector3 Forwards
         {
-            get
-            {
-                return new Vector3(0, 0, 1);
-            }
+            get { return new Vector3(0, 0, 1); }
         }
 
         public static Vector3 South
         {
-            get
-            {
-                return new Vector3(0, 0, 1);
-            }
+            get { return new Vector3(0, 0, 1); }
         }
 
         public static Vector3 North
         {
-            get
-            {
-                return new Vector3(0, 0, -1);
-            }
+            get { return new Vector3(0, 0, -1); }
         }
 
         public static Vector3 West
         {
-            get
-            {
-                return new Vector3(-1, 0, 0);
-            }
+            get { return new Vector3(-1, 0, 0); }
         }
 
         public static Vector3 East
         {
-            get
-            {
-                return new Vector3(1, 0, 0);
-            }
+            get { return new Vector3(1, 0, 0); }
         }
 
         #endregion
     }
 }
-

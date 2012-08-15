@@ -1,4 +1,3 @@
-using System;
 using Craft.Net.Server.Blocks;
 using ICSharpCode.SharpZipLib.Zip.Compression;
 
@@ -8,31 +7,29 @@ namespace Craft.Net.Server.Worlds
     {
         public const byte Width = 16, Height = 16, Depth = 16;
         public static Deflater Deflater;
+        public NibbleArray BlockLight;
 
-        public byte Y;
         public byte[] Blocks;
         public NibbleArray Metadata;
-        public NibbleArray BlockLight;
-        public NibbleArray SkyLight;
         private int NonairCount;
-        public bool IsAir
-        {
-            get
-            {
-                return NonairCount == 0;
-            }
-        }
+        public NibbleArray SkyLight;
+        public byte Y;
 
         public Section(byte Y)
         {
             this.Y = Y;
-            this.Blocks = new byte[Width * Height * Depth];
-            this.Metadata = new NibbleArray(Width * Height * Depth);
-            this.BlockLight = new NibbleArray(Width * Height * Depth);
-            this.SkyLight = new NibbleArray(Width * Height * Depth);
-            for (int i = 0; i < this.SkyLight.Data.Length; i++)
-                this.SkyLight.Data[i] = this.BlockLight.Data[i] = 0xFF;
-            this.NonairCount = 0;
+            Blocks = new byte[Width*Height*Depth];
+            Metadata = new NibbleArray(Width*Height*Depth);
+            BlockLight = new NibbleArray(Width*Height*Depth);
+            SkyLight = new NibbleArray(Width*Height*Depth);
+            for (int i = 0; i < SkyLight.Data.Length; i++)
+                SkyLight.Data[i] = BlockLight.Data[i] = 0xFF;
+            NonairCount = 0;
+        }
+
+        public bool IsAir
+        {
+            get { return NonairCount == 0; }
         }
 
         /// <summary>
@@ -40,14 +37,14 @@ namespace Craft.Net.Server.Worlds
         /// </summary>
         public void SetBlock(Vector3 position, Block value)
         {
-            int x = (int)position.X;
-            int y = (int)position.Y;
-            int z = (int)position.Z;
-            int index = x + (z * Width) + (y * Height * Width);
-            this.Blocks[index] = value.BlockID;
-            this.Metadata[index] = value.Metadata;
-            this.BlockLight[index] = value.BlockLight;
-            this.SkyLight[index] = value.SkyLight;
+            var x = (int) position.X;
+            var y = (int) position.Y;
+            var z = (int) position.Z;
+            int index = x + (z*Width) + (y*Height*Width);
+            Blocks[index] = value.BlockID;
+            Metadata[index] = value.Metadata;
+            BlockLight[index] = value.BlockLight;
+            SkyLight[index] = value.SkyLight;
             if (value is AirBlock)
                 NonairCount--;
             else
@@ -56,16 +53,15 @@ namespace Craft.Net.Server.Worlds
 
         public Block GetBlock(Vector3 position)
         {
-            int x = (int)position.X;
-            int y = (int)position.Y;
-            int z = (int)position.Z;
-            int index = x + (z * Width) + (y * Height * Width);
-            Block block = (Block)this.Blocks[index];
-            block.Metadata = this.Metadata[index];
-            block.SkyLight = this.SkyLight[index];
-            block.BlockLight = this.BlockLight[index];
+            var x = (int) position.X;
+            var y = (int) position.Y;
+            var z = (int) position.Z;
+            int index = x + (z*Width) + (y*Height*Width);
+            Block block = Blocks[index];
+            block.Metadata = Metadata[index];
+            block.SkyLight = SkyLight[index];
+            block.BlockLight = BlockLight[index];
             return block;
         }
     }
 }
-

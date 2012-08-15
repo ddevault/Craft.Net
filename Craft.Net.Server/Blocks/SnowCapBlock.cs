@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Craft.Net.Server.Blocks
+﻿namespace Craft.Net.Server.Blocks
 {
     /// <summary>
     /// A Snow Cap block (ID = 78)
@@ -22,10 +17,7 @@ namespace Craft.Net.Server.Blocks
 
         public override BlockOpacity Transparent
         {
-            get
-            {
-                return BlockOpacity.NonSolid;
-            }
+            get { return BlockOpacity.NonSolid; }
         }
     }
 }

@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Craft.Net.Server.Blocks
+﻿namespace Craft.Net.Server.Blocks
 {
-    class CobblestoneStairsBlock : StairsBlock
+    internal class CobblestoneStairsBlock : StairsBlock
     {
-        public override byte BlockID { get { return 67; } }
+        public override byte BlockID
+        {
+            get { return 67; }
+        }
     }
 }

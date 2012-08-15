@@ -1,23 +1,16 @@
-using System;
 using Craft.Net.Server.Worlds;
 
 namespace Craft.Net.Server.Packets
 {
     public class PlayerPositionPacket : Packet
     {
-        public double X, Y, Z, Stance;
         public bool OnGround;
-
-        public PlayerPositionPacket()
-        {
-        }
+        public double Stance;
+        public double X, Y, Z;
 
         public override byte PacketID
         {
-            get
-            {
-                return 0xB;
-            }
+            get { return 0xB; }
         }
 
         public override int TryReadPacket(byte[] Buffer, int Length)
@@ -41,7 +34,7 @@ namespace Craft.Net.Server.Packets
             if (!Client.ReadyToSpawn)
                 return;
             Client.Entity.Position = new Vector3(X, Y, Z);
-            if (Client.Entity.Position.DistanceTo(Client.Entity.OldPosition) > 
+            if (Client.Entity.Position.DistanceTo(Client.Entity.OldPosition) >
                 Client.MaxMoveDistance)
             {
                 Client.SendPacket(new DisconnectPacket("Hacking: You moved too fast!"));
@@ -55,8 +48,6 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
         {
-
         }
     }
 }
-

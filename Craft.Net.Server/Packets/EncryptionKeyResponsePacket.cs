@@ -1,6 +1,4 @@
-using System;
 using System.Linq;
-using System.Security.Cryptography;
 
 namespace Craft.Net.Server.Packets
 {
@@ -16,10 +14,7 @@ namespace Craft.Net.Server.Packets
 
         public override byte PacketID
         {
-            get
-            {
-                return 0xFC;
-            }
+            get { return 0xFC; }
         }
 
         public override int TryReadPacket(byte[] Buffer, int Length)
@@ -28,11 +23,11 @@ namespace Craft.Net.Server.Packets
             int offset = 1;
             if (!TryReadShort(Buffer, ref offset, out secretLength))
                 return -1;
-            if (!TryReadArray(Buffer, secretLength, ref offset, out this.SharedSecret))
+            if (!TryReadArray(Buffer, secretLength, ref offset, out SharedSecret))
                 return -1;
             if (!TryReadShort(Buffer, ref offset, out verifyLength))
                 return -1;
-            if (!TryReadArray(Buffer, verifyLength, ref offset, out this.VerifyToken))
+            if (!TryReadArray(Buffer, verifyLength, ref offset, out VerifyToken))
                 return -1;
             return offset;
         }
@@ -52,11 +47,11 @@ namespace Craft.Net.Server.Packets
         public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
         {
             // Send packet and enable encryption
-            byte[] buffer = new byte[] { PacketID }.Concat(
-                CreateShort((short)SharedSecret.Length)).Concat(
-                SharedSecret).Concat(
-                CreateShort((short)VerifyToken.Length)).Concat(
-                VerifyToken).ToArray();
+            byte[] buffer = new[] {PacketID}.Concat(
+                CreateShort((short) SharedSecret.Length)).Concat(
+                    SharedSecret).Concat(
+                        CreateShort((short) VerifyToken.Length)).Concat(
+                            VerifyToken).ToArray();
             Client.SendData(buffer);
             Client.EncryptionEnabled = true;
         }

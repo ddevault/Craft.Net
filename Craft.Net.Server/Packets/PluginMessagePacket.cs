@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 
 namespace Craft.Net.Server.Packets
 {
@@ -46,9 +43,9 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
         {
-            byte[] data = new byte[] { PacketID }
+            byte[] data = new[] {PacketID}
                 .Concat(CreateString(Channel))
-                .Concat(CreateShort((short)Message.Length))
+                .Concat(CreateShort((short) Message.Length))
                 .Concat(Message).ToArray();
             Client.SendData(data);
         }

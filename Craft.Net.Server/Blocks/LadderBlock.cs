@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Craft.Net.Server.Blocks
+﻿namespace Craft.Net.Server.Blocks
 {
     public enum LadderFacing
     {
@@ -25,7 +20,7 @@ namespace Craft.Net.Server.Blocks
 
         public LadderBlock(LadderFacing Facing)
         {
-            this.Metadata = (byte)Facing;
+            Metadata = (byte) Facing;
         }
 
         /// <summary>

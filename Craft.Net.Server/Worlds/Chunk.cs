@@ -1,4 +1,3 @@
-using System;
 using Craft.Net.Server.Blocks;
 
 namespace Craft.Net.Server.Worlds
@@ -7,21 +6,22 @@ namespace Craft.Net.Server.Worlds
     {
         public const int Width = 16, Height = 256, Depth = 16;
 
-        public Section[] Sections;
+        public Vector3 AbsolutePosition;
         public byte[] Biomes;
-        public Vector3 RelativePosition, AbsolutePosition;
         public Region ParentRegion;
+        public Vector3 RelativePosition;
+        public Section[] Sections;
 
         public Chunk(Vector3 RelativePosition, Region ParentRegion)
         {
             Sections = new Section[16];
             for (int i = 0; i < Sections.Length; i++)
-                Sections[i] = new Section((byte)i);
+                Sections[i] = new Section((byte) i);
             this.RelativePosition = RelativePosition;
-            this.Biomes = new byte[Width * Depth];
+            Biomes = new byte[Width*Depth];
             this.ParentRegion = ParentRegion;
-            this.AbsolutePosition = 
-                (ParentRegion.Position * new Vector3(Region.Width, 0, Region.Depth)) 
+            AbsolutePosition =
+                (ParentRegion.Position*new Vector3(Region.Width, 0, Region.Depth))
                 + RelativePosition;
         }
 
@@ -29,9 +29,9 @@ namespace Craft.Net.Server.Worlds
         {
             Sections = new Section[16];
             for (int i = 0; i < Sections.Length; i++)
-                Sections[i] = new Section((byte)i);
+                Sections[i] = new Section((byte) i);
             this.RelativePosition = RelativePosition;
-            this.Biomes = new byte[Width * Depth];
+            Biomes = new byte[Width*Depth];
         }
 
         /// <summary>
@@ -39,19 +39,18 @@ namespace Craft.Net.Server.Worlds
         /// </summary>
         public void SetBlock(Vector3 position, Block value)
         {
-            byte y = (byte)position.Y;
+            var y = (byte) position.Y;
             y /= 16;
-            position.Y = position.Y % 16;
+            position.Y = position.Y%16;
             Sections[y].SetBlock(position, value);
         }
 
         public Block GetBlock(Vector3 position)
         {
-            byte y = (byte)position.Y;
+            var y = (byte) position.Y;
             y /= 16;
-            position.Y = position.Y % 16;
+            position.Y = position.Y%16;
             return Sections[y].GetBlock(position);
         }
     }
 }
-

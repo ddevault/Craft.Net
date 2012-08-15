@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Craft.Net.Server.Blocks
+﻿namespace Craft.Net.Server.Blocks
 {
     /// <summary>
     /// A Nether Brick block (ID = 112)
     /// </summary>
-    class NetherBrickBlock : Block
+    internal class NetherBrickBlock : Block
     {
-        public override byte BlockID { get { return 112; } }
+        public override byte BlockID
+        {
+            get { return 112; }
+        }
     }
 }

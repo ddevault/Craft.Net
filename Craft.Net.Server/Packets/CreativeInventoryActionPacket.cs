@@ -1,6 +1,4 @@
 using System;
-using Craft.Net.Server.Blocks;
-using Craft.Net.Server.Items;
 
 namespace Craft.Net.Server.Packets
 {
@@ -9,16 +7,9 @@ namespace Craft.Net.Server.Packets
         public short Index;
         public Slot Item;
 
-        public CreativeInventoryActionPacket()
-        {
-        }
-
         public override byte PacketID
         {
-            get
-            {
-                return 0x6B;
-            }
+            get { return 0x6B; }
         }
 
         public override int TryReadPacket(byte[] Buffer, int Length)
@@ -43,4 +34,3 @@ namespace Craft.Net.Server.Packets
         }
     }
 }
-

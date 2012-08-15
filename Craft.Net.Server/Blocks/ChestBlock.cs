@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Craft.Net.Server.Worlds;
+﻿using Craft.Net.Server.Worlds;
 using Craft.Net.Server.Worlds.Entities;
 
 namespace Craft.Net.Server.Blocks
@@ -23,6 +19,15 @@ namespace Craft.Net.Server.Blocks
         }
 
         /// <summary>
+        /// Gets the opacity of a block.
+        /// A Chest is a CubeSolid.
+        /// </summary>
+        public override BlockOpacity Transparent
+        {
+            get { return BlockOpacity.CubeSolid; }
+        }
+
+        /// <summary>
         /// Called when this block is placed
         /// </summary>
         /// <param name="world">The world it was placed in</param>
@@ -32,7 +37,8 @@ namespace Craft.Net.Server.Blocks
         /// <param name="placedBy">The entity who placed the block</param>
         /// <returns>False to override placement</returns>
         /// <remarks></remarks>
-        public override bool BlockPlaced(World world, Vector3 position, Vector3 blockClicked, byte facing, Entity placedBy)
+        public override bool BlockPlaced(World world, Vector3 position, Vector3 blockClicked, byte facing,
+                                         Entity placedBy)
         {
             return true;
         }
@@ -48,15 +54,6 @@ namespace Craft.Net.Server.Blocks
         public override bool BlockRightClicked(World world, Vector3 position, PlayerEntity clickedBy)
         {
             return false;
-        }
-
-        /// <summary>
-        /// Gets the opacity of a block.
-        /// A Chest is a CubeSolid.
-        /// </summary>
-        public override BlockOpacity Transparent
-        {
-            get { return BlockOpacity.CubeSolid; }
         }
     }
 }

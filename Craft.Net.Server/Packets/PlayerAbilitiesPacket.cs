@@ -1,10 +1,9 @@
-using System;
-
 namespace Craft.Net.Server.Packets
 {
     public class PlayerAbilitiesPacket : Packet
     {
-        public byte WalkingSpeed, FlyingSpeed;
+        public byte FlyingSpeed;
+        public byte WalkingSpeed;
 
         public PlayerAbilitiesPacket()
         {
@@ -18,10 +17,7 @@ namespace Craft.Net.Server.Packets
 
         public override byte PacketID
         {
-            get
-            {
-                return 0xCA;
-            }
+            get { return 0xCA; }
         }
 
         public override int TryReadPacket(byte[] Buffer, int Length)
@@ -48,4 +44,3 @@ namespace Craft.Net.Server.Packets
         }
     }
 }
-

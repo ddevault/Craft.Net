@@ -6,16 +6,9 @@ namespace Craft.Net.Server.Packets
     {
         public short SlotId;
 
-        public HeldItemChangePacket()
-        {
-        }
-
         public override byte PacketID
         {
-            get
-            {
-                return 0x10;
-            }
+            get { return 0x10; }
         }
 
         public override int TryReadPacket(byte[] Buffer, int Length)
@@ -33,8 +26,7 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }
-

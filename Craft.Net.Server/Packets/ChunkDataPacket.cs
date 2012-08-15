@@ -2,22 +2,24 @@ using System;
 using System.Linq;
 using Craft.Net.Server.Worlds;
 using ICSharpCode.SharpZipLib.Zip.Compression;
-using Craft.Net.Server.Blocks;
 
 namespace Craft.Net.Server.Packets
 {
     public class ChunkDataPacket : Packet
     {
         public static int CompressionLevel = 5;
-        static Deflater zLibDeflater;
+        private static Deflater zLibDeflater;
+
         public static byte[] ChunkRemovalSequence =
-            new byte[] { 0x78, 0x9C, 0x63, 0x64, 0x1C, 0xD9, 0x00, 0x00, 0x81, 0x80, 0x01, 0x01 };
-        public int X, Z;
-        public bool GroundUpContiguous;
-        public ushort PrimaryBitMap, AddBitMap;
-        public byte[] CompressedData;
+            new byte[] {0x78, 0x9C, 0x63, 0x64, 0x1C, 0xD9, 0x00, 0x00, 0x81, 0x80, 0x01, 0x01};
 
         private static object LockObject;
+
+        public ushort AddBitMap;
+        public byte[] CompressedData;
+        public bool GroundUpContiguous;
+        public ushort PrimaryBitMap;
+        public int X, Z;
 
         public ChunkDataPacket()
         {
@@ -29,19 +31,19 @@ namespace Craft.Net.Server.Packets
 
         public ChunkDataPacket(ref Chunk Chunk) : this()
         {
-            this.X = (int)Chunk.AbsolutePosition.X;
-            this.Z = (int)Chunk.AbsolutePosition.Z;
+            X = (int) Chunk.AbsolutePosition.X;
+            Z = (int) Chunk.AbsolutePosition.Z;
 
-            byte[] blockData = new byte[0];
-            byte[] metadata = new byte[0];
-            byte[] blockLight = new byte[0];
-            byte[] skyLight = new byte[0];
-            
+            var blockData = new byte[0];
+            var metadata = new byte[0];
+            var blockLight = new byte[0];
+            var skyLight = new byte[0];
+
             ushort mask = 1, chunkY = 0;
             bool nonAir = true;
             for (int i = 15; i >= 0; i--)
             {
-                Section s = Chunk.Sections [chunkY++];
+                Section s = Chunk.Sections[chunkY++];
 
                 if (s.IsAir)
                     nonAir = false;
@@ -51,17 +53,17 @@ namespace Craft.Net.Server.Packets
                     metadata = metadata.Concat(s.Metadata.Data).ToArray();
                     blockLight = blockLight.Concat(s.BlockLight.Data).ToArray();
                     skyLight = skyLight.Concat(s.SkyLight.Data).ToArray();
-                    
-                    this.PrimaryBitMap |= mask;
+
+                    PrimaryBitMap |= mask;
                 }
-                
+
                 mask <<= 1;
             }
 
             byte[] data = blockData.Concat(metadata).Concat(blockLight)
                 .Concat(skyLight).Concat(Chunk.Biomes).ToArray();
             int length;
-            byte[] result = new byte[data.Length];
+            var result = new byte[data.Length];
             lock (LockObject)
             {
                 zLibDeflater.SetInput(data);
@@ -70,17 +72,14 @@ namespace Craft.Net.Server.Packets
                 zLibDeflater.Reset();
             }
 
-            this.GroundUpContiguous = true;
+            GroundUpContiguous = true;
 
             CompressedData = result.Take(length).ToArray();
         }
 
         public override byte PacketID
         {
-            get
-            {
-                return 0x33;
-            }
+            get { return 0x33; }
         }
 
         public override int TryReadPacket(byte[] Buffer, int Length)
@@ -95,7 +94,7 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
         {
-            byte[] buffer = new byte[] { PacketID }
+            byte[] buffer = new[] {PacketID}
                 .Concat(CreateInt(X))
                 .Concat(CreateInt(Z))
                 .Concat(CreateBoolean(GroundUpContiguous))
@@ -107,4 +106,3 @@ namespace Craft.Net.Server.Packets
         }
     }
 }
-

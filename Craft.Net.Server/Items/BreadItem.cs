@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Craft.Net.Server.Items
+﻿namespace Craft.Net.Server.Items
 {
     /// <summary>
     /// A loaf of Bread (ID = 297)

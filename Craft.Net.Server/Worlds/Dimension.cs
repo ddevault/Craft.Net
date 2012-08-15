@@ -1,5 +1,3 @@
-using System;
-
 namespace Craft.Net.Server.Worlds
 {
     public enum Dimension
@@ -9,4 +7,3 @@ namespace Craft.Net.Server.Worlds
         TheEnd = 1
     }
 }
-

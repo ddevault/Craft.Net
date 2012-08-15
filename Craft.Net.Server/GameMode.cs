@@ -1,5 +1,3 @@
-using System;
-
 namespace Craft.Net.Server
 {
     public enum GameMode
@@ -8,4 +6,3 @@ namespace Craft.Net.Server
         Creative = 1
     }
 }
-

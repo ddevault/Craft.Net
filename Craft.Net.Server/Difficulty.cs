@@ -1,5 +1,3 @@
-using System;
-
 namespace Craft.Net.Server
 {
     public enum Difficulty
@@ -10,4 +8,3 @@ namespace Craft.Net.Server
         Hard = 3
     }
 }
-

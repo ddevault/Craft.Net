@@ -1,7 +1,7 @@
 using System;
-using Craft.Net.Server.Worlds;
-using Craft.Net.Server.Blocks;
 using System.Linq;
+using Craft.Net.Server.Blocks;
+using Craft.Net.Server.Worlds;
 
 namespace Craft.Net.Server.Packets
 {
@@ -18,10 +18,7 @@ namespace Craft.Net.Server.Packets
 
         public override byte PacketID
         {
-            get
-            {
-                return 0x35;
-            }
+            get { return 0x35; }
         }
 
         public override int TryReadPacket(byte[] Buffer, int Length)
@@ -36,14 +33,13 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
         {
-            byte[] buffer = new byte[] { PacketID }
-                .Concat(CreateInt((int)Position.X))
-                .Concat(new byte[] { (byte)Position.Y })
-                .Concat(CreateInt((int)Position.Z))
-                .Concat(CreateShort((short)Value.BlockID))
-                .Concat(new byte[] { Value.Metadata }).ToArray();
+            byte[] buffer = new[] {PacketID}
+                .Concat(CreateInt((int) Position.X))
+                .Concat(new[] {(byte) Position.Y})
+                .Concat(CreateInt((int) Position.Z))
+                .Concat(CreateShort(Value.BlockID))
+                .Concat(new[] {Value.Metadata}).ToArray();
             Client.SendData(buffer);
         }
     }
 }
-

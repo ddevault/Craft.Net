@@ -18,10 +18,7 @@ namespace Craft.Net.Server.Packets
 
         public override byte PacketID
         {
-            get
-            {
-                return 0x00;
-            }
+            get { return 0x00; }
         }
 
         public override int TryReadPacket(byte[] Buffer, int Length)
@@ -35,15 +32,14 @@ namespace Craft.Net.Server.Packets
         public override void HandlePacket(MinecraftServer Server, ref MinecraftClient Client)
         {
             Client.LastKeepAlive = DateTime.Now;
-            Client.Ping = (short)(Client.LastKeepAlive - Client.LastKeepAliveSent).TotalMilliseconds;
+            Client.Ping = (short) (Client.LastKeepAlive - Client.LastKeepAliveSent).TotalMilliseconds;
         }
 
         public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
         {
-            byte[] buffer = new byte[] { PacketID }.Concat(
+            byte[] buffer = new[] {PacketID}.Concat(
                 CreateInt(KeepAlive)).ToArray();
             Client.SendData(buffer);
         }
     }
 }
-

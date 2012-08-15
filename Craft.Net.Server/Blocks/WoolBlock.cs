@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Craft.Net.Server.Blocks
+﻿namespace Craft.Net.Server.Blocks
 {
     public enum WoolColor
     {
@@ -29,7 +24,7 @@ namespace Craft.Net.Server.Blocks
     /// A Wool Block (ID = 35)
     /// </summary>
     /// <remarks></remarks>
-    public class WoolBlock:Block
+    public class WoolBlock : Block
     {
         public WoolBlock()
         {
@@ -37,7 +32,7 @@ namespace Craft.Net.Server.Blocks
 
         public WoolBlock(WoolColor Color)
         {
-            this.Metadata = (byte)Color;
+            Metadata = (byte) Color;
         }
 
         /// <summary>
@@ -46,7 +41,7 @@ namespace Craft.Net.Server.Blocks
         /// <remarks></remarks>
         public override byte BlockID
         {
-            get { return 35 ; }
+            get { return 35; }
         }
     }
 }

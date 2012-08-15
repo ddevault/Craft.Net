@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
-using Craft.Net.Server.Worlds.Generation;
 using Craft.Net.Server.Blocks;
+using Craft.Net.Server.Worlds.Generation;
 
 namespace Craft.Net.Server.Worlds
 {
@@ -11,8 +10,8 @@ namespace Craft.Net.Server.Worlds
         public const int Width = 32, Depth = 32;
 
         public Dictionary<Vector3, Chunk> Chunks;
-        public IWorldGenerator WorldGenerator;
         public Vector3 Position;
+        public IWorldGenerator WorldGenerator;
 
         public Region(Vector3 Position, IWorldGenerator WorldGenerator)
         {
@@ -20,13 +19,13 @@ namespace Craft.Net.Server.Worlds
             this.Position = Position;
             this.WorldGenerator = WorldGenerator;
         }
-        
+
         //Create new region without IWorldGenerator
         public Region(Vector3 Position)
         {
             Chunks = new Dictionary<Vector3, Chunk>();
             this.Position = Position;
-            this.WorldGenerator = null;
+            WorldGenerator = null;
         }
 
         public Chunk GetChunk(Vector3 position)
@@ -47,13 +46,13 @@ namespace Craft.Net.Server.Worlds
         {
             position = position.Floor();
             Vector3 relativePosition = position;
-            position.X = (int)(position.X) / Chunk.Width;
+            position.X = (int) (position.X)/Chunk.Width;
             position.Y = 0;
-            position.Z = (int)(position.Z) / Chunk.Depth;
+            position.Z = (int) (position.Z)/Chunk.Depth;
 
-            relativePosition.X = (int)(relativePosition.X) % Chunk.Width;
+            relativePosition.X = (int) (relativePosition.X)%Chunk.Width;
             relativePosition.Y = 0;
-            relativePosition.Z = (int)(relativePosition.Z) % Chunk.Depth;
+            relativePosition.Z = (int) (relativePosition.Z)%Chunk.Depth;
 
             if (!Chunks.ContainsKey(position))
                 Chunks.Add(position, WorldGenerator.GenerateChunk(position, this));
@@ -65,18 +64,17 @@ namespace Craft.Net.Server.Worlds
         {
             position = position.Floor();
             Vector3 relativePosition = position;
-            position.X = (int)(position.X) / Chunk.Width;
+            position.X = (int) (position.X)/Chunk.Width;
             position.Y = 0;
-            position.Z = (int)(position.Z) / Chunk.Depth;
-            
-            relativePosition.X = (int)(relativePosition.X) % Chunk.Width;
-            relativePosition.Z = (int)(relativePosition.Z) % Chunk.Depth;
-            
+            position.Z = (int) (position.Z)/Chunk.Depth;
+
+            relativePosition.X = (int) (relativePosition.X)%Chunk.Width;
+            relativePosition.Z = (int) (relativePosition.Z)%Chunk.Depth;
+
             if (!Chunks.ContainsKey(position))
                 Chunks.Add(position, WorldGenerator.GenerateChunk(position, this));
-            
+
             Chunks[position].SetBlock(relativePosition, value);
         }
     }
 }
-

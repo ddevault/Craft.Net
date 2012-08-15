@@ -1,31 +1,21 @@
 using System;
-using Craft.Net.Server.Worlds.Generation;
-using Craft.Net.Server.Blocks;
 using System.Collections.Generic;
+using Craft.Net.Server.Blocks;
 using Craft.Net.Server.Events;
+using Craft.Net.Server.Worlds.Generation;
 
 namespace Craft.Net.Server.Worlds
 {
     public class World
     {
-        public string LevelType
-        {
-            get
-            {
-                return WorldGenerator.LevelType;
-            }
-        }
-
-        public Dictionary<Vector3, Region> Regions;
-        public EntityManager EntityManager;
-        public string Name;
-        public Vector3 SpawnPoint;
-        public GameMode GameMode;
         public Difficulty Difficulty;
-        public IWorldGenerator WorldGenerator;
+        public EntityManager EntityManager;
+        public GameMode GameMode;
+        public string Name;
+        public Dictionary<Vector3, Region> Regions;
         public long Seed;
-
-        public event EventHandler<BlockChangedEventArgs> OnBlockChanged;
+        public Vector3 SpawnPoint;
+        public IWorldGenerator WorldGenerator;
 
         public World(IWorldGenerator WorldGenerator)
         {
@@ -44,6 +34,13 @@ namespace Craft.Net.Server.Worlds
             this.Seed = Seed;
         }
 
+        public string LevelType
+        {
+            get { return WorldGenerator.LevelType; }
+        }
+
+        public event EventHandler<BlockChangedEventArgs> OnBlockChanged;
+
         /// <summary>
         /// Returns the chunk at the specific position
         /// </summary>
@@ -52,18 +49,18 @@ namespace Craft.Net.Server.Worlds
         public Chunk GetChunk(Vector3 position)
         {
             //In chunks
-            int x = (int)position.X;
-            int z = (int)position.Z;
+            var x = (int) position.X;
+            var z = (int) position.Z;
 
             //In regions
-            int regionX = x / Region.Width - ((x < 0) ? 1 : 0);
-            int regionZ = z / Region.Depth - ((z < 0) ? 1 : 0);
+            int regionX = x/Region.Width - ((x < 0) ? 1 : 0);
+            int regionZ = z/Region.Depth - ((z < 0) ? 1 : 0);
 
-            Vector3 region = new Vector3(regionX, 0, regionZ);
+            var region = new Vector3(regionX, 0, regionZ);
             if (!Regions.ContainsKey(region))
                 Regions.Add(region, new Region(region, WorldGenerator));
 
-            return Regions[region].GetChunk(new Vector3(x - regionX * 32, 0, z - regionZ * 32));
+            return Regions[region].GetChunk(new Vector3(x - regionX*32, 0, z - regionZ*32));
         }
 
         /// <summary>
@@ -73,18 +70,18 @@ namespace Craft.Net.Server.Worlds
         public void SetChunk(Vector3 position, Chunk chunk)
         {
             //In chunks
-            int x = (int)position.X;
-            int z = (int)position.Z;
+            var x = (int) position.X;
+            var z = (int) position.Z;
 
             //In regions
-            int regionX = x / Region.Width - ((x < 0) ? 1 : 0);
-            int regionZ = z / Region.Depth - ((z < 0) ? 1 : 0);
+            int regionX = x/Region.Width - ((x < 0) ? 1 : 0);
+            int regionZ = z/Region.Depth - ((z < 0) ? 1 : 0);
 
-            Vector3 region = new Vector3(regionX, 0, regionZ);
+            var region = new Vector3(regionX, 0, regionZ);
             if (!Regions.ContainsKey(region))
                 Regions.Add(region, new Region(region, WorldGenerator));
 
-            Regions[region].SetChunk(new Vector3(x - regionX * 32, 0, z - regionZ * 32), chunk);
+            Regions[region].SetChunk(new Vector3(x - regionX*32, 0, z - regionZ*32), chunk);
         }
 
         public Block GetBlock(Vector3 position)
@@ -108,18 +105,18 @@ namespace Craft.Net.Server.Worlds
 
         private Vector3 FindBlockPosition(Vector3 position, out Chunk chunk)
         {
-            int x = (int)position.X;
-            int y = (int)position.Y;
-            int z = (int)position.Z;
+            var x = (int) position.X;
+            var y = (int) position.Y;
+            var z = (int) position.Z;
 
             if (y < 0 || y >= Chunk.Height) throw new ArgumentOutOfRangeException("Block is out of range");
 
-            int chunkX = x / (Chunk.Width) - ((x < 0) ? 1 : 0);
-            int chunkZ = z / (Chunk.Depth) - ((z < 0) ? 1 : 0);
+            int chunkX = x/(Chunk.Width) - ((x < 0) ? 1 : 0);
+            int chunkZ = z/(Chunk.Depth) - ((z < 0) ? 1 : 0);
 
             chunk = GetChunk(new Vector3(chunkX, 0, chunkZ));
-            return new Vector3(x - chunkX * Chunk.Width, y, z - chunkZ * Chunk.Depth);;
+            return new Vector3(x - chunkX*Chunk.Width, y, z - chunkZ*Chunk.Depth);
+            ;
         }
     }
 }
-

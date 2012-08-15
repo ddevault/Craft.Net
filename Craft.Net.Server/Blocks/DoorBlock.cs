@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-namespace Craft.Net.Server.Blocks
+﻿namespace Craft.Net.Server.Blocks
 {
     /// <summary>
     /// The base class for IronDoorBlock and WoodenDoorBlock
@@ -15,14 +11,8 @@ namespace Craft.Net.Server.Blocks
         /// </summary>
         public override byte Metadata
         {
-            get
-            {
-                return base.Metadata;
-            }
-            set
-            {
-                base.Metadata = value;
-            }
+            get { return base.Metadata; }
+            set { base.Metadata = value; }
         }
 
         /// <summary>
@@ -32,13 +22,6 @@ namespace Craft.Net.Server.Blocks
         public override BlockOpacity Transparent
         {
             get { return BlockOpacity.NonCubeSolid; }
-        }
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public DoorBlock()
-        {
         }
     }
 }

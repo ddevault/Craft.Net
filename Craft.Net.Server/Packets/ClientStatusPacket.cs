@@ -1,11 +1,9 @@
 using System;
-using System.Security.Cryptography;
-using System.Text;
+using System.IO;
 using System.Linq;
 using System.Net;
-using System.IO;
-using Craft.Net.Server.Worlds.Entities;
-using Craft.Net.Server.Worlds;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Craft.Net.Server.Packets
 {
@@ -17,20 +15,13 @@ namespace Craft.Net.Server.Packets
 
     public class ClientStatusPacket : Packet
     {
-        const string SessionCheckUri = "http://session.minecraft.net/game/checkserver.jsp?user={0}&serverId={1}";
+        private const string SessionCheckUri = "http://session.minecraft.net/game/checkserver.jsp?user={0}&serverId={1}";
 
         public ClientStatus ClientStatus;
 
-        public ClientStatusPacket()
-        {
-        }
-
         public override byte PacketID
         {
-            get
-            {
-                return 0xCD;
-            }
+            get { return 0xCD; }
         }
 
         public override int TryReadPacket(byte[] Buffer, int Length)
@@ -39,7 +30,7 @@ namespace Craft.Net.Server.Packets
             byte status = 0;
             if (!TryReadByte(Buffer, ref offset, out status))
                 return -1;
-            ClientStatus = (ClientStatus)status;
+            ClientStatus = (ClientStatus) status;
             return offset;
         }
 
@@ -59,10 +50,10 @@ namespace Craft.Net.Server.Packets
                     // Talk to session.minecraft.net
                     if (Server.OnlineMode)
                     {
-                        WebClient webClient = new WebClient();
-                        StreamReader webReader = new StreamReader(webClient.OpenRead(
-                                new Uri(string.Format(SessionCheckUri,
-                                Client.Username, hash))));
+                        var webClient = new WebClient();
+                        var webReader = new StreamReader(webClient.OpenRead(
+                            new Uri(string.Format(SessionCheckUri,
+                                                  Client.Username, hash))));
                         string response = webReader.ReadToEnd();
                         webReader.Close();
                         if (response != "YES")
@@ -88,4 +79,3 @@ namespace Craft.Net.Server.Packets
         }
     }
 }
-

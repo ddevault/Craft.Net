@@ -1,38 +1,30 @@
 using System;
-using System.Security.Cryptography;
 using System.Net;
-using System.Threading;
 
 namespace Craft.Net.Server.Packets
 {
     public class HandshakePacket : Packet
     {
-        public byte ProtocolVersion;
-        public string Username, Hostname;
+        public string Hostname;
         public int Port;
-
-        public HandshakePacket()
-        {
-        }
+        public byte ProtocolVersion;
+        public string Username;
 
         public override byte PacketID
         {
-            get
-            {
-                return 0x02;
-            }
+            get { return 0x02; }
         }
 
         public override int TryReadPacket(byte[] Buffer, int Length)
         {
             int offset = 1;
-            if (!TryReadByte(Buffer, ref offset, out this.ProtocolVersion))
+            if (!TryReadByte(Buffer, ref offset, out ProtocolVersion))
                 return -1;
-            if (!TryReadString(Buffer, ref offset, out this.Username))
+            if (!TryReadString(Buffer, ref offset, out Username))
                 return -1;
-            if (!TryReadString(Buffer, ref offset, out this.Hostname))
+            if (!TryReadString(Buffer, ref offset, out Hostname))
                 return -1;
-            if (!TryReadInt(Buffer, ref offset, out this.Port))
+            if (!TryReadInt(Buffer, ref offset, out Port))
                 return -1;
             return offset;
         }
@@ -60,7 +52,7 @@ namespace Craft.Net.Server.Packets
                 Client.AuthenticationHash = "-";
             if (Server.EncryptionEnabled)
             {
-                EncryptionKeyRequestPacket keyRequest =
+                var keyRequest =
                     new EncryptionKeyRequestPacket(Client.AuthenticationHash,
                                                    Server.ServerKey);
                 Client.SendPacket(keyRequest);
@@ -91,4 +83,3 @@ namespace Craft.Net.Server.Packets
         }
     }
 }
-

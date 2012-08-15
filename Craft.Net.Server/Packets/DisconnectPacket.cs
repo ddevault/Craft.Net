@@ -1,17 +1,15 @@
-using System;
-using System.Linq;
-using System.Net.Sockets;
+﻿using System.Linq;
 
 namespace Craft.Net.Server.Packets
 {
     public class DisconnectPacket : Packet
     {
         public string Reason;
-        
+
         public DisconnectPacket()
         {
         }
-        
+
         public DisconnectPacket(string Reason)
         {
             this.Reason = Reason;
@@ -19,10 +17,7 @@ namespace Craft.Net.Server.Packets
 
         public override byte PacketID
         {
-            get
-            {
-                return 0xFF;
-            }
+            get { return 0xFF; }
         }
 
         public override int TryReadPacket(byte[] Buffer, int Length)
@@ -43,10 +38,9 @@ namespace Craft.Net.Server.Packets
         {
             if (!Reason.Contains("§"))
                 Server.Log("Disconnected client: " + Reason);
-            byte[] buffer = new byte[] { PacketID }.Concat(CreateString(Reason)).ToArray();
+            byte[] buffer = new[] {PacketID}.Concat(CreateString(Reason)).ToArray();
             Client.SendData(buffer);
             Client.IsDisconnected = true;
         }
     }
 }
-

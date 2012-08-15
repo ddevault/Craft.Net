@@ -14,19 +14,12 @@ namespace Craft.Net.Server.Packets
 
     public class EntityActionPacket : Packet
     {
-        public int EntityId;
         public EntityAction Action;
-
-        public EntityActionPacket()
-        {
-        }
+        public int EntityId;
 
         public override byte PacketID
         {
-            get
-            {
-                return 0x13;
-            }
+            get { return 0x13; }
         }
 
         public override int TryReadPacket(byte[] Buffer, int Length)
@@ -37,7 +30,7 @@ namespace Craft.Net.Server.Packets
                 return -1;
             if (!TryReadByte(Buffer, ref offset, out action))
                 return -1;
-            this.Action = (EntityAction)action;
+            Action = (EntityAction) action;
             return offset;
         }
 
@@ -60,12 +53,14 @@ namespace Craft.Net.Server.Packets
             }
             if (Action != EntityAction.LeaveBed) // NOTE: Does this matter?
             {
-                this.EntityId = Client.Entity.Id;
-                for (int i = 0; i < 
-                     Server.GetClientsInWorld(Server.GetClientWorld(Client)).Count(); i++)
+                EntityId = Client.Entity.Id;
+                for (int i = 0;
+                     i <
+                     Server.GetClientsInWorld(Server.GetClientWorld(Client)).Count();
+                     i++)
                 {
-                    if (Server.Clients [i] != Client)
-                        Server.Clients [i].SendPacket(this);
+                    if (Server.Clients[i] != Client)
+                        Server.Clients[i].SendPacket(this);
                 }
                 Server.ProcessSendQueue();
             }
@@ -77,4 +72,3 @@ namespace Craft.Net.Server.Packets
         }
     }
 }
-

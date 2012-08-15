@@ -1,17 +1,15 @@
-using System;
 using System.Collections.Generic;
-using Craft.Net.Server.Worlds.Entities;
 using Craft.Net.Server.Packets;
+using Craft.Net.Server.Worlds.Entities;
 
 namespace Craft.Net.Server.Worlds
 {
     public class EntityManager
     {
-        public List<Entity> Entities;
-        public World World;
-        public MinecraftServer Server;
-
         private static int NextEntityId;
+        public List<Entity> Entities;
+        public MinecraftServer Server;
+        public World World;
 
         public EntityManager(World World)
         {
@@ -26,8 +24,8 @@ namespace Craft.Net.Server.Worlds
             Entities.Add(Entity);
             if (Entity is PlayerEntity)
             {
-                PlayerEntity player = (PlayerEntity)Entity;
-                foreach (var client in Server.GetClientsInWorld(World))
+                var player = (PlayerEntity) Entity;
+                foreach (MinecraftClient client in Server.GetClientsInWorld(World))
                 {
                     if (client != player.Client)
                         client.SendPacket(new SpawnNamedEntityPacket(player.Client));
@@ -38,8 +36,6 @@ namespace Craft.Net.Server.Worlds
 
         public void UpdateEntity(Entity entity)
         {
-
         }
     }
 }
-

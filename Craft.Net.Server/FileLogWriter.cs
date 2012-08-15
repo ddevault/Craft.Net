@@ -1,18 +1,19 @@
-using System;
 using System.IO;
 
 namespace Craft.Net.Server
 {
     public class FileLogWriter : ILogProvider
     {
+        private readonly StreamWriter LogWriter;
         public LogImportance MinimumImportance;
-        private StreamWriter LogWriter;
 
         public FileLogWriter(string File, LogImportance MinimumImportance)
         {
             this.MinimumImportance = MinimumImportance;
             LogWriter = new StreamWriter(File, true);
         }
+
+        #region ILogProvider Members
 
         public void Log(string text, LogImportance Level)
         {
@@ -23,6 +24,7 @@ namespace Craft.Net.Server
                 LogWriter.Flush();
             }
         }
+
+        #endregion
     }
 }
-

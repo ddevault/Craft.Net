@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Craft.Net.Server.Blocks
+﻿namespace Craft.Net.Server.Blocks
 {
     /// <summary>
     /// Leaf Block ID=18
     /// </summary>
-    public class LeafBlockBlock:Block
+    public class LeafBlockBlock : Block
     {
         /// <summary>
         /// The Block ID for this block (18)
@@ -25,10 +20,7 @@ namespace Craft.Net.Server.Blocks
         /// </summary>
         public override BlockOpacity Transparent
         {
-            get
-            {
-                return BlockOpacity.CubeSolid;
-            }
+            get { return BlockOpacity.CubeSolid; }
         }
     }
 }

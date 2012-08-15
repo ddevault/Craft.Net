@@ -1,21 +1,12 @@
-using System;
-
 namespace Craft.Net.Server.Packets
 {
     public class CloseWindowPacket : Packet
     {
         public byte WindowId;
 
-        public CloseWindowPacket()
-        {
-        }
-
         public override byte PacketID
         {
-            get
-            {
-                return 0x65;
-            }
+            get { return 0x65; }
         }
 
         public override int TryReadPacket(byte[] Buffer, int Length)
@@ -34,9 +25,8 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
         {
-            byte[] buffer = new byte[] { PacketID, WindowId };
+            var buffer = new[] {PacketID, WindowId};
             Client.SendData(buffer);
         }
     }
 }
-

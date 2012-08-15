@@ -1,14 +1,16 @@
-using System;
-using Craft.Net.Server.Worlds;
 using System.Linq;
+using Craft.Net.Server.Worlds;
 
 namespace Craft.Net.Server.Packets
 {
     public class PlayerPositionAndLookPacket : Packet
     {
-        public double X, Y, Z, Stance;
-        public float Yaw, Pitch;
         public bool OnGround;
+        public float Pitch;
+        public double Stance;
+        public double X, Y;
+        public float Yaw;
+        public double Z;
 
         public PlayerPositionAndLookPacket()
         {
@@ -16,10 +18,10 @@ namespace Craft.Net.Server.Packets
 
         public PlayerPositionAndLookPacket(Vector3 Position, float Yaw, float Pitch, bool OnGround)
         {
-            this.X = Position.X;
-            this.Y = Position.Y;
-            this.Z = Position.Z;
-            this.Stance = this.Y + 1.5;
+            X = Position.X;
+            Y = Position.Y;
+            Z = Position.Z;
+            Stance = Y + 1.5;
             this.Yaw = Yaw;
             this.Pitch = Pitch;
             this.OnGround = OnGround;
@@ -27,10 +29,7 @@ namespace Craft.Net.Server.Packets
 
         public override byte PacketID
         {
-            get
-            {
-                return 0xD;
-            }
+            get { return 0xD; }
         }
 
         public override int TryReadPacket(byte[] Buffer, int Length)
@@ -60,7 +59,7 @@ namespace Craft.Net.Server.Packets
             Client.Entity.Position = new Vector3(X, Y, Z);
             Client.Entity.Pitch = Pitch;
             Client.Entity.Yaw = Yaw;
-            if (Client.Entity.Position.DistanceTo(Client.Entity.OldPosition) > 
+            if (Client.Entity.Position.DistanceTo(Client.Entity.OldPosition) >
                 Client.MaxMoveDistance)
             {
                 Client.SendPacket(new DisconnectPacket("Hacking: You moved too fast!"));
@@ -74,7 +73,7 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
         {
-            byte[] buffer = new byte[] { PacketID }
+            byte[] buffer = new[] {PacketID}
                 .Concat(CreateDouble(X))
                 .Concat(CreateDouble(Stance))
                 .Concat(CreateDouble(Y))
@@ -86,4 +85,3 @@ namespace Craft.Net.Server.Packets
         }
     }
 }
-

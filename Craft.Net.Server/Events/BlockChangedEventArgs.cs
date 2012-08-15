@@ -1,14 +1,14 @@
 using System;
-using Craft.Net.Server.Worlds;
 using Craft.Net.Server.Blocks;
+using Craft.Net.Server.Worlds;
 
 namespace Craft.Net.Server.Events
 {
     public class BlockChangedEventArgs : EventArgs
     {
-        public World World;
         public Vector3 Position;
         public Block Value;
+        public World World;
 
         public BlockChangedEventArgs(World World, Vector3 Position, Block Value)
         {
@@ -18,4 +18,3 @@ namespace Craft.Net.Server.Events
         }
     }
 }
-

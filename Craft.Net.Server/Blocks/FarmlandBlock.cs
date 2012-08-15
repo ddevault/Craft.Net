@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Craft.Net.Server.Blocks
+﻿namespace Craft.Net.Server.Blocks
 {
     /// <summary>
     /// Farmland Block ID = 60
@@ -18,7 +13,9 @@ namespace Craft.Net.Server.Blocks
         public override byte BlockID
         {
             get { return 60; }
-        } // TODO: PlayerWalkedOn
+        }
+
+        // TODO: PlayerWalkedOn
 
         /// <summary>
         /// Returns the opacity of a block.
@@ -28,6 +25,5 @@ namespace Craft.Net.Server.Blocks
         {
             get { return BlockOpacity.NonCubeSolid; }
         }
-
     }
 }

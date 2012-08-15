@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using Craft.Net.Server.Events;
 
@@ -19,10 +18,7 @@ namespace Craft.Net.Server.Packets
 
         public override byte PacketID
         {
-            get
-            {
-                return 0x3;
-            }
+            get { return 0x3; }
         }
 
         public override int TryReadPacket(byte[] Buffer, int Length)
@@ -36,7 +32,7 @@ namespace Craft.Net.Server.Packets
         public override void HandlePacket(MinecraftServer Server, ref MinecraftClient Client)
         {
             Server.Log("<" + Client.Username + "> " + Message);
-            ChatMessageEventArgs args = new ChatMessageEventArgs(Client, Message);
+            var args = new ChatMessageEventArgs(Client, Message);
             Server.FireOnChatMessage(args);
             if (!args.Handled)
                 Server.SendChat("<" + Client.Username + "> " + Message);
@@ -44,10 +40,9 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
         {
-            byte[] buffer = new byte[] { PacketID }
+            byte[] buffer = new[] {PacketID}
                 .Concat(CreateString(Message)).ToArray();
             Client.SendData(buffer);
         }
     }
 }
-

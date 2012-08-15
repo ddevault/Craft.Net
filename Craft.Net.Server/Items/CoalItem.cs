@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Craft.Net.Server.Items
+﻿namespace Craft.Net.Server.Items
 {
     /// <summary>
     /// A peice of Coal item (ID = 263)

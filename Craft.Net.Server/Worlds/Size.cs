@@ -1,10 +1,10 @@
-using System;
-
 namespace Craft.Net.Server.Worlds
 {
     public struct Size
     {
-        public double Width, Height, Depth;
+        public double Depth;
+        public double Height;
+        public double Width;
 
         public Size(double Width, double Height, double Depth)
         {
@@ -14,4 +14,3 @@ namespace Craft.Net.Server.Worlds
         }
     }
 }
-

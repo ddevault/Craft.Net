@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Craft.Net.Server.Blocks;
+﻿using Craft.Net.Server.Blocks;
 
 namespace Craft.Net.Server.Worlds.Generation
 {
@@ -12,6 +8,8 @@ namespace Craft.Net.Server.Worlds.Generation
     /// </summary>
     public class DebugGenerator : IWorldGenerator
     {
+        #region IWorldGenerator Members
+
         public string LevelType
         {
             get { return "FLAT"; }
@@ -26,11 +24,11 @@ namespace Craft.Net.Server.Worlds.Generation
 
         public Chunk GenerateChunk(Vector3 Position, Region ParentRegion)
         {
-            Chunk chunk = new Chunk(Position, ParentRegion);
+            var chunk = new Chunk(Position, ParentRegion);
 
             for (int y = 0; y < Chunk.Height; y++)
             {
-                if (y % Section.Height == 0)
+                if (y%Section.Height == 0)
                 {
                     for (int x = 0; x < Chunk.Width; x++)
                     {
@@ -48,7 +46,7 @@ namespace Craft.Net.Server.Worlds.Generation
 
         public Chunk GenerateChunk(Vector3 Position)
         {
-            Chunk chunk = new Chunk(Position);
+            var chunk = new Chunk(Position);
             for (int x = 0; x < Chunk.Width; x++)
                 for (int z = 0; z < Chunk.Width; z++)
                 {
@@ -56,5 +54,7 @@ namespace Craft.Net.Server.Worlds.Generation
                 }
             return chunk;
         }
+
+        #endregion
     }
 }

@@ -1,6 +1,3 @@
-using System;
-using Craft.Net.Server.Worlds;
-
 namespace Craft.Net.Server.Worlds.Entities
 {
     public class PlayerEntity : Entity
@@ -20,37 +17,24 @@ namespace Craft.Net.Server.Worlds.Entities
 
         public override Size Size
         {
-            get
-            {
-                return new Size(0.6, 1.8, 0.6);
-            }
+            get { return new Size(0.6, 1.8, 0.6); }
         }
 
         public static double Width
         {
-            get
-            {
-                return 0.6;
-            }
+            get { return 0.6; }
         }
 
         public static double Height
         {
-            get
-            {
-                return 1.8;
-            }
+            get { return 1.8; }
         }
 
         public static double Depth
         {
-            get
-            {
-                return 0.6;
-            }
+            get { return 0.6; }
         }
 
         #endregion
     }
 }
-

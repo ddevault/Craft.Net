@@ -7,8 +7,8 @@ namespace Craft.Net.Server.Packets
 {
     public class EncryptionKeyRequestPacket : Packet
     {
-        private string AuthenticationHash;
-        private RSAParameters ServerKey;
+        private readonly string AuthenticationHash;
+        private readonly RSAParameters ServerKey;
 
         public EncryptionKeyRequestPacket()
         {
@@ -22,10 +22,7 @@ namespace Craft.Net.Server.Packets
 
         public override byte PacketID
         {
-            get
-            {
-                return 0xFD;
-            }
+            get { return 0xFD; }
         }
 
         public override int TryReadPacket(byte[] Buffer, int Length)
@@ -40,20 +37,19 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer Server, MinecraftClient Client)
         {
-            byte[] verifyToken = new byte[4];
-            RNGCryptoServiceProvider csp = new RNGCryptoServiceProvider();
+            var verifyToken = new byte[4];
+            var csp = new RNGCryptoServiceProvider();
             csp.GetBytes(verifyToken); // TODO: Encrypt this
 
             AsnKeyBuilder.AsnMessage encodedKey = AsnKeyBuilder.PublicKeyToX509(ServerKey);
 
-            byte[] buffer = new byte[] { PacketID }
+            byte[] buffer = new[] {PacketID}
                 .Concat(CreateString(AuthenticationHash))
-                .Concat(CreateShort((short)encodedKey.GetBytes().Length))
+                .Concat(CreateShort((short) encodedKey.GetBytes().Length))
                 .Concat(encodedKey.GetBytes())
-                .Concat(CreateShort((short)verifyToken.Length))
+                .Concat(CreateShort((short) verifyToken.Length))
                 .Concat(verifyToken).ToArray();
             Client.Socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, null, null);
         }
     }
 }
-

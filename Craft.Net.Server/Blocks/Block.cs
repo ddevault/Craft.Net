@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
 using Craft.Net.Server.Worlds;
 using Craft.Net.Server.Worlds.Entities;
 
@@ -16,135 +12,135 @@ namespace Craft.Net.Server.Blocks
     {
         #region Block list
 
-        private static Block[] Blocks = new Block[]
-        {
-            new AirBlock(),
-            new StoneBlock(),
-            new GrassBlock(),
-            new DirtBlock(),
-            new CobblestoneBlock(),
-            new WoodPlankBlock(),
-            new SaplingBlock(), //saplings (4 types)
-            new BedrockBlock(),
-            new WaterFlowingBlock(),
-            new WaterStillBlock(),
-            new LavaFlowingBlock(),
-            new LavaStillBlock(),
-            new SandBlock(),
-            new GravelBlock(),
-            new GoldOreBlock(),
-            new IronOreBlock(),
-            new CoalOreBlock(),
-            new LogBlock(), //logs (4 types)
-            new LeafBlockBlock(), //leaves (4 or 5 types)
-            new SpongeBlock(),
-            new GlassBlock(),
-            new LapisLazuliOreBlock(),
-            new LapisLazuliBlock(),
-            new DispenserBlock(),
-            new SandstoneBlock(),
-            new NoteBlock(),
-            new BedBlock(),
-            new PoweredRailBlock(),
-            new DetectorRailBlock(),
-            new StickyPistonBlock(),
-            new CobwebBlock(),
-            new TallGrassBlock(),
-            new DeadBushBlock(),
-            new PistonBlock(),
-            new PistonPlungerBlock(),
-            new WoolBlock(), //wools
-            new MovedByPistonBlock(), //moved by piston
-            new DandelionBlock(),
-            new RoseBlock(),
-            new BrownMushroomBlock(),
-            new RedMushroomBlock(),
-            new GoldBlock(),
-            new IronBlock(),
-            new SlabBlock(),
-            new HalfSlabBlock(), // 4 different textures
-            new BricksBlock(), // 4 different textures
-            new TNTBlock(),
-            new BookshelfBlock(),
-            new MossStoneBlock(),
-            new ObsidianBlock(),
-            new TorchBlock(),
-            new FireBlock(), //fire
-            new MonsterSpawnerBlock(),
-            new WoodenStairsBlock(),
-            new ChestBlock(),
-            new RedstoneWireBlock(),
-            new DiamondOreBlock(),
-            new DiamondBlock(),
-            new CraftingTableBlock(),
-            new SeedBlock(),
-            new FarmlandBlock(), //farmland
-            new FurnaceBlock(),
-            new ActiveFurnaceBlock(),
-            new SignPostBlock(),
-            new WoodenDoorBlock(),
-            new LadderBlock(),
-            new RailBlock(),
-            new StoneStairsBlock(),
-            new WallSignBlock(),
-            new LeverBlock(),
-            new StonePressurePlateBlock(),
-            new IronDoorBlock(),
-            new WoodPressurePlateBlock(),
-            new RedstoneOreBlock(),
-            new RedstoneOreActiveBlock(),
-            new RedstoneTorchBlock(),
-            new RedstoneTorchActiveBlock(),
-            new ButtonBlock(),
-            new SnowCapBlock(),
-            new IceBlock(),
-            new SnowBlock(),
-            new CactusBlock(),
-            new ClayBlock(),
-            new SugarcaneBlock(),
-            new JukeboxBlock(),
-            new FenceBlock(),
-            new PumpkinBlock(),
-            new NetherrackBlock(),
-            new SoulSandBlock(),
-            new GlowstoneBlock(),
-            new NetherPortalBlock(),
-            new JackOLanternBlock(), //jack o lantern
-            new CakeBlock(),
-            new RepeaterBlock(),
-            new RepeaterActiveBlock(),
-            new LockedChestBlock(),
-            new TrapdoorBlock(),
-            new SilverfishBlock(),
-            new StoneBrickBlock(),
-            new HugeMushroomBlock(),
-            new HugeMushroomRedBlock(),
-            new IronBarsBlock(),
-            new GlassPaneBlock(),
-            new MelonBlock(),
-            new PumpkinStemBlock(),
-            new MelonStemBlock(),
-            new VinesBlock(),
-            new FenceGateBlock(),
-            new BrickStairsBlock(),
-            new StoneBrickStairsBlock(),
-            new MyceliumBlock(),
-            new LilyPadBlock(),
-            new NetherBrickBlock(),
-            new NetherBrickFenceBlock(),
-            new NetherBrickStairsBlock(),
-            new NetherWartBlock(),
-            new EnchantmentTableBlock(),
-            new BrewingStandBlock(),
-            new CauldronBlock(),
-            new EndPortalBlock(),
-            new EndPortalFrameBlock(),
-            new EndStoneBlock(),
-            new EnderDragonEggBlock(),
-            new InactiveRedstonelampBlock(),
-            new ActiveRedstonelampBlock(),
-        };
-        
+        private static readonly Block[] Blocks = new Block[]
+                                                     {
+                                                         new AirBlock(),
+                                                         new StoneBlock(),
+                                                         new GrassBlock(),
+                                                         new DirtBlock(),
+                                                         new CobblestoneBlock(),
+                                                         new WoodPlankBlock(),
+                                                         new SaplingBlock(), //saplings (4 types)
+                                                         new BedrockBlock(),
+                                                         new WaterFlowingBlock(),
+                                                         new WaterStillBlock(),
+                                                         new LavaFlowingBlock(),
+                                                         new LavaStillBlock(),
+                                                         new SandBlock(),
+                                                         new GravelBlock(),
+                                                         new GoldOreBlock(),
+                                                         new IronOreBlock(),
+                                                         new CoalOreBlock(),
+                                                         new LogBlock(), //logs (4 types)
+                                                         new LeafBlockBlock(), //leaves (4 or 5 types)
+                                                         new SpongeBlock(),
+                                                         new GlassBlock(),
+                                                         new LapisLazuliOreBlock(),
+                                                         new LapisLazuliBlock(),
+                                                         new DispenserBlock(),
+                                                         new SandstoneBlock(),
+                                                         new NoteBlock(),
+                                                         new BedBlock(),
+                                                         new PoweredRailBlock(),
+                                                         new DetectorRailBlock(),
+                                                         new StickyPistonBlock(),
+                                                         new CobwebBlock(),
+                                                         new TallGrassBlock(),
+                                                         new DeadBushBlock(),
+                                                         new PistonBlock(),
+                                                         new PistonPlungerBlock(),
+                                                         new WoolBlock(), //wools
+                                                         new MovedByPistonBlock(), //moved by piston
+                                                         new DandelionBlock(),
+                                                         new RoseBlock(),
+                                                         new BrownMushroomBlock(),
+                                                         new RedMushroomBlock(),
+                                                         new GoldBlock(),
+                                                         new IronBlock(),
+                                                         new SlabBlock(),
+                                                         new HalfSlabBlock(), // 4 different textures
+                                                         new BricksBlock(), // 4 different textures
+                                                         new TNTBlock(),
+                                                         new BookshelfBlock(),
+                                                         new MossStoneBlock(),
+                                                         new ObsidianBlock(),
+                                                         new TorchBlock(),
+                                                         new FireBlock(), //fire
+                                                         new MonsterSpawnerBlock(),
+                                                         new WoodenStairsBlock(),
+                                                         new ChestBlock(),
+                                                         new RedstoneWireBlock(),
+                                                         new DiamondOreBlock(),
+                                                         new DiamondBlock(),
+                                                         new CraftingTableBlock(),
+                                                         new SeedBlock(),
+                                                         new FarmlandBlock(), //farmland
+                                                         new FurnaceBlock(),
+                                                         new ActiveFurnaceBlock(),
+                                                         new SignPostBlock(),
+                                                         new WoodenDoorBlock(),
+                                                         new LadderBlock(),
+                                                         new RailBlock(),
+                                                         new StoneStairsBlock(),
+                                                         new WallSignBlock(),
+                                                         new LeverBlock(),
+                                                         new StonePressurePlateBlock(),
+                                                         new IronDoorBlock(),
+                                                         new WoodPressurePlateBlock(),
+                                                         new RedstoneOreBlock(),
+                                                         new RedstoneOreActiveBlock(),
+                                                         new RedstoneTorchBlock(),
+                                                         new RedstoneTorchActiveBlock(),
+                                                         new ButtonBlock(),
+                                                         new SnowCapBlock(),
+                                                         new IceBlock(),
+                                                         new SnowBlock(),
+                                                         new CactusBlock(),
+                                                         new ClayBlock(),
+                                                         new SugarcaneBlock(),
+                                                         new JukeboxBlock(),
+                                                         new FenceBlock(),
+                                                         new PumpkinBlock(),
+                                                         new NetherrackBlock(),
+                                                         new SoulSandBlock(),
+                                                         new GlowstoneBlock(),
+                                                         new NetherPortalBlock(),
+                                                         new JackOLanternBlock(), //jack o lantern
+                                                         new CakeBlock(),
+                                                         new RepeaterBlock(),
+                                                         new RepeaterActiveBlock(),
+                                                         new LockedChestBlock(),
+                                                         new TrapdoorBlock(),
+                                                         new SilverfishBlock(),
+                                                         new StoneBrickBlock(),
+                                                         new HugeMushroomBlock(),
+                                                         new HugeMushroomRedBlock(),
+                                                         new IronBarsBlock(),
+                                                         new GlassPaneBlock(),
+                                                         new MelonBlock(),
+                                                         new PumpkinStemBlock(),
+                                                         new MelonStemBlock(),
+                                                         new VinesBlock(),
+                                                         new FenceGateBlock(),
+                                                         new BrickStairsBlock(),
+                                                         new StoneBrickStairsBlock(),
+                                                         new MyceliumBlock(),
+                                                         new LilyPadBlock(),
+                                                         new NetherBrickBlock(),
+                                                         new NetherBrickFenceBlock(),
+                                                         new NetherBrickStairsBlock(),
+                                                         new NetherWartBlock(),
+                                                         new EnchantmentTableBlock(),
+                                                         new BrewingStandBlock(),
+                                                         new CauldronBlock(),
+                                                         new EndPortalBlock(),
+                                                         new EndPortalFrameBlock(),
+                                                         new EndStoneBlock(),
+                                                         new EnderDragonEggBlock(),
+                                                         new InactiveRedstonelampBlock(),
+                                                         new ActiveRedstonelampBlock(),
+                                                     };
+
         #endregion
 
         /// <summary>
@@ -158,10 +154,7 @@ namespace Craft.Net.Server.Blocks
         /// </summary>
         public virtual string BlockName
         {
-            get
-            {
-                return this.GetType().Name;
-            }
+            get { return GetType().Name; }
         }
 
         /// <summary>
@@ -185,10 +178,7 @@ namespace Craft.Net.Server.Blocks
         /// </summary>
         public virtual BlockOpacity Transparent
         {
-            get
-            {
-                return BlockOpacity.Opaque;
-            }
+            get { return BlockOpacity.Opaque; }
         }
 
         /// <summary>
@@ -205,7 +195,7 @@ namespace Craft.Net.Server.Blocks
         public static implicit operator Block(byte b)
         {
             Block bl = Blocks[b];
-            return (Block)Activator.CreateInstance(bl.GetType());
+            return (Block) Activator.CreateInstance(bl.GetType());
         }
 
         /// <summary>
@@ -228,7 +218,8 @@ namespace Craft.Net.Server.Blocks
         /// <param name="facing">The facing of the placement</param>
         /// <param name="placedBy">The entity who placed the block</param>
         /// <returns>False to override placement</returns>
-        public virtual bool BlockPlaced(World world, Vector3 position, Vector3 blockClicked, byte facing, Entity placedBy)
+        public virtual bool BlockPlaced(World world, Vector3 position, Vector3 blockClicked, byte facing,
+                                        Entity placedBy)
         {
             return true;
         }
