@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
@@ -17,7 +18,7 @@ namespace Craft.Net.Server.Packets
         public EntityAction Action;
         public int EntityId;
 
-        public override byte PacketID
+        public override byte PacketId
         {
             get { return 0x13; }
         }
@@ -26,9 +27,9 @@ namespace Craft.Net.Server.Packets
         {
             int offset = 1;
             byte action = 0;
-            if (!TryReadInt(buffer, ref offset, out EntityId))
+            if (!DataUtility.TryReadInt(buffer, ref offset, out EntityId))
                 return -1;
-            if (!TryReadByte(buffer, ref offset, out action))
+            if (!DataUtility.TryReadByte(buffer, ref offset, out action))
                 return -1;
             Action = (EntityAction)action;
             return offset;

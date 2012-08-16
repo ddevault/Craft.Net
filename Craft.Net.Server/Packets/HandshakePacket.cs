@@ -1,5 +1,6 @@
 using System;
 using System.Net;
+using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
@@ -10,7 +11,7 @@ namespace Craft.Net.Server.Packets
         public byte ProtocolVersion;
         public string Username;
 
-        public override byte PacketID
+        public override byte PacketId
         {
             get { return 0x02; }
         }
@@ -18,13 +19,13 @@ namespace Craft.Net.Server.Packets
         public override int TryReadPacket(byte[] buffer, int length)
         {
             int offset = 1;
-            if (!TryReadByte(buffer, ref offset, out ProtocolVersion))
+            if (!DataUtility.TryReadByte(buffer, ref offset, out ProtocolVersion))
                 return -1;
-            if (!TryReadString(buffer, ref offset, out Username))
+            if (!DataUtility.TryReadString(buffer, ref offset, out Username))
                 return -1;
-            if (!TryReadString(buffer, ref offset, out Hostname))
+            if (!DataUtility.TryReadString(buffer, ref offset, out Hostname))
                 return -1;
-            if (!TryReadInt(buffer, ref offset, out Port))
+            if (!DataUtility.TryReadInt(buffer, ref offset, out Port))
                 return -1;
             return offset;
         }

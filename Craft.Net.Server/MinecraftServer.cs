@@ -7,8 +7,8 @@ using System.Security.Cryptography;
 using System.Threading;
 using Craft.Net.Server.Events;
 using Craft.Net.Server.Packets;
-using Craft.Net.Server.Worlds;
-using Craft.Net.Server.Worlds.Entities;
+using Craft.Net.Data;
+using Craft.Net.Data.Entities;
 
 namespace Craft.Net.Server
 {
@@ -145,7 +145,6 @@ namespace Craft.Net.Server
 
         public void AddWorld(World world)
         {
-            world.EntityManager.Server = this;
             world.OnBlockChanged += HandleOnBlockChanged;
             Worlds.Add(world);
         }
@@ -159,22 +158,13 @@ namespace Craft.Net.Server
 
         public World GetClientWorld(MinecraftClient client)
         {
-            foreach (World world in Worlds)
-            {
-                if (world.EntityManager.Entities.Contains(client.Entity))
-                    return world;
-            }
-            return null;
+            return Worlds.First();
         }
 
         public MinecraftClient[] GetClientsInWorld(World world)
         {
             var clients = new List<MinecraftClient>();
-            foreach (MinecraftClient client in Clients)
-            {
-                if (world.EntityManager.Entities.Contains(client.Entity))
-                    clients.Add(client);
-            }
+            // TODO
             return clients.ToArray();
         }
 
@@ -340,10 +330,9 @@ namespace Craft.Net.Server
             Log(client.Username + " logged in.");
             client.IsLoggedIn = true;
             // Spawn player
-            client.Entity = new PlayerEntity(client);
+            client.Entity = new PlayerEntity();
             client.Entity.Position = DefaultWorld.SpawnPoint;
             client.Entity.Position += new Vector3(0, PlayerEntity.Height, 0);
-            DefaultWorld.EntityManager.SpawnEntity(client.Entity);
             client.SendPacket(new LoginPacket(client.Entity.Id,
                                               DefaultWorld.LevelType, DefaultWorld.GameMode,
                                               client.Entity.Dimension, DefaultWorld.Difficulty,

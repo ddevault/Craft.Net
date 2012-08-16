@@ -5,7 +5,7 @@ namespace Craft.Net.Server.Packets
 {
     public class ServerListPingPacket : Packet
     {
-        public override byte PacketID
+        public override byte PacketId
         {
             get { return 0xFE; }
         }

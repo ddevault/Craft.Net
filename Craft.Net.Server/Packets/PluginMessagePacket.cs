@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
@@ -17,7 +18,7 @@ namespace Craft.Net.Server.Packets
             this.Message = message;
         }
 
-        public override byte PacketID
+        public override byte PacketId
         {
             get { return 0xFA; }
         }
@@ -26,11 +27,11 @@ namespace Craft.Net.Server.Packets
         {
             int offset = 0;
             short messageLength = 0;
-            if (!TryReadString(buffer, ref offset, out Channel))
+            if (!DataUtility.TryReadString(buffer, ref offset, out Channel))
                 return -1;
-            if (!TryReadShort(buffer, ref offset, out messageLength))
+            if (!DataUtility.TryReadShort(buffer, ref offset, out messageLength))
                 return -1;
-            if (!TryReadArray(buffer, messageLength, ref offset, out Message))
+            if (!DataUtility.TryReadArray(buffer, messageLength, ref offset, out Message))
                 return -1;
             return offset;
         }
@@ -43,9 +44,9 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
-            byte[] data = new[] {PacketID}
-                .Concat(CreateString(Channel))
-                .Concat(CreateShort((short)Message.Length))
+            byte[] data = new[] {PacketId}
+                .Concat(DataUtility.CreateString(Channel))
+                .Concat(DataUtility.CreateShort((short)Message.Length))
                 .Concat(Message).ToArray();
             client.SendData(data);
         }

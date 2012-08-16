@@ -1,4 +1,5 @@
 using System;
+using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
@@ -17,7 +18,7 @@ namespace Craft.Net.Server.Packets
         public string Locale;
         public int ViewDistance;
 
-        public override byte PacketID
+        public override byte PacketId
         {
             get { return 0xCC; }
         }
@@ -27,13 +28,13 @@ namespace Craft.Net.Server.Packets
             int offset = 1;
             byte viewDistance = 0, chatFlags = 0, difficulty = 0;
 
-            if (!TryReadString(buffer, ref offset, out Locale))
+            if (!DataUtility.TryReadString(buffer, ref offset, out Locale))
                 return -1;
-            if (!TryReadByte(buffer, ref offset, out viewDistance))
+            if (!DataUtility.TryReadByte(buffer, ref offset, out viewDistance))
                 return -1;
-            if (!TryReadByte(buffer, ref offset, out chatFlags))
+            if (!DataUtility.TryReadByte(buffer, ref offset, out chatFlags))
                 return -1;
-            if (!TryReadByte(buffer, ref offset, out difficulty))
+            if (!DataUtility.TryReadByte(buffer, ref offset, out difficulty))
                 return -1;
 
             // Adds an extra 2 chunk buffer to make loading look nice

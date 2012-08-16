@@ -1,6 +1,6 @@
 using System;
-using Craft.Net.Server.Blocks;
-using Craft.Net.Server.Worlds;
+using Craft.Net.Data;
+using Craft.Net.Data.Blocks;
 
 namespace Craft.Net.Server.Packets
 {
@@ -11,7 +11,7 @@ namespace Craft.Net.Server.Packets
         public Slot HeldItem;
         public Vector3 Position;
 
-        public override byte PacketID
+        public override byte PacketId
         {
             get { return 0xF; }
         }
@@ -22,21 +22,21 @@ namespace Craft.Net.Server.Packets
             int x = 0, z = 0;
             byte y = 0;
             byte curX, curY, curZ;
-            if (!TryReadInt(buffer, ref offset, out x))
+            if (!DataUtility.TryReadInt(buffer, ref offset, out x))
                 return -1;
-            if (!TryReadByte(buffer, ref offset, out y))
+            if (!DataUtility.TryReadByte(buffer, ref offset, out y))
                 return -1;
-            if (!TryReadInt(buffer, ref offset, out z))
+            if (!DataUtility.TryReadInt(buffer, ref offset, out z))
                 return -1;
-            if (!TryReadByte(buffer, ref offset, out Direction))
+            if (!DataUtility.TryReadByte(buffer, ref offset, out Direction))
                 return -1;
             if (!Slot.TryReadSlot(buffer, ref offset, out HeldItem))
                 return -1;
-            if (!TryReadByte(buffer, ref offset, out curX))
+            if (!DataUtility.TryReadByte(buffer, ref offset, out curX))
                 return -1;
-            if (!TryReadByte(buffer, ref offset, out curY))
+            if (!DataUtility.TryReadByte(buffer, ref offset, out curY))
                 return -1;
-            if (!TryReadByte(buffer, ref offset, out curZ))
+            if (!DataUtility.TryReadByte(buffer, ref offset, out curZ))
                 return -1;
             Position = new Vector3(x, y, z);
             CursorPosition = new Vector3(curX, curY, curZ);

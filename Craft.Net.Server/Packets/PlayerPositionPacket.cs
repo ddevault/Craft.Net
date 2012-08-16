@@ -1,4 +1,4 @@
-using Craft.Net.Server.Worlds;
+using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
@@ -8,7 +8,7 @@ namespace Craft.Net.Server.Packets
         public double Stance;
         public double X, Y, Z;
 
-        public override byte PacketID
+        public override byte PacketId
         {
             get { return 0xB; }
         }
@@ -16,15 +16,15 @@ namespace Craft.Net.Server.Packets
         public override int TryReadPacket(byte[] buffer, int length)
         {
             int offset = 1;
-            if (!TryReadDouble(buffer, ref offset, out X))
+            if (!DataUtility.TryReadDouble(buffer, ref offset, out X))
                 return -1;
-            if (!TryReadDouble(buffer, ref offset, out Y))
+            if (!DataUtility.TryReadDouble(buffer, ref offset, out Y))
                 return -1;
-            if (!TryReadDouble(buffer, ref offset, out Stance))
+            if (!DataUtility.TryReadDouble(buffer, ref offset, out Stance))
                 return -1;
-            if (!TryReadDouble(buffer, ref offset, out Z))
+            if (!DataUtility.TryReadDouble(buffer, ref offset, out Z))
                 return -1;
-            if (!TryReadBoolean(buffer, ref offset, out OnGround))
+            if (!DataUtility.TryReadBoolean(buffer, ref offset, out OnGround))
                 return -1;
             return offset;
         }
@@ -42,7 +42,6 @@ namespace Craft.Net.Server.Packets
                 return;
             }
             client.UpdateChunksAsync();
-            server.GetClientWorld(client).EntityManager.UpdateEntity(client.Entity);
             server.ProcessSendQueue();
         }
 

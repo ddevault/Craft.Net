@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
@@ -15,7 +16,7 @@ namespace Craft.Net.Server.Packets
             this.Reason = reason;
         }
 
-        public override byte PacketID
+        public override byte PacketId
         {
             get { return 0xFF; }
         }
@@ -23,7 +24,7 @@ namespace Craft.Net.Server.Packets
         public override int TryReadPacket(byte[] buffer, int length)
         {
             int offset = 1;
-            if (!TryReadString(buffer, ref offset, out Reason))
+            if (!DataUtility.TryReadString(buffer, ref offset, out Reason))
                 return -1;
             return offset;
         }
@@ -38,7 +39,7 @@ namespace Craft.Net.Server.Packets
         {
             if (!Reason.Contains("§"))
                 server.Log("Disconnected client: " + Reason);
-            byte[] buffer = new[] {PacketID}.Concat(CreateString(Reason)).ToArray();
+            byte[] buffer = new[] { PacketId }.Concat(DataUtility.CreateString(Reason)).ToArray();
             client.SendData(buffer);
             client.IsDisconnected = true;
         }

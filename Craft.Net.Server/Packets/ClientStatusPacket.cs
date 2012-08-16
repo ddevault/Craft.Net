@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
@@ -19,7 +20,7 @@ namespace Craft.Net.Server.Packets
 
         public ClientStatus ClientStatus;
 
-        public override byte PacketID
+        public override byte PacketId
         {
             get { return 0xCD; }
         }
@@ -28,7 +29,7 @@ namespace Craft.Net.Server.Packets
         {
             int offset = 1;
             byte status = 0;
-            if (!TryReadByte(buffer, ref offset, out status))
+            if (!DataUtility.TryReadByte(buffer, ref offset, out status))
                 return -1;
             ClientStatus = (ClientStatus)status;
             return offset;

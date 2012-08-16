@@ -1,3 +1,4 @@
+using Craft.Net.Data;
 namespace Craft.Net.Server.Packets
 {
     public class PlayerAbilitiesPacket : Packet
@@ -15,7 +16,7 @@ namespace Craft.Net.Server.Packets
             this.FlyingSpeed = flyingSpeed;
         }
 
-        public override byte PacketID
+        public override byte PacketId
         {
             get { return 0xCA; }
         }
@@ -24,11 +25,11 @@ namespace Craft.Net.Server.Packets
         {
             byte flags = 0;
             int offset = 1;
-            if (!TryReadByte(buffer, ref offset, out flags))
+            if (!DataUtility.TryReadByte(buffer, ref offset, out flags))
                 return -1;
-            if (!TryReadByte(buffer, ref offset, out WalkingSpeed))
+            if (!DataUtility.TryReadByte(buffer, ref offset, out WalkingSpeed))
                 return -1;
-            if (!TryReadByte(buffer, ref offset, out FlyingSpeed))
+            if (!DataUtility.TryReadByte(buffer, ref offset, out FlyingSpeed))
                 return -1;
             return offset;
         }

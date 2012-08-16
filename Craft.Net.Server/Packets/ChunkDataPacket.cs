@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Craft.Net.Server.Worlds;
+using Craft.Net.Data;
 using ICSharpCode.SharpZipLib.Zip.Compression;
 
 namespace Craft.Net.Server.Packets
@@ -77,7 +77,7 @@ namespace Craft.Net.Server.Packets
             CompressedData = result.Take(length).ToArray();
         }
 
-        public override byte PacketID
+        public override byte PacketId
         {
             get { return 0x33; }
         }
@@ -94,13 +94,13 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
-            byte[] buffer = new[] {PacketID}
-                .Concat(CreateInt(X))
-                .Concat(CreateInt(Z))
-                .Concat(CreateBoolean(GroundUpContiguous))
-                .Concat(CreateUShort(PrimaryBitMap))
-                .Concat(CreateUShort(AddBitMap))
-                .Concat(CreateInt(CompressedData.Length))
+            byte[] buffer = new[] {PacketId}
+                .Concat(DataUtility.CreateInt(X))
+                .Concat(DataUtility.CreateInt(Z))
+                .Concat(DataUtility.CreateBoolean(GroundUpContiguous))
+                .Concat(DataUtility.CreateUShort(PrimaryBitMap))
+                .Concat(DataUtility.CreateUShort(AddBitMap))
+                .Concat(DataUtility.CreateInt(CompressedData.Length))
                 .Concat(CompressedData).ToArray();
             client.SendData(buffer);
         }

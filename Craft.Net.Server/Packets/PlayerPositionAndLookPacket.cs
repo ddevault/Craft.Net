@@ -1,5 +1,5 @@
 using System.Linq;
-using Craft.Net.Server.Worlds;
+using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
@@ -27,7 +27,7 @@ namespace Craft.Net.Server.Packets
             this.OnGround = onGround;
         }
 
-        public override byte PacketID
+        public override byte PacketId
         {
             get { return 0xD; }
         }
@@ -35,19 +35,19 @@ namespace Craft.Net.Server.Packets
         public override int TryReadPacket(byte[] buffer, int length)
         {
             int offset = 1;
-            if (!TryReadDouble(buffer, ref offset, out X))
+            if (!DataUtility.TryReadDouble(buffer, ref offset, out X))
                 return -1;
-            if (!TryReadDouble(buffer, ref offset, out Y))
+            if (!DataUtility.TryReadDouble(buffer, ref offset, out Y))
                 return -1;
-            if (!TryReadDouble(buffer, ref offset, out Stance))
+            if (!DataUtility.TryReadDouble(buffer, ref offset, out Stance))
                 return -1;
-            if (!TryReadDouble(buffer, ref offset, out Z))
+            if (!DataUtility.TryReadDouble(buffer, ref offset, out Z))
                 return -1;
-            if (!TryReadFloat(buffer, ref offset, out Yaw))
+            if (!DataUtility.TryReadFloat(buffer, ref offset, out Yaw))
                 return -1;
-            if (!TryReadFloat(buffer, ref offset, out Pitch))
+            if (!DataUtility.TryReadFloat(buffer, ref offset, out Pitch))
                 return -1;
-            if (!TryReadBoolean(buffer, ref offset, out OnGround))
+            if (!DataUtility.TryReadBoolean(buffer, ref offset, out OnGround))
                 return -1;
             return offset;
         }
@@ -67,20 +67,19 @@ namespace Craft.Net.Server.Packets
                 return;
             }
             client.UpdateChunksAsync();
-            server.GetClientWorld(client).EntityManager.UpdateEntity(client.Entity);
             server.ProcessSendQueue();
         }
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
-            byte[] buffer = new[] {PacketID}
-                .Concat(CreateDouble(X))
-                .Concat(CreateDouble(Stance))
-                .Concat(CreateDouble(Y))
-                .Concat(CreateDouble(Z))
-                .Concat(CreateFloat(Yaw))
-                .Concat(CreateFloat(Pitch))
-                .Concat(CreateBoolean(OnGround)).ToArray();
+            byte[] buffer = new[] {PacketId}
+                .Concat(DataUtility.CreateDouble(X))
+                .Concat(DataUtility.CreateDouble(Stance))
+                .Concat(DataUtility.CreateDouble(Y))
+                .Concat(DataUtility.CreateDouble(Z))
+                .Concat(DataUtility.CreateFloat(Yaw))
+                .Concat(DataUtility.CreateFloat(Pitch))
+                .Concat(DataUtility.CreateBoolean(OnGround)).ToArray();
             client.SendData(buffer);
         }
     }

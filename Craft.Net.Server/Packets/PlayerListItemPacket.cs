@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
@@ -20,7 +21,7 @@ namespace Craft.Net.Server.Packets
             this.Ping = ping;
         }
 
-        public override byte PacketID
+        public override byte PacketId
         {
             get { return 0xC9; }
         }
@@ -37,10 +38,10 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
-            byte[] buffer = new[] {PacketID}
-                .Concat(CreateString(PlayerName))
-                .Concat(CreateBoolean(Online))
-                .Concat(CreateShort(Ping)).ToArray();
+            byte[] buffer = new[] {PacketId}
+                .Concat(DataUtility.CreateString(PlayerName))
+                .Concat(DataUtility.CreateBoolean(Online))
+                .Concat(DataUtility.CreateShort(Ping)).ToArray();
             client.SendData(buffer);
         }
     }

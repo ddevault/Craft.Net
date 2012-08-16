@@ -3,6 +3,7 @@ using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Modes;
 using Org.BouncyCastle.Crypto.Parameters;
+using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
@@ -16,7 +17,7 @@ namespace Craft.Net.Server.Packets
             VerifyToken = new byte[0];
         }
 
-        public override byte PacketID
+        public override byte PacketId
         {
             get { return 0xFC; }
         }
@@ -25,13 +26,13 @@ namespace Craft.Net.Server.Packets
         {
             short secretLength = 0, verifyLength = 0;
             int offset = 1;
-            if (!TryReadShort(buffer, ref offset, out secretLength))
+            if (!DataUtility.TryReadShort(buffer, ref offset, out secretLength))
                 return -1;
-            if (!TryReadArray(buffer, secretLength, ref offset, out SharedSecret))
+            if (!DataUtility.TryReadArray(buffer, secretLength, ref offset, out SharedSecret))
                 return -1;
-            if (!TryReadShort(buffer, ref offset, out verifyLength))
+            if (!DataUtility.TryReadShort(buffer, ref offset, out verifyLength))
                 return -1;
-            if (!TryReadArray(buffer, verifyLength, ref offset, out VerifyToken))
+            if (!DataUtility.TryReadArray(buffer, verifyLength, ref offset, out VerifyToken))
                 return -1;
             return offset;
         }
@@ -55,11 +56,11 @@ namespace Craft.Net.Server.Packets
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
             // Send packet and enable encryption
-            byte[] buffer = new[] {PacketID}.Concat(
-                CreateShort((short)SharedSecret.Length)).Concat(
-                    SharedSecret).Concat(
-                        CreateShort((short)VerifyToken.Length)).Concat(
-                            VerifyToken).ToArray();
+            byte[] buffer = new[] {PacketId}.Concat(
+                DataUtility.CreateShort((short)SharedSecret.Length)).Concat(
+                SharedSecret).Concat(
+                DataUtility.CreateShort((short)VerifyToken.Length)).Concat(
+                VerifyToken).ToArray();
             client.SendData(buffer);
             client.EncryptionEnabled = true;
         }

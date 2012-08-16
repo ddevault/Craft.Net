@@ -1,4 +1,5 @@
 using System;
+using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
@@ -6,7 +7,7 @@ namespace Craft.Net.Server.Packets
     {
         public short SlotId;
 
-        public override byte PacketID
+        public override byte PacketId
         {
             get { return 0x10; }
         }
@@ -14,7 +15,7 @@ namespace Craft.Net.Server.Packets
         public override int TryReadPacket(byte[] buffer, int length)
         {
             int offset = 1;
-            if (!TryReadShort(buffer, ref offset, out SlotId))
+            if (!DataUtility.TryReadShort(buffer, ref offset, out SlotId))
                 return -1;
             return offset;
         }

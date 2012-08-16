@@ -1,4 +1,5 @@
 using System;
+using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
@@ -7,7 +8,7 @@ namespace Craft.Net.Server.Packets
         public bool OnGround;
         public float Pitch, Yaw;
 
-        public override byte PacketID
+        public override byte PacketId
         {
             get { return 0xC; }
         }
@@ -15,11 +16,11 @@ namespace Craft.Net.Server.Packets
         public override int TryReadPacket(byte[] buffer, int length)
         {
             int offset = 1;
-            if (!TryReadFloat(buffer, ref offset, out Pitch))
+            if (!DataUtility.TryReadFloat(buffer, ref offset, out Pitch))
                 return -1;
-            if (!TryReadFloat(buffer, ref offset, out Yaw))
+            if (!DataUtility.TryReadFloat(buffer, ref offset, out Yaw))
                 return -1;
-            if (!TryReadBoolean(buffer, ref offset, out OnGround))
+            if (!DataUtility.TryReadBoolean(buffer, ref offset, out OnGround))
                 return -1;
             return offset;
         }

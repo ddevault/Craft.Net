@@ -1,6 +1,6 @@
 using System;
-using Craft.Net.Server.Blocks;
-using Craft.Net.Server.Worlds;
+using Craft.Net.Data;
+using Craft.Net.Data.Blocks;
 
 namespace Craft.Net.Server.Packets
 {
@@ -20,7 +20,7 @@ namespace Craft.Net.Server.Packets
         public byte Face;
         public Vector3 Position;
 
-        public override byte PacketID
+        public override byte PacketId
         {
             get { return 0xE; }
         }
@@ -30,15 +30,15 @@ namespace Craft.Net.Server.Packets
             int offset = 1;
             byte action, y;
             int x, z;
-            if (!TryReadByte(buffer, ref offset, out action))
+            if (!DataUtility.TryReadByte(buffer, ref offset, out action))
                 return -1;
-            if (!TryReadInt(buffer, ref offset, out x))
+            if (!DataUtility.TryReadInt(buffer, ref offset, out x))
                 return -1;
-            if (!TryReadByte(buffer, ref offset, out y))
+            if (!DataUtility.TryReadByte(buffer, ref offset, out y))
                 return -1;
-            if (!TryReadInt(buffer, ref offset, out z))
+            if (!DataUtility.TryReadInt(buffer, ref offset, out z))
                 return -1;
-            if (!TryReadByte(buffer, ref offset, out Face))
+            if (!DataUtility.TryReadByte(buffer, ref offset, out Face))
                 return -1;
             Position = new Vector3(x, y, z);
             Action = (PlayerAction)action;

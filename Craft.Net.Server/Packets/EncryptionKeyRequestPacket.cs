@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Net.Sockets;
 using System.Security.Cryptography;
+using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
@@ -20,7 +21,7 @@ namespace Craft.Net.Server.Packets
             this.serverKey = serverKey;
         }
 
-        public override byte PacketID
+        public override byte PacketId
         {
             get { return 0xFD; }
         }
@@ -43,11 +44,11 @@ namespace Craft.Net.Server.Packets
 
             AsnKeyBuilder.AsnMessage encodedKey = AsnKeyBuilder.PublicKeyToX509(serverKey);
 
-            byte[] buffer = new[] {PacketID}
-                .Concat(CreateString(authenticationHash))
-                .Concat(CreateShort((short)encodedKey.GetBytes().Length))
+            byte[] buffer = new[] {PacketId}
+                .Concat(DataUtility.CreateString(authenticationHash))
+                .Concat(DataUtility.CreateShort((short)encodedKey.GetBytes().Length))
                 .Concat(encodedKey.GetBytes())
-                .Concat(CreateShort((short)verifyToken.Length))
+                .Concat(DataUtility.CreateShort((short)verifyToken.Length))
                 .Concat(verifyToken).ToArray();
             client.Socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, null, null);
         }

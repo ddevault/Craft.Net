@@ -1,5 +1,5 @@
 using System.Linq;
-using Craft.Net.Server.Worlds;
+using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
@@ -28,7 +28,7 @@ namespace Craft.Net.Server.Packets
             this.MaxPlayers = maxPlayers;
         }
 
-        public override byte PacketID
+        public override byte PacketId
         {
             get { return 0x1; }
         }
@@ -45,9 +45,9 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
-            byte[] buffer = new[] {PacketID}
-                .Concat(CreateInt(EntityId))
-                .Concat(CreateString(LevelType))
+            byte[] buffer = new[] {PacketId}
+                .Concat(DataUtility.CreateInt(EntityId))
+                .Concat(DataUtility.CreateString(LevelType))
                 .Concat(new byte[]
                             {
                                 (byte)GameMode,

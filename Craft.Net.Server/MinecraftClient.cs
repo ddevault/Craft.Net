@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Craft.Net.Server.Packets;
-using Craft.Net.Server.Worlds;
-using Craft.Net.Server.Worlds.Entities;
+using Craft.Net.Data;
+using Craft.Net.Data.Entities;
 using Org.BouncyCastle.Crypto;
 
 namespace Craft.Net.Server
@@ -49,7 +49,6 @@ namespace Craft.Net.Server
         public Socket Socket;
         public Dictionary<string, object> Tags;
         public string Username;
-        internal int VerificationKey;
 
         /// <summary>
         /// The view distance in chunks.

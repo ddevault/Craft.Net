@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Craft.Net.Server.Worlds;
+using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
@@ -23,7 +23,7 @@ namespace Craft.Net.Server.Packets
             CurrentItem = 0; // TODO
         }
 
-        public override byte PacketID
+        public override byte PacketId
         {
             get { return 0x14; }
         }
@@ -40,15 +40,15 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
-            byte[] buffer = new[] {PacketID}
-                .Concat(CreateInt(EntityId))
-                .Concat(CreateString(PlayerName))
-                .Concat(CreateInt((int)Position.X))
-                .Concat(CreateInt((int)Position.Y))
-                .Concat(CreateInt((int)Position.Z))
-                .Concat(CreatePackedByte(Yaw))
-                .Concat(CreatePackedByte(Pitch))
-                .Concat(CreateShort(CurrentItem)).ToArray();
+            byte[] buffer = new[] {PacketId}
+                .Concat(DataUtility.CreateInt(EntityId))
+                .Concat(DataUtility.CreateString(PlayerName))
+                .Concat(DataUtility.CreateInt((int)Position.X))
+                .Concat(DataUtility.CreateInt((int)Position.Y))
+                .Concat(DataUtility.CreateInt((int)Position.Z))
+                .Concat(DataUtility.CreatePackedByte(Yaw))
+                .Concat(DataUtility.CreatePackedByte(Pitch))
+                .Concat(DataUtility.CreateShort(CurrentItem)).ToArray();
             client.SendData(buffer);
         }
     }

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
@@ -16,7 +17,7 @@ namespace Craft.Net.Server.Packets
             this.KeepAlive = keepAlive;
         }
 
-        public override byte PacketID
+        public override byte PacketId
         {
             get { return 0x00; }
         }
@@ -24,7 +25,7 @@ namespace Craft.Net.Server.Packets
         public override int TryReadPacket(byte[] buffer, int length)
         {
             int offset = 1;
-            if (!TryReadInt(buffer, ref offset, out KeepAlive))
+            if (!DataUtility.TryReadInt(buffer, ref offset, out KeepAlive))
                 return -1;
             return offset;
         }
@@ -37,8 +38,8 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
-            byte[] buffer = new[] {PacketID}.Concat(
-                CreateInt(KeepAlive)).ToArray();
+            byte[] buffer = new[] {PacketId}.Concat(
+                DataUtility.CreateInt(KeepAlive)).ToArray();
             client.SendData(buffer);
         }
     }

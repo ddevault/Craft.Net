@@ -5,7 +5,9 @@ namespace Craft.Net.Server
 {
     public abstract class PluginChannel
     {
+#pragma warning disable
         internal MinecraftServer Server;
+#pragma warning restore
 
         public abstract string Channel { get; }
 

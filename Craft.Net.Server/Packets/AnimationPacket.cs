@@ -1,4 +1,5 @@
 using System.Linq;
+using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
@@ -18,7 +19,7 @@ namespace Craft.Net.Server.Packets
         public Animation Animation;
         public int EntityId;
 
-        public override byte PacketID
+        public override byte PacketId
         {
             get { return 0x12; }
         }
@@ -27,9 +28,9 @@ namespace Craft.Net.Server.Packets
         {
             int offset = 1;
             byte animation = 0;
-            if (!TryReadInt(buffer, ref offset, out EntityId))
+            if (!DataUtility.TryReadInt(buffer, ref offset, out EntityId))
                 return -1;
-            if (!TryReadByte(buffer, ref offset, out animation))
+            if (!DataUtility.TryReadByte(buffer, ref offset, out animation))
                 return -1;
             Animation = (Animation)animation;
             return offset;
@@ -51,9 +52,8 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
-            return;
-            byte[] data = new byte[] {PacketID}
-                .Concat(CreateInt(EntityId))
+            byte[] data = new byte[] {PacketId}
+                .Concat(DataUtility.CreateInt(EntityId))
                 .Concat(new byte[] {(byte)Animation}).ToArray();
             client.SendData(data);
         }

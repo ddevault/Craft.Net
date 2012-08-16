@@ -1,10 +1,11 @@
+using Craft.Net.Data;
 namespace Craft.Net.Server.Packets
 {
     public class CloseWindowPacket : Packet
     {
         public byte WindowId;
 
-        public override byte PacketID
+        public override byte PacketId
         {
             get { return 0x65; }
         }
@@ -12,7 +13,7 @@ namespace Craft.Net.Server.Packets
         public override int TryReadPacket(byte[] buffer, int length)
         {
             int offset = 1;
-            if (!TryReadByte(buffer, ref offset, out WindowId))
+            if (!DataUtility.TryReadByte(buffer, ref offset, out WindowId))
                 return -1;
             return offset;
         }
@@ -25,7 +26,7 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
-            var buffer = new[] {PacketID, WindowId};
+            var buffer = new[] {PacketId, WindowId};
             client.SendData(buffer);
         }
     }

@@ -1,8 +1,8 @@
 using System;
 using Craft.Net.Server;
 using System.Net;
-using Craft.Net.Server.Worlds;
-using Craft.Net.Server.Worlds.Generation;
+using Craft.Net.Data;
+using Craft.Net.Data.Generation;
 using Craft.Net.Server.Events;
 
 namespace Craft.Net.Server.Test
