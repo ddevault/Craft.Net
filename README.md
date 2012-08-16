@@ -1,8 +1,10 @@
 #Craft.Net
 
-Craft.Net is a library for .Net that implements the Minecraft 12w32a server protocol.
-It also contains functionality for manipulating Anvil worlds, simulating block interactions,
-and simulating entity interactions.
+Craft.Net is consists of several libraries for .NET that that accomplish various
+Minecraft-related tasks. Included in Craft.Net are:
+
+* Craft.Net.Data: A library to work with various kinds of Minecraft-related data.
+* Craft.Net.Server: An implementation of the 12w32a Minecraft server protocol.
 
 Craft.Net runs well on Microsoft.Net or [Mono](https://github.com/mono/mono).
 
@@ -48,17 +50,6 @@ a given LogImportance. High importance is for things like server starting and ne
 logging in. Medium importance is for things like chat and player deaths. Low importance is a
 log of all communication on the server, and all packets are logged with a low importance.
 Packet logging is only enabled in DEBUG builds.
-
-##Structure
-
-* The Craft.Net.Data library is used for manipulation of Anvil worlds, entities, and various
-  other forms of data in Minecraft.
-
-* The Craft.Net.Server library is an implementation of the Minecraft 12w32a server protocol.
-  It also contains code to manage and perform updates on worlds.
-
-* The Craft.Net.Server.Test executable runs a test Craft.Net.Server server and is an example
-  of Craft.Net.Server usage.
 
 ##Contributing
 
