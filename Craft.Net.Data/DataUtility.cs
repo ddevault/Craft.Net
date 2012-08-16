@@ -9,6 +9,21 @@ namespace Craft.Net.Data
     {
         public static Random Random = new Random();
 
+        #region Logging/Debugging
+
+        public static string DumpArray(byte[] array)
+        {
+            if (array.Length == 0)
+                return "[]";
+            var sb = new StringBuilder((array.Length * 2) + 2);
+            foreach (byte b in array)
+                sb.AppendFormat("0x{0},", b.ToString("x"));
+            
+            return sb.ToString().Remove(sb.Length - 1) + "]";
+        }
+
+        #endregion
+
         #region Network Data
 
         public static byte[] CreateString(string text)

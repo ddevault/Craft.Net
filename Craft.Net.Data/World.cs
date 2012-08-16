@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Craft.Net.Data.Blocks;
 using Craft.Net.Data.Generation;
+using Craft.Net.Data.Entities;
 
 namespace Craft.Net.Data
 {
@@ -11,6 +12,7 @@ namespace Craft.Net.Data
         public GameMode GameMode;
         public string Name;
         public Dictionary<Vector3, Region> Regions;
+        public List<Entity> Entities;
         public long Seed;
         public Vector3 SpawnPoint;
         public IWorldGenerator WorldGenerator;
@@ -23,6 +25,7 @@ namespace Craft.Net.Data
             this.WorldGenerator = worldGenerator;
             SpawnPoint = worldGenerator.SpawnPoint;
             Seed = DataUtility.Random.Next();
+            Entities = new List<Entity>();
             Regions = new Dictionary<Vector3, Region>();
         }
 

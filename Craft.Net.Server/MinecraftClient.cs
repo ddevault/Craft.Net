@@ -98,25 +98,11 @@ namespace Craft.Net.Server
         public void SendData(byte[] data)
         {
 #if DEBUG
-            Server.Log(DumpArray(data), LogImportance.Low);
+            Server.Log(DataUtility.DumpArray(data), LogImportance.Low);
 #endif
             if (EncryptionEnabled)
                 data = Encrypter.ProcessBytes(data);
             Socket.BeginSend(data, 0, data.Length, SocketFlags.None, null, null);
-        }
-
-        public static string DumpArray(byte[] array)
-        {
-            // TODO: There's probably somewhere better to put this
-            // Maybe a general utility class?
-            if (array.Length == 0)
-                return "[]";
-            var sb = new StringBuilder((array.Length*2) + 2);
-            foreach (byte b in array)
-            {
-                sb.AppendFormat("0x{0},", b.ToString("x"));
-            }
-            return sb.ToString().Remove(sb.Length - 1) + "]";
         }
 
         public Task UpdateChunksAsync()

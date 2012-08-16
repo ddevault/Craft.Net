@@ -333,6 +333,7 @@ namespace Craft.Net.Server
             client.Entity = new PlayerEntity();
             client.Entity.Position = DefaultWorld.SpawnPoint;
             client.Entity.Position += new Vector3(0, PlayerEntity.Height, 0);
+            DefaultWorld.Entities.Add(client.Entity);
             client.SendPacket(new LoginPacket(client.Entity.Id,
                                               DefaultWorld.LevelType, DefaultWorld.GameMode,
                                               client.Entity.Dimension, DefaultWorld.Difficulty,

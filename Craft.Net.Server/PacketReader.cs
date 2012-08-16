@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Craft.Net.Server.Packets;
+using Craft.Net.Data;
 
 namespace Craft.Net.Server
 {
@@ -308,7 +309,7 @@ namespace Craft.Net.Server
                     return results;
                 }
                 client.Server.Log("[CLIENT->SERVER] " + client.Socket.RemoteEndPoint, LogImportance.Low);
-                client.Server.Log("Raw: " + MinecraftClient.DumpArray(buffer.Take(workingLength).ToArray()), LogImportance.Low);
+                client.Server.Log("Raw: " + DataUtility.DumpArray(buffer.Take(workingLength).ToArray()), LogImportance.Low);
                 client.Server.Log(workingPacket.ToString(), LogImportance.Low);
                 client.Socket.ReceiveTimeout = 30000;
                 results.Add(workingPacket);
