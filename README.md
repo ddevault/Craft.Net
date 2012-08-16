@@ -49,6 +49,17 @@ logging in. Medium importance is for things like chat and player deaths. Low imp
 log of all communication on the server, and all packets are logged with a low importance.
 Packet logging is only enabled in DEBUG builds.
 
+##Structure
+
+* The Craft.Net.Data library is used for manipulation of Anvil worlds, entities, and various
+  other forms of data in Minecraft.
+
+* The Craft.Net.Server library is an implementation of the Minecraft 12w32a server protocol.
+  It also contains code to manage and perform updates on worlds.
+
+* The Craft.Net.Server.Test executable runs a test Craft.Net.Server server and is an example
+  of Craft.Net.Server usage.
+
 ##Contributing
 
 If you wish to contribute your own code to Craft.Net, please create a fork. You are
