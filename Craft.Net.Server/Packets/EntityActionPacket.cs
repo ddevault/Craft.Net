@@ -27,7 +27,7 @@ namespace Craft.Net.Server.Packets
         {
             int offset = 1;
             byte action = 0;
-            if (!DataUtility.TryReadInt(buffer, ref offset, out EntityId))
+            if (!DataUtility.TryReadInt32(buffer, ref offset, out EntityId))
                 return -1;
             if (!DataUtility.TryReadByte(buffer, ref offset, out action))
                 return -1;

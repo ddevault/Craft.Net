@@ -41,7 +41,7 @@ namespace Craft.Net.Server.Packets
             byte[] buffer = new[] {PacketId}
                 .Concat(DataUtility.CreateString(PlayerName))
                 .Concat(DataUtility.CreateBoolean(Online))
-                .Concat(DataUtility.CreateShort(Ping)).ToArray();
+                .Concat(DataUtility.CreateInt16(Ping)).ToArray();
             client.SendData(buffer);
         }
     }

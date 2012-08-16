@@ -2,6 +2,9 @@ using System;
 
 namespace Craft.Net.Data
 {
+    /// <summary>
+    /// Represents the location of an object in 3D space.
+    /// </summary>
     public struct Vector3
     {
         public double X, Y, Z;
@@ -18,6 +21,10 @@ namespace Craft.Net.Data
             this.Z = z;
         }
 
+        /// <summary>
+        /// Converts this Vector3 to a string in the format &lt;x, y, z&gt;.
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return string.Format("<{0},{1},{2}>", X, Y, Z);
@@ -25,11 +32,17 @@ namespace Craft.Net.Data
 
         #region Math
 
+        /// <summary>
+        /// Truncates the decimal component of each part of this Vector3.
+        /// </summary>
         public Vector3 Floor()
         {
             return new Vector3((int)X, (int)Y, (int)Z);
         }
 
+        /// <summary>
+        /// Calculates the distance between two Vector3 objects.
+        /// </summary>
         public double DistanceTo(Vector3 other)
         {
             return Math.Sqrt(Math.Pow(other.Z - Z, 2) +

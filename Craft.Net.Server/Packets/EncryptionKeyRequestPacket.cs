@@ -46,9 +46,9 @@ namespace Craft.Net.Server.Packets
 
             byte[] buffer = new[] {PacketId}
                 .Concat(DataUtility.CreateString(authenticationHash))
-                .Concat(DataUtility.CreateShort((short)encodedKey.GetBytes().Length))
+                .Concat(DataUtility.CreateInt16((short)encodedKey.GetBytes().Length))
                 .Concat(encodedKey.GetBytes())
-                .Concat(DataUtility.CreateShort((short)verifyToken.Length))
+                .Concat(DataUtility.CreateInt16((short)verifyToken.Length))
                 .Concat(verifyToken).ToArray();
             client.Socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, null, null);
         }

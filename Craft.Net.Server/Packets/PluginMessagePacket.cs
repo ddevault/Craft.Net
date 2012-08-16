@@ -29,7 +29,7 @@ namespace Craft.Net.Server.Packets
             short messageLength = 0;
             if (!DataUtility.TryReadString(buffer, ref offset, out Channel))
                 return -1;
-            if (!DataUtility.TryReadShort(buffer, ref offset, out messageLength))
+            if (!DataUtility.TryReadInt16(buffer, ref offset, out messageLength))
                 return -1;
             if (!DataUtility.TryReadArray(buffer, messageLength, ref offset, out Message))
                 return -1;
@@ -46,7 +46,7 @@ namespace Craft.Net.Server.Packets
         {
             byte[] data = new[] {PacketId}
                 .Concat(DataUtility.CreateString(Channel))
-                .Concat(DataUtility.CreateShort((short)Message.Length))
+                .Concat(DataUtility.CreateInt16((short)Message.Length))
                 .Concat(Message).ToArray();
             client.SendData(data);
         }

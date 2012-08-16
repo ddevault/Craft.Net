@@ -34,10 +34,10 @@ namespace Craft.Net.Server.Packets
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
             byte[] buffer = new[] {PacketId}
-                .Concat(DataUtility.CreateInt((int)Position.X))
+                .Concat(DataUtility.CreateInt32((int)Position.X))
                 .Concat(new[] {(byte)Position.Y})
-                .Concat(DataUtility.CreateInt((int)Position.Z))
-                .Concat(DataUtility.CreateShort(Value.BlockID))
+                .Concat(DataUtility.CreateInt32((int)Position.Z))
+                .Concat(DataUtility.CreateInt16(Value.BlockID))
                 .Concat(new[] {Value.Metadata}).ToArray();
             client.SendData(buffer);
         }

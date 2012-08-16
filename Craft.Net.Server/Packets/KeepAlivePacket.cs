@@ -25,7 +25,7 @@ namespace Craft.Net.Server.Packets
         public override int TryReadPacket(byte[] buffer, int length)
         {
             int offset = 1;
-            if (!DataUtility.TryReadInt(buffer, ref offset, out KeepAlive))
+            if (!DataUtility.TryReadInt32(buffer, ref offset, out KeepAlive))
                 return -1;
             return offset;
         }
@@ -39,7 +39,7 @@ namespace Craft.Net.Server.Packets
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
             byte[] buffer = new[] {PacketId}.Concat(
-                DataUtility.CreateInt(KeepAlive)).ToArray();
+                DataUtility.CreateInt32(KeepAlive)).ToArray();
             client.SendData(buffer);
         }
     }

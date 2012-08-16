@@ -26,11 +26,11 @@ namespace Craft.Net.Server.Packets
         {
             short secretLength = 0, verifyLength = 0;
             int offset = 1;
-            if (!DataUtility.TryReadShort(buffer, ref offset, out secretLength))
+            if (!DataUtility.TryReadInt16(buffer, ref offset, out secretLength))
                 return -1;
             if (!DataUtility.TryReadArray(buffer, secretLength, ref offset, out SharedSecret))
                 return -1;
-            if (!DataUtility.TryReadShort(buffer, ref offset, out verifyLength))
+            if (!DataUtility.TryReadInt16(buffer, ref offset, out verifyLength))
                 return -1;
             if (!DataUtility.TryReadArray(buffer, verifyLength, ref offset, out VerifyToken))
                 return -1;
@@ -57,9 +57,9 @@ namespace Craft.Net.Server.Packets
         {
             // Send packet and enable encryption
             byte[] buffer = new[] {PacketId}.Concat(
-                DataUtility.CreateShort((short)SharedSecret.Length)).Concat(
+                DataUtility.CreateInt16((short)SharedSecret.Length)).Concat(
                 SharedSecret).Concat(
-                DataUtility.CreateShort((short)VerifyToken.Length)).Concat(
+                DataUtility.CreateInt16((short)VerifyToken.Length)).Concat(
                 VerifyToken).ToArray();
             client.SendData(buffer);
             client.EncryptionEnabled = true;

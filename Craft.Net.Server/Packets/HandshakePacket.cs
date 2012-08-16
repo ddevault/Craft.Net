@@ -25,7 +25,7 @@ namespace Craft.Net.Server.Packets
                 return -1;
             if (!DataUtility.TryReadString(buffer, ref offset, out Hostname))
                 return -1;
-            if (!DataUtility.TryReadInt(buffer, ref offset, out Port))
+            if (!DataUtility.TryReadInt32(buffer, ref offset, out Port))
                 return -1;
             return offset;
         }

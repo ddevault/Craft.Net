@@ -2,6 +2,10 @@ using Craft.Net.Data.Blocks;
 
 namespace Craft.Net.Data.Generation
 {
+    /// <summary>
+    /// Generates a world that mimics the Minecraft flatland generator
+    /// with structures turned off.
+    /// </summary>
     public class FlatlandGenerator : IWorldGenerator
     {
         #region IWorldGenerator Members

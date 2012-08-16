@@ -115,16 +115,16 @@ namespace Craft.Net.Data
         public static bool TryReadSlot(byte[] buffer, ref int offset, out Slot slot)
         {
             slot = new Slot();
-            if (!DataUtility.TryReadShort(buffer, ref offset, out slot.Id))
+            if (!DataUtility.TryReadInt16(buffer, ref offset, out slot.Id))
                 return false;
             if (slot.Id == -1)
                 return true;
             if (!DataUtility.TryReadByte(buffer, ref offset, out slot.Count))
                 return false;
-            if (!DataUtility.TryReadShort(buffer, ref offset, out slot.Metadata))
+            if (!DataUtility.TryReadInt16(buffer, ref offset, out slot.Metadata))
                 return false;
             short length = 0;
-            if (!DataUtility.TryReadShort(buffer, ref offset, out length))
+            if (!DataUtility.TryReadInt16(buffer, ref offset, out length))
                 return false;
             if (length == -1)
                 return true;
@@ -151,11 +151,11 @@ namespace Craft.Net.Data
         public byte[] GetData()
         {
             byte[] data = new byte[0]
-                .Concat(DataUtility.CreateShort(Id)).ToArray();
+                .Concat(DataUtility.CreateInt16(Id)).ToArray();
             if (Id == -1)
                 return data;
             data = data.Concat(new[] {Count})
-                .Concat(DataUtility.CreateShort(Metadata)).ToArray();
+                .Concat(DataUtility.CreateInt16(Metadata)).ToArray();
 
             // TODO: Confirm this works (needs to return -1?)
             var ms = new MemoryStream();
@@ -163,7 +163,7 @@ namespace Craft.Net.Data
             Nbt.SaveFile(gzs);
             gzs.Close();
             byte[] b = ms.GetBuffer();
-            data = data.Concat(DataUtility.CreateShort((short)b.Length)).Concat(b).ToArray();
+            data = data.Concat(DataUtility.CreateInt16((short)b.Length)).Concat(b).ToArray();
             return data;
         }
 
@@ -175,16 +175,16 @@ namespace Craft.Net.Data
         public byte[] GetFullData()
         {
             byte[] data = new byte[0]
-                .Concat(DataUtility.CreateShort(Id)).ToArray();
+                .Concat(DataUtility.CreateInt16(Id)).ToArray();
             data = data.Concat(new[] {Count})
-                .Concat(DataUtility.CreateShort(Metadata)).ToArray();
+                .Concat(DataUtility.CreateInt16(Metadata)).ToArray();
 
             var ms = new MemoryStream();
             var gzs = new GZipStream(ms, CompressionMode.Compress, false);
             Nbt.SaveFile(gzs);
             gzs.Close();
             byte[] b = ms.GetBuffer();
-            data = data.Concat(DataUtility.CreateShort((short)b.Length)).Concat(b).ToArray();
+            data = data.Concat(DataUtility.CreateInt16((short)b.Length)).Concat(b).ToArray();
 
             return data;
         }

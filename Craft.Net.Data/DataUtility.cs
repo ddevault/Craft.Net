@@ -5,20 +5,30 @@ using System.Text;
 
 namespace Craft.Net.Data
 {
+    /// <summary>
+    /// Provides several useful utilities for manipulating
+    /// Minecraft data.
+    /// </summary>
     public static class DataUtility
     {
+        /// <summary>
+        /// A global <see cref="System.Random"/> instance.
+        /// </summary>
         public static Random Random = new Random();
 
         #region Logging/Debugging
 
+        /// <summary>
+        /// Turns the given byte array into a string of hexadecimal
+        /// numbers in the format [01 23 45 67]
+        /// </summary>
         public static string DumpArray(byte[] array)
         {
             if (array.Length == 0)
                 return "[]";
             var sb = new StringBuilder((array.Length * 2) + 2);
             foreach (byte b in array)
-                sb.AppendFormat("0x{0},", b.ToString("x"));
-            
+                sb.AppendFormat("{0} ", b.ToString("X2"));
             return sb.ToString().Remove(sb.Length - 1) + "]";
         }
 
@@ -26,20 +36,29 @@ namespace Craft.Net.Data
 
         #region Network Data
 
+        /// <summary>
+        /// Creates a Minecraft-style length-prefixed UCS-2 string.
+        /// </summary>
         public static byte[] CreateString(string text)
         {
             if (text.Length > 240)
                 throw new ArgumentOutOfRangeException("text", "String length cannot be greater 240 characters.");
 
-            return CreateShort((short)text.Length)
+            return CreateInt16((short)text.Length)
                 .Concat(Encoding.BigEndianUnicode.GetBytes(text)).ToArray();
         }
 
+        /// <summary>
+        /// Creates a Minecraft-style boolean whose value is false.
+        /// </summary>
         public static byte[] CreateBoolean()
         {
             return CreateBoolean(false);
         }
 
+        /// <summary>
+        /// Creates a Minecraft-style boolean.
+        /// </summary>
         public static byte[] CreateBoolean(bool value)
         {
             return new[]
@@ -48,7 +67,10 @@ namespace Craft.Net.Data
                        };
         }
 
-        public static byte[] CreateUShort(ushort value)
+        /// <summary>
+        /// Creates a Minecraft-style unsigned 16-bit integer.
+        /// </summary>
+        public static byte[] CreateUInt16(ushort value)
         {
             unchecked
             {
@@ -56,7 +78,10 @@ namespace Craft.Net.Data
             }
         }
 
-        public static byte[] CreateShort(short value)
+        /// <summary>
+        /// Creates a Minecraft-style 16-bit integer.
+        /// </summary>
+        public static byte[] CreateInt16(short value)
         {
             unchecked
             {
@@ -64,7 +89,10 @@ namespace Craft.Net.Data
             }
         }
 
-        public static byte[] CreateInt(int value)
+        /// <summary>
+        /// Creates a Minecraft-style unsigned 32-bit integer.
+        /// </summary>
+        public static byte[] CreateInt32(int value)
         {
             unchecked
             {
@@ -76,7 +104,10 @@ namespace Craft.Net.Data
             }
         }
 
-        public static byte[] CreateLong(long value)
+        /// <summary>
+        /// Creates a Minecraft-style unsigned 64-bit integer.
+        /// </summary>
+        public static byte[] CreateInt64(long value)
         {
             unchecked
             {
@@ -90,26 +121,42 @@ namespace Craft.Net.Data
             }
         }
 
+        /// <summary>
+        /// Creates a Minecraft-style 32-bit floating-point value.
+        /// </summary>
         public static unsafe byte[] CreateFloat(float value)
         {
-            return CreateInt(*(int*)&value);
+            return CreateInt32(*(int*)&value);
         }
 
+        /// <summary>
+        /// Creates a Minecraft-style "packed byte" to map degrees onto
+        /// a byte.
+        /// </summary>
         public static byte[] CreatePackedByte(float value)
         {
             return new[] { (byte)(((Math.Floor(value) % 360) / 360) * 256) };
         }
 
+        /// <summary>
+        /// Creates a Minecraft-style 64-bit floating-point value.
+        /// </summary>
         public static unsafe byte[] CreateDouble(double value)
         {
-            return CreateLong(*(long*)&value);
+            return CreateInt64(*(long*)&value);
         }
 
-        public static short ReadShort(byte[] buffer, int offset)
+        /// <summary>
+        /// Reads a Minecraft-style 16-bit integer from a buffer.
+        /// </summary>
+        public static short ReadInt16(byte[] buffer, int offset)
         {
             return unchecked((short)(buffer[0 + offset] << 8 | buffer[1 + offset]));
         }
 
+        /// <summary>
+        /// Attempts to read a Minecraft-style boolean value from the specified buffer.
+        /// </summary>
         public static bool TryReadBoolean(byte[] buffer, ref int offset, out bool value)
         {
             value = false;
@@ -121,6 +168,9 @@ namespace Craft.Net.Data
             return false;
         }
 
+        /// <summary>
+        /// Attempts to read a Minecraft-style 8-bit unsigned integer from the given buffer.
+        /// </summary>
         public static bool TryReadByte(byte[] buffer, ref int offset, out byte value)
         {
             value = 0;
@@ -132,7 +182,10 @@ namespace Craft.Net.Data
             return false;
         }
 
-        public static bool TryReadShort(byte[] buffer, ref int offset, out short value)
+        /// <summary>
+        /// Attempts to read a Minecraft-style 16-bit integer from the given buffer.
+        /// </summary>
+        public static bool TryReadInt16(byte[] buffer, ref int offset, out short value)
         {
             value = -1;
             if (buffer.Length - offset >= 2)
@@ -144,7 +197,10 @@ namespace Craft.Net.Data
             return false;
         }
 
-        public static bool TryReadInt(byte[] buffer, ref int offset, out int value)
+        /// <summary>
+        /// Attempts to read a Minecraft-style 32-bit integer from the given buffer.
+        /// </summary>
+        public static bool TryReadInt32(byte[] buffer, ref int offset, out int value)
         {
             value = -1;
             if (buffer.Length - offset >= 4)
@@ -159,7 +215,10 @@ namespace Craft.Net.Data
             return false;
         }
 
-        public static bool TryReadLong(byte[] buffer, ref int offset, out long value)
+        /// <summary>
+        /// Attempts to read a Minecraft-style 64-bit integer from the given buffer.
+        /// </summary>
+        public static bool TryReadInt64(byte[] buffer, ref int offset, out long value)
         {
             if (buffer.Length - offset >= 4)
             {
@@ -182,12 +241,15 @@ namespace Craft.Net.Data
             return false;
         }
 
+        /// <summary>
+        /// Attempts to read a Minecraft-style 32-bit floating-point value from the given buffer.
+        /// </summary>
         public static unsafe bool TryReadFloat(byte[] buffer, ref int offset, out float value)
         {
             value = -1;
             int i;
 
-            if (TryReadInt(buffer, ref offset, out i))
+            if (TryReadInt32(buffer, ref offset, out i))
             {
                 value = *(float*)&i;
                 return true;
@@ -196,12 +258,15 @@ namespace Craft.Net.Data
             return false;
         }
 
+        /// <summary>
+        /// Attempts to read a Minecraft-style 64-bit floating-point value from the given buffer.
+        /// </summary>
         public static unsafe bool TryReadDouble(byte[] buffer, ref int offset, out double value)
         {
             value = -1;
             long l;
 
-            if (TryReadLong(buffer, ref offset, out l))
+            if (TryReadInt64(buffer, ref offset, out l))
             {
                 value = *(double*)&l;
                 return true;
@@ -210,13 +275,16 @@ namespace Craft.Net.Data
             return false;
         }
 
+        /// <summary>
+        /// Attempts to read a Minecraft-style length-prefixed UCS-2 string from the given buffer.
+        /// </summary>
         public static bool TryReadString(byte[] buffer, ref int offset, out string value)
         {
             value = null;
             short length;
 
             if (buffer.Length - offset >= 2)
-                length = ReadShort(buffer, offset);
+                length = ReadInt16(buffer, offset);
             else
                 return false;
 
@@ -234,6 +302,9 @@ namespace Craft.Net.Data
             return false;
         }
 
+        /// <summary>
+        /// Attempts to read an arbituary number of bytes from the given buffer.
+        /// </summary>
         public static bool TryReadArray(byte[] buffer, short length, ref int offset, out byte[] value)
         {
             value = null;

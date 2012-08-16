@@ -46,7 +46,7 @@ namespace Craft.Net.Server.Packets
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
             byte[] buffer = new[] {PacketId}
-                .Concat(DataUtility.CreateInt(EntityId))
+                .Concat(DataUtility.CreateInt32(EntityId))
                 .Concat(DataUtility.CreateString(LevelType))
                 .Concat(new byte[]
                             {

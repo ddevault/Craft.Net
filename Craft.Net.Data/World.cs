@@ -6,46 +6,101 @@ using Craft.Net.Data.Entities;
 
 namespace Craft.Net.Data
 {
+    /// <summary>
+    /// Represents a horizontally infinite world of blocks with a fixed height of 256 blocks.
+    /// </summary>
     public class World
     {
+        /// <summary>
+        /// The difficulty of this world.
+        /// </summary>
         public Difficulty Difficulty;
+        /// <summary>
+        /// The default game mode players use.
+        /// </summary>
         public GameMode GameMode;
+        /// <summary>
+        /// The name of this world.
+        /// </summary>
         public string Name;
+        /// <summary>
+        /// The currently loaded regions for this world.
+        /// </summary>
         public Dictionary<Vector3, Region> Regions;
+        /// <summary>
+        /// The entities currently present in this world.
+        /// </summary>
         public List<Entity> Entities;
+        /// <summary>
+        /// The seed used to generate this world.
+        /// </summary>
         public long Seed;
+        /// <summary>
+        /// The spawn point for new players in this world.
+        /// </summary>
         public Vector3 SpawnPoint;
+        /// <summary>
+        /// The world generator used to create this world.
+        /// </summary>
         public IWorldGenerator WorldGenerator;
 
+        /// <summary>
+        /// Creates a new world for client-side use.
+        /// </summary>
+        public World()
+        {
+            Name = "world";
+            GameMode = GameMode.Creative;
+            Difficulty = Difficulty.Peaceful;
+            SpawnPoint = Vector3.Zero;
+            Seed = DataUtility.Random.Next();
+            Entities = new List<Entity>();
+            Regions = new Dictionary<Vector3, Region>();
+        }
+
+        /// <summary>
+        /// Creates a new world for server-side use with the specified world generator.
+        /// </summary>
+        /// <param name="worldGenerator"></param>
         public World(IWorldGenerator worldGenerator)
         {
             Name = "world";
             GameMode = GameMode.Creative;
             Difficulty = Difficulty.Peaceful;
-            this.WorldGenerator = worldGenerator;
+            WorldGenerator = worldGenerator;
             SpawnPoint = worldGenerator.SpawnPoint;
             Seed = DataUtility.Random.Next();
             Entities = new List<Entity>();
             Regions = new Dictionary<Vector3, Region>();
         }
 
+        /// <summary>
+        /// Creates a new world for server-side use with the specified world generator and seed.
+        /// </summary>
+        /// <param name="worldGenerator"></param>
+        /// <param name="seed"></param>
         public World(IWorldGenerator worldGenerator, long seed) : this(worldGenerator)
         {
-            this.Seed = seed;
+            Seed = seed;
         }
 
+        /// <summary>
+        /// Gets the level type this world's generator produces.
+        /// </summary>
         public string LevelType
         {
             get { return WorldGenerator.LevelType; }
         }
 
+        /// <summary>
+        /// Fires when a block in the world is changed.
+        /// </summary>
         public event EventHandler<BlockChangedEventArgs> OnBlockChanged;
 
         /// <summary>
         /// Returns the chunk at the specific position
         /// </summary>
         /// <param name="position">Position in chunk coordinates</param>
-        /// <returns></returns>
         public Chunk GetChunk(Vector3 position)
         {
             //In chunks
@@ -66,7 +121,6 @@ namespace Craft.Net.Data
         /// <summary>
         /// Sets the chunk at the given position to the chunk provided.
         /// </summary>
-        /// <param name="position">Position in chunk coordinates</param>
         public void SetChunk(Vector3 position, Chunk chunk)
         {
             //In chunks
@@ -84,6 +138,9 @@ namespace Craft.Net.Data
             Regions[region].SetChunk(new Vector3(x - regionX*32, 0, z - regionZ*32), chunk);
         }
 
+        /// <summary>
+        /// Gets the block at the specified position.
+        /// </summary>
         public Block GetBlock(Vector3 position)
         {
             Chunk chunk;
@@ -92,6 +149,9 @@ namespace Craft.Net.Data
             return chunk.GetBlock(blockPosition);
         }
 
+        /// <summary>
+        /// Sets the block at the specified position.
+        /// </summary>
         public void SetBlock(Vector3 position, Block value)
         {
             Chunk chunk;
@@ -109,7 +169,7 @@ namespace Craft.Net.Data
             var y = (int)position.Y;
             var z = (int)position.Z;
 
-            if (y < 0 || y >= Chunk.Height) throw new ArgumentOutOfRangeException("Block is out of range");
+            if (y < 0 || y >= Chunk.Height) throw new ArgumentOutOfRangeException("position", "Position is out of range");
 
             int chunkX = x/(Chunk.Width) - ((x < 0) ? 1 : 0);
             int chunkZ = z/(Chunk.Depth) - ((z < 0) ? 1 : 0);

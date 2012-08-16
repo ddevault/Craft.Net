@@ -32,11 +32,11 @@ namespace Craft.Net.Server.Packets
             int x, z;
             if (!DataUtility.TryReadByte(buffer, ref offset, out action))
                 return -1;
-            if (!DataUtility.TryReadInt(buffer, ref offset, out x))
+            if (!DataUtility.TryReadInt32(buffer, ref offset, out x))
                 return -1;
             if (!DataUtility.TryReadByte(buffer, ref offset, out y))
                 return -1;
-            if (!DataUtility.TryReadInt(buffer, ref offset, out z))
+            if (!DataUtility.TryReadInt32(buffer, ref offset, out z))
                 return -1;
             if (!DataUtility.TryReadByte(buffer, ref offset, out Face))
                 return -1;

@@ -1,5 +1,8 @@
 namespace Craft.Net.Data
 {
+    /// <summary>
+    /// Represents the size of an object in 3D space.
+    /// </summary>
     public struct Size
     {
         public double Depth;

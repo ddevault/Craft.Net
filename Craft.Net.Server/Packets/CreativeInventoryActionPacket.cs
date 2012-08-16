@@ -16,7 +16,7 @@ namespace Craft.Net.Server.Packets
         public override int TryReadPacket(byte[] buffer, int length)
         {
             int offset = 1;
-            if (!DataUtility.TryReadShort(buffer, ref offset, out Index))
+            if (!DataUtility.TryReadInt16(buffer, ref offset, out Index))
                 return -1;
             if (!Slot.TryReadSlot(buffer, ref offset, out Item))
                 return -1;

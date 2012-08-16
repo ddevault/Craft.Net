@@ -95,12 +95,12 @@ namespace Craft.Net.Server.Packets
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
             byte[] buffer = new[] {PacketId}
-                .Concat(DataUtility.CreateInt(X))
-                .Concat(DataUtility.CreateInt(Z))
+                .Concat(DataUtility.CreateInt32(X))
+                .Concat(DataUtility.CreateInt32(Z))
                 .Concat(DataUtility.CreateBoolean(GroundUpContiguous))
-                .Concat(DataUtility.CreateUShort(PrimaryBitMap))
-                .Concat(DataUtility.CreateUShort(AddBitMap))
-                .Concat(DataUtility.CreateInt(CompressedData.Length))
+                .Concat(DataUtility.CreateUInt16(PrimaryBitMap))
+                .Concat(DataUtility.CreateUInt16(AddBitMap))
+                .Concat(DataUtility.CreateInt32(CompressedData.Length))
                 .Concat(CompressedData).ToArray();
             client.SendData(buffer);
         }

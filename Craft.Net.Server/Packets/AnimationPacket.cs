@@ -28,7 +28,7 @@ namespace Craft.Net.Server.Packets
         {
             int offset = 1;
             byte animation = 0;
-            if (!DataUtility.TryReadInt(buffer, ref offset, out EntityId))
+            if (!DataUtility.TryReadInt32(buffer, ref offset, out EntityId))
                 return -1;
             if (!DataUtility.TryReadByte(buffer, ref offset, out animation))
                 return -1;
@@ -53,7 +53,7 @@ namespace Craft.Net.Server.Packets
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
             byte[] data = new byte[] {PacketId}
-                .Concat(DataUtility.CreateInt(EntityId))
+                .Concat(DataUtility.CreateInt32(EntityId))
                 .Concat(new byte[] {(byte)Animation}).ToArray();
             client.SendData(data);
         }
