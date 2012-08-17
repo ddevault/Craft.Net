@@ -8,6 +8,9 @@ namespace Craft.Net.Server
 {
     public static class Cryptography
     {
+        /// <summary>
+        /// Creates a Java-style SHA-1 hash.
+        /// </summary>
         public static string JavaHexDigest(byte[] data)
         {
             SHA1 sha1 = SHA1.Create();

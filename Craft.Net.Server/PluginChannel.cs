@@ -3,32 +3,38 @@ using Craft.Net.Server.Packets;
 
 namespace Craft.Net.Server
 {
+    /// <summary>
+    /// A channel for mods to communicate with clients.
+    /// </summary>
     public abstract class PluginChannel
     {
 #pragma warning disable
         internal MinecraftServer Server;
 #pragma warning restore
 
+        /// <summary>
+        /// This channel name.
+        /// </summary>
         public abstract string Channel { get; }
 
-        public virtual void MessageRecieved(byte[] data)
-        {
-        }
+        /// <summary>
+        /// Run when a plugin message is recieved.
+        /// </summary>
+        public abstract void MessageRecieved(byte[] data);
 
-        public virtual void ChannelRegistered(MinecraftServer server)
-        {
-        }
+        /// <summary>
+        /// Run when the channel is successfully registered.
+        /// </summary>
+        public abstract void ChannelRegistered(MinecraftServer server);
 
+        /// <summary>
+        /// Sends a channel message to the given client.
+        /// </summary>
         public void SendMessage(byte[] data, MinecraftClient client)
         {
             if (data.Length > short.MaxValue)
                 throw new ArgumentOutOfRangeException("Maximum plugin message length is " + short.MaxValue);
             client.SendPacket(new PluginMessagePacket(Channel, data));
         }
-    }
-
-    public class PluginChannelMessageEvengArgs : EventArgs
-    {
-        public byte Data { get; set; }
     }
 }

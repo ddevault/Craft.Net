@@ -11,54 +11,115 @@ using Org.BouncyCastle.Crypto;
 
 namespace Craft.Net.Server
 {
+    /// <summary>
+    /// Describes a client connected to a <see cref="MinecraftServer"/>.
+    /// </summary>
     public class MinecraftClient
     {
         #region Fields
 
-        internal string AuthenticationHash;
+        /// <summary>
+        /// The client-provided chat modes.
+        /// </summary>
         public ChatMode ChatMode;
+        /// <summary>
+        /// True if the client has enabled colors in chat.
+        /// </summary>
         public bool ColorsEnabled;
-        internal BufferedBlockCipher Decrypter;
-        internal BufferedBlockCipher Encrypter;
-        internal bool EncryptionEnabled;
+        /// <summary>
+        /// The entity this client represents.
+        /// </summary>
         public PlayerEntity Entity;
+        /// <summary>
+        /// The speed at which the client is permitted to fly.
+        /// </summary>
         public byte FlyingSpeed;
+        /// <summary>
+        /// The hostname the client connected with.
+        /// </summary>
         public string Hostname;
+        /// <summary>
+        /// The client's current inventory.
+        /// </summary>
         public Slot[] Inventory;
+        /// <summary>
+        /// Set to true if the client is currently crouching.
+        /// </summary>
         public bool IsCrouching;
-        public bool IsDisconnected;
-        public bool IsLoggedIn;
+        /// <summary>
+        /// Set to true if the client is currently sprinting.
+        /// </summary>
         public bool IsSprinting;
-        internal Timer KeepAliveTimer;
-        internal DateTime LastKeepAlive, LastKeepAliveSent;
+        /// <summary>
+        /// Set to true if the client has completed the login sequence and
+        /// has been spawned.
+        /// </summary>
+        public bool IsLoggedIn;
+        /// <summary>
+        /// A list of all chunks the client has been sent and
+        /// instructed to load.
+        /// </summary>
         public List<Vector3> LoadedChunks;
+        /// <summary>
+        /// The client-provided locale string.
+        /// </summary>
         public string Locale;
-
         /// <summary>
         /// The view distance in chunks.
         /// </summary>
         public int MaxViewDistance;
-
+        /// <summary>
+        /// The time, in milliseconds, it takes this client to respond to a
+        /// <see cref="KeepAlivePacket"/>.
+        /// </summary>
         public short Ping;
-        internal bool ReadyToSpawn;
-        internal byte[] RecieveBuffer;
-        internal int RecieveBufferIndex;
+        /// <summary>
+        /// The current queue of packets to be sent to this client.
+        /// </summary>
         public Queue<Packet> SendQueue;
+        /// <summary>
+        /// The <see cref="MinecraftServer"/> managing this client's connection.
+        /// </summary>
         public MinecraftServer Server;
-        internal byte[] SharedKey;
-        public Socket Socket;
+        /// <summary>
+        /// The TCP socket used to communicate with this client.
+        /// </summary>
+        public Socket Socket; // TODO: Private?
+        /// <summary>
+        /// 3rd party client-specific data may be saved here.
+        /// </summary>
         public Dictionary<string, object> Tags;
+        /// <summary>
+        /// This client's username.
+        /// </summary>
         public string Username;
-
         /// <summary>
         /// The view distance in chunks.
         /// </summary>
         public int ViewDistance;
-
+        /// <summary>
+        /// The speed at which this client is permitted to walk.
+        /// </summary>
         public byte WalkingSpeed;
+
+        internal string AuthenticationHash;
+        internal Timer KeepAliveTimer;
+        internal DateTime LastKeepAlive, LastKeepAliveSent;
+        internal BufferedBlockCipher Decrypter;
+        internal BufferedBlockCipher Encrypter;
+        internal bool EncryptionEnabled;
+        internal byte[] SharedKey;
+        internal bool ReadyToSpawn;
+        internal byte[] RecieveBuffer;
+        internal int RecieveBufferIndex;
+        internal bool IsDisconnected;
 
         #endregion
 
+        /// <summary>
+        /// Creates a new MinecraftClient with the specified socket to be
+        /// managed by the given <see cref="MinecraftServer"/>.
+        /// </summary>
         public MinecraftClient(Socket socket, MinecraftServer server)
         {
             this.Socket = socket;
@@ -80,6 +141,9 @@ namespace Craft.Net.Server
             LastKeepAlive = DateTime.MaxValue.AddSeconds(-120);
         }
 
+        /// <summary>
+        /// The maximum speed that a client may move.
+        /// </summary>
         public double MaxMoveDistance
         {
             get
@@ -89,12 +153,22 @@ namespace Craft.Net.Server
             }
         }
 
+        /// <summary>
+        /// Queues the given packet for sending. Make sure to call
+        /// <see cref="MinecraftServer.ProcessSendQueue"/> to send
+        /// the queued packet.
+        /// </summary>
+        /// <param name="packet"></param>
         public void SendPacket(Packet packet)
         {
             packet.PacketContext = PacketContext.ServerToClient;
             SendQueue.Enqueue(packet);
         }
 
+        /// <summary>
+        /// Sends the specified raw data to the client. This data
+        /// will be encrypted if encryption is enabled.
+        /// </summary>
         public void SendData(byte[] data)
         {
 #if DEBUG
@@ -105,6 +179,10 @@ namespace Craft.Net.Server
             Socket.BeginSend(data, 0, data.Length, SocketFlags.None, null, null);
         }
 
+        /// <summary>
+        /// Asyncronously updates chunks loaded on the client
+        /// </summary>
+        /// <returns></returns>
         public Task UpdateChunksAsync()
         {
             if ((int)(Entity.Position.X) >> 4 != (int)(Entity.OldPosition.X) >> 4 ||
@@ -115,11 +193,18 @@ namespace Craft.Net.Server
             return null;
         }
 
+        /// <summary>
+        /// Asyncronously updates chunks loaded on the client and forces a
+        /// recalculation of which chunks should be loaded.
+        /// </summary>
         public Task ForceUpdateChunksAsync()
         {
             return Task.Factory.StartNew(() => UpdateChunks(true));
         }
 
+        /// <summary>
+        /// Updates which chunks are loaded on the client.
+        /// </summary>
         public void UpdateChunks(bool forceUpdate)
         {
             if (forceUpdate ||
@@ -152,6 +237,9 @@ namespace Craft.Net.Server
             }
         }
 
+        /// <summary>
+        /// Loads the given chunk on the client.
+        /// </summary>
         public void LoadChunk(Vector3 position)
         {
             World world = Server.GetClientWorld(this);
@@ -160,6 +248,9 @@ namespace Craft.Net.Server
             SendPacket(dataPacket);
         }
 
+        /// <summary>
+        /// Unloads the given chunk on the client.
+        /// </summary>
         public void UnloadChunk(Vector3 position)
         {
             var dataPacket = new ChunkDataPacket();
@@ -172,6 +263,9 @@ namespace Craft.Net.Server
             SendPacket(dataPacket);
         }
 
+        /// <summary>
+        /// Sends a <see cref="ChatMessagePacket"/> to the client.
+        /// </summary>
         public void SendChat(string message)
         {
             SendPacket(new ChatMessagePacket(message));

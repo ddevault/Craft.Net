@@ -1,5 +1,8 @@
 namespace Craft.Net.Server
 {
+    /// <summary>
+    /// Specifies the importance of a given message with regard to logging.
+    /// </summary>
     public enum LogImportance
     {
         Low = 0,
@@ -7,8 +10,14 @@ namespace Craft.Net.Server
         High = 2
     }
 
+    /// <summary>
+    /// Describes a mechanism for logging server information.
+    /// </summary>
     public interface ILogProvider
     {
+        /// <summary>
+        /// Logs the given text at the given importance.
+        /// </summary>
         void Log(string text, LogImportance level);
     }
 }

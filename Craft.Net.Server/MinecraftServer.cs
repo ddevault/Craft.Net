@@ -13,23 +13,56 @@ using Craft.Net.Data.Entities;
 namespace Craft.Net.Server
 {
     /// <summary>
-    /// A Minecraft server.
+    /// A Minecraft 12w32a server.
     /// </summary>
     public class MinecraftServer
     {
         #region Public Fields
 
+        /// <summary>
+        /// The protocol version supported by this server.
+        /// </summary>
         public const int ProtocolVersion = 40;
 
+        /// <summary>
+        /// A list of all connected clients. Not all connected
+        /// clients will be logged in.
+        /// </summary>
         public List<MinecraftClient> Clients;
+        /// <summary>
+        /// The default world to spawn clients in.
+        /// </summary>
         public int DefaultWorldIndex;
+        /// <summary>
+        /// Set to true if this server is to use encrypted
+        /// connections.
+        /// </summary>
         public bool EncryptionEnabled;
+        /// <summary>
+        /// A list of <see cref="ILogProvider"/> objects to log
+        /// data to.
+        /// </summary>
         public List<ILogProvider> LogProviders;
+        /// <summary>
+        /// The maximum number of players that may log in.
+        /// </summary>
         public byte MaxPlayers;
+        /// <summary>
+        /// The message of the day.
+        /// </summary>
         public string MotD;
+        /// <summary>
+        /// Set to true to authenticate connecting users with Minecraft.net
+        /// </summary>
         public bool OnlineMode;
+        /// <summary>
+        /// A list of Worlds this server will use.
+        /// </summary>
         public List<World> Worlds;
 
+        /// <summary>
+        /// Fired when the server recieves a <see cref="ChatMessagePacket"/>.
+        /// </summary>
         public event EventHandler<ChatMessageEventArgs> OnChatMessage;
 
         #endregion
@@ -39,9 +72,10 @@ namespace Craft.Net.Server
         internal static Random Random;
         internal RSACryptoServiceProvider CryptoServiceProvider;
         internal Dictionary<string, PluginChannel> PluginChannels;
+        internal RSAParameters ServerKey;
+
         private AutoResetEvent sendQueueReset;
         private Thread sendQueueThread;
-        internal RSAParameters ServerKey;
         private Timer updatePlayerListTimer;
         private Socket socket;
 
@@ -49,6 +83,9 @@ namespace Craft.Net.Server
 
         #region Public Properties
 
+        /// <summary>
+        /// Gets the default world for new clients.
+        /// </summary>
         public World DefaultWorld
         {
             get { return Worlds[DefaultWorldIndex]; }
@@ -58,6 +95,10 @@ namespace Craft.Net.Server
 
         #region Constructor
 
+        /// <summary>
+        /// Creates a new Minecraft server to listen on the requested
+        /// endpoint.
+        /// </summary>
         public MinecraftServer(IPEndPoint endPoint)
         {
             Clients = new List<MinecraftClient>();
@@ -79,6 +120,9 @@ namespace Craft.Net.Server
 
         #region Public Methods
 
+        /// <summary>
+        /// Starts the server.
+        /// </summary>
         public void Start()
         {
             if (Worlds.Count == 0)
@@ -103,6 +147,9 @@ namespace Craft.Net.Server
             Log("Server started.");
         }
 
+        /// <summary>
+        /// Stops the server.
+        /// </summary>
         public void Stop()
         {
             Log("Stopping server...");
@@ -121,46 +168,63 @@ namespace Craft.Net.Server
             Log("Server stopped.");
         }
 
+        /// <summary>
+        /// After queueing several packets to send, this will
+        /// process the queue.
+        /// </summary>
         public void ProcessSendQueue()
         {
             if (sendQueueReset != null)
                 sendQueueReset.Set();
         }
 
+        /// <summary>
+        /// Adds the requested <see cref="ILogProvider"/> to the
+        /// list of log providers.
+        /// </summary>
         public void AddLogProvider(ILogProvider logProvider)
         {
             LogProviders.Add(logProvider);
         }
 
+        /// <summary>
+        /// Logs the given text with high importance.
+        /// </summary>
         public void Log(string text)
         {
             Log(text, LogImportance.High);
         }
 
+        /// <summary>
+        /// Logs the given text.
+        /// </summary>
         public void Log(string text, LogImportance logLevel)
         {
             foreach (ILogProvider provider in LogProviders)
                 provider.Log(text, logLevel);
         }
 
+        /// <summary>
+        /// Adds a world to this server's list of worlds.
+        /// </summary>
         public void AddWorld(World world)
         {
             world.OnBlockChanged += HandleOnBlockChanged;
             Worlds.Add(world);
         }
 
-        private void HandleOnBlockChanged(object sender, BlockChangedEventArgs e)
-        {
-            foreach (MinecraftClient client in GetClientsInWorld(e.World))
-                client.SendPacket(new BlockChangePacket(e.Position, e.Value));
-            ProcessSendQueue();
-        }
-
+        /// <summary>
+        /// Gets the World that the given client is present in.
+        /// </summary>
         public World GetClientWorld(MinecraftClient client)
         {
-            return Worlds.First();
+            return DefaultWorld; // TODO
         }
 
+        /// <summary>
+        /// Gets all <see cref="MinecraftClient"/> objects in the given
+        /// world.
+        /// </summary>
         public MinecraftClient[] GetClientsInWorld(World world)
         {
             var clients = new List<MinecraftClient>();
@@ -168,6 +232,9 @@ namespace Craft.Net.Server
             return clients.ToArray();
         }
 
+        /// <summary>
+        /// Sends the specified chat message to all connected clients.
+        /// </summary>
         public void SendChat(string message)
         {
             for (int i = 0; i < Clients.Count; i++)
@@ -175,15 +242,43 @@ namespace Craft.Net.Server
             ProcessSendQueue();
         }
 
+        /// <summary>
+        /// Registers the provided <see cref="PluginChannel"/> to listen
+        /// for and send plugin messages.
+        /// </summary>
         public void RegisterPluginChannel(PluginChannel channel)
         {
             PluginChannels.Add(channel.Channel, channel);
             channel.ChannelRegistered(this);
         }
 
+        /// <summary>
+        /// Sends and updated player list to all connected clients.
+        /// </summary>
+        public void UpdatePlayerList(object unused)
+        {
+            if (Clients.Count != 0)
+            {
+                for (int i = 0; i < Clients.Count; i++)
+                {
+                    foreach (MinecraftClient client in Clients)
+                        Clients[i].SendPacket(new PlayerListItemPacket(
+                                                  client.Username, true, client.Ping));
+                }
+            }
+            ProcessSendQueue();
+        }
+
         #endregion
 
         #region Private Methods
+
+        private void HandleOnBlockChanged(object sender, BlockChangedEventArgs e)
+        {
+            foreach (MinecraftClient client in GetClientsInWorld(e.World))
+                client.SendPacket(new BlockChangePacket(e.Position, e.Value));
+            ProcessSendQueue();
+        }
 
         private void SendQueueWorker()
         {
@@ -299,20 +394,6 @@ namespace Craft.Net.Server
                 }
                 ProcessSendQueue();
             }
-        }
-
-        public void UpdatePlayerList(object unused)
-        {
-            if (Clients.Count != 0)
-            {
-                for (int i = 0; i < Clients.Count; i++)
-                {
-                    foreach (MinecraftClient client in Clients)
-                        Clients[i].SendPacket(new PlayerListItemPacket(
-                                                  client.Username, true, client.Ping));
-                }
-            }
-            ProcessSendQueue();
         }
 
         #endregion
