@@ -10,10 +10,6 @@ namespace Craft.Net.Server
     {
         #region Packet type array
 
-        /// <summary>
-        /// The length of each packet, or -1 if the ID is
-        /// not enough to determine the length.
-        /// </summary>
         private static readonly Type[] PacketTypes =
             {
                 typeof (KeepAlivePacket), // 0x0
@@ -286,13 +282,15 @@ namespace Craft.Net.Server
         public static IEnumerable<Packet> TryReadPackets(ref MinecraftClient client, int length)
         {
             var results = new List<Packet>();
+            // Get a buffer to parse that is the length of the recieved data
             byte[] buffer = client.RecieveBuffer.Take(length).ToArray();
+            // Decrypt the buffer if needed
             if (client.EncryptionEnabled)
                 buffer = client.Decrypter.ProcessBytes(buffer);
 
             while (buffer.Length > 0)
             {
-                Type packetType = PacketTypes[buffer[0]];
+                Type packetType = PacketTypes[buffer[0]]; // Get the correct type to parse this packet
                 if (packetType == null)
                 {
                     throw new InvalidOperationException("Invalid packet ID 0x" +
@@ -300,19 +298,26 @@ namespace Craft.Net.Server
                 }
                 var workingPacket = (Packet)Activator.CreateInstance(packetType);
                 workingPacket.PacketContext = PacketContext.ClientToServer;
+                // Attempt to read the packet
                 int workingLength = workingPacket.TryReadPacket(buffer, length);
                 if (workingLength == -1) // Incomplete packet
                 {
+                    // Copy the incomplete packet into the recieve buffer and recieve more data
+                    // TODO: Test if this can be avoided
                     Array.Copy(buffer, client.RecieveBuffer, buffer.Length);
                     client.RecieveBufferIndex = buffer.Length;
                     client.Socket.ReceiveTimeout = 500;
                     return results;
                 }
+                // Log the packet
                 client.Server.Log("[CLIENT->SERVER] " + client.Socket.RemoteEndPoint, LogImportance.Low);
                 client.Server.Log("Raw: " + DataUtility.DumpArray(buffer.Take(workingLength).ToArray()), LogImportance.Low);
                 client.Server.Log(workingPacket.ToString(), LogImportance.Low);
+
                 client.Socket.ReceiveTimeout = 30000;
+                // Add this packet to the results
                 results.Add(workingPacket);
+                // Shift the buffer over and remove the packet just parsed
                 buffer = buffer.Skip(workingLength).ToArray();
             }
 
