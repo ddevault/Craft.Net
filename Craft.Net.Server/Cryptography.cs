@@ -19,7 +19,7 @@ namespace Craft.Net.Server
             if (negative) // check for negative hashes
                 hash = TwosCompliment(hash);
             // Create the string and trim away the zeroes
-            string digest = GetHexString(hash).Trim('0');
+            string digest = GetHexString(hash).TrimStart('0');
             if (negative)
                 digest = "-" + digest;
             return digest;
