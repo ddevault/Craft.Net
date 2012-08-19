@@ -251,6 +251,7 @@ namespace Craft.Net.Server
             Chunk chunk = world.GetChunk(position);
             var dataPacket = new ChunkDataPacket(ref chunk);
             SendPacket(dataPacket);
+            this.LoadedChunks.Add(position);
         }
 
         /// <summary>
@@ -266,6 +267,7 @@ namespace Craft.Net.Server
             dataPacket.Z = (int)position.Z;
             dataPacket.CompressedData = ChunkDataPacket.ChunkRemovalSequence;
             SendPacket(dataPacket);
+            this.LoadedChunks.Remove(position);
         }
 
         /// <summary>
@@ -279,7 +281,7 @@ namespace Craft.Net.Server
 
         internal void StartKeepAliveTimer()
         {
-            KeepAliveTimer = new Timer(KeepAlive, null, 5000, 5000);
+            KeepAliveTimer = new Timer(KeepAlive, null, 30000, 30000);
         }
 
         internal void KeepAlive(object unused)
@@ -291,7 +293,7 @@ namespace Craft.Net.Server
                 ViewDistance++;
                 ForceUpdateChunksAsync(); // TODO: Move this to its own timer
             }
-            if (LastKeepAlive.AddSeconds(5) < DateTime.Now && false)
+            if (LastKeepAlive.AddSeconds(30) < DateTime.Now && false)
             {
                 //Server.Log("Client timed out");
                 //IsDisconnected = true;

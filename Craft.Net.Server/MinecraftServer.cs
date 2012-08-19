@@ -230,11 +230,9 @@ namespace Craft.Net.Server
         /// Gets all <see cref="MinecraftClient"/> objects in the given
         /// world.
         /// </summary>
-        public MinecraftClient[] GetClientsInWorld(World world)
+        public IEnumerable<MinecraftClient> GetClientsInWorld(World world)
         {
-            var clients = new List<MinecraftClient>();
-            // TODO
-            return clients.ToArray();
+            return EntityManager.GetClientsInWorld(world);
         }
 
         /// <summary>
