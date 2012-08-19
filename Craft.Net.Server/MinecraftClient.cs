@@ -42,6 +42,7 @@ namespace Craft.Net.Server
         /// The client's current inventory.
         /// </summary>
         public Slot[] Inventory;
+        public int SelectedSlot;
         /// <summary>
         /// Set to true if the client is currently crouching.
         /// </summary>

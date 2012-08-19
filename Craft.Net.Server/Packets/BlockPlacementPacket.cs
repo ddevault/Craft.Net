@@ -46,21 +46,11 @@ namespace Craft.Net.Server.Packets
         public override void HandlePacket(MinecraftServer server, ref MinecraftClient client)
         {
             // TODO
-            if (client.Entity.Position.DistanceTo(Position) > 6)
+            if (client.Entity.Position.DistanceTo(Position) > 6) // TODO: Use client.Reach
                 return;
             Item item = (Item)HeldItem.Id;
-            if (HeldItem.Id < 0x80)
-            {
-                var block = (Block)HeldItem.Id;
-                Vector3 clickedBlock = Position;
-                Vector3 placedBlock = Position;
-                placedBlock += AdjustByDirection(Direction);
-                if (block != null)
-                {
-                    block.Data = (byte)HeldItem.Metadata;
-                    server.GetClientWorld(client).SetBlock(placedBlock, block);
-                }
-            }
+            if (item != null)
+                item.OnItemUsed(Position, AdjustByDirection(Direction), CursorPosition, server.GetClientWorld(client), client.Entity);
         }
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)

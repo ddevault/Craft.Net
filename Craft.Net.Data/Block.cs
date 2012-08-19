@@ -51,7 +51,14 @@ namespace Craft.Net.Data
 
         public override void OnItemUsed(Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, World world, Entity usedBy)
         {
-            
+            var clicked = world.GetBlock(clickedBlock);
+            if (clicked.OnBlockRightClicked(clickedBlock, clickedSide, cursorPosition, world, usedBy))
+            {
+                if (this.OnBlockPlaced(clickedBlock, clickedSide, cursorPosition, world, usedBy))
+                {
+                    world.SetBlock(clickedBlock + clickedSide, this);
+                }
+            }
         }
 
         #endregion
@@ -72,7 +79,7 @@ namespace Craft.Net.Data
         /// When the block is clicked, this will be called. Return
         /// false to cancel block placement if relevant.
         /// </summary>
-        public virtual bool OnBlockRightClicked()
+        public virtual bool OnBlockRightClicked(Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, World world, Entity usedBy)
         {
             return true;
         }

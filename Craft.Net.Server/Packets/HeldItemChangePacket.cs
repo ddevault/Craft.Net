@@ -22,7 +22,8 @@ namespace Craft.Net.Server.Packets
 
         public override void HandlePacket(MinecraftServer server, ref MinecraftClient client)
         {
-            // TODO
+            // TODO: Confirm the slot is in an acceptable range
+            client.SelectedSlot = SlotId;
         }
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
