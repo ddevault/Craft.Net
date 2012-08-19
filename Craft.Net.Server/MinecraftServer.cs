@@ -427,6 +427,7 @@ namespace Craft.Net.Server
             client.Entity = new PlayerEntity();
             client.Entity.Position = DefaultWorld.SpawnPoint;
             client.Entity.Position += new Vector3(0, PlayerEntity.Height, 0);
+            client.GameMode = DefaultWorld.GameMode;
             EntityManager.SpawnEntity(DefaultWorld, client.Entity);
             client.SendPacket(new LoginPacket(client.Entity.Id,
                                               DefaultWorld.LevelType, DefaultWorld.GameMode,

@@ -17,6 +17,16 @@ namespace Craft.Net.Server
     /// </summary>
     public class MinecraftClient
     {
+        #region Constants
+
+        public const int InventoryHotbar = 36;
+        public const int InventoryCraftingGrid = 1;
+        public const int InventoryCraftingOutput = 0;
+        public const int InventoryArmor = 5;
+        public const int InventoryMain = 9;
+
+        #endregion
+
         #region Fields
 
         /// <summary>
@@ -103,6 +113,10 @@ namespace Craft.Net.Server
         /// The speed at which this client is permitted to walk.
         /// </summary>
         public byte WalkingSpeed;
+        /// <summary>
+        /// This client's game mode.
+        /// </summary>
+        public GameMode GameMode;
 
         internal List<int> KnownEntities;
         internal string AuthenticationHash;
@@ -141,6 +155,7 @@ namespace Craft.Net.Server
             WalkingSpeed = 12;
             FlyingSpeed = 25;
             Inventory = new Slot[44];
+            SelectedSlot = InventoryHotbar;
             LastKeepAlive = DateTime.MaxValue.AddSeconds(-10);
             KnownEntities = new List<int>();
         }

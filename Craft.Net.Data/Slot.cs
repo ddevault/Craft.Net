@@ -204,5 +204,20 @@ namespace Craft.Net.Data
             Array.Reverse(buffer);
             return BitConverter.ToUInt16(buffer, 0);
         }
+
+        public Item Item
+        {
+            get
+            {
+                var item = (Item)Id;
+                item.Data = Metadata;
+                return item;
+            }
+            set
+            {
+                Id = value.Id;
+                Metadata = value.Data;
+            }
+        }
     }
 }

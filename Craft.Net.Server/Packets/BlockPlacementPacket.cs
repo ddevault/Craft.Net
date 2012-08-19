@@ -45,12 +45,15 @@ namespace Craft.Net.Server.Packets
 
         public override void HandlePacket(MinecraftServer server, ref MinecraftClient client)
         {
-            // TODO
             if (client.Entity.Position.DistanceTo(Position) > 6) // TODO: Use client.Reach
                 return;
-            Item item = (Item)HeldItem.Id;
+            Item item = client.Inventory[client.SelectedSlot].Item;
             if (item != null)
+            {
                 item.OnItemUsed(Position, AdjustByDirection(Direction), CursorPosition, server.GetClientWorld(client), client.Entity);
+                if (client.GameMode != GameMode.Creative)
+                    client.Inventory[client.SelectedSlot].Count--;
+            }
             else
             {
                 client.SendPacket(new DisconnectPacket("Unrecognized item!"));
