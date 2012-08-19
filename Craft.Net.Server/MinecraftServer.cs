@@ -9,6 +9,7 @@ using Craft.Net.Server.Events;
 using Craft.Net.Server.Packets;
 using Craft.Net.Data;
 using Craft.Net.Data.Entities;
+using Craft.Net.Data.Blocks;
 
 namespace Craft.Net.Server
 {
@@ -137,6 +138,7 @@ namespace Craft.Net.Server
             }
 
             Log("Starting Craft.Net server...");
+            DefaultWorld.SetBlock(Vector3.One, new GoldBlock());
 
             CryptoServiceProvider = new RSACryptoServiceProvider(1024);
             ServerKey = CryptoServiceProvider.ExportParameters(true);

@@ -67,10 +67,10 @@ namespace Craft.Net.Server.Packets
                     nonAir = false;
                 if (nonAir)
                 {
-                    Array.Copy(s.Blocks, 0, blockData, i * BlockDataLength, BlockDataLength);
-                    Array.Copy(s.Metadata.Data, 0, metadata, i * NibbleDataLength, NibbleDataLength);
-                    Array.Copy(s.BlockLight.Data, 0, blockLight, i * NibbleDataLength, NibbleDataLength);
-                    Array.Copy(s.SkyLight.Data, 0, skyLight, i * NibbleDataLength, NibbleDataLength);
+                    Array.Copy(s.Blocks, 0, blockData, (chunkY - 1) * BlockDataLength, BlockDataLength);
+                    Array.Copy(s.Metadata.Data, 0, metadata, (chunkY - 1) * NibbleDataLength, NibbleDataLength);
+                    Array.Copy(s.BlockLight.Data, 0, blockLight, (chunkY - 1) * NibbleDataLength, NibbleDataLength);
+                    Array.Copy(s.SkyLight.Data, 0, skyLight, (chunkY - 1) * NibbleDataLength, NibbleDataLength);
 
                     PrimaryBitMap |= mask;
                 }
