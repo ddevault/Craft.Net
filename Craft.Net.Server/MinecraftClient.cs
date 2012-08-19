@@ -140,7 +140,7 @@ namespace Craft.Net.Server
             WalkingSpeed = 12;
             FlyingSpeed = 25;
             Inventory = new Slot[44];
-            LastKeepAlive = DateTime.MaxValue.AddSeconds(-120);
+            LastKeepAlive = DateTime.MaxValue.AddSeconds(-10);
             KnownEntities = new List<int>();
         }
 
@@ -279,7 +279,7 @@ namespace Craft.Net.Server
 
         internal void StartKeepAliveTimer()
         {
-            KeepAliveTimer = new Timer(KeepAlive, null, 30000, 30000);
+            KeepAliveTimer = new Timer(KeepAlive, null, 5000, 5000);
         }
 
         internal void KeepAlive(object unused)
@@ -291,10 +291,11 @@ namespace Craft.Net.Server
                 ViewDistance++;
                 ForceUpdateChunksAsync(); // TODO: Move this to its own timer
             }
-            if (LastKeepAlive.AddSeconds(60) < DateTime.Now)
+            if (LastKeepAlive.AddSeconds(5) < DateTime.Now && false)
             {
-                Server.Log("Client timed out");
-                IsDisconnected = true;
+                //Server.Log("Client timed out");
+                //IsDisconnected = true;
+                // TODO: Fix this
             }
             else
             {
