@@ -1,22 +1,15 @@
-﻿namespace Craft.Net.Data.Blocks
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Craft.Net.Data.Blocks
 {
-    /// <summary>
-    /// FireBlock (ID = 51)
-    /// </summary>
     public class FireBlock : Block
     {
-        /// <summary>
-        /// The Block ID for this block (51)
-        /// </summary>
-        /// <remarks></remarks>
-        public override byte BlockID
+        public override ushort Id
         {
             get { return 51; }
-        }
-
-        public override BlockOpacity Transparent
-        {
-            get { return BlockOpacity.NonSolid; }
         }
     }
 }

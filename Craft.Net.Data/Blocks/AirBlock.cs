@@ -1,8 +1,13 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
 namespace Craft.Net.Data.Blocks
 {
     public class AirBlock : Block
     {
-        public override byte BlockID
+        public override ushort Id
         {
             get { return 0; }
         }

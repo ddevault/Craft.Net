@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using Craft.Net.Data;
-using Craft.Net.Data.Blocks;
 
 namespace Craft.Net.Server.Packets
 {
@@ -37,8 +36,8 @@ namespace Craft.Net.Server.Packets
                 .Concat(DataUtility.CreateInt32((int)Position.X))
                 .Concat(new[] {(byte)Position.Y})
                 .Concat(DataUtility.CreateInt32((int)Position.Z))
-                .Concat(DataUtility.CreateInt16(Value.BlockID))
-                .Concat(new[] {Value.Metadata}).ToArray();
+                .Concat(DataUtility.CreateUInt16(Value.Id))
+                .Concat(new[] { Value.Metadata }).ToArray();
             client.SendData(buffer);
         }
     }

@@ -45,8 +45,10 @@ namespace Craft.Net.Server.Packets
 
         public override void HandlePacket(MinecraftServer server, ref MinecraftClient client)
         {
+            // TODO
             if (client.Entity.Position.DistanceTo(Position) > 6)
                 return;
+            Item item = (Item)HeldItem.Id;
             if (HeldItem.Id < 0x80)
             {
                 var block = (Block)HeldItem.Id;
@@ -55,7 +57,7 @@ namespace Craft.Net.Server.Packets
                 placedBlock += AdjustByDirection(Direction);
                 if (block != null)
                 {
-                    // TODO: More stuff here
+                    block.Data = (byte)HeldItem.Metadata;
                     server.GetClientWorld(client).SetBlock(placedBlock, block);
                 }
             }

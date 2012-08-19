@@ -1,5 +1,5 @@
-using Craft.Net.Data.Blocks;
 
+using Craft.Net.Data.Blocks;
 namespace Craft.Net.Data.Generation
 {
     /// <summary>
@@ -18,7 +18,7 @@ namespace Craft.Net.Data.Generation
                 for (int z = 0; z < 16; z++)
                 {
                     for (int y = 1; y < 3; y++)
-                        chunk.SetBlock(new Vector3(x, y, z), new DirtBlock());
+                        chunk.SetBlock(new Vector3(x, y, z), new DirtBlock()); // TODO: Try to stop all of these object creations
                     chunk.SetBlock(new Vector3(x, 0, z), new BedrockBlock());
                     chunk.SetBlock(new Vector3(x, 3, z), new GrassBlock());
                 }

@@ -1,4 +1,9 @@
-﻿namespace Craft.Net.Data.Blocks
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Craft.Net.Data.Blocks
 {
     public enum WoolColor
     {
@@ -20,10 +25,6 @@
         Black = 15
     }
 
-    /// <summary>
-    /// A Wool Block (ID = 35)
-    /// </summary>
-    /// <remarks></remarks>
     public class WoolBlock : Block
     {
         public WoolBlock()
@@ -35,11 +36,7 @@
             Metadata = (byte)color;
         }
 
-        /// <summary>
-        /// The Block ID for this block (35)
-        /// </summary>
-        /// <remarks></remarks>
-        public override byte BlockID
+        public override ushort Id
         {
             get { return 35; }
         }

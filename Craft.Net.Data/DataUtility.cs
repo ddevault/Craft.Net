@@ -185,6 +185,21 @@ namespace Craft.Net.Data
         /// <summary>
         /// Attempts to read a Minecraft-style 16-bit integer from the given buffer.
         /// </summary>
+        public static bool TryReadUInt16(byte[] buffer, ref int offset, out ushort value)
+        {
+            value = 0xFFFF;
+            if (buffer.Length - offset >= 2)
+            {
+                value = unchecked((ushort)(buffer[0 + offset] << 8 | buffer[1 + offset]));
+                offset += 2;
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Attempts to read a Minecraft-style 16-bit integer from the given buffer.
+        /// </summary>
         public static bool TryReadInt16(byte[] buffer, ref int offset, out short value)
         {
             value = -1;

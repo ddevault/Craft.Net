@@ -1,4 +1,3 @@
-using Craft.Net.Data.Blocks;
 using ICSharpCode.SharpZipLib.Zip.Compression;
 
 namespace Craft.Net.Data
@@ -66,11 +65,11 @@ namespace Craft.Net.Data
             var y = (int)position.Y;
             var z = (int)position.Z;
             int index = x + (z*Width) + (y*Height*Width);
-            Blocks[index] = value.BlockID;
+            Blocks[index] = (byte)value.Id; // TODO: Allow block IDs greater than 255
             Metadata[index] = value.Metadata;
             BlockLight[index] = value.BlockLight;
             SkyLight[index] = value.SkyLight;
-            if (value is AirBlock)
+            if (value.Id == 0)
                 nonAirCount--;
             else
                 nonAirCount++;
@@ -85,8 +84,8 @@ namespace Craft.Net.Data
             var y = (int)position.Y;
             var z = (int)position.Z;
             int index = x + (z*Width) + (y*Height*Width);
-            Block block = Blocks[index];
-            block.Metadata = Metadata[index];
+            Block block = (Block)Blocks[index];
+            block.Data = Metadata[index];
             block.SkyLight = SkyLight[index];
             block.BlockLight = BlockLight[index];
             return block;

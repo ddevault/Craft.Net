@@ -1,22 +1,15 @@
-﻿namespace Craft.Net.Data.Blocks
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Craft.Net.Data.Blocks
 {
-    /// <summary>
-    /// Sapling ID=6
-    /// </summary>
     public class SaplingBlock : Block
     {
-        /// <summary>
-        /// The Block ID for this block (6)
-        /// </summary>
-        /// <remarks></remarks>
-        public override byte BlockID
+        public override ushort Id
         {
             get { return 6; }
-        }
-
-        public override BlockOpacity Transparent
-        {
-            get { return BlockOpacity.Plant; }
         }
     }
 }

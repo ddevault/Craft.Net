@@ -24,14 +24,14 @@ namespace Craft.Net.Data
         /// </summary>
         /// <value>The item ID.</value>
         /// <remarks>This ID may be a block or an item.</remarks>
-        public short Id;
+        public ushort Id;
 
         /// <summary>
         /// Gets or sets the item metadata.
         /// </summary>
         /// <value>The item metadata.</value>
         /// <remarks></remarks>
-        public short Metadata;
+        public ushort Metadata;
 
         /// <summary>
         /// Gets or sets the NBT data.
@@ -58,7 +58,7 @@ namespace Craft.Net.Data
         /// <param name="id">The ID.</param>
         /// <param name="count">The count.</param>
         /// <remarks></remarks>
-        public Slot(short id, byte count)
+        public Slot(ushort id, byte count)
         {
             Id = id;
             this.Count = count;
@@ -73,7 +73,7 @@ namespace Craft.Net.Data
         /// <param name="count">The count.</param>
         /// <param name="metadata">The metadata.</param>
         /// <remarks></remarks>
-        public Slot(short id, byte count, short metadata)
+        public Slot(ushort id, byte count, ushort metadata)
         {
             Id = id;
             this.Count = count;
@@ -90,11 +90,11 @@ namespace Craft.Net.Data
         public static Slot ReadSlot(Stream stream)
         {
             var s = new Slot();
-            s.Id = ReadShort(stream);
-            if (s.Id == -1)
+            s.Id = ReadUShort(stream);
+            if (s.Id == 0xFFFF)
                 return s;
             s.Count = (byte)stream.ReadByte();
-            s.Metadata = ReadShort(stream);
+            s.Metadata = ReadUShort(stream);
 
             short length = ReadShort(stream);
             if (length != -1)
@@ -115,13 +115,13 @@ namespace Craft.Net.Data
         public static bool TryReadSlot(byte[] buffer, ref int offset, out Slot slot)
         {
             slot = new Slot();
-            if (!DataUtility.TryReadInt16(buffer, ref offset, out slot.Id))
+            if (!DataUtility.TryReadUInt16(buffer, ref offset, out slot.Id))
                 return false;
-            if (slot.Id == -1)
+            if (slot.Id == 0xFFFF)
                 return true;
             if (!DataUtility.TryReadByte(buffer, ref offset, out slot.Count))
                 return false;
-            if (!DataUtility.TryReadInt16(buffer, ref offset, out slot.Metadata))
+            if (!DataUtility.TryReadUInt16(buffer, ref offset, out slot.Metadata))
                 return false;
             short length = 0;
             if (!DataUtility.TryReadInt16(buffer, ref offset, out length))
@@ -151,11 +151,11 @@ namespace Craft.Net.Data
         public byte[] GetData()
         {
             byte[] data = new byte[0]
-                .Concat(DataUtility.CreateInt16(Id)).ToArray();
-            if (Id == -1)
+                .Concat(DataUtility.CreateUInt16(Id)).ToArray();
+            if (Id == 0xFFFF)
                 return data;
             data = data.Concat(new[] {Count})
-                .Concat(DataUtility.CreateInt16(Metadata)).ToArray();
+                .Concat(DataUtility.CreateUInt16(Metadata)).ToArray();
 
             // TODO: Confirm this works (needs to return -1?)
             var ms = new MemoryStream();
@@ -175,9 +175,9 @@ namespace Craft.Net.Data
         public byte[] GetFullData()
         {
             byte[] data = new byte[0]
-                .Concat(DataUtility.CreateInt16(Id)).ToArray();
+                .Concat(DataUtility.CreateUInt16(Id)).ToArray();
             data = data.Concat(new[] {Count})
-                .Concat(DataUtility.CreateInt16(Metadata)).ToArray();
+                .Concat(DataUtility.CreateUInt16(Metadata)).ToArray();
 
             var ms = new MemoryStream();
             var gzs = new GZipStream(ms, CompressionMode.Compress, false);
@@ -195,6 +195,14 @@ namespace Craft.Net.Data
             stream.Read(buffer, 0, 2);
             Array.Reverse(buffer);
             return BitConverter.ToInt16(buffer, 0);
+        }
+
+        private static ushort ReadUShort(Stream stream)
+        {
+            var buffer = new byte[2];
+            stream.Read(buffer, 0, 2);
+            Array.Reverse(buffer);
+            return BitConverter.ToUInt16(buffer, 0);
         }
     }
 }

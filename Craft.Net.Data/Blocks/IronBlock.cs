@@ -1,16 +1,13 @@
-﻿namespace Craft.Net.Data.Blocks
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Craft.Net.Data.Blocks
 {
-    /// <summary>
-    /// An Iron block (ID = 42)
-    /// </summary>
-    /// <remarks></remarks>
     public class IronBlock : Block
     {
-        /// <summary>
-        /// The Block ID for this block (42)
-        /// </summary>
-        /// <remarks></remarks>
-        public override byte BlockID
+        public override ushort Id
         {
             get { return 42; }
         }

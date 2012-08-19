@@ -5,11 +5,11 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class LavaFlowingBlock : Block
+    public class SpiderwebBlock : Block
     {
         public override ushort Id
         {
-            get { return 10; }
+            get { return 30; }
         }
     }
 }

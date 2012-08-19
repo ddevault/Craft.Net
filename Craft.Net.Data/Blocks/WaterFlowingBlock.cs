@@ -1,23 +1,15 @@
-﻿namespace Craft.Net.Data.Blocks
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Craft.Net.Data.Blocks
 {
-    /// <summary>
-    /// A Flowing Water block (ID = 8)
-    /// </summary>
-    /// <remarks></remarks>
     public class WaterFlowingBlock : Block
     {
-        /// <summary>
-        /// The Block ID for this block (8)
-        /// </summary>
-        /// <remarks></remarks>
-        public override byte BlockID
+        public override ushort Id
         {
             get { return 8; }
-        }
-
-        public override BlockOpacity Transparent
-        {
-            get { return BlockOpacity.Fluid; }
         }
     }
 }

@@ -1,18 +1,15 @@
-﻿namespace Craft.Net.Data.Blocks
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Craft.Net.Data.Blocks
 {
-    /// <summary>
-    /// A Grass block (ID = 2)
-    /// </summary>
-    /// <remarks></remarks>
     public class GrassBlock : Block
     {
-        /// <summary>
-        /// The Block ID for this block (2)
-        /// </summary>
-        /// <remarks></remarks>
-        public override byte BlockID
+        public override ushort Id
         {
-            get { return 0x02; }
+            get { return 2; }
         }
     }
 }

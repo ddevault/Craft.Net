@@ -1,15 +1,15 @@
-﻿namespace Craft.Net.Data.Blocks
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Craft.Net.Data.Blocks
 {
     public class LavaStillBlock : Block
     {
-        public override byte BlockID
+        public override ushort Id
         {
             get { return 11; }
-        }
-
-        public override BlockOpacity Transparent
-        {
-            get { return BlockOpacity.Fluid; }
         }
     }
 }

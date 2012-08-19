@@ -1,18 +1,15 @@
-﻿namespace Craft.Net.Data.Blocks
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Craft.Net.Data.Blocks
 {
-    /// <summary>
-    /// A Stone block (ID = 1)
-    /// </summary>
-    /// <remarks></remarks>
     public class StoneBlock : Block
     {
-        /// <summary>
-        /// The Block ID for this block (1)
-        /// </summary>
-        /// <remarks></remarks>
-        public override byte BlockID
+        public override ushort Id
         {
-            get { return 0x01; }
+            get { return 1; }
         }
     }
 }

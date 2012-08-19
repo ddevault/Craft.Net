@@ -1,15 +1,13 @@
-﻿namespace Craft.Net.Data.Blocks
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Craft.Net.Data.Blocks
 {
-    /// <summary>
-    /// Log Block ID=17
-    /// </summary>
     public class LogBlock : Block
     {
-        /// <summary>
-        /// The Block ID for this block (17)
-        /// </summary>
-        /// <remarks></remarks>
-        public override byte BlockID
+        public override ushort Id
         {
             get { return 17; }
         }
