@@ -301,7 +301,7 @@ namespace Craft.Net.Server
                                 Packet packet = Clients[i].SendQueue.Dequeue();
                                 // I don't understand why this happens. The only place the SendQueue
                                 // is modified is through Client.SendPacket, and I watched for null packets
-                                // entering through there. There is never a null packet that is put
+                                // entering through there. There is never a null packet that is added
                                 // into the packet queue
                                 if (packet == null)
                                     continue;

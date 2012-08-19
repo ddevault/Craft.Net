@@ -106,7 +106,7 @@ namespace Craft.Net.Server
 
         internal List<int> KnownEntities;
         internal string AuthenticationHash;
-        internal Timer KeepAliveTimer;
+        internal Timer KeepAliveTimer, UpdateLoadedChunksTimer;
         internal DateTime LastKeepAlive, LastKeepAliveSent;
         internal BufferedBlockCipher Decrypter;
         internal BufferedBlockCipher Encrypter;
@@ -282,31 +282,33 @@ namespace Craft.Net.Server
             Server.ProcessSendQueue();
         }
 
-        internal void StartKeepAliveTimer()
+        internal void StartWorkers()
         {
-            KeepAliveTimer = new Timer(KeepAlive, null, 10000, 10000);
+            KeepAliveTimer = new Timer(KeepAlive, null, 1000, 5000);
+            UpdateLoadedChunksTimer = new Timer(UpdateLoadedChunks, null, 1000, 1000);
         }
 
-        internal void KeepAlive(object unused)
+        internal void KeepAlive(object discarded)
         {
-            // Keep alive timer is also responsible for trickling in chunks
-            // early in the session.
-            if (ReadyToSpawn && ViewDistance < MaxViewDistance)
-            {
-                ViewDistance++;
-                ForceUpdateChunksAsync(); // TODO: Move this to its own timer
-            }
             if (LastKeepAlive.AddSeconds(10) < DateTime.Now && false)
             {
-                //Server.Log("Client timed out");
-                //IsDisconnected = true;
-                // TODO: Fix this
+                Server.Log("Client timed out");
+                IsDisconnected = true;
             }
             else
             {
                 SendPacket(new KeepAlivePacket(MinecraftServer.Random.Next()));
                 Server.ProcessSendQueue();
                 LastKeepAliveSent = DateTime.Now;
+            }
+        }
+
+        internal void UpdateLoadedChunks(object discarded)
+        {
+            if (ReadyToSpawn && ViewDistance < MaxViewDistance)
+            {
+                ViewDistance++;
+                ForceUpdateChunksAsync(); // TODO: Move this to its own timer
             }
         }
     }

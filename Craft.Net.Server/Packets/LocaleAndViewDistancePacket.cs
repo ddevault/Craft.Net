@@ -52,6 +52,7 @@ namespace Craft.Net.Server.Packets
             client.MaxViewDistance = ViewDistance;
             client.ColorsEnabled = ColorsEnabled;
             // Difficulty is discarded
+            client.ForceUpdateChunksAsync();
         }
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)

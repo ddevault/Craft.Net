@@ -62,7 +62,7 @@ namespace Craft.Net.Server.Packets
             else
                 server.LogInPlayer(client);
 
-            client.StartKeepAliveTimer();
+            client.StartWorkers();
         }
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
