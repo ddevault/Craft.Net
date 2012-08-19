@@ -22,6 +22,9 @@ namespace Craft.Net.Data
         /// </summary>
         public virtual ushort Data { get; set; }
 
+        /// <summary>
+        /// Called when this item is used by a player.
+        /// </summary>
         public virtual void OnItemUsed(Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, World world, Entity usedBy)
         {
         }

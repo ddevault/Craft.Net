@@ -265,6 +265,7 @@
     <Compile Include="Items\GoldIngotItem.cs" />
     <Compile Include="Items\GoldNuggetItem.cs" />
     <Compile Include="Items\GunpowderItem.cs" />
+    <Compile Include="Items\HoeItem.cs" />
     <Compile Include="Items\IronAxeItem.cs" />
     <Compile Include="Items\IronBootsItem.cs" />
     <Compile Include="Items\IronChestplateItem.cs" />

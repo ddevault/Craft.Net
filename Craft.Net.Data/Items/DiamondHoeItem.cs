@@ -11,7 +11,7 @@
 namespace Craft.Net.Data.Items
 {
     
-    public class DiamondHoeItem : Item
+    public class DiamondHoeItem : HoeItem
     {
         public override ushort Id
         {

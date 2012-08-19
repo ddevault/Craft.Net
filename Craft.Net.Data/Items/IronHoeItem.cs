@@ -10,8 +10,8 @@
 
 namespace Craft.Net.Data.Items
 {
-    
-    public class IronHoeItem : Item
+
+    public class IronHoeItem : HoeItem
     {
         public override ushort Id
         {
