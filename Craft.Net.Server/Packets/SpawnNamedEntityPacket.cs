@@ -43,12 +43,13 @@ namespace Craft.Net.Server.Packets
             byte[] buffer = new[] {PacketId}
                 .Concat(DataUtility.CreateInt32(EntityId))
                 .Concat(DataUtility.CreateString(PlayerName))
-                .Concat(DataUtility.CreateInt32((int)Position.X))
-                .Concat(DataUtility.CreateInt32((int)Position.Y))
-                .Concat(DataUtility.CreateInt32((int)Position.Z))
+                .Concat(DataUtility.CreateAbsoluteInteger((int)Position.X))
+                .Concat(DataUtility.CreateAbsoluteInteger((int)Position.Y))
+                .Concat(DataUtility.CreateAbsoluteInteger((int)Position.Z))
                 .Concat(DataUtility.CreatePackedByte(Yaw))
                 .Concat(DataUtility.CreatePackedByte(Pitch))
-                .Concat(DataUtility.CreateInt16(CurrentItem)).ToArray();
+                .Concat(DataUtility.CreateInt16(CurrentItem))
+                .Concat(new byte[] { 0x00, 0x00, 0x48, 0x00, 0x00, 0x00, 0x00, 0x7F }).ToArray(); // TODO: Metadata
             client.SendData(buffer);
         }
     }

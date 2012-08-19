@@ -104,6 +104,11 @@ namespace Craft.Net.Data
             }
         }
 
+        public static byte[] CreateAbsoluteInteger(double value)
+        {
+            return CreateInt32((int)(value * 32));
+        }
+
         /// <summary>
         /// Creates a Minecraft-style unsigned 64-bit integer.
         /// </summary>

@@ -12,12 +12,6 @@ namespace Craft.Net.Data
     /// </summary>
     public abstract class Item : IComparable
     {
-        static Item()
-        {
-            // The items should always be kept in order
-            Items.Sort();
-        }
-
         /// <summary>
         /// This item's ID.
         /// </summary>

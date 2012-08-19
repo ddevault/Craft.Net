@@ -51,6 +51,11 @@ namespace Craft.Net.Server.Packets
             Item item = (Item)HeldItem.Id;
             if (item != null)
                 item.OnItemUsed(Position, AdjustByDirection(Direction), CursorPosition, server.GetClientWorld(client), client.Entity);
+            else
+            {
+                client.SendPacket(new DisconnectPacket("Unrecognized item!"));
+                server.ProcessSendQueue();
+            }
         }
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)

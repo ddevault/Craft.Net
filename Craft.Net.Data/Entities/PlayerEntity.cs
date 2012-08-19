@@ -25,5 +25,11 @@ namespace Craft.Net.Data.Entities
         }
 
         #endregion
+
+        #region Fields
+
+        public string Username;
+
+        #endregion
     }
 }

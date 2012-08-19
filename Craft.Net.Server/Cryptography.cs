@@ -43,7 +43,7 @@ namespace Craft.Net.Server
             bool carry = true;
             for (i = p.Length - 1; i >= 0; i--)
             {
-                p[i] = (byte)~p[i];
+                p[i] = unchecked((byte)~p[i]);
                 if (carry)
                 {
                     carry = p[i] == 0xFF;

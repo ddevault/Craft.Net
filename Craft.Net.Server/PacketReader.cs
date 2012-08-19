@@ -41,7 +41,7 @@ namespace Craft.Net.Server
                 null, // 0x1a
                 null, // 0x1b
                 null, // 0x1c
-                null, // 0x1d
+                typeof(DestroyEntityPacket), // 0x1d
                 null, // 0x1e
                 null, // 0x1f
                 null, // 0x20

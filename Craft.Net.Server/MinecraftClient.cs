@@ -103,6 +103,7 @@ namespace Craft.Net.Server
         /// </summary>
         public byte WalkingSpeed;
 
+        internal List<int> KnownEntities;
         internal string AuthenticationHash;
         internal Timer KeepAliveTimer;
         internal DateTime LastKeepAlive, LastKeepAliveSent;
@@ -140,6 +141,7 @@ namespace Craft.Net.Server
             FlyingSpeed = 25;
             Inventory = new Slot[44];
             LastKeepAlive = DateTime.MaxValue.AddSeconds(-120);
+            KnownEntities = new List<int>();
         }
 
         /// <summary>
@@ -172,6 +174,8 @@ namespace Craft.Net.Server
         /// </summary>
         public void SendData(byte[] data)
         {
+            if (IsDisconnected)
+                return;
 #if DEBUG
             Server.Log(DataUtility.DumpArray(data), LogImportance.Low);
 #endif

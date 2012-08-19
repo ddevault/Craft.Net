@@ -59,6 +59,10 @@ namespace Craft.Net.Server
         /// A list of Worlds this server will use.
         /// </summary>
         public List<World> Worlds;
+        /// <summary>
+        /// This server's entity manager.
+        /// </summary>
+        public EntityManager EntityManager;
 
         /// <summary>
         /// Fired when the server recieves a <see cref="ChatMessagePacket"/>.
@@ -110,6 +114,7 @@ namespace Craft.Net.Server
             Worlds = new List<World>();
             LogProviders = new List<ILogProvider>();
             PluginChannels = new Dictionary<string, PluginChannel>();
+            EntityManager = new EntityManager(this);
 
             socket = new Socket(AddressFamily.InterNetwork,
                                 SocketType.Stream, ProtocolType.Tcp);
@@ -288,25 +293,22 @@ namespace Craft.Net.Server
                 sendQueueReset.WaitOne();
                 if (Clients.Count != 0)
                 {
-                    for (int i = 0; i < Clients.Count; i++)
+                    lock (Clients)
                     {
-                        while (Clients[i].SendQueue.Count != 0)
+                        for (int i = 0; i < Clients.Count; i++)
                         {
-                            Packet packet = Clients[i].SendQueue.Dequeue();
-                            Log("[SERVER->CLIENT] " + Clients[i].Socket.RemoteEndPoint,
-                                LogImportance.Low);
-                            Log(packet.ToString(), LogImportance.Low);
-                            try
+                            while (i < Clients.Count && Clients[i].SendQueue.Count != 0)
                             {
-                                packet.SendPacket(this, Clients[i]);
-                                packet.FirePacketSent();
-                            }
-                            catch
-                            {
-                                // Occasionally, the client will disconnect while
-                                // processing the packet to be sent, which causes
-                                // a fatal exception.
-                                lock (Clients)
+                                Packet packet = Clients[i].SendQueue.Dequeue();
+                                Log("[SERVER->CLIENT] " + Clients[i].Socket.RemoteEndPoint,
+                                    LogImportance.Low);
+                                Log(packet.ToString(), LogImportance.Low);
+                                try
+                                {
+                                    packet.SendPacket(this, Clients[i]);
+                                    packet.FirePacketSent();
+                                }
+                                catch
                                 {
                                     if (i < Clients.Count)
                                     {
@@ -315,8 +317,8 @@ namespace Craft.Net.Server
                                             Clients[i].Socket.BeginDisconnect(false, null, null);
                                     }
                                     i--;
+                                    break;
                                 }
-                                break;
                             }
                         }
                     }
@@ -356,9 +358,12 @@ namespace Craft.Net.Server
                     foreach (Packet packet in packets)
                         packet.HandlePacket(this, ref client);
 
-                    client.Socket.BeginReceive(client.RecieveBuffer, client.RecieveBufferIndex,
-                                               client.RecieveBuffer.Length - client.RecieveBufferIndex,
-                                               SocketFlags.None, SocketRecieveAsync, client);
+                    if (!client.IsDisconnected)
+                    {
+                        client.Socket.BeginReceive(client.RecieveBuffer, client.RecieveBufferIndex,
+                                                   client.RecieveBuffer.Length - client.RecieveBufferIndex,
+                                                   SocketFlags.None, SocketRecieveAsync, client);
+                    }
                 }
                 catch (InvalidOperationException e)
                 {
@@ -373,23 +378,25 @@ namespace Craft.Net.Server
             }
             if (client.IsDisconnected)
             {
-                if (client.Socket.Connected)
-                    client.Socket.BeginDisconnect(false, null, null);
-                if (client.KeepAliveTimer != null)
-                    client.KeepAliveTimer.Dispose();
-                if (client.IsLoggedIn)
-                {
-                    foreach (MinecraftClient remainingClient in Clients)
-                    {
-                        if (remainingClient.IsLoggedIn)
-                        {
-                            remainingClient.SendPacket(new PlayerListItemPacket(
-                                                           client.Username, false, 0));
-                        }
-                    }
-                }
                 lock (Clients)
                 {
+                    if (client.Socket.Connected)
+                        client.Socket.BeginDisconnect(false, null, null);
+                    if (client.KeepAliveTimer != null)
+                        client.KeepAliveTimer.Dispose();
+                    if (client.IsLoggedIn)
+                    {
+                        foreach (MinecraftClient remainingClient in Clients)
+                        {
+                            if (remainingClient.IsLoggedIn)
+                            {
+                                remainingClient.SendPacket(new PlayerListItemPacket(
+                                                               client.Username, false, 0));
+                            }
+                        }
+                        SendChat(client.Username + " logged out."); // TODO: Event handler
+                        EntityManager.DespawnEntity(client.Entity);
+                    }
                     Clients.Remove(client);
                 }
                 ProcessSendQueue();
@@ -408,13 +415,12 @@ namespace Craft.Net.Server
 
         internal void LogInPlayer(MinecraftClient client)
         {
-            Log(client.Username + " logged in.");
             client.IsLoggedIn = true;
             // Spawn player
             client.Entity = new PlayerEntity();
             client.Entity.Position = DefaultWorld.SpawnPoint;
             client.Entity.Position += new Vector3(0, PlayerEntity.Height, 0);
-            DefaultWorld.Entities.Add(client.Entity);
+            EntityManager.SpawnEntity(DefaultWorld, client.Entity);
             client.SendPacket(new LoginPacket(client.Entity.Id,
                                               DefaultWorld.LevelType, DefaultWorld.GameMode,
                                               client.Entity.Dimension, DefaultWorld.Difficulty,
@@ -422,11 +428,14 @@ namespace Craft.Net.Server
 
             // Send initial chunks
             client.UpdateChunks(true);
-            client.SendQueue.Last().OnPacketSent += (sender, e) => { client.ReadyToSpawn = true; };
             client.SendPacket(new PlayerPositionAndLookPacket(
                                   client.Entity.Position, client.Entity.Yaw, client.Entity.Pitch, true));
+            client.SendQueue.Last().OnPacketSent += (sender, e) => { client.ReadyToSpawn = true; };
 
             UpdatePlayerList(null); // Should also process send queue
+
+            Log(client.Username + " logged in.");
+            SendChat(client.Username + " logged in."); // TODO: event handler
         }
 
         #endregion
