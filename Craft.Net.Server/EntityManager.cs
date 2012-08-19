@@ -82,16 +82,17 @@ namespace Craft.Net.Server
         public void UpdateEntity(Entity entity)
         {
             // Update location with known clients
-            if (entity.Position.DistanceTo(entity.OldPosition) > 0.2d) // Minimum threshold before sending to clients
+            if (entity.Position.DistanceTo(entity.OldPosition) > 0.1d) // Minimum threshold before sending to clients
             {
                 var world = GetEntityWorld(entity);
                 var knownClients = GetClientsInWorld(world).Where(c => c.KnownEntities.Contains(entity.Id));
                 foreach (var client in knownClients)
                 {
-                    if (entity.OldPosition.DistanceTo(entity.Position) < 4)
-                        client.SendPacket(new EntityRelativeMovePacket(entity));
-                    else
-                        client.SendPacket(new EntityTeleportPacket(entity));
+                    client.SendPacket(new EntityTeleportPacket(entity));
+                    // TODO: Further research into relative movement
+                    // When relative movement packets are used, the remote
+                    // clients inevitably see each other in a very inaccurate
+                    // position.
                 }
                 server.ProcessSendQueue();
                 entity.OldPosition = entity.Position;

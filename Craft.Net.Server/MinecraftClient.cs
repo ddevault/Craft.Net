@@ -8,6 +8,7 @@ using Craft.Net.Server.Packets;
 using Craft.Net.Data;
 using Craft.Net.Data.Entities;
 using Org.BouncyCastle.Crypto;
+using System.Diagnostics;
 
 namespace Craft.Net.Server
 {
@@ -164,6 +165,8 @@ namespace Craft.Net.Server
         /// <param name="packet"></param>
         public void SendPacket(Packet packet)
         {
+            if (packet == null)
+                return;
             packet.PacketContext = PacketContext.ServerToClient;
             SendQueue.Enqueue(packet);
         }

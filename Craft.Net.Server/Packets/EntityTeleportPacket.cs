@@ -11,7 +11,7 @@ namespace Craft.Net.Server.Packets
     {
         public int EntityId;
         public Vector3 Position;
-        public byte Yaw, Pitch;
+        public float Yaw, Pitch;
 
         public EntityTeleportPacket()
         {
@@ -21,8 +21,8 @@ namespace Craft.Net.Server.Packets
         {
             EntityId = entity.Id;
             Position = entity.Position;
-            entity.Yaw = entity.Yaw;
-            entity.Pitch = entity.Pitch;
+            this.Yaw = entity.Yaw;
+            this.Pitch = entity.Pitch;
         }
 
         public override byte PacketId
@@ -44,10 +44,11 @@ namespace Craft.Net.Server.Packets
         {
             byte[] payload = new byte[] { PacketId }
                 .Concat(DataUtility.CreateInt32(EntityId))
-                .Concat(DataUtility.CreateInt32((int)Position.X))
-                .Concat(DataUtility.CreateInt32((int)Position.Y))
-                .Concat(DataUtility.CreateInt32((int)Position.Z))
-                .Concat(new byte[] { Yaw, Pitch }).ToArray();
+                .Concat(DataUtility.CreateAbsoluteInteger(Position.X))
+                .Concat(DataUtility.CreateAbsoluteInteger(Position.Y))
+                .Concat(DataUtility.CreateAbsoluteInteger(Position.Z))
+                .Concat(DataUtility.CreatePackedByte(Yaw))
+                .Concat(DataUtility.CreatePackedByte(Pitch)).ToArray();
             client.SendData(payload);
         }
     }
