@@ -54,22 +54,13 @@ namespace Craft.Net.Server.Packets
             }
             if (Action != EntityAction.LeaveBed) // NOTE: Does this matter?
             {
-                EntityId = client.Entity.Id;
-                for (int i = 0;
-                     i <
-                     server.GetClientsInWorld(server.GetClientWorld(client)).Count();
-                     i++)
-                {
-                    if (server.Clients[i] != client)
-                        server.Clients[i].SendPacket(this);
-                }
-                server.ProcessSendQueue();
+                // TODO ?
             }
         }
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
-            throw new InvalidOperationException();
+            throw new NotImplementedException();
         }
     }
 }

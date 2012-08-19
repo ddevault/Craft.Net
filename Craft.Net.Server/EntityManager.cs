@@ -50,6 +50,15 @@ namespace Craft.Net.Server
             server.ProcessSendQueue();
         }
 
+        public void SendClientEntities(MinecraftClient client)
+        {
+            var world = GetEntityWorld(client.Entity);
+            var clients = GetClientsInWorld(world)
+                .Where(c => !c.IsDisconnected && c.Entity.Position.DistanceTo(client.Entity.Position) < (c.ViewDistance * Chunk.Width) && c != client);
+            foreach (var _client in clients)
+                client.SendPacket(new SpawnNamedEntityPacket(_client));
+        }
+
         public void DespawnEntity(Entity entity)
         {
             DespawnEntity(GetEntityWorld(entity), entity);
@@ -65,6 +74,29 @@ namespace Craft.Net.Server
                 client.SendPacket(new DestroyEntityPacket(entity.Id));
             }
             server.ProcessSendQueue();
+        }
+
+        public void UpdateEntity(Entity entity)
+        {
+            // Update location with known clients
+            if (entity.Id == 2)
+                Console.WriteLine("Diff: " + entity.Position.DistanceTo(entity.OldPosition));
+            if (entity.Position.DistanceTo(entity.OldPosition) > 0.2d) // Minimum threshold before sending to clients
+            {
+                var world = GetEntityWorld(entity);
+                var knownClients = GetClientsInWorld(world).Where(c => c.KnownEntities.Contains(entity.Id));
+                foreach (var client in knownClients)
+                {
+                    if (entity.OldPosition.DistanceTo(entity.Position) < 4)
+                        client.SendPacket(new EntityRelativeMovePacket(entity));
+                    else
+                    {
+                        // Entity Teleport
+                    }
+                }
+                server.ProcessSendQueue();
+                entity.OldPosition = entity.Position;
+            }
         }
 
         public IEnumerable<MinecraftClient> GetClientsInWorld(World world)

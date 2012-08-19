@@ -39,14 +39,9 @@ namespace Craft.Net.Server.Packets
         public override void HandlePacket(MinecraftServer server, ref MinecraftClient client)
         {
             EntityId = client.Entity.Id;
-            for (int i = 0;
-                 i <
-                 server.GetClientsInWorld(server.GetClientWorld(client)).Count();
-                 i++) // TODO: Better way
-            {
-                if (server.Clients[i] != client)
-                    server.Clients[i].SendPacket(this);
-            }
+            var clients = server.GetClientsInWorld(server.GetClientWorld(client)).Where(c => c.Entity.Id != EntityId);
+            foreach (var _client in clients)
+                _client.SendPacket(this);
             server.ProcessSendQueue();
         }
 

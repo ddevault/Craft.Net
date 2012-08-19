@@ -56,13 +56,16 @@ namespace Craft.Net.Data
         /// <param name="position">The position of the requested local chunk coordinates.</param>
         public Chunk GetChunk(Vector3 position)
         {
-            if (!Chunks.ContainsKey(position))
+            lock (Chunks)
             {
-                if (WorldGenerator == null)
-                    throw new ArgumentException("The requested chunk is not loaded.", "position");
-                Chunks.Add(position, WorldGenerator.GenerateChunk(position, this));
+                if (!Chunks.ContainsKey(position))
+                {
+                    if (WorldGenerator == null)
+                        throw new ArgumentException("The requested chunk is not loaded.", "position");
+                    Chunks.Add(position, WorldGenerator.GenerateChunk(position, this));
+                }
+                return Chunks[position];
             }
-            return Chunks[position];
         }
 
         /// <summary>

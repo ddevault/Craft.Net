@@ -431,6 +431,9 @@ namespace Craft.Net.Server
                                   client.Entity.Position, client.Entity.Yaw, client.Entity.Pitch, true));
             client.SendQueue.Last().OnPacketSent += (sender, e) => { client.ReadyToSpawn = true; };
 
+            // Send entities
+            EntityManager.SendClientEntities(client);
+
             UpdatePlayerList(null); // Should also process send queue
 
             Log(client.Username + " logged in.");

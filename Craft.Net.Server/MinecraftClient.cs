@@ -281,7 +281,7 @@ namespace Craft.Net.Server
 
         internal void StartKeepAliveTimer()
         {
-            KeepAliveTimer = new Timer(KeepAlive, null, 30000, 30000);
+            KeepAliveTimer = new Timer(KeepAlive, null, 10000, 10000);
         }
 
         internal void KeepAlive(object unused)
@@ -293,7 +293,7 @@ namespace Craft.Net.Server
                 ViewDistance++;
                 ForceUpdateChunksAsync(); // TODO: Move this to its own timer
             }
-            if (LastKeepAlive.AddSeconds(30) < DateTime.Now && false)
+            if (LastKeepAlive.AddSeconds(10) < DateTime.Now && false)
             {
                 //Server.Log("Client timed out");
                 //IsDisconnected = true;

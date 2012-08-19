@@ -56,6 +56,7 @@
     <Compile Include="Packet.cs" />
     <Compile Include="Packets\DestroyEntityPacket.cs" />
     <Compile Include="Packets\DisconnectPacket.cs" />
+    <Compile Include="Packets\EntityRelativeMovePacket.cs" />
     <Compile Include="Packets\PluginMessagePacket.cs" />
     <Compile Include="Packets\ServerListPingPacket.cs" />
     <Compile Include="Packets\HandshakePacket.cs" />

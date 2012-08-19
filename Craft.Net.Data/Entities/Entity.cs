@@ -9,17 +9,7 @@ namespace Craft.Net.Data.Entities
         public bool OnGround;
         public float Pitch;
         public float Yaw;
-
-        private Vector3 position;
-        public Vector3 Position
-        {
-            get { return position; }
-            set
-            {
-                OldPosition = position;
-                position = value;
-            }
-        }
+        public Vector3 Position;
 
         public abstract Size Size { get; }
     }
