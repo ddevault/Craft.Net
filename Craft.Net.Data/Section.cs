@@ -1,5 +1,3 @@
-using ICSharpCode.SharpZipLib.Zip.Compression;
-
 namespace Craft.Net.Data
 {
     /// <summary>

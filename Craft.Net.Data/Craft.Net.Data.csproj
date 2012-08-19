@@ -32,8 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\ICSharpCode.SharpZipLib.dll</HintPath>
+    <Reference Include="Ionic.Zip.Reduced">
+      <HintPath>..\Ionic.Zip.Reduced.dll</HintPath>
     </Reference>
     <Reference Include="LibNbt">
       <HintPath>..\LibNbt.dll</HintPath>
