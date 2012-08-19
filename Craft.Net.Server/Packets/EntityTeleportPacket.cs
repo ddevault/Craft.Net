@@ -7,27 +7,27 @@ using Craft.Net.Data.Entities;
 
 namespace Craft.Net.Server.Packets
 {
-    public class EntityRelativeMovePacket : Packet
+    public class EntityTeleportPacket : Packet
     {
         public int EntityId;
-        public sbyte DeltaX, DeltaY, DeltaZ;
+        public Vector3 Position;
+        public byte Yaw, Pitch;
 
-        public EntityRelativeMovePacket()
+        public EntityTeleportPacket()
         {
         }
 
-        public EntityRelativeMovePacket(Entity entity)
+        public EntityTeleportPacket(Entity entity)
         {
             EntityId = entity.Id;
-            Vector3 diff = entity.Position - entity.OldPosition;
-            this.DeltaX = (sbyte)(diff.X * 32.0);
-            this.DeltaY = (sbyte)(diff.Y * 32.0);
-            this.DeltaZ = (sbyte)(diff.Z * 32.0);
+            Position = entity.Position;
+            entity.Yaw = entity.Yaw;
+            entity.Pitch = entity.Pitch;
         }
 
         public override byte PacketId
         {
-            get { return 0x1F; }
+            get { return 0x22; }
         }
 
         public override int TryReadPacket(byte[] buffer, int length)
@@ -44,7 +44,10 @@ namespace Craft.Net.Server.Packets
         {
             byte[] payload = new byte[] { PacketId }
                 .Concat(DataUtility.CreateInt32(EntityId))
-                .Concat(new byte[] { (byte)DeltaX, (byte)DeltaY, (byte)DeltaZ }).ToArray();
+                .Concat(DataUtility.CreateInt32((int)Position.X))
+                .Concat(DataUtility.CreateInt32((int)Position.Y))
+                .Concat(DataUtility.CreateInt32((int)Position.Z))
+                .Concat(new byte[] { Yaw, Pitch }).ToArray();
             client.SendData(payload);
         }
     }

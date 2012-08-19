@@ -56,7 +56,10 @@ namespace Craft.Net.Server
             var clients = GetClientsInWorld(world)
                 .Where(c => !c.IsDisconnected && c.Entity.Position.DistanceTo(client.Entity.Position) < (c.ViewDistance * Chunk.Width) && c != client);
             foreach (var _client in clients)
+            {
+                client.KnownEntities.Add(_client.Entity.Id);
                 client.SendPacket(new SpawnNamedEntityPacket(_client));
+            }
         }
 
         public void DespawnEntity(Entity entity)
@@ -79,8 +82,6 @@ namespace Craft.Net.Server
         public void UpdateEntity(Entity entity)
         {
             // Update location with known clients
-            if (entity.Id == 2)
-                Console.WriteLine("Diff: " + entity.Position.DistanceTo(entity.OldPosition));
             if (entity.Position.DistanceTo(entity.OldPosition) > 0.2d) // Minimum threshold before sending to clients
             {
                 var world = GetEntityWorld(entity);
@@ -90,9 +91,7 @@ namespace Craft.Net.Server
                     if (entity.OldPosition.DistanceTo(entity.Position) < 4)
                         client.SendPacket(new EntityRelativeMovePacket(entity));
                     else
-                    {
-                        // Entity Teleport
-                    }
+                        client.SendPacket(new EntityTeleportPacket(entity));
                 }
                 server.ProcessSendQueue();
                 entity.OldPosition = entity.Position;
