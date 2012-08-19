@@ -240,7 +240,7 @@ namespace Craft.Net.Data
         /// </summary>
         public static bool TryReadInt64(byte[] buffer, ref int offset, out long value)
         {
-            if (buffer.Length - offset >= 4)
+            if (buffer.Length - offset >= 8)
             {
                 unchecked
                 {
