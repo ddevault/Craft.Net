@@ -138,7 +138,6 @@ namespace Craft.Net.Server
             }
 
             Log("Starting Craft.Net server...");
-            DefaultWorld.SetBlock(Vector3.One, new GoldBlock());
 
             CryptoServiceProvider = new RSACryptoServiceProvider(1024);
             ServerKey = CryptoServiceProvider.ExportParameters(true);
