@@ -17,16 +17,6 @@ namespace Craft.Net.Server
     /// </summary>
     public class MinecraftClient
     {
-        #region Constants
-
-        public const int InventoryHotbar = 36;
-        public const int InventoryCraftingGrid = 1;
-        public const int InventoryCraftingOutput = 0;
-        public const int InventoryArmor = 5;
-        public const int InventoryMain = 9;
-
-        #endregion
-
         #region Fields
 
         /// <summary>
@@ -49,11 +39,6 @@ namespace Craft.Net.Server
         /// The hostname the client connected with.
         /// </summary>
         public string Hostname;
-        /// <summary>
-        /// The client's current inventory.
-        /// </summary>
-        public Slot[] Inventory;
-        public int SelectedSlot;
         /// <summary>
         /// Set to true if the client is currently crouching.
         /// </summary>
@@ -113,10 +98,6 @@ namespace Craft.Net.Server
         /// The speed at which this client is permitted to walk.
         /// </summary>
         public byte WalkingSpeed;
-        /// <summary>
-        /// This client's game mode.
-        /// </summary>
-        public GameMode GameMode;
 
         internal List<int> KnownEntities;
         internal string AuthenticationHash;
@@ -154,10 +135,6 @@ namespace Craft.Net.Server
             this.Server = server;
             WalkingSpeed = 12;
             FlyingSpeed = 25;
-            Inventory = new Slot[45];
-            for (int i = 0; i < Inventory.Length; i++)
-                Inventory[i] = new Slot();
-            SelectedSlot = InventoryHotbar;
             LastKeepAlive = DateTime.MaxValue.AddSeconds(-10);
             KnownEntities = new List<int>();
         }

@@ -1,5 +1,6 @@
 using System;
 using Craft.Net.Data;
+using Craft.Net.Data.Entities;
 
 namespace Craft.Net.Server.Packets
 {
@@ -22,13 +23,13 @@ namespace Craft.Net.Server.Packets
 
         public override void HandlePacket(MinecraftServer server, ref MinecraftClient client)
         {
-            if (SlotId < 10 && SlotId > 0)
+            if (SlotId < 10 && SlotId >= 0)
             {
-                client.SelectedSlot = MinecraftClient.InventoryHotbar + SlotId;
+                client.Entity.SelectedSlot = (short)(PlayerEntity.InventoryHotbar + SlotId);
                 var clients = server.EntityManager.GetKnownClients(client.Entity);
                 foreach (var _client in clients)
                     _client.SendPacket(new EntityEquipmentPacket(client.Entity.Id, EntityEquipmentSlot.HeldItem,
-                        client.Inventory[client.SelectedSlot]));
+                        client.Entity.Inventory[client.Entity.SelectedSlot]));
             }
         }
 

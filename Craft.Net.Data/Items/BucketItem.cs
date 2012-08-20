@@ -8,6 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using Craft.Net.Data.Blocks;
+using Craft.Net.Data.Entities;
 namespace Craft.Net.Data.Items
 {
     
@@ -18,6 +20,21 @@ namespace Craft.Net.Data.Items
             get
             {
                 return 325;
+            }
+        }
+
+        public override void OnItemUsed(Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, World world, Entities.Entity usedBy)
+        {
+            PlayerEntity entity = (PlayerEntity)usedBy;
+            // TODO: Check for source block
+            // TODO: Survival
+            if (world.GetBlock(clickedBlock + clickedSide) is WaterFlowingBlock || world.GetBlock(clickedBlock + clickedSide) is WaterStillBlock)
+            {
+                world.SetBlock(clickedBlock + clickedSide, new AirBlock());
+            }
+            if (world.GetBlock(clickedBlock + clickedSide) is LavaFlowingBlock || world.GetBlock(clickedBlock + clickedSide) is LavaStillBlock)
+            {
+                world.SetBlock(clickedBlock + clickedSide, new AirBlock());
             }
         }
     }

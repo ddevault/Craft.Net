@@ -69,6 +69,7 @@
     <Compile Include="Packets\ClientStatusPacket.cs" />
     <Compile Include="Packets\LoginPacket.cs" />
     <Compile Include="Packets\KeepAlivePacket.cs" />
+    <Compile Include="Packets\SetSlotPacket.cs" />
     <Compile Include="PluginChannel.cs" />
     <Compile Include="ConsoleLogWriter.cs" />
     <Compile Include="Packets\LocaleAndViewDistancePacket.cs" />

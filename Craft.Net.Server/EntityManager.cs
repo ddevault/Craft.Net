@@ -59,7 +59,7 @@ namespace Craft.Net.Server
             {
                 client.KnownEntities.Add(_client.Entity.Id);
                 client.SendPacket(new SpawnNamedEntityPacket(_client));
-                client.SendPacket(new EntityEquipmentPacket(_client.Entity.Id, EntityEquipmentSlot.HeldItem, _client.Inventory[_client.SelectedSlot]));
+                client.SendPacket(new EntityEquipmentPacket(_client.Entity.Id, EntityEquipmentSlot.HeldItem, _client.Entity.Inventory[_client.Entity.SelectedSlot]));
             }
         }
 
@@ -111,6 +111,14 @@ namespace Craft.Net.Server
         public IEnumerable<MinecraftClient> GetClientsInWorld(World world)
         {
             return server.Clients.Where(c => world.Entities.Contains(c.Entity));
+        }
+
+        public MinecraftClient GetClient(PlayerEntity entity)
+        {
+            var clients = server.Clients.Where(c => c.Entity == entity);
+            if (clients.Count() == 0)
+                return null;
+            return clients.First();
         }
 
         public World GetEntityWorld(Entity entity)

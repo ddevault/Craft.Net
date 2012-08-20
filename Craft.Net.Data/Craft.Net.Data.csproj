@@ -193,6 +193,7 @@
     <Compile Include="Dimension.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\PlayerEntity.cs" />
+    <Compile Include="Events\InventoryChangedEventArgs.cs" />
     <Compile Include="GameMode.cs" />
     <Compile Include="Generation\DebugGenerator.cs" />
     <Compile Include="Generation\FlatlandGenerator.cs" />

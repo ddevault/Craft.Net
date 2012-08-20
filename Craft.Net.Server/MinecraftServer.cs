@@ -427,7 +427,8 @@ namespace Craft.Net.Server
             client.Entity = new PlayerEntity();
             client.Entity.Position = DefaultWorld.SpawnPoint;
             client.Entity.Position += new Vector3(0, PlayerEntity.Height, 0);
-            client.GameMode = DefaultWorld.GameMode;
+            client.Entity.GameMode = DefaultWorld.GameMode;
+            client.Entity.InventoryChanged += Entity_InventoryChanged;
             EntityManager.SpawnEntity(DefaultWorld, client.Entity);
             client.SendPacket(new LoginPacket(client.Entity.Id,
                                               DefaultWorld.LevelType, DefaultWorld.GameMode,
@@ -447,6 +448,13 @@ namespace Craft.Net.Server
 
             Log(client.Username + " logged in.");
             SendChat(client.Username + " logged in."); // TODO: event handler
+        }
+
+        void Entity_InventoryChanged(object sender, Data.Events.InventoryChangedEventArgs e)
+        {
+            var client = EntityManager.GetClient(sender as PlayerEntity);
+            client.SendPacket(new SetSlotPacket(0, e.Index, e.NewValue));
+            this.ProcessSendQueue();
         }
 
         #endregion
