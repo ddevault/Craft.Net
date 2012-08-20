@@ -154,7 +154,7 @@ namespace Craft.Net.Server
             this.Server = server;
             WalkingSpeed = 12;
             FlyingSpeed = 25;
-            Inventory = new Slot[44];
+            Inventory = new Slot[45];
             for (int i = 0; i < Inventory.Length; i++)
                 Inventory[i] = new Slot();
             SelectedSlot = InventoryHotbar;

@@ -23,7 +23,13 @@ namespace Craft.Net.Server.Packets
         public override void HandlePacket(MinecraftServer server, ref MinecraftClient client)
         {
             if (SlotId < 10 && SlotId > 0)
+            {
                 client.SelectedSlot = MinecraftClient.InventoryHotbar + SlotId;
+                var clients = server.EntityManager.GetKnownClients(client.Entity);
+                foreach (var _client in clients)
+                    _client.SendPacket(new EntityEquipmentPacket(client.Entity.Id, EntityEquipmentSlot.HeldItem,
+                        client.Inventory[client.SelectedSlot]));
+            }
         }
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)

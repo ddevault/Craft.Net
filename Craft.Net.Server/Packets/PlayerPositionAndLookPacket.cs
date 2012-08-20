@@ -43,9 +43,9 @@ namespace Craft.Net.Server.Packets
                 return -1;
             if (!DataUtility.TryReadDouble(buffer, ref offset, out Z))
                 return -1;
-            if (!DataUtility.TryReadFloat(buffer, ref offset, out Yaw))
-                return -1;
             if (!DataUtility.TryReadFloat(buffer, ref offset, out Pitch))
+                return -1;
+            if (!DataUtility.TryReadFloat(buffer, ref offset, out Yaw))
                 return -1;
             if (!DataUtility.TryReadBoolean(buffer, ref offset, out OnGround))
                 return -1;

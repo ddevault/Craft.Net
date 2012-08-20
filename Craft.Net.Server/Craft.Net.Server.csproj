@@ -57,6 +57,7 @@
     <Compile Include="Packets\DestroyEntityPacket.cs" />
     <Compile Include="Packets\DisconnectPacket.cs" />
     <Compile Include="Packets\EntityEquipmentPacket.cs" />
+    <Compile Include="Packets\EntityHeadLookPacket.cs" />
     <Compile Include="Packets\EntityRelativeMovePacket.cs" />
     <Compile Include="Packets\EntityTeleportPacket.cs" />
     <Compile Include="Packets\PluginMessagePacket.cs" />

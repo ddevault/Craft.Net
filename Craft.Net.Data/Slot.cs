@@ -179,9 +179,14 @@ namespace Craft.Net.Data
                 .Concat(DataUtility.CreateUInt16(Metadata)).ToArray();
 
             var ms = new MemoryStream();
-            var gzs = new GZipStream(ms, CompressionMode.Compress, false);
+            var gzs = new GZipStream(ms, CompressionMode.Compress, true);
             Nbt.SaveFile(gzs);
             gzs.Close();
+            if (ms.Length == 0)
+            {
+                data = data.Concat(DataUtility.CreateInt16(-1)).ToArray();
+                return data;
+            }
             byte[] b = ms.GetBuffer();
             data = data.Concat(DataUtility.CreateInt16((short)b.Length)).Concat(b).ToArray();
 
