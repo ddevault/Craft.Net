@@ -25,8 +25,16 @@ namespace Craft.Net.Server.Packets
 
         public override void HandlePacket(MinecraftServer server, ref MinecraftClient client)
         {
-            if (Index < client.Inventory.Length)
+            if (Index < client.Inventory.Length && Index > 0)
+            {
                 client.Inventory[Index] = Item;
+                if (Index == client.SelectedSlot)
+                {
+                    var clients = server.EntityManager.GetKnownClients(client.Entity);
+                    foreach (var _client in clients)
+                        _client.SendPacket(new EntityEquipmentPacket(client.Entity.Id, EntityEquipmentSlot.HeldItem, client.Inventory[Index]));
+                }
+            }
         }
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)

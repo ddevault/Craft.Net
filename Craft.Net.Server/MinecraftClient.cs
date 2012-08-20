@@ -155,6 +155,8 @@ namespace Craft.Net.Server
             WalkingSpeed = 12;
             FlyingSpeed = 25;
             Inventory = new Slot[44];
+            for (int i = 0; i < Inventory.Length; i++)
+                Inventory[i] = new Slot();
             SelectedSlot = InventoryHotbar;
             LastKeepAlive = DateTime.MaxValue.AddSeconds(-10);
             KnownEntities = new List<int>();

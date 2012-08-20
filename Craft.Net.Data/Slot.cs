@@ -146,22 +146,23 @@ namespace Craft.Net.Data
         /// <summary>
         /// Gets the slot data.
         /// </summary>
-        /// <returns></returns>
-        /// <remarks></remarks>
         public byte[] GetData()
         {
-            byte[] data = new byte[0]
-                .Concat(DataUtility.CreateUInt16(Id)).ToArray();
+            byte[] data = DataUtility.CreateUInt16(Id);
             if (Id == 0xFFFF)
                 return data;
-            data = data.Concat(new[] {Count})
+            data = data.Concat(new[] { Count })
                 .Concat(DataUtility.CreateUInt16(Metadata)).ToArray();
 
-            // TODO: Confirm this works (needs to return -1?)
             var ms = new MemoryStream();
-            var gzs = new GZipStream(ms, CompressionMode.Compress, false);
+            var gzs = new GZipStream(ms, CompressionMode.Compress, true);
             Nbt.SaveFile(gzs);
             gzs.Close();
+            if (ms.Length == 0)
+            {
+                data = data.Concat(DataUtility.CreateInt16(-1)).ToArray();
+                return data;
+            }
             byte[] b = ms.GetBuffer();
             data = data.Concat(DataUtility.CreateInt16((short)b.Length)).Concat(b).ToArray();
             return data;
@@ -174,9 +175,7 @@ namespace Craft.Net.Data
         /// <remarks></remarks>
         public byte[] GetFullData()
         {
-            byte[] data = new byte[0]
-                .Concat(DataUtility.CreateUInt16(Id)).ToArray();
-            data = data.Concat(new[] {Count})
+            byte[] data = DataUtility.CreateUInt16(Id).Concat(new[] {Count})
                 .Concat(DataUtility.CreateUInt16(Metadata)).ToArray();
 
             var ms = new MemoryStream();
