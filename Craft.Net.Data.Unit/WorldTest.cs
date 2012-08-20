@@ -24,22 +24,22 @@ namespace Craft.Net.Data.Unit
         public void TestGetBlock()
         {
             // Test vertical sections
-            Assert.AreEqual(World.GetBlock(Vector3.Zero), new BedrockBlock());
-            Assert.AreEqual(World.GetBlock(Vector3.Up), new DirtBlock());
-            Assert.AreEqual(World.GetBlock(new Vector3(0, 3, 0)), new GrassBlock());
+            Assert.AreEqual(new BedrockBlock(), World.GetBlock(Vector3.Zero));
+            Assert.AreEqual(new DirtBlock(), World.GetBlock(Vector3.Up));
+            Assert.AreEqual(new GrassBlock(), World.GetBlock(new Vector3(0, 3, 0)));
 
             // Test quadrants
-            Assert.AreEqual(World.GetBlock(new Vector3(1, 0, 1)), new BedrockBlock());
-            Assert.AreEqual(World.GetBlock(new Vector3(-1, 0, 1)), new BedrockBlock());
-            Assert.AreEqual(World.GetBlock(new Vector3(1, 0, -1)), new BedrockBlock());
-            Assert.AreEqual(World.GetBlock(new Vector3(-1, 0, -1)), new BedrockBlock());
+            Assert.AreEqual(new BedrockBlock(), World.GetBlock(new Vector3(1, 0, 1)));
+            Assert.AreEqual(new BedrockBlock(), World.GetBlock(new Vector3(-1, 0, 1)));
+            Assert.AreEqual(new BedrockBlock(), World.GetBlock(new Vector3(1, 0, -1)));
+            Assert.AreEqual(new BedrockBlock(), World.GetBlock(new Vector3(-1, 0, -1)));
         }
 
         [Test]
         public void TestSetBlock()
         {
             World.SetBlock(Vector3.Zero, new GoldBlock());
-            Assert.AreEqual(World.GetBlock(Vector3.Zero), new GoldBlock());
+            Assert.AreEqual(new GoldBlock(), World.GetBlock(Vector3.Zero));
         }
     }
 }

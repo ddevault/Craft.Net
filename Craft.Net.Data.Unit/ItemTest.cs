@@ -21,9 +21,9 @@ namespace Craft.Net.Data.Unit
             {
                 GameMode = GameMode.Creative
             };
-            Vector3 targetBlock = new Vector3(0, 3, 0);
-            Vector3 liquidBlock = targetBlock + Vector3.Up;
-            world.SetBlock(targetBlock, new AirBlock());
+            Vector3 targetBlock = new Vector3(0, 2, 0);
+            Vector3 alteredBlock = targetBlock + Vector3.Up;
+            world.SetBlock(alteredBlock, new AirBlock());
 
             BucketItem bucket = new BucketItem();
             LavaBucketItem lavaBucket = new LavaBucketItem();
@@ -31,21 +31,34 @@ namespace Craft.Net.Data.Unit
 
             // TODO: Survival tests
             waterBucket.OnItemUsed(targetBlock, Vector3.Up, Vector3.Zero, world, player);
-            Assert.AreEqual(world.GetBlock(liquidBlock), new WaterFlowingBlock());
+            Assert.AreEqual(new WaterFlowingBlock(), world.GetBlock(alteredBlock));
 
             bucket.OnItemUsed(targetBlock, Vector3.Up, Vector3.Zero, world, player);
-            Assert.AreEqual(world.GetBlock(liquidBlock), new AirBlock());
+            Assert.AreEqual(new AirBlock(), world.GetBlock(alteredBlock));
 
             lavaBucket.OnItemUsed(targetBlock, Vector3.Up, Vector3.Zero, world, player);
-            Assert.AreEqual(world.GetBlock(liquidBlock), new LavaFlowingBlock());
+            Assert.AreEqual(new LavaFlowingBlock(), world.GetBlock(alteredBlock));
 
             bucket.OnItemUsed(targetBlock, Vector3.Up, Vector3.Zero, world, player);
-            Assert.AreEqual(world.GetBlock(liquidBlock), new AirBlock());
+            Assert.AreEqual(new AirBlock(), world.GetBlock(alteredBlock));
 
-            world.SetBlock(liquidBlock, new BedrockBlock());
+            world.SetBlock(alteredBlock, new BedrockBlock());
 
             bucket.OnItemUsed(targetBlock, Vector3.Up, Vector3.Zero, world, player);
-            Assert.AreEqual(world.GetBlock(liquidBlock), new BedrockBlock());
+            Assert.AreEqual(new BedrockBlock(), world.GetBlock(alteredBlock));
+        }
+
+        [Test]
+        public void TestFlintAndSteel()
+        {
+            World world = new World(new FlatlandGenerator());
+            Vector3 targetBlock = new Vector3(0, 3, 0);
+            Vector3 alteredBlock = targetBlock + Vector3.Up;
+
+            FlintAndSteelItem flintAndSteel = new FlintAndSteelItem();
+            flintAndSteel.OnItemUsed(targetBlock, Vector3.Up, Vector3.Zero, world, null);
+
+            Assert.AreEqual(new FireBlock(), world.GetBlock(alteredBlock));
         }
 
         [Test]
@@ -56,7 +69,7 @@ namespace Craft.Net.Data.Unit
             BrewingStandItem brewingStand = new BrewingStandItem();
             brewingStand.OnItemUsed(new Vector3(0, 3, 0), Vector3.Up, Vector3.Zero, world, null);
 
-            Assert.AreEqual(world.GetBlock(new Vector3(0, 4, 0)), new BrewingStandBlock());
+            Assert.AreEqual(new BrewingStandBlock(), world.GetBlock(new Vector3(0, 4, 0)));
         }
 
         [Test]
@@ -88,7 +101,7 @@ namespace Craft.Net.Data.Unit
 
             while (testBlock != grassBlock)
             {
-                Assert.AreEqual(world.GetBlock(testBlock), new FarmlandBlock());
+                Assert.AreEqual(new FarmlandBlock(), world.GetBlock(testBlock));
                 testBlock.X++;
             }
         }
