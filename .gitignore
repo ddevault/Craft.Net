@@ -5,3 +5,5 @@ obj/
 *.suo
 *.pidb
 _ReSharper*/
+TestResults/
+*.mdf
