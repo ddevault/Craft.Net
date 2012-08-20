@@ -5,7 +5,7 @@ namespace Craft.Net.Data
     /// <summary>
     /// Represents the location of an object in 3D space.
     /// </summary>
-    public struct Vector3
+    public struct Vector3 : IEquatable<Vector3>
     {
         public double X, Y, Z;
 
@@ -53,6 +53,16 @@ namespace Craft.Net.Data
         #endregion
 
         #region Operators
+
+        public static bool operator !=(Vector3 a, Vector3 b)
+        {
+            return !a.Equals(b);
+        }
+
+        public static bool operator ==(Vector3 a, Vector3 b)
+        {
+            return a.Equals(b);
+        }
 
         public static Vector3 operator +(Vector3 a, Vector3 b)
         {
@@ -151,5 +161,10 @@ namespace Craft.Net.Data
         }
 
         #endregion
+
+        public bool Equals(Vector3 other)
+        {
+            return other.X == this.X && other.Y == this.Y && other.Z == this.Z;
+        }
     }
 }

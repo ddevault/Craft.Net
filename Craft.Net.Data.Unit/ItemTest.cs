@@ -12,23 +12,49 @@ namespace Craft.Net.Data.Unit
     [TestFixture]
     public class ItemTest
     {
-        public World World;
-
-        [TestFixtureSetUp]
-        public void SetUp()
+        [Test]
+        public void TestBrewingStand()
         {
-            World = new World(new FlatlandGenerator());
+            World world = new World(new FlatlandGenerator());
+
+            BrewingStandItem brewingStand = new BrewingStandItem();
+            brewingStand.OnItemUsed(new Vector3(0, 3, 0), Vector3.Up, Vector3.Zero, world, null);
+
+            Assert.AreEqual(world.GetBlock(new Vector3(0, 4, 0)), new BrewingStandBlock());
         }
 
         [Test]
         public void TestHoe()
         {
+            World world = new World(new FlatlandGenerator());
             Vector3 grassBlock = new Vector3(0, 3, 0);
 
-            var hoe = new DiamondHoeItem();
-            hoe.OnItemUsed(grassBlock, Vector3.Up, Vector3.Zero, World, null);
+            HoeItem hoe = new DiamondHoeItem();
+            hoe.OnItemUsed(grassBlock, Vector3.Up, Vector3.Zero, world, null);
 
-            Assert.AreEqual(World.GetBlock(grassBlock), new FarmlandBlock());
+            grassBlock.X++;
+            hoe = new IronHoeItem();
+            hoe.OnItemUsed(grassBlock, Vector3.Up, Vector3.Zero, world, null);
+
+            grassBlock.X++;
+            hoe = new GoldenHoeItem();
+            hoe.OnItemUsed(grassBlock, Vector3.Up, Vector3.Zero, world, null);
+
+            grassBlock.X++;
+            hoe = new StoneHoeItem();
+            hoe.OnItemUsed(grassBlock, Vector3.Up, Vector3.Zero, world, null);
+
+            grassBlock.X++;
+            hoe = new WoodenHoeItem();
+            hoe.OnItemUsed(grassBlock, Vector3.Up, Vector3.Zero, world, null);
+
+            var testBlock = new Vector3(0, 3, 0);
+
+            while (testBlock != grassBlock)
+            {
+                Assert.AreEqual(world.GetBlock(testBlock), new FarmlandBlock());
+                testBlock.X++;
+            }
         }
     }
 }
