@@ -14,23 +14,23 @@ namespace Craft.Net.Data
         /// The location of this chunk in global,
         /// world-wide coordinates.
         /// </summary>
-        public Vector3 AbsolutePosition;
+        public Vector3 AbsolutePosition { get; set; }
         /// <summary>
         /// The biome data for this chunk.
         /// </summary>
-        public byte[] Biomes;
+        public byte[] Biomes { get; set; }
         /// <summary>
         /// The region this chunk is contained in.
         /// </summary>
-        public Region ParentRegion;
+        public Region ParentRegion { get; set; }
         /// <summary>
         /// The position of this chunk within the parent region.
         /// </summary>
-        public Vector3 RelativePosition;
+        public Vector3 RelativePosition { get; set; }
         /// <summary>
         /// The 16x16x16 sections that make up this chunk.
         /// </summary>
-        public Section[] Sections;
+        public Section[] Sections { get; set; }
 
         /// <summary>
         /// Creates a new Chunk within the specified <see cref="Craft.Net.Data.Region"/>

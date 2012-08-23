@@ -35,7 +35,7 @@ namespace Craft.Net.Server.Packets
             throw new InvalidOperationException();
         }
 
-        public override void HandlePacket(MinecraftServer server, ref MinecraftClient client)
+        public override void HandlePacket(MinecraftServer server, MinecraftClient client)
         {
             throw new InvalidOperationException();
         }

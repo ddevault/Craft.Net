@@ -14,35 +14,35 @@ namespace Craft.Net.Data
         /// <summary>
         /// The difficulty of this world.
         /// </summary>
-        public Difficulty Difficulty;
+        public Difficulty Difficulty { get; set; }
         /// <summary>
         /// The default game mode players use.
         /// </summary>
-        public GameMode GameMode;
+        public GameMode GameMode { get; set; }
         /// <summary>
         /// The name of this world.
         /// </summary>
-        public string Name;
+        public string Name { get; set; }
         /// <summary>
         /// The currently loaded regions for this world.
         /// </summary>
-        public Dictionary<Vector3, Region> Regions;
+        public Dictionary<Vector3, Region> Regions { get; set; }
         /// <summary>
         /// The entities currently present in this world.
         /// </summary>
-        public List<Entity> Entities;
+        public List<Entity> Entities { get; set; }
         /// <summary>
         /// The seed used to generate this world.
         /// </summary>
-        public long Seed;
+        public long Seed { get; set; }
         /// <summary>
         /// The spawn point for new players in this world.
         /// </summary>
-        public Vector3 SpawnPoint;
+        public Vector3 SpawnPoint { get; set; }
         /// <summary>
         /// The world generator used to create this world.
         /// </summary>
-        public IWorldGenerator WorldGenerator;
+        public IWorldGenerator WorldGenerator { get; set; }
 
         /// <summary>
         /// Creates a new world for client-side use.

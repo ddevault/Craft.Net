@@ -29,7 +29,7 @@ namespace Craft.Net.Server.Packets
             return offset;
         }
 
-        public override void HandlePacket(MinecraftServer server, ref MinecraftClient client)
+        public override void HandlePacket(MinecraftServer server, MinecraftClient client)
         {
             server.Log(client.Username + " disconnected (" + Reason + ")");
             client.IsDisconnected = true;

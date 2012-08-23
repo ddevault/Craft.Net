@@ -45,7 +45,7 @@ namespace Craft.Net.Server.Packets
             return offset;
         }
 
-        public override void HandlePacket(MinecraftServer server, ref MinecraftClient client)
+        public override void HandlePacket(MinecraftServer server, MinecraftClient client)
         {
             if (client.Entity.Position.DistanceTo(Position) <= MaxDigDistance)
             {

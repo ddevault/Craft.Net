@@ -10,23 +10,23 @@ namespace Craft.Net.Data
         /// <summary>
         /// The raw block data in this section.
         /// </summary>
-        public byte[] Blocks;
+        public byte[] Blocks { get; set; }
         /// <summary>
         /// The raw metadata in this section.
         /// </summary>
-        public NibbleArray Metadata;
+        public NibbleArray Metadata { get; set; }
         /// <summary>
         /// The raw block light in this section.
         /// </summary>
-        public NibbleArray BlockLight;
+        public NibbleArray BlockLight { get; set; }
         /// <summary>
         /// The raw sky light in this section.
         /// </summary>
-        public NibbleArray SkyLight;
+        public NibbleArray SkyLight { get; set; }
         /// <summary>
         /// The Y location of this section, in relative coordinates.
         /// </summary>
-        public byte Y;
+        public byte Y { get; set; }
 
         private int nonAirCount;
 

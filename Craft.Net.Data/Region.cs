@@ -18,15 +18,15 @@ namespace Craft.Net.Data
         /// <summary>
         /// The currently loaded chunk list.
         /// </summary>
-        public Dictionary<Vector3, Chunk> Chunks;
+        public Dictionary<Vector3, Chunk> Chunks { get; set; }
         /// <summary>
         /// The location of this region in the overworld.
         /// </summary>
-        public Vector3 Position;
+        public Vector3 Position { get; set; }
         /// <summary>
         /// The <see cref="IWorldGenerator"/> used to generate this world.
         /// </summary>
-        public IWorldGenerator WorldGenerator;
+        public IWorldGenerator WorldGenerator { get; set; }
 
         /// <summary>
         /// Creates a new Region for server-side use at the given position using

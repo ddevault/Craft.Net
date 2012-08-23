@@ -363,7 +363,7 @@ namespace Craft.Net.Server
                 {
                     IEnumerable<Packet> packets = PacketReader.TryReadPackets(ref client, length);
                     foreach (Packet packet in packets)
-                        packet.HandlePacket(this, ref client);
+                        packet.HandlePacket(this, client);
 
                     if (!client.IsDisconnected)
                     {

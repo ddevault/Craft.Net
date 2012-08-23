@@ -36,7 +36,7 @@ namespace Craft.Net.Server.Packets
             return offset;
         }
 
-        public override void HandlePacket(MinecraftServer server, ref MinecraftClient client)
+        public override void HandlePacket(MinecraftServer server, MinecraftClient client)
         {
             EntityId = client.Entity.Id;
             var clients = server.GetClientsInWorld(server.GetClientWorld(client)).Where(c => c.Entity.Id != EntityId);

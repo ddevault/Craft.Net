@@ -47,7 +47,7 @@ namespace Craft.Net.Server
         /// <summary>
         /// Handles the server-side logic for recieving the packet.
         /// </summary>
-        public abstract void HandlePacket(MinecraftServer server, ref MinecraftClient client);
+        public abstract void HandlePacket(MinecraftServer server, MinecraftClient client);
         /// <summary>
         /// Sends the packet to a client.
         /// </summary>
