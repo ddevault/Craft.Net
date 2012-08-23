@@ -23,7 +23,7 @@ namespace Craft.Net.Server
         /// <summary>
         /// The protocol version supported by this server.
         /// </summary>
-        public const int ProtocolVersion = 40;
+        public const int ProtocolVersion = 41;
 
         /// <summary>
         /// A list of all connected clients. Not all connected
