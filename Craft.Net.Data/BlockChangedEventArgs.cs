@@ -11,15 +11,15 @@ namespace Craft.Net.Data
         /// <summary>
         /// The position of the changed block.
         /// </summary>
-        public Vector3 Position;
+        public Vector3 Position { get; set; }
         /// <summary>
         /// The new block.
         /// </summary>
-        public Block Value;
+        public Block Value { get; set; }
         /// <summary>
         /// The world it changed in.
         /// </summary>
-        public World World;
+        public World World { get; set; }
 
         /// <summary>
         /// Creates a new instance of <see cref="Craft.Net.Data.BlockChangedEventArgs"/>.

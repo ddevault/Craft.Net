@@ -9,9 +9,9 @@ namespace Craft.Net.Data
 {
     public abstract class Block : Item
     {
-        #region Properties and Fields
+        #region Properties
 
-        private static Dictionary<ushort, Block> OverridenBlocks;
+        private static Dictionary<ushort, Block> OverridenBlocks { get; set; }
 
         /// <summary>
         /// Gets or sets this block's metadata value as a
@@ -33,17 +33,17 @@ namespace Craft.Net.Data
         /// This block's metadata value, stored as a 4-bit
         /// nibble.
         /// </summary>
-        public byte Metadata;
+        public byte Metadata { get; set; }
 
         /// <summary>
         /// The light on this block cast by other blocks.
         /// </summary>
-        public byte BlockLight;
+        public byte BlockLight { get; set; }
 
         /// <summary>
         /// The light on this block cast by the sky.
         /// </summary>
-        public byte SkyLight;
+        public byte SkyLight { get; set; }
 
         #endregion
 

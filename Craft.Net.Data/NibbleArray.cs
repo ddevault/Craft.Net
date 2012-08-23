@@ -9,7 +9,7 @@ namespace Craft.Net.Data
         /// The data in the nibble array. Each byte contains
         /// two nibbles, stored in big-endian.
         /// </summary>
-        public byte[] Data;
+        public byte[] Data { get; set; }
 
         /// <summary>
         /// Creates a new nibble array with the given number of nibbles.
