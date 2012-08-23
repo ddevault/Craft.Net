@@ -32,8 +32,7 @@ namespace Craft.Net.Server.Test
             minecraftServer.Start();
             Console.WriteLine("Press any key to exit.");
             while (Console.ReadKey(true).Key != ConsoleKey.Q)
-		    continue;
-
+		        continue;
             // Stop the server
             minecraftServer.Stop();
         }
