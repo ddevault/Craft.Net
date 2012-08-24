@@ -5,13 +5,17 @@ namespace Craft.Net.Server
     /// <summary>
     /// Logs server messages to a file.
     /// </summary>
-    public class FileLogWriter : ILogProvider
+    public class FileLogWriter
     {
         private readonly StreamWriter logWriter;
         /// <summary>
         /// The minimum message importance level required to log a message.
         /// </summary>
-        public LogImportance MinimumImportance;
+	public LogImportance MinimumImportance
+	{
+		get;
+		set;
+	}
 
         /// <summary>
         /// Creates a new logger to output messages at or above the specified

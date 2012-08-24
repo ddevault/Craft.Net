@@ -5,12 +5,16 @@ namespace Craft.Net.Server
     /// <summary>
     /// Logs output to the command window.
     /// </summary>
-    public class ConsoleLogWriter : ILogProvider
+    public class ConsoleLogWriter
     {
         /// <summary>
         /// The minimum importance required to log a message.
         /// </summary>
-        public LogImportance MinimumImportance;
+	public LogImportance MinimumImportance
+	{
+	    get;
+	    set;
+	}
 
         /// <summary>
         /// Creates a new logger with the provided minimum importance.
