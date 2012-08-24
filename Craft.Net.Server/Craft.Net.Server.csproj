@@ -50,6 +50,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Cryptography.cs" />
     <Compile Include="EntityManager.cs" />
+    <Compile Include="LogManager.cs" />
     <Compile Include="MinecraftServer.cs" />
     <Compile Include="MinecraftClient.cs" />
     <Compile Include="PacketReader.cs" />
@@ -63,7 +64,6 @@
     <Compile Include="Packets\PluginMessagePacket.cs" />
     <Compile Include="Packets\ServerListPingPacket.cs" />
     <Compile Include="Packets\HandshakePacket.cs" />
-    <Compile Include="ILogProvider.cs" />
     <Compile Include="Packets\EncryptionKeyRequestPacket.cs" />
     <Compile Include="Packets\EncryptionKeyResponsePacket.cs" />
     <Compile Include="Packets\ClientStatusPacket.cs" />

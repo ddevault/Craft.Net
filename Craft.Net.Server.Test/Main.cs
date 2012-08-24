@@ -22,17 +22,19 @@ namespace Craft.Net.Server.Test
             minecraftServer.OnlineMode = false;
             minecraftServer.EncryptionEnabled = true;
             // Add a console logger
-            minecraftServer.AddLogProvider(new ConsoleLogWriter(LogImportance.High));
-            minecraftServer.AddLogProvider(new FileLogWriter("packetLog.txt", LogImportance.Low));
+            minecraftServer.AddLogProvider(new ConsoleLogWriter(LogImportance.High).Log);
+            minecraftServer.AddLogProvider(new FileLogWriter("packetLog.txt", LogImportance.Low).Log);
             // Add a flatland world
             minecraftServer.AddWorld(new World(new FlatlandGenerator()));
             // Register the chat handler
             minecraftServer.OnChatMessage += HandleOnChatMessage;
             // Start the server
             minecraftServer.Start();
-            Console.WriteLine("Press any key to exit.");
+            
+            Console.WriteLine("Press q-key to exit.");
             while (Console.ReadKey(true).Key != ConsoleKey.Q)
-		        continue;
+                continue;
+
             // Stop the server
             minecraftServer.Stop();
         }

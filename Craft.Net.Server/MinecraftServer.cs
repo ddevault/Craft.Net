@@ -43,7 +43,7 @@ namespace Craft.Net.Server
         /// A list of <see cref="ILogProvider"/> objects to log
         /// data to.
         /// </summary>
-        public List<ILogProvider> LogProviders;
+        public LogManager LogManager;
         /// <summary>
         /// The maximum number of players that may log in.
         /// </summary>
@@ -109,17 +109,19 @@ namespace Craft.Net.Server
             Clients = new List<MinecraftClient>();
             MaxPlayers = 25;
             MotD = "Craft.Net Server";
-            OnlineMode = EncryptionEnabled = true;
+            OnlineMode = EncryptionEnabled = false;
             Random = new Random();
             DefaultWorldIndex = 0;
             Worlds = new List<World>();
-            LogProviders = new List<ILogProvider>();
+            LogManager = new LogManager();
             PluginChannels = new Dictionary<string, PluginChannel>();
             EntityManager = new EntityManager(this);
 
             socket = new Socket(AddressFamily.InterNetwork,
                                 SocketType.Stream, ProtocolType.Tcp);
             socket.Bind(endPoint);
+
+
         }
 
         #endregion
@@ -188,9 +190,9 @@ namespace Craft.Net.Server
         /// Adds the requested <see cref="ILogProvider"/> to the
         /// list of log providers.
         /// </summary>
-        public void AddLogProvider(ILogProvider logProvider)
+        public void AddLogProvider(LogDelegate del)
         {
-            LogProviders.Add(logProvider);
+	    LogManager.LogEvent += del;
         }
 
         /// <summary>
@@ -206,8 +208,7 @@ namespace Craft.Net.Server
         /// </summary>
         public void Log(string text, LogImportance logLevel)
         {
-            foreach (ILogProvider provider in LogProviders)
-                provider.Log(text, logLevel);
+	    LogManager.Log(text, logLevel);
         }
 
         /// <summary>
