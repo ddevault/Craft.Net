@@ -31,9 +31,9 @@ namespace Craft.Net.Server.Test
             // Start the server
             minecraftServer.Start();
             
-	    Console.WriteLine("Press q-key to exit.");
-	    while (Console.ReadKey(true).Key != ConsoleKey.Q)
-		    continue;
+            Console.WriteLine("Press q-key to exit.");
+            while (Console.ReadKey(true).Key != ConsoleKey.Q)
+                continue;
 
             // Stop the server
             minecraftServer.Stop();
