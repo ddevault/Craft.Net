@@ -65,11 +65,6 @@ namespace Craft.Net.Server
         /// </summary>
         public EntityManager EntityManager;
 
-        /// <summary>
-        /// Fired when the server recieves a <see cref="ChatMessagePacket"/>.
-        /// </summary>
-        public event EventHandler<ChatMessageEventArgs> OnChatMessage;
-
         #endregion
 
         #region Private Fields
@@ -95,6 +90,23 @@ namespace Craft.Net.Server
         {
             get { return Worlds[DefaultWorldIndex]; }
         }
+
+        #endregion
+
+        #region Events
+
+        /// <summary>
+        /// Fired when a player logs in.
+        /// </summary>
+        public event EventHandler<PlayerLogInEventArgs> PlayerLoggedIn;
+        /// <summary>
+        /// Fired when a player logs out.
+        /// </summary>
+        public event EventHandler<PlayerLogInEventArgs> PlayerLoggedOut;
+        /// <summary>
+        /// Fired when the server recieves a <see cref="ChatMessagePacket"/>.
+        /// </summary>
+        public event EventHandler<ChatMessageEventArgs> ChatMessage;
 
         #endregion
 
@@ -401,6 +413,7 @@ namespace Craft.Net.Server
                                                                client.Username, false, 0));
                             }
                         }
+                        OnPlayerLoggedOut(new PlayerLogInEventArgs(client));
                         SendChat(client.Username + " logged out."); // TODO: Event handler
                         EntityManager.DespawnEntity(client.Entity);
                     }
@@ -416,8 +429,8 @@ namespace Craft.Net.Server
 
         internal void FireOnChatMessage(ChatMessageEventArgs e)
         {
-            if (OnChatMessage != null)
-                OnChatMessage(this, e);
+            if (ChatMessage != null)
+                ChatMessage(this, e);
         }
 
         internal void LogInPlayer(MinecraftClient client)
@@ -446,6 +459,7 @@ namespace Craft.Net.Server
 
             UpdatePlayerList(null); // Should also process send queue
 
+            OnPlayerLoggedIn(new PlayerLogInEventArgs(client));
             Log(client.Username + " logged in.");
             SendChat(client.Username + " logged in."); // TODO: event handler
         }
@@ -456,6 +470,22 @@ namespace Craft.Net.Server
             client.SendPacket(new SetSlotPacket(0, e.Index, e.NewValue));
             this.ProcessSendQueue();
         }
+
+        #region Events
+
+        protected internal virtual void OnPlayerLoggedIn(PlayerLogInEventArgs e)
+        {
+            if (PlayerLoggedIn != null)
+                PlayerLoggedIn(this, e);
+        }
+
+        protected internal virtual void OnPlayerLoggedOut(PlayerLogInEventArgs e)
+        {
+            if (PlayerLoggedOut != null)
+                PlayerLoggedOut(this, e);
+        }
+
+        #endregion
 
         #endregion
     }

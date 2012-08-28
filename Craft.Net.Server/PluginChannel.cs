@@ -20,7 +20,7 @@ namespace Craft.Net.Server
         /// <summary>
         /// Run when a plugin message is recieved.
         /// </summary>
-        public abstract void MessageRecieved(byte[] data);
+        public abstract void MessageRecieved(MinecraftClient client, byte[] data);
 
         /// <summary>
         /// Run when the channel is successfully registered.
