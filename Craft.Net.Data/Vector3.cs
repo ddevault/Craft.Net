@@ -164,7 +164,25 @@ namespace Craft.Net.Data
 
         public bool Equals(Vector3 other)
         {
-            return other.X == this.X && other.Y == this.Y && other.Z == this.Z;
+            return other.X.Equals(X) && other.Y.Equals(Y) && other.Z.Equals(Z);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (obj.GetType() != typeof (Vector3)) return false;
+            return Equals((Vector3)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int result = X.GetHashCode();
+                result = (result * 397) ^ Y.GetHashCode();
+                result = (result * 397) ^ Z.GetHashCode();
+                return result;
+            }
         }
     }
 }

@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Biome.cs" />
     <Compile Include="Block.cs" />
     <Compile Include="BlockChangedEventArgs.cs" />
     <Compile Include="Blocks\AirBlock.cs" />

@@ -49,7 +49,14 @@ namespace Craft.Net.Server.Packets
         public override void HandlePacket(MinecraftServer server, MinecraftClient client)
         {
             client.ChatMode = ChatMode;
-            client.Locale = CultureInfo.GetCultureInfo(Locale);
+            try
+            {
+                client.Locale = CultureInfo.GetCultureInfo(Locale.Replace("_", "-"));
+            }
+            catch
+            {
+                client.Locale = CultureInfo.InvariantCulture;
+            }
             client.MaxViewDistance = ViewDistance;
             client.ColorsEnabled = ColorsEnabled;
             // Difficulty is discarded
