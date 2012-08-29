@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Craft.Net.Data.Entities;
 
 namespace Craft.Net.Data
 {
@@ -15,6 +16,63 @@ namespace Craft.Net.Data
         /// A global <see cref="System.Random"/> instance.
         /// </summary>
         public static Random Random = new Random();
+
+        #region Math
+
+        /// <summary>
+        /// Gets a byte representing block direction based on the rotation
+        /// of the entity that placed it, on a flat plane.
+        /// </summary>
+        /// <param name="p">The entity whose rotation should be used.</param>
+        /// <param name="invert">If set to <c>true</c> the direction is inverted.</param>
+        /// <returns></returns>
+        /// <remarks>This is used for directional data on blocks like Furnaces</remarks>
+        public static byte DirectionByRotationFlat(Entity p, bool invert = false)
+        {
+            byte direction = (byte)((int)Math.Floor((p.Yaw * 4F) / 360F + 0.5D) & 3);
+            if (invert)
+                switch (direction)
+                {
+                    case 0: return 2;
+                    case 1: return 5;
+                    case 2: return 3;
+                    case 3: return 4;
+                }
+            else
+                switch (direction)
+                {
+                    case 0: return 3;
+                    case 1: return 4;
+                    case 2: return 2;
+                    case 3: return 5;
+                }
+            return 0;
+        }
+
+        /// <summary>
+        /// Gets a byte representing block direction based on the rotation
+        /// of the entity that placed it.
+        /// </summary>
+        /// <param name="p">The entity whose rotation should be used.</param>
+        /// <param name="position">The position of the block being placed.</param>
+        /// <param name="invert">If set to <c>true</c>, the direction is inverted.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
+        public static byte DirectionByRotation(PlayerEntity p, Vector3 position, bool invert = false)
+        {
+            // TODO: Figure out some algorithm based on player's look yaw
+            double d = Math.Asin((p.Position.Y - position.Y) / position.DistanceTo(p.Position));
+            if (d > (Math.PI / 4)) return invert ? (byte)1 : (byte)0;
+            if (d < -(Math.PI / 4)) return invert ? (byte)0 : (byte)1;
+            return DirectionByRotationFlat(p, invert);
+        }
+
+        public static double Distance2D(double A1, double A2, double B1, double B2)
+        {
+            return Math.Sqrt(Math.Pow(B1 - A1, 2) + Math.Pow(B2 - A2, 2));
+        }
+
+        #endregion
 
         #region Logging/Debugging
 

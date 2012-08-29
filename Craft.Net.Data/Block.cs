@@ -54,7 +54,7 @@ namespace Craft.Net.Data
             var clicked = world.GetBlock(clickedBlock);
             if (clicked.OnBlockRightClicked(clickedBlock, clickedSide, cursorPosition, world, usedBy))
             {
-                if (this.OnBlockPlaced(clickedBlock, clickedSide, cursorPosition, world, usedBy))
+                if (this.OnBlockPlaced(world, clickedBlock + clickedSide, clickedBlock, clickedSide, cursorPosition, usedBy))
                 {
                     world.SetBlock(clickedBlock + clickedSide, this);
                 }
@@ -96,7 +96,7 @@ namespace Craft.Net.Data
         /// false to cancel block placement. The default behavoir
         /// is to simply place the block.
         /// </summary>
-        public virtual bool OnBlockPlaced(Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, World world, Entity usedBy)
+        public virtual bool OnBlockPlaced(World world, Vector3 position, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entity usedBy)
         {
             return true;
         }
