@@ -169,14 +169,53 @@ namespace Craft.Net.Data
             var y = (int)position.Y;
             var z = (int)position.Z;
 
-            if (y < 0 || y >= Chunk.Height) throw new ArgumentOutOfRangeException("position", "Position is out of range");
+            if (y < 0 || y >= Chunk.Height)
+                throw new ArgumentOutOfRangeException("position", "Position is out of range");
 
-            int chunkX = x/(Chunk.Width) - ((x < 0) ? 1 : 0);
-            int chunkZ = z/(Chunk.Depth) - ((z < 0) ? 1 : 0);
+            int chunkX = x / (Chunk.Width) - ((x < 0) ? 1 : 0);
+            int chunkZ = z / (Chunk.Depth) - ((z < 0) ? 1 : 0);
 
             chunk = GetChunk(new Vector3(chunkX, 0, chunkZ));
-            return new Vector3(x - chunkX*Chunk.Width, y, z - chunkZ*Chunk.Depth);
-            ;
+            return new Vector3(x - chunkX * Chunk.Width, y, z - chunkZ * Chunk.Depth);
+        }
+
+        /// <summary>
+        /// Gets the coordinates of the chunk that contains the given world coordinates.
+        /// </summary>
+        public static Vector3 WorldToChunkCoordinates(Vector3 position)
+        {
+            var x = (int)position.X;
+            var y = (int)position.Y;
+            var z = (int)position.Z;
+
+            if (y < 0 || y >= Chunk.Height)
+                throw new ArgumentOutOfRangeException("position", "Position is out of range");
+
+            int chunkX = x / (Chunk.Width) - ((x < 0) ? 1 : 0);
+            int chunkZ = z / (Chunk.Depth) - ((z < 0) ? 1 : 0);
+
+            return new Vector3(chunkX, 0, chunkZ);
+        }
+
+        /// <summary>
+        /// Gets the position of the given block in world coordinates relative to
+        /// its parent chunk.
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
+        public static Vector3 FindBlockPosition(Vector3 position)
+        {
+            var x = (int)position.X;
+            var y = (int)position.Y;
+            var z = (int)position.Z;
+
+            if (y < 0 || y >= Chunk.Height)
+                throw new ArgumentOutOfRangeException("position", "Position is out of range");
+
+            int chunkX = x / (Chunk.Width) - ((x < 0) ? 1 : 0);
+            int chunkZ = z / (Chunk.Depth) - ((z < 0) ? 1 : 0);
+
+            return new Vector3(x - chunkX * Chunk.Width, y, z - chunkZ * Chunk.Depth);
         }
     }
 }

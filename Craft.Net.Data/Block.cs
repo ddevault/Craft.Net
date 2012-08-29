@@ -66,6 +66,32 @@ namespace Craft.Net.Data
         #region Virtual Members
 
         /// <summary>
+        /// The transparency of this block.
+        /// </summary>
+        public virtual Transparency Transparency
+        {
+            get { return Transparency.Opaque; }
+        }
+
+        /// <summary>
+        /// True if this block should be destroyed when the block
+        /// it rests upon is destroyed.
+        /// </summary>
+        public virtual bool RequiresSupport
+        {
+            get { return false; }
+        }
+
+        /// <summary>
+        /// The direction of the block that provides support for
+        /// this block.
+        /// </summary>
+        public virtual Vector3 SupportDirection
+        {
+            get { return Vector3.Down; }
+        }
+
+        /// <summary>
         /// When the block is placed, this will be called. Return
         /// false to cancel block placement. The default behavoir
         /// is to simply place the block.

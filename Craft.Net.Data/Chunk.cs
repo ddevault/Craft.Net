@@ -81,8 +81,8 @@ namespace Craft.Net.Data
             position.Y = position.Y % 16;
             Sections[y].SetBlock(position, value);
             var heightIndex = (byte)(position.Z * Depth) + (byte)position.X;
-            if (HeightMap[heightIndex] < y)
-                HeightMap[heightIndex] = y;
+            if (HeightMap[heightIndex] < position.Y)
+                HeightMap[heightIndex] = (byte)position.Y;
         }
 
         /// <summary>
@@ -96,14 +96,28 @@ namespace Craft.Net.Data
             return Sections[y].GetBlock(position);
         }
 
+        /// <summary>
+        /// Gets the biome at the given column.
+        /// </summary>
         public Biome GetBiome(byte x, byte z)
         {
             return (Biome)Biomes[(byte)(z * Depth) + x];
         }
 
+        /// <summary>
+        /// Sets the value of the biome at the given column.
+        /// </summary>
         public void SetBiome(byte x, byte z, Biome value)
         {
             Biomes[(byte)(z * Depth) + x] = (byte)value;
+        }
+
+        /// <summary>
+        /// Gets the height of the specified column.
+        /// </summary>
+        public byte GetHeight(byte x, byte z)
+        {
+            return HeightMap[(byte)(z * Depth) + x];
         }
     }
 }

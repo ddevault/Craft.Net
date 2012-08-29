@@ -285,6 +285,27 @@ namespace Craft.Net.Server
             ProcessSendQueue();
         }
 
+        /// <summary>
+        /// Spawns a bolt of lightning in the given world
+        /// at the given position.
+        /// </summary>
+        public void SpawnLightning(World world, Vector3 position)
+        {
+            var chunk = world.GetChunk(World.WorldToChunkCoordinates(position));
+            var block = World.FindBlockPosition(position);
+            byte y = (byte)(chunk.GetHeight((byte)block.X, (byte)block.Z) + 1);
+
+            var strike = new Vector3(position.X, y, position.Z);
+            if (world.GetBlock(strike + Vector3.Down).Transparency == Transparency.Opaque)
+                world.SetBlock(strike, new FireBlock());
+
+            var clients = GetClientsInWorld(world);
+            foreach (var minecraftClient in clients)
+                minecraftClient.SendPacket(new SpawnLightningPacket(EntityManager.nextEntityId++, strike));
+
+            ProcessSendQueue();
+        }
+
         #endregion
 
         #region Private Methods

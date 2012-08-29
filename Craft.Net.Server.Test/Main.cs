@@ -61,6 +61,9 @@ namespace Craft.Net.Server.Test
                     case "ping":
                         e.Origin.SendChat("Pong");
                         break;
+                    case "lightning":
+                        minecraftServer.SpawnLightning(minecraftServer.GetClientWorld(e.Origin), e.Origin.Entity.Position);
+                        break;
                 }
             }
         }
