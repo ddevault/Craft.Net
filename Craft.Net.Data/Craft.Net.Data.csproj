@@ -62,12 +62,14 @@
     <Compile Include="Blocks\BrownMushroomBlock.cs" />
     <Compile Include="Blocks\CactusBlock.cs" />
     <Compile Include="Blocks\CakeBlock.cs" />
+    <Compile Include="Blocks\CarrotBlock.cs" />
     <Compile Include="Blocks\CauldronBlock.cs" />
     <Compile Include="Blocks\ChestBlock.cs" />
     <Compile Include="Blocks\ClayBlock.cs" />
     <Compile Include="Blocks\CoalOreBlock.cs" />
     <Compile Include="Blocks\CobblestoneBlock.cs" />
     <Compile Include="Blocks\CobblestoneStairBlock.cs" />
+    <Compile Include="Blocks\CobblestoneWallBlock.cs" />
     <Compile Include="Blocks\CocoaPlantBlock.cs" />
     <Compile Include="Blocks\CommandBlock.cs" />
     <Compile Include="Blocks\CraftingTableBlock.cs" />
@@ -89,6 +91,7 @@
     <Compile Include="Blocks\FenceBlock.cs" />
     <Compile Include="Blocks\FenceGateBlock.cs" />
     <Compile Include="Blocks\FireBlock.cs" />
+    <Compile Include="Blocks\FlowerPotBlock.cs" />
     <Compile Include="Blocks\FurnaceActiveBlock.cs" />
     <Compile Include="Blocks\FurnaceBlock.cs" />
     <Compile Include="Blocks\GlassBlock.cs" />
@@ -134,6 +137,7 @@
     <Compile Include="Blocks\PistonBlock.cs" />
     <Compile Include="Blocks\PistonHeadBlock.cs" />
     <Compile Include="Blocks\PistonMovementBlock.cs" />
+    <Compile Include="Blocks\PotatoBlock.cs" />
     <Compile Include="Blocks\PoweredRailBlock.cs" />
     <Compile Include="Blocks\PumpkinBlock.cs" />
     <Compile Include="Blocks\PumpkinStemBlock.cs" />
@@ -182,6 +186,7 @@
     <Compile Include="Blocks\WaterFlowingBlock.cs" />
     <Compile Include="Blocks\WaterStillBlock.cs" />
     <Compile Include="Blocks\LogBlock.cs" />
+    <Compile Include="Blocks\WoodenButtonBlock.cs" />
     <Compile Include="Blocks\WoodenDoorBlock.cs" />
     <Compile Include="Blocks\WoodenDoubleSlabBlock.cs" />
     <Compile Include="Blocks\WoodenPlanksBlock.cs" />

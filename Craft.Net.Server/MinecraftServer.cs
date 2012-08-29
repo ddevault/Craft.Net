@@ -14,7 +14,7 @@ using Craft.Net.Data.Blocks;
 namespace Craft.Net.Server
 {
     /// <summary>
-    /// A Minecraft 12w32a server.
+    /// A Minecraft 12w34b server.
     /// </summary>
     public class MinecraftServer
     {
