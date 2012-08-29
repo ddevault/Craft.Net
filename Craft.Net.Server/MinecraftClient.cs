@@ -9,6 +9,7 @@ using Craft.Net.Data;
 using Craft.Net.Data.Entities;
 using Org.BouncyCastle.Crypto;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace Craft.Net.Server
 {
@@ -36,7 +37,7 @@ namespace Craft.Net.Server
         /// </summary>
         public byte FlyingSpeed;
         /// <summary>
-        /// The hostname the client connected with.
+        /// The hostname the client connected to.
         /// </summary>
         public string Hostname;
         /// <summary>
@@ -60,7 +61,7 @@ namespace Craft.Net.Server
         /// <summary>
         /// The client-provided locale string.
         /// </summary>
-        public string Locale;
+        public CultureInfo Locale;
         /// <summary>
         /// The view distance in chunks.
         /// </summary>
@@ -127,7 +128,7 @@ namespace Craft.Net.Server
             IsDisconnected = false;
             IsLoggedIn = false;
             EncryptionEnabled = false;
-            Locale = "en_US";
+            Locale = CultureInfo.CurrentCulture;
             MaxViewDistance = 10;
             ViewDistance = 3;
             ReadyToSpawn = false;

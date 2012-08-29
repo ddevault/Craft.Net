@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
@@ -48,7 +49,7 @@ namespace Craft.Net.Server.Packets
         public override void HandlePacket(MinecraftServer server, MinecraftClient client)
         {
             client.ChatMode = ChatMode;
-            client.Locale = Locale;
+            client.Locale = CultureInfo.GetCultureInfo(Locale);
             client.MaxViewDistance = ViewDistance;
             client.ColorsEnabled = ColorsEnabled;
             // Difficulty is discarded

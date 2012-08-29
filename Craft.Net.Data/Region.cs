@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Craft.Net.Data.Blocks;
 using Craft.Net.Data.Generation;
 
@@ -27,6 +28,8 @@ namespace Craft.Net.Data
         /// The <see cref="IWorldGenerator"/> used to generate this world.
         /// </summary>
         public IWorldGenerator WorldGenerator { get; set; }
+
+        private Stream regionFile { get; set; }
 
         /// <summary>
         /// Creates a new Region for server-side use at the given position using
