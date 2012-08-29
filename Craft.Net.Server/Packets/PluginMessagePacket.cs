@@ -39,7 +39,7 @@ namespace Craft.Net.Server.Packets
         public override void HandlePacket(MinecraftServer server, MinecraftClient client)
         {
             if (server.PluginChannels.ContainsKey(Channel))
-                server.PluginChannels[Channel].MessageRecieved(Message);
+                server.PluginChannels[Channel].MessageRecieved(client, Message);
         }
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)

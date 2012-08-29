@@ -99,6 +99,10 @@ namespace Craft.Net.Server
         /// The speed at which this client is permitted to walk.
         /// </summary>
         public byte WalkingSpeed;
+        /// <summary>
+        /// Plugin channels this client has requested to listen to.
+        /// </summary>
+        public List<string> PluginChannels { get; set; }
 
         internal List<int> KnownEntities;
         internal string AuthenticationHash;
@@ -138,6 +142,7 @@ namespace Craft.Net.Server
             FlyingSpeed = 25;
             LastKeepAlive = DateTime.MaxValue.AddSeconds(-10);
             KnownEntities = new List<int>();
+            PluginChannels = new List<string>();
         }
 
         /// <summary>

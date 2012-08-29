@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using Craft.Net.Data;
 using Craft.Net.Data.Generation;
+using Craft.Net.Server.Channels;
 using Craft.Net.Server.Events;
 using System.Reflection;
 using Craft.Net.Data.Blocks;
@@ -27,11 +28,12 @@ namespace Craft.Net.Server.Test
             // Add a flatland world
             minecraftServer.AddWorld(new World(new FlatlandGenerator()));
             // Register the chat handler
-            minecraftServer.OnChatMessage += HandleOnChatMessage;
+            minecraftServer.ChatMessage += HandleOnChatMessage;
             // Start the server
             minecraftServer.Start();
             Console.WriteLine("Press any key to exit.");
-            Console.ReadKey(true);
+            while (Console.ReadKey(true).Key != ConsoleKey.Q)
+		        continue;
             // Stop the server
             minecraftServer.Stop();
         }
