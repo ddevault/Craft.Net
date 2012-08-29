@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class SandstoneStairBlock : Block
+    public class SandstoneStairBlock : StairBlock
     {
         public override ushort Id
         {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Craft.Net.Data.Entities;
 
 namespace Craft.Net.Data.Blocks
 {
@@ -10,6 +11,12 @@ namespace Craft.Net.Data.Blocks
         public override ushort Id
         {
             get { return 29; }
+        }
+
+        public override bool OnBlockPlaced(World world, Vector3 position, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entity usedBy)
+        {
+            this.Metadata = DataUtility.DirectionByRotation((PlayerEntity)usedBy, position, true);
+            return true;
         }
     }
 }

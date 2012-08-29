@@ -16,5 +16,11 @@ namespace Craft.Net.Data.Blocks
         {
             return false;
         }
+
+        public override bool OnBlockPlaced(World world, Vector3 position, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entities.Entity usedBy)
+        {
+            this.Metadata = DataUtility.DirectionByRotationFlat(usedBy, true);
+            return true;
+        }
     }
 }
