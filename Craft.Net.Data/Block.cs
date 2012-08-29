@@ -110,6 +110,21 @@ namespace Craft.Net.Data
             return true;
         }
 
+        /// <summary>
+        /// Called when an entity walks on top of the block.
+        /// </summary>
+        public virtual void OnBlockWalkedOn(World world, Vector3 position, Entity entity)
+        {
+        }
+
+        /// <summary>
+        /// Called when an entity walks inside of the block.
+        /// </summary>
+        public virtual void OnBlockWalkedIn(World world, Vector3 position, Entity entity)
+        {
+            // TODO: Default handler to kick the entity out
+        }
+
         #endregion
     }
 }

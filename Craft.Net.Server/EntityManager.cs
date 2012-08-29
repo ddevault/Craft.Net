@@ -82,11 +82,24 @@ namespace Craft.Net.Server
 
         public void UpdateEntity(Entity entity)
         {
+            var world = GetEntityWorld(entity);
+
+            if ((int)(entity.Position.X) != (int)(entity.OldPosition.X) ||
+                (int)(entity.Position.Y) != (int)(entity.OldPosition.Y) ||
+                (int)(entity.Position.Z) != (int)(entity.OldPosition.Z))
+            {
+                var flooredPosition = entity.Position.Floor();
+                var blockIn = world.GetBlock(flooredPosition);
+                var blockOn = world.GetBlock(flooredPosition + Vector3.Down);
+                blockIn.OnBlockWalkedIn(world, flooredPosition, entity);
+                if (flooredPosition.Y == entity.Position.Y)
+                    blockOn.OnBlockWalkedOn(world, flooredPosition + Vector3.Down, entity);
+            }
+
             // Update location with known clients
             if (entity.Position.DistanceTo(entity.OldPosition) > 0.1d ||
                 entity.Pitch != entity.OldPitch || entity.Yaw != entity.OldYaw)
             {
-                var world = GetEntityWorld(entity);
                 var knownClients = GetClientsInWorld(world).Where(c => c.KnownEntities.Contains(entity.Id));
                 foreach (var client in knownClients)
                 {
