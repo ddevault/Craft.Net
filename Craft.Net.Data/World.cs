@@ -199,7 +199,7 @@ namespace Craft.Net.Data
             if (!Regions.ContainsKey(position))
             {
                 // Attempt to load from file
-                if (File.Exists(Path.Combine(Directory, Region.GetRegionFileName(position))))
+                if (Directory != null && File.Exists(Path.Combine(Directory, Region.GetRegionFileName(position))))
                     Regions.Add(position, new Region(position, WorldGenerator, Path.Combine(Directory, Region.GetRegionFileName(position))));
                 else // Generate new region
                     Regions.Add(position, new Region(position, WorldGenerator));
