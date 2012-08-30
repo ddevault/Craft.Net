@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using Craft.Net.Data.Blocks;
 using Craft.Net.Data.Entities;
@@ -13,6 +14,26 @@ namespace Craft.Net.Data.Unit
     [TestFixture]
     public class ItemTest
     {
+        [Test]
+        public void TestItemList()
+        {
+            // Test order
+            for (int i = 1; i < Item.Items.Count; i++)
+                Assert.Less(Item.Items[i - 1].Id, Item.Items[i].Id);
+            // Test completeness
+            var itemTypes = Assembly.GetAssembly(typeof(Item)).GetTypes().Where(t =>
+                !t.IsAbstract && typeof(Item).IsAssignableFrom(t)).OrderBy(t => ((Item)Activator.CreateInstance(t)).Id);
+            string values = "";
+            // Tests for completeness and generates passing code in case of failure
+            foreach (var type in itemTypes)
+                values += "new " + type.Name + "(),\n";
+            foreach (var type in itemTypes)
+            {
+                var instance = (Item)Activator.CreateInstance(type);
+                Assert.IsTrue(Item.Items.Count(i => i.Id == instance.Id) != 0);
+            }
+        }
+
         [Test]
         public void TestBuckets()
         {

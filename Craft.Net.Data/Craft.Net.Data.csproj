@@ -73,6 +73,7 @@
     <Compile Include="Blocks\CocoaPlantBlock.cs" />
     <Compile Include="Blocks\CommandBlock.cs" />
     <Compile Include="Blocks\CraftingTableBlock.cs" />
+    <Compile Include="Blocks\DeadBushBlock.cs" />
     <Compile Include="Blocks\DetectorRailBlock.cs" />
     <Compile Include="Blocks\DiamondBlock.cs" />
     <Compile Include="Blocks\DiamondOreBlock.cs" />
@@ -208,6 +209,7 @@
     <Compile Include="Item.cs" />
     <Compile Include="Items\AppleItem.cs" />
     <Compile Include="Items\ArrowItem.cs" />
+    <Compile Include="Items\BakedPotatoItem.cs" />
     <Compile Include="Items\BedItem.cs" />
     <Compile Include="Items\BlazePowderItem.cs" />
     <Compile Include="Items\BlazeRodItem.cs" />
@@ -223,6 +225,7 @@
     <Compile Include="Items\BrickItem.cs" />
     <Compile Include="Items\BucketItem.cs" />
     <Compile Include="Items\CakeItem.cs" />
+    <Compile Include="Items\CarrotItem.cs" />
     <Compile Include="Items\CauldronItem.cs" />
     <Compile Include="Items\ChainBootsItem.cs" />
     <Compile Include="Items\ChainChestplateItem.cs" />
@@ -256,6 +259,7 @@
     <Compile Include="Items\FishingRodItem.cs" />
     <Compile Include="Items\FlintAndSteelItem.cs" />
     <Compile Include="Items\FlintItem.cs" />
+    <Compile Include="Items\FlowerPotItem.cs" />
     <Compile Include="Items\GhastTearItem.cs" />
     <Compile Include="Items\GlassBottleItem.cs" />
     <Compile Include="Items\GlisteringMelonItem.cs" />
@@ -263,6 +267,7 @@
     <Compile Include="Items\GoldenAppleItem.cs" />
     <Compile Include="Items\GoldenAxeItem.cs" />
     <Compile Include="Items\GoldenBootsItem.cs" />
+    <Compile Include="Items\GoldenCarrotItem.cs" />
     <Compile Include="Items\GoldenChestplateItem.cs" />
     <Compile Include="Items\GoldenHelmetItem.cs" />
     <Compile Include="Items\GoldenHoeItem.cs" />
@@ -285,6 +290,7 @@
     <Compile Include="Items\IronPickaxeItem.cs" />
     <Compile Include="Items\IronShovelItem.cs" />
     <Compile Include="Items\IronSwordItem.cs" />
+    <Compile Include="Items\ItemFrameItem.cs" />
     <Compile Include="Items\LavaBucketItem.cs" />
     <Compile Include="Items\LeatherBootsItem.cs" />
     <Compile Include="Items\LeatherCapItem.cs" />
@@ -304,6 +310,8 @@
     <Compile Include="Items\NetherWartItem.cs" />
     <Compile Include="Items\PaintingItem.cs" />
     <Compile Include="Items\PaperItem.cs" />
+    <Compile Include="Items\PoisonousPotatoItem.cs" />
+    <Compile Include="Items\PotatoItem.cs" />
     <Compile Include="Items\PotionItem.cs" />
     <Compile Include="Items\PumpkinSeedsItem.cs" />
     <Compile Include="Items\RawBeefItem.cs" />

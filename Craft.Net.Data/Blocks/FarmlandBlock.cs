@@ -11,5 +11,11 @@ namespace Craft.Net.Data.Blocks
         {
             get { return 60; }
         }
+
+        public override void OnBlockWalkedOn(World world, Vector3 position, Entities.Entity entity)
+        {
+            if (entity.Velocity.Y < -0.25)
+                Console.WriteLine("Entity " + entity.Id + " jumped onto farmland with velocity " + entity.Velocity);
+        }
     }
 }

@@ -9,7 +9,7 @@ namespace Craft.Net.Data
     {
         public double X, Y, Z;
 
-        public Vector3(float value)
+        public Vector3(double value)
         {
             X = Y = Z = value;
         }
@@ -83,17 +83,81 @@ namespace Craft.Net.Data
         public static Vector3 operator *(Vector3 a, Vector3 b)
         {
             return new Vector3(
-                a.X*b.X,
-                a.Y*b.Y,
-                a.Z*b.Z);
+                a.X * b.X,
+                a.Y * b.Y,
+                a.Z * b.Z);
         }
 
         public static Vector3 operator /(Vector3 a, Vector3 b)
         {
             return new Vector3(
-                a.X/b.X,
-                a.Y/b.Y,
-                a.Z/b.Z);
+                a.X / b.X,
+                a.Y / b.Y,
+                a.Z / b.Z);
+        }
+
+        public static Vector3 operator +(Vector3 a, double b)
+        {
+            return new Vector3(
+                a.X + b,
+                a.Y + b,
+                a.Z + b);
+        }
+
+        public static Vector3 operator -(Vector3 a, double b)
+        {
+            return new Vector3(
+                a.X - b,
+                a.Y - b,
+                a.Z - b);
+        }
+
+        public static Vector3 operator *(Vector3 a, double b)
+        {
+            return new Vector3(
+                a.X * b,
+                a.Y * b,
+                a.Z * b);
+        }
+
+        public static Vector3 operator /(Vector3 a, double b)
+        {
+            return new Vector3(
+                a.X / b,
+                a.Y / b,
+                a.Z / b);
+        }
+
+        public static Vector3 operator +(double a, Vector3 b)
+        {
+            return new Vector3(
+                a + b.X,
+                a + b.Y,
+                a + b.Z);
+        }
+
+        public static Vector3 operator -(double a, Vector3 b)
+        {
+            return new Vector3(
+                a - b.X,
+                a - b.Y,
+                a - b.Z);
+        }
+
+        public static Vector3 operator *(double a, Vector3 b)
+        {
+            return new Vector3(
+                a * b.X,
+                a * b.Y,
+                a * b.Z);
+        }
+
+        public static Vector3 operator /(double a, Vector3 b)
+        {
+            return new Vector3(
+                a / b.X,
+                a / b.Y,
+                a / b.Z);
         }
 
         #endregion
@@ -170,7 +234,7 @@ namespace Craft.Net.Data
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
-            if (obj.GetType() != typeof (Vector3)) return false;
+            if (obj.GetType() != typeof(Vector3)) return false;
             return Equals((Vector3)obj);
         }
 

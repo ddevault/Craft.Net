@@ -64,6 +64,9 @@ namespace Craft.Net.Server.Test
                     case "lightning":
                         minecraftServer.SpawnLightning(minecraftServer.GetClientWorld(e.Origin), e.Origin.Entity.Position);
                         break;
+                    case "velocity":
+                        e.Origin.SendChat(e.Origin.Entity.Velocity.ToString());
+                        break;
                 }
             }
         }

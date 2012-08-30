@@ -113,6 +113,7 @@ namespace Craft.Net.Data
             new StickyPistonBlock(),
             new SpiderwebBlock(),
             new TallGrassBlock(),
+            new DeadBushBlock(),
             new PistonBlock(),
             new PistonHeadBlock(),
             new WoolBlock(),
@@ -219,6 +220,11 @@ namespace Craft.Net.Data
             new JungleWoodStairBlock(),
             new CommandBlock(),
             new BeaconBlock(),
+            new CobblestoneWallBlock(),
+            new FlowerPotBlock(),
+            new CarrotBlock(),
+            new PotatoBlock(),
+            new WoodenButtonBlock(),
             new IronShovelItem(),
             new IronPickaxeItem(),
             new IronAxeItem(),
@@ -351,6 +357,13 @@ namespace Craft.Net.Data
             new BookAndQuillItem(),
             new WrittenBookItem(),
             new EmeraldItem(),
+            new ItemFrameItem(),
+            new FlowerPotItem(),
+            new CarrotItem(),
+            new PotatoItem(),
+            new BakedPotatoItem(),
+            new PoisonousPotatoItem(),
+            new GoldenCarrotItem(),
             new MusicDiscItem()
         });
 

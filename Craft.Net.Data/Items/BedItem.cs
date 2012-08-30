@@ -20,5 +20,10 @@ namespace Craft.Net.Data.Items
                 return 355;
             }
         }
+
+        public override void OnItemUsed(Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, World world, Entities.Entity usedBy)
+        {
+            var near = world.GetBlock(clickedBlock + clickedSide);
+        }
     }
 }

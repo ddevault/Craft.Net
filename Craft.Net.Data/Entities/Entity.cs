@@ -1,12 +1,22 @@
+using System;
 namespace Craft.Net.Data.Entities
 {
     public abstract class Entity
     {
+        public Entity()
+        {
+            LastPositionUpdateTime = DateTime.Now;
+            LastPositionUpdate = Position;
+        }
+
         public Dimension Dimension;
         public int Id;
         public Vector3 OldPosition;
         public bool OnGround;
         public Vector3 Position;
+        public DateTime LastPositionUpdateTime;
+        public Vector3 LastPositionUpdate;
+        public Vector3 Velocity;
 
         private float _Pitch;
         public float OldPitch;
@@ -39,5 +49,13 @@ namespace Craft.Net.Data.Entities
         }
 
         public abstract Size Size { get; }
+
+        public virtual bool AffectedByGravity
+        {
+            get
+            {
+                return true;
+            }
+        }
     }
 }
