@@ -10,6 +10,7 @@ namespace Craft.Net.Data
     public class Chunk
     {
         public const int Width = 16, Height = 256, Depth = 16;
+        internal bool IsModified;
 
         /// <summary>
         /// Creates a new Chunk within the specified <see cref="Craft.Net.Data.Region"/>
@@ -22,8 +23,9 @@ namespace Craft.Net.Data
                 Sections[i] = new Section((byte)i);
             RelativePosition = relativePosition;
             Biomes = new byte[Width * Depth];
-            HeightMap = new byte[Width * Depth];
+            HeightMap = new int[Width * Depth];
             ParentRegion = parentRegion;
+            IsModified = false;
         }
 
         /// <summary>
@@ -36,7 +38,7 @@ namespace Craft.Net.Data
                 Sections[i] = new Section((byte)i);
             RelativePosition = relativePosition;
             Biomes = new byte[Width * Depth];
-            HeightMap = new byte[Width * Depth];
+            HeightMap = new int[Width * Depth];
         }
 
         /// <summary>
@@ -57,7 +59,7 @@ namespace Craft.Net.Data
         /// Each byte corresponds to the height of the given 1x256x1
         /// column of blocks.
         /// </summary>
-        public byte[] HeightMap { get; set; }
+        public int[] HeightMap { get; set; }
 
         /// <summary>
         /// The region this chunk is contained in.
@@ -86,6 +88,7 @@ namespace Craft.Net.Data
             var heightIndex = (byte)(position.Z * Depth) + (byte)position.X;
             if (HeightMap[heightIndex] < position.Y)
                 HeightMap[heightIndex] = (byte)position.Y;
+            IsModified = true;
         }
 
         /// <summary>
@@ -113,14 +116,62 @@ namespace Craft.Net.Data
         public void SetBiome(byte x, byte z, Biome value)
         {
             Biomes[(byte)(z * Depth) + x] = (byte)value;
+            IsModified = true;
         }
 
         /// <summary>
         /// Gets the height of the specified column.
         /// </summary>
-        public byte GetHeight(byte x, byte z)
+        public int GetHeight(byte x, byte z)
         {
             return HeightMap[(byte)(z * Depth) + x];
+        }
+
+        public NbtFile ToNbt() // TODO: Entities
+        {
+            NbtFile file = new NbtFile();
+            NbtCompound level = new NbtCompound("Level");
+            
+            // Entities // TODO
+            level.Tags.Add(new NbtList("Entities"));
+
+            // Biomes
+            level.Tags.Add(new NbtByteArray("Biomes", Biomes));
+
+            // Last Update // TODO: What is this
+            level.Tags.Add(new NbtLong("LastUpdate", 0));
+
+            // Position
+            level.Tags.Add(new NbtInt("xPos", (int)RelativePosition.X));
+            level.Tags.Add(new NbtInt("zPos", (int)RelativePosition.Z));
+
+            // Tile Entities // TODO
+            level.Tags.Add(new NbtList("TileEntites"));
+
+            // Terrain Populated // TODO: When is this 0? Will vanilla use this?
+            level.Tags.Add(new NbtByte("TerrainPopualted", 1));
+
+            // Sections and height
+            level.Tags.Add(new NbtIntArray("HeightMap", HeightMap));
+            NbtList sectionList = new NbtList("Sections");
+            foreach (var section in Sections)
+            {
+                if (!section.IsAir)
+                {
+                    NbtCompound sectionTag = new NbtCompound();
+                    sectionTag.Tags.Add(new NbtByteArray("Data", section.Metadata.Data));
+                    sectionTag.Tags.Add(new NbtByteArray("SkyLight", section.SkyLight.Data));
+                    sectionTag.Tags.Add(new NbtByteArray("BlockLight", section.BlockLight.Data));
+                    sectionTag.Tags.Add(new NbtByte("Y", section.Y));
+                    sectionTag.Tags.Add(new NbtByteArray("Blocks", section.Blocks));
+                    sectionList.Tags.Add(sectionTag);
+                }
+            }
+            level.Tags.Add(sectionList);
+            file.RootTag = new NbtCompound();
+            file.RootTag.Tags.Add(level);
+
+            return file;
         }
 
         public static Chunk FromNbt(Vector3 position, NbtFile nbt)
@@ -129,9 +180,7 @@ namespace Craft.Net.Data
             // Load data
             var root = nbt.RootTag.Get<NbtCompound>("Level");
             chunk.Biomes = root.Get<NbtByteArray>("Biomes").Value;
-            int[] heightMap = root.Get<NbtIntArray>("HeightMap").Value;
-            for (int i = 0; i < chunk.HeightMap.Length; i++ )
-                chunk.HeightMap[i] = (byte)heightMap[i];
+            chunk.HeightMap = root.Get<NbtIntArray>("HeightMap").Value;
             var sections = root.Get<NbtList>("Sections");
             foreach (var sectionTag in sections.Tags)
             {

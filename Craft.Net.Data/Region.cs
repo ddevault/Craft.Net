@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Craft.Net.Data.Blocks;
 using Craft.Net.Data.Generation;
 using Ionic.Zlib;
@@ -59,12 +60,7 @@ namespace Craft.Net.Data
         /// </summary>
         public Region(Vector3 position, IWorldGenerator worldGenerator, string file) : this(position, worldGenerator)
         {
-            if (File.Exists(file))
-                regionFile = File.Open(file, FileMode.Open);
-            else
-            {
-                // TODO: Create region file
-            }
+            regionFile = File.Open(file, FileMode.OpenOrCreate);
         }
 
         /// <summary>
@@ -175,6 +171,53 @@ namespace Craft.Net.Data
             Chunks[position].SetBlock(relativePosition, value);
         }
 
+        /// <summary>
+        /// Saves this region to the specified file.
+        /// </summary>
+        public void Save(string file)
+        {
+            if (regionFile != null)
+                throw new InvalidOperationException("This object is already associated with a region file, use Save()");
+            regionFile = File.Open(file, FileMode.OpenOrCreate);
+            Save();
+        }
+
+        /// <summary>
+        /// Saves this region to the open region file.
+        /// </summary>
+        public void Save()
+        {
+            lock (Chunks)
+            {
+                lock (regionFile)
+                {
+                    foreach (var kvp in  Chunks)
+                    {
+                        var chunk = kvp.Value;
+                        if (chunk.IsModified)
+                        {
+                            var data = chunk.ToNbt();
+                            MemoryStream stream = new MemoryStream();
+                            data.SaveFile(stream);
+                            byte[] raw = new byte[stream.Length];
+                            Array.Copy(stream.GetBuffer(), raw, raw.Length);
+                            raw = ZlibStream.CompressBuffer(raw);
+
+                            var header = GetChunkFromTable(kvp.Key);
+                            if (header.Item2 > raw.Length)
+                            {
+                                // TODO: Create new entry
+                            }
+                            regionFile.Seek(header.Item1, SeekOrigin.Begin);
+                            DataUtility.WriteInt32(regionFile, raw.Length);
+                            regionFile.WriteByte(2); // Compressed with zlib
+                            regionFile.Write(raw, 0, raw.Length);
+                        }
+                    }
+                }
+            }
+        }
+
         #region Stream Helpers
 
         private const int ChunkSizeMultiplier = 4096;
@@ -200,8 +243,6 @@ namespace Craft.Net.Data
         {
             var x = (int)position.X;
             var z = (int)position.Z;
-            //x = x / Region.Width - ((x < 0) ? 1 : 0);
-            //z = z / Region.Depth - ((z < 0) ? 1 : 0);
             return "r." + x + "." + z + ".mca";
         }
     }

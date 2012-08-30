@@ -42,6 +42,15 @@ namespace Craft.Net.Data.Unit
         }
 
         [Test]
+        public void TestSaveRegion()
+        {
+            Region region = new Region(Vector3.Zero, new FlatlandGenerator(), "r.0.0.mca");
+            region.GetChunk(Vector3.Zero);
+            region.Save();
+            Assert.Inconclusive("This test must be verified by hand."); // TODO: Reload region and confirm correctness
+        }
+
+        [Test]
         public void TestGetBlock()
         {
             // Test vertical sections

@@ -68,6 +68,9 @@ namespace Craft.Net.Server.Test
                     case "velocity":
                         e.Origin.SendChat(e.Origin.Entity.Velocity.ToString());
                         break;
+                    case "save":
+                        minecraftServer.DefaultWorld.Regions[Vector3.Zero].Save();
+                        break;
                 }
             }
         }

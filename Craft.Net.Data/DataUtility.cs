@@ -397,6 +397,8 @@ namespace Craft.Net.Data
 
         #endregion
 
+        #region Stream Utilities
+
         public static int ReadInt32(Stream stream)
         {
             byte[] buffer = new byte[4];
@@ -404,6 +406,15 @@ namespace Craft.Net.Data
             Array.Reverse(buffer);
             return BitConverter.ToInt32(buffer, 0);
         }
+
+        public static void WriteInt32(Stream stream, int value)
+        {
+            byte[] buffer = BitConverter.GetBytes(value);
+            Array.Reverse(buffer);
+            stream.Write(buffer, 0, buffer.Length);
+        }
+
+        #endregion
     }
 
     public enum Direction
