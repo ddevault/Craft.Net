@@ -198,7 +198,7 @@ namespace Craft.Net.Data
                         {
                             var data = chunk.ToNbt();
                             MemoryStream stream = new MemoryStream();
-                            data.SaveFile(stream);
+                            data.SaveFile(stream, false);
                             byte[] raw = new byte[stream.Length];
                             Array.Copy(stream.GetBuffer(), raw, raw.Length);
                             raw = ZlibStream.CompressBuffer(raw);
@@ -214,6 +214,7 @@ namespace Craft.Net.Data
                             regionFile.Write(raw, 0, raw.Length);
                         }
                     }
+                    regionFile.Flush();
                 }
             }
         }

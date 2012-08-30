@@ -168,8 +168,10 @@ namespace Craft.Net.Data
                 }
             }
             level.Tags.Add(sectionList);
-            file.RootTag = new NbtCompound();
-            file.RootTag.Tags.Add(level);
+
+            var rootCompound = new NbtCompound();
+            rootCompound.Tags.Add(level);
+            file.RootTag = rootCompound;
 
             return file;
         }
