@@ -198,9 +198,11 @@ namespace Craft.Net.Data
 
         public static string GetRegionFileName(Vector3 position)
         {
-            int x = (int)(position.X / 32);
-            int z = (int)(position.Z / 32);
-            return "r." + x + "." + z + ".mcr";
+            var x = (int)position.X;
+            var z = (int)position.Z;
+            //x = x / Region.Width - ((x < 0) ? 1 : 0);
+            //z = z / Region.Depth - ((z < 0) ? 1 : 0);
+            return "r." + x + "." + z + ".mca";
         }
     }
 }

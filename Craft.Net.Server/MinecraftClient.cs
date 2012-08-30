@@ -126,7 +126,7 @@ namespace Craft.Net.Server
         public MinecraftClient(Socket socket, MinecraftServer server)
         {
             this.Socket = socket;
-            RecieveBuffer = new byte[1024];
+            RecieveBuffer = new byte[4096];
             RecieveBufferIndex = 0;
             SendQueue = new Queue<Packet>();
             IsDisconnected = false;

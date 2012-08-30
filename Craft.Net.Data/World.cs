@@ -129,8 +129,8 @@ namespace Craft.Net.Data
             var z = (int)position.Z;
 
             //In regions
-            int regionX = x/Region.Width - ((x < 0) ? 1 : 0);
-            int regionZ = z/Region.Depth - ((z < 0) ? 1 : 0);
+            int regionX = x / Region.Width - ((x < 0) ? 1 : 0);
+            int regionZ = z / Region.Depth - ((z < 0) ? 1 : 0);
 
             var region = CreateOrLoadRegion(new Vector3(regionX, 0, regionZ));
             return region.GetChunk(new Vector3(x - regionX * 32, 0, z - regionZ * 32));

@@ -281,6 +281,8 @@ namespace Craft.Net.Server
         /// </returns>
         public static IEnumerable<Packet> TryReadPackets(ref MinecraftClient client, int length)
         {
+            // TODO: Investigate buffer overflow problem
+
             var results = new List<Packet>();
             // Get a buffer to parse that is the length of the recieved data
             byte[] buffer = client.RecieveBuffer.Take(length).ToArray();

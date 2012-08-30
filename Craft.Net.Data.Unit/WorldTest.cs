@@ -22,6 +22,17 @@ namespace Craft.Net.Data.Unit
         }
 
         [Test]
+        public void TestGetRegionFile()
+        {
+            Vector3 region = new Vector3(-2, 0, -2);
+            Assert.AreEqual("r.-2.-2.mca", Region.GetRegionFileName(region));
+            region = new Vector3(2, 0, 2);
+            Assert.AreEqual("r.2.2.mca", Region.GetRegionFileName(region));
+            region = new Vector3(0, 0, 0);
+            Assert.AreEqual("r.0.0.mca", Region.GetRegionFileName(region));
+        }
+
+        [Test]
         public void TestLoadRegion()
         {
             Region region = new Region(Vector3.Zero, null, Path.Combine("TestWorld", "region", "r.0.0.mca"));
