@@ -51,21 +51,21 @@ namespace Craft.Net.Data.Unit
             WaterBucketItem waterBucket = new WaterBucketItem();
 
             // TODO: Survival tests
-            waterBucket.OnItemUsed(targetBlock, Vector3.Up, Vector3.Zero, world, player);
+            waterBucket.OnItemUsed(world, targetBlock, Vector3.Up, Vector3.Zero, player);
             Assert.AreEqual(new WaterFlowingBlock(), world.GetBlock(alteredBlock));
 
-            bucket.OnItemUsed(targetBlock, Vector3.Up, Vector3.Zero, world, player);
+            bucket.OnItemUsed(world, targetBlock, Vector3.Up, Vector3.Zero, player);
             Assert.AreEqual(new AirBlock(), world.GetBlock(alteredBlock));
 
-            lavaBucket.OnItemUsed(targetBlock, Vector3.Up, Vector3.Zero, world, player);
+            lavaBucket.OnItemUsed(world, targetBlock, Vector3.Up, Vector3.Zero, player);
             Assert.AreEqual(new LavaFlowingBlock(), world.GetBlock(alteredBlock));
 
-            bucket.OnItemUsed(targetBlock, Vector3.Up, Vector3.Zero, world, player);
+            bucket.OnItemUsed(world, targetBlock, Vector3.Up, Vector3.Zero, player);
             Assert.AreEqual(new AirBlock(), world.GetBlock(alteredBlock));
 
             world.SetBlock(alteredBlock, new BedrockBlock());
 
-            bucket.OnItemUsed(targetBlock, Vector3.Up, Vector3.Zero, world, player);
+            bucket.OnItemUsed(world, targetBlock, Vector3.Up, Vector3.Zero, player);
             Assert.AreEqual(new BedrockBlock(), world.GetBlock(alteredBlock));
         }
 
@@ -77,7 +77,7 @@ namespace Craft.Net.Data.Unit
             Vector3 alteredBlock = targetBlock + Vector3.Up;
 
             FlintAndSteelItem flintAndSteel = new FlintAndSteelItem();
-            flintAndSteel.OnItemUsed(targetBlock, Vector3.Up, Vector3.Zero, world, null);
+            flintAndSteel.OnItemUsed(world, targetBlock, Vector3.Up, Vector3.Zero, null);
 
             Assert.AreEqual(new FireBlock(), world.GetBlock(alteredBlock));
         }
@@ -88,7 +88,7 @@ namespace Craft.Net.Data.Unit
             World world = new World(new FlatlandGenerator());
 
             BrewingStandItem brewingStand = new BrewingStandItem();
-            brewingStand.OnItemUsed(new Vector3(0, 3, 0), Vector3.Up, Vector3.Zero, world, null);
+            brewingStand.OnItemUsed(world, new Vector3(0, 3, 0), Vector3.Up, Vector3.Zero, null);
 
             Assert.AreEqual(new BrewingStandBlock(), world.GetBlock(new Vector3(0, 4, 0)));
         }
@@ -100,23 +100,23 @@ namespace Craft.Net.Data.Unit
             Vector3 grassBlock = new Vector3(0, 3, 0);
 
             HoeItem hoe = new DiamondHoeItem();
-            hoe.OnItemUsed(grassBlock, Vector3.Up, Vector3.Zero, world, null);
+            hoe.OnItemUsed(world, grassBlock, Vector3.Up, Vector3.Zero, null);
 
             grassBlock.X++;
             hoe = new IronHoeItem();
-            hoe.OnItemUsed(grassBlock, Vector3.Up, Vector3.Zero, world, null);
+            hoe.OnItemUsed(world, grassBlock, Vector3.Up, Vector3.Zero, null);
 
             grassBlock.X++;
             hoe = new GoldenHoeItem();
-            hoe.OnItemUsed(grassBlock, Vector3.Up, Vector3.Zero, world, null);
+            hoe.OnItemUsed(world, grassBlock, Vector3.Up, Vector3.Zero, null);
 
             grassBlock.X++;
             hoe = new StoneHoeItem();
-            hoe.OnItemUsed(grassBlock, Vector3.Up, Vector3.Zero, world, null);
+            hoe.OnItemUsed(world, grassBlock, Vector3.Up, Vector3.Zero, null);
 
             grassBlock.X++;
             hoe = new WoodenHoeItem();
-            hoe.OnItemUsed(grassBlock, Vector3.Up, Vector3.Zero, world, null);
+            hoe.OnItemUsed(world, grassBlock, Vector3.Up, Vector3.Zero, null);
 
             var testBlock = new Vector3(0, 3, 0);
 

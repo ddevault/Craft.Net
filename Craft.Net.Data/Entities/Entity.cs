@@ -1,4 +1,5 @@
 using System;
+
 namespace Craft.Net.Data.Entities
 {
     public abstract class Entity

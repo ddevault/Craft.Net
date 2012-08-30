@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using Craft.Net.Data.Events;
 namespace Craft.Net.Data.Entities
 {
@@ -46,6 +47,12 @@ namespace Craft.Net.Data.Entities
         /// </summary>
         public Slot[] Inventory;
         public short SelectedSlot;
+        /// <summary>
+        /// Used to check when beds need to be checked.
+        /// </summary>
+        public Timer BedUseTimer;
+
+        public event EventHandler BedTimerExpired;
 
         public GameMode GameMode;
 
@@ -57,6 +64,11 @@ namespace Craft.Net.Data.Entities
             for (int i = 0; i < Inventory.Length; i++)
                 Inventory[i] = new Slot();
             SelectedSlot = InventoryHotbar;
+            BedUseTimer = new Timer(state =>
+                                         {
+                                             if (BedTimerExpired != null)
+                                                 BedTimerExpired(this, null);
+                                         });
         }
 
         public void SetSlot(short index, Slot slot)

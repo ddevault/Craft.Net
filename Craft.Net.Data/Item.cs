@@ -25,7 +25,7 @@ namespace Craft.Net.Data
         /// <summary>
         /// Called when this item is used by a player.
         /// </summary>
-        public virtual void OnItemUsed(Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, World world, Entity usedBy)
+        public virtual void OnItemUsed(World world, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entity usedBy)
         {
         }
 

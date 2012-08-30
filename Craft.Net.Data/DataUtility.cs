@@ -23,10 +23,6 @@ namespace Craft.Net.Data
         /// Gets a byte representing block direction based on the rotation
         /// of the entity that placed it, on a flat plane.
         /// </summary>
-        /// <param name="p">The entity whose rotation should be used.</param>
-        /// <param name="invert">If set to <c>true</c> the direction is inverted.</param>
-        /// <returns></returns>
-        /// <remarks>This is used for directional data on blocks like Furnaces</remarks>
         public static byte DirectionByRotationFlat(Entity p, bool invert = false)
         {
             byte direction = (byte)((int)Math.Floor((p.Yaw * 4F) / 360F + 0.5D) & 3);
@@ -53,11 +49,6 @@ namespace Craft.Net.Data
         /// Gets a byte representing block direction based on the rotation
         /// of the entity that placed it.
         /// </summary>
-        /// <param name="p">The entity whose rotation should be used.</param>
-        /// <param name="position">The position of the block being placed.</param>
-        /// <param name="invert">If set to <c>true</c>, the direction is inverted.</param>
-        /// <returns></returns>
-        /// <remarks></remarks>
         public static byte DirectionByRotation(PlayerEntity p, Vector3 position, bool invert = false)
         {
             // TODO: Figure out some algorithm based on player's look yaw
@@ -67,9 +58,31 @@ namespace Craft.Net.Data
             return DirectionByRotationFlat(p, invert);
         }
 
-        public static double Distance2D(double A1, double A2, double B1, double B2)
+        /// <summary>
+        /// Gets a byte representing block direction based on the rotation
+        /// of the entity that placed it.
+        /// </summary>
+        public static Vector3 FowardVector(Entity entity, bool invert = false)
         {
-            return Math.Sqrt(Math.Pow(B1 - A1, 2) + Math.Pow(B2 - A2, 2));
+            Direction value = (Direction)DirectionByRotationFlat(entity, invert);
+            switch (value)
+            {
+                case Direction.East:
+                    return Vector3.East;
+                case Direction.West:
+                    return Vector3.West;
+                case Direction.North:
+                    return Vector3.North;
+                case Direction.South:
+                    return Vector3.South;
+                default:
+                    return Vector3.Zero;
+            }
+        }
+
+        public static double Distance2D(double a1, double a2, double b1, double b2)
+        {
+            return Math.Sqrt(Math.Pow(b1 - a1, 2) + Math.Pow(b2 - a2, 2));
         }
 
         #endregion
@@ -401,9 +414,9 @@ namespace Craft.Net.Data
     {
         Bottom = 0,
         Top = 1, 
-        East = 2, 
-        West = 3,
-        North = 4,
-        South = 5 
+        North = 2, 
+        South = 3,
+        West = 4,
+        East = 5 
     }
 }

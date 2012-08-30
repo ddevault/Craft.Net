@@ -12,7 +12,7 @@ namespace Craft.Net.Data.Items
             }
         }
 
-        public override void OnItemUsed(Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, World world, Entities.Entity usedBy)
+        public override void OnItemUsed(World world, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entities.Entity usedBy)
         {
             if (world.GetBlock(clickedBlock + clickedSide) == 0)
                 world.SetBlock(clickedBlock + clickedSide, new BrewingStandBlock());

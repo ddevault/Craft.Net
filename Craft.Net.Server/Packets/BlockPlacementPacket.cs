@@ -50,7 +50,7 @@ namespace Craft.Net.Server.Packets
             Item item = client.Entity.Inventory[client.Entity.SelectedSlot].Item;
             if (item != null)
             {
-                item.OnItemUsed(Position, AdjustByDirection(Direction), CursorPosition, server.GetClientWorld(client), client.Entity);
+                item.OnItemUsed(server.GetClientWorld(client), Position, AdjustByDirection(Direction), CursorPosition, client.Entity);
                 if (client.Entity.GameMode != GameMode.Creative)
                     client.Entity.Inventory[client.Entity.SelectedSlot].Count--;
             }
