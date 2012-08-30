@@ -8,6 +8,7 @@ using Craft.Net.Server.Channels;
 using Craft.Net.Server.Events;
 using System.Reflection;
 using Craft.Net.Data.Blocks;
+using System.IO;
 
 namespace Craft.Net.Server.Test
 {
@@ -66,6 +67,9 @@ namespace Craft.Net.Server.Test
                         break;
                     case "velocity":
                         e.Origin.SendChat(e.Origin.Entity.Velocity.ToString());
+                        break;
+                    case "save":
+                        minecraftServer.DefaultWorld.Regions[Vector3.Zero].Save();
                         break;
                 }
             }

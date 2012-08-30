@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,35 @@ namespace Craft.Net.Data.Unit
         public void SetUp()
         {
             World = new World(new FlatlandGenerator());
+        }
+
+        [Test]
+        public void TestGetRegionFile()
+        {
+            Vector3 region = new Vector3(-2, 0, -2);
+            Assert.AreEqual("r.-2.-2.mca", Region.GetRegionFileName(region));
+            region = new Vector3(2, 0, 2);
+            Assert.AreEqual("r.2.2.mca", Region.GetRegionFileName(region));
+            region = new Vector3(0, 0, 0);
+            Assert.AreEqual("r.0.0.mca", Region.GetRegionFileName(region));
+        }
+
+        [Test]
+        public void TestLoadRegion()
+        {
+            Region region = new Region(Vector3.Zero, null, Path.Combine("TestWorld", "region", "r.0.0.mca"));
+            var chunk = region.GetChunk(Vector3.Zero);
+            for (int y = 0; y < Chunk.Height - 1; y++ )
+                Assert.AreEqual(new GoldBlock(), chunk.GetBlock(new Vector3(0, y, 0)));
+        }
+
+        [Test]
+        public void TestSaveRegion()
+        {
+            Region region = new Region(Vector3.Zero, new FlatlandGenerator(), "r.0.0.mca");
+            region.GetChunk(Vector3.Zero);
+            region.Save();
+            Assert.Inconclusive("This test must be verified by hand."); // TODO: Reload region and confirm correctness
         }
 
         [Test]

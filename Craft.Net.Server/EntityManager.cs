@@ -14,15 +14,12 @@ namespace Craft.Net.Server
     /// </summary>
     public class EntityManager
     {
-        private Queue<Entity> entitiesToDestroy;
-
         internal static int nextEntityId = 1;
         internal MinecraftServer server;
 
         public EntityManager(MinecraftServer server)
         {
             this.server = server;
-            entitiesToDestroy = new Queue<Entity>();
         }
 
         public void SpawnEntity(World world, Entity entity)
@@ -39,7 +36,7 @@ namespace Craft.Net.Server
                 if (entity is PlayerEntity)
                 {
                     // Isolate the client being spawned
-                    var client = clients.Where(c => c.Entity == entity).First();
+                    var client = clients.First(c => c.Entity == entity);
                     clients = clients.Where(c => c.Entity != entity);
                     clients.ToList().ForEach(c => {
                         c.SendPacket(new SpawnNamedEntityPacket(client));
@@ -133,19 +130,14 @@ namespace Craft.Net.Server
         public MinecraftClient GetClient(PlayerEntity entity)
         {
             var clients = server.Clients.Where(c => c.Entity == entity);
-            if (clients.Count() == 0)
+            if (!clients.Any())
                 return null;
             return clients.First();
         }
 
         public World GetEntityWorld(Entity entity)
         {
-            foreach (var world in server.Worlds)
-            {
-                if (world.Entities.Contains(entity))
-                    return world;
-            }
-            return null;
+            return server.Worlds.FirstOrDefault(world => world.Entities.Contains(entity));
         }
     }
 }

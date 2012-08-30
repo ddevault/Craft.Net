@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Craft.Net.Data.Entities;
@@ -405,6 +406,25 @@ namespace Craft.Net.Data
             Array.Copy(buffer, offset, value, 0, length);
             offset += length;
             return true;
+        }
+
+        #endregion
+
+        #region Stream Utilities
+
+        public static int ReadInt32(Stream stream)
+        {
+            byte[] buffer = new byte[4];
+            stream.Read(buffer, 0, 4);
+            Array.Reverse(buffer);
+            return BitConverter.ToInt32(buffer, 0);
+        }
+
+        public static void WriteInt32(Stream stream, int value)
+        {
+            byte[] buffer = BitConverter.GetBytes(value);
+            Array.Reverse(buffer);
+            stream.Write(buffer, 0, buffer.Length);
         }
 
         #endregion

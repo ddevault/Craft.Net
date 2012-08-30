@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Craft.Net.Data.Blocks;
 using Craft.Net.Data.Generation;
 using Craft.Net.Data.Entities;
+using System.IO;
 
 namespace Craft.Net.Data
 {
@@ -43,6 +44,10 @@ namespace Craft.Net.Data
         /// The world generator used to create this world.
         /// </summary>
         public IWorldGenerator WorldGenerator { get; set; }
+        /// <summary>
+        /// Gets the directory this world uses to save and load the world.
+        /// </summary>
+        public string Directory { get; private set; }
 
         /// <summary>
         /// Creates a new world for client-side use.
@@ -61,7 +66,6 @@ namespace Craft.Net.Data
         /// <summary>
         /// Creates a new world for server-side use with the specified world generator.
         /// </summary>
-        /// <param name="worldGenerator"></param>
         public World(IWorldGenerator worldGenerator)
         {
             Name = "world";
@@ -72,6 +76,23 @@ namespace Craft.Net.Data
             Seed = DataUtility.Random.Next();
             Entities = new List<Entity>();
             Regions = new Dictionary<Vector3, Region>();
+        }
+
+        /// <summary>
+        /// Creates a new world for server-side use with the specified world generator
+        /// and the specified working directory.
+        /// </summary>
+        public World(IWorldGenerator worldGenerator, string directory)
+        {
+            Name = "world";
+            GameMode = GameMode.Creative;
+            Difficulty = Difficulty.Peaceful;
+            WorldGenerator = worldGenerator;
+            SpawnPoint = worldGenerator.SpawnPoint;
+            Seed = DataUtility.Random.Next();
+            Entities = new List<Entity>();
+            Regions = new Dictionary<Vector3, Region>();
+            Directory = directory;
         }
 
         /// <summary>
@@ -108,14 +129,11 @@ namespace Craft.Net.Data
             var z = (int)position.Z;
 
             //In regions
-            int regionX = x/Region.Width - ((x < 0) ? 1 : 0);
-            int regionZ = z/Region.Depth - ((z < 0) ? 1 : 0);
+            int regionX = x / Region.Width - ((x < 0) ? 1 : 0);
+            int regionZ = z / Region.Depth - ((z < 0) ? 1 : 0);
 
-            var region = new Vector3(regionX, 0, regionZ);
-            if (!Regions.ContainsKey(region))
-                Regions.Add(region, new Region(region, WorldGenerator));
-
-            return Regions[region].GetChunk(new Vector3(x - regionX*32, 0, z - regionZ*32));
+            var region = CreateOrLoadRegion(new Vector3(regionX, 0, regionZ));
+            return region.GetChunk(new Vector3(x - regionX * 32, 0, z - regionZ * 32));
         }
 
         /// <summary>
@@ -131,11 +149,8 @@ namespace Craft.Net.Data
             int regionX = x/Region.Width - ((x < 0) ? 1 : 0);
             int regionZ = z/Region.Depth - ((z < 0) ? 1 : 0);
 
-            var region = new Vector3(regionX, 0, regionZ);
-            if (!Regions.ContainsKey(region))
-                Regions.Add(region, new Region(region, WorldGenerator));
-
-            Regions[region].SetChunk(new Vector3(x - regionX*32, 0, z - regionZ*32), chunk);
+            var region = CreateOrLoadRegion(new Vector3(regionX, 0, regionZ));
+            region.SetChunk(new Vector3(x - regionX * 32, 0, z - regionZ * 32), chunk);
         }
 
         /// <summary>
@@ -177,6 +192,19 @@ namespace Craft.Net.Data
 
             chunk = GetChunk(new Vector3(chunkX, 0, chunkZ));
             return new Vector3(x - chunkX * Chunk.Width, y, z - chunkZ * Chunk.Depth);
+        }
+
+        private Region CreateOrLoadRegion(Vector3 position)
+        {
+            if (!Regions.ContainsKey(position))
+            {
+                // Attempt to load from file
+                if (Directory != null && File.Exists(Path.Combine(Directory, Region.GetRegionFileName(position))))
+                    Regions.Add(position, new Region(position, WorldGenerator, Path.Combine(Directory, Region.GetRegionFileName(position))));
+                else // Generate new region
+                    Regions.Add(position, new Region(position, WorldGenerator));
+            }
+            return Regions[position];
         }
 
         /// <summary>
