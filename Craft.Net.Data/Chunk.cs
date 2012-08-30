@@ -1,3 +1,6 @@
+using LibNbt;
+using LibNbt.Tags;
+
 namespace Craft.Net.Data
 {
     /// <summary>
@@ -118,6 +121,33 @@ namespace Craft.Net.Data
         public byte GetHeight(byte x, byte z)
         {
             return HeightMap[(byte)(z * Depth) + x];
+        }
+
+        public static Chunk FromNbt(Vector3 position, NbtFile nbt)
+        {
+            Chunk chunk = new Chunk(position);
+            // Load data
+            var root = nbt.RootTag.Get<NbtCompound>("Level");
+            chunk.Biomes = root.Get<NbtByteArray>("Biomes").Value;
+            int[] heightMap = root.Get<NbtIntArray>("HeightMap").Value;
+            for (int i = 0; i < chunk.HeightMap.Length; i++ )
+                chunk.HeightMap[i] = (byte)heightMap[i];
+            var sections = root.Get<NbtList>("Sections");
+            foreach (var sectionTag in sections.Tags)
+            {
+                // Load data
+                var compound = (NbtCompound)sectionTag;
+                byte y = compound.Get<NbtByte>("Y").Value;
+                var section = new Section(y);
+                section.Blocks = compound.Get<NbtByteArray>("Blocks").Value;
+                section.BlockLight.Data = compound.Get<NbtByteArray>("BlockLight").Value;
+                section.SkyLight.Data = compound.Get<NbtByteArray>("SkyLight").Value;
+                section.Metadata.Data = compound.Get<NbtByteArray>("Data").Value;
+                // Process section
+                section.ProcessSection();
+                chunk.Sections[y] = section;
+            }
+            return chunk;
         }
     }
 }

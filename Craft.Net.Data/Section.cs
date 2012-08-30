@@ -88,5 +88,16 @@ namespace Craft.Net.Data
             block.BlockLight = BlockLight[index];
             return block;
         }
+
+        internal void ProcessSection()
+        {
+            // TODO: Schedule updates
+            nonAirCount = 0;
+            for (int i = 0; i < Blocks.Length; i++)
+            {
+                if (Blocks[i] != 0)
+                    nonAirCount++;
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Craft.Net.Data.Entities;
@@ -395,6 +396,14 @@ namespace Craft.Net.Data
         }
 
         #endregion
+
+        public static int ReadInt32(Stream stream)
+        {
+            byte[] buffer = new byte[4];
+            stream.Read(buffer, 0, 4);
+            Array.Reverse(buffer);
+            return BitConverter.ToInt32(buffer, 0);
+        }
     }
 
     public enum Direction

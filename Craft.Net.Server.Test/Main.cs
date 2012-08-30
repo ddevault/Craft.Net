@@ -8,6 +8,7 @@ using Craft.Net.Server.Channels;
 using Craft.Net.Server.Events;
 using System.Reflection;
 using Craft.Net.Data.Blocks;
+using System.IO;
 
 namespace Craft.Net.Server.Test
 {
