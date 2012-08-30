@@ -51,8 +51,8 @@ namespace Craft.Net.Data.Entities
         /// Used to check when beds need to be checked.
         /// </summary>
         public Timer BedUseTimer;
-
-        public event EventHandler BedTimerExpired;
+        public event EventHandler UpdateBedState;
+        private Vector3 bedPosition;
 
         public GameMode GameMode;
 
@@ -66,8 +66,8 @@ namespace Craft.Net.Data.Entities
             SelectedSlot = InventoryHotbar;
             BedUseTimer = new Timer(state =>
                                          {
-                                             if (BedTimerExpired != null)
-                                                 BedTimerExpired(this, null);
+                                             if (UpdateBedState != null)
+                                                 UpdateBedState(this, null);
                                          });
         }
 
@@ -81,6 +81,12 @@ namespace Craft.Net.Data.Entities
                     NewValue = slot
                 });
             Inventory[index] = slot;
+        }
+
+        public void EnterBed(Vector3 bedPosition)
+        {
+            if (UpdateBedState != null)
+                UpdateBedState(this, null);
         }
 
         public event EventHandler<InventoryChangedEventArgs> InventoryChanged;
