@@ -60,7 +60,13 @@ namespace Craft.Net.Data
         /// </summary>
         public Region(Vector3 position, IWorldGenerator worldGenerator, string file) : this(position, worldGenerator)
         {
-            regionFile = File.Open(file, FileMode.OpenOrCreate);
+            if (File.Exists(file))
+                regionFile = File.Open(file, FileMode.OpenOrCreate);
+            else
+            {
+                regionFile = File.Open(file, FileMode.OpenOrCreate);
+                CreateRegionHeader();
+            }
         }
 
         /// <summary>
@@ -178,7 +184,13 @@ namespace Craft.Net.Data
         {
             if (regionFile != null)
                 throw new InvalidOperationException("This object is already associated with a region file, use Save()");
-            regionFile = File.Open(file, FileMode.OpenOrCreate);
+            if (File.Exists(file))
+                regionFile = File.Open(file, FileMode.OpenOrCreate);
+            else
+            {
+                regionFile = File.Open(file, FileMode.OpenOrCreate);
+                CreateRegionHeader();
+            }
             Save();
         }
 
@@ -204,10 +216,9 @@ namespace Craft.Net.Data
                             raw = ZlibStream.CompressBuffer(raw);
 
                             var header = GetChunkFromTable(kvp.Key);
-                            if (header.Item2 > raw.Length)
-                            {
-                                // TODO: Create new entry
-                            }
+                            if (header == null || header.Item2 > raw.Length)
+                                header = AllocateNewChunks(kvp.Key, raw.Length);
+
                             regionFile.Seek(header.Item1, SeekOrigin.Begin);
                             DataUtility.WriteInt32(regionFile, raw.Length);
                             regionFile.WriteByte(2); // Compressed with zlib
@@ -236,6 +247,35 @@ namespace Craft.Net.Data
                 return null;
             return new Tuple<int, int>(offset,
                 length * ChunkSizeMultiplier);
+        }
+
+        private void CreateRegionHeader()
+        {
+            regionFile.Write(new byte[8192], 0, 8192);
+            regionFile.Flush();
+        }
+
+        private Tuple<int, int> AllocateNewChunks(Vector3 position, int length)
+        {
+            // Expand region file
+            regionFile.Seek(0, SeekOrigin.End);
+            int dataOffset = (int)regionFile.Position;
+
+            length /= ChunkSizeMultiplier;
+            length++;
+            regionFile.Write(new byte[length * ChunkSizeMultiplier], 0, length * ChunkSizeMultiplier);
+
+            // Write table entry
+            int tableOffset = (((int)(position.X) % Width) +
+                               ((int)(position.Z) % Depth) * Width) * 4;
+            regionFile.Seek(tableOffset, SeekOrigin.Begin);
+
+            byte[] entry = BitConverter.GetBytes(dataOffset >> 4);
+            entry[0] = (byte)length;
+            Array.Reverse(entry);
+            regionFile.Write(entry, 0, entry.Length);
+
+            return new Tuple<int, int>(dataOffset, length * ChunkSizeMultiplier);
         }
 
         #endregion

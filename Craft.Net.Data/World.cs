@@ -101,6 +101,8 @@ namespace Craft.Net.Data
             Entities = new List<Entity>();
             Regions = new Dictionary<Vector3, Region>();
             Directory = directory;
+            if (!System.IO.Directory.Exists(directory))
+                System.IO.Directory.CreateDirectory(directory);
             SaveInterval = TimeSpan.FromSeconds(5);
             saveTimer = new Timer(Save, null, (int)SaveInterval.TotalMilliseconds, Timeout.Infinite);
         }
