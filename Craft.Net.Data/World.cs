@@ -14,14 +14,6 @@ namespace Craft.Net.Data
     public class World
     {
         /// <summary>
-        /// The difficulty of this world.
-        /// </summary>
-        public Difficulty Difficulty { get; set; }
-        /// <summary>
-        /// The default game mode players use.
-        /// </summary>
-        public GameMode GameMode { get; set; }
-        /// <summary>
         /// The name of this world.
         /// </summary>
         public string Name { get; set; }
@@ -38,15 +30,11 @@ namespace Craft.Net.Data
         /// </summary>
         public long Seed { get; set; }
         /// <summary>
-        /// The spawn point for new players in this world.
-        /// </summary>
-        public Vector3 SpawnPoint { get; set; }
-        /// <summary>
         /// The world generator used to create this world.
         /// </summary>
         public IWorldGenerator WorldGenerator { get; set; }
         /// <summary>
-        /// Gets the directory this world uses to save and load the world.
+        /// Gets the directory this world uses to save and load regions.
         /// </summary>
         public string Directory { get; private set; }
         /// <summary>
@@ -63,9 +51,6 @@ namespace Craft.Net.Data
         public World()
         {
             Name = "world";
-            GameMode = GameMode.Creative;
-            Difficulty = Difficulty.Peaceful;
-            SpawnPoint = Vector3.Zero;
             Seed = DataUtility.Random.Next();
             Entities = new List<Entity>();
             Regions = new Dictionary<Vector3, Region>();
@@ -77,10 +62,7 @@ namespace Craft.Net.Data
         public World(IWorldGenerator worldGenerator)
         {
             Name = "world";
-            GameMode = GameMode.Creative;
-            Difficulty = Difficulty.Peaceful;
             WorldGenerator = worldGenerator;
-            SpawnPoint = worldGenerator.SpawnPoint;
             Seed = DataUtility.Random.Next();
             Entities = new List<Entity>();
             Regions = new Dictionary<Vector3, Region>();
@@ -93,10 +75,7 @@ namespace Craft.Net.Data
         public World(IWorldGenerator worldGenerator, string directory)
         {
             Name = "world";
-            GameMode = GameMode.Creative;
-            Difficulty = Difficulty.Peaceful;
             WorldGenerator = worldGenerator;
-            SpawnPoint = worldGenerator.SpawnPoint;
             Seed = DataUtility.Random.Next();
             Entities = new List<Entity>();
             Regions = new Dictionary<Vector3, Region>();

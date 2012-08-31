@@ -8,8 +8,6 @@ namespace Craft.Net.Data.Generation
     /// </summary>
     public class FlatlandGenerator : IWorldGenerator
     {
-        #region IWorldGenerator Members
-
         public Chunk GenerateChunk(Vector3 position, Region parentRegion)
         {
             var chunk = GenerateChunk(position);
@@ -39,13 +37,13 @@ namespace Craft.Net.Data.Generation
             get { return "FLAT"; }
         }
 
+        public string GeneratorName { get { return "FLAT"; } }
+
         public long Seed { get; set; }
 
         public Vector3 SpawnPoint
         {
             get { return new Vector3(0, 4, 0); }
         }
-
-        #endregion
     }
 }

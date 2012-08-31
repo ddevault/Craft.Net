@@ -8,8 +8,6 @@ namespace Craft.Net.Data.Generation
     /// </summary>
     public class DebugGenerator : IWorldGenerator
     {
-        #region IWorldGenerator Members
-
         public string LevelType
         {
             get { return "FLAT"; }
@@ -68,6 +66,9 @@ namespace Craft.Net.Data.Generation
             return chunk;
         }
 
-        #endregion
+        public string GeneratorName
+        {
+            get { return "DebugGenerator"; }
+        }
     }
 }

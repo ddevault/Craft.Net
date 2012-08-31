@@ -52,8 +52,8 @@ namespace Craft.Net.Server.Packets
                 switch (Action)
                 {
                     case PlayerAction.StartedDigging:
-                        // if (creative)
-                        server.GetClientWorld(client).SetBlock(Position, new AirBlock());
+                        if (client.Entity.GameMode == GameMode.Creative)
+                            server.GetClientWorld(client).SetBlock(Position, new AirBlock());
                         break;
                     case PlayerAction.FinishedDigging:
                         server.GetClientWorld(client).SetBlock(Position, new AirBlock());

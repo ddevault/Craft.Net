@@ -139,7 +139,7 @@ namespace Craft.Net.Data
             level.Tags.Add(new NbtByteArray("Biomes", Biomes));
 
             // Last Update // TODO: What is this
-            level.Tags.Add(new NbtLong("LastUpdate", 0));
+            level.Tags.Add(new NbtLong("LastUpdate", 15));
 
             // Position
             level.Tags.Add(new NbtInt("xPos", (int)AbsolutePosition.X));
@@ -149,7 +149,7 @@ namespace Craft.Net.Data
             level.Tags.Add(new NbtList("TileEntites"));
 
             // Terrain Populated // TODO: When is this 0? Will vanilla use this?
-            level.Tags.Add(new NbtByte("TerrainPopualted", 1));
+            level.Tags.Add(new NbtByte("TerrainPopualted", 0));
 
             // Sections and height
             level.Tags.Add(new NbtIntArray("HeightMap", HeightMap));
@@ -159,11 +159,11 @@ namespace Craft.Net.Data
                 if (!section.IsAir)
                 {
                     NbtCompound sectionTag = new NbtCompound();
+                    sectionTag.Tags.Add(new NbtByte("Y", section.Y));
+                    sectionTag.Tags.Add(new NbtByteArray("Blocks", section.Blocks));
                     sectionTag.Tags.Add(new NbtByteArray("Data", section.Metadata.Data));
                     sectionTag.Tags.Add(new NbtByteArray("SkyLight", section.SkyLight.Data));
                     sectionTag.Tags.Add(new NbtByteArray("BlockLight", section.BlockLight.Data));
-                    sectionTag.Tags.Add(new NbtByte("Y", section.Y));
-                    sectionTag.Tags.Add(new NbtByteArray("Blocks", section.Blocks));
                     sectionList.Tags.Add(sectionTag);
                 }
             }

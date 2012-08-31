@@ -59,11 +59,15 @@ namespace Craft.Net.Server
         /// <summary>
         /// A list of Worlds this server will use.
         /// </summary>
-        public List<World> Worlds;
+        public List<Level> Levels;
         /// <summary>
         /// This server's entity manager.
         /// </summary>
         public EntityManager EntityManager;
+        /// <summary>
+        /// This server's difficulty.
+        /// </summary>
+        public Difficulty Difficulty;
 
         #endregion
 
@@ -88,7 +92,15 @@ namespace Craft.Net.Server
         /// </summary>
         public World DefaultWorld
         {
-            get { return Worlds[DefaultWorldIndex]; }
+            get { return Levels[DefaultWorldIndex].World; }
+        }
+
+        /// <summary>
+        /// Gets the default level for new clients.
+        /// </summary>
+        public Level DefaultLevel
+        {
+            get { return Levels[DefaultWorldIndex]; }
         }
 
         #endregion
@@ -124,10 +136,11 @@ namespace Craft.Net.Server
             OnlineMode = EncryptionEnabled = true;
             Random = new Random();
             DefaultWorldIndex = 0;
-            Worlds = new List<World>();
+            Levels = new List<Level>();
             LogProviders = new List<ILogProvider>();
             PluginChannels = new Dictionary<string, PluginChannel>();
             EntityManager = new EntityManager(this);
+            Difficulty = Difficulty.Peaceful;
 
             socket = new Socket(AddressFamily.InterNetwork,
                                 SocketType.Stream, ProtocolType.Tcp);
@@ -143,7 +156,7 @@ namespace Craft.Net.Server
         /// </summary>
         public void Start()
         {
-            if (Worlds.Count == 0)
+            if (Levels.Count == 0)
             {
                 Log("Unable to start server with no worlds loaded.");
                 throw new InvalidOperationException("Unable to start server with no worlds loaded.");
@@ -225,10 +238,10 @@ namespace Craft.Net.Server
         /// <summary>
         /// Adds a world to this server's list of worlds.
         /// </summary>
-        public void AddWorld(World world)
+        public void AddLevel(Level level)
         {
-            world.OnBlockChanged += HandleOnBlockChanged;
-            Worlds.Add(world);
+            level.World.OnBlockChanged += HandleOnBlockChanged;
+            Levels.Add(level);
         }
 
         /// <summary>
@@ -459,14 +472,14 @@ namespace Craft.Net.Server
             client.IsLoggedIn = true;
             // Spawn player
             client.Entity = new PlayerEntity();
-            client.Entity.Position = DefaultWorld.SpawnPoint;
+            client.Entity.Position = DefaultLevel.SpawnPoint;
             client.Entity.Position += new Vector3(0, PlayerEntity.Height, 0);
-            client.Entity.GameMode = DefaultWorld.GameMode;
+            client.Entity.GameMode = DefaultLevel.GameMode;
             client.Entity.InventoryChanged += Entity_InventoryChanged;
             EntityManager.SpawnEntity(DefaultWorld, client.Entity);
             client.SendPacket(new LoginPacket(client.Entity.Id,
-                                              DefaultWorld.LevelType, DefaultWorld.GameMode,
-                                              client.Entity.Dimension, DefaultWorld.Difficulty,
+                                              DefaultWorld.LevelType, DefaultLevel.GameMode,
+                                              client.Entity.Dimension, this.Difficulty,
                                               MaxPlayers));
 
             // Send initial chunks

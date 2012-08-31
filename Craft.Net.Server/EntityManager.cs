@@ -137,7 +137,7 @@ namespace Craft.Net.Server
 
         public World GetEntityWorld(Entity entity)
         {
-            return server.Worlds.FirstOrDefault(world => world.Entities.Contains(entity));
+            return server.Levels.FirstOrDefault(level => level.World.Entities.Contains(entity)).World;
         }
     }
 }

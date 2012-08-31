@@ -3,6 +3,7 @@ namespace Craft.Net.Data.Generation
     public interface IWorldGenerator
     {
         string LevelType { get; }
+        string GeneratorName { get; }
         long Seed { get; set; }
         Vector3 SpawnPoint { get; }
 
