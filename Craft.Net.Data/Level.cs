@@ -144,6 +144,7 @@ namespace Craft.Net.Data
             data.Tags.Add(new NbtInt("version", 19133));
             data.Tags.Add(new NbtByte("thundering", (byte)(Thundering ? 1 : 0)));
             data.Tags.Add(new NbtString("LevelName", Name));
+            data.Tags.Add(new NbtLong("LastPlayed", DateTime.UtcNow.Ticks));
             file.RootTag = new NbtCompound();
             file.RootTag.Tags.Add(data);
             using (var stream = File.Open(Path.Combine(LevelDirectory, "level.dat"), FileMode.Create))
