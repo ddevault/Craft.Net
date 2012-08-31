@@ -14,7 +14,7 @@ namespace Craft.Net.Data
     /// Not all of these chunks are represented at any given time, and
     /// will be loaded from disk or generated when the need arises.
     /// </summary>
-    public class Region
+    public class Region : IDisposable
     {
         // In chunks
         public const int Width = 32, Depth = 32;
@@ -285,6 +285,15 @@ namespace Craft.Net.Data
             var x = (int)position.X;
             var z = (int)position.Z;
             return "r." + x + "." + z + ".mca";
+        }
+
+        public void Dispose()
+        {
+            lock (regionFile)
+            {
+                regionFile.Flush();
+                regionFile.Close();
+            }
         }
     }
 }

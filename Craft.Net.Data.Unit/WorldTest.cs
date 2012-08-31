@@ -18,7 +18,7 @@ namespace Craft.Net.Data.Unit
         [TestFixtureSetUp]
         public void SetUp()
         {
-            World = new World(new FlatlandGenerator());
+            World = new World(new FlatlandGenerator(), "world");
         }
 
         [Test]
@@ -46,8 +46,10 @@ namespace Craft.Net.Data.Unit
         {
             Region region = new Region(Vector3.Zero, new FlatlandGenerator(), "r.0.0.mca");
             region.GetChunk(Vector3.Zero);
+            region.SetBlock(Vector3.Zero, new GoldBlock());
             region.Save();
-            Assert.Inconclusive("This test must be verified by hand."); // TODO: Reload region and confirm correctness
+            region.Dispose();
+            region = new Region(Vector3.Zero, new FlatlandGenerator(), "r.0.0.mca");
         }
 
         [Test]
