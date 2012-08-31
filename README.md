@@ -23,6 +23,7 @@ Some cool technical things about Craft.Net that are already implemented:
 
 * **Asynchronous I/O:** *Minimizes CPU load and increases speed*
 * **Threaded Chunk Management:** *Offloads chunk compression and sending to short-lived threads*
+* **Anvil Support:** *Includes support for loading, saving, creating, and manipulating Anvil worlds*
 
 ## Usage
 
@@ -30,17 +31,18 @@ Craft.Net is a library, and will not work as a standalone server. However, the b
 is simple. To get started, the following code will create a Minecraft 12w34b server:
 
     MinecraftServer server = new MinecraftServer(new IPEndPoint(IPAddress.Any, 25565));
-    server.AddWorld(new World(new FlatlandGenerator()));
+    server.AddLevel(new Level("world"));
     server.Start();
     // ...
     server.Stop();
 
+This server will create a "world" directory and place an Anvil world in there. The default world
+generator is flatland. If a world already exists in that directory, it will use it instead of
+creating a new one.
+
 The MinecraftServer class is the core server class, and runs networking, chunk management,
 block updates, and more. Each server must have at least one world to start, and an
 InvalidOperationException will be thrown if an attempt is made to start the server without.
-
-Additionally, each world must have a terrain generator, which implements IWorldGenerator.
-FlatlandGenerator is a clone of the vanilla Minecraft flatland generator.
 
 You should also consider adding an ILogProvider to the server with
 MinecraftServer.AddLogProvider. Included in Craft.Net is ConsoleLogWriter, and FileLogWriter,
