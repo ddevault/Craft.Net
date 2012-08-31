@@ -142,8 +142,8 @@ namespace Craft.Net.Data
             level.Tags.Add(new NbtLong("LastUpdate", 0));
 
             // Position
-            level.Tags.Add(new NbtInt("xPos", (int)RelativePosition.X));
-            level.Tags.Add(new NbtInt("zPos", (int)RelativePosition.Z));
+            level.Tags.Add(new NbtInt("xPos", (int)AbsolutePosition.X));
+            level.Tags.Add(new NbtInt("zPos", (int)AbsolutePosition.Z));
 
             // Tile Entities // TODO
             level.Tags.Add(new NbtList("TileEntites"));
