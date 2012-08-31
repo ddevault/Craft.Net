@@ -4,6 +4,7 @@ using Craft.Net.Data.Blocks;
 using Craft.Net.Data.Generation;
 using Craft.Net.Data.Entities;
 using System.IO;
+using System.Threading;
 
 namespace Craft.Net.Data
 {
@@ -48,6 +49,13 @@ namespace Craft.Net.Data
         /// Gets the directory this world uses to save and load the world.
         /// </summary>
         public string Directory { get; private set; }
+        /// <summary>
+        /// The time between automatic saves.
+        /// Default value is one minute.
+        /// </summary>
+        public TimeSpan SaveInterval { get; set; }
+
+        private Timer saveTimer { get; set; }
 
         /// <summary>
         /// Creates a new world for client-side use.
@@ -93,6 +101,8 @@ namespace Craft.Net.Data
             Entities = new List<Entity>();
             Regions = new Dictionary<Vector3, Region>();
             Directory = directory;
+            SaveInterval = TimeSpan.FromSeconds(5);
+            saveTimer = new Timer(Save, null, (int)SaveInterval.TotalMilliseconds, Timeout.Infinite);
         }
 
         /// <summary>
@@ -178,6 +188,18 @@ namespace Craft.Net.Data
                 OnBlockChanged(this, new BlockChangedEventArgs(this, position, value));
         }
 
+        private void Save(object dicarded)
+        {
+            Save();
+            saveTimer = new Timer(Save, null, (int)SaveInterval.TotalMilliseconds, Timeout.Infinite);
+        }
+
+        public void Save()
+        {
+            foreach (var region in Regions)
+                region.Value.Save();
+        }
+
         private Vector3 FindBlockPosition(Vector3 position, out Chunk chunk)
         {
             var x = (int)position.X;
@@ -191,19 +213,13 @@ namespace Craft.Net.Data
             int chunkZ = z / (Chunk.Depth) - ((z < 0) ? 1 : 0);
 
             chunk = GetChunk(new Vector3(chunkX, 0, chunkZ));
-            return new Vector3(x - chunkX * Chunk.Width, y, z - chunkZ * Chunk.Depth);
+            return new Vector3((x - chunkX * Chunk.Width) % Chunk.Width, y, (z - chunkZ * Chunk.Depth) % Chunk.Depth);
         }
 
         private Region CreateOrLoadRegion(Vector3 position)
         {
             if (!Regions.ContainsKey(position))
-            {
-                // Attempt to load from file
-                if (Directory != null && File.Exists(Path.Combine(Directory, Region.GetRegionFileName(position))))
-                    Regions.Add(position, new Region(position, WorldGenerator, Path.Combine(Directory, Region.GetRegionFileName(position))));
-                else // Generate new region
-                    Regions.Add(position, new Region(position, WorldGenerator));
-            }
+                Regions.Add(position, new Region(position, WorldGenerator, Path.Combine(Directory, Region.GetRegionFileName(position))));
             return Regions[position];
         }
 

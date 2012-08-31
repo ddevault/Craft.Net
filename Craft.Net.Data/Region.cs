@@ -158,9 +158,9 @@ namespace Craft.Net.Data
         {
             position = position.Floor();
             Vector3 relativePosition = position;
-            position.X = (int)(position.X)/Chunk.Width;
+            position.X = (int)(position.X) / Chunk.Width;
             position.Y = 0;
-            position.Z = (int)(position.Z)/Chunk.Depth;
+            position.Z = (int)(position.Z) / Chunk.Depth;
 
             relativePosition.X = (int)(relativePosition.X) % Chunk.Width;
             relativePosition.Z = (int)(relativePosition.Z) % Chunk.Depth;
