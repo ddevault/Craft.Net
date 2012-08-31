@@ -37,13 +37,6 @@ namespace Craft.Net.Data
         /// Gets the directory this world uses to save and load regions.
         /// </summary>
         public string Directory { get; private set; }
-        /// <summary>
-        /// The time between automatic saves.
-        /// Default value is one minute.
-        /// </summary>
-        public TimeSpan SaveInterval { get; set; }
-
-        private Timer saveTimer { get; set; }
 
         /// <summary>
         /// Creates a new world for client-side use.
@@ -82,8 +75,6 @@ namespace Craft.Net.Data
             Directory = directory;
             if (!System.IO.Directory.Exists(directory))
                 System.IO.Directory.CreateDirectory(directory);
-            SaveInterval = TimeSpan.FromSeconds(5);
-            saveTimer = new Timer(Save, null, (int)SaveInterval.TotalMilliseconds, Timeout.Infinite);
         }
 
         /// <summary>
@@ -167,12 +158,6 @@ namespace Craft.Net.Data
 
             if (OnBlockChanged != null)
                 OnBlockChanged(this, new BlockChangedEventArgs(this, position, value));
-        }
-
-        private void Save(object dicarded)
-        {
-            Save();
-            saveTimer = new Timer(Save, null, (int)SaveInterval.TotalMilliseconds, Timeout.Infinite);
         }
 
         public void Save()

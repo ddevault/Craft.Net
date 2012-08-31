@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using Craft.Net.Data.Entities;
 using Craft.Net.Data.Generation;
 using LibNbt;
@@ -20,6 +21,13 @@ namespace Craft.Net.Data
         /// Craft.Net will use this world generator if it does not recognize the provided one.
         /// </summary>
         public static Type DefaultGenerator = typeof(FlatlandGenerator);
+        /// <summary>
+        /// The time between automatic saves.
+        /// Default value is one minute.
+        /// </summary>
+        public TimeSpan SaveInterval { get; set; }
+
+        private Timer saveTimer { get; set; }
 
         public World World { get; set; }
         public string Name { get; set; }
@@ -39,6 +47,7 @@ namespace Craft.Net.Data
         
         public Level(string directory)
         {
+            Name = "world";
             LevelDirectory = directory;
             if (!Directory.Exists(LevelDirectory))
                 Directory.CreateDirectory(LevelDirectory);
@@ -48,6 +57,9 @@ namespace Craft.Net.Data
                 WorldGenerator = (IWorldGenerator)Activator.CreateInstance(DefaultGenerator);
                 SpawnPoint = WorldGenerator.SpawnPoint;
                 World = new World(WorldGenerator, Path.Combine(directory, "region"));
+
+                SaveInterval = TimeSpan.FromSeconds(5);
+                saveTimer = new Timer(Save, null, (int)SaveInterval.TotalMilliseconds, Timeout.Infinite);
                 return;
             }
 
@@ -87,15 +99,57 @@ namespace Craft.Net.Data
             var chunk = World.GetChunk(World.WorldToChunkCoordinates(SpawnPoint));
             var relativeSpawn = World.FindBlockPosition(SpawnPoint);
             SpawnPoint = new Vector3(SpawnPoint.X, chunk.GetHeight((byte)relativeSpawn.X, (byte)relativeSpawn.Z), SpawnPoint.Z);
+
+            SaveInterval = TimeSpan.FromSeconds(5);
+            saveTimer = new Timer(Save, null, (int)SaveInterval.TotalMilliseconds, Timeout.Infinite);
         }
 
         public Level(IWorldGenerator worldGenerator, string directory)
         {
+            Name = "world";
             if (!Directory.Exists(directory))
                 Directory.CreateDirectory(directory);
             WorldGenerator = worldGenerator;
             SpawnPoint = WorldGenerator.SpawnPoint;
             World = new World(WorldGenerator, Path.Combine(directory, "region"));
+            SaveInterval = TimeSpan.FromSeconds(5);
+            saveTimer = new Timer(Save, null, (int)SaveInterval.TotalMilliseconds, Timeout.Infinite);
+        }
+
+        private void Save(object discarded)
+        {
+            Save();
+            saveTimer = new Timer(Save, null, (int)SaveInterval.TotalMilliseconds, Timeout.Infinite);
+        }
+
+        public void Save()
+        {
+            NbtFile file = new NbtFile();
+            NbtCompound data = new NbtCompound("Data");
+            data.Tags.Add(new NbtByte("raining", (byte)(Raining ? 1 : 0)));
+            data.Tags.Add(new NbtInt("generatorVersion", 0)); // TODO
+            data.Tags.Add(new NbtLong("Time", Time));
+            data.Tags.Add(new NbtInt("GameType", (int)GameMode));
+            data.Tags.Add(new NbtByte("MapFeatures", (byte)(MapFeatures ? 1 : 0))); // TODO: Move to world generator
+            data.Tags.Add(new NbtString("generatorName", WorldGenerator.GeneratorName));
+            data.Tags.Add(new NbtByte("initialized", 1));
+            data.Tags.Add(new NbtByte("hardcore", 0)); // TODO
+            data.Tags.Add(new NbtLong("RandomSeed", Seed));
+            data.Tags.Add(new NbtInt("SpawnX", (int)SpawnPoint.X));
+            data.Tags.Add(new NbtInt("SpawnY", (int)SpawnPoint.Y));
+            data.Tags.Add(new NbtInt("SpawnZ", (int)SpawnPoint.Z));
+            data.Tags.Add(new NbtLong("SizeOnDisk", 0));
+            data.Tags.Add(new NbtInt("thunderTime", ThunderTime));
+            data.Tags.Add(new NbtInt("rainTime", RainTime));
+            data.Tags.Add(new NbtInt("version", 19133));
+            data.Tags.Add(new NbtByte("thundering", (byte)(Thundering ? 1 : 0)));
+            data.Tags.Add(new NbtString("LevelName", Name));
+            file.RootTag = new NbtCompound();
+            file.RootTag.Tags.Add(data);
+            using (var stream = File.Open(Path.Combine(LevelDirectory, "level.dat"), FileMode.Create))
+                file.SaveFile(stream, true);
+
+            World.Save();
         }
     }
 }

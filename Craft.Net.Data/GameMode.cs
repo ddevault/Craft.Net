@@ -15,6 +15,11 @@ namespace Craft.Net.Data
         /// Players are given unlimited resources, flying, and
         /// invulnerability.
         /// </summary>
-        Creative = 1
+        Creative = 1,
+        /// <summary>
+        /// Similar to survival, with the exception that players may
+        /// not place or remove blocks.
+        /// </summary>
+        AdventureMode = 2
     }
 }
