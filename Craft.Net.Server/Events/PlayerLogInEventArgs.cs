@@ -16,6 +16,8 @@ namespace Craft.Net.Server.Events
         }
         public MinecraftClient Client { get; set; }
 
+        public bool Handled { get; set; }
+
         public PlayerLogInEventArgs(MinecraftClient client)
         {
             Client = client;

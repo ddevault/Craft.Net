@@ -196,6 +196,7 @@
     <Compile Include="Blocks\WoodenSlabBlock.cs" />
     <Compile Include="Blocks\WoolBlock.cs" />
     <Compile Include="Blocks\YellowFlowerBlock.cs" />
+    <Compile Include="ChatColors.cs" />
     <Compile Include="Chunk.cs" />
     <Compile Include="DataUtility.cs" />
     <Compile Include="Difficulty.cs" />

@@ -20,7 +20,7 @@ namespace Craft.Net.Data
         /// <summary>
         /// Craft.Net will use this world generator if it does not recognize the provided one.
         /// </summary>
-        public static Type DefaultGenerator = typeof(FlatlandGenerator);
+        public static IWorldGenerator DefaultGenerator = new FlatlandGenerator();
         /// <summary>
         /// The time between automatic saves.
         /// Default value is one minute.
@@ -54,7 +54,7 @@ namespace Craft.Net.Data
             // Load from level.dat
             if (!File.Exists(Path.Combine(LevelDirectory, "level.dat")))
             {
-                WorldGenerator = (IWorldGenerator)Activator.CreateInstance(DefaultGenerator);
+                WorldGenerator = DefaultGenerator;
                 SpawnPoint = WorldGenerator.SpawnPoint;
                 World = new World(WorldGenerator, Path.Combine(directory, "region"));
 
@@ -63,37 +63,7 @@ namespace Craft.Net.Data
                 return;
             }
 
-            NbtFile file = new NbtFile();
-            using (var stream = File.Open(Path.Combine(LevelDirectory, "level.dat"), FileMode.Open))
-                file.LoadFile(stream, true);
-            // TODO: Gracefully handle missing tags
-            var data = file.RootTag.Get<NbtCompound>("Data");
-            Name = data.Get<NbtString>("LevelName").Value;
-            Time = data.Get<NbtLong>("Time").Value;
-            GameMode = (GameMode)data.Get<NbtInt>("GameType").Value;
-            MapFeatures = data.Get<NbtByte>("MapFeatures").Value == 1;
-            Seed = data.Get<NbtLong>("RandomSeed").Value;
-
-            // Find world generator
-            string generatorName = data.Get<NbtString>("generatorName").Value;
-            foreach (var type in Assembly.GetExecutingAssembly().GetTypes().Where(t =>
-                !t.IsAbstract && !t.IsInterface && typeof(IWorldGenerator).IsAssignableFrom(t)))
-            {
-                var generator = (IWorldGenerator)Activator.CreateInstance(type);
-                if (generator.GeneratorName == generatorName)
-                    WorldGenerator = generator;
-            }
-            if (WorldGenerator == null)
-                WorldGenerator = (IWorldGenerator)Activator.CreateInstance(DefaultGenerator);
-            WorldGenerator.Seed = Seed;
-
-            int x, y, z;
-            x = data.Get<NbtInt>("SpawnX").Value;
-            y = data.Get<NbtInt>("SpawnY").Value;
-            z = data.Get<NbtInt>("SpawnZ").Value;
-            SpawnPoint = new Vector3(x, y, z);
-
-            World = new World(WorldGenerator, Path.Combine(directory, "region"));
+            LoadFromFile(directory);
 
             // Move spawn point
             var chunk = World.GetChunk(World.WorldToChunkCoordinates(SpawnPoint));
@@ -109,6 +79,7 @@ namespace Craft.Net.Data
             Name = "world";
             if (!Directory.Exists(directory))
                 Directory.CreateDirectory(directory);
+            LevelDirectory = directory;
             WorldGenerator = worldGenerator;
             SpawnPoint = WorldGenerator.SpawnPoint;
             World = new World(WorldGenerator, Path.Combine(directory, "region"));
@@ -151,6 +122,48 @@ namespace Craft.Net.Data
                 file.SaveFile(stream, true);
 
             World.Save();
+        }
+
+        public static IWorldGenerator GetGenerator(string generatorName)
+        {
+            IWorldGenerator worldGenerator = null;
+            foreach (var type in Assembly.GetExecutingAssembly().GetTypes().Where(t =>
+                !t.IsAbstract && !t.IsInterface && typeof(IWorldGenerator).IsAssignableFrom(t)))
+            {
+                var generator = (IWorldGenerator)Activator.CreateInstance(type);
+                if (generator.GeneratorName == generatorName)
+                    worldGenerator = generator;
+            }
+            if (worldGenerator == null)
+                worldGenerator = DefaultGenerator;
+            return worldGenerator;
+        }
+
+        private void LoadFromFile(string directory)
+        {
+            NbtFile file = new NbtFile();
+            using (var stream = File.Open(Path.Combine(LevelDirectory, "level.dat"), FileMode.Open))
+                file.LoadFile(stream, true);
+            // TODO: Gracefully handle missing tags
+            var data = file.RootTag.Get<NbtCompound>("Data");
+            Name = data.Get<NbtString>("LevelName").Value;
+            Time = data.Get<NbtLong>("Time").Value;
+            GameMode = (GameMode)data.Get<NbtInt>("GameType").Value;
+            MapFeatures = data.Get<NbtByte>("MapFeatures").Value == 1;
+            Seed = data.Get<NbtLong>("RandomSeed").Value;
+
+            // Find world generator
+            string generatorName = data.Get<NbtString>("generatorName").Value;
+            WorldGenerator = GetGenerator(generatorName);
+            WorldGenerator.Seed = Seed;
+
+            int x, y, z;
+            x = data.Get<NbtInt>("SpawnX").Value;
+            y = data.Get<NbtInt>("SpawnY").Value;
+            z = data.Get<NbtInt>("SpawnZ").Value;
+            SpawnPoint = new Vector3(x, y, z);
+
+            World = new World(WorldGenerator, Path.Combine(directory, "region"));
         }
     }
 }

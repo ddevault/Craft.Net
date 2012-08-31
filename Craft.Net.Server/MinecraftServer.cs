@@ -447,8 +447,10 @@ namespace Craft.Net.Server
                                                                client.Username, false, 0));
                             }
                         }
-                        OnPlayerLoggedOut(new PlayerLogInEventArgs(client));
-                        SendChat(client.Username + " logged out."); // TODO: Event handler
+                        var args = new PlayerLogInEventArgs(client);
+                        OnPlayerLoggedOut(args);
+                        if (!args.Handled)
+                            SendChat(client.Username + " logged out.");
                         EntityManager.DespawnEntity(client.Entity);
                     }
                     Clients.Remove(client);
@@ -493,9 +495,11 @@ namespace Craft.Net.Server
 
             UpdatePlayerList(null); // Should also process send queue
 
-            OnPlayerLoggedIn(new PlayerLogInEventArgs(client));
+            var args = new PlayerLogInEventArgs(client);
+            OnPlayerLoggedIn(args);
             Log(client.Username + " logged in.");
-            SendChat(client.Username + " logged in."); // TODO: event handler
+            if (!args.Handled)
+                SendChat(client.Username + " logged in.");
         }
 
         void Entity_InventoryChanged(object sender, Data.Events.InventoryChangedEventArgs e)

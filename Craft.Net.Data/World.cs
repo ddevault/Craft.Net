@@ -162,8 +162,11 @@ namespace Craft.Net.Data
 
         public void Save()
         {
-            foreach (var region in Regions)
-                region.Value.Save();
+            lock (Regions)
+            {
+                foreach (var region in Regions)
+                    region.Value.Save();
+            }
         }
 
         private Vector3 FindBlockPosition(Vector3 position, out Chunk chunk)
@@ -184,9 +187,14 @@ namespace Craft.Net.Data
 
         private Region CreateOrLoadRegion(Vector3 position)
         {
-            if (!Regions.ContainsKey(position))
-                Regions.Add(position, new Region(position, WorldGenerator, Path.Combine(Directory, Region.GetRegionFileName(position))));
-            return Regions[position];
+            lock (Regions)
+            {
+                if (!Regions.ContainsKey(position))
+                    Regions.Add(position,
+                                new Region(position, WorldGenerator,
+                                           Path.Combine(Directory, Region.GetRegionFileName(position))));
+                return Regions[position];
+            }
         }
 
         /// <summary>
