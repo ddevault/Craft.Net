@@ -79,6 +79,7 @@
     <Compile Include="Blocks\DiamondOreBlock.cs" />
     <Compile Include="Blocks\DirtBlock.cs" />
     <Compile Include="Blocks\DispenserBlock.cs" />
+    <Compile Include="Blocks\DoorBlock.cs" />
     <Compile Include="Blocks\DoubleSlabBlock.cs" />
     <Compile Include="Blocks\DragonEggBlock.cs" />
     <Compile Include="Blocks\EmeraldBlock.cs" />

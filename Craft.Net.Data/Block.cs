@@ -54,7 +54,7 @@ namespace Craft.Net.Data
             var clicked = world.GetBlock(clickedBlock);
             if (clicked.OnBlockRightClicked(clickedBlock, clickedSide, cursorPosition, world, usedBy))
             {
-                if (this.OnBlockPlaced(world, clickedBlock + clickedSide, clickedBlock, clickedSide, cursorPosition, usedBy))
+                if (OnBlockPlaced(world, clickedBlock + clickedSide, clickedBlock, clickedSide, cursorPosition, usedBy))
                 {
                     world.SetBlock(clickedBlock + clickedSide, this);
                 }

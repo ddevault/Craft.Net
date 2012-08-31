@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class IronDoorBlock : Block
+    public class IronDoorBlock : DoorBlock
     {
         public override ushort Id
         {
@@ -15,6 +15,17 @@ namespace Craft.Net.Data.Blocks
         public override bool OnBlockRightClicked(Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, World world, Entities.Entity usedBy)
         {
             return false;
+        }
+
+        public IronDoorBlock()
+        {
+        }
+
+        public IronDoorBlock(DoorDirection direction, bool upperHalf)
+        {
+            UpperHalf = upperHalf;
+            if (!UpperHalf)
+                Direction = direction;
         }
     }
 }
