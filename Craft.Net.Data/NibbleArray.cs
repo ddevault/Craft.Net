@@ -32,7 +32,7 @@ namespace Craft.Net.Data
         /// </summary>
         public byte this[int index]
         {
-            get { return (byte)(Data[index/2] >> ((index + 1)%2*4) & 0xF); }
+            get { return (byte)(Data[index / 2] >> ((index) % 2 * 4) & 0xF); }
             set
             {
                 value &= 0xF;

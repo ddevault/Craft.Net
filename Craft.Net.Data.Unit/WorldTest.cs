@@ -72,6 +72,8 @@ namespace Craft.Net.Data.Unit
         {
             World.SetBlock(Vector3.Zero, new GoldBlock());
             Assert.AreEqual(new GoldBlock(), World.GetBlock(Vector3.Zero));
+            World.SetBlock(new Vector3(-15, 0, 5), new GoldBlock());
+            Assert.AreEqual(new GoldBlock(), World.GetBlock(new Vector3(-15, 0, 5)));
         }
     }
 }
