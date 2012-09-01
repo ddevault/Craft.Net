@@ -8,6 +8,10 @@ namespace Craft.Net.Data.Generation
     /// </summary>
     public class DebugGenerator : IWorldGenerator
     {
+        public void Initialize()
+        {
+        }
+
         public string LevelType
         {
             get { return "FLAT"; }

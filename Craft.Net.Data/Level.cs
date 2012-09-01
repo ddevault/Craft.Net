@@ -25,7 +25,7 @@ namespace Craft.Net.Data
         /// The time between automatic saves.
         /// Default value is one minute.
         /// </summary>
-        public TimeSpan SaveInterval { get; set; }
+        public static TimeSpan SaveInterval { get; set; }
 
         private Timer saveTimer { get; set; }
 
@@ -55,6 +55,7 @@ namespace Craft.Net.Data
             if (!File.Exists(Path.Combine(LevelDirectory, "level.dat")))
             {
                 WorldGenerator = DefaultGenerator;
+                WorldGenerator.Initialize();
                 SpawnPoint = WorldGenerator.SpawnPoint;
                 World = new World(WorldGenerator, Path.Combine(directory, "region"));
 
@@ -81,6 +82,7 @@ namespace Craft.Net.Data
                 Directory.CreateDirectory(directory);
             LevelDirectory = directory;
             WorldGenerator = worldGenerator;
+            WorldGenerator.Initialize();
             SpawnPoint = WorldGenerator.SpawnPoint;
             World = new World(WorldGenerator, Path.Combine(directory, "region"));
             SaveInterval = TimeSpan.FromSeconds(5);

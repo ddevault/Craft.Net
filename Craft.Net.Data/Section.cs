@@ -89,7 +89,10 @@ namespace Craft.Net.Data
             return block;
         }
 
-        internal void ProcessSection()
+        /// <summary>
+        /// Reschedules block updates and air counts.
+        /// </summary>
+        public void ProcessSection()
         {
             // TODO: Schedule updates
             nonAirCount = 0;

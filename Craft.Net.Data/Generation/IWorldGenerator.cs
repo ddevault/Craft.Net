@@ -13,5 +13,11 @@ namespace Craft.Net.Data.Generation
         Chunk GenerateChunk(Vector3 position, Region parentRegion);
 
         Chunk GenerateChunk(Vector3 position);
+
+        /// <summary>
+        /// Called after the world generator is created and
+        /// all values are set.
+        /// </summary>
+        void Initialize();
     }
 }
