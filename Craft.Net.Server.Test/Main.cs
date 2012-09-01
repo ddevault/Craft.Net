@@ -27,7 +27,7 @@ namespace Craft.Net.Server.Test
             minecraftServer.AddLogProvider(new ConsoleLogWriter(LogImportance.High));
             minecraftServer.AddLogProvider(new FileLogWriter("packetLog.txt", LogImportance.Low));
             // Add a flatland world
-            minecraftServer.AddLevel(new Level(new DebugGenerator(), Path.Combine(Directory.GetCurrentDirectory(), "test")));
+            minecraftServer.AddLevel(new Level(Path.Combine(Directory.GetCurrentDirectory(), "world")));
             minecraftServer.DefaultLevel.GameMode = GameMode.Creative;
             // Register the chat handler
             minecraftServer.ChatMessage += HandleOnChatMessage;
