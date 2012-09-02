@@ -35,9 +35,6 @@
     <Reference Include="Ionic.Zip.Reduced">
       <HintPath>..\Ionic.Zip.Reduced.dll</HintPath>
     </Reference>
-    <Reference Include="LibNbt">
-      <HintPath>..\LibNbt.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -361,7 +358,12 @@
     <Compile Include="Vector3.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\externals\libnbt\LibNbt\LibNbt.csproj">
+      <Project>{4488498d-976d-4da3-bf72-109531af0488}</Project>
+      <Name>LibNbt</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
