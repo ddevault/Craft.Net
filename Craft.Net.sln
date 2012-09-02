@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Data", "Craft.Net
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Data.Unit", "Craft.Net.Data.Unit\Craft.Net.Data.Unit.csproj", "{15AA5096-F131-4D3C-8235-A9F0165729C0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Externals", "Externals", "{59CA5728-83B9-48C5-A822-90FB20E8133E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibNbt", "externals\libnbt\LibNbt\LibNbt.csproj", "{4488498D-976D-4DA3-BF72-109531AF0488}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,9 +35,16 @@ Global
 		{15AA5096-F131-4D3C-8235-A9F0165729C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15AA5096-F131-4D3C-8235-A9F0165729C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15AA5096-F131-4D3C-8235-A9F0165729C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4488498D-976D-4DA3-BF72-109531AF0488}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4488498D-976D-4DA3-BF72-109531AF0488}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4488498D-976D-4DA3-BF72-109531AF0488}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4488498D-976D-4DA3-BF72-109531AF0488}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4488498D-976D-4DA3-BF72-109531AF0488} = {59CA5728-83B9-48C5-A822-90FB20E8133E}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Craft.Net.Server.Test\Craft.Net.Server.Test.csproj
