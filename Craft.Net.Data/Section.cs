@@ -42,7 +42,7 @@ namespace Craft.Net.Data
             BlockLight = new NibbleArray(Width*Height*Depth);
             SkyLight = new NibbleArray(Width*Height*Depth);
             for (int i = 0; i < SkyLight.Data.Length; i++)
-                SkyLight.Data[i] = BlockLight.Data[i] = 0xFF;
+                SkyLight.Data[i] = 0xFF;
             nonAirCount = 0;
         }
 
