@@ -9,6 +9,7 @@ using Craft.Net.Server.Events;
 using System.Reflection;
 using Craft.Net.Data.Blocks;
 using System.IO;
+using Craft.Net.Server.Packets;
 
 namespace Craft.Net.Server.Test
 {
@@ -71,6 +72,11 @@ namespace Craft.Net.Server.Test
                         break;
                     case "save":
                         minecraftServer.DefaultWorld.Regions[Vector3.Zero].Save();
+                        break;
+                    case "time":
+                        var clients = minecraftServer.GetClientsInWorld(minecraftServer.GetClientWorld(e.Origin));
+                        foreach (var minecraftClient in clients )
+                            minecraftClient.SendPacket(new TimeUpdatePacket(18000));
                         break;
                 }
             }

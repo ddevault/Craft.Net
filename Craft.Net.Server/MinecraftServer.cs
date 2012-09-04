@@ -493,6 +493,8 @@ namespace Craft.Net.Server
             // Send entities
             EntityManager.SendClientEntities(client);
 
+            client.SendPacket(new TimeUpdatePacket(DefaultLevel.Time));
+
             UpdatePlayerList(null); // Should also process send queue
 
             var args = new PlayerLogInEventArgs(client);

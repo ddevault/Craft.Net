@@ -21,6 +21,7 @@ namespace Craft.Net.Data
         /// Craft.Net will use this world generator if it does not recognize the provided one.
         /// </summary>
         public static IWorldGenerator DefaultGenerator = new FlatlandGenerator();
+        public const int TickLength = 1000 / 20;
         /// <summary>
         /// The time between automatic saves.
         /// Default value is one minute.
@@ -28,6 +29,7 @@ namespace Craft.Net.Data
         public static TimeSpan SaveInterval { get; set; }
 
         private Timer saveTimer { get; set; }
+        private Timer tickTimer { get; set; }
 
         public World World { get; set; }
         public string Name { get; set; }
@@ -45,6 +47,7 @@ namespace Craft.Net.Data
         public int RainTime { get; set; }
         public int ThunderTime { get; set; }
         
+        // TODO: Refactor constructors
         public Level(string directory)
         {
             Name = "world";
@@ -73,6 +76,7 @@ namespace Craft.Net.Data
 
             SaveInterval = TimeSpan.FromSeconds(5);
             saveTimer = new Timer(Save, null, (int)SaveInterval.TotalMilliseconds, Timeout.Infinite);
+            tickTimer = new Timer(Tick, null, TickLength, TickLength);
         }
 
         public Level(IWorldGenerator worldGenerator, string directory)
@@ -87,6 +91,7 @@ namespace Craft.Net.Data
             World = new World(WorldGenerator, Path.Combine(directory, "region"));
             SaveInterval = TimeSpan.FromSeconds(5);
             saveTimer = new Timer(Save, null, (int)SaveInterval.TotalMilliseconds, Timeout.Infinite);
+            tickTimer = new Timer(Tick, null, TickLength, TickLength);
         }
 
         private void Save(object discarded)
@@ -166,6 +171,11 @@ namespace Craft.Net.Data
             SpawnPoint = new Vector3(x, y, z);
 
             World = new World(WorldGenerator, Path.Combine(directory, "region"));
+        }
+
+        private void Tick(object discarded)
+        {
+            Time++;
         }
     }
 }
