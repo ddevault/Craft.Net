@@ -85,16 +85,22 @@ namespace Craft.Net.Server
             // check for walked on blocks
             if (flooredPosition.Y == entity.Position.Y && entity.OldPosition.Floor() != entity.OldPosition)
             {
-                var blockOn = world.GetBlock(flooredPosition + Vector3.Down);
-                blockOn.OnBlockWalkedOn(world, flooredPosition + Vector3.Down, entity);
+                if ((flooredPosition + Vector3.Down).Y >= 0 && (flooredPosition + Vector3.Down).Y <= Chunk.Height)
+                {
+                    var blockOn = world.GetBlock(flooredPosition + Vector3.Down);
+                    blockOn.OnBlockWalkedOn(world, flooredPosition + Vector3.Down, entity);
+                }
             }
 
             if ((int)(entity.Position.X) != (int)(entity.OldPosition.X) ||
                 (int)(entity.Position.Y) != (int)(entity.OldPosition.Y) ||
                 (int)(entity.Position.Z) != (int)(entity.OldPosition.Z))
             {
-                var blockIn = world.GetBlock(flooredPosition);
-                blockIn.OnBlockWalkedIn(world, flooredPosition, entity);
+                if (flooredPosition.Y >= 0 && flooredPosition.Y <= Chunk.Height)
+                {
+                    var blockIn = world.GetBlock(flooredPosition);
+                    blockIn.OnBlockWalkedIn(world, flooredPosition, entity);
+                }
             }
 
             // Update location with known clients

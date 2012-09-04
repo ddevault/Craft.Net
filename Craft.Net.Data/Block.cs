@@ -56,7 +56,8 @@ namespace Craft.Net.Data
             {
                 if (OnBlockPlaced(world, clickedBlock + clickedSide, clickedBlock, clickedSide, cursorPosition, usedBy))
                 {
-                    world.SetBlock(clickedBlock + clickedSide, this);
+                    if ((clickedBlock + clickedSide).Y >= 0 && (clickedBlock + clickedSide).Y <= Chunk.Height)
+                        world.SetBlock(clickedBlock + clickedSide, this);
                 }
             }
         }
