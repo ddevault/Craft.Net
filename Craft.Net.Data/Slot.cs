@@ -98,6 +98,16 @@ namespace Craft.Net.Data
             return s;
         }
 
+        public NbtCompound ToNbt()
+        {
+            var c = new NbtCompound();
+            c.Tags.Add(new NbtShort("id", (short)Id));
+            c.Tags.Add(new NbtShort("Damage", (short)Metadata));
+            c.Tags.Add(new NbtByte("Count", Count));
+            c.Tags.Add(new NbtByte("Slot", (byte)Index));
+            return c;
+        }
+
         /// <summary>
         /// Reads a slot from the given stream.
         /// </summary>

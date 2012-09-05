@@ -249,9 +249,48 @@ namespace Craft.Net.Data
             return entity;
         }
 
-        public void SavePlayer(PlayerEntity player)
+        public void SavePlayer(PlayerEntity entity)
         {
-            
+            // TODO: Generalize to all mobs
+            NbtFile file = new NbtFile();
+            var data = new NbtCompound();
+            data.Tags.Add(new NbtByte("OnGround", (byte)(entity.OnGround ? 1 : 0)));
+            data.Tags.Add(new NbtShort("Air", entity.Air));
+            data.Tags.Add(new NbtShort("Health", entity.Health));
+            data.Tags.Add(new NbtInt("Dimension", 0)); // TODO
+            data.Tags.Add(new NbtInt("Food", entity.Food));
+            data.Tags.Add(new NbtInt("XpLevel", entity.XpLevel));
+            data.Tags.Add(new NbtInt("XpTotal", entity.XpTotal));
+            data.Tags.Add(new NbtFloat("foodExhaustionLevel", entity.FoodExhaustion));
+            data.Tags.Add(new NbtFloat("foodSaturationLevel", entity.FoodSaturation));
+            data.Tags.Add(new NbtFloat("XpP", entity.XpProgress));
+            data.Tags.Add(new NbtList("Equipment"));
+            var inventory = new NbtList("Inventory");
+            for (int index = 0; index < entity.Inventory.Length; index++)
+            {
+                var slot = entity.Inventory[index];
+                slot.Index = index;
+                inventory.Tags.Add(slot.ToNbt());
+            }
+            data.Tags.Add(inventory);
+            var motion = new NbtList("Motion");
+            motion.Tags.Add(new NbtDouble(entity.Velocity.X));
+            motion.Tags.Add(new NbtDouble(entity.Velocity.Y));
+            motion.Tags.Add(new NbtDouble(entity.Velocity.Z));
+            data.Tags.Add(motion);
+
+            var pos = new NbtList("Pos");
+            pos.Tags.Add(new NbtDouble(entity.Position.X));
+            pos.Tags.Add(new NbtDouble(entity.Position.Y));
+            pos.Tags.Add(new NbtDouble(entity.Position.Z));
+            data.Tags.Add(pos);
+
+            var rotation = new NbtList("Rotation");
+            data.Tags.Add(new NbtFloat(entity.Yaw));
+            data.Tags.Add(new NbtFloat(entity.Pitch));
+            data.Tags.Add(rotation);
+
+            data.Tags.Add(new NbtCompound("abilities"));
         }
 
         /// <summary>
