@@ -193,9 +193,14 @@ namespace Craft.Net.Data
             lock (Regions)
             {
                 if (!Regions.ContainsKey(position))
-                    Regions.Add(position,
+                {
+                    if (Directory == null)
+                        Regions.Add(position, new Region(position, WorldGenerator));
+                    else
+                        Regions.Add(position,
                                 new Region(position, WorldGenerator,
                                            Path.Combine(Directory, Region.GetRegionFileName(position))));
+                }
                 return Regions[position];
             }
         }
