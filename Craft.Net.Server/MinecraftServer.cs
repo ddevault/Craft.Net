@@ -496,7 +496,7 @@ namespace Craft.Net.Server
             EntityManager.SendClientEntities(client);
 
             // Send inventory
-            client.SendPacket(new SetWindowItemsPacket(0, client.Entity.Inventory));
+            client.SendPacket(new SetWindowItemsPacket(Window.Inventory, client.Entity.Inventory));
 
             client.SendPacket(new TimeUpdatePacket(DefaultLevel.Time));
 

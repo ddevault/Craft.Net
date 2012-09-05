@@ -6,6 +6,16 @@ using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
+    public enum Window
+    {
+        Inventory = 0,
+        Chest = 0,
+        Workbench = 1,
+        Furnace = 2,
+        Dispenser = 3,
+        EnchantmentTable = 4
+    }
+
     public class SetWindowItemsPacket : Packet
     {
         public byte WindowId { get; set; }
@@ -15,9 +25,9 @@ namespace Craft.Net.Server.Packets
         {
         }
 
-        public SetWindowItemsPacket(byte windowId, Slot[] slots)
+        public SetWindowItemsPacket(Window window, Slot[] slots)
         {
-            WindowId = windowId;
+            WindowId = (byte)window;
             Slots = slots;
         }
 
