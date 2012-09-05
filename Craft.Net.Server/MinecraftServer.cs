@@ -495,6 +495,9 @@ namespace Craft.Net.Server
             // Send entities
             EntityManager.SendClientEntities(client);
 
+            // Send inventory
+            client.SendPacket(new SetWindowItemsPacket(0, client.Entity.Inventory));
+
             client.SendPacket(new TimeUpdatePacket(DefaultLevel.Time));
 
             UpdatePlayerList(null); // Should also process send queue

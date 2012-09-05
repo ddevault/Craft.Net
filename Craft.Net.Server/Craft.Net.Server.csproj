@@ -74,6 +74,7 @@
     <Compile Include="Packets\LoginPacket.cs" />
     <Compile Include="Packets\KeepAlivePacket.cs" />
     <Compile Include="Packets\SetSlotPacket.cs" />
+    <Compile Include="Packets\SetWindowItemsPacket.cs" />
     <Compile Include="Packets\SpawnLightningPacket.cs" />
     <Compile Include="Packets\TimeUpdatePacket.cs" />
     <Compile Include="Packets\UseBedPacket.cs" />
