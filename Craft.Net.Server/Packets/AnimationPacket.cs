@@ -19,6 +19,16 @@ namespace Craft.Net.Server.Packets
         public Animation Animation;
         public int EntityId;
 
+        public AnimationPacket()
+        {
+        }
+
+        public AnimationPacket(int entityId, Animation animation)
+        {
+            EntityId = entityId;
+            Animation = animation;
+        }
+
         public override byte PacketId
         {
             get { return 0x12; }

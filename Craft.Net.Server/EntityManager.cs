@@ -37,6 +37,7 @@ namespace Craft.Net.Server
                 {
                     // Isolate the client being spawned
                     var client = clients.First(c => c.Entity == entity);
+                    client.Entity.UpdateBedState += EntityOnUpdateBedState;
                     clients = clients.Where(c => c.Entity != entity);
                     clients.ToList().ForEach(c => {
                         c.SendPacket(new SpawnNamedEntityPacket(client));
@@ -45,6 +46,24 @@ namespace Craft.Net.Server
                 }
             }
             server.ProcessSendQueue();
+        }
+
+        private void EntityOnUpdateBedState(object sender, EventArgs eventArgs)
+        {
+            var player = sender as PlayerEntity;
+            var clients = GetClientsInWorld(GetEntityWorld(player));
+            if (player.BedPosition == -Vector3.One)
+            {
+                // Leave bed
+                foreach (var minecraftClient in clients)
+                    minecraftClient.SendPacket(new AnimationPacket(player.Id, Animation.LeaveBed));
+            }
+            else
+            {
+                // Enter bed
+                foreach (var minecraftClient in clients)
+                    minecraftClient.SendPacket(new UseBedPacket(player.Id, player.BedPosition));
+            }
         }
 
         public void SendClientEntities(MinecraftClient client)

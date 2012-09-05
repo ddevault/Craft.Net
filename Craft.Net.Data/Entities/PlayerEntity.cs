@@ -52,7 +52,7 @@ namespace Craft.Net.Data.Entities
         /// </summary>
         public Timer BedUseTimer;
         public event EventHandler UpdateBedState;
-        private Vector3 bedPosition;
+        public Vector3 BedPosition;
 
         public GameMode GameMode;
 
@@ -83,12 +83,20 @@ namespace Craft.Net.Data.Entities
             Inventory[index] = slot;
         }
 
-        public void EnterBed(Vector3 bedPosition)
+        public void EnterBed(Vector3 position)
         {
+            BedPosition = position;
             if (UpdateBedState != null)
                 UpdateBedState(this, null);
         }
 
         public event EventHandler<InventoryChangedEventArgs> InventoryChanged;
+
+        public void LeaveBed()
+        {
+            BedPosition = -Vector3.One;
+            if (UpdateBedState != null)
+                UpdateBedState(this, null);
+        }
     }
 }

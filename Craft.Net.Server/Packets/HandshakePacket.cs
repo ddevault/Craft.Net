@@ -1,5 +1,6 @@
 using System;
 using System.Net;
+using System.Linq;
 using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
@@ -41,6 +42,12 @@ namespace Craft.Net.Server.Packets
             if (ProtocolVersion > MinecraftServer.ProtocolVersion)
             {
                 client.SendPacket(new DisconnectPacket("Outdated server!"));
+                server.ProcessSendQueue();
+                return;
+            }
+            if (server.Clients.Count(c => c.Username == Username) != 0)
+            {
+                client.SendPacket(new DisconnectPacket("You are already logged in!"));
                 server.ProcessSendQueue();
                 return;
             }

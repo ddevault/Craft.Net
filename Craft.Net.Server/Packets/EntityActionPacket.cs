@@ -51,6 +51,9 @@ namespace Craft.Net.Server.Packets
                 case EntityAction.StopSprinting:
                     client.IsSprinting = false;
                     break;
+                case EntityAction.LeaveBed:
+                    client.Entity.LeaveBed();
+                    break;
             }
             if (Action != EntityAction.LeaveBed) // NOTE: Does this matter?
             {

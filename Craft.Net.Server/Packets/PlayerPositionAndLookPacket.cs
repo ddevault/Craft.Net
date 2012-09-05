@@ -1,5 +1,6 @@
 using System.Linq;
 using Craft.Net.Data;
+using Craft.Net.Data.Entities;
 
 namespace Craft.Net.Server.Packets
 {
@@ -21,7 +22,7 @@ namespace Craft.Net.Server.Packets
             X = position.X;
             Y = position.Y;
             Z = position.Z;
-            Stance = Y + 1.5;
+            Stance = Y + PlayerEntity.Height;
             this.Yaw = yaw;
             this.Pitch = pitch;
             this.OnGround = onGround;

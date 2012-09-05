@@ -74,6 +74,7 @@
     <Compile Include="Packets\SetSlotPacket.cs" />
     <Compile Include="Packets\SpawnLightningPacket.cs" />
     <Compile Include="Packets\TimeUpdatePacket.cs" />
+    <Compile Include="Packets\UseBedPacket.cs" />
     <Compile Include="PluginChannel.cs" />
     <Compile Include="ConsoleLogWriter.cs" />
     <Compile Include="Packets\LocaleAndViewDistancePacket.cs" />

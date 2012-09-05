@@ -69,6 +69,8 @@ namespace Craft.Net.Data.Blocks
                 return false;
             IsOccupied = true;
             var entity = (PlayerEntity)usedBy;
+            if (!IsHeadboard)
+                clickedBlock += BedDirectionToVector3(Direction);
             entity.EnterBed(clickedBlock);
             return false;
         }
@@ -82,6 +84,21 @@ namespace Craft.Net.Data.Blocks
             if (direction == Vector3.South)
                 return BedDirection.South;
             return BedDirection.West;
+        }
+
+        public static Vector3 BedDirectionToVector3(BedDirection direction)
+        {
+            switch (direction)
+            {
+                case BedDirection.North:
+                    return Vector3.North;
+                case BedDirection.South:
+                    return Vector3.South;
+                case BedDirection.West:
+                    return Vector3.West;
+                default:
+                    return Vector3.East;
+            }
         }
     }
 }
