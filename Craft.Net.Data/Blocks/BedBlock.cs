@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Craft.Net.Data.Entities;
 
 namespace Craft.Net.Data.Blocks
 {
@@ -64,7 +65,11 @@ namespace Craft.Net.Data.Blocks
 
         public override bool OnBlockRightClicked(Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, World world, Entities.Entity usedBy)
         {
-
+            if (IsOccupied)
+                return false;
+            IsOccupied = true;
+            var entity = (PlayerEntity)usedBy;
+            entity.EnterBed(clickedBlock);
             return false;
         }
 
