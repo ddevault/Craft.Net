@@ -15,7 +15,7 @@ namespace Craft.Net.Data.Blocks
 
         public override bool OnBlockPlaced(World world, Vector3 position, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entity usedBy)
         {
-            this.Metadata = DataUtility.DirectionByRotation((PlayerEntity)usedBy, position, true);
+            this.Metadata = (byte)DataUtility.DirectionByRotation((PlayerEntity)usedBy, position, true);
             return true;
         }
     }

@@ -24,24 +24,24 @@ namespace Craft.Net.Data
         /// Gets a byte representing block direction based on the rotation
         /// of the entity that placed it, on a flat plane.
         /// </summary>
-        public static byte DirectionByRotationFlat(Entity p, bool invert = false)
+        public static Direction DirectionByRotationFlat(Entity p, bool invert = false)
         {
             byte direction = (byte)((int)Math.Floor((p.Yaw * 4F) / 360F + 0.5D) & 3);
             if (invert)
-                switch (direction)
+                switch (direction) // TODO: Don't cast these
                 {
-                    case 0: return 2;
-                    case 1: return 5;
-                    case 2: return 3;
-                    case 3: return 4;
+                    case 0: return (Direction)2;
+                    case 1: return (Direction)5;
+                    case 2: return (Direction)3;
+                    case 3: return (Direction)4;
                 }
             else
                 switch (direction)
                 {
-                    case 0: return 3;
-                    case 1: return 4;
-                    case 2: return 2;
-                    case 3: return 5;
+                    case 0: return (Direction)3;
+                    case 1: return (Direction)4;
+                    case 2: return (Direction)2;
+                    case 3: return (Direction)5;
                 }
             return 0;
         }
@@ -50,12 +50,12 @@ namespace Craft.Net.Data
         /// Gets a byte representing block direction based on the rotation
         /// of the entity that placed it.
         /// </summary>
-        public static byte DirectionByRotation(PlayerEntity p, Vector3 position, bool invert = false)
+        public static Direction DirectionByRotation(PlayerEntity p, Vector3 position, bool invert = false)
         {
             // TODO: Figure out some algorithm based on player's look yaw
             double d = Math.Asin((p.Position.Y - position.Y) / position.DistanceTo(p.Position));
-            if (d > (Math.PI / 4)) return invert ? (byte)1 : (byte)0;
-            if (d < -(Math.PI / 4)) return invert ? (byte)0 : (byte)1;
+            if (d > (Math.PI / 4)) return invert ? (Direction)1 : (Direction)0;
+            if (d < -(Math.PI / 4)) return invert ? (Direction)0 : (Direction)1;
             return DirectionByRotationFlat(p, invert);
         }
 

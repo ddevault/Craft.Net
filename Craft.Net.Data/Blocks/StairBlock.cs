@@ -17,7 +17,7 @@ namespace Craft.Net.Data.Blocks
     {
         public override bool OnBlockPlaced(World world, Vector3 position, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entities.Entity usedBy)
         {
-            Metadata = DataUtility.DirectionByRotationFlat(usedBy);
+            Metadata = (byte)DataUtility.DirectionByRotationFlat(usedBy);
             switch ((Direction)Metadata)
             {
                 case Direction.North:

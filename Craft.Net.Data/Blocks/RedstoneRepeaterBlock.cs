@@ -7,6 +7,15 @@ namespace Craft.Net.Data.Blocks
 {
     public class RedstoneRepeaterBlock : Block
     {
+        public RedstoneRepeaterBlock()
+        {
+        }
+
+        public RedstoneRepeaterBlock(Direction direction)
+        {
+            Metadata = (byte)direction;
+        }
+
         public override ushort Id
         {
             get { return 93; }

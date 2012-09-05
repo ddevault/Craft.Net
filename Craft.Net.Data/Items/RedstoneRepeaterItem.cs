@@ -8,6 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using Craft.Net.Data.Blocks;
+
 namespace Craft.Net.Data.Items
 {
     
@@ -19,6 +21,12 @@ namespace Craft.Net.Data.Items
             {
                 return 356;
             }
+        }
+
+        public override void OnItemUsed(World world, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entities.Entity usedBy)
+        {
+            if (world.GetBlock(clickedBlock + clickedSide) == 0)
+                world.SetBlock(clickedBlock + clickedSide, new RedstoneRepeaterBlock(DataUtility.DirectionByRotationFlat(usedBy)));
         }
     }
 }
