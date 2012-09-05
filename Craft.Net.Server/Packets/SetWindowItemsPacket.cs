@@ -6,7 +6,7 @@ using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
-    public enum Window
+    public enum Window // TODO: Move
     {
         Inventory = 0,
         Chest = 0,
@@ -25,9 +25,9 @@ namespace Craft.Net.Server.Packets
         {
         }
 
-        public SetWindowItemsPacket(Window window, Slot[] slots)
+        public SetWindowItemsPacket(byte windowId, Slot[] slots)
         {
-            WindowId = (byte)window;
+            WindowId = windowId;
             Slots = slots;
         }
 
