@@ -47,10 +47,12 @@ namespace Craft.Net.Server.Packets
         {
             if (client.Entity.Position.DistanceTo(Position) > 6) // TODO: Use client.Reach
                 return;
-            Item item = client.Entity.Inventory[client.Entity.SelectedSlot].Item;
+            var item = client.Entity.Inventory[client.Entity.SelectedSlot];
+            if (item != null && item.Id == 0xFFFF)
+                item.Id = 0;
             if (item != null)
             {
-                item.OnItemUsed(server.GetClientWorld(client), Position, AdjustByDirection(Direction), CursorPosition, client.Entity);
+                item.Item.OnItemUsed(server.GetClientWorld(client), Position, AdjustByDirection(Direction), CursorPosition, client.Entity);
                 if (client.Entity.GameMode != GameMode.Creative)
                     client.Entity.Inventory[client.Entity.SelectedSlot].Count--;
             }

@@ -80,7 +80,8 @@ namespace Craft.Net.Server.Test
                         break;
                     case "time":
                         var clients = minecraftServer.GetClientsInWorld(minecraftServer.GetClientWorld(e.Origin));
-                        foreach (var minecraftClient in clients )
+                        minecraftServer.GetLevel(minecraftServer.GetClientWorld(e.Origin)).Time = 18000;
+                        foreach (var minecraftClient in clients)
                             minecraftClient.SendPacket(new TimeUpdatePacket(18000));
                         break;
                 }

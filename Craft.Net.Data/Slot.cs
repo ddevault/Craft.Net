@@ -223,5 +223,10 @@ namespace Craft.Net.Data
                 Metadata = value.Data;
             }
         }
+
+        public bool Empty
+        {
+            get { return Id == 0xFFFF || Id == 0; }
+        }
     }
 }

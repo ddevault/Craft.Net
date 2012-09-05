@@ -319,6 +319,11 @@ namespace Craft.Net.Server
             ProcessSendQueue();
         }
 
+        public Level GetLevel(World world)
+        {
+            return Levels.First(l => l.World == world);
+        }
+
         #endregion
 
         #region Private Methods

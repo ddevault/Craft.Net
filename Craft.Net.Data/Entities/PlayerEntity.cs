@@ -47,14 +47,12 @@ namespace Craft.Net.Data.Entities
         /// </summary>
         public Slot[] Inventory;
         public short SelectedSlot;
-        /// <summary>
-        /// Used to check when beds need to be checked.
-        /// </summary>
-        public Timer BedUseTimer;
-        public event EventHandler UpdateBedState;
+        public event EventHandler BedStateChanged, BedTimerExpired;
         public Vector3 BedPosition;
-
         public GameMode GameMode;
+        public Vector3 SpawnPoint;
+
+        private Timer bedUseTimer;
 
         #endregion
 
@@ -62,13 +60,14 @@ namespace Craft.Net.Data.Entities
         {
             Inventory = new Slot[45];
             for (int i = 0; i < Inventory.Length; i++)
-                Inventory[i] = new Slot();
+                Inventory[i] = new Slot(0xFFFF, 0);
             SelectedSlot = InventoryHotbar;
-            BedUseTimer = new Timer(state =>
-                                         {
-                                             if (UpdateBedState != null)
-                                                 UpdateBedState(this, null);
-                                         });
+            bedUseTimer = new Timer(state =>
+                {
+                    if (BedTimerExpired != null)
+                        BedTimerExpired(this, null);
+                });
+            BedPosition = -Vector3.One;
         }
 
         public void SetSlot(short index, Slot slot)
@@ -86,8 +85,9 @@ namespace Craft.Net.Data.Entities
         public void EnterBed(Vector3 position)
         {
             BedPosition = position;
-            if (UpdateBedState != null)
-                UpdateBedState(this, null);
+            bedUseTimer.Change(5000, Timeout.Infinite);
+            if (BedStateChanged != null)
+                BedStateChanged(this, null);
         }
 
         public event EventHandler<InventoryChangedEventArgs> InventoryChanged;
@@ -95,8 +95,8 @@ namespace Craft.Net.Data.Entities
         public void LeaveBed()
         {
             BedPosition = -Vector3.One;
-            if (UpdateBedState != null)
-                UpdateBedState(this, null);
+            if (BedStateChanged != null)
+                BedStateChanged(this, null);
         }
     }
 }

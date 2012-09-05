@@ -37,7 +37,8 @@ namespace Craft.Net.Server
                 {
                     // Isolate the client being spawned
                     var client = clients.First(c => c.Entity == entity);
-                    client.Entity.UpdateBedState += EntityOnUpdateBedState;
+                    client.Entity.BedStateChanged += EntityOnUpdateBedState;
+                    client.Entity.BedTimerExpired += EntityOnBedTimerExpired;
                     clients = clients.Where(c => c.Entity != entity);
                     clients.ToList().ForEach(c => {
                         c.SendPacket(new SpawnNamedEntityPacket(client));
@@ -48,29 +49,62 @@ namespace Craft.Net.Server
             server.ProcessSendQueue();
         }
 
+        private void EntityOnBedTimerExpired(object sender, EventArgs eventArgs)
+        {
+            var player = sender as PlayerEntity;
+            var world = GetEntityWorld(player);
+            var clients = GetClientsInWorld(world);
+            foreach (var minecraftClient in clients)
+            {
+                if (minecraftClient.Entity.BedPosition == -Vector3.One)
+                    return;
+            }
+            var level = server.GetLevel(world);
+            level.Time = 0;
+            foreach (var minecraftClient in clients)
+            {
+                minecraftClient.SendPacket(new AnimationPacket(minecraftClient.Entity.Id, Animation.LeaveBed));
+                foreach (var client in GetKnownClients(minecraftClient.Entity))
+                    client.SendPacket(new AnimationPacket(minecraftClient.Entity.Id, Animation.LeaveBed));
+                minecraftClient.SendPacket(new TimeUpdatePacket(level.Time));
+                minecraftClient.Entity.BedPosition = -Vector3.One;
+            }
+            server.ProcessSendQueue();
+        }
+
         private void EntityOnUpdateBedState(object sender, EventArgs eventArgs)
         {
             var player = sender as PlayerEntity;
-            var clients = GetClientsInWorld(GetEntityWorld(player));
+            var clients = GetKnownClients(player);
             if (player.BedPosition == -Vector3.One)
             {
                 // Leave bed
+                GetClient(player).SendPacket(new AnimationPacket(player.Id, Animation.LeaveBed));
                 foreach (var minecraftClient in clients)
                     minecraftClient.SendPacket(new AnimationPacket(player.Id, Animation.LeaveBed));
             }
             else
             {
+                if (server.GetLevel(GetEntityWorld(player)).Time % 24000 < 12000)
+                {
+                    GetClient(player).SendChat("You can only sleep at night.");
+                    return;
+                }
                 // Enter bed
+                GetClient(player).SendPacket(new UseBedPacket(player.Id, player.BedPosition));
                 foreach (var minecraftClient in clients)
                     minecraftClient.SendPacket(new UseBedPacket(player.Id, player.BedPosition));
+                player.SpawnPoint = player.BedPosition;
             }
+            server.ProcessSendQueue();
         }
 
         public void SendClientEntities(MinecraftClient client)
         {
             var world = GetEntityWorld(client.Entity);
             var clients = GetClientsInWorld(world)
-                .Where(c => !c.IsDisconnected && c.Entity.Position.DistanceTo(client.Entity.Position) < (c.ViewDistance * Chunk.Width) && c != client);
+                .Where(c => !c.IsDisconnected && c.Entity.Position.DistanceTo(client.Entity.Position) < 
+                    (c.ViewDistance * Chunk.Width) && c != client);
             foreach (var _client in clients)
             {
                 client.KnownEntities.Add(_client.Entity.Id);
