@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class RedstoneRepeaterActiveBlock : Block
+    public class RedstoneRepeaterActiveBlock : RedstoneRepeaterBlock
     {
         public override ushort Id
         {
