@@ -478,10 +478,7 @@ namespace Craft.Net.Server
         {
             client.IsLoggedIn = true;
             // Spawn player
-            client.Entity = new PlayerEntity();
-            client.Entity.Position = DefaultLevel.SpawnPoint;
-            client.Entity.Position += new Vector3(0, PlayerEntity.Height, 0);
-            client.Entity.GameMode = DefaultLevel.GameMode;
+            client.Entity = DefaultLevel.LoadPlayer(client.Username);
             client.Entity.InventoryChanged += Entity_InventoryChanged;
             EntityManager.SpawnEntity(DefaultWorld, client.Entity);
             client.SendPacket(new LoginPacket(client.Entity.Id,

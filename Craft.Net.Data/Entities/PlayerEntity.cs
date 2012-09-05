@@ -3,7 +3,7 @@ using System.Threading;
 using Craft.Net.Data.Events;
 namespace Craft.Net.Data.Entities
 {
-    public class PlayerEntity : Entity
+    public class PlayerEntity : LivingEntity
     {
         #region Constants
 
@@ -22,6 +22,11 @@ namespace Craft.Net.Data.Entities
             get { return new Size(0.6, 1.8, 0.6); }
         }
 
+        public override short MaxHealth
+        {
+            get { return 20; }
+        }
+
         public static double Width
         {
             get { return 0.6; }
@@ -36,6 +41,13 @@ namespace Craft.Net.Data.Entities
         {
             get { return 0.6; }
         }
+
+        public short Food { get; set; }
+        public float FoodSaturation { get; set; }
+        public float FoodExhaustion { get; set; }
+        public int XpLevel { get; set; }
+        public int XpTotal { get; set; }
+        public float XpProgress { get; set; }
 
         #endregion
 

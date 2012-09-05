@@ -3,6 +3,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using LibNbt;
+using LibNbt.Tags;
 
 namespace Craft.Net.Data
 {
@@ -39,6 +40,12 @@ namespace Craft.Net.Data
         /// <value>The NBT data.</value>
         /// <remarks>This is used for enchanting equipment</remarks>
         public NbtFile Nbt;
+
+        /// <summary>
+        /// Almost never set, but if provided, this will be set to the
+        /// index in an inventory this slot appears.
+        /// </summary>
+        public int Index;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Slot"/> class.
@@ -79,6 +86,16 @@ namespace Craft.Net.Data
             this.Count = count;
             this.Metadata = metadata;
             Nbt = new NbtFile();
+        }
+
+        public static Slot FromNbt(NbtCompound compound)
+        {
+            var s = new Slot();
+            s.Id = (ushort)compound.Get<NbtShort>("id").Value;
+            s.Metadata = (ushort)compound.Get<NbtShort>("Damage").Value;
+            s.Count = compound.Get<NbtByte>("Count").Value;
+            s.Index = compound.Get<NbtByte>("Slot").Value;
+            return s;
         }
 
         /// <summary>

@@ -177,5 +177,101 @@ namespace Craft.Net.Data
         {
             Time++;
         }
+
+        public PlayerEntity LoadPlayer(string name)
+        {
+            PlayerEntity entity = new PlayerEntity();
+            if (!File.Exists(Path.Combine(LevelDirectory, "players", name + ".dat")))
+            {
+                // Return default player entity
+                entity.Position = SpawnPoint;
+                entity.Position += new Vector3(0, PlayerEntity.Height, 0);
+                entity.GameMode = GameMode;
+                return entity;
+            }
+            
+            NbtFile file = new NbtFile();
+            using (Stream stream = File.Open(Path.Combine(LevelDirectory, "players", name + ".dat"), FileMode.Open))
+                file.LoadFile(stream, true);
+            var data = file.RootTag;
+            entity.OnGround = data.Get<NbtByte>("OnGround").Value == 1;
+            entity.Air = data.Get<NbtShort>("Air").Value;
+            entity.Health = data.Get<NbtShort>("Health").Value;
+            Dimension dimension = (Dimension)data.Get<NbtInt>("Dimension").Value; // TODO
+            entity.Food = (short)data.Get<NbtInt>("foodLevel").Value;
+            entity.XpLevel = data.Get<NbtInt>("XpLevel").Value;
+            entity.XpTotal = data.Get<NbtInt>("XpTotal").Value;
+            // TODO: Set velocity based on fall distance
+            entity.FoodExhaustion = data.Get<NbtFloat>("foodExhaustionLevel").Value;
+            entity.FoodSaturation = data.Get<NbtFloat>("foodSaturationLevel").Value;
+            entity.XpProgress = data.Get<NbtFloat>("XpP").Value;
+
+            var equipment = data.Get<NbtList>("Equipment");
+            var inventory = data.Get<NbtList>("Inventory");
+            var motion = data.Get<NbtList>("Motion");
+            var pos = data.Get<NbtList>("Pos");
+            var rotation = data.Get<NbtList>("Rotation");
+            var abilities = data.Get<NbtCompound>("abilities");
+
+            // Appears to be unused, is overriden by the inventory contents
+            // foreach (var item in equipment.Tags)
+
+            foreach (var item in inventory.Tags)
+            {
+                var slot = Slot.FromNbt((NbtCompound)item);
+                slot.Index = DataSlotToNetworkSlot(slot.Index);
+                entity.Inventory[slot.Index] = slot;
+            }
+
+            entity.Velocity = new Vector3(
+                ((NbtDouble)motion.Tags[0]).Value,
+                ((NbtDouble)motion.Tags[1]).Value,
+                ((NbtDouble)motion.Tags[2]).Value);
+
+            entity.Position = new Vector3(
+                ((NbtDouble)pos.Tags[0]).Value,
+                ((NbtDouble)pos.Tags[1]).Value,
+                ((NbtDouble)pos.Tags[2]).Value);
+
+            if (data.Get<NbtInt>("SpawnX") != null)
+            {
+                entity.SpawnPoint = new Vector3(
+                    data.Get<NbtInt>("SpawnX").Value,
+                    data.Get<NbtInt>("SpawnY").Value,
+                    data.Get<NbtInt>("SpawnZ").Value);
+            }
+
+            entity.Yaw = ((NbtFloat)rotation.Tags[0]).Value;
+            entity.Pitch = ((NbtFloat)rotation.Tags[1]).Value;
+
+            // TODO: Abilities
+
+            return entity;
+        }
+
+        public void SavePlayer(PlayerEntity player)
+        {
+            
+        }
+
+        /// <summary>
+        /// Thanks to some idiot at Mojang
+        /// </summary>
+        private static int DataSlotToNetworkSlot(int index)
+        {
+            if (index <= 8)
+                index += 36;
+            else if (index == 100)
+                index = 8;
+            else if (index == 101)
+                index = 7;
+            else if (index == 102)
+                index = 6;
+            else if (index == 103)
+                index = 5;
+            else if (index >= 80 && index <= 83)
+                index -= 79;
+            return index;
+        }
     }
 }
