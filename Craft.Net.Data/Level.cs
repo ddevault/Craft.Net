@@ -258,7 +258,7 @@ namespace Craft.Net.Data
             data.Tags.Add(new NbtShort("Air", entity.Air));
             data.Tags.Add(new NbtShort("Health", entity.Health));
             data.Tags.Add(new NbtInt("Dimension", 0)); // TODO
-            data.Tags.Add(new NbtInt("Food", entity.Food));
+            data.Tags.Add(new NbtInt("foodLevel", entity.Food));
             data.Tags.Add(new NbtInt("XpLevel", entity.XpLevel));
             data.Tags.Add(new NbtInt("XpTotal", entity.XpTotal));
             data.Tags.Add(new NbtFloat("foodExhaustionLevel", entity.FoodExhaustion));
@@ -269,7 +269,9 @@ namespace Craft.Net.Data
             for (int index = 0; index < entity.Inventory.Length; index++)
             {
                 var slot = entity.Inventory[index];
-                slot.Index = index;
+                if (slot.Empty)
+                    continue;
+                slot.Index = NetworkSlotToDataSlot(index);
                 inventory.Tags.Add(slot.ToNbt());
             }
             data.Tags.Add(inventory);
@@ -286,11 +288,15 @@ namespace Craft.Net.Data
             data.Tags.Add(pos);
 
             var rotation = new NbtList("Rotation");
-            data.Tags.Add(new NbtFloat(entity.Yaw));
-            data.Tags.Add(new NbtFloat(entity.Pitch));
+            rotation.Tags.Add(new NbtFloat(entity.Yaw));
+            rotation.Tags.Add(new NbtFloat(entity.Pitch));
             data.Tags.Add(rotation);
 
             data.Tags.Add(new NbtCompound("abilities"));
+
+            file.RootTag = data;
+            using (Stream stream = File.Open(Path.Combine(LevelDirectory, "players", entity.Username + ".dat"), FileMode.OpenOrCreate))
+                file.SaveFile(stream, true);
         }
 
         /// <summary>
@@ -310,6 +316,23 @@ namespace Craft.Net.Data
                 index = 5;
             else if (index >= 80 && index <= 83)
                 index -= 79;
+            return index;
+        }
+
+        private static int NetworkSlotToDataSlot(int index)
+        {
+            if (index >= 36 && index <= 44)
+                index -= 36;
+            else if (index == 8)
+                index = 100;
+            else if (index == 7)
+                index = 101;
+            else if (index == 6)
+                index = 102;
+            else if (index == 5)
+                index = 103;
+            else if (index >= 1 && index <= 4)
+                index += 79;
             return index;
         }
     }

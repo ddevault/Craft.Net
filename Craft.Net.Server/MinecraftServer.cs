@@ -452,6 +452,7 @@ namespace Craft.Net.Server
                                                                client.Username, false, 0));
                             }
                         }
+                        DefaultLevel.SavePlayer(client.Entity);
                         var args = new PlayerLogInEventArgs(client);
                         OnPlayerLoggedOut(args);
                         if (!args.Handled)
@@ -479,6 +480,7 @@ namespace Craft.Net.Server
             client.IsLoggedIn = true;
             // Spawn player
             client.Entity = DefaultLevel.LoadPlayer(client.Username);
+            client.Entity.Username = client.Username;
             client.Entity.InventoryChanged += Entity_InventoryChanged;
             EntityManager.SpawnEntity(DefaultWorld, client.Entity);
             client.SendPacket(new LoginPacket(client.Entity.Id,
