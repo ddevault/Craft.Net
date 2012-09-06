@@ -1,7 +1,7 @@
 ---
 layout: base
 title: >
-    Craft.Net
+    Craft\.Net
 ---
 
 # Craft.Net
