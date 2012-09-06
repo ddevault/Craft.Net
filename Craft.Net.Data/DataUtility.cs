@@ -113,9 +113,6 @@ namespace Craft.Net.Data
         /// </summary>
         public static byte[] CreateString(string text)
         {
-            if (text.Length > 64)
-                throw new ArgumentOutOfRangeException("text", "String length cannot be greater 64 characters.");
-
             return CreateInt16((short)text.Length)
                 .Concat(Encoding.BigEndianUnicode.GetBytes(text)).ToArray();
         }

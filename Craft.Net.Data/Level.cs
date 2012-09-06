@@ -185,6 +185,7 @@ namespace Craft.Net.Data
             {
                 // Return default player entity
                 entity.Position = SpawnPoint;
+                entity.SpawnPoint = SpawnPoint;
                 entity.Position += new Vector3(0, PlayerEntity.Height, 0);
                 entity.GameMode = GameMode;
                 return entity;

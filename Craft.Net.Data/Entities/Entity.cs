@@ -1,17 +1,27 @@
 using System;
+using System.ComponentModel;
 
 namespace Craft.Net.Data.Entities
 {
-    public abstract class Entity
+    public abstract class Entity : INotifyPropertyChanged
     {
-        public Entity()
+        protected Entity()
         {
             Fire = -20;
         }
 
         public int Id { get; set; }
-        public Vector3 Position { get; set; }
-        public Vector3 OldPosition { get; set; } // TODO: Refactor away
+        public Vector3 Position
+        {
+            get { return position; }
+            set
+            {
+                position = value;
+                OnPropertyChanged("Position");
+            }
+        }
+
+        public Vector3 OldPosition { get; set; }
         /// <summary>
         /// In meters per tick
         /// </summary>
@@ -26,9 +36,40 @@ namespace Craft.Net.Data.Entities
         /// of how long the entity may stand in a fire-creating
         /// block before catching fire.
         /// </summary>
-        public int Fire { get; set; }
-        public bool OnGround { get; set; }
-        public Dimension Dimension { get; set; }
+        public int Fire
+        {
+            get { return fire; }
+            set
+            {
+                fire = value;
+                OnPropertyChanged("Fire");
+            }
+        }
+
+        public bool IsOnFire
+        {
+            get { return Fire > 0; }
+        }
+
+        public bool OnGround
+        {
+            get { return onGround; }
+            set
+            {
+                onGround = value;
+                OnPropertyChanged("OnGround");
+            }
+        }
+
+        public Dimension Dimension
+        {
+            get { return dimension; }
+            set
+            {
+                dimension = value;
+                OnPropertyChanged("Dimension");
+            }
+        }
 
         private float _Pitch;
         public float OldPitch { get; set; }
@@ -42,10 +83,15 @@ namespace Craft.Net.Data.Entities
             {
                 OldPitch = _Pitch;
                 _Pitch = value;
+                OnPropertyChanged("Pitch");
             }
         }
 
         private float _Yaw;
+        private Dimension dimension;
+        private bool onGround;
+        private int fire;
+        private Vector3 position;
         public float OldYaw { get; set; }
         public float Yaw
         {
@@ -57,6 +103,7 @@ namespace Craft.Net.Data.Entities
             {
                 OldYaw = _Yaw;
                 _Yaw = value;
+                OnPropertyChanged("Yaw");
             }
         }
 
@@ -68,6 +115,14 @@ namespace Craft.Net.Data.Entities
             {
                 return true;
             }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -63,8 +63,10 @@
     <Compile Include="Packets\EntityEquipmentPacket.cs" />
     <Compile Include="Packets\EntityHeadLookPacket.cs" />
     <Compile Include="Packets\EntityRelativeMovePacket.cs" />
+    <Compile Include="Packets\EntityStatusPacket.cs" />
     <Compile Include="Packets\EntityTeleportPacket.cs" />
     <Compile Include="Packets\PluginMessagePacket.cs" />
+    <Compile Include="Packets\RespawnPacket.cs" />
     <Compile Include="Packets\ServerListPingPacket.cs" />
     <Compile Include="Packets\HandshakePacket.cs" />
     <Compile Include="ILogProvider.cs" />

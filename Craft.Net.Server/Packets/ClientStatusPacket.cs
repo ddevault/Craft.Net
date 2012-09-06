@@ -5,18 +5,19 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using Craft.Net.Data;
+using Craft.Net.Data.Entities;
 
 namespace Craft.Net.Server.Packets
 {
     public enum ClientStatus
     {
         InitialSpawn = 0,
-        Respawn = 2
+        Respawn = 1
     }
 
     public class ClientStatusPacket : Packet
     {
-        private const string SessionCheckUri = "http://session.minecraft.net/game/checkserver.jsp?user={0}&serverId={1}";
+        private const string sessionCheckUri = "http://session.minecraft.net/game/checkserver.jsp?user={0}&serverId={1}";
 
         public ClientStatus ClientStatus;
 
@@ -53,8 +54,7 @@ namespace Craft.Net.Server.Packets
                     {
                         var webClient = new WebClient();
                         var webReader = new StreamReader(webClient.OpenRead(
-                            new Uri(string.Format(SessionCheckUri,
-                                                  client.Username, hash))));
+                            new Uri(string.Format(sessionCheckUri, client.Username, hash))));
                         string response = webReader.ReadToEnd();
                         webReader.Close();
                         if (response != "YES")
@@ -67,7 +67,21 @@ namespace Craft.Net.Server.Packets
                     server.LogInPlayer(client);
                     break;
                 case ClientStatus.Respawn:
-                    // TODO
+                    var world = server.GetClientWorld(client);
+                    client.Entity.Position = new Vector3(
+                        client.Entity.SpawnPoint.X,
+                        client.Entity.SpawnPoint.Y + PlayerEntity.Height,
+                        client.Entity.SpawnPoint.Z);
+                    client.Entity.Health = client.Entity.MaxHealth;
+                    client.Entity.Food = 20;
+                    client.Entity.FoodSaturation = 20;
+                    server.EntityManager.SpawnEntity(server.GetClientWorld(client), client.Entity);
+                    //client.SendPacket(new UpdateHealthPacket(client.Entity.Health, client.Entity.Food, client.Entity.FoodSaturation));
+                    client.SendPacket(new RespawnPacket(Dimension.Overworld, server.Difficulty,
+                        client.Entity.GameMode, world.LevelType));
+                    client.SendPacket(new PlayerPositionAndLookPacket(
+                                  client.Entity.Position, client.Entity.Yaw, client.Entity.Pitch, true));
+                    server.ProcessSendQueue();
                     break;
                 default:
                     throw new InvalidOperationException();

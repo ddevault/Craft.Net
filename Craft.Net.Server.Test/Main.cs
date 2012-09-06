@@ -84,6 +84,9 @@ namespace Craft.Net.Server.Test
                         foreach (var minecraftClient in clients)
                             minecraftClient.SendPacket(new TimeUpdatePacket(18000));
                         break;
+                    case "kill":
+                        e.Origin.Entity.Health = 0;
+                        break;
                 }
             }
         }

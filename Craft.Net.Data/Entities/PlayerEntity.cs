@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Threading;
 using Craft.Net.Data.Events;
 namespace Craft.Net.Data.Entities

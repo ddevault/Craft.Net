@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -29,6 +30,7 @@ namespace Craft.Net.Server
             // Get nearby clients in the same world
             var clients = GetClientsInWorld(world)
                 .Where(c => !c.IsDisconnected && c.Entity.Position.DistanceTo(entity.Position) < (c.ViewDistance * Chunk.Width));
+            entity.PropertyChanged += EntityOnPropertyChanged;
 
             if (clients.Count() != 0)
             {
@@ -47,6 +49,25 @@ namespace Craft.Net.Server
                 }
             }
             server.ProcessSendQueue();
+        }
+
+        private void EntityOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            // Handles changes in entity properties
+            var entity = sender as Entity;
+            if (entity is PlayerEntity)
+            {
+                var player = entity as PlayerEntity;
+                switch (propertyChangedEventArgs.PropertyName)
+                {
+                    case "Health":
+                        var client = GetClient(player);
+                        client.SendPacket(new UpdateHealthPacket(player.Health, player.Food, player.FoodSaturation));
+                        if (player.Health <= 0)
+                            KillEntity(player);
+                        break;
+                }
+            }
         }
 
         private void EntityOnBedTimerExpired(object sender, EventArgs eventArgs)
@@ -120,6 +141,11 @@ namespace Craft.Net.Server
 
         public void DespawnEntity(World world, Entity entity)
         {
+            if (world == null)
+                return;
+            if (!world.Entities.Contains(entity))
+                return;
+            entity.PropertyChanged -= EntityOnPropertyChanged;
             world.Entities.Remove(entity);
             var clients = GetClientsInWorld(world).Where(c => c.KnownEntities.Contains(entity.Id));
             foreach (var client in clients)
@@ -130,8 +156,27 @@ namespace Craft.Net.Server
             server.ProcessSendQueue();
         }
 
+        /// <summary>
+        /// Note: This will not correctly kill players. If you wish to kill
+        /// a player, set its health to zero and EntityManager will automatically
+        /// kill the player through the correct means.
+        /// </summary>
+        public void KillEntity(LivingEntity entity)
+        {
+            entity.DeathAnimationComplete += (sender, args) =>
+                {
+                    if (entity.Health <= 0)
+                        DespawnEntity(entity);
+                };
+            entity.Kill();
+            foreach (var client in GetKnownClients(entity))
+                client.SendPacket(new EntityStatusPacket(entity.Id, EntityStatus.Dead));
+        }
+
         public void UpdateEntity(Entity entity)
         {
+            if (!server.Levels.Any(l => l.World.Entities.Contains(entity)))
+                return;
             var world = GetEntityWorld(entity);
             var flooredPosition = entity.Position.Floor();
 
@@ -196,7 +241,10 @@ namespace Craft.Net.Server
 
         public World GetEntityWorld(Entity entity)
         {
-            return server.Levels.FirstOrDefault(level => level.World.Entities.Contains(entity)).World;
+            var firstOrDefault = server.Levels.FirstOrDefault(level => level.World.Entities.Contains(entity));
+            if (firstOrDefault != null)
+                return firstOrDefault.World;
+            return server.DefaultWorld;
         }
     }
 }
