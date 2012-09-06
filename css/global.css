@@ -64,17 +64,20 @@ code, pre {
 }
 
 .update-list {
-    padding-left: 20px;
+    padding: 0;
     list-style: none;
+}
+
+.update-list > li {
+    border-radius: 5px;
+    background-color: #ccc;
+    margin: 5px;
+    padding: 5px;
 }
 
 .update-list > li h3 {
     margin: 0 0 5px;
     padding: 0;
-}
-
-.read-more {
-    
 }
 
 /* Commit scroller */
