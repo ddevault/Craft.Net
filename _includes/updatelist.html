@@ -5,6 +5,9 @@
         <div class="date">{{ post.date | date_to_long_string }}</div>
         <blockquote class="post-preview">
             {{ post.content | markdownify | strip_html | truncatewords: 30, '...' }}
+            {% if post.content number_of_words > 30 %}
+                <a class="read-more" href="{{ post.url }}">Read more</a>
+            {% endif %}
         </blockquote>
     </li>
 {% endfor %}

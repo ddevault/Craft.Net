@@ -69,6 +69,11 @@ code, pre {
 }
 
 .update-list > li h3 {
+    margin: 0 0 5px;
+    padding: 0;
+}
+
+.read-more {
     
 }
 
