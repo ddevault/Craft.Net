@@ -59,7 +59,17 @@ code, pre {
 }
 
 .date {
-    color: #333;
+    color: #999;
+    padding-left: 20px;
+}
+
+.update-list {
+    padding-left: 20px;
+    list-style: none;
+}
+
+.update-list > li h3 {
+    
 }
 
 /* Commit scroller */
