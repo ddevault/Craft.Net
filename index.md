@@ -1,6 +1,6 @@
 ---
 layout: base
-title: CraftDotNet Damn YML
+title: CraftDotNet
 ---
 
 # Craft.Net
