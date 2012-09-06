@@ -1,5 +1,5 @@
 <ul class="update-list">
-{% for post in site.posts %}
+{% for post in site.categories.updates %}
     <li>
         <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
         <div class="date">{{ post.date | date_to_long_string }}</div>
