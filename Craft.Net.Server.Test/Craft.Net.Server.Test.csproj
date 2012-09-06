@@ -9,6 +9,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>Craft.Net.Server.Test</RootNamespace>
     <AssemblyName>Craft.Net.Server.Test</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
