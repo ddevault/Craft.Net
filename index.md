@@ -1,9 +1,7 @@
 ---
 layout: base
-title: CraftDotNet
+title: Craft.Net
 ---
-
-# Craft.Net
 
 Craft.Net is consists of several libraries for .NET that that accomplish various
 Minecraft-related tasks. Included in Craft.Net are:
