@@ -58,6 +58,10 @@ code, pre {
     color: #222;
 }
 
+.date {
+    color: #333;
+}
+
 /* Commit scroller */
 
 #top-bar {
