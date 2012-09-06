@@ -38,6 +38,26 @@ code, pre {
     background-color: #bbb;
 }
 
+#navigation {
+    list-style: none;
+    position: absolute;
+    margin: 0px;
+    padding: 21px 0 0;
+    left: 228px;
+}
+
+#navigation > li {
+    background-color: #BBBBBB;
+    border-radius: 0 0 5px 5px;
+    float: left;
+    margin: 2px;
+    padding: 3px;
+}
+
+#navigation > li > a {
+    color: #222;
+}
+
 /* Commit scroller */
 
 #top-bar {
