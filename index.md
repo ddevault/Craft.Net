@@ -51,3 +51,5 @@ In a nutshell:
 * You are not restricted on usage of Craft.Net; commercial, private, etc, all fine.
 * The developers are not liable for what you do with it.
 * Craft.Net is provided "as is" with no warranty.
+
+[Minecraft](http://minecraft.net/) is not officially affiliated with Craft.Net.
