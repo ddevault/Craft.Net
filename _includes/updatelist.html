@@ -1,9 +1,10 @@
-<ul>
+<ul class="update-list">
 {% for post in site.posts %}
     <li>
-        <span class="date">{{ post.date | date_to_long_string }}</span><a href="{{ post.url }}">{{ post.title }}</a>
+        <a href="{{ post.url }}">{{ post.title }}</a>
+        <div class="date">{{ post.date | date_to_long_string }}</div>
         <div class="post-preview">
-            
+            {{ post.content | markdownify | strip_html | truncatewords: 100, '...' }}
         </div>
     </li>
 {% endfor %}
