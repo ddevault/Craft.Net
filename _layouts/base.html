@@ -9,6 +9,10 @@
         <script type="text/javascript" src="/Craft.Net/js/global.js"></script>
     </head>
     <body>
+		<div id="last-update">
+			{% assign latest = site.categories.updates | first %}
+			Last Update: <a href="{{update.url}}">{{update.title}}</a>
+		</div>
         <div id="top-bar">
             Latest Commits:
             <div id="commits">

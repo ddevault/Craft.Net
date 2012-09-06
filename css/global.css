@@ -80,6 +80,16 @@ code, pre {
     padding: 0;
 }
 
+#last-update {
+  background-color: #999;
+  border-radius: 0 0 0 5px;
+  left: -256px;
+  padding: 3px;
+  position: absolute;
+  top: 23px;
+  width: 250px;
+}
+
 /* Commit scroller */
 
 #top-bar {
