@@ -159,6 +159,7 @@
     <Compile Include="Blocks\SeedsBlock.cs" />
     <Compile Include="Blocks\SignPostBlock.cs" />
     <Compile Include="Blocks\SilverfishStoneBlock.cs" />
+    <Compile Include="Blocks\SkullBlock.cs" />
     <Compile Include="Blocks\SlabBlock.cs" />
     <Compile Include="Blocks\SnowBlock.cs" />
     <Compile Include="Blocks\SnowfallBlock.cs" />
@@ -228,6 +229,7 @@
     <Compile Include="Items\BucketItem.cs" />
     <Compile Include="Items\CakeItem.cs" />
     <Compile Include="Items\CarrotItem.cs" />
+    <Compile Include="Items\CarrotOnStickItem.cs" />
     <Compile Include="Items\CauldronItem.cs" />
     <Compile Include="Items\ChainBootsItem.cs" />
     <Compile Include="Items\ChainChestplateItem.cs" />
@@ -309,6 +311,7 @@
     <Compile Include="Items\MinecartWithFurnaceItem.cs" />
     <Compile Include="Items\MushroomStewItem.cs" />
     <Compile Include="Items\MusicDiscItem.cs" />
+    <Compile Include="Items\NetherStarItem.cs" />
     <Compile Include="Items\NetherWartItem.cs" />
     <Compile Include="Items\PaintingItem.cs" />
     <Compile Include="Items\PaperItem.cs" />
@@ -327,6 +330,7 @@
     <Compile Include="Items\SeedsItem.cs" />
     <Compile Include="Items\ShearsItem.cs" />
     <Compile Include="Items\SignItem.cs" />
+    <Compile Include="Items\SkullItem.cs" />
     <Compile Include="Items\SlimeballItem.cs" />
     <Compile Include="Items\SnowballItem.cs" />
     <Compile Include="Items\SpawnItem.cs" />

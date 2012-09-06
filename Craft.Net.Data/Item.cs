@@ -47,6 +47,7 @@ namespace Craft.Net.Data
 
         private static int GetItemIndex(ushort item)
         {
+            // Binary search for items
             if (item > Items[Items.Count - 1].Id)
                 return -1;
             int a = 0, b = Items.Count;
@@ -225,6 +226,7 @@ namespace Craft.Net.Data
             new CarrotBlock(),
             new PotatoBlock(),
             new WoodenButtonBlock(),
+            new SkullBlock(),
             new IronShovelItem(),
             new IronPickaxeItem(),
             new IronAxeItem(),
@@ -364,6 +366,9 @@ namespace Craft.Net.Data
             new BakedPotatoItem(),
             new PoisonousPotatoItem(),
             new GoldenCarrotItem(),
+            new SkullItem(),
+            new CarrotOnStickItem(),
+            new NetherStarItem(),
             new MusicDiscItem()
         });
 
