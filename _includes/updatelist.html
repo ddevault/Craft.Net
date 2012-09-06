@@ -4,7 +4,7 @@
         <a href="{{ post.url }}">{{ post.title }}</a>
         <div class="date">{{ post.date | date_to_long_string }}</div>
         <div class="post-preview">
-            {{ post.content | markdownify | strip_html | truncatewords: 100, '...' }}
+            {{ post.content | markdownify | strip_html | truncatewords: 20, '...' }}
         </div>
     </li>
 {% endfor %}
