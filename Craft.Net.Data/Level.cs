@@ -295,6 +295,8 @@ namespace Craft.Net.Data
             data.Tags.Add(new NbtCompound("abilities"));
 
             file.RootTag = data;
+            if (!Directory.Exists(Path.Combine(LevelDirectory, "players")))
+                Directory.CreateDirectory(Path.Combine(LevelDirectory, "players"));
             using (Stream stream = File.Open(Path.Combine(LevelDirectory, "players", entity.Username + ".dat"), FileMode.OpenOrCreate))
                 file.SaveFile(stream, true);
         }
