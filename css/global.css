@@ -34,6 +34,10 @@ a:hover {
     text-decoration: underline;
 }
 
+code, pre {
+    background-color: #bbb;
+}
+
 /* Commit scroller */
 
 #top-bar {
