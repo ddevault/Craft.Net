@@ -1,0 +1,35 @@
+---
+pygments: true
+---
+<!doctype html>
+<html>
+    <head>
+        <title>{{ page.title }}</title>
+        <link rel="stylesheet" type="text/css" href="/Craft.Net/css/global.css" />
+        <link rel="stylesheet" type="text/css" href="/Craft.Net/css/code/vs.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script type="text/javascript" src="/Craft.Net/js/highlight.pack.js"></script>
+        <script type="text/javascript" src="/Craft.Net/js/global.js"></script>
+    </head>
+    <body>
+        <div id="top-bar">
+            Latest Commits:
+            <div id="commits">
+                <ul>
+                    <li class="visible">Loading news...</li>
+                </ul>
+            </div>
+            <span style="float: right;">
+                <a href="https://github.com/SirCmpwn/Craft.Net/">Craft.Net on GitHub »</a>
+            </span>
+        </div>
+        <div id="wrapper">
+            {% include navigation.html %}
+            <a href="https://github.com/SirCmpwn/Craft.Net" id="fork"><img src="/Craft.Net/images/fork.png" /></a>
+            <div id="content">
+                <h1>{{ page.title }}</h1>
+                {{ content }}
+            </div>
+        </div>
+    </body>
+</html>
