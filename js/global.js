@@ -1,5 +1,7 @@
+hljs.tabReplace = '    ';
+hljs.initHighlightingOnLoad();
+
 $(document).ready(function() {
-    
     $.ajax({
       dataType: 'jsonp',
       jsonpCallback: 'ghjsonp',
