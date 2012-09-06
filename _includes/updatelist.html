@@ -1,5 +1,5 @@
 <ul>
 {% for post in site.categories.updates %}
-    <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+    <li><span class="date">{{ post.time | date_to_long_string }}</span><a href="{{ page.url }}">{{ page.title }}</a></li>
 {% endfor %}
 </ul>

@@ -1,7 +1,7 @@
 html, body {
     margin: 0;
     padding: 0;
-    background: url("../images/body-bg.png") repeat scroll transparent;
+    background: url("/Craft.Net/images/body-bg.png") repeat scroll transparent;
     min-height: 100%;
     height: 100%;
     font-family: Helvetica;
@@ -12,7 +12,7 @@ html, body {
     margin: 0 auto;
     width: 800px;
     min-height: 100%;
-    background: url("../images/content-bg.png") repeat scroll transparent;
+    background: url("/Craft.Net/images/content-bg.png") repeat scroll transparent;
 }
 
 #content {
