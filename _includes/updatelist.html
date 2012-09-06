@@ -1,7 +1,7 @@
 <ul>
 {% for post in site.posts %}
     <li>
-        <span class="date"></span><a href="{{ post.url }}">{{ post.title }}</a>
+        <span class="date">{{ post.date | date_to_long_string }}</span><a href="{{ post.url }}">{{ post.title }}</a>
         <div class="post-preview">
             
         </div>
