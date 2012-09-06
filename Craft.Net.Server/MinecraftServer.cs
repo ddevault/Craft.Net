@@ -497,11 +497,9 @@ namespace Craft.Net.Server
             // Send entities
             EntityManager.SendClientEntities(client);
 
-            // Send inventory
             client.SendPacket(new SetWindowItemsPacket(0, client.Entity.Inventory));
-            // Send health + food
             client.SendPacket(new UpdateHealthPacket(client.Entity.Health, client.Entity.Food, client.Entity.FoodSaturation));
-
+            client.SendPacket(new SpawnPositionPacket(client.Entity.SpawnPoint));
             client.SendPacket(new TimeUpdatePacket(DefaultLevel.Time));
 
             UpdatePlayerList(null); // Should also process send queue

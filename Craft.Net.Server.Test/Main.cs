@@ -87,6 +87,12 @@ namespace Craft.Net.Server.Test
                     case "kill":
                         e.Origin.Entity.Health = 0;
                         break;
+                    case "survival":
+                        e.Origin.Entity.GameMode = GameMode.Survival;
+                        break;
+                    case "creative":
+                        e.Origin.Entity.GameMode = GameMode.Creative;
+                        break;
                 }
             }
         }

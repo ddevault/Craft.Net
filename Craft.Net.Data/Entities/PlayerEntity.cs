@@ -59,27 +59,125 @@ namespace Craft.Net.Data.Entities
             get { return 0.6; }
         }
 
-        public short Food { get; set; }
-        public float FoodSaturation { get; set; }
-        public float FoodExhaustion { get; set; }
-        public int XpLevel { get; set; }
-        public int XpTotal { get; set; }
-        public float XpProgress { get; set; }
+        public short Food
+        {
+            get { return food; }
+            set
+            {
+                food = value;
+                OnPropertyChanged("Food");
+            }
+        }
+
+        public float FoodSaturation
+        {
+            get { return foodSaturation; }
+            set
+            {
+                foodSaturation = value;
+                OnPropertyChanged("FoodSaturation");
+            }
+        }
+
+        public float FoodExhaustion
+        {
+            get { return foodExhaustion; }
+            set
+            {
+                foodExhaustion = value;
+                OnPropertyChanged("FoodExhaustion");
+            }
+        }
+
+        public int XpLevel
+        {
+            get { return xpLevel; }
+            set
+            {
+                xpLevel = value;
+                OnPropertyChanged("XpLevel");
+            }
+        }
+
+        public int XpTotal
+        {
+            get { return xpTotal; }
+            set
+            {
+                xpTotal = value;
+                OnPropertyChanged("XpTotal");
+            }
+        }
+
+        public float XpProgress
+        {
+            get { return xpProgress; }
+            set
+            {
+                xpProgress = value;
+                OnPropertyChanged("XpProgress");
+            }
+        }
 
         public string Username { get; set; }
         /// <summary>
         /// The client's current inventory.
         /// </summary>
         public Slot[] Inventory { get; set; }
-        public short SelectedSlot { get; set; }
+        public short SelectedSlot
+        {
+            get { return selectedSlot; }
+            set
+            {
+                selectedSlot = value;
+                OnPropertyChanged("SelectedSlot");
+            }
+        }
+
         /// <summary>
         /// Set to -Vector3.One if the player is not in a bed.
         /// </summary>
-        public Vector3 BedPosition { get; set; }
-        public GameMode GameMode { get; set; }
-        public Vector3 SpawnPoint { get; set; }
+        public Vector3 BedPosition
+        {
+            get { return bedPosition; }
+            set
+            {
+                bedPosition = value;
+                OnPropertyChanged("BedPosition");
+            }
+        }
+
+        public GameMode GameMode
+        {
+            get { return gameMode; }
+            set
+            {
+                gameMode = value;
+                OnPropertyChanged("GameMode");
+            }
+        }
+
+        public Vector3 SpawnPoint
+        {
+            get { return spawnPoint; }
+            set
+            {
+                spawnPoint = value;
+                OnPropertyChanged("SpawnPoint");
+            }
+        }
 
         private Timer bedUseTimer;
+        private short food;
+        private float foodSaturation;
+        private float foodExhaustion;
+        private int xpLevel;
+        private int xpTotal;
+        private float xpProgress;
+        private GameMode gameMode;
+        private Vector3 bedPosition;
+        private short selectedSlot;
+        private Vector3 spawnPoint;
 
         public event EventHandler BedStateChanged, BedTimerExpired;
 

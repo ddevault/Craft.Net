@@ -58,13 +58,21 @@ namespace Craft.Net.Server
             if (entity is PlayerEntity)
             {
                 var player = entity as PlayerEntity;
+                var client = GetClient(player);
                 switch (propertyChangedEventArgs.PropertyName)
                 {
                     case "Health":
-                        var client = GetClient(player);
+                    case "Food":
+                    case "FoodSaturation":
                         client.SendPacket(new UpdateHealthPacket(player.Health, player.Food, player.FoodSaturation));
                         if (player.Health <= 0)
                             KillEntity(player);
+                        break;
+                    case "SpawnPoint":
+                        client.SendPacket(new SpawnPositionPacket(player.SpawnPoint));
+                        break;
+                    case "GameMode":
+                        client.SendPacket(new ChangeGameStatePacket(GameState.ChangeGameMode, client.Entity.GameMode));
                         break;
                 }
             }

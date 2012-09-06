@@ -58,6 +58,7 @@
     <Compile Include="MinecraftClient.cs" />
     <Compile Include="PacketReader.cs" />
     <Compile Include="Packet.cs" />
+    <Compile Include="Packets\ChangeGameStatePacket.cs" />
     <Compile Include="Packets\DestroyEntityPacket.cs" />
     <Compile Include="Packets\DisconnectPacket.cs" />
     <Compile Include="Packets\EntityEquipmentPacket.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="Packets\SetSlotPacket.cs" />
     <Compile Include="Packets\SetWindowItemsPacket.cs" />
     <Compile Include="Packets\SpawnLightningPacket.cs" />
+    <Compile Include="Packets\SpawnPositionPacket.cs" />
     <Compile Include="Packets\TimeUpdatePacket.cs" />
     <Compile Include="Packets\UpdateHealthPacket.cs" />
     <Compile Include="Packets\UseBedPacket.cs" />
