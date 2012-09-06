@@ -5,6 +5,22 @@ namespace Craft.Net.Data.Entities
 {
     public class PlayerEntity : LivingEntity
     {
+        public PlayerEntity()
+        {
+            Inventory = new Slot[45];
+            for (int i = 0; i < Inventory.Length; i++)
+                Inventory[i] = new Slot(0xFFFF, 0);
+            SelectedSlot = InventoryHotbar;
+            bedUseTimer = new Timer(state =>
+            {
+                if (BedTimerExpired != null)
+                    BedTimerExpired(this, null);
+            });
+            BedPosition = -Vector3.One;
+            Health = 20;
+            Food = 20;
+        }
+
         #region Constants
 
         public const int InventoryHotbar = 36;
@@ -67,22 +83,6 @@ namespace Craft.Net.Data.Entities
         public event EventHandler BedStateChanged, BedTimerExpired;
 
         #endregion
-
-        public PlayerEntity()
-        {
-            Inventory = new Slot[45];
-            for (int i = 0; i < Inventory.Length; i++)
-                Inventory[i] = new Slot(0xFFFF, 0);
-            SelectedSlot = InventoryHotbar;
-            bedUseTimer = new Timer(state =>
-                {
-                    if (BedTimerExpired != null)
-                        BedTimerExpired(this, null);
-                });
-            BedPosition = -Vector3.One;
-            Health = 20;
-            Food = 20;
-        }
 
         public void SetSlot(short index, Slot slot)
         {
