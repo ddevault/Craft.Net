@@ -80,6 +80,8 @@ namespace Craft.Net.Data.Entities
                         BedTimerExpired(this, null);
                 });
             BedPosition = -Vector3.One;
+            Health = 20;
+            Food = 20;
         }
 
         public void SetSlot(short index, Slot slot)

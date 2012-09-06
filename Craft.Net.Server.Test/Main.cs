@@ -34,7 +34,7 @@ namespace Craft.Net.Server.Test
                 Directory.Delete("world", true);
 #endif
             minecraftServer.AddLevel(new Level(Path.Combine(Directory.GetCurrentDirectory(), "world")));
-            minecraftServer.DefaultLevel.GameMode = GameMode.Creative;
+            //minecraftServer.DefaultLevel.GameMode = GameMode.Creative;
             // Register the chat handler
             minecraftServer.ChatMessage += HandleOnChatMessage;
             // Start the server

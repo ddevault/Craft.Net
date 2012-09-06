@@ -77,6 +77,7 @@
     <Compile Include="Packets\SetWindowItemsPacket.cs" />
     <Compile Include="Packets\SpawnLightningPacket.cs" />
     <Compile Include="Packets\TimeUpdatePacket.cs" />
+    <Compile Include="Packets\UpdateHealthPacket.cs" />
     <Compile Include="Packets\UseBedPacket.cs" />
     <Compile Include="PluginChannel.cs" />
     <Compile Include="ConsoleLogWriter.cs" />
