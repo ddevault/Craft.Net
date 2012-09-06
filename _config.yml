@@ -1,3 +1,4 @@
 permalink: /:title
 pygments: true
 markdown: redcarpet
+url: http://sircmpwn.github.com/Craft.Net
