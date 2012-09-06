@@ -3,35 +3,13 @@ layout: base
 title: Craft.Net
 ---
 
-Craft.Net is consists of several libraries for .NET that that accomplish various
-Minecraft-related tasks. Included in Craft.Net are:
+Craft.Net is a collection of [.Net](http://en.wikipedia.org/wiki/.NET_Framework) libraries
+for working with Minecraft. It includes a 12w36a server, and tools for manipulating Anvil
+world saves, simulating block and entity interactions, and more.
 
-* Craft.Net.Data: A library to work with various kinds of Minecraft-related data.
-* Craft.Net.Server: An implementation of the 12w36a Minecraft server protocol.
+## Getting Started
 
-Craft.Net runs well on Microsoft.Net or [Mono](https://github.com/mono/mono).
-
-## Features
-
-Craft.Net is incomplete. However, it aims to eventually reproduce the functionality of the
-vanilla Minecraft server. In addition, Craft.Net should use significantly less CPU and
-memory on the host machine when operating a server. For more information on progress, see
-the latest [Milestone](https://github.com/SirCmpwn/Craft.Net/issues/milestones).
-
-If there are any additional features you would like, or any problems you encounter while
-using Craft.Net, please do not hesitate to
-[create an issue](https://github.com/SirCmpwn/Craft.Net/issues).
-
-Some cool technical things about Craft.Net that are already implemented:
-
-* **Asynchronous I/O:** *Minimizes CPU load and increases speed*
-* **Threaded Chunk Management:** *Offloads chunk compression and sending to short-lived threads*
-* **Anvil Support:** *Includes support for loading, saving, creating, and manipulating Anvil worlds*
-
-## Usage
-
-Craft.Net is a library, and will not work as a standalone server. However, the basic usage
-is simple. To get started, the following code will create a Minecraft 12w36a server:
+If you wish to use Craft.Net to run a Minecraft server, it's nice and simple:
 
     MinecraftServer server = new MinecraftServer(new IPEndPoint(IPAddress.Any, 25565));
     server.AddLevel(new Level("world"));
@@ -39,28 +17,16 @@ is simple. To get started, the following code will create a Minecraft 12w36a ser
     // ...
     server.Stop();
 
-This server will create a "world" directory and place an Anvil world in there. The default world
-generator is flatland. If a world already exists in that directory, it will use it instead of
-creating a new one.
+If you want to manipulate an Anvil world, that's also pretty easy. Here's an example of
+changing the block at <0, 0, 0> in the "example" world of the user's machine:
 
-The MinecraftServer class is the core server class, and runs networking, chunk management,
-block updates, and more. Each server must have at least one world to start, and an
-InvalidOperationException will be thrown if an attempt is made to start the server without.
+    var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData ),
+        ".minecraft", "example");
+    Level level = new Level(path);
+    level.World.SetBlock(Vector3.Zero, new GoldBlock());
+    level.Save();
 
-You should also consider adding an ILogProvider to the server with
-MinecraftServer.AddLogProvider. Included in Craft.Net is ConsoleLogWriter, and FileLogWriter,
-which output logs to the command line or a file, respectively. Craft.Net logs messages with
-a given LogImportance. High importance is for things like server starting and new clients
-logging in. Medium importance is for things like chat and player deaths. Low importance is a
-log of all communication on the server, and all packets are logged with a low importance.
-Packet logging is only enabled in DEBUG builds.
-
-## Contributing
-
-If you wish to contribute your own code to Craft.Net, please create a fork. You are
-encouraged to follow the code standards currently in use, and pull requests that do not will
-be rejected. You are also encouraged to make small, focused pull requests, rather than large,
-sweeping changes. For such changes, it would be better to create an issue instead.
+You can learn more at the [Wiki](https://github.com/SirCmpwn/Craft.Net/wiki).
 
 ## Getting Help
 
