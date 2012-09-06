@@ -35,7 +35,7 @@ Some cool technical things about Craft.Net that are already implemented:
 Craft.Net is a library, and will not work as a standalone server. However, the basic usage
 is simple. To get started, the following code will create a Minecraft 12w36a server:
 
-``` csharp
+``` C#
 MinecraftServer server = new MinecraftServer(new IPEndPoint(IPAddress.Any, 25565));
 server.AddLevel(new Level("world"));
 server.Start();
