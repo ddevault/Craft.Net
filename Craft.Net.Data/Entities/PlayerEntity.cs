@@ -49,22 +49,22 @@ namespace Craft.Net.Data.Entities
         public int XpTotal { get; set; }
         public float XpProgress { get; set; }
 
-        #endregion
-
-        #region Fields
-
-        public string Username;
+        public string Username { get; set; }
         /// <summary>
         /// The client's current inventory.
         /// </summary>
-        public Slot[] Inventory;
-        public short SelectedSlot;
-        public event EventHandler BedStateChanged, BedTimerExpired;
-        public Vector3 BedPosition;
-        public GameMode GameMode;
-        public Vector3 SpawnPoint;
+        public Slot[] Inventory { get; set; }
+        public short SelectedSlot { get; set; }
+        /// <summary>
+        /// Set to -Vector3.One if the player is not in a bed.
+        /// </summary>
+        public Vector3 BedPosition { get; set; }
+        public GameMode GameMode { get; set; }
+        public Vector3 SpawnPoint { get; set; }
 
         private Timer bedUseTimer;
+
+        public event EventHandler BedStateChanged, BedTimerExpired;
 
         #endregion
 

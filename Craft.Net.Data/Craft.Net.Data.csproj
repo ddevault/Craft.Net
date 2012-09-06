@@ -199,6 +199,8 @@
     <Compile Include="Difficulty.cs" />
     <Compile Include="Dimension.cs" />
     <Compile Include="Entities\Entity.cs" />
+    <Compile Include="Entities\IBreedableEntity.cs" />
+    <Compile Include="Entities\ITamableEntity.cs" />
     <Compile Include="Entities\LivingEntity.cs" />
     <Compile Include="Entities\PlayerEntity.cs" />
     <Compile Include="Events\InventoryChangedEventArgs.cs" />

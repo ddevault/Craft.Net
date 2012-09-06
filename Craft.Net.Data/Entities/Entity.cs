@@ -6,21 +6,32 @@ namespace Craft.Net.Data.Entities
     {
         public Entity()
         {
-            LastPositionUpdateTime = DateTime.Now;
-            LastPositionUpdate = Position;
+            Fire = -20;
         }
 
-        public Dimension Dimension;
-        public int Id;
-        public Vector3 OldPosition;
-        public bool OnGround;
-        public Vector3 Position;
-        public DateTime LastPositionUpdateTime;
-        public Vector3 LastPositionUpdate;
-        public Vector3 Velocity;
+        public int Id { get; set; }
+        public Vector3 Position { get; set; }
+        public Vector3 OldPosition { get; set; } // TODO: Refactor away
+        /// <summary>
+        /// In meters per tick
+        /// </summary>
+        public Vector3 Velocity { get; set; }
+
+        public int FallDistance { get; set; }
+        // The Y location that falling began at
+        internal double FallStart { get; set; }
+        /// <summary>
+        /// The number of ticks that remain before an entity
+        /// on fire is put out. Negative values are indicitive
+        /// of how long the entity may stand in a fire-creating
+        /// block before catching fire.
+        /// </summary>
+        public int Fire { get; set; }
+        public bool OnGround { get; set; }
+        public Dimension Dimension { get; set; }
 
         private float _Pitch;
-        public float OldPitch;
+        public float OldPitch { get; set; }
         public float Pitch
         {
             get
@@ -35,7 +46,7 @@ namespace Craft.Net.Data.Entities
         }
 
         private float _Yaw;
-        public float OldYaw;
+        public float OldYaw { get; set; }
         public float Yaw
         {
             get
