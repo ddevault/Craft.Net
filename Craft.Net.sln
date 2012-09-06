@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Externals", "Externals", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibNbt", "externals\libnbt\LibNbt\LibNbt.csproj", "{4488498D-976D-4DA3-BF72-109531AF0488}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Server.Unit", "Craft.Net.Server.Unit\Craft.Net.Server.Unit.csproj", "{3E19A5B0-B775-45D7-8B6C-0D0244D70880}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{4488498D-976D-4DA3-BF72-109531AF0488}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4488498D-976D-4DA3-BF72-109531AF0488}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4488498D-976D-4DA3-BF72-109531AF0488}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E19A5B0-B775-45D7-8B6C-0D0244D70880}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E19A5B0-B775-45D7-8B6C-0D0244D70880}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E19A5B0-B775-45D7-8B6C-0D0244D70880}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E19A5B0-B775-45D7-8B6C-0D0244D70880}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

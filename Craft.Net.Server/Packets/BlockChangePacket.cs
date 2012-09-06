@@ -9,6 +9,10 @@ namespace Craft.Net.Server.Packets
         public Vector3 Position;
         public Block Value;
 
+        public BlockChangePacket()
+        {
+        }
+
         public BlockChangePacket(Vector3 position, Block value)
         {
             this.Position = position;

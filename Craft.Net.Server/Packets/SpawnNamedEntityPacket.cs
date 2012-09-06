@@ -13,6 +13,10 @@ namespace Craft.Net.Server.Packets
         public Vector3 Position;
         public float Yaw;
 
+        public SpawnNamedEntityPacket()
+        {
+        }
+
         public SpawnNamedEntityPacket(MinecraftClient client)
         {
             EntityId = client.Entity.Id;

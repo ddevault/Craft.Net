@@ -10,29 +10,29 @@ namespace Craft.Net.Server
     {
         #region Packet type array
 
-        private static readonly Type[] PacketTypes =
+        public static readonly Type[] PacketTypes =
             {
-                typeof (KeepAlivePacket), // 0x0
-                typeof (LoginPacket), // 0x1
-                typeof (HandshakePacket), // 0x2
-                typeof (ChatMessagePacket), // 0x3
-                null, // 0x4
-                null, // 0x5
-                null, // 0x6
+                typeof(KeepAlivePacket), // 0x0
+                typeof(LoginPacket), // 0x1
+                typeof(HandshakePacket), // 0x2
+                typeof(ChatMessagePacket), // 0x3
+                typeof(TimeUpdatePacket), // 0x4
+                typeof(EntityEquipmentPacket), // 0x5
+                typeof(SpawnPositionPacket), // 0x6
                 null, // 0x7
-                null, // 0x8
-                null, // 0x9
-                typeof (PlayerPacket), // 0xa
-                typeof (PlayerPositionPacket), // 0xb
-                typeof (PlayerLookPacket), // 0xc
-                typeof (PlayerPositionAndLookPacket), // 0xd
-                typeof (PlayerDiggingPacket), // 0xe
-                typeof (BlockPlacementPacket), // 0xf
-                typeof (HeldItemChangePacket), // 0x10
-                null, // 0x11
-                typeof (AnimationPacket), // 0x12
-                typeof (EntityActionPacket), // 0x13
-                null, // 0x14
+                typeof(UpdateHealthPacket), // 0x8
+                typeof(RespawnPacket), // 0x9
+                typeof(PlayerPacket), // 0xa
+                typeof(PlayerPositionPacket), // 0xb
+                typeof(PlayerLookPacket), // 0xc
+                typeof(PlayerPositionAndLookPacket), // 0xd
+                typeof(PlayerDiggingPacket), // 0xe
+                typeof(BlockPlacementPacket), // 0xf
+                typeof(HeldItemChangePacket), // 0x10
+                typeof(UseBedPacket), // 0x11
+                typeof(AnimationPacket), // 0x12
+                typeof(EntityActionPacket), // 0x13
+                typeof(SpawnNamedEntityPacket), // 0x14
                 null, // 0x15
                 null, // 0x16
                 null, // 0x17
@@ -43,14 +43,14 @@ namespace Craft.Net.Server
                 null, // 0x1c
                 typeof(DestroyEntityPacket), // 0x1d
                 null, // 0x1e
-                null, // 0x1f
+                typeof(EntityRelativeMovePacket), // 0x1f
                 null, // 0x20
                 null, // 0x21
-                null, // 0x22
-                null, // 0x23
+                typeof(EntityTeleportPacket), // 0x22
+                typeof(EntityHeadLookPacket), // 0x23
                 null, // 0x24
                 null, // 0x25
-                null, // 0x26
+                typeof(EntityStatusPacket), // 0x26
                 null, // 0x27
                 null, // 0x28
                 null, // 0x29
@@ -63,9 +63,9 @@ namespace Craft.Net.Server
                 null, // 0x30
                 null, // 0x31
                 null, // 0x32
-                typeof (ChunkDataPacket), // 0x33
+                typeof(ChunkDataPacket), // 0x33
                 null, // 0x34
-                null, // 0x35
+                typeof(BlockChangePacket), // 0x35
                 null, // 0x36
                 null, // 0x37
                 null, // 0x38
@@ -82,8 +82,8 @@ namespace Craft.Net.Server
                 null, // 0x43
                 null, // 0x44
                 null, // 0x45
-                null, // 0x46
-                null, // 0x47
+                typeof(ChangeGameStatePacket), // 0x46
+                typeof(SpawnLightningPacket), // 0x47
                 null, // 0x48
                 null, // 0x49
                 null, // 0x4a
@@ -113,13 +113,13 @@ namespace Craft.Net.Server
                 null, // 0x62
                 null, // 0x63
                 null, // 0x64
-                typeof (CloseWindowPacket), // 0x65
+                typeof(CloseWindowPacket), // 0x65
                 null, // 0x66
-                null, // 0x67
-                null, // 0x68
+                typeof(SetSlotPacket), // 0x67
+                typeof(SetWindowItemsPacket), // 0x68
                 null, // 0x69
                 null, // 0x6a
-                typeof (CreativeInventoryActionPacket), // 0x6b
+                typeof(CreativeInventoryActionPacket), // 0x6b
                 null, // 0x6c
                 null, // 0x6d
                 null, // 0x6e
@@ -213,11 +213,11 @@ namespace Craft.Net.Server
                 null, // 0xc6
                 null, // 0xc7
                 null, // 0xc8
-                null, // 0xc9
-                typeof (PlayerAbilitiesPacket), // 0xca
+                typeof(PlayerListItemPacket), // 0xc9
+                typeof(PlayerAbilitiesPacket), // 0xca
                 null, // 0xcb
-                typeof (LocaleAndViewDistancePacket), // 0xcc
-                typeof (ClientStatusPacket), // 0xcd
+                typeof(LocaleAndViewDistancePacket), // 0xcc
+                typeof(ClientStatusPacket), // 0xcd
                 null, // 0xce
                 null, // 0xcf
                 null, // 0xd0
@@ -262,12 +262,12 @@ namespace Craft.Net.Server
                 null, // 0xf7
                 null, // 0xf8
                 null, // 0xf9
-                typeof (PluginMessagePacket), // 0xfa
+                typeof(PluginMessagePacket), // 0xfa
                 null, // 0xfb
-                typeof (EncryptionKeyResponsePacket), // 0xfc
-                typeof (EncryptionKeyRequestPacket), // 0xfd
-                typeof (ServerListPingPacket), // 0xfe
-                typeof (DisconnectPacket) // 0xff
+                typeof(EncryptionKeyResponsePacket), // 0xfc
+                typeof(EncryptionKeyRequestPacket), // 0xfd
+                typeof(ServerListPingPacket), // 0xfe
+                typeof(DisconnectPacket), // 0xff
             };
 
         #endregion
