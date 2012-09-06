@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+    <head>
+        <title>{{ page.title }}</title>
+        <link rel="stylesheet" type="text/css" href="css/global.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script type="text/javascript" src="js/global.js"></script>
+    </head>
+    <body>
+        <div id="top-bar">
+            Latest Commits:
+            <div id="commits">
+                <ul>
+                    <li class="visible">Loading news...</li>
+                </ul>
+            </div>
+            <span style="float: right;">
+                <a href="https://github.com/SirCmpwn/Craft.Net/">Craft.Net on GitHub »</a>
+            </span>
+        </div>
+        <div id="wrapper">
+            <a href="https://github.com/SirCmpwn/Craft.Net" id="fork"><img src="images/fork.png" /></a>
+            <div id="content">
+                {{ content }}
+            </div>
+        </div>
+    </body>
+</html>

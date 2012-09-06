@@ -1,0 +1,91 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    background: url("../images/body-bg.png") repeat scroll transparent;
+    min-height: 100%;
+    height: 100%;
+    font-family: Helvetica;
+}
+
+#wrapper {
+    position: relative;
+    margin: 0 auto;
+    width: 800px;
+    min-height: 100%;
+    background: url("../images/content-bg.png") repeat scroll transparent;
+}
+
+#content {
+    padding: 25px 10px 10px;
+}
+
+#fork {
+    float: right;
+    padding-top: 23px;
+    outline: none;
+}
+
+a {
+    color: #555;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Commit scroller */
+
+#top-bar {
+    width: 100%;
+    margin: 0;
+    height: 18px;
+    background-color: #444;
+    color: #ccc;
+    font-size: 12pt;
+    overflow: hidden;
+    padding-bottom: 5px;
+    font-weight: bold;
+    display: inline-block;
+    top: 0;
+    position: absolute;
+    z-index: 1;
+}
+
+#top-bar img {
+    width: 16px;
+    height: 16px;
+    padding-top: 2px;
+}
+
+#top-bar a {
+    color: #fff;
+    text-decoration: underline;
+    font-weight: normal;
+    padding-right: 5px;
+}
+
+#top-bar a:hover {
+    text-decoration: none;
+}
+
+#top-bar ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#commits {
+    display: inline-block;
+    font-weight: normal;
+}
+
+#commits li {
+    display: none;
+}
+
+#commits li.visible {
+    display: inline;
+}
+
+/* End of commit scroller */
