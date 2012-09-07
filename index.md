@@ -1,6 +1,6 @@
 ---
 title: >
-	Craft.Net
+	Craft&#46;Net
 layout: base
 ---
 
