@@ -9,13 +9,6 @@
         <script type="text/javascript" src="/Craft.Net/js/global.js"></script>
     </head>
     <body>
-		<div id="last-update">
-			{% for post in site.categories.updates % }
-				{% if forloop.first %}
-					Last Update: <a href="{{post.url}}">{{post.title}}</a>
-				{% endif %}
-			{% endfor %}
-		</div>
         <div id="top-bar">
             Latest Commits:
             <div id="commits">
