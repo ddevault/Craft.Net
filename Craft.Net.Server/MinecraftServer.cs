@@ -11,6 +11,7 @@ using Craft.Net.Data;
 using Craft.Net.Data.Entities;
 using Craft.Net.Data.Blocks;
 using System.ComponentModel;
+
 namespace Craft.Net.Server
 {
     /// <summary>
@@ -183,6 +184,7 @@ namespace Craft.Net.Server
 
             updatePlayerListTimer = new Timer(UpdatePlayerList, null, 60000, 60000);
 
+            RunAutoSave();
             Log("Server started.");
         }
 
@@ -341,8 +343,8 @@ namespace Craft.Net.Server
         /// </summary>
         private static void RunAutoSave()
         {
-            BackgroundWorker d = new BackgroundWorker();
-            d.DoWork += (fsdasdf, sdfdsf) =>
+            BackgroundWorker Worker = new BackgroundWorker();
+            Worker.DoWork += (sender, e) =>
                 {
                     while (true)
                     {
@@ -356,7 +358,7 @@ namespace Craft.Net.Server
                         }
                     }
                 };
-            d.RunWorkerAsync();
+            Worker.RunWorkerAsync();
         }
         private void HandleOnBlockChanged(object sender, BlockChangedEventArgs e)
         {
