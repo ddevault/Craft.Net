@@ -1,3 +1,6 @@
 permalink: updates/:title.html
 url: http://sircmpwn.github.com/Craft.Net
 title: Craft.Net
+safe: true
+lsi: false
+pygments: true
