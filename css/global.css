@@ -90,6 +90,12 @@ code, pre {
   width: 250px;
 }
 
+#rss-feed {
+	position: absolute;
+	right: 3px;
+	top: 26px;
+}
+
 /* Commit scroller */
 
 #top-bar {
