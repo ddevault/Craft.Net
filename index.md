@@ -1,6 +1,5 @@
 ---
-title: >
-	Craft&#46;Net
+title: Craft&#46;Net
 layout: base
 ---
 
