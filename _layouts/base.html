@@ -10,11 +10,8 @@
     </head>
     <body>
 		<div id="last-update">
-			{% for post in site.categories.updates % }
-				{% if forloop.first %}
-					Last Update: <a href="{{post.url}}">{{post.title}}</a>
-				{% endif %}
-			{% endfor %}
+			{% assign latest = site.categories.updates | first %}
+			Last Update: <a href="{{latest.url}}">{{latest.title}}</a>
 		</div>
         <div id="top-bar">
             Latest Commits:
