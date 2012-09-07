@@ -72,11 +72,11 @@ namespace Craft.Net.Server
         /// <summary>
         /// True = World Automatic Saving enabled.
         /// </summary>
-        public static bool AutoSave = true;
+        public bool AutoSave = true;
         /// <summary>
         /// World Saving Interval.
         /// </summary>
-        public static int AutoSaveInterval = 20000;
+        public int AutoSaveInterval = 20000;
 
         #endregion
 
@@ -341,7 +341,7 @@ namespace Craft.Net.Server
         /// <summary>
         /// Automatic World Saver.
         /// </summary>
-        private static void RunAutoSave()
+        private void RunAutoSave()
         {
             BackgroundWorker Worker = new BackgroundWorker();
             Worker.DoWork += (sender, e) =>
