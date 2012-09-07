@@ -10,6 +10,7 @@ using Craft.Net.Server.Packets;
 using Craft.Net.Data;
 using Craft.Net.Data.Entities;
 using Craft.Net.Data.Blocks;
+using System.ComponentModel;
 
 namespace Craft.Net.Server
 {
@@ -68,6 +69,14 @@ namespace Craft.Net.Server
         /// This server's difficulty.
         /// </summary>
         public Difficulty Difficulty;
+        /// <summary>
+        /// True = World Automatic Saving enabled.
+        /// </summary>
+        public bool AutoSave = true;
+        /// <summary>
+        /// World Saving Interval.
+        /// </summary>
+        public int AutoSaveInterval = 20000;
 
         #endregion
 
@@ -141,10 +150,13 @@ namespace Craft.Net.Server
             PluginChannels = new Dictionary<string, PluginChannel>();
             EntityManager = new EntityManager(this);
             Difficulty = Difficulty.Peaceful;
+            AutoSave = true;
+            AutoSaveInterval = 20000;
 
             socket = new Socket(AddressFamily.InterNetwork,
                                 SocketType.Stream, ProtocolType.Tcp);
             socket.Bind(endPoint);
+            RunAutoSave();
         }
 
         #endregion
@@ -196,6 +208,10 @@ namespace Craft.Net.Server
                 socket = null;
             }
             updatePlayerListTimer.Dispose();
+            foreach (Level c in Levels)
+            {
+                c.World.Save();
+            }
             Log("Server stopped.");
         }
 
@@ -328,6 +344,28 @@ namespace Craft.Net.Server
 
         #region Private Methods
 
+        /// <summary>
+        /// Automatic World Saver.
+        /// </summary>
+        private void RunAutoSave()
+        {
+            BackgroundWorker Worker = new BackgroundWorker();
+            Worker.DoWork += (sender, e) =>
+            {
+                while (true)
+                {
+                    System.Threading.Thread.Sleep(AutoSaveInterval);
+                    if (AutoSave && socket != null)
+                    {
+                        foreach (Level c in Levels)
+                        {
+                            c.World.Save();
+                        }
+                    }
+                }
+            };
+            Worker.RunWorkerAsync();
+        }
         private void HandleOnBlockChanged(object sender, BlockChangedEventArgs e)
         {
             foreach (MinecraftClient client in GetClientsInWorld(e.World))
