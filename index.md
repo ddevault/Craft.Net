@@ -1,7 +1,7 @@
 ---
 layout: base
 title: >
-    Craft.Net
+    CraftNet
 ---
 
 Craft.Net is a collection of [.Net](http://en.wikipedia.org/wiki/.NET_Framework) libraries
