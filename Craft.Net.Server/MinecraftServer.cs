@@ -412,7 +412,7 @@ namespace Craft.Net.Server
             {
                 try
                 {
-                    IEnumerable<Packet> packets = PacketReader.TryReadPackets(ref client, length);
+                    IEnumerable<Packet> packets = PacketReader.TryReadPackets(client, length);
                     foreach (Packet packet in packets)
                         packet.HandlePacket(this, client);
 

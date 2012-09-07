@@ -279,7 +279,7 @@ namespace Craft.Net.Server
         /// <returns>
         /// The read packets.
         /// </returns>
-        public static IEnumerable<Packet> TryReadPackets(ref MinecraftClient client, int length)
+        public static IEnumerable<Packet> TryReadPackets(MinecraftClient client, int length)
         {
             // TODO: Investigate buffer overflow problem
 
