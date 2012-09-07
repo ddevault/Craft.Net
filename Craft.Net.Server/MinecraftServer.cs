@@ -184,7 +184,7 @@ namespace Craft.Net.Server
             sendQueueThread = new Thread(SendQueueWorker);
             sendQueueThread.Start();
             socket.BeginAccept(AcceptConnectionAsync, null);
-            
+
             updatePlayerListTimer = new Timer(UpdatePlayerList, null, 60000, 60000);
 
             Log("Server started.");
@@ -208,6 +208,10 @@ namespace Craft.Net.Server
                 socket = null;
             }
             updatePlayerListTimer.Dispose();
+            foreach (Level c in Levels)
+            {
+                c.World.Save();
+            }
             Log("Server stopped.");
         }
 
