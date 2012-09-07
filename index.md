@@ -1,6 +1,7 @@
 ---
-title: Craft&#46;Net
+title: Craft.Net
 layout: base
+author: Drew DeVault
 ---
 
 Craft.Net is a collection of [.Net](http://en.wikipedia.org/wiki/.NET_Framework) libraries
