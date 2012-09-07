@@ -1,4 +1,7 @@
 ---
 ---
 
-{% include ../index.md %}
+{% capture bodycontent %}
+	{% include ../index.md %}
+{% endcapture %}
+{{ bodycontent | markdownify }}
