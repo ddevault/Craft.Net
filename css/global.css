@@ -96,6 +96,10 @@ code, pre {
 	top: 26px;
 }
 
+#disqus_thread {
+	margin-top: 20px;
+}
+
 /* Commit scroller */
 
 #top-bar {
