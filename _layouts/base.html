@@ -10,8 +10,8 @@
     </head>
     <body>
 		<div id="last-update">
-			{% assign latest = site.categories.updates.first %}
-			Last Update: <a href="{{latest.url}}">{{latest.title}}</a>
+			{% assign latest = site.categories.updates | first %}
+			Last Update: <a href="{{latest.url}}">{{site.categories.updates | first.title}}</a>
 		</div>
         <div id="top-bar">
             Latest Commits:
