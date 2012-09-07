@@ -150,10 +150,13 @@ namespace Craft.Net.Server
             PluginChannels = new Dictionary<string, PluginChannel>();
             EntityManager = new EntityManager(this);
             Difficulty = Difficulty.Peaceful;
+            AutoSave = true;
+            AutoSaveInterval = 20000;
 
             socket = new Socket(AddressFamily.InterNetwork,
                                 SocketType.Stream, ProtocolType.Tcp);
             socket.Bind(endPoint);
+            RunAutoSave();
         }
 
         #endregion
@@ -181,10 +184,9 @@ namespace Craft.Net.Server
             sendQueueThread = new Thread(SendQueueWorker);
             sendQueueThread.Start();
             socket.BeginAccept(AcceptConnectionAsync, null);
-
+            
             updatePlayerListTimer = new Timer(UpdatePlayerList, null, 60000, 60000);
 
-            RunAutoSave();
             Log("Server started.");
         }
 
@@ -345,19 +347,19 @@ namespace Craft.Net.Server
         {
             BackgroundWorker Worker = new BackgroundWorker();
             Worker.DoWork += (sender, e) =>
+            {
+                while (true)
                 {
-                    while (true)
+                    System.Threading.Thread.Sleep(AutoSaveInterval);
+                    if (AutoSave && socket != null)
                     {
-                        System.Threading.Thread.Sleep(AutoSaveInterval);
-                        if (AutoWorldSave)
+                        foreach (Level c in Levels)
                         {
-                            foreach (Level c in minecraftServer.Levels)
-                            {
-                                c.World.Save();
-                            }
+                            c.World.Save();
                         }
                     }
-                };
+                }
+            };
             Worker.RunWorkerAsync();
         }
         private void HandleOnBlockChanged(object sender, BlockChangedEventArgs e)
