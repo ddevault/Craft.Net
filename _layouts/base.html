@@ -12,7 +12,7 @@
 		<div id="last-update">
 			{% comment %}Dirty hack{% endcomment %}
 			{% for post in site.categories.updates % }
-				{% if for.first %}
+				{% if forloop.first %}
 					Last Update: <a href="{{post.url}}">{{post.title}}</a>
 				{% endif %}
 			{% endfor %}
