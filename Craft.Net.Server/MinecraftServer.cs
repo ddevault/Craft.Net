@@ -10,7 +10,7 @@ using Craft.Net.Server.Packets;
 using Craft.Net.Data;
 using Craft.Net.Data.Entities;
 using Craft.Net.Data.Blocks;
-
+using System.ComponentModel;
 namespace Craft.Net.Server
 {
     /// <summary>
@@ -68,6 +68,14 @@ namespace Craft.Net.Server
         /// This server's difficulty.
         /// </summary>
         public Difficulty Difficulty;
+        /// <summary>
+        /// True = World Automatic Saving enabled.
+        /// </summary>
+        public static bool AutoSave = true;
+        /// <summary>
+        /// World Saving Interval.
+        /// </summary>
+        public static int AutoSaveInterval = 20000;
 
         #endregion
 
@@ -328,6 +336,28 @@ namespace Craft.Net.Server
 
         #region Private Methods
 
+        /// <summary>
+        /// Automatic World Saver.
+        /// </summary>
+        private static void RunAutoSave()
+        {
+            BackgroundWorker d = new BackgroundWorker();
+            d.DoWork += (fsdasdf, sdfdsf) =>
+                {
+                    while (true)
+                    {
+                        System.Threading.Thread.Sleep(AutoSaveInterval);
+                        if (AutoWorldSave)
+                        {
+                            foreach (Level c in minecraftServer.Levels)
+                            {
+                                c.World.Save();
+                            }
+                        }
+                    }
+                };
+            d.RunWorkerAsync();
+        }
         private void HandleOnBlockChanged(object sender, BlockChangedEventArgs e)
         {
             foreach (MinecraftClient client in GetClientsInWorld(e.World))
