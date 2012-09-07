@@ -10,12 +10,12 @@
     </head>
     <body>
 		<div id="last-update">
-			{% comment %}Dirty hack{% endcomment %}
+			{% comment %}Dirty hack
 			{% for post in site.categories.updates % }
 				{% if forloop.first %}
 					Last Update: <a href="{{post.url}}">{{post.title}}</a>
 				{% endif %}
-			{% endfor %}
+			{% endfor %}{% endcomment %}
 		</div>
         <div id="top-bar">
             Latest Commits:
