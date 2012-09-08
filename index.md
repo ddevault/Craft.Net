@@ -16,7 +16,7 @@ If you wish to use Craft.Net to run a Minecraft server, it's nice and simple:
 
 
 If you want to manipulate an Anvil world, that's also pretty easy. Here's an example of
-changing the block at &lt;0, 0, 0&gt; in the "example" world of the user's machine:
+changing the block at  in the "example" world of the user's machine:
 
 
 
