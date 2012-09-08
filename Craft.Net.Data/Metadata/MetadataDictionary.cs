@@ -60,5 +60,13 @@ namespace Craft.Net.Data.Metadata
                 typeof(MetadataSlot), // 5
                 typeof(MetadataVector3) // 6
             };
+
+        public override string ToString()
+        {
+            var value = "";
+            foreach (var entry in entries)
+                value += entry.Value.ToString() + ", ";
+            return value.Remove(value.Length - 2);
+        }
     }
 }
