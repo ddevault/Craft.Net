@@ -52,7 +52,7 @@ namespace Craft.Net.Server.Packets
                 return;
             }
             client.Username = Username;
-            client.Hostname = Hostname + ":" + Port.ToString();
+            client.Hostname = Hostname + ":" + Port;
             // Respond with encryption request
             if (server.OnlineMode)
                 client.AuthenticationHash = CreateHash();
@@ -68,8 +68,6 @@ namespace Craft.Net.Server.Packets
             }
             else
                 server.LogInPlayer(client);
-
-            client.StartWorkers();
         }
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)

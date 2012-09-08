@@ -267,7 +267,10 @@ namespace Craft.Net.Server
         public void SendChat(string message)
         {
             for (int i = 0; i < Clients.Count; i++)
-                Clients[i].SendPacket(new ChatMessagePacket(message));
+            {
+                if (Clients[i].IsLoggedIn)
+                    Clients[i].SendPacket(new ChatMessagePacket(message));
+            }
             ProcessSendQueue();
         }
 
@@ -433,6 +436,11 @@ namespace Craft.Net.Server
                     client.IsDisconnected = true;
                     Log("Disconnected client using unsupported features.");
                 }
+                catch (Exception e)
+                {
+                    client.IsDisconnected = true;
+                    Log("Disconnected client with error: " + e.Message);
+                }
             }
             if (client.IsDisconnected)
             {
@@ -509,6 +517,8 @@ namespace Craft.Net.Server
             Log(client.Username + " logged in.");
             if (!args.Handled)
                 SendChat(client.Username + " logged in.");
+
+            client.StartWorkers();
         }
 
         void Entity_InventoryChanged(object sender, Data.Events.InventoryChangedEventArgs e)

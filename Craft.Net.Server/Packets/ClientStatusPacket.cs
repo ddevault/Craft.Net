@@ -76,7 +76,7 @@ namespace Craft.Net.Server.Packets
                     client.Entity.Food = 20;
                     client.Entity.FoodSaturation = 20;
                     server.EntityManager.SpawnEntity(server.GetClientWorld(client), client.Entity);
-                    //client.SendPacket(new UpdateHealthPacket(client.Entity.Health, client.Entity.Food, client.Entity.FoodSaturation));
+                    client.SendPacket(new UpdateHealthPacket(client.Entity.Health, client.Entity.Food, client.Entity.FoodSaturation));
                     client.SendPacket(new RespawnPacket(Dimension.Overworld, server.Difficulty,
                         client.Entity.GameMode, world.LevelType));
                     client.SendPacket(new PlayerPositionAndLookPacket(
