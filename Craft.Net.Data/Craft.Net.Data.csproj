@@ -355,6 +355,15 @@
     <Compile Include="Items\WoodenSwordItem.cs" />
     <Compile Include="Items\WrittenBookItem.cs" />
     <Compile Include="Level.cs" />
+    <Compile Include="Metadata\MetadataByte.cs" />
+    <Compile Include="Metadata\MetadataDictionary.cs" />
+    <Compile Include="Metadata\MetadataEntry.cs" />
+    <Compile Include="Metadata\MetadataFloat.cs" />
+    <Compile Include="Metadata\MetadataInt.cs" />
+    <Compile Include="Metadata\MetadataShort.cs" />
+    <Compile Include="Metadata\MetadataSlot.cs" />
+    <Compile Include="Metadata\MetadataString.cs" />
+    <Compile Include="Metadata\MetadataVector3.cs" />
     <Compile Include="NibbleArray.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Region.cs" />

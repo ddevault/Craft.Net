@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using Craft.Net.Data.Metadata;
 
 namespace Craft.Net.Data.Entities
 {
@@ -114,6 +115,17 @@ namespace Craft.Net.Data.Entities
             get
             {
                 return true;
+            }
+        }
+
+        public virtual MetadataDictionary Metadata
+        {
+            get 
+            {
+                var dictionary = new MetadataDictionary();
+                dictionary[0] = new MetadataByte(0, 0); // Flags
+                dictionary[8] = new MetadataInt(8, 0); // Potion effects
+                return dictionary;
             }
         }
 

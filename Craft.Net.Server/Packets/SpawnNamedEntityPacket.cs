@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Craft.Net.Data;
+using Craft.Net.Data.Metadata;
 
 namespace Craft.Net.Server.Packets
 {
@@ -12,6 +13,7 @@ namespace Craft.Net.Server.Packets
         public string PlayerName;
         public Vector3 Position;
         public float Yaw;
+        public MetadataDictionary Metadata;
 
         public SpawnNamedEntityPacket()
         {
@@ -25,6 +27,7 @@ namespace Craft.Net.Server.Packets
             Yaw = client.Entity.Yaw;
             Pitch = client.Entity.Pitch;
             CurrentItem = 0; // TODO
+            Metadata = client.Entity.Metadata;
         }
 
         public override byte PacketId
@@ -53,7 +56,7 @@ namespace Craft.Net.Server.Packets
                 .Concat(DataUtility.CreatePackedByte(Yaw))
                 .Concat(DataUtility.CreatePackedByte(Pitch))
                 .Concat(DataUtility.CreateInt16(CurrentItem))
-                .Concat(new byte[] { 0x00, 0x00, 0x48, 0x00, 0x00, 0x00, 0x00, 0x7F }).ToArray(); // TODO: Metadata
+                .Concat(Metadata.Encode()).ToArray();
             client.SendData(buffer);
         }
     }
