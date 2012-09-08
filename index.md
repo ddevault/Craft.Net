@@ -1,7 +1,8 @@
 ---
-title: Craft.Net
+title: Craft dot Net
 layout: base
 author: Drew DeVault
+github: SirCmpwn
 ---
 
 Craft.Net is a collection of [.Net](http://en.wikipedia.org/wiki/.NET_Framework) libraries
@@ -32,7 +33,7 @@ You can learn more at the [Wiki](https://github.com/SirCmpwn/Craft.Net/wiki).
 ## Getting Help
 
 You can get help by making an [issue on GitHub](https://github.com/SirCmpwn/Craft.Net/issues),
-or joining \#craft.net on irc.freenode.net.  If you are already knowledgable about using
+or joining #craft.net on irc.freenode.net.  If you are already knowledgable about using
 Craft.Net, consider contributing to the [wiki](https://github.com/SirCmpwn/Craft.Net/wiki) for
 the sake of others.
 
