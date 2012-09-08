@@ -1,0 +1,21 @@
+---
+---
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+	<title type="text" xml:lang="en">{{ site.title }}</title>
+	<link type="application/atom+xml" href="{{ site.url }}/feed" rel="self" />
+	<link type="text" href="{{ site.url }}" rel="alternate" />
+	<updated>{{ site.time | date_to_xmlschema }}</updated>
+	<id>{{ site.url }}</id>
+	<author><name>Drew DeVault</name></author>
+	<rights>Copyright (c) 2012 Drew DeVault</rights>
+	{% for post in site.posts limit:30 %}
+		<entry>
+		<title>{{ post.title }}</title>
+		<link href="{{ site.url }}{{ post.url }}/"/>
+		<updated>{{ post.date | date_to_xmlschema }}</updated>
+		<id>{{ site.url }}{{ post.url }}/</id>
+		<summary type="html">{{ post.content | strip_html | truncatewords: 20 }}</summary>
+		</entry>
+	{% endfor %}
+</feed>

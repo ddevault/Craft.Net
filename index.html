@@ -1,7 +1,100 @@
----
----
+<!doctype html>
+<html>
+    <head>
+        <title>Craft&#46;Net</title>
+        <link rel="stylesheet" type="text/css" href="/Craft.Net/css/global.css" />
+        <link rel="stylesheet" type="text/css" href="/Craft.Net/css/code/vs.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script type="text/javascript" src="/Craft.Net/js/highlight.pack.js"></script>
+        <script type="text/javascript" src="/Craft.Net/js/global.js"></script>
+    </head>
+    <body>
+        <div id="top-bar">
+            Latest Commits:
+            <div id="commits">
+                <ul>
+                    <li class="visible">Loading news...</li>
+                </ul>
+            </div>
+            <span style="float: right;">
+                <a href="https://github.com/SirCmpwn/Craft.Net/">Craft.Net on GitHub »</a>
+            </span>
+        </div>
+        <div id="wrapper">
+            <ul id="navigation">
+    <li><a href="/Craft.Net">Home</a></li>
+    <li><a href="/Craft.Net/updates.html">Updates</a></li>
+    <li><a href="https://github.com/SirCmpwn/Craft.Net">Code</a></li>
+    <li><a href="https://github.com/SirCmpwn/Craft.Net/issues/milestones">Milestones</a></li>
+    <li><a href="https://github.com/SirCmpwn/Craft.Net/wiki">Wiki</a></li>
+    <li><a href="https://github.com/SirCmpwn/Craft.Net/downloads">Downloads</a></li>
+</ul>
+            <a href="https://github.com/SirCmpwn/Craft.Net" id="fork"><img src="/Craft.Net/images/fork.png" /></a>
+			<div id="rss-feed"><a href="/Craft.Net/feed"><img src="/Craft.Net/images/rss.png" alt="rss" /></a></div>
+            <div id="content">
+                <h1>Craft&#46;Net</h1>
+                <p>Craft.Net is a collection of <a href='http://en.wikipedia.org/wiki/.NET_Framework'>.Net</a> libraries for working with Minecraft. It includes a 12w36a server, and tools for manipulating Anvil world saves, simulating block and entity interactions, and more.</p>
 
-{% capture bodycontent %}
-	{% include ../index.md %}
-{% endcapture %}
-{{ bodycontent | markdownify }}
+<h2 id='getting_started'>Getting Started</h2>
+
+<p>If you wish to use Craft.Net to run a Minecraft server, it&#8217;s nice and simple:</p>
+
+<pre><code>MinecraftServer server = new MinecraftServer(new IPEndPoint(IPAddress.Any, 25565));
+server.AddLevel(new Level(&quot;world&quot;));
+server.Start();
+// ...
+server.Stop();</code></pre>
+
+<p>If you want to manipulate an Anvil world, that&#8217;s also pretty easy. Here&#8217;s an example of changing the block at &#60;0, 0, 0&#62; in the &#8220;example&#8221; world of the user&#8217;s machine:</p>
+
+<pre><code>var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+    &quot;.minecraft&quot;, &quot;example&quot;);
+Level level = new Level(path);
+level.World.SetBlock(Vector3.Zero, new GoldBlock());
+level.Save();</code></pre>
+
+<p>You can learn more at the <a href='https://github.com/SirCmpwn/Craft.Net/wiki'>Wiki</a>.</p>
+
+<h2 id='getting_help'>Getting Help</h2>
+
+<p>You can get help by making an <a href='https://github.com/SirCmpwn/Craft.Net/issues'>issue on GitHub</a>, or joining #craft.net on irc.freenode.net. If you are already knowledgable about using Craft.Net, consider contributing to the <a href='https://github.com/SirCmpwn/Craft.Net/wiki'>wiki</a> for the sake of others.</p>
+
+<h2 id='dependencies'>Dependencies</h2>
+
+<p>Craft.Net depends on the following tools and assemblies, which are included in the repository:</p>
+
+<ul>
+<li><a href='http://dotnetzip.codeplex.com/'>DotNetZip</a> is used for data compression.</li>
+
+<li><a href='http://www.bouncycastle.org/'>BouncyCastle</a> is used for encryption.</li>
+</ul>
+
+<h2 id='licensing'>Licensing</h2>
+
+<p>Craft.Net uses the permissive <a href='http://www.opensource.org/licenses/mit-license.php/'>MIT license</a>.</p>
+
+<p>In a nutshell:</p>
+
+<ul>
+<li>You are not restricted on usage of Craft.Net; commercial, private, etc, all fine.</li>
+
+<li>The developers are not liable for what you do with it.</li>
+
+<li>Craft.Net is provided &#8220;as is&#8221; with no warranty.</li>
+</ul>
+
+<p><a href='http://minecraft.net/'>Minecraft</a> is not officially affiliated with Craft.Net.</p>
+            </div>
+        </div>
+    </body>
+	<script type="text/javascript">
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-34604042-1']);
+	  _gaq.push(['_trackPageview']);
+	  (function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+	</script>
+</html>
