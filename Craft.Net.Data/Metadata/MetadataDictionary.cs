@@ -47,6 +47,7 @@ namespace Craft.Net.Data.Metadata
                 if (offset >= buffer.Length)
                     return false;
             }
+            offset++;
             return true;
         }
 
