@@ -30,6 +30,8 @@ namespace Craft.Net.Data.Metadata
             byte count;
             if (!DataUtility.TryReadUInt16(buffer, ref offset, out id))
                 return false;
+            if (id == 0xFFFF)
+                return true;
             if (!DataUtility.TryReadByte(buffer, ref offset, out count))
                 return false;
             if (!DataUtility.TryReadUInt16(buffer, ref offset, out metadata))
