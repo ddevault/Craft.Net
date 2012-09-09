@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
@@ -74,7 +75,7 @@ namespace Craft.Net.Server
         /// <summary>
         /// The current queue of packets to be sent to this client.
         /// </summary>
-        public Queue<Packet> SendQueue;
+        public ConcurrentQueue<Packet> SendQueue;
         /// <summary>
         /// The <see cref="MinecraftServer"/> managing this client's connection.
         /// </summary>
@@ -128,7 +129,7 @@ namespace Craft.Net.Server
             this.Socket = socket;
             RecieveBuffer = new byte[4096];
             RecieveBufferIndex = 0;
-            SendQueue = new Queue<Packet>();
+            SendQueue = new ConcurrentQueue<Packet>();
             IsDisconnected = false;
             IsLoggedIn = false;
             EncryptionEnabled = false;

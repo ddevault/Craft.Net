@@ -352,13 +352,8 @@ namespace Craft.Net.Server
                         {
                             while (i < Clients.Count && Clients[i].SendQueue.Count != 0)
                             {
-                                Packet packet = Clients[i].SendQueue.Dequeue();
-                                // I don't understand why this happens. The only place the SendQueue
-                                // is modified is through Client.SendPacket, and I watched for null packets
-                                // entering through there. There is never a null packet that is added
-                                // into the packet queue
-                                if (packet == null)
-                                    continue;
+                                Packet packet;
+                                while (!Clients[i].SendQueue.TryDequeue(out packet)) { }
 #if DEBUG
                                 Log("[SERVER->CLIENT] " + Clients[i].Socket.RemoteEndPoint,
                                     LogImportance.Low);
