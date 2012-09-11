@@ -294,8 +294,10 @@ namespace Craft.Net.Server
                 for (int i = 0; i < Clients.Count; i++)
                 {
                     foreach (MinecraftClient client in Clients)
-                        Clients[i].SendPacket(new PlayerListItemPacket(
-                                                  client.Username, true, client.Ping));
+                    {
+                        if (client.IsLoggedIn)
+                            Clients[i].SendPacket(new PlayerListItemPacket(client.Username, true, client.Ping));
+                    }
                 }
             }
             ProcessSendQueue();
