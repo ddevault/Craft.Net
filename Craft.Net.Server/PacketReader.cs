@@ -142,7 +142,7 @@ namespace Craft.Net.Server
                 null, // 0x7f
                 null, // 0x80
                 null, // 0x81
-                null, // 0x82
+                typeof(UpdateSignPacket), // 0x82
                 null, // 0x83
                 null, // 0x84
                 null, // 0x85

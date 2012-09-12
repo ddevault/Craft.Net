@@ -1,5 +1,9 @@
+using System;
+using System.Linq;
 using LibNbt;
 using LibNbt.Tags;
+using System.Collections.Generic;
+using Craft.Net.Data.NbtSerialization;
 
 namespace Craft.Net.Data
 {
@@ -16,14 +20,8 @@ namespace Craft.Net.Data
         /// Creates a new Chunk within the specified <see cref="Craft.Net.Data.Region"/>
         /// at the specified location.
         /// </summary>
-        public Chunk(Vector3 relativePosition, Region parentRegion)
+        public Chunk(Vector3 relativePosition, Region parentRegion) : this(relativePosition)
         {
-            Sections = new Section[16];
-            for (int i = 0; i < Sections.Length; i++)
-                Sections[i] = new Section((byte)i);
-            RelativePosition = relativePosition;
-            Biomes = new byte[Width * Depth];
-            HeightMap = new int[Width * Depth];
             ParentRegion = parentRegion;
             IsModified = false;
         }
@@ -39,6 +37,7 @@ namespace Craft.Net.Data
             RelativePosition = relativePosition;
             Biomes = new byte[Width * Depth];
             HeightMap = new int[Width * Depth];
+            TileEntities = new Dictionary<Vector3, TileEntity>();
         }
 
         /// <summary>
@@ -76,6 +75,8 @@ namespace Craft.Net.Data
         /// </summary>
         public Section[] Sections { get; set; }
 
+        public Dictionary<Vector3, TileEntity> TileEntities { get; set; }
+
         /// <summary>
         /// Sets the value of the block at the given position, relative to this chunk.
         /// </summary>
@@ -88,6 +89,10 @@ namespace Craft.Net.Data
             var heightIndex = (byte)(position.Z * Depth) + (byte)position.X;
             if (HeightMap[heightIndex] < position.Y)
                 HeightMap[heightIndex] = (byte)position.Y;
+            if (TileEntities.ContainsKey(position) && value.TileEntity == null)
+                TileEntities.Remove(position);
+            if (value.TileEntity != null)
+                TileEntities[position] = value.TileEntity;
             IsModified = true;
         }
 
@@ -99,7 +104,10 @@ namespace Craft.Net.Data
             var y = (byte)position.Y;
             y /= 16;
             position.Y = position.Y % 16;
-            return Sections[y].GetBlock(position);
+            var block = Sections[y].GetBlock(position);
+            if (TileEntities.ContainsKey(position))
+                block.TileEntity = TileEntities[position];
+            return block;
         }
 
         /// <summary>
@@ -145,8 +153,15 @@ namespace Craft.Net.Data
             level.Tags.Add(new NbtInt("xPos", (int)AbsolutePosition.X));
             level.Tags.Add(new NbtInt("zPos", (int)AbsolutePosition.Z));
 
-            // Tile Entities // TODO
+            // Tile Entities
             level.Tags.Add(new NbtList("TileEntites"));
+            foreach (var tileEntity in TileEntities)
+            {
+                // Get properties
+                var properties = tileEntity.GetType().GetProperties().Where(p => !p.GetCustomAttributes(typeof(NbtIgnoreAttribute), true).Any());
+                foreach (var property in properties)
+                    Console.WriteLine("Saving tile entity: " + property.Name);
+            }
 
             // Terrain Populated // TODO: When is this 0? Will vanilla use this?
             level.Tags.Add(new NbtByte("TerrainPopualted", 0));

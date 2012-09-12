@@ -92,6 +92,12 @@ namespace Craft.Net.Data
             get { return Vector3.Down; }
         }
 
+        public virtual TileEntity TileEntity
+        {
+            get { return null;  }
+            set { }
+        }
+
         /// <summary>
         /// When the block is placed, this will be called. Return
         /// false to cancel block placement. The default behavoir

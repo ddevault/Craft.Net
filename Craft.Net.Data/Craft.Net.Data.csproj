@@ -365,12 +365,15 @@
     <Compile Include="Metadata\MetadataSlot.cs" />
     <Compile Include="Metadata\MetadataString.cs" />
     <Compile Include="Metadata\MetadataVector3.cs" />
+    <Compile Include="NbtSerialization\NbtIgnoreAttribute.cs" />
+    <Compile Include="NbtSerialization\TagNameAttribute.cs" />
     <Compile Include="NibbleArray.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Region.cs" />
     <Compile Include="Section.cs" />
     <Compile Include="Size.cs" />
     <Compile Include="Slot.cs" />
+    <Compile Include="TileEntity.cs" />
     <Compile Include="Transparency.cs" />
     <Compile Include="Vector3.cs" />
     <Compile Include="World.cs" />
@@ -381,6 +384,7 @@
       <Name>LibNbt</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
