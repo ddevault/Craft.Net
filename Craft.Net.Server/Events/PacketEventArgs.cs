@@ -9,7 +9,9 @@ namespace Craft.Net.Server.Events
     {
         public PacketEventArgs(Packet packet, MinecraftClient client, MinecraftServer server)
         {
-            
+            Packet = packet;
+            Client = client;
+            Server = server;
         }
 
         public PacketContext Context
