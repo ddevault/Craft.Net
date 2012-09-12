@@ -1,4 +1,4 @@
-Debug/
+bin/
 obj/
 *.user
 *.userprefs
@@ -7,3 +7,6 @@ obj/
 _ReSharper*/
 TestResults/
 *.mdf
+merged/
+Craft.Net.Server.dll
+Craft.Net.Server.pdb

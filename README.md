@@ -52,6 +52,22 @@ logging in. Medium importance is for things like chat and player deaths. Low imp
 log of all communication on the server, and all packets are logged with a low importance.
 Packet logging is only enabled in DEBUG builds.
 
+## Building from Source
+
+There are two different configurations for building Craft.Net. You should use the DEBUG
+configuration when building for testing purposes, and RELEASE when building for production
+purposes. The latter will create Craft.Net.Server.dll in the root of the solution, which
+has all of the dependencies merged into one binary.
+
+On Windows, add "C:\Windows\Microsoft.NET\Framework\v4.0.30319" to your path. Then, use
+
+    msbuild.exe /p:Configuration=[RELEASE|DEBUG]
+
+Update the configuration as required. On Linux and Mac, install Mono, and then use this
+command:
+
+    xbuild /property:Configuration=[RELEASE|DEBUG]
+
 ## Contributing
 
 If you wish to contribute your own code to Craft.Net, please create a fork. You are

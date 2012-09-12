@@ -45,9 +45,6 @@
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Core" />
-    <Reference Include="LibNbt">
-      <HintPath>..\LibNbt.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
@@ -113,6 +110,10 @@
       <Project>{30C3F936-8D95-4113-BA48-8B798B056309}</Project>
       <Name>Craft.Net.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\externals\libnbt\LibNbt\LibNbt.csproj">
+      <Project>{4488498D-976D-4DA3-BF72-109531AF0488}</Project>
+      <Name>LibNbt</Name>
+    </ProjectReference>
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>
@@ -124,4 +125,10 @@
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
+  <PropertyGroup Condition="'$(Configuration)|$(OS)'=='Release|Windows_NT'">
+    <PostBuildEvent>$(SolutionDir)lib/ILRepack.exe $(TargetDir)$(TargetFileName) /out:$(SolutionDir)$(TargetFileName) $(TargetDir)BouncyCastle.Crypto.dll $(TargetDir)Craft.Net.Data.dll $(TargetDir)Ionic.Zip.Reduced.dll $(SolutionDir)externals/libnbt/LibNbt/bin/LibNbt.dll</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'And'$(OS)'!='Windows_NT'">
+    <PostBuildEvent>mono $(SolutionDir)lib/ILRepack.exe $(TargetDir)$(TargetFileName) /out:$(SolutionDir)$(TargetFileName) $(TargetDir)BouncyCastle.Crypto.dll $(TargetDir)Craft.Net.Data.dll $(TargetDir)Ionic.Zip.Reduced.dll $(SolutionDir)externals/libnbt/LibNbt/bin/LibNbt.dll</PostBuildEvent>
+  </PropertyGroup>
 </Project>

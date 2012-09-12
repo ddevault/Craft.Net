@@ -68,6 +68,10 @@ namespace Craft.Net.Server
         /// This server's difficulty.
         /// </summary>
         public Difficulty Difficulty;
+        /// <summary>
+        /// The socket this server listens on.
+        /// </summary>
+        public Socket Socket;
 
         #endregion
 
@@ -81,7 +85,6 @@ namespace Craft.Net.Server
         private AutoResetEvent sendQueueReset;
         private Thread sendQueueThread;
         private Timer updatePlayerListTimer;
-        private Socket socket;
 
         #endregion
 
@@ -142,9 +145,9 @@ namespace Craft.Net.Server
             EntityManager = new EntityManager(this);
             Difficulty = Difficulty.Peaceful;
 
-            socket = new Socket(AddressFamily.InterNetwork,
+            Socket = new Socket(AddressFamily.InterNetwork,
                                 SocketType.Stream, ProtocolType.Tcp);
-            socket.Bind(endPoint);
+            Socket.Bind(endPoint);
         }
 
         #endregion
@@ -167,11 +170,11 @@ namespace Craft.Net.Server
             CryptoServiceProvider = new RSACryptoServiceProvider(1024);
             ServerKey = CryptoServiceProvider.ExportParameters(true);
 
-            socket.Listen(10);
+            Socket.Listen(10);
             sendQueueReset = new AutoResetEvent(false);
             sendQueueThread = new Thread(SendQueueWorker);
             sendQueueThread.Start();
-            socket.BeginAccept(AcceptConnectionAsync, null);
+            Socket.BeginAccept(AcceptConnectionAsync, null);
 
             updatePlayerListTimer = new Timer(UpdatePlayerList, null, 60000, 60000);
 
@@ -189,11 +192,11 @@ namespace Craft.Net.Server
                 sendQueueThread.Abort();
                 sendQueueThread = null;
             }
-            if (socket != null)
+            if (Socket != null)
             {
-                if (socket.Connected)
-                    socket.Shutdown(SocketShutdown.Both);
-                socket = null;
+                if (Socket.Connected)
+                    Socket.Shutdown(SocketShutdown.Both);
+                Socket = null;
             }
             updatePlayerListTimer.Dispose();
             Log("Server stopped.");
@@ -385,19 +388,19 @@ namespace Craft.Net.Server
             }
         }
 
-        private void AcceptConnectionAsync(IAsyncResult result)
+        protected void AcceptConnectionAsync(IAsyncResult result)
         {
-            Socket connection = socket.EndAccept(result);
+            Socket connection = Socket.EndAccept(result);
             var client = new MinecraftClient(connection, this);
             Clients.Add(client);
             client.Socket.SendTimeout = 5000;
             client.Socket.BeginReceive(client.RecieveBuffer, client.RecieveBufferIndex,
                                        client.RecieveBuffer.Length,
                                        SocketFlags.None, SocketRecieveAsync, client);
-            socket.BeginAccept(AcceptConnectionAsync, null);
+            Socket.BeginAccept(AcceptConnectionAsync, null);
         }
 
-        private void SocketRecieveAsync(IAsyncResult result)
+        protected void SocketRecieveAsync(IAsyncResult result)
         {
             var client = (MinecraftClient)result.AsyncState;
             SocketError error;
