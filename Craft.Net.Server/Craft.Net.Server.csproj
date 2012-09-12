@@ -51,6 +51,7 @@
     <Compile Include="Channels\TexturePackChannel.cs" />
     <Compile Include="Cryptography.cs" />
     <Compile Include="EntityManager.cs" />
+    <Compile Include="Events\PacketEventArgs.cs" />
     <Compile Include="Events\PlayerLogInEventArgs.cs" />
     <Compile Include="MinecraftServer.cs" />
     <Compile Include="MinecraftClient.cs" />

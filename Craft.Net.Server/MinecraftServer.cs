@@ -122,6 +122,15 @@ namespace Craft.Net.Server
         /// Fired when the server recieves a <see cref="ChatMessagePacket"/>.
         /// </summary>
         public event EventHandler<ChatMessageEventArgs> ChatMessage;
+        /// <summary>
+        /// Fired after a packet has been send from server to client.
+        /// </summary>
+        public event EventHandler<PacketEventArgs> PacketSent;
+        /// <summary>
+        /// Fired after the server recieves a packet from a client.
+        /// </summary>
+        public event EventHandler<PacketEventArgs> PacketRecieved;
+
 
         #endregion
 
@@ -368,6 +377,7 @@ namespace Craft.Net.Server
                                 {
                                     packet.SendPacket(this, Clients[i]);
                                     packet.FirePacketSent();
+                                    OnPacketSent(new PacketEventArgs(packet, Clients[i], this));
                                 }
                                 catch
                                 {
@@ -417,7 +427,10 @@ namespace Craft.Net.Server
                 {
                     IEnumerable<Packet> packets = PacketReader.TryReadPackets(client, length);
                     foreach (Packet packet in packets)
+                    {
+                        OnPacketRecieved(new PacketEventArgs(packet, client, this));
                         packet.HandlePacket(this, client);
+                    }
 
                     if (!client.IsDisconnected)
                     {
@@ -540,6 +553,18 @@ namespace Craft.Net.Server
         {
             if (PlayerLoggedOut != null)
                 PlayerLoggedOut(this, e);
+        }
+
+        protected internal virtual void OnPacketSent(PacketEventArgs e)
+        {
+            if (PacketSent != null)
+                PacketSent(this, e);
+        }
+
+        protected internal virtual void OnPacketRecieved(PacketEventArgs e)
+        {
+            if (PacketRecieved != null)
+                PacketRecieved(this, e);
         }
 
         #endregion
