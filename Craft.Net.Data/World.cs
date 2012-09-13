@@ -26,10 +26,6 @@ namespace Craft.Net.Data
         /// </summary>
         public List<Entity> Entities { get; set; }
         /// <summary>
-        /// The seed used to generate this world.
-        /// </summary>
-        public long Seed { get; set; }
-        /// <summary>
         /// The world generator used to create this world.
         /// </summary>
         public IWorldGenerator WorldGenerator { get; set; }
@@ -37,6 +33,10 @@ namespace Craft.Net.Data
         /// Gets the directory this world uses to save and load regions.
         /// </summary>
         public string Directory { get; private set; }
+        /// <summary>
+        /// Set to true if block updates should be performed.
+        /// </summary>
+        public bool EnableBlockUpdates { get; set; }
 
         /// <summary>
         /// Creates a new world for client-side use.
@@ -44,47 +44,28 @@ namespace Craft.Net.Data
         public World()
         {
             Name = "world";
-            Seed = DataUtility.Random.Next();
             Entities = new List<Entity>();
             Regions = new Dictionary<Vector3, Region>();
+            EnableBlockUpdates = true;
         }
 
         /// <summary>
         /// Creates a new world for server-side use with the specified world generator.
         /// </summary>
-        public World(IWorldGenerator worldGenerator)
+        public World(IWorldGenerator worldGenerator) : this()
         {
-            Name = "world";
             WorldGenerator = worldGenerator;
-            Seed = DataUtility.Random.Next();
-            Entities = new List<Entity>();
-            Regions = new Dictionary<Vector3, Region>();
         }
 
         /// <summary>
         /// Creates a new world for server-side use with the specified world generator
         /// and the specified working directory.
         /// </summary>
-        public World(IWorldGenerator worldGenerator, string directory)
+        public World(IWorldGenerator worldGenerator, string directory) : this(worldGenerator)
         {
-            Name = "world";
-            WorldGenerator = worldGenerator;
-            Seed = DataUtility.Random.Next();
-            Entities = new List<Entity>();
-            Regions = new Dictionary<Vector3, Region>();
             Directory = directory;
             if (!System.IO.Directory.Exists(directory))
                 System.IO.Directory.CreateDirectory(directory);
-        }
-
-        /// <summary>
-        /// Creates a new world for server-side use with the specified world generator and seed.
-        /// </summary>
-        /// <param name="worldGenerator"></param>
-        /// <param name="seed"></param>
-        public World(IWorldGenerator worldGenerator, long seed) : this(worldGenerator)
-        {
-            Seed = seed;
         }
 
         /// <summary>
