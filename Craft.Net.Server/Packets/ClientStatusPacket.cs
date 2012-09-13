@@ -67,7 +67,7 @@ namespace Craft.Net.Server.Packets
                     server.LogInPlayer(client);
                     break;
                 case ClientStatus.Respawn:
-                    var world = server.GetClientWorld(client);
+                    var world = client.World;
                     client.Entity.Position = new Vector3(
                         client.Entity.SpawnPoint.X,
                         client.Entity.SpawnPoint.Y + PlayerEntity.Height,
@@ -75,7 +75,7 @@ namespace Craft.Net.Server.Packets
                     client.Entity.Health = client.Entity.MaxHealth;
                     client.Entity.Food = 20;
                     client.Entity.FoodSaturation = 20;
-                    server.EntityManager.SpawnEntity(server.GetClientWorld(client), client.Entity);
+                    server.EntityManager.SpawnEntity(world, client.Entity);
                     client.SendPacket(new UpdateHealthPacket(client.Entity.Health, client.Entity.Food, client.Entity.FoodSaturation));
                     client.SendPacket(new RespawnPacket(Dimension.Overworld, server.Settings.Difficulty,
                         client.Entity.GameMode, world.LevelType));

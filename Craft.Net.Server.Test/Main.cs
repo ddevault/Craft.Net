@@ -60,8 +60,7 @@ namespace Craft.Net.Server.Test
                         try
                         {
                             e.Origin.SendChat("Block under you: " + 
-                                minecraftServer.GetClientWorld(e.Origin).GetBlock(
-                                e.Origin.Entity.Position + Vector3.Down).GetType().Name);
+                                e.Origin.World.GetBlock(e.Origin.Entity.Position + Vector3.Down).GetType().Name);
                         }
                         catch { }
                         break;
@@ -69,7 +68,7 @@ namespace Craft.Net.Server.Test
                         e.Origin.SendChat("Pong");
                         break;
                     case "lightning":
-                        minecraftServer.SpawnLightning(minecraftServer.GetClientWorld(e.Origin), e.Origin.Entity.Position);
+                        minecraftServer.WeatherManager.SpawnLightning(e.Origin.World, e.Origin.Entity.Position);
                         break;
                     case "velocity":
                         e.Origin.SendChat(e.Origin.Entity.Velocity.ToString());
@@ -78,8 +77,8 @@ namespace Craft.Net.Server.Test
                         minecraftServer.DefaultWorld.Regions[Vector3.Zero].Save();
                         break;
                     case "time":
-                        var clients = minecraftServer.GetClientsInWorld(minecraftServer.GetClientWorld(e.Origin));
-                        minecraftServer.GetLevel(minecraftServer.GetClientWorld(e.Origin)).Time = 18000;
+                        var clients = minecraftServer.EntityManager.GetClientsInWorld(e.Origin.World);
+                        minecraftServer.GetLevel(e.Origin.World).Time = 18000;
                         foreach (var minecraftClient in clients)
                             minecraftClient.SendPacket(new TimeUpdatePacket(18000));
                         break;

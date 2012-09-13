@@ -49,7 +49,7 @@ namespace Craft.Net.Server.Packets
                 .Concat(DataUtility.CreateInt32((int)Dimension))
                 .Concat(new byte[] { (byte)Difficulty, (byte)GameMode })
                 .Concat(DataUtility.CreateInt16(WorldHeight))
-                .Concat(DataUtility.CreateString(server.GetClientWorld(client).LevelType))
+                .Concat(DataUtility.CreateString(client.World.LevelType))
                 .ToArray();
             client.SendData(payload);
         }

@@ -53,10 +53,10 @@ namespace Craft.Net.Server.Packets
                 {
                     case PlayerAction.StartedDigging:
                         if (client.Entity.GameMode == GameMode.Creative)
-                            server.GetClientWorld(client).SetBlock(Position, new AirBlock());
+                            client.World.SetBlock(Position, new AirBlock());
                         break;
                     case PlayerAction.FinishedDigging:
-                        server.GetClientWorld(client).SetBlock(Position, new AirBlock());
+                        client.World.SetBlock(Position, new AirBlock());
                         break;
                 }
             }

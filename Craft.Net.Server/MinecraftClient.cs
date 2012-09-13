@@ -105,6 +105,11 @@ namespace Craft.Net.Server
         /// </summary>
         public List<string> PluginChannels { get; set; }
 
+        public World World
+        {
+            get { return Server.EntityManager.GetEntityWorld(Entity); }
+        }
+
         internal List<int> KnownEntities;
         internal string AuthenticationHash;
         internal Timer KeepAliveTimer, UpdateLoadedChunksTimer;
@@ -251,7 +256,7 @@ namespace Craft.Net.Server
         /// </summary>
         public void LoadChunk(Vector3 position)
         {
-            World world = Server.GetClientWorld(this);
+            World world = Server.EntityManager.GetEntityWorld(Entity);
             Chunk chunk = world.GetChunk(position);
             var dataPacket = new ChunkDataPacket(ref chunk);
             SendPacket(dataPacket);

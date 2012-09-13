@@ -109,6 +109,7 @@
     <Compile Include="Packets\PlayerDiggingPacket.cs" />
     <Compile Include="Packets\BlockChangePacket.cs" />
     <Compile Include="ServerSettings.cs" />
+    <Compile Include="WeatherManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

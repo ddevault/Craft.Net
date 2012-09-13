@@ -9,7 +9,6 @@ using Craft.Net.Server.Events;
 using Craft.Net.Server.Packets;
 using Craft.Net.Data;
 using Craft.Net.Data.Entities;
-using Craft.Net.Data.Blocks;
 
 namespace Craft.Net.Server
 {
@@ -43,6 +42,10 @@ namespace Craft.Net.Server
         /// This server's entity manager.
         /// </summary>
         public EntityManager EntityManager { get; set; }
+        /// <summary>
+        /// This server's weather manager.
+        /// </summary>
+        public WeatherManager WeatherManager { get; set; }
         /// <summary>
         /// The socket this server listens on.
         /// </summary>
@@ -104,7 +107,7 @@ namespace Craft.Net.Server
 
         #endregion
 
-        #region Constructor
+        #region Constructors
 
         /// <summary>
         /// Creates a new Minecraft server to listen on the requested
@@ -127,6 +130,7 @@ namespace Craft.Net.Server
             LogProviders = new List<ILogProvider>();
             PluginChannels = new Dictionary<string, PluginChannel>();
             EntityManager = new EntityManager(this);
+            WeatherManager = new WeatherManager(this);
             // Bind socket
             Socket = new Socket(AddressFamily.InterNetwork,
                                 SocketType.Stream, ProtocolType.Tcp);
@@ -205,20 +209,11 @@ namespace Craft.Net.Server
         }
 
         /// <summary>
-        /// Gets the World that the given client is present in.
+        /// Gets the level that handles the specified world.
         /// </summary>
-        public World GetClientWorld(MinecraftClient client)
+        public Level GetLevel(World world)
         {
-            return DefaultWorld; // TODO
-        }
-
-        /// <summary>
-        /// Gets all <see cref="MinecraftClient"/> objects in the given
-        /// world.
-        /// </summary>
-        public IEnumerable<MinecraftClient> GetClientsInWorld(World world)
-        {
-            return EntityManager.GetClientsInWorld(world);
+            return Levels.First(l => l.World == world);
         }
 
         /// <summary>
@@ -242,51 +237,6 @@ namespace Craft.Net.Server
         {
             PluginChannels.Add(channel.Channel, channel);
             channel.ChannelRegistered(this);
-        }
-
-        /// <summary>
-        /// Sends and updated player list to all connected clients.
-        /// </summary>
-        public void UpdatePlayerList(object unused)
-        {
-            if (Clients.Count != 0)
-            {
-                for (int i = 0; i < Clients.Count; i++)
-                {
-                    foreach (MinecraftClient client in Clients)
-                    {
-                        if (client.IsLoggedIn)
-                            Clients[i].SendPacket(new PlayerListItemPacket(client.Username, true, client.Ping));
-                    }
-                }
-            }
-            ProcessSendQueue();
-        }
-
-        /// <summary>
-        /// Spawns a bolt of lightning in the given world
-        /// at the given position.
-        /// </summary>
-        public void SpawnLightning(World world, Vector3 position)
-        {
-            var chunk = world.GetChunk(World.WorldToChunkCoordinates(position));
-            var block = World.FindBlockPosition(position);
-            byte y = (byte)(chunk.GetHeight((byte)block.X, (byte)block.Z) + 1);
-
-            var strike = new Vector3(position.X, y, position.Z);
-            if (world.GetBlock(strike + Vector3.Down).Transparency == Transparency.Opaque)
-                world.SetBlock(strike, new FireBlock());
-
-            var clients = GetClientsInWorld(world);
-            foreach (var minecraftClient in clients)
-                minecraftClient.SendPacket(new SpawnLightningPacket(EntityManager.nextEntityId++, strike));
-
-            ProcessSendQueue();
-        }
-
-        public Level GetLevel(World world)
-        {
-            return Levels.First(l => l.World == world);
         }
 
         #endregion
@@ -339,6 +289,22 @@ namespace Craft.Net.Server
             ProcessSendQueue();
         }
 
+        protected internal void UpdatePlayerList(object unused)
+        {
+            if (Clients.Count != 0)
+            {
+                for (int i = 0; i < Clients.Count; i++)
+                {
+                    foreach (MinecraftClient client in Clients)
+                    {
+                        if (client.IsLoggedIn)
+                            Clients[i].SendPacket(new PlayerListItemPacket(client.Username, true, client.Ping));
+                    }
+                }
+            }
+            ProcessSendQueue();
+        }
+
         #region Events
 
         protected internal virtual void OnChatMessage(ChatMessageEventArgs e)
@@ -379,7 +345,7 @@ namespace Craft.Net.Server
 
         private void HandleOnBlockChanged(object sender, BlockChangedEventArgs e)
         {
-            foreach (MinecraftClient client in GetClientsInWorld(e.World))
+            foreach (MinecraftClient client in EntityManager.GetClientsInWorld(e.World))
                 client.SendPacket(new BlockChangePacket(e.Position, e.Value));
             ProcessSendQueue();
         }
