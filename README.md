@@ -24,6 +24,7 @@ Some cool technical things about Craft.Net that are already implemented:
 * **Asynchronous I/O:** *Minimizes CPU load and increases speed*
 * **Threaded Chunk Management:** *Offloads chunk compression and sending to short-lived threads*
 * **Anvil Support:** *Includes support for loading, saving, creating, and manipulating Anvil worlds*
+* **PvP Combat:** *Survival-mode PvP combat is supported*
 
 ## Usage
 
