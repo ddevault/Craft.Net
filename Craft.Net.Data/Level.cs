@@ -150,6 +150,8 @@ namespace Craft.Net.Data
             data.Tags.Add(new NbtByte("thundering", (byte)(Thundering ? 1 : 0)));
             data.Tags.Add(new NbtString("LevelName", Name));
             data.Tags.Add(new NbtLong("LastPlayed", DateTime.UtcNow.Ticks));
+            if (GeneratorOptions != null)
+                data.Tags.Add(new NbtString("generatorOptions", GeneratorOptions));
             file.RootTag = new NbtCompound();
             file.RootTag.Tags.Add(data);
             using (var stream = File.Open(Path.Combine(LevelDirectory, "level.dat"), FileMode.Create))
@@ -190,6 +192,9 @@ namespace Craft.Net.Data
             string generatorName = data.Get<NbtString>("generatorName").Value;
             WorldGenerator = GetGenerator(generatorName);
             WorldGenerator.Seed = Seed;
+            if (data.Get<NbtString>("generatorOptions") != null)
+                GeneratorOptions = data.Get<NbtString>("generatorOptions").Value;
+            WorldGenerator.Initialize(this);
 
             int x, y, z;
             x = data.Get<NbtInt>("SpawnX").Value;
