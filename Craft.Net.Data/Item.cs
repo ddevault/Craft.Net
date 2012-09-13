@@ -394,6 +394,7 @@ namespace Craft.Net.Data
             new SkullItem(),
             new CarrotOnStickItem(),
             new NetherStarItem(),
+            new PumpkinPieItem(),
             new MusicDiscItem()
         });
 
