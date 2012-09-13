@@ -65,6 +65,7 @@
     <Compile Include="Packets\EntityRelativeMovePacket.cs" />
     <Compile Include="Packets\EntityStatusPacket.cs" />
     <Compile Include="Packets\EntityTeleportPacket.cs" />
+    <Compile Include="Packets\EntityVelocityPacket.cs" />
     <Compile Include="Packets\PluginMessagePacket.cs" />
     <Compile Include="Packets\RespawnPacket.cs" />
     <Compile Include="Packets\ServerListPingPacket.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="Packets\UpdateHealthPacket.cs" />
     <Compile Include="Packets\UpdateSignPacket.cs" />
     <Compile Include="Packets\UseBedPacket.cs" />
+    <Compile Include="Packets\UseEntityPacket.cs" />
     <Compile Include="PluginChannel.cs" />
     <Compile Include="ConsoleLogWriter.cs" />
     <Compile Include="Packets\LocaleAndViewDistancePacket.cs" />

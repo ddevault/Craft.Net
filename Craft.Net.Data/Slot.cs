@@ -2,6 +2,7 @@
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using Craft.Net.Data.Blocks;
 using LibNbt;
 using LibNbt.Tags;
 
@@ -240,6 +241,8 @@ namespace Craft.Net.Data
         {
             get
             {
+                if (Empty)
+                    return null;
                 var item = (Item)Id;
                 item.Data = Metadata;
                 return item;

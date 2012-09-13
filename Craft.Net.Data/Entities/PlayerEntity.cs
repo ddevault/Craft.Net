@@ -172,6 +172,11 @@ namespace Craft.Net.Data.Entities
             }
         }
 
+        public override bool Invulnerable
+        {
+            get { return gameMode == GameMode.Creative; }
+        }
+
         private Timer bedUseTimer;
         private short food;
         private float foodSaturation;
@@ -215,6 +220,13 @@ namespace Craft.Net.Data.Entities
             BedPosition = -Vector3.One;
             if (BedStateChanged != null)
                 BedStateChanged(this, null);
+        }
+
+        public override void Kill()
+        {
+            deathTimer.Change(3000, Timeout.Infinite);
+            for (int i = 0; i < Inventory.Length; i++)
+                Inventory[i] = new Slot(0xFFFF, 0);
         }
     }
 }

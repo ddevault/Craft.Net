@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using Craft.Net.Server;
 using System.Linq;
 using System.Net;
@@ -92,6 +93,20 @@ namespace Craft.Net.Server.Test
                         break;
                     case "creative":
                         e.Origin.Entity.GameMode = GameMode.Creative;
+                        break;
+                    case "spawn":
+                        // TODO: Why does this mess up stance
+                        minecraftServer.EntityManager.TeleportEntity(e.Origin.Entity, e.Origin.Entity.SpawnPoint);
+                        break;
+                    case "jump":
+                        e.Origin.Entity.Velocity = new Vector3(0, 10, 0);
+                        break;
+                    case "forward":
+                        Vector3 velocity = DataUtility.RotateY(Vector3.Forwards * 5,
+                            DataUtility.DegreesToRadians(e.Origin.Entity.Yaw));
+                        //velocity.X = -velocity.X;
+                        e.Origin.Entity.Velocity = velocity;
+                        e.Origin.SendChat(e.Origin.Entity.Yaw.ToString(CultureInfo.InvariantCulture));
                         break;
                 }
             }

@@ -86,6 +86,43 @@ namespace Craft.Net.Data
             return Math.Sqrt(Math.Pow(b1 - a1, 2) + Math.Pow(b2 - a2, 2));
         }
 
+        public static Vector3 RotateX(Vector3 vector, double rotation) // TODO: Matrix
+        {
+            rotation = -rotation; // the algorithms I found were left-handed
+            return new Vector3(
+                vector.X,
+                vector.Y * Math.Cos(rotation) - vector.Z * Math.Sin(rotation),
+                vector.Y * Math.Sin(rotation) + vector.Z * Math.Cos(rotation));
+        }
+
+        public static Vector3 RotateY(Vector3 vector, double rotation)
+        {
+            rotation = -rotation; // the algorithms I found were left-handed
+            return new Vector3(
+                vector.Z * Math.Sin(rotation) + vector.X * Math.Cos(rotation),
+                vector.Y,
+                vector.Z * Math.Cos(rotation) - vector.X * Math.Sin(rotation));
+        }
+
+        public static Vector3 RotateZ(Vector3 vector, double rotation)
+        {
+            rotation = -rotation; // the algorithms I found were left-handed
+            return new Vector3(
+                vector.X * Math.Cos(rotation) - vector.Y * Math.Sin(rotation),
+                vector.X * Math.Sin(rotation) + vector.Y * Math.Cos(rotation),
+                vector.Z);
+        }
+
+        public static double DegreesToRadians(double degrees)
+        {
+            return degrees * (Math.PI / 180);
+        }
+
+        public static double RadiansToDegrees(double radians)
+        {
+            return radians * (180 / Math.PI);
+        }
+
         #endregion
 
         #region Logging/Debugging

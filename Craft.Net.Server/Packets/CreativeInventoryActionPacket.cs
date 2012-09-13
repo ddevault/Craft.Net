@@ -27,8 +27,7 @@ namespace Craft.Net.Server.Packets
         {
             if (Index < client.Entity.Inventory.Length && Index > 0)
             {
-                client.Entity.SetSlot(Index, Item);
-                //client.Entity.Inventory[Index] = Item;
+                client.Entity.Inventory[Index] = Item;
                 if (Index == client.Entity.SelectedSlot)
                 {
                     var clients = server.EntityManager.GetKnownClients(client.Entity);

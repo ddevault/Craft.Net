@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using Craft.Net.Data;
 using Craft.Net.Data.Entities;
+using Craft.Net.Data.Events;
 using Craft.Net.Server.Packets;
 
 namespace Craft.Net.Server
@@ -32,6 +33,9 @@ namespace Craft.Net.Server
                 .Where(c => !c.IsDisconnected && c.Entity.Position.DistanceTo(entity.Position) < (c.ViewDistance * Chunk.Width));
             entity.PropertyChanged += EntityOnPropertyChanged;
 
+            if (entity is LivingEntity)
+                (entity as LivingEntity).EntityDamaged += EntityDamaged; 
+
             if (clients.Count() != 0)
             {
                 // Spawn entity on relevant clients
@@ -51,10 +55,20 @@ namespace Craft.Net.Server
             server.ProcessSendQueue();
         }
 
+        private void EntityDamaged(object sender, EntityDamageEventArgs entityDamageEventArgs)
+        {
+            var entity = (LivingEntity)sender;
+            var clients = GetKnownClients(entity);
+            foreach (var minecraftClient in clients)
+                minecraftClient.SendPacket(new EntityStatusPacket(entity.Id, EntityStatus.Hurt));
+            server.ProcessSendQueue();
+        }
+
         private void EntityOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
             // Handles changes in entity properties
             var entity = sender as Entity;
+            var clients = GetKnownClients(entity);
             if (entity is PlayerEntity)
             {
                 var player = entity as PlayerEntity;
@@ -74,8 +88,23 @@ namespace Craft.Net.Server
                     case "GameMode":
                         client.SendPacket(new ChangeGameStatePacket(GameState.ChangeGameMode, client.Entity.GameMode));
                         break;
+                    case "Velocity":
+                        client.SendPacket(new EntityVelocityPacket(player.Id, player.Velocity));
+                        foreach (var knownClient in clients)
+                            knownClient.SendPacket(new EntityVelocityPacket(player.Id, player.Velocity));
+                        break;
                 }
             }
+        }
+
+        public void TeleportEntity(Entity entity, Vector3 position)
+        {
+            var clients = GetKnownClients(entity);
+            if (entity is PlayerEntity)
+                clients = clients.Concat(new MinecraftClient[] {GetClient(entity as PlayerEntity)});
+            entity.Position = position;
+            foreach (var client in clients)
+                client.SendPacket(new EntityTeleportPacket(entity));
         }
 
         private void EntityOnBedTimerExpired(object sender, EventArgs eventArgs)
@@ -253,6 +282,17 @@ namespace Craft.Net.Server
             if (firstOrDefault != null)
                 return firstOrDefault.World;
             return server.DefaultWorld;
+        }
+
+        public Entity GetEntity(int id)
+        {
+            foreach (var level in server.Levels)
+            {
+                var entity = level.World.Entities.FirstOrDefault(e => e.Id == id);
+                if (entity != null)
+                    return entity;
+            }
+            return null;
         }
     }
 }

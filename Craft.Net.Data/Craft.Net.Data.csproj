@@ -205,6 +205,7 @@
     <Compile Include="Entities\ITamableEntity.cs" />
     <Compile Include="Entities\LivingEntity.cs" />
     <Compile Include="Entities\PlayerEntity.cs" />
+    <Compile Include="Events\EntityDamageEventArgs.cs" />
     <Compile Include="Events\InventoryChangedEventArgs.cs" />
     <Compile Include="GameMode.cs" />
     <Compile Include="Generation\DebugGenerator.cs" />
@@ -298,10 +299,10 @@
     <Compile Include="Items\ItemFrameItem.cs" />
     <Compile Include="Items\LavaBucketItem.cs" />
     <Compile Include="Items\LeatherBootsItem.cs" />
-    <Compile Include="Items\LeatherCapItem.cs" />
+    <Compile Include="Items\LeatherHelmetItem.cs" />
     <Compile Include="Items\LeatherItem.cs" />
-    <Compile Include="Items\LeatherPantsItem.cs" />
-    <Compile Include="Items\LeatherTunicItem.cs" />
+    <Compile Include="Items\LeatherLeggingsItem.cs" />
+    <Compile Include="Items\LeatherChestplateItem.cs" />
     <Compile Include="Items\MagmaCreamItem.cs" />
     <Compile Include="Items\MapItem.cs" />
     <Compile Include="Items\MelonItem.cs" />

@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataUtilityTest.cs" />
     <Compile Include="ItemTest.cs" />
     <Compile Include="MetadataTest.cs" />
     <Compile Include="WorldTest.cs" />

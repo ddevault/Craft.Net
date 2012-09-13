@@ -19,7 +19,7 @@ namespace Craft.Net.Server
                 typeof(TimeUpdatePacket), // 0x4
                 typeof(EntityEquipmentPacket), // 0x5
                 typeof(SpawnPositionPacket), // 0x6
-                null, // 0x7
+                typeof(UseEntityPacket), // 0x7
                 typeof(UpdateHealthPacket), // 0x8
                 typeof(RespawnPacket), // 0x9
                 typeof(PlayerPacket), // 0xa
@@ -40,7 +40,7 @@ namespace Craft.Net.Server
                 null, // 0x19
                 null, // 0x1a
                 null, // 0x1b
-                null, // 0x1c
+                typeof(EntityVelocityPacket), // 0x1c
                 typeof(DestroyEntityPacket), // 0x1d
                 null, // 0x1e
                 typeof(EntityRelativeMovePacket), // 0x1f

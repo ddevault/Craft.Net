@@ -26,7 +26,15 @@ namespace Craft.Net.Data.Entities
         /// <summary>
         /// In meters per tick
         /// </summary>
-        public Vector3 Velocity { get; set; }
+        public Vector3 Velocity
+        {
+            get { return velocity; }
+            set
+            {
+                velocity = value;
+                OnPropertyChanged("Velocity");
+            }
+        }
 
         public int FallDistance { get; set; }
         // The Y location that falling began at
@@ -93,6 +101,7 @@ namespace Craft.Net.Data.Entities
         private bool onGround;
         private int fire;
         private Vector3 position;
+        private Vector3 velocity;
         public float OldYaw { get; set; }
         public float Yaw
         {
@@ -120,7 +129,7 @@ namespace Craft.Net.Data.Entities
 
         public virtual MetadataDictionary Metadata
         {
-            get 
+            get
             {
                 var dictionary = new MetadataDictionary();
                 dictionary[0] = new MetadataByte(0, 0); // Flags

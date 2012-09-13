@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using Craft.Net.Data.Events;
 
 namespace Craft.Net.Data.Entities
 {
@@ -41,14 +42,19 @@ namespace Craft.Net.Data.Entities
 
         public abstract short MaxHealth { get; }
 
-        private Timer deathTimer { get; set; }
+        public virtual bool Invulnerable
+        {
+            get { return false; }
+        }
+
+        protected Timer deathTimer { get; set; }
 
         /// <summary>
         /// Starts the death timer for despawn. For servers, use
         /// EntityManager to kill entities by setting the entity
         /// health to zero.
         /// </summary>
-        public void Kill()
+        public virtual void Kill()
         {
             deathTimer.Change(3000, Timeout.Infinite);
         }
@@ -59,6 +65,18 @@ namespace Craft.Net.Data.Entities
         {
             if (DeathAnimationComplete != null)
                 DeathAnimationComplete(this, null);
+        }
+
+        public EventHandler<EntityDamageEventArgs> EntityDamaged;
+
+        public void Damage(int damage, bool accountForArmor = true)
+        {
+            // TODO: Armor
+            if (Invulnerable)
+                return;
+            Health -= (short)damage;
+            if (EntityDamaged != null)
+                EntityDamaged(this, new EntityDamageEventArgs(damage, Health));
         }
 
         // TODO: Potion effects

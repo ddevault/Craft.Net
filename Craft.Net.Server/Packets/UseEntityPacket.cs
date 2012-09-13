@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Craft.Net.Data;
+using Craft.Net.Data.Blocks;
+using Craft.Net.Data.Entities;
 
 namespace Craft.Net.Server.Packets
 {
@@ -31,8 +33,25 @@ namespace Craft.Net.Server.Packets
 
         public override void HandlePacket(MinecraftServer server, MinecraftClient client)
         {
-            var item = client.Entity.SelectedItem;
-            
+            var target = server.EntityManager.GetEntity(TargetId);
+            if (target == null || 
+                server.EntityManager.GetEntityWorld(target) != server.EntityManager.GetEntityWorld(client.Entity) ||
+                target.Position.DistanceTo(client.Entity.Position) > 6) // TODO: client.Reach
+                return;
+
+            if (target is LivingEntity)
+            {
+                // Do damage
+                var livingEntity = target as LivingEntity;
+
+                var item = client.Entity.SelectedItem.Item;
+                if (item == null)
+                    item = new AirBlock();
+                livingEntity.Damage(item.AttackDamage);
+                Console.WriteLine(client.IsSprinting);
+                livingEntity.Velocity /*+*/= DataUtility.RotateY(new Vector3(0, 0, client.IsSprinting ? 10 : 3), // TODO: Knockback enchantment
+                    DataUtility.DegreesToRadians(client.Entity.Yaw));                  // TODO: Physics
+            }
         }
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
