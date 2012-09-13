@@ -18,6 +18,6 @@ namespace Craft.Net.Data.Generation
         /// Called after the world generator is created and
         /// all values are set.
         /// </summary>
-        void Initialize();
+        void Initialize(Level level);
     }
 }

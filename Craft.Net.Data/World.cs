@@ -59,7 +59,6 @@ namespace Craft.Net.Data
             Seed = DataUtility.Random.Next();
             Entities = new List<Entity>();
             Regions = new Dictionary<Vector3, Region>();
-            worldGenerator.Initialize();
         }
 
         /// <summary>
@@ -76,7 +75,6 @@ namespace Craft.Net.Data
             Directory = directory;
             if (!System.IO.Directory.Exists(directory))
                 System.IO.Directory.CreateDirectory(directory);
-            worldGenerator.Initialize();
         }
 
         /// <summary>
@@ -87,7 +85,6 @@ namespace Craft.Net.Data
         public World(IWorldGenerator worldGenerator, long seed) : this(worldGenerator)
         {
             Seed = seed;
-            worldGenerator.Initialize();
         }
 
         /// <summary>

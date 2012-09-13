@@ -41,6 +41,7 @@ namespace Craft.Net.Data
         public Vector3 SpawnPoint { get; set; }
         public long LastPlayed { get; set; }
         public string LevelDirectory { get; private set; }
+        public string GeneratorOptions { get; set; }
         // TODO: Move to weather manager class
         public bool Raining { get; set; }
         public bool Thundering { get; set; }
@@ -59,7 +60,7 @@ namespace Craft.Net.Data
             WorldGenerator = DefaultGenerator;
             Seed = GenerateSeed();
             WorldGenerator.Seed = Seed;
-            WorldGenerator.Initialize();
+            WorldGenerator.Initialize(this);
             SpawnPoint = WorldGenerator.SpawnPoint;
             tickTimer = new Timer(Tick, null, TickLength, TickLength);
         }
@@ -75,7 +76,7 @@ namespace Craft.Net.Data
             if (!File.Exists(Path.Combine(LevelDirectory, "level.dat")))
             {
                 WorldGenerator = DefaultGenerator;
-                WorldGenerator.Initialize();
+                WorldGenerator.Initialize(this);
                 SpawnPoint = WorldGenerator.SpawnPoint;
                 World = new World(WorldGenerator, Path.Combine(directory, "region"));
 
@@ -104,7 +105,7 @@ namespace Craft.Net.Data
                 Directory.CreateDirectory(directory);
             LevelDirectory = directory;
             WorldGenerator = worldGenerator;
-            WorldGenerator.Initialize();
+            WorldGenerator.Initialize(this);
             SpawnPoint = WorldGenerator.SpawnPoint;
             World = new World(WorldGenerator, Path.Combine(directory, "region"));
             SaveInterval = TimeSpan.FromSeconds(5);

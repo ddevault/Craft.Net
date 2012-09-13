@@ -8,8 +8,21 @@ namespace Craft.Net.Data.Generation
     /// </summary>
     public class FlatlandGenerator : IWorldGenerator
     {
-        public void Initialize()
+        static FlatlandGenerator()
         {
+            DefaultGeneratorOptions = "1;7,2x3,2;1";
+        }
+
+        public static string DefaultGeneratorOptions { get; set; }
+
+        public string GeneratorOptions { get; set; }
+
+        public void Initialize(Level level)
+        {
+            if (level.GeneratorOptions == null)
+                GeneratorOptions = DefaultGeneratorOptions;
+            else
+                GeneratorOptions = level.GeneratorOptions;
         }
 
         public Chunk GenerateChunk(Vector3 position, Region parentRegion)

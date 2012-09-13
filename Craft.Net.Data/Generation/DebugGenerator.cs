@@ -8,7 +8,7 @@ namespace Craft.Net.Data.Generation
     /// </summary>
     public class DebugGenerator : IWorldGenerator
     {
-        public void Initialize()
+        public void Initialize(Level level)
         {
         }
 
