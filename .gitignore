@@ -1,0 +1,10 @@
+Debug/
+obj/
+*.user
+*.userprefs
+*.suo
+*.pidb
+_ReSharper*/
+TestResults/
+*.mdf
+_site/
