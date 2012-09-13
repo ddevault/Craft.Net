@@ -320,6 +320,7 @@
     <Compile Include="Items\PoisonousPotatoItem.cs" />
     <Compile Include="Items\PotatoItem.cs" />
     <Compile Include="Items\PotionItem.cs" />
+    <Compile Include="Items\PumpkinPieItem.cs" />
     <Compile Include="Items\PumpkinSeedsItem.cs" />
     <Compile Include="Items\RawBeefItem.cs" />
     <Compile Include="Items\RawChickenItem.cs" />
