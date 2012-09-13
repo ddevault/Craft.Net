@@ -33,8 +33,6 @@ namespace Craft.Net.Server.Packets
             EntityId = entityId;
             SlotIndex = (short)slot;
             Item = item;
-            if (slot == 0 && item.Id != 0xFFFF)
-                item.Id = 0xFFFF;
         }
 
         public override byte PacketId

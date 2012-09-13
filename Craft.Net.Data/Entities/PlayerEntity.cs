@@ -134,6 +134,11 @@ namespace Craft.Net.Data.Entities
             }
         }
 
+        public Slot SelectedItem
+        {
+            get { return Inventory[SelectedSlot]; }
+        }
+
         /// <summary>
         /// Set to -Vector3.One if the player is not in a bed.
         /// </summary>

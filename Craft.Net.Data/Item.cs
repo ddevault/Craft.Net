@@ -23,6 +23,31 @@ namespace Craft.Net.Data
         public virtual ushort Data { get; set; }
 
         /// <summary>
+        /// The amount of damage hitting a living entity with this item
+        /// will do.
+        /// </summary>
+        public virtual int AttackDamage
+        {
+            get { return 1; }
+        }
+
+        /// <summary>
+        /// When placed in an armor slot, the amount of protection given.
+        /// </summary>
+        public virtual int ArmorBonus
+        {
+            get { return 0; }
+        }
+
+        /// <summary>
+        /// Used to determine if this item may be placed in an armor slot.
+        /// </summary>
+        public virtual bool IsArmor
+        {
+            get { return false; }
+        }
+
+        /// <summary>
         /// Called when this item is used by a player.
         /// </summary>
         public virtual void OnItemUsed(World world, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entity usedBy)
@@ -269,9 +294,9 @@ namespace Craft.Net.Data
             new SeedsItem(),
             new WheatItem(),
             new BreadItem(),
-            new LeatherCapItem(),
-            new LeatherTunicItem(),
-            new LeatherPantsItem(),
+            new LeatherHelmetItem(),
+            new LeatherChestplateItem(),
+            new LeatherLeggingsItem(),
             new LeatherBootsItem(),
             new ChainHelmetItem(),
             new ChainChestplateItem(),

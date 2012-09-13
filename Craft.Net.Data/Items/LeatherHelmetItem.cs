@@ -1,13 +1,12 @@
 namespace Craft.Net.Data.Items
 {
-    
-    public class DiamondChestplateItem : Item
+    public class LeatherHelmetItem : Item
     {
         public override ushort Id
         {
             get
             {
-                return 311;
+                return 298;
             }
         }
 
@@ -18,7 +17,7 @@ namespace Craft.Net.Data.Items
 
         public override int ArmorBonus
         {
-            get { return 8; }
+            get { return 1; }
         }
     }
 }
