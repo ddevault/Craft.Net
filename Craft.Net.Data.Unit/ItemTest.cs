@@ -38,6 +38,7 @@ namespace Craft.Net.Data.Unit
         public void TestBuckets()
         {
             World world = new World(new FlatlandGenerator());
+            world.WorldGenerator.Initialize(new Level());
             PlayerEntity player = new PlayerEntity()
             {
                 GameMode = GameMode.Creative
@@ -73,6 +74,7 @@ namespace Craft.Net.Data.Unit
         public void TestFlintAndSteel()
         {
             World world = new World(new FlatlandGenerator());
+            world.WorldGenerator.Initialize(new Level());
             Vector3 targetBlock = new Vector3(0, 3, 0);
             Vector3 alteredBlock = targetBlock + Vector3.Up;
 
@@ -86,6 +88,7 @@ namespace Craft.Net.Data.Unit
         public void TestBrewingStand()
         {
             World world = new World(new FlatlandGenerator());
+            world.WorldGenerator.Initialize(new Level());
 
             BrewingStandItem brewingStand = new BrewingStandItem();
             brewingStand.OnItemUsed(world, new Vector3(0, 3, 0), Vector3.Up, Vector3.Zero, null);
@@ -97,6 +100,7 @@ namespace Craft.Net.Data.Unit
         public void TestHoe()
         {
             World world = new World(new FlatlandGenerator());
+            world.WorldGenerator.Initialize(new Level());
             Vector3 grassBlock = new Vector3(0, 3, 0);
 
             HoeItem hoe = new DiamondHoeItem();

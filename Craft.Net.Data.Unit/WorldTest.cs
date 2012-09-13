@@ -19,6 +19,7 @@ namespace Craft.Net.Data.Unit
         public void SetUp()
         {
             World = new World(new FlatlandGenerator(), "world");
+            World.WorldGenerator.Initialize(new Level());
         }
 
         [Test]
