@@ -32,9 +32,9 @@ namespace Craft.Net.Server.Packets
 
         public override void HandlePacket(MinecraftServer server, MinecraftClient client)
         {
-            server.Log("<" + client.Username + "> " + Message);
+            LogProvider.Log("<" + client.Username + "> " + Message);
             var args = new ChatMessageEventArgs(client, Message);
-            server.FireOnChatMessage(args);
+            server.OnChatMessage(args);
             if (!args.Handled)
                 server.SendChat("<" + client.Username + "> " + Message);
         }

@@ -50,7 +50,7 @@ namespace Craft.Net.Server.Packets
                     string hash = Cryptography.JavaHexDigest(shaData);
 
                     // Talk to session.minecraft.net
-                    if (server.OnlineMode)
+                    if (server.Settings.OnlineMode)
                     {
                         var webClient = new WebClient();
                         var webReader = new StreamReader(webClient.OpenRead(
@@ -77,7 +77,7 @@ namespace Craft.Net.Server.Packets
                     client.Entity.FoodSaturation = 20;
                     server.EntityManager.SpawnEntity(server.GetClientWorld(client), client.Entity);
                     client.SendPacket(new UpdateHealthPacket(client.Entity.Health, client.Entity.Food, client.Entity.FoodSaturation));
-                    client.SendPacket(new RespawnPacket(Dimension.Overworld, server.Difficulty,
+                    client.SendPacket(new RespawnPacket(Dimension.Overworld, server.Settings.Difficulty,
                         client.Entity.GameMode, world.LevelType));
                     client.SendPacket(new PlayerPositionAndLookPacket(
                                   client.Entity.Position, client.Entity.Yaw, client.Entity.Pitch, true));

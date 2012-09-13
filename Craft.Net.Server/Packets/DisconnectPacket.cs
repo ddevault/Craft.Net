@@ -31,14 +31,14 @@ namespace Craft.Net.Server.Packets
 
         public override void HandlePacket(MinecraftServer server, MinecraftClient client)
         {
-            server.Log(client.Username + " disconnected (" + Reason + ")");
+            LogProvider.Log(client.Username + " disconnected (" + Reason + ")");
             client.IsDisconnected = true;
         }
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
             if (!Reason.Contains("§"))
-                server.Log("Disconnected client: " + Reason);
+                LogProvider.Log("Disconnected client: " + Reason);
             byte[] buffer = new[] { PacketId }.Concat(DataUtility.CreateString(Reason)).ToArray();
             client.SendData(buffer);
             client.IsDisconnected = true;

@@ -181,7 +181,7 @@ namespace Craft.Net.Server
             if (IsDisconnected)
                 return;
 #if DEBUG
-            Server.Log(DataUtility.DumpArray(data), LogImportance.Low);
+            LogProvider.Log(DataUtility.DumpArray(data), LogImportance.Low);
 #endif
             if (EncryptionEnabled)
                 data = Encrypter.ProcessBytes(data);
@@ -291,14 +291,14 @@ namespace Craft.Net.Server
 
         internal void KeepAlive(object discarded)
         {
-            if (LastKeepAlive.AddSeconds(10) < DateTime.Now && false)
+            if (LastKeepAlive.AddSeconds(10) < DateTime.Now && false) // TODO
             {
-                Server.Log("Client timed out");
+                LogProvider.Log("Client timed out");
                 IsDisconnected = true;
             }
             else
             {
-                SendPacket(new KeepAlivePacket(MinecraftServer.Random.Next()));
+                SendPacket(new KeepAlivePacket(DataUtility.Random.Next()));
                 Server.ProcessSendQueue();
                 LastKeepAliveSent = DateTime.Now;
             }

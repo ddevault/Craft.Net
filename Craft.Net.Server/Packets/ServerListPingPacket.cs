@@ -29,9 +29,9 @@ namespace Craft.Net.Server.Packets
 
         public string GetPingValue(MinecraftServer server)
         {
-            return server.MotD + "§" +
+            return server.Settings.MotD + "§" +
                    server.Clients.Count(c => c.IsLoggedIn) + "§" +
-                   server.MaxPlayers;
+                   server.Settings.MaxPlayers;
         }
     }
 }

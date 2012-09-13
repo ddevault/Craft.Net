@@ -53,6 +53,7 @@
     <Compile Include="EntityManager.cs" />
     <Compile Include="Events\PacketEventArgs.cs" />
     <Compile Include="Events\PlayerLogInEventArgs.cs" />
+    <Compile Include="LogProvider.cs" />
     <Compile Include="MinecraftServer.cs" />
     <Compile Include="MinecraftClient.cs" />
     <Compile Include="PacketReader.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="Packets\HeldItemChangePacket.cs" />
     <Compile Include="Packets\PlayerDiggingPacket.cs" />
     <Compile Include="Packets\BlockChangePacket.cs" />
+    <Compile Include="ServerSettings.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

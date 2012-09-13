@@ -18,84 +18,55 @@ namespace Craft.Net.Server
     /// </summary>
     public class MinecraftServer
     {
-        #region Public Fields
-
         /// <summary>
         /// The protocol version supported by this server.
         /// </summary>
         public const int ProtocolVersion = 42;
 
+        #region Properties
+
         /// <summary>
         /// A list of all connected clients. Not all connected
         /// clients will be logged in.
         /// </summary>
-        public List<MinecraftClient> Clients;
-        /// <summary>
-        /// The default world to spawn clients in.
-        /// </summary>
-        public int DefaultWorldIndex;
-        /// <summary>
-        /// Set to true if this server is to use encrypted
-        /// connections.
-        /// </summary>
-        public bool EncryptionEnabled;
+        public List<MinecraftClient> Clients { get; set; }
         /// <summary>
         /// A list of <see cref="ILogProvider"/> objects to log
         /// data to.
         /// </summary>
-        public List<ILogProvider> LogProviders;
-        /// <summary>
-        /// The maximum number of players that may log in.
-        /// </summary>
-        public byte MaxPlayers;
-        /// <summary>
-        /// The message of the day.
-        /// </summary>
-        public string MotD;
-        /// <summary>
-        /// Set to true to authenticate connecting users with Minecraft.net
-        /// </summary>
-        public bool OnlineMode;
+        public List<ILogProvider> LogProviders { get; set; }
         /// <summary>
         /// A list of Worlds this server will use.
         /// </summary>
-        public List<Level> Levels;
+        public List<Level> Levels { get; set; }
         /// <summary>
         /// This server's entity manager.
         /// </summary>
-        public EntityManager EntityManager;
-        /// <summary>
-        /// This server's difficulty.
-        /// </summary>
-        public Difficulty Difficulty;
+        public EntityManager EntityManager { get; set; }
         /// <summary>
         /// The socket this server listens on.
         /// </summary>
-        public Socket Socket;
+        public Socket Socket { get; set; }
+        /// <summary>
+        /// Settings that describe this server's function.
+        /// </summary>
+        public ServerSettings Settings { get; set; }
 
-        #endregion
+        protected internal Dictionary<string, PluginChannel> PluginChannels { get; set; }
 
-        #region Private Fields
+        internal RSACryptoServiceProvider CryptoServiceProvider { get; set; }
+        internal RSAParameters ServerKey { get; set; }
 
-        internal static Random Random;
-        internal RSACryptoServiceProvider CryptoServiceProvider;
-        internal Dictionary<string, PluginChannel> PluginChannels;
-        internal RSAParameters ServerKey;
-
-        private AutoResetEvent sendQueueReset;
-        private Thread sendQueueThread;
-        private Timer updatePlayerListTimer;
-
-        #endregion
-
-        #region Public Properties
+        private AutoResetEvent sendQueueReset { get; set; } // TODO: Move packet sending to individual clients
+        private Thread sendQueueThread { get; set; }
+        private Timer updatePlayerListTimer { get; set; }
 
         /// <summary>
         /// Gets the default world for new clients.
         /// </summary>
         public World DefaultWorld
         {
-            get { return Levels[DefaultWorldIndex].World; }
+            get { return Levels[Settings.DefaultWorldIndex].World; }
         }
 
         /// <summary>
@@ -103,7 +74,7 @@ namespace Craft.Net.Server
         /// </summary>
         public Level DefaultLevel
         {
-            get { return Levels[DefaultWorldIndex]; }
+            get { return Levels[Settings.DefaultWorldIndex]; }
         }
 
         #endregion
@@ -131,7 +102,6 @@ namespace Craft.Net.Server
         /// </summary>
         public event EventHandler<PacketEventArgs> PacketRecieved;
 
-
         #endregion
 
         #region Constructor
@@ -140,20 +110,24 @@ namespace Craft.Net.Server
         /// Creates a new Minecraft server to listen on the requested
         /// endpoint.
         /// </summary>
-        public MinecraftServer(IPEndPoint endPoint)
+        public MinecraftServer(IPEndPoint endPoint) : this(endPoint, ServerSettings.DefaultSettings)
         {
+        }
+
+        /// <summary>
+        /// Creates a new Minecraft server to listen on the requested
+        /// endpoint.
+        /// </summary>
+        public MinecraftServer(IPEndPoint endPoint, ServerSettings settings)
+        {
+            Settings = settings;
+            // Initialize variables
             Clients = new List<MinecraftClient>();
-            MaxPlayers = 25;
-            MotD = "Craft.Net Server";
-            OnlineMode = EncryptionEnabled = true;
-            Random = new Random();
-            DefaultWorldIndex = 0;
             Levels = new List<Level>();
             LogProviders = new List<ILogProvider>();
             PluginChannels = new Dictionary<string, PluginChannel>();
             EntityManager = new EntityManager(this);
-            Difficulty = Difficulty.Peaceful;
-
+            // Bind socket
             Socket = new Socket(AddressFamily.InterNetwork,
                                 SocketType.Stream, ProtocolType.Tcp);
             Socket.Bind(endPoint);
@@ -170,11 +144,11 @@ namespace Craft.Net.Server
         {
             if (Levels.Count == 0)
             {
-                Log("Unable to start server with no worlds loaded.");
+                LogProvider.Log("Unable to start server with no worlds loaded.");
                 throw new InvalidOperationException("Unable to start server with no worlds loaded.");
             }
 
-            Log("Starting Craft.Net server...");
+            LogProvider.Log("Starting Craft.Net server...");
 
             CryptoServiceProvider = new RSACryptoServiceProvider(1024);
             ServerKey = CryptoServiceProvider.ExportParameters(true);
@@ -187,7 +161,7 @@ namespace Craft.Net.Server
 
             updatePlayerListTimer = new Timer(UpdatePlayerList, null, 60000, 60000);
 
-            Log("Server started.");
+            LogProvider.Log("Server started.");
         }
 
         /// <summary>
@@ -195,7 +169,7 @@ namespace Craft.Net.Server
         /// </summary>
         public void Stop()
         {
-            Log("Stopping server...");
+            LogProvider.Log("Stopping server...");
             if (sendQueueThread != null)
             {
                 sendQueueThread.Abort();
@@ -208,7 +182,7 @@ namespace Craft.Net.Server
                 Socket = null;
             }
             updatePlayerListTimer.Dispose();
-            Log("Server stopped.");
+            LogProvider.Log("Server stopped.");
         }
 
         /// <summary>
@@ -219,32 +193,6 @@ namespace Craft.Net.Server
         {
             if (sendQueueReset != null)
                 sendQueueReset.Set();
-        }
-
-        /// <summary>
-        /// Adds the requested <see cref="ILogProvider"/> to the
-        /// list of log providers.
-        /// </summary>
-        public void AddLogProvider(ILogProvider logProvider)
-        {
-            LogProviders.Add(logProvider);
-        }
-
-        /// <summary>
-        /// Logs the given text with high importance.
-        /// </summary>
-        public void Log(string text)
-        {
-            Log(text, LogImportance.High);
-        }
-
-        /// <summary>
-        /// Logs the given text.
-        /// </summary>
-        public void Log(string text, LogImportance logLevel)
-        {
-            foreach (ILogProvider provider in LogProviders)
-                provider.Log(text, logLevel);
         }
 
         /// <summary>
@@ -343,6 +291,90 @@ namespace Craft.Net.Server
 
         #endregion
 
+        #region Internal Methods
+
+        internal void LogInPlayer(MinecraftClient client)
+        {
+            client.IsLoggedIn = true;
+            // Spawn player
+            client.Entity = DefaultLevel.LoadPlayer(client.Username);
+            client.Entity.Username = client.Username;
+            client.Entity.InventoryChanged += EntityInventoryChanged;
+            EntityManager.SpawnEntity(DefaultWorld, client.Entity);
+            client.SendPacket(new LoginPacket(client.Entity.Id,
+                                              DefaultWorld.LevelType, DefaultLevel.GameMode,
+                                              client.Entity.Dimension, Settings.Difficulty,
+                                              Settings.MaxPlayers));
+
+            // Send initial chunks
+            client.UpdateChunks(true);
+            client.SendPacket(new PlayerPositionAndLookPacket(
+                                  client.Entity.Position, client.Entity.Yaw, client.Entity.Pitch, true));
+            client.SendQueue.Last().OnPacketSent += (sender, e) => { client.ReadyToSpawn = true; };
+
+            // Send entities
+            EntityManager.SendClientEntities(client);
+
+            client.SendPacket(new SetWindowItemsPacket(0, client.Entity.Inventory));
+            client.SendPacket(new UpdateHealthPacket(client.Entity.Health, client.Entity.Food, client.Entity.FoodSaturation));
+            client.SendPacket(new SpawnPositionPacket(client.Entity.SpawnPoint));
+            client.SendPacket(new TimeUpdatePacket(DefaultLevel.Time));
+
+            UpdatePlayerList(null); // Should also process send queue
+
+            var args = new PlayerLogInEventArgs(client);
+            OnPlayerLoggedIn(args);
+            LogProvider.Log(client.Username + " logged in.");
+            if (!args.Handled)
+                SendChat(client.Username + " logged in.");
+
+            client.StartWorkers();
+        }
+
+        void EntityInventoryChanged(object sender, Data.Events.InventoryChangedEventArgs e)
+        {
+            // Send changes to client
+            var client = EntityManager.GetClient(sender as PlayerEntity);
+            client.SendPacket(new SetSlotPacket(0, e.Index, e.NewValue));
+            ProcessSendQueue();
+        }
+
+        #region Events
+
+        protected internal virtual void OnChatMessage(ChatMessageEventArgs e)
+        {
+            if (ChatMessage != null)
+                ChatMessage(this, e);
+        }
+
+        protected internal virtual void OnPlayerLoggedIn(PlayerLogInEventArgs e)
+        {
+            if (PlayerLoggedIn != null)
+                PlayerLoggedIn(this, e);
+        }
+
+        protected internal virtual void OnPlayerLoggedOut(PlayerLogInEventArgs e)
+        {
+            if (PlayerLoggedOut != null)
+                PlayerLoggedOut(this, e);
+        }
+
+        protected internal virtual void OnPacketSent(PacketEventArgs e)
+        {
+            if (PacketSent != null)
+                PacketSent(this, e);
+        }
+
+        protected internal virtual void OnPacketRecieved(PacketEventArgs e)
+        {
+            if (PacketRecieved != null)
+                PacketRecieved(this, e);
+        }
+
+        #endregion
+
+        #endregion
+
         #region Private Methods
 
         private void HandleOnBlockChanged(object sender, BlockChangedEventArgs e)
@@ -369,9 +401,9 @@ namespace Craft.Net.Server
                                 Packet packet;
                                 while (!Clients[i].SendQueue.TryDequeue(out packet)) { }
 #if DEBUG
-                                Log("[SERVER->CLIENT] " + Clients[i].Socket.RemoteEndPoint,
+                                LogProvider.Log("[SERVER->CLIENT] " + Clients[i].Socket.RemoteEndPoint,
                                     LogImportance.Low);
-                                Log(packet.ToString(), LogImportance.Low);
+                                LogProvider.Log(packet.ToString(), LogImportance.Low);
 #endif
                                 try
                                 {
@@ -418,7 +450,7 @@ namespace Craft.Net.Server
             if (error != SocketError.Success || !client.Socket.Connected || length == client.RecieveBufferIndex)
             {
                 if (error != SocketError.Success)
-                    Log("Socket error: " + error);
+                    LogProvider.Log("Socket error: " + error);
                 client.IsDisconnected = true;
             }
             else
@@ -442,17 +474,17 @@ namespace Craft.Net.Server
                 catch (InvalidOperationException e)
                 {
                     client.IsDisconnected = true;
-                    Log("Disconnected client with protocol error. " + e.Message);
+                    LogProvider.Log("Disconnected client with protocol error. " + e.Message);
                 }
                 catch (NotImplementedException)
                 {
                     client.IsDisconnected = true;
-                    Log("Disconnected client using unsupported features.");
+                    LogProvider.Log("Disconnected client using unsupported features.");
                 }
                 catch (Exception e)
                 {
                     client.IsDisconnected = true;
-                    Log("Disconnected client with error: " + e.Message);
+                    LogProvider.Log("Disconnected client with error: " + e.Message);
                 }
             }
             if (client.IsDisconnected)
@@ -485,89 +517,6 @@ namespace Craft.Net.Server
                 ProcessSendQueue();
             }
         }
-
-        #endregion
-
-        #region Internal Methods
-
-        internal void FireOnChatMessage(ChatMessageEventArgs e)
-        {
-            if (ChatMessage != null)
-                ChatMessage(this, e);
-        }
-
-        internal void LogInPlayer(MinecraftClient client)
-        {
-            client.IsLoggedIn = true;
-            // Spawn player
-            client.Entity = DefaultLevel.LoadPlayer(client.Username);
-            client.Entity.Username = client.Username;
-            client.Entity.InventoryChanged += Entity_InventoryChanged;
-            EntityManager.SpawnEntity(DefaultWorld, client.Entity);
-            client.SendPacket(new LoginPacket(client.Entity.Id,
-                                              DefaultWorld.LevelType, DefaultLevel.GameMode,
-                                              client.Entity.Dimension, this.Difficulty,
-                                              MaxPlayers));
-
-            // Send initial chunks
-            client.UpdateChunks(true);
-            client.SendPacket(new PlayerPositionAndLookPacket(
-                                  client.Entity.Position, client.Entity.Yaw, client.Entity.Pitch, true));
-            client.SendQueue.Last().OnPacketSent += (sender, e) => { client.ReadyToSpawn = true; };
-
-            // Send entities
-            EntityManager.SendClientEntities(client);
-
-            client.SendPacket(new SetWindowItemsPacket(0, client.Entity.Inventory));
-            client.SendPacket(new UpdateHealthPacket(client.Entity.Health, client.Entity.Food, client.Entity.FoodSaturation));
-            client.SendPacket(new SpawnPositionPacket(client.Entity.SpawnPoint));
-            client.SendPacket(new TimeUpdatePacket(DefaultLevel.Time));
-
-            UpdatePlayerList(null); // Should also process send queue
-
-            var args = new PlayerLogInEventArgs(client);
-            OnPlayerLoggedIn(args);
-            Log(client.Username + " logged in.");
-            if (!args.Handled)
-                SendChat(client.Username + " logged in.");
-
-            client.StartWorkers();
-        }
-
-        void Entity_InventoryChanged(object sender, Data.Events.InventoryChangedEventArgs e)
-        {
-            var client = EntityManager.GetClient(sender as PlayerEntity);
-            client.SendPacket(new SetSlotPacket(0, e.Index, e.NewValue));
-            this.ProcessSendQueue();
-        }
-
-        #region Events
-
-        protected internal virtual void OnPlayerLoggedIn(PlayerLogInEventArgs e)
-        {
-            if (PlayerLoggedIn != null)
-                PlayerLoggedIn(this, e);
-        }
-
-        protected internal virtual void OnPlayerLoggedOut(PlayerLogInEventArgs e)
-        {
-            if (PlayerLoggedOut != null)
-                PlayerLoggedOut(this, e);
-        }
-
-        protected internal virtual void OnPacketSent(PacketEventArgs e)
-        {
-            if (PacketSent != null)
-                PacketSent(this, e);
-        }
-
-        protected internal virtual void OnPacketRecieved(PacketEventArgs e)
-        {
-            if (PacketRecieved != null)
-                PacketRecieved(this, e);
-        }
-
-        #endregion
 
         #endregion
     }

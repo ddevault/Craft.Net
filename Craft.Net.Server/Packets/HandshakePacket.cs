@@ -54,11 +54,11 @@ namespace Craft.Net.Server.Packets
             client.Username = Username;
             client.Hostname = Hostname + ":" + Port;
             // Respond with encryption request
-            if (server.OnlineMode)
+            if (server.Settings.OnlineMode)
                 client.AuthenticationHash = CreateHash();
             else
                 client.AuthenticationHash = "-";
-            if (server.EncryptionEnabled)
+            if (server.Settings.EnableEncryption)
             {
                 var keyRequest =
                     new EncryptionKeyRequestPacket(client.AuthenticationHash,

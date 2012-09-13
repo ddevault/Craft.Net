@@ -312,9 +312,9 @@ namespace Craft.Net.Server
                     return results;
                 }
                 // Log the packet
-                client.Server.Log("[CLIENT->SERVER] " + client.Socket.RemoteEndPoint, LogImportance.Low);
-                client.Server.Log("Raw: " + DataUtility.DumpArray(buffer.Take(workingLength).ToArray()), LogImportance.Low);
-                client.Server.Log(workingPacket.ToString(), LogImportance.Low);
+                LogProvider.Log("[CLIENT->SERVER] " + client.Socket.RemoteEndPoint, LogImportance.Low);
+                LogProvider.Log("Raw: " + DataUtility.DumpArray(buffer.Take(workingLength).ToArray()), LogImportance.Low);
+                LogProvider.Log(workingPacket.ToString(), LogImportance.Low);
 
                 client.Socket.ReceiveTimeout = 30000;
                 // Add this packet to the results

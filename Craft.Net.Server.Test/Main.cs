@@ -23,11 +23,11 @@ namespace Craft.Net.Server.Test
             // Create a server on 0.0.0.0:25565
             minecraftServer = new MinecraftServer(
 		        new IPEndPoint(IPAddress.Any, 25565));
-            minecraftServer.OnlineMode = false;
-            minecraftServer.EncryptionEnabled = true;
+            minecraftServer.Settings.OnlineMode = false;
+            minecraftServer.Settings.EnableEncryption = true;
             // Add a console logger
-            minecraftServer.AddLogProvider(new ConsoleLogWriter(LogImportance.High));
-            minecraftServer.AddLogProvider(new FileLogWriter("packetLog.txt", LogImportance.Low));
+            LogProvider.RegisterProvider(new ConsoleLogWriter(LogImportance.High));
+            LogProvider.RegisterProvider(new FileLogWriter("packetLog.txt", LogImportance.Low));
             // Add a flatland world
 #if DEBUG
             // Use a fresh world each time
@@ -35,14 +35,12 @@ namespace Craft.Net.Server.Test
                 Directory.Delete("world", true);
 #endif
             minecraftServer.AddLevel(new Level(Path.Combine(Directory.GetCurrentDirectory(), "world")));
-            //minecraftServer.DefaultLevel.GameMode = GameMode.Creative;
             // Register the chat handler
             minecraftServer.ChatMessage += HandleOnChatMessage;
             // Start the server
             minecraftServer.Start();
             Console.WriteLine("Press any key to exit.");
-            while (Console.ReadKey(true).Key != ConsoleKey.Q)
-		        continue;
+            while (Console.ReadKey(true).Key != ConsoleKey.Q) { }
             // Stop the server
             minecraftServer.Stop();
         }
