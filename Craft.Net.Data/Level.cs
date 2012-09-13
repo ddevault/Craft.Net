@@ -46,7 +46,24 @@ namespace Craft.Net.Data
         public bool Thundering { get; set; }
         public int RainTime { get; set; }
         public int ThunderTime { get; set; }
-        
+
+        /// <summary>
+        /// Default constructor for a level that only exists in memory.
+        /// </summary>
+        public Level()
+        {
+            World = new World(DefaultGenerator);
+            Name = "world";
+            GameMode = GameMode.Survival;
+            MapFeatures = false;
+            WorldGenerator = DefaultGenerator;
+            Seed = GenerateSeed();
+            WorldGenerator.Seed = Seed;
+            WorldGenerator.Initialize();
+            SpawnPoint = WorldGenerator.SpawnPoint;
+            tickTimer = new Timer(Tick, null, TickLength, TickLength);
+        }
+
         // TODO: Refactor constructors
         public Level(string directory)
         {
@@ -64,6 +81,7 @@ namespace Craft.Net.Data
 
                 SaveInterval = TimeSpan.FromSeconds(5);
                 saveTimer = new Timer(Save, null, (int)SaveInterval.TotalMilliseconds, Timeout.Infinite);
+                tickTimer = new Timer(Tick, null, TickLength, TickLength);
                 return;
             }
 
@@ -92,6 +110,14 @@ namespace Craft.Net.Data
             SaveInterval = TimeSpan.FromSeconds(5);
             saveTimer = new Timer(Save, null, (int)SaveInterval.TotalMilliseconds, Timeout.Infinite);
             tickTimer = new Timer(Tick, null, TickLength, TickLength);
+        }
+
+        private static unsafe long GenerateSeed()
+        {
+            double seed = DataUtility.Random.NextDouble();
+            void* seedPtr = &seed;
+            long Seed = *(long*)seedPtr;
+            return Seed;
         }
 
         private void Save(object discarded)
