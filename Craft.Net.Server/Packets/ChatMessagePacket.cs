@@ -32,7 +32,7 @@ namespace Craft.Net.Server.Packets
 
         public override void HandlePacket(MinecraftServer server, MinecraftClient client)
         {
-            LogProvider.Log("<" + client.Username + "> " + Message);
+            LogProvider.Log("<" + client.Username + "> " + Message, LogImportance.Medium);
             var args = new ChatMessageEventArgs(client, Message);
             server.OnChatMessage(args);
             if (!args.Handled)

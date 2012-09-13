@@ -45,13 +45,12 @@ The MinecraftServer class is the core server class, and runs networking, chunk m
 block updates, and more. Each server must have at least one world to start, and an
 InvalidOperationException will be thrown if an attempt is made to start the server without.
 
-You should also consider adding an ILogProvider to the server with
-MinecraftServer.AddLogProvider. Included in Craft.Net is ConsoleLogWriter, and FileLogWriter,
-which output logs to the command line or a file, respectively. Craft.Net logs messages with
-a given LogImportance. High importance is for things like server starting and new clients
-logging in. Medium importance is for things like chat and player deaths. Low importance is a
-log of all communication on the server, and all packets are logged with a low importance.
-Packet logging is only enabled in DEBUG builds.
+You should also consider adding an ILogProvider to the server with LogProvider.RegisterProvider.
+Included in Craft.Net is ConsoleLogWriter, and FileLogWriter, which output logs to the command
+line or a file, respectively. Craft.Net logs messages with a given LogImportance. High importance
+is for things like server starting and new clients logging in. Medium importance is for things
+like chat and player deaths. Low importance is a log of all communication on the server, and
+all packets are logged with a low importance. Packet logging is only enabled in DEBUG builds.
 
 ## Building from Source
 

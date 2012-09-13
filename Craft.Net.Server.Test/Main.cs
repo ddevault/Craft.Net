@@ -26,7 +26,7 @@ namespace Craft.Net.Server.Test
             minecraftServer.Settings.OnlineMode = false;
             minecraftServer.Settings.EnableEncryption = true;
             // Add a console logger
-            LogProvider.RegisterProvider(new ConsoleLogWriter(LogImportance.High));
+            LogProvider.RegisterProvider(new ConsoleLogWriter(LogImportance.Medium));
             LogProvider.RegisterProvider(new FileLogWriter("packetLog.txt", LogImportance.Low));
             // Add a flatland world
 #if DEBUG
