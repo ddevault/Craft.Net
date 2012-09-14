@@ -51,6 +51,7 @@
     <Compile Include="DataUtilityTest.cs" />
     <Compile Include="ItemTest.cs" />
     <Compile Include="MetadataTest.cs" />
+    <Compile Include="NbtTest.cs" />
     <Compile Include="WorldTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
