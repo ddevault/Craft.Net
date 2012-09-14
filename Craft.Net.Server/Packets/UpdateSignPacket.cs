@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Craft.Net.Data;
+using Craft.Net.Data.Blocks;
 
 namespace Craft.Net.Server.Packets
 {
@@ -13,6 +14,19 @@ namespace Craft.Net.Server.Packets
         public string Text2;
         public string Text3;
         public string Text4;
+
+        public UpdateSignPacket()
+        {
+        }
+
+        public UpdateSignPacket(Vector3 position, SignTileEntity data)
+        {
+            Position = position;
+            Text1 = data.Text1;
+            Text2 = data.Text2;
+            Text3 = data.Text3;
+            Text4 = data.Text4;
+        }
 
         public override byte PacketId
         {
@@ -44,7 +58,17 @@ namespace Craft.Net.Server.Packets
 
         public override void HandlePacket(MinecraftServer server, MinecraftClient client)
         {
-            //
+            if (Position.DistanceTo(client.Entity.Position) > 6) // TODO: Client.Reach
+                return;
+            var block = client.World.GetBlock(Position);
+            if (!(block is SignBlock))
+                return;
+            var sign = (SignBlock)block;
+            sign.SignData.Text1 = Text1;
+            sign.SignData.Text2 = Text2;
+            sign.SignData.Text3 = Text3;
+            sign.SignData.Text4 = Text4;
+            client.World.SetBlock(Position, sign);
         }
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)

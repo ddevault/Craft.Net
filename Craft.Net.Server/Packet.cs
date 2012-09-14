@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using LibNbt;
 
 namespace Craft.Net.Server
 {
@@ -63,7 +64,10 @@ namespace Craft.Net.Server
             FieldInfo[] fields = type.GetFields();
             foreach (FieldInfo field in fields)
             {
-                value += "\t" + field.Name + ": " + field.GetValue(this) + "\n";
+                var fieldValue = field.GetValue(this);
+                if (fieldValue is NbtFile)
+                    fieldValue = ((NbtFile)fieldValue).RootTag;
+                value += "\t" + field.Name + ": " + fieldValue + "\n";
             }
             return value.Remove(value.Length - 1);
         }

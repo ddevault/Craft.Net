@@ -158,6 +158,7 @@
     <Compile Include="Blocks\SandstoneStairBlock.cs" />
     <Compile Include="Blocks\SaplingBlock.cs" />
     <Compile Include="Blocks\SeedsBlock.cs" />
+    <Compile Include="Blocks\SignBlock.cs" />
     <Compile Include="Blocks\SignPostBlock.cs" />
     <Compile Include="Blocks\SilverfishStoneBlock.cs" />
     <Compile Include="Blocks\SkullBlock.cs" />

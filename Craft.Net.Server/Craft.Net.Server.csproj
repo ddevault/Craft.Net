@@ -84,6 +84,7 @@
     <Compile Include="Packets\TimeUpdatePacket.cs" />
     <Compile Include="Packets\UpdateHealthPacket.cs" />
     <Compile Include="Packets\UpdateSignPacket.cs" />
+    <Compile Include="Packets\UpdateTileEntityPacket.cs" />
     <Compile Include="Packets\UseBedPacket.cs" />
     <Compile Include="Packets\UseEntityPacket.cs" />
     <Compile Include="PluginChannel.cs" />

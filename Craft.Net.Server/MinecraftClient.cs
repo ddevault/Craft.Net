@@ -11,6 +11,7 @@ using Craft.Net.Data.Entities;
 using Org.BouncyCastle.Crypto;
 using System.Diagnostics;
 using System.Globalization;
+using Craft.Net.Data.Blocks;
 
 namespace Craft.Net.Server
 {
@@ -260,6 +261,15 @@ namespace Craft.Net.Server
             Chunk chunk = world.GetChunk(position);
             var dataPacket = new ChunkDataPacket(ref chunk);
             SendPacket(dataPacket);
+            if (chunk.TileEntities.Count != 0)
+            {
+                foreach (var tileEntity in chunk.TileEntities)
+                {
+                    Console.WriteLine("Handling tile entity: " + tileEntity.Value.GetType().Name);
+                    if (tileEntity.Value is SignTileEntity)
+                        SendPacket(new UpdateSignPacket(tileEntity.Key, tileEntity.Value as SignTileEntity));
+                }
+            }
             this.LoadedChunks.Add(position);
         }
 

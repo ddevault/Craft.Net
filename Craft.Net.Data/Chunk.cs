@@ -5,6 +5,7 @@ using LibNbt;
 using LibNbt.Tags;
 using System.Collections.Generic;
 using Craft.Net.Data.NbtSerialization;
+using System.Reflection;
 
 namespace Craft.Net.Data
 {
@@ -155,49 +156,11 @@ namespace Craft.Net.Data
             level.Tags.Add(new NbtInt("zPos", (int)AbsolutePosition.Z));
 
             // Tile Entities
-            var tileEntityList = new NbtList("TileEntity");
+            var tileEntityList = new NbtList("TileEntities");
             foreach (var tileEntity in TileEntities)
             {
                 // Get properties
-                var properties = tileEntity.Value.GetType().GetProperties().Where(p => 
-                    !p.GetCustomAttributes(typeof(NbtIgnoreAttribute), true).Any());
-                var entity = new NbtCompound();
-                entity.Tags.Add(new NbtInt("x", (int)tileEntity.Key.X));
-                entity.Tags.Add(new NbtInt("y", (int)tileEntity.Key.Y));
-                entity.Tags.Add(new NbtInt("z", (int)tileEntity.Key.Z));
-                foreach (var property in properties)
-                {
-                    var value = property.GetValue(tileEntity.Value, null);
-                    NbtTag tag = null;
-                    if (value != null) // TODO: Allow further customization from TileEntity object
-                    {
-                        if (value is byte)
-                            tag = new NbtByte(property.Name, (byte)value);
-                        else if (value is byte[])
-                            tag = new NbtByteArray(property.Name, (byte[])value);
-                        else if (value is double)
-                            tag = new NbtDouble(property.Name, (double)value);
-                        else if (value is float)
-                            tag = new NbtFloat(property.Name, (float)value);
-                        else if (value is int)
-                            tag = new NbtInt(property.Name, (int)value);
-                        else if (value is int[])
-                            tag = new NbtIntArray(property.Name, (int[])value);
-                        else if (value is long)
-                            tag = new NbtLong(property.Name, (long)value);
-                        else if (value is short)
-                            tag = new NbtShort(property.Name, (short)value);
-                        else if (value is string)
-                            tag = new NbtString(property.Name, (string)value);
-                        else
-                        {
-                            throw new SerializationException("No NBT tag sutible to handle " + tileEntity.GetType().Name +
-                                "." + property.Name);
-                        }
-                    }
-                    entity.Tags.Add(tag);
-                }
-                tileEntityList.Tags.Add(entity);
+                tileEntityList.Tags.Add(tileEntity.Value.ToNbt(tileEntity.Key));
             }
             level.Tags.Add(tileEntityList);
 
@@ -250,6 +213,16 @@ namespace Craft.Net.Data
                 // Process section
                 section.ProcessSection();
                 chunk.Sections[y] = section;
+            }
+            var tileEntities = root.Get<NbtList>("TileEntities");
+            if (tileEntities != null)
+            {
+                foreach (var tag in tileEntities.Tags)
+                {
+                    Vector3 tilePosition;
+                    var entity = TileEntity.FromNbt(tag as NbtCompound, out tilePosition);
+                    chunk.TileEntities.Add(tilePosition, entity);
+                }
             }
             return chunk;
         }

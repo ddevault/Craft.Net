@@ -31,8 +31,8 @@ namespace Craft.Net.Server.Test
             // Add a flatland world
 #if DEBUG
             // Use a fresh world each time
-            if (Directory.Exists("world"))
-                Directory.Delete("world", true);
+            //if (Directory.Exists("world"))
+            //    Directory.Delete("world", true);
 #endif
             minecraftServer.AddLevel(new Level(Path.Combine(Directory.GetCurrentDirectory(), "world")));
             // Register the chat handler
@@ -43,6 +43,7 @@ namespace Craft.Net.Server.Test
             while (Console.ReadKey(true).Key != ConsoleKey.Q) { }
             // Stop the server
             minecraftServer.Stop();
+            minecraftServer.DefaultLevel.Save();
         }
 
         static void HandleOnChatMessage(object sender, ChatMessageEventArgs e)
