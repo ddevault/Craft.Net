@@ -221,7 +221,8 @@ namespace Craft.Net.Data
                 {
                     Vector3 tilePosition;
                     var entity = TileEntity.FromNbt(tag as NbtCompound, out tilePosition);
-                    chunk.TileEntities.Add(tilePosition, entity);
+                    if (entity != null)
+                        chunk.TileEntities.Add(tilePosition, entity);
                 }
             }
             return chunk;

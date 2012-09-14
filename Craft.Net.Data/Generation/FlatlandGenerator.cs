@@ -25,6 +25,8 @@ namespace Craft.Net.Data.Generation
         public void Initialize(Level level)
         {
             GeneratorOptions = level.GeneratorOptions ?? DefaultGeneratorOptions;
+            if (string.IsNullOrEmpty(GeneratorOptions))
+                GeneratorOptions = DefaultGeneratorOptions;
             var parts = GeneratorOptions.Split(';');
             var layers = parts[1].Split(',');
             Layers = new List<GeneratorLayer>();
