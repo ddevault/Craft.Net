@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Runtime.Serialization;
 using LibNbt;
 using LibNbt.Tags;
 using System.Collections.Generic;
@@ -154,14 +155,51 @@ namespace Craft.Net.Data
             level.Tags.Add(new NbtInt("zPos", (int)AbsolutePosition.Z));
 
             // Tile Entities
-            level.Tags.Add(new NbtList("TileEntites"));
+            var tileEntityList = new NbtList("TileEntity");
             foreach (var tileEntity in TileEntities)
             {
                 // Get properties
-                var properties = tileEntity.GetType().GetProperties().Where(p => !p.GetCustomAttributes(typeof(NbtIgnoreAttribute), true).Any());
+                var properties = tileEntity.Value.GetType().GetProperties().Where(p => 
+                    !p.GetCustomAttributes(typeof(NbtIgnoreAttribute), true).Any());
+                var entity = new NbtCompound();
+                entity.Tags.Add(new NbtInt("x", (int)tileEntity.Key.X));
+                entity.Tags.Add(new NbtInt("y", (int)tileEntity.Key.Y));
+                entity.Tags.Add(new NbtInt("z", (int)tileEntity.Key.Z));
                 foreach (var property in properties)
-                    Console.WriteLine("Saving tile entity: " + property.Name);
+                {
+                    var value = property.GetValue(tileEntity.Value, null);
+                    NbtTag tag = null;
+                    if (value != null) // TODO: Allow further customization from TileEntity object
+                    {
+                        if (value is byte)
+                            tag = new NbtByte(property.Name, (byte)value);
+                        else if (value is byte[])
+                            tag = new NbtByteArray(property.Name, (byte[])value);
+                        else if (value is double)
+                            tag = new NbtDouble(property.Name, (double)value);
+                        else if (value is float)
+                            tag = new NbtFloat(property.Name, (float)value);
+                        else if (value is int)
+                            tag = new NbtInt(property.Name, (int)value);
+                        else if (value is int[])
+                            tag = new NbtIntArray(property.Name, (int[])value);
+                        else if (value is long)
+                            tag = new NbtLong(property.Name, (long)value);
+                        else if (value is short)
+                            tag = new NbtShort(property.Name, (short)value);
+                        else if (value is string)
+                            tag = new NbtString(property.Name, (string)value);
+                        else
+                        {
+                            throw new SerializationException("No NBT tag sutible to handle " + tileEntity.GetType().Name +
+                                "." + property.Name);
+                        }
+                    }
+                    entity.Tags.Add(tag);
+                }
+                tileEntityList.Tags.Add(entity);
             }
+            level.Tags.Add(tileEntityList);
 
             // Terrain Populated // TODO: When is this 0? Will vanilla use this?
             level.Tags.Add(new NbtByte("TerrainPopualted", 0));
