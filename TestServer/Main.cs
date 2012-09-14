@@ -12,7 +12,7 @@ using Craft.Net.Data.Blocks;
 using System.IO;
 using Craft.Net.Server.Packets;
 
-namespace Craft.Net.Server.Test
+namespace TestServer
 {
     class MainClass
     {

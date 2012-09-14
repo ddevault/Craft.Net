@@ -7,8 +7,8 @@
     <ProjectGuid>{15AA5096-F131-4D3C-8235-A9F0165729C0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Craft.Net.Data.Unit</RootNamespace>
-    <AssemblyName>Craft.Net.Data.Unit</AssemblyName>
+    <RootNamespace>Craft.Net.Data.Test</RootNamespace>
+    <AssemblyName>Craft.Net.Data.Test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

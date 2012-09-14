@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Server", "Craft.Net.Server\Craft.Net.Server.csproj", "{E00C6FF6-BCD8-44E0-BCD8-5F1BDF201617}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Server.Test", "Craft.Net.Server.Test\Craft.Net.Server.Test.csproj", "{A5B680AB-71B4-4EC3-B640-A5869526BAAF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestServer", "TestServer\TestServer.csproj", "{A5B680AB-71B4-4EC3-B640-A5869526BAAF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Data", "Craft.Net.Data\Craft.Net.Data.csproj", "{30C3F936-8D95-4113-BA48-8B798B056309}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Data.Unit", "Craft.Net.Data.Unit\Craft.Net.Data.Unit.csproj", "{15AA5096-F131-4D3C-8235-A9F0165729C0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Data.Test", "Craft.Net.Data.Test\Craft.Net.Data.Test.csproj", "{15AA5096-F131-4D3C-8235-A9F0165729C0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Externals", "Externals", "{59CA5728-83B9-48C5-A822-90FB20E8133E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibNbt", "externals\libnbt\LibNbt\LibNbt.csproj", "{4488498D-976D-4DA3-BF72-109531AF0488}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Server.Unit", "Craft.Net.Server.Unit\Craft.Net.Server.Unit.csproj", "{3E19A5B0-B775-45D7-8B6C-0D0244D70880}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Server.Test", "Craft.Net.Server.Test\Craft.Net.Server.Test.csproj", "{3E19A5B0-B775-45D7-8B6C-0D0244D70880}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

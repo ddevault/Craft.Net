@@ -8,7 +8,7 @@ using Craft.Net.Data.Blocks;
 using Craft.Net.Data.Generation;
 using NUnit.Framework;
 
-namespace Craft.Net.Data.Unit
+namespace Craft.Net.Data.Test
 {
     [TestFixture]
     public class WorldTest

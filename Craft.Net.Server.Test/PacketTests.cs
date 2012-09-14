@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 
-namespace Craft.Net.Server.Unit
+namespace Craft.Net.Server.Test
 {
     [TestFixture]
     public class PacketTests

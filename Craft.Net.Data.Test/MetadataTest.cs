@@ -5,7 +5,7 @@ using System.Text;
 using Craft.Net.Data.Metadata;
 using NUnit.Framework;
 
-namespace Craft.Net.Data.Unit
+namespace Craft.Net.Data.Test
 {
     [TestFixture]
     public class MetadataTest

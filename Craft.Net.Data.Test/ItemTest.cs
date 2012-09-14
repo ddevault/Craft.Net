@@ -9,7 +9,7 @@ using Craft.Net.Data.Generation;
 using Craft.Net.Data.Items;
 using NUnit.Framework;
 
-namespace Craft.Net.Data.Unit
+namespace Craft.Net.Data.Test
 {
     [TestFixture]
     public class ItemTest
