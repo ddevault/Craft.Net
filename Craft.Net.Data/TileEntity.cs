@@ -48,9 +48,9 @@ namespace Craft.Net.Data
 
         public NbtCompound ToNbt(Vector3 position)
         {
-        	var serializer = new NbtSerializer(GetType());
-        	
-        	var entity = (NbtCompound)serializer.Serialize(this);
+            var serializer = new NbtSerializer(GetType());
+            
+            var entity = (NbtCompound)serializer.Serialize(this);
             
             entity.Tags.Add(new NbtInt("x", (int)position.X));
             entity.Tags.Add(new NbtInt("y", (int)position.Y));
