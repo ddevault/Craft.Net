@@ -12,7 +12,6 @@ namespace Craft.Net.Server.Packets
     public enum TileEntityAction
     {
         MobSpawner = 1,
-        UpdateSign = 6 // Unverified
     }
 
     public class UpdateTileEntityPacket : Packet
