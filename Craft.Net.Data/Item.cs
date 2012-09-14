@@ -67,7 +67,7 @@ namespace Craft.Net.Data
             int index = GetItemIndex(u);
             if (index == -1)
                 return null;
-            return Items[index];
+            return (Item)Activator.CreateInstance(Items[index].GetType());
         }
 
         private static int GetItemIndex(ushort item)
