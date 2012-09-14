@@ -132,6 +132,16 @@ namespace Craft.Net.Data
             // TODO: Default handler to kick the entity out
         }
 
+        /// <summary>
+        /// Called when a block update occurs. Default handler will handle
+        /// common activities such as destroying blocks that lose support,
+        /// make sure you call it if you don't want to lose this functionality.
+        /// </summary>
+        public virtual void BlockUpdate(World world, Vector3 updatedBlock, Vector3 modifiedBlock)
+        {
+            // TODO: Stuff described in XML comments
+        }
+
         #endregion
     }
 }

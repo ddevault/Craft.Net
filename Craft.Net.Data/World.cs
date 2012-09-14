@@ -136,9 +136,27 @@ namespace Craft.Net.Data
             Vector3 blockPosition = FindBlockPosition(position, out chunk);
 
             chunk.SetBlock(blockPosition, value);
+            DoUpdates(position);
 
             if (OnBlockChanged != null)
                 OnBlockChanged(this, new BlockChangedEventArgs(this, position, value));
+        }
+
+        private void DoUpdates(Vector3 blockPosition)
+        {
+            if ((blockPosition + Vector3.Up).Y <= Chunk.Height)
+                GetBlock(blockPosition + Vector3.Up).BlockUpdate(this, blockPosition + Vector3.Up, blockPosition);
+
+            if ((blockPosition + Vector3.Down).Y >= 0)
+                GetBlock(blockPosition + Vector3.Down).BlockUpdate(this, blockPosition + Vector3.Down, blockPosition);
+
+            GetBlock(blockPosition + Vector3.Left).BlockUpdate(this, blockPosition + Vector3.Left, blockPosition);
+
+            GetBlock(blockPosition + Vector3.Right).BlockUpdate(this, blockPosition + Vector3.Right, blockPosition);
+
+            GetBlock(blockPosition + Vector3.Backwards).BlockUpdate(this, blockPosition + Vector3.Backwards, blockPosition);
+
+            GetBlock(blockPosition + Vector3.Forwards).BlockUpdate(this, blockPosition + Vector3.Forwards, blockPosition);
         }
 
         public void Save()
