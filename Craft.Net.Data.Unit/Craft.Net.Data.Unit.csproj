@@ -51,6 +51,7 @@
     <Compile Include="DataUtilityTest.cs" />
     <Compile Include="ItemTest.cs" />
     <Compile Include="MetadataTest.cs" />
+    <Compile Include="NbtTest.cs" />
     <Compile Include="WorldTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -58,6 +59,10 @@
     <ProjectReference Include="..\Craft.Net.Data\Craft.Net.Data.csproj">
       <Project>{30c3f936-8d95-4113-ba48-8b798b056309}</Project>
       <Name>Craft.Net.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\externals\libnbt\LibNbt\LibNbt.csproj">
+      <Project>{4488498D-976D-4DA3-BF72-109531AF0488}</Project>
+      <Name>LibNbt</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
