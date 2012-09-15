@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets

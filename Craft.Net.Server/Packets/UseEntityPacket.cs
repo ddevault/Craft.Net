@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Craft.Net.Data;
 using Craft.Net.Data.Blocks;
 using Craft.Net.Data.Entities;
@@ -16,7 +13,7 @@ namespace Craft.Net.Server.Packets
 
         public override byte PacketId
         {
-            get { return 0x7; }
+            get { return 0x07; }
         }
 
         public override int TryReadPacket(byte[] buffer, int length)
@@ -48,7 +45,7 @@ namespace Craft.Net.Server.Packets
                 if (item == null)
                     item = new AirBlock();
                 livingEntity.Damage(item.AttackDamage);
-                livingEntity.Velocity /*+*/= DataUtility.RotateY(new Vector3(0, 0, client.IsSprinting ? 10 : 3), // TODO: Knockback enchantment
+                livingEntity.Velocity /*+*/ = DataUtility.RotateY(new Vector3(0, 0, client.IsSprinting ? 10 : 3), // TODO: Knockback enchantment
                     DataUtility.DegreesToRadians(client.Entity.Yaw));                  // TODO: Physics
             }
         }

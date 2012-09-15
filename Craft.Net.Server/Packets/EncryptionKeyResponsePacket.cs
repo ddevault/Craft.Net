@@ -1,4 +1,3 @@
-using System.Linq;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Modes;
@@ -56,12 +55,11 @@ namespace Craft.Net.Server.Packets
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
             // Send packet and enable encryption
-            byte[] buffer = new[] {PacketId}.Concat(
-                DataUtility.CreateInt16((short)SharedSecret.Length)).Concat(
-                SharedSecret).Concat(
-                DataUtility.CreateInt16((short)VerifyToken.Length)).Concat(
-                VerifyToken).ToArray();
-            client.SendData(buffer);
+            client.SendData(CreateBuffer(
+                DataUtility.CreateInt16((short)SharedSecret.Length),
+                SharedSecret,
+                DataUtility.CreateInt16((short)VerifyToken.Length),
+                VerifyToken));
             client.EncryptionEnabled = true;
         }
     }

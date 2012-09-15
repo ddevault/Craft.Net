@@ -1,4 +1,3 @@
-using System.Linq;
 using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
@@ -58,10 +57,9 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
-            byte[] data = new byte[] {PacketId}
-                .Concat(DataUtility.CreateInt32(EntityId))
-                .Concat(new byte[] {(byte)Animation}).ToArray();
-            client.SendData(data);
+            client.SendData(CreateBuffer(
+                DataUtility.CreateInt32(EntityId),
+                new[] {(byte)Animation}));
         }
     }
 }

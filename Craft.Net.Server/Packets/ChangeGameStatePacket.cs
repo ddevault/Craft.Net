@@ -1,8 +1,4 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
 using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
@@ -25,7 +21,9 @@ namespace Craft.Net.Server.Packets
         {
         }
 
-        public ChangeGameStatePacket(GameState gameState) : this(gameState, GameMode.Survival) { }
+        public ChangeGameStatePacket(GameState gameState) : this(gameState, GameMode.Survival)
+        {
+        }
 
         public ChangeGameStatePacket(GameState gameState, GameMode gameMode)
         {
@@ -50,7 +48,12 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
-            byte[] payload = new byte[] { PacketId, (byte)GameState, (byte)GameMode };
+            byte[] payload = new byte[]
+            {
+                PacketId,
+                (byte)GameState,
+                (byte)GameMode
+            };
             client.SendData(payload);
         }
     }

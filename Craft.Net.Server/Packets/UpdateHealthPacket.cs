@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
@@ -24,7 +21,7 @@ namespace Craft.Net.Server.Packets
 
         public override byte PacketId
         {
-            get { return 0x8; }
+            get { return 0x08; }
         }
 
         public override int TryReadPacket(byte[] buffer, int length)
@@ -39,12 +36,10 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
-            byte[] payload = new byte[] {PacketId}
-                .Concat(DataUtility.CreateInt16(Health))
-                .Concat(DataUtility.CreateInt16(Food))
-                .Concat(DataUtility.CreateFloat(FoodSaturation))
-                .ToArray();
-            client.SendData(payload);
+            client.SendData(CreateBuffer(
+                DataUtility.CreateInt16(Health),
+                DataUtility.CreateInt16(Food),
+                DataUtility.CreateFloat(FoodSaturation)));
         }
     }
 }

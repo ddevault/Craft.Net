@@ -1,4 +1,5 @@
 using Craft.Net.Data;
+using System;
 
 namespace Craft.Net.Server.Packets
 {
@@ -10,7 +11,7 @@ namespace Craft.Net.Server.Packets
 
         public override byte PacketId
         {
-            get { return 0xB; }
+            get { return 0x0B; }
         }
 
         public override int TryReadPacket(byte[] buffer, int length)
@@ -48,6 +49,7 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
+            throw new InvalidOperationException();
         }
     }
 }

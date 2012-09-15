@@ -1,4 +1,3 @@
-using System.Linq;
 using Craft.Net.Data;
 using Craft.Net.Data.Entities;
 
@@ -30,7 +29,7 @@ namespace Craft.Net.Server.Packets
 
         public override byte PacketId
         {
-            get { return 0xD; }
+            get { return 0x0D; }
         }
 
         public override int TryReadPacket(byte[] buffer, int length)
@@ -74,15 +73,14 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
-            byte[] buffer = new[] {PacketId}
-                .Concat(DataUtility.CreateDouble(X))
-                .Concat(DataUtility.CreateDouble(Stance))
-                .Concat(DataUtility.CreateDouble(Y))
-                .Concat(DataUtility.CreateDouble(Z))
-                .Concat(DataUtility.CreateFloat(Yaw))
-                .Concat(DataUtility.CreateFloat(Pitch))
-                .Concat(DataUtility.CreateBoolean(OnGround)).ToArray();
-            client.SendData(buffer);
+            client.SendData(CreateBuffer(
+                DataUtility.CreateDouble(X),
+                DataUtility.CreateDouble(Stance),
+                DataUtility.CreateDouble(Y),
+                DataUtility.CreateDouble(Z),
+                DataUtility.CreateFloat(Yaw),
+                DataUtility.CreateFloat(Pitch),
+                DataUtility.CreateBoolean(OnGround)));
         }
     }
 }

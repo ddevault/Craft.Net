@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
@@ -44,12 +41,12 @@ namespace Craft.Net.Server.Packets
             var x = (short)(Velocity.X * 1600);
             var y = (short)(Velocity.Y * 1600);
             var z = (short)(Velocity.Z * 1600);
-            byte[] payload = new byte[] {PacketId}
-                .Concat(DataUtility.CreateInt32(EntityId))
-                .Concat(DataUtility.CreateInt16(x))
-                .Concat(DataUtility.CreateInt16(y))
-                .Concat(DataUtility.CreateInt16(z)).ToArray();
-            client.SendData(payload);
+
+            client.SendData(CreateBuffer(
+                DataUtility.CreateInt32(EntityId),
+                DataUtility.CreateInt16(x),
+                DataUtility.CreateInt16(y),
+                DataUtility.CreateInt16(z)));
         }
     }
 }

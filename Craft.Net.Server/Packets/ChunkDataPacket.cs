@@ -1,6 +1,4 @@
 using System;
-using System.IO;
-using System.Linq;
 using Craft.Net.Data;
 using Ionic.Zlib;
 
@@ -9,7 +7,21 @@ namespace Craft.Net.Server.Packets
     public class ChunkDataPacket : Packet
     {
         public static byte[] ChunkRemovalSequence =
-            new byte[] {0x78, 0x9C, 0x63, 0x64, 0x1C, 0xD9, 0x00, 0x00, 0x81, 0x80, 0x01, 0x01};
+            new byte[]
+            {
+                0x78,
+                0x9C,
+                0x63,
+                0x64,
+                0x1C,
+                0xD9,
+                0x00,
+                0x00,
+                0x81,
+                0x80,
+                0x01,
+                0x01
+            };
 
         private const int BlockDataLength = Section.Width * Section.Depth * Section.Height;
         private const int NibbleDataLength = BlockDataLength / 2;
@@ -41,7 +53,7 @@ namespace Craft.Net.Server.Packets
             int totalSections = 0;
             for (int i = 15; i >= 0; i--)
             {
-                Section s = chunk.Sections[chunkY++];
+                Section s = chunk.Sections [chunkY++];
 
                 if (s.IsAir)
                     nonAir = false;
@@ -61,7 +73,7 @@ namespace Craft.Net.Server.Packets
             // Second pass produces the arrays
             for (int i = 15; i >= 0; i--)
             {
-                Section s = chunk.Sections[chunkY++];
+                Section s = chunk.Sections [chunkY++];
 
                 if (s.IsAir)
                     nonAir = false;
@@ -83,10 +95,14 @@ namespace Craft.Net.Server.Packets
             byte[] data = new byte[blockData.Length + metadata.Length +
                 blockLight.Length + skyLight.Length + chunk.Biomes.Length];
             int index = 0;
-            Array.Copy(blockData, 0, data, index, blockData.Length); index += blockData.Length;
-            Array.Copy(metadata, 0, data, index, metadata.Length); index += metadata.Length;
-            Array.Copy(blockLight, 0, data, index, blockLight.Length); index += blockLight.Length;
-            Array.Copy(skyLight, 0, data, index, skyLight.Length); index += skyLight.Length;
+            Array.Copy(blockData, 0, data, index, blockData.Length);
+            index += blockData.Length;
+            Array.Copy(metadata, 0, data, index, metadata.Length);
+            index += metadata.Length;
+            Array.Copy(blockLight, 0, data, index, blockLight.Length);
+            index += blockLight.Length;
+            Array.Copy(skyLight, 0, data, index, skyLight.Length);
+            index += skyLight.Length;
             Array.Copy(chunk.Biomes, 0, data, index, chunk.Biomes.Length);
 
             // Compress the array
@@ -113,15 +129,14 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
-            byte[] buffer = new[] {PacketId}
-                .Concat(DataUtility.CreateInt32(X))
-                .Concat(DataUtility.CreateInt32(Z))
-                .Concat(DataUtility.CreateBoolean(GroundUpContiguous))
-                .Concat(DataUtility.CreateUInt16(PrimaryBitMap))
-                .Concat(DataUtility.CreateUInt16(AddBitMap))
-                .Concat(DataUtility.CreateInt32(CompressedData.Length))
-                .Concat(CompressedData).ToArray();
-            client.SendData(buffer);
+            client.SendData(CreateBuffer(
+                DataUtility.CreateInt32(X),
+                DataUtility.CreateInt32(Z),
+                DataUtility.CreateBoolean(GroundUpContiguous),
+                DataUtility.CreateUInt16(PrimaryBitMap),
+                DataUtility.CreateUInt16(AddBitMap),
+                DataUtility.CreateInt32(CompressedData.Length),
+                CompressedData));
         }
     }
 }

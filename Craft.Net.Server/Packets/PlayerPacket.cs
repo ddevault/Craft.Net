@@ -9,7 +9,7 @@ namespace Craft.Net.Server.Packets
 
         public override byte PacketId
         {
-            get { return 0xA; }
+            get { return 0x0A; }
         }
 
         public override int TryReadPacket(byte[] buffer, int length)

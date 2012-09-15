@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Craft.Net.Data;
+﻿using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
@@ -39,8 +38,8 @@ namespace Craft.Net.Server.Packets
         {
             if (!Reason.Contains("§"))
                 LogProvider.Log("Disconnected client: " + Reason);
-            byte[] buffer = new[] { PacketId }.Concat(DataUtility.CreateString(Reason)).ToArray();
-            client.SendData(buffer);
+
+            client.SendData(CreateBuffer(DataUtility.CreateString(Reason)));
             client.IsDisconnected = true;
         }
     }

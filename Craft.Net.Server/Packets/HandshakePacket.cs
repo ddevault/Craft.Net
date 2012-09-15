@@ -65,8 +65,7 @@ namespace Craft.Net.Server.Packets
                                                    server.ServerKey);
                 client.SendPacket(keyRequest);
                 server.ProcessSendQueue();
-            }
-            else
+            } else
                 server.LogInPlayer(client);
         }
 
@@ -77,7 +76,7 @@ namespace Craft.Net.Server.Packets
 
         private string CreateHash()
         {
-            byte[] hash = BitConverter.GetBytes(IPAddress.HostToNetworkOrder(new Random().Next()));
+            byte[] hash = DataUtility.CreateInt32(new Random().Next());
             string response = "";
             foreach (byte b in hash)
             {

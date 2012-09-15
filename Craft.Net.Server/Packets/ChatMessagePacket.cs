@@ -1,4 +1,3 @@
-using System.Linq;
 using Craft.Net.Server.Events;
 using Craft.Net.Data;
 
@@ -19,7 +18,7 @@ namespace Craft.Net.Server.Packets
 
         public override byte PacketId
         {
-            get { return 0x3; }
+            get { return 0x03; }
         }
 
         public override int TryReadPacket(byte[] buffer, int length)
@@ -41,9 +40,7 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
-            byte[] buffer = new[] {PacketId}
-                .Concat(DataUtility.CreateString(Message)).ToArray();
-            client.SendData(buffer);
+            client.SendData(CreateBuffer(DataUtility.CreateString(Message)));
         }
     }
 }

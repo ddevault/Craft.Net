@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using Craft.Net.Data;
 using LibNbt;
 using LibNbt.Tags;
@@ -53,14 +50,21 @@ namespace Craft.Net.Server.Packets
             Data.SaveFile(stream, true);
             byte[] nbt = stream.GetBuffer();
 
-            var payload = new byte[] {PacketId}
+            /*var payload = new byte[] {PacketId}
                 .Concat(DataUtility.CreateInt32((int)Position.X))
                 .Concat(DataUtility.CreateInt16((short)Position.Y))
                 .Concat(DataUtility.CreateInt32((int)Position.Z))
                 .Concat(new byte[] {(byte)Action});
             // TODO: Empty NBT (is this ever useful?)
             payload = payload.Concat(DataUtility.CreateInt16((short)nbt.Length)).Concat(nbt);
-            client.SendData(payload.ToArray());
+            client.SendData(payload.ToArray());*/
+            client.SendData(CreateBuffer(
+                DataUtility.CreateInt32((int)Position.X),
+                DataUtility.CreateInt16((short)Position.Y),
+                DataUtility.CreateInt32((int)Position.Z),
+                new[] {(byte)Action},
+                DataUtility.CreateInt16((short)nbt.Length),
+                nbt));
         }
     }
 }

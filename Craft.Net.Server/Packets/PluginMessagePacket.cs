@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Craft.Net.Data;
+﻿using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
@@ -39,16 +38,15 @@ namespace Craft.Net.Server.Packets
         public override void HandlePacket(MinecraftServer server, MinecraftClient client)
         {
             if (server.PluginChannels.ContainsKey(Channel))
-                server.PluginChannels[Channel].MessageRecieved(client, Message);
+                server.PluginChannels [Channel].MessageRecieved(client, Message);
         }
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
-            byte[] data = new[] {PacketId}
-                .Concat(DataUtility.CreateString(Channel))
-                .Concat(DataUtility.CreateInt16((short)Message.Length))
-                .Concat(Message).ToArray();
-            client.SendData(data);
+            client.SendData(CreateBuffer(
+                DataUtility.CreateString(Channel),
+                DataUtility.CreateInt16((short)Message.Length),
+                Message));
         }
     }
 }

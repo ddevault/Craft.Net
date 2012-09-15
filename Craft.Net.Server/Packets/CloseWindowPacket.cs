@@ -26,8 +26,7 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
-            var buffer = new[] {PacketId, WindowId};
-            client.SendData(buffer);
+            client.SendData(CreateBuffer(new[] {WindowId}));
         }
     }
 }
