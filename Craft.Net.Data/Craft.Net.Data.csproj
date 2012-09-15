@@ -368,6 +368,7 @@
     <Compile Include="Metadata\MetadataSlot.cs" />
     <Compile Include="Metadata\MetadataString.cs" />
     <Compile Include="Metadata\MetadataVector3.cs" />
+    <Compile Include="NbtSerialization\IgnoreOnNullAttribute.cs" />
     <Compile Include="NbtSerialization\NbtIgnoreAttribute.cs" />
     <Compile Include="NbtSerialization\NbtSerializer.cs" />
     <Compile Include="NbtSerialization\TagNameAttribute.cs" />
