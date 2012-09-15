@@ -3,13 +3,9 @@ using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
-    public class TimeUpdatePacket : Packet
+    public sealed class TimeUpdatePacket : Packet
     {
-        public long Time { get; set; }
-
-        public TimeUpdatePacket()
-        {
-        }
+        private long Time { get; set; }
 
         public TimeUpdatePacket(long time)
         {

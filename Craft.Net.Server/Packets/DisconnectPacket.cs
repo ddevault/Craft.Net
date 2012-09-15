@@ -2,13 +2,9 @@
 
 namespace Craft.Net.Server.Packets
 {
-    public class DisconnectPacket : Packet
+    public sealed class DisconnectPacket : Packet
     {
-        public string Reason;
-
-        public DisconnectPacket()
-        {
-        }
+        private string Reason;
 
         public DisconnectPacket(string reason)
         {

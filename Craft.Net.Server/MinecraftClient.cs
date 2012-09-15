@@ -2,14 +2,12 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Craft.Net.Server.Packets;
 using Craft.Net.Data;
 using Craft.Net.Data.Entities;
 using Org.BouncyCastle.Crypto;
-using System.Diagnostics;
 using System.Globalization;
 using Craft.Net.Data.Blocks;
 
@@ -278,7 +276,7 @@ namespace Craft.Net.Server
         /// </summary>
         public void UnloadChunk(Vector3 position)
         {
-            var dataPacket = new ChunkDataPacket();
+            var dataPacket = new ChunkDataPacket(); //TODO move the logic to the packet itself!
             dataPacket.AddBitMap = 0;
             dataPacket.GroundUpContiguous = true;
             dataPacket.PrimaryBitMap = 0;
@@ -310,8 +308,7 @@ namespace Craft.Net.Server
             {
                 LogProvider.Log("Client timed out");
                 IsDisconnected = true;
-            }
-            else
+            } else
             {
                 SendPacket(new KeepAlivePacket(DataUtility.Random.Next()));
                 Server.ProcessSendQueue();

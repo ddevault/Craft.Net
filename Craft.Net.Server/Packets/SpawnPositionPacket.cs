@@ -3,13 +3,9 @@ using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
-    public class SpawnPositionPacket : Packet
+    public sealed class SpawnPositionPacket : Packet
     {
-        public Vector3 SpawnPosition;
-
-        public SpawnPositionPacket()
-        {
-        }
+        private Vector3 SpawnPosition;
 
         public SpawnPositionPacket(Vector3 spawnPosition)
         {

@@ -13,14 +13,10 @@ namespace Craft.Net.Server.Packets
         Uncrouch = 105
     }
 
-    public class AnimationPacket : Packet
+    public sealed class AnimationPacket : Packet
     {
-        public Animation Animation;
-        public int EntityId;
-
-        public AnimationPacket()
-        {
-        }
+        private Animation Animation;
+        private int EntityId;
 
         public AnimationPacket(int entityId, Animation animation)
         {

@@ -3,17 +3,13 @@ using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
-    public class RespawnPacket : Packet
+    public sealed class RespawnPacket : Packet
     {
-        public Dimension Dimension { get; set; }
-        public Difficulty Difficulty { get; set; }
-        public GameMode GameMode { get; set; }
-        public short WorldHeight { get; set; }
-        public string LevelType { get; set; }
-
-        public RespawnPacket()
-        {
-        }
+        private Dimension Dimension { get; set; }
+        private Difficulty Difficulty { get; set; }
+        private GameMode GameMode { get; set; }
+        private short WorldHeight { get; set; }
+        private string LevelType { get; set; }
 
         public RespawnPacket(Dimension dimension, Difficulty difficulty, GameMode gameMode,
             string levelType)

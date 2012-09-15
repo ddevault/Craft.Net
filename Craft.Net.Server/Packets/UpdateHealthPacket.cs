@@ -3,14 +3,10 @@ using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
-    public class UpdateHealthPacket : Packet
+    public sealed class UpdateHealthPacket : Packet
     {
-        public short Health, Food;
-        public float FoodSaturation;
-
-        public UpdateHealthPacket()
-        {
-        }
+        private short Health, Food;
+        private float FoodSaturation;
 
         public UpdateHealthPacket(short health, short food, float foodSaturation)
         {

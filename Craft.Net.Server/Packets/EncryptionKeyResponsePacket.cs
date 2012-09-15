@@ -6,9 +6,9 @@ using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
-    public class EncryptionKeyResponsePacket : Packet
+    public sealed class EncryptionKeyResponsePacket : Packet
     {
-        public byte[] SharedSecret, VerifyToken;
+        private byte[] SharedSecret, VerifyToken;
 
         public EncryptionKeyResponsePacket()
         {

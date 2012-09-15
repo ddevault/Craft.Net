@@ -3,12 +3,12 @@ using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
-    public class BlockPlacementPacket : Packet
+    public sealed class BlockPlacementPacket : Packet
     {
-        public Vector3 CursorPosition;
-        public byte Direction;
-        public Slot HeldItem;
-        public Vector3 Position;
+        private Vector3 CursorPosition;
+        private byte Direction;
+        private Slot HeldItem;
+        private Vector3 Position;
 
         public override byte PacketId
         {

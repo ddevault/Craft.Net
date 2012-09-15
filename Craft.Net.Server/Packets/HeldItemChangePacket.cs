@@ -4,9 +4,9 @@ using Craft.Net.Data.Entities;
 
 namespace Craft.Net.Server.Packets
 {
-    public class HeldItemChangePacket : Packet
+    public sealed class HeldItemChangePacket : Packet
     {
-        public short SlotId;
+        private short SlotId;
 
         public override byte PacketId
         {
@@ -29,7 +29,7 @@ namespace Craft.Net.Server.Packets
                 var clients = server.EntityManager.GetKnownClients(client.Entity);
                 foreach (var _client in clients)
                     _client.SendPacket(new EntityEquipmentPacket(client.Entity.Id, EntityEquipmentSlot.HeldItem,
-                        client.Entity.Inventory[client.Entity.SelectedSlot]));
+                        client.Entity.Inventory [client.Entity.SelectedSlot]));
             }
         }
 

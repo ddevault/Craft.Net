@@ -3,13 +3,9 @@ using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
-    public class ChatMessagePacket : Packet
+    public sealed class ChatMessagePacket : Packet
     {
-        public string Message;
-
-        public ChatMessagePacket()
-        {
-        }
+        private string Message;
 
         public ChatMessagePacket(string message)
         {

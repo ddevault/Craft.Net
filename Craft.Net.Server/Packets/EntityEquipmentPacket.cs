@@ -12,18 +12,14 @@ namespace Craft.Net.Server.Packets
         Footwear = 4
     }
 
-    public class EntityEquipmentPacket : Packet
+    public sealed class EntityEquipmentPacket : Packet
     {
-        public int EntityId { get; set; }
+        private int EntityId { get; set; }
         /// <summary>
         /// Note: Zero is used for the currently held item
         /// </summary>
-        public short SlotIndex { get; set; }
-        public Slot Item { get; set; }
-
-        public EntityEquipmentPacket()
-        {
-        }
+        private short SlotIndex { get; set; }
+        private Slot Item { get; set; }
 
         public EntityEquipmentPacket(int entityId, EntityEquipmentSlot slot, Slot item)
         {

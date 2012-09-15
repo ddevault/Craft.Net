@@ -12,13 +12,13 @@ namespace Craft.Net.Server.Packets
         ShootArrow = 5
     }
 
-    public class PlayerDiggingPacket : Packet
+    public sealed class PlayerDiggingPacket : Packet
     {
-        public static double MaxDigDistance = 6;
+        private const double MaxDigDistance = 6;
 
-        public PlayerAction Action;
-        public byte Face;
-        public Vector3 Position;
+        private PlayerAction Action;
+        private byte Face;
+        private Vector3 Position;
 
         public override byte PacketId
         {

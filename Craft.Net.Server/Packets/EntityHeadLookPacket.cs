@@ -4,14 +4,10 @@ using Craft.Net.Data.Entities;
 
 namespace Craft.Net.Server.Packets
 {
-    public class EntityHeadLookPacket : Packet
+    public sealed class EntityHeadLookPacket : Packet
     {
-        public int EntityId;
-        public byte HeadYaw;
-
-        public EntityHeadLookPacket()
-        {
-        }
+        private int EntityId;
+        private byte HeadYaw;
 
         public EntityHeadLookPacket(Entity entity)
         {

@@ -3,14 +3,10 @@ using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
-    public class UseBedPacket : Packet
+    public sealed class UseBedPacket : Packet
     {
-        public Vector3 HeadboardPosition;
-        public int EntityId;
-
-        public UseBedPacket()
-        {
-        }
+        private Vector3 HeadboardPosition;
+        private int EntityId;
 
         public UseBedPacket(int entityId, Vector3 headboardPosition)
         {

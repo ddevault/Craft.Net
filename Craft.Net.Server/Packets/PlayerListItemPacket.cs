@@ -3,15 +3,11 @@ using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
-    public class PlayerListItemPacket : Packet
+    public sealed class PlayerListItemPacket : Packet
     {
-        public bool Online;
-        public short Ping;
-        public string PlayerName;
-
-        public PlayerListItemPacket()
-        {
-        }
+        private bool Online;
+        private short Ping;
+        private string PlayerName;
 
         public PlayerListItemPacket(string playerName, bool online, short ping)
         {

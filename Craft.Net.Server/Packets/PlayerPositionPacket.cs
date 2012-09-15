@@ -3,11 +3,11 @@ using System;
 
 namespace Craft.Net.Server.Packets
 {
-    public class PlayerPositionPacket : Packet
+    public sealed class PlayerPositionPacket : Packet
     {
-        public bool OnGround;
-        public double Stance;
-        public double X, Y, Z;
+        private bool OnGround;
+        private double Stance;
+        private double X, Y, Z;
 
         public override byte PacketId
         {

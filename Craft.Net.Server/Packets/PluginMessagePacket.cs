@@ -2,14 +2,10 @@
 
 namespace Craft.Net.Server.Packets
 {
-    public class PluginMessagePacket : Packet
+    public sealed class PluginMessagePacket : Packet
     {
-        public string Channel;
-        public byte[] Message;
-
-        public PluginMessagePacket()
-        {
-        }
+        private string Channel;
+        private byte[] Message;
 
         public PluginMessagePacket(string channel, byte[] message)
         {
