@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2010
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Server", "Craft.Net.Server\Craft.Net.Server.csproj", "{E00C6FF6-BCD8-44E0-BCD8-5F1BDF201617}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestServer", "TestServer\TestServer.csproj", "{A5B680AB-71B4-4EC3-B640-A5869526BAAF}"
@@ -51,6 +51,9 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{4488498D-976D-4DA3-BF72-109531AF0488} = {59CA5728-83B9-48C5-A822-90FB20E8133E}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Craft.Net.Server.Test\Craft.Net.Server.Test.csproj

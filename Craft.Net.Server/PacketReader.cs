@@ -144,7 +144,7 @@ namespace Craft.Net.Server
                 null, // 0x81
                 typeof(UpdateSignPacket), // 0x82
                 null, // 0x83
-                null, // 0x84
+                typeof(UpdateTileEntityPacket), // 0x84
                 null, // 0x85
                 null, // 0x86
                 null, // 0x87

@@ -46,6 +46,7 @@ namespace Craft.Net.Data.Test
         public void TestSaveRegion()
         {
             Region region = new Region(Vector3.Zero, new FlatlandGenerator(), "r.0.0.mca");
+            region.WorldGenerator.Initialize(null);
             region.GetChunk(Vector3.Zero);
             region.SetBlock(Vector3.Zero, new GoldBlock());
             region.Save();

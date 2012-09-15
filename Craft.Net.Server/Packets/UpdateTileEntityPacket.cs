@@ -50,14 +50,7 @@ namespace Craft.Net.Server.Packets
             Data.SaveFile(stream, true);
             byte[] nbt = stream.GetBuffer();
 
-            /*var payload = new byte[] {PacketId}
-                .Concat(DataUtility.CreateInt32((int)Position.X))
-                .Concat(DataUtility.CreateInt16((short)Position.Y))
-                .Concat(DataUtility.CreateInt32((int)Position.Z))
-                .Concat(new byte[] {(byte)Action});
             // TODO: Empty NBT (is this ever useful?)
-            payload = payload.Concat(DataUtility.CreateInt16((short)nbt.Length)).Concat(nbt);
-            client.SendData(payload.ToArray());*/
             client.SendData(CreateBuffer(
                 DataUtility.CreateInt32((int)Position.X),
                 DataUtility.CreateInt16((short)Position.Y),
