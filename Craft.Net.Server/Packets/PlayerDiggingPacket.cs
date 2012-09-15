@@ -52,7 +52,7 @@ namespace Craft.Net.Server.Packets
                 switch (Action)
                 {
                     case PlayerAction.StartedDigging:
-                        if (client.Entity.GameMode == GameMode.Creative)
+                        if (client.Entity.Abilities.InstantMine)
                             client.World.SetBlock(Position, new AirBlock());
                         break;
                     case PlayerAction.FinishedDigging:

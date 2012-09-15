@@ -372,6 +372,7 @@
     <Compile Include="NbtSerialization\NbtSerializer.cs" />
     <Compile Include="NbtSerialization\TagNameAttribute.cs" />
     <Compile Include="NibbleArray.cs" />
+    <Compile Include="PlayerAbilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Region.cs" />
     <Compile Include="Section.cs" />

@@ -106,6 +106,12 @@ namespace TestServer
                         e.Origin.Entity.Velocity = velocity;
                         e.Origin.SendChat(e.Origin.Entity.Yaw.ToString(CultureInfo.InvariantCulture));
                         break;
+                    case "flying":
+                        e.Origin.Entity.Abilities.MayFly = !e.Origin.Entity.Abilities.MayFly;
+                        break;
+                    case "instantmine":
+                        e.Origin.Entity.Abilities.InstantMine = !e.Origin.Entity.Abilities.InstantMine;
+                        break;
                 }
             }
         }

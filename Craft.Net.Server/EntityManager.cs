@@ -44,6 +44,7 @@ namespace Craft.Net.Server
                 if (entity is PlayerEntity)
                 {
                     // Isolate the client being spawned
+                    (entity as PlayerEntity).Abilities.PropertyChanged += PlayerAbilitiesChanged; 
                     var client = clients.First(c => c.Entity == entity);
                     client.Entity.BedStateChanged += EntityOnUpdateBedState;
                     client.Entity.BedTimerExpired += EntityOnBedTimerExpired;
@@ -264,6 +265,13 @@ namespace Craft.Net.Server
                 player.SpawnPoint = player.BedPosition;
             }
             server.ProcessSendQueue();
+        }
+
+        private void PlayerAbilitiesChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            var entity = (PlayerEntity)sender;
+            var client = GetClient(entity);
+            client.SendPacket(new PlayerAbilitiesPacket(entity.Abilities));
         }
 
         #region Utility methods

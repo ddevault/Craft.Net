@@ -20,6 +20,7 @@ namespace Craft.Net.Data.Entities
             BedPosition = -Vector3.One;
             Health = 20;
             Food = 20;
+            Abilities = new PlayerAbilities(this);
         }
 
         #region Constants
@@ -33,6 +34,8 @@ namespace Craft.Net.Data.Entities
         #endregion
 
         #region Properties
+
+        #region Constants
 
         public override Size Size
         {
@@ -58,6 +61,10 @@ namespace Craft.Net.Data.Entities
         {
             get { return 0.6; }
         }
+
+        #endregion
+
+        #region Food & XP
 
         public short Food
         {
@@ -119,6 +126,8 @@ namespace Craft.Net.Data.Entities
             }
         }
 
+        #endregion
+
         public string Username { get; set; }
         /// <summary>
         /// The client's current inventory.
@@ -158,6 +167,22 @@ namespace Craft.Net.Data.Entities
             set
             {
                 gameMode = value;
+                Abilities.FirePropertyChanged = false;
+                if (value == GameMode.Creative)
+                {
+                    Abilities.InstantMine = false;
+                    Abilities.Invulnerable = false;
+                    Abilities.MayFly = false;
+                    Abilities.IsFlying = false;
+                }
+                else
+                {
+                    Abilities.InstantMine = true;
+                    Abilities.Invulnerable = true;
+                    Abilities.MayFly = true;
+                    Abilities.IsFlying = true;
+                }
+                Abilities.FirePropertyChanged = true;
                 OnPropertyChanged("GameMode");
             }
         }
@@ -172,9 +197,11 @@ namespace Craft.Net.Data.Entities
             }
         }
 
+        public PlayerAbilities Abilities { get; set; }
+
         public override bool Invulnerable
         {
-            get { return gameMode == GameMode.Creative; }
+            get { return Abilities.Invulnerable; }
         }
 
         private Timer bedUseTimer;

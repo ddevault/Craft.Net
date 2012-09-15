@@ -3,17 +3,15 @@ namespace Craft.Net.Server.Packets
 {
     public class PlayerAbilitiesPacket : Packet
     {
-        public byte FlyingSpeed;
-        public byte WalkingSpeed;
+        public PlayerAbilities Abilities;
 
         public PlayerAbilitiesPacket()
         {
         }
 
-        public PlayerAbilitiesPacket(byte walkingSpeed, byte flyingSpeed)
+        public PlayerAbilitiesPacket(PlayerAbilities abilities)
         {
-            this.WalkingSpeed = walkingSpeed;
-            this.FlyingSpeed = flyingSpeed;
+            Abilities = abilities;
         }
 
         public override byte PacketId
@@ -24,24 +22,39 @@ namespace Craft.Net.Server.Packets
         public override int TryReadPacket(byte[] buffer, int length)
         {
             byte flags = 0;
+            byte walkingSpeed, flyingSpeed;
             int offset = 1;
             if (!DataUtility.TryReadByte(buffer, ref offset, out flags))
                 return -1;
-            if (!DataUtility.TryReadByte(buffer, ref offset, out WalkingSpeed))
+            if (!DataUtility.TryReadByte(buffer, ref offset, out walkingSpeed))
                 return -1;
-            if (!DataUtility.TryReadByte(buffer, ref offset, out FlyingSpeed))
+            if (!DataUtility.TryReadByte(buffer, ref offset, out flyingSpeed))
                 return -1;
+            Abilities = new PlayerAbilities(null);
+            Abilities.WalkingSpeed = walkingSpeed;
+            Abilities.FlyingSpeed = flyingSpeed;
+            Abilities.Invulnerable = (flags & 1) == 1;
+            Abilities.IsFlying = (flags & 2) == 1;
+            Abilities.MayFly = (flags & 4) == 1;
+            Abilities.InstantMine = (flags & 8) == 1;
             return offset;
         }
 
         public override void HandlePacket(MinecraftServer server, MinecraftClient client)
         {
-            // TODO
+            client.Entity.Abilities.IsFlying = Abilities.IsFlying;
         }
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
-            // TODO
+            client.SendData(CreateBuffer(
+                new[] { (byte)(
+                        (Abilities.Invulnerable ? 1 : 0) | 
+                        (Abilities.IsFlying ? 2 : 0) | 
+                        (Abilities.MayFly? 4 : 0) | 
+                        (Abilities.InstantMine ? 8 : 0)
+                        ), Abilities.WalkingSpeed, Abilities.FlyingSpeed }
+                ));
         }
     }
 }

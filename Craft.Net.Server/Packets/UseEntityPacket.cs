@@ -40,6 +40,8 @@ namespace Craft.Net.Server.Packets
             {
                 // Do damage
                 var livingEntity = target as LivingEntity;
+                if (livingEntity.Invulnerable)
+                    return;
 
                 var item = client.Entity.SelectedItem.Item;
                 if (item == null)
