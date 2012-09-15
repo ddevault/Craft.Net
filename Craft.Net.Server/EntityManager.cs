@@ -24,6 +24,8 @@ namespace Craft.Net.Server
             this.server = server;
         }
 
+        #region Public entity management
+
         public void SpawnEntity(World world, Entity entity)
         {
             entity.Id = nextEntityId++;
@@ -55,120 +57,14 @@ namespace Craft.Net.Server
             server.ProcessSendQueue();
         }
 
-        private void EntityDamaged(object sender, EntityDamageEventArgs entityDamageEventArgs)
-        {
-            var entity = (LivingEntity)sender;
-            var clients = GetKnownClients(entity);
-            foreach (var minecraftClient in clients)
-                minecraftClient.SendPacket(new EntityStatusPacket(entity.Id, EntityStatus.Hurt));
-            server.ProcessSendQueue();
-        }
-
-        private void EntityOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
-        {
-            // Handles changes in entity properties
-            var entity = sender as Entity;
-            var clients = GetKnownClients(entity);
-            if (entity is PlayerEntity)
-            {
-                var player = entity as PlayerEntity;
-                var client = GetClient(player);
-                switch (propertyChangedEventArgs.PropertyName)
-                {
-                    case "Health":
-                    case "Food":
-                    case "FoodSaturation":
-                        client.SendPacket(new UpdateHealthPacket(player.Health, player.Food, player.FoodSaturation));
-                        if (player.Health <= 0)
-                            KillEntity(player);
-                        break;
-                    case "SpawnPoint":
-                        client.SendPacket(new SpawnPositionPacket(player.SpawnPoint));
-                        break;
-                    case "GameMode":
-                        client.SendPacket(new ChangeGameStatePacket(GameState.ChangeGameMode, client.Entity.GameMode));
-                        break;
-                    case "Velocity":
-                        client.SendPacket(new EntityVelocityPacket(player.Id, player.Velocity));
-                        foreach (var knownClient in clients)
-                            knownClient.SendPacket(new EntityVelocityPacket(player.Id, player.Velocity));
-                        break;
-                }
-            }
-        }
-
         public void TeleportEntity(Entity entity, Vector3 position)
         {
             var clients = GetKnownClients(entity);
             if (entity is PlayerEntity)
-                clients = clients.Concat(new MinecraftClient[] {GetClient(entity as PlayerEntity)});
+                clients = clients.Concat(new MinecraftClient[] { GetClient(entity as PlayerEntity) });
             entity.Position = position;
             foreach (var client in clients)
                 client.SendPacket(new EntityTeleportPacket(entity));
-        }
-
-        private void EntityOnBedTimerExpired(object sender, EventArgs eventArgs)
-        {
-            var player = sender as PlayerEntity;
-            var world = GetEntityWorld(player);
-            var clients = GetClientsInWorld(world);
-            foreach (var minecraftClient in clients)
-            {
-                if (minecraftClient.Entity.BedPosition == -Vector3.One)
-                    return;
-            }
-            var level = server.GetLevel(world);
-            level.Time = 0;
-            foreach (var minecraftClient in clients)
-            {
-                minecraftClient.SendPacket(new AnimationPacket(minecraftClient.Entity.Id, Animation.LeaveBed));
-                foreach (var client in GetKnownClients(minecraftClient.Entity))
-                    client.SendPacket(new AnimationPacket(minecraftClient.Entity.Id, Animation.LeaveBed));
-                minecraftClient.SendPacket(new TimeUpdatePacket(level.Time));
-                minecraftClient.Entity.BedPosition = -Vector3.One;
-            }
-            server.ProcessSendQueue();
-        }
-
-        private void EntityOnUpdateBedState(object sender, EventArgs eventArgs)
-        {
-            var player = sender as PlayerEntity;
-            var clients = GetKnownClients(player);
-            if (player.BedPosition == -Vector3.One)
-            {
-                // Leave bed
-                GetClient(player).SendPacket(new AnimationPacket(player.Id, Animation.LeaveBed));
-                foreach (var minecraftClient in clients)
-                    minecraftClient.SendPacket(new AnimationPacket(player.Id, Animation.LeaveBed));
-            }
-            else
-            {
-                if (server.GetLevel(GetEntityWorld(player)).Time % 24000 < 12000)
-                {
-                    GetClient(player).SendChat("You can only sleep at night.");
-                    return;
-                }
-                // Enter bed
-                GetClient(player).SendPacket(new UseBedPacket(player.Id, player.BedPosition));
-                foreach (var minecraftClient in clients)
-                    minecraftClient.SendPacket(new UseBedPacket(player.Id, player.BedPosition));
-                player.SpawnPoint = player.BedPosition;
-            }
-            server.ProcessSendQueue();
-        }
-
-        public void SendClientEntities(MinecraftClient client)
-        {
-            var world = GetEntityWorld(client.Entity);
-            var clients = GetClientsInWorld(world)
-                .Where(c => !c.IsDisconnected && c.Entity.Position.DistanceTo(client.Entity.Position) < 
-                    (c.ViewDistance * Chunk.Width) && c != client);
-            foreach (var _client in clients)
-            {
-                client.KnownEntities.Add(_client.Entity.Id);
-                client.SendPacket(new SpawnNamedEntityPacket(_client));
-                client.SendPacket(new EntityEquipmentPacket(_client.Entity.Id, EntityEquipmentSlot.HeldItem, _client.Entity.Inventory[_client.Entity.SelectedSlot]));
-            }
         }
 
         public void DespawnEntity(Entity entity)
@@ -201,10 +97,10 @@ namespace Craft.Net.Server
         public void KillEntity(LivingEntity entity)
         {
             entity.DeathAnimationComplete += (sender, args) =>
-                {
-                    if (entity.Health <= 0)
-                        DespawnEntity(entity);
-                };
+            {
+                if (entity.Health <= 0)
+                    DespawnEntity(entity);
+            };
             entity.Kill();
             foreach (var client in GetKnownClients(entity))
                 client.SendPacket(new EntityStatusPacket(entity.Id, EntityStatus.Dead));
@@ -258,6 +154,120 @@ namespace Craft.Net.Server
             }
         }
 
+        /// <summary>
+        /// Calculates which entities the client should be aware
+        /// of, and sends them.
+        /// </summary>
+        public void SendClientEntities(MinecraftClient client)
+        {
+            var world = GetEntityWorld(client.Entity);
+            var clients = GetClientsInWorld(world)
+                .Where(c => !c.IsDisconnected && c.Entity.Position.DistanceTo(client.Entity.Position) <
+                    (c.ViewDistance * Chunk.Width) && c != client);
+            foreach (var _client in clients)
+            {
+                client.KnownEntities.Add(_client.Entity.Id);
+                client.SendPacket(new SpawnNamedEntityPacket(_client));
+                client.SendPacket(new EntityEquipmentPacket(_client.Entity.Id, EntityEquipmentSlot.HeldItem, _client.Entity.Inventory[_client.Entity.SelectedSlot]));
+            }
+        }
+
+        #endregion
+
+        private void EntityDamaged(object sender, EntityDamageEventArgs entityDamageEventArgs)
+        {
+            var entity = (LivingEntity)sender;
+            var clients = GetKnownClients(entity);
+            foreach (var minecraftClient in clients)
+                minecraftClient.SendPacket(new EntityStatusPacket(entity.Id, EntityStatus.Hurt));
+            server.ProcessSendQueue();
+        }
+
+        private void EntityOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            // Handles changes in entity properties
+            var entity = sender as Entity;
+            var clients = GetKnownClients(entity);
+            if (entity is PlayerEntity)
+            {
+                var player = entity as PlayerEntity;
+                var client = GetClient(player);
+                switch (propertyChangedEventArgs.PropertyName)
+                {
+                    case "Health":
+                    case "Food":
+                    case "FoodSaturation":
+                        client.SendPacket(new UpdateHealthPacket(player.Health, player.Food, player.FoodSaturation));
+                        if (player.Health <= 0)
+                            KillEntity(player);
+                        break;
+                    case "SpawnPoint":
+                        client.SendPacket(new SpawnPositionPacket(player.SpawnPoint));
+                        break;
+                    case "GameMode":
+                        client.SendPacket(new ChangeGameStatePacket(GameState.ChangeGameMode, client.Entity.GameMode));
+                        break;
+                    case "Velocity":
+                        client.SendPacket(new EntityVelocityPacket(player.Id, player.Velocity));
+                        foreach (var knownClient in clients)
+                            knownClient.SendPacket(new EntityVelocityPacket(player.Id, player.Velocity));
+                        break;
+                }
+            }
+        }
+
+        private void EntityOnBedTimerExpired(object sender, EventArgs eventArgs)
+        {
+            var player = sender as PlayerEntity;
+            var world = GetEntityWorld(player);
+            var clients = GetClientsInWorld(world);
+            foreach (var minecraftClient in clients)
+            {
+                if (minecraftClient.Entity.BedPosition == -Vector3.One)
+                    return;
+            }
+            var level = server.GetLevel(world);
+            level.Time = 0;
+            foreach (var minecraftClient in clients)
+            {
+                minecraftClient.SendPacket(new AnimationPacket(minecraftClient.Entity.Id, Animation.LeaveBed));
+                foreach (var client in GetKnownClients(minecraftClient.Entity))
+                    client.SendPacket(new AnimationPacket(minecraftClient.Entity.Id, Animation.LeaveBed));
+                minecraftClient.SendPacket(new TimeUpdatePacket(level.Time));
+                minecraftClient.Entity.BedPosition = -Vector3.One;
+            }
+            server.ProcessSendQueue();
+        }
+
+        private void EntityOnUpdateBedState(object sender, EventArgs eventArgs)
+        {
+            var player = sender as PlayerEntity;
+            var clients = GetKnownClients(player);
+            if (player.BedPosition == -Vector3.One)
+            {
+                // Leave bed
+                GetClient(player).SendPacket(new AnimationPacket(player.Id, Animation.LeaveBed));
+                foreach (var minecraftClient in clients)
+                    minecraftClient.SendPacket(new AnimationPacket(player.Id, Animation.LeaveBed));
+            }
+            else
+            {
+                if (server.GetLevel(GetEntityWorld(player)).Time % 24000 < 12000)
+                {
+                    GetClient(player).SendChat("You can only sleep at night.");
+                    return;
+                }
+                // Enter bed
+                GetClient(player).SendPacket(new UseBedPacket(player.Id, player.BedPosition));
+                foreach (var minecraftClient in clients)
+                    minecraftClient.SendPacket(new UseBedPacket(player.Id, player.BedPosition));
+                player.SpawnPoint = player.BedPosition;
+            }
+            server.ProcessSendQueue();
+        }
+
+        #region Utility methods
+
         public IEnumerable<MinecraftClient> GetKnownClients(Entity entity)
         {
             return GetClientsInWorld(GetEntityWorld(entity)).Where(c => c.KnownEntities.Contains(entity.Id));
@@ -294,5 +304,7 @@ namespace Craft.Net.Server
             }
             return null;
         }
+
+        #endregion
     }
 }

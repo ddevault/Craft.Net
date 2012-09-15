@@ -190,6 +190,10 @@ namespace Craft.Net.Data.Entities
         private Vector3 spawnPoint;
 
         public event EventHandler BedStateChanged, BedTimerExpired;
+        /// <summary>
+        /// Note: Only fired when the inventory is changed via SetSlot.
+        /// </summary>
+        public event EventHandler<InventoryChangedEventArgs> InventoryChanged;
 
         #endregion
 
@@ -212,8 +216,6 @@ namespace Craft.Net.Data.Entities
             if (BedStateChanged != null)
                 BedStateChanged(this, null);
         }
-
-        public event EventHandler<InventoryChangedEventArgs> InventoryChanged;
 
         public void LeaveBed()
         {

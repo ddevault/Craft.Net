@@ -80,39 +80,39 @@ namespace Craft.Net.Data.Entities
             }
         }
 
-        private float _Pitch;
+        private float pitch;
         public float OldPitch { get; set; }
         public float Pitch
         {
             get
             {
-                return _Pitch;
+                return pitch;
             }
             set
             {
-                OldPitch = _Pitch;
-                _Pitch = value;
+                OldPitch = pitch;
+                pitch = value;
                 OnPropertyChanged("Pitch");
             }
         }
 
-        private float _Yaw;
         private Dimension dimension;
         private bool onGround;
         private int fire;
         private Vector3 position;
         private Vector3 velocity;
+        private float yaw;
         public float OldYaw { get; set; }
         public float Yaw
         {
             get
             {
-                return _Yaw;
+                return yaw;
             }
             set
             {
-                OldYaw = _Yaw;
-                _Yaw = value;
+                OldYaw = yaw;
+                yaw = value;
                 OnPropertyChanged("Yaw");
             }
         }
