@@ -24,6 +24,8 @@ namespace Craft.Net.Data.NbtSerialization
         {
             if (value is byte)
                 return new NbtByte("", (byte)value);
+            if (value is bool)
+                return new NbtByte("", (byte)((bool)value ? 1 : 0));
             else if (value is byte[])
                 return new NbtByteArray("", (byte[])value);
             else if (value is double)
@@ -42,11 +44,15 @@ namespace Craft.Net.Data.NbtSerialization
                 return new NbtString("", (string)value);
             else
             {
-            	
+
                 var compound = new NbtCompound();
-                
+               
                 if(value == null) return compound;
-                
+                var nameAttributes = Attribute.GetCustomAttributes(value.GetType(), typeof(TagNameAttribute));
+
+                if (nameAttributes.Length > 0)
+                    compound.Name = ((TagNameAttribute)nameAttributes[0]).Name;
+
                 var properties = Type.GetProperties().Where(p =>
                     !Attribute.GetCustomAttributes(p, typeof(NbtIgnoreAttribute)).Any());
                 
@@ -58,7 +64,8 @@ namespace Craft.Net.Data.NbtSerialization
                     NbtTag tag = null;
                     
                     string name = property.Name;
-                    var nameAttributes = Attribute.GetCustomAttributes(property, typeof(TagNameAttribute));
+                    nameAttributes = Attribute.GetCustomAttributes(property, typeof(TagNameAttribute));
+                    var ignoreOnNullAttribute = Attribute.GetCustomAttribute(property, typeof(IgnoreOnNullAttribute));
                     if (nameAttributes.Length != 0)
                         name = ((TagNameAttribute)nameAttributes[0]).Name;
                     
@@ -67,6 +74,7 @@ namespace Craft.Net.Data.NbtSerialization
                     
                     if(propValue == null)
                     {
+                        if (ignoreOnNullAttribute != null) continue;
                     	if(property.PropertyType.IsValueType)
                     	{
                     		propValue = Activator.CreateInstance(property.PropertyType);
@@ -116,10 +124,17 @@ namespace Craft.Net.Data.NbtSerialization
                         continue;
                     string name = property.Name;
                     var nameAttributes = Attribute.GetCustomAttributes(property, typeof(TagNameAttribute));
+
                     if (nameAttributes.Length != 0)
                         name = ((TagNameAttribute)nameAttributes[0]).Name;
                     var node = compound.Tags.SingleOrDefault(a => a.Name == name);
+                    if (node == null) continue;
                     var data = new NbtSerializer(property.PropertyType).Deserialize(node);
+
+                    if (property.PropertyType == typeof(bool)
+                        && data is byte)
+                        data = (byte)data == 1;
+
                     property.SetValue(resultObject, data, null);
                 }
                 

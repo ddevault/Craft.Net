@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Craft.Net.Data.NbtSerialization
 {
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Class)]
     public class TagNameAttribute : Attribute
     {
         public string Name { get; set; }

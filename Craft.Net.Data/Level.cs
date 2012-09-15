@@ -9,6 +9,7 @@ using Craft.Net.Data.Entities;
 using Craft.Net.Data.Generation;
 using LibNbt;
 using LibNbt.Tags;
+using Craft.Net.Data.NbtSerialization;
 
 namespace Craft.Net.Data
 {
@@ -130,28 +131,27 @@ namespace Craft.Net.Data
         public void Save()
         {
             NbtFile file = new NbtFile();
-            NbtCompound data = new NbtCompound("Data");
-            data.Tags.Add(new NbtByte("raining", (byte)(Raining ? 1 : 0)));
-            data.Tags.Add(new NbtInt("generatorVersion", 0)); // TODO
-            data.Tags.Add(new NbtLong("Time", Time));
-            data.Tags.Add(new NbtInt("GameType", (int)GameMode));
-            data.Tags.Add(new NbtByte("MapFeatures", (byte)(MapFeatures ? 1 : 0))); // TODO: Move to world generator
-            data.Tags.Add(new NbtString("generatorName", WorldGenerator.GeneratorName));
-            data.Tags.Add(new NbtByte("initialized", 1));
-            data.Tags.Add(new NbtByte("hardcore", 0)); // TODO
-            data.Tags.Add(new NbtLong("RandomSeed", Seed));
-            data.Tags.Add(new NbtInt("SpawnX", (int)SpawnPoint.X));
-            data.Tags.Add(new NbtInt("SpawnY", (int)SpawnPoint.Y));
-            data.Tags.Add(new NbtInt("SpawnZ", (int)SpawnPoint.Z));
-            data.Tags.Add(new NbtLong("SizeOnDisk", 0));
-            data.Tags.Add(new NbtInt("thunderTime", ThunderTime));
-            data.Tags.Add(new NbtInt("rainTime", RainTime));
-            data.Tags.Add(new NbtInt("version", 19133));
-            data.Tags.Add(new NbtByte("thundering", (byte)(Thundering ? 1 : 0)));
-            data.Tags.Add(new NbtString("LevelName", Name));
-            data.Tags.Add(new NbtLong("LastPlayed", DateTime.UtcNow.Ticks));
-            if (GeneratorOptions != null)
-                data.Tags.Add(new NbtString("generatorOptions", GeneratorOptions));
+
+            var serializer = new NbtSerializer(typeof(SavedLevel));
+            var data = serializer.Serialize(new SavedLevel
+            {
+                IsRaining = Raining,
+                GeneratorVersion = 0,
+                Time = Time,
+                GameMode = (int)GameMode,
+                MapFeatures = MapFeatures,
+                GeneratorName =WorldGenerator.GeneratorName,
+                Initialized = true,
+                Seed = Seed,
+                SpawnPoint = SpawnPoint,
+                SizeOnDisk = 0,
+                ThunderTime = ThunderTime,
+               RainTime = RainTime,
+               Version = 19133,
+               Thundering = Thundering,
+               LevelName = Name,
+               LastPlayed = DateTime.UtcNow.Ticks
+            });
             file.RootTag = new NbtCompound();
             file.RootTag.Tags.Add(data);
             using (var stream = File.Open(Path.Combine(LevelDirectory, "level.dat"), FileMode.Create))
@@ -182,25 +182,24 @@ namespace Craft.Net.Data
                 file.LoadFile(stream, true);
             // TODO: Gracefully handle missing tags
             var data = file.RootTag.Get<NbtCompound>("Data");
-            Name = data.Get<NbtString>("LevelName").Value;
-            Time = data.Get<NbtLong>("Time").Value;
-            GameMode = (GameMode)data.Get<NbtInt>("GameType").Value;
-            MapFeatures = data.Get<NbtByte>("MapFeatures").Value == 1;
-            Seed = data.Get<NbtLong>("RandomSeed").Value;
+
+            var serializer = new NbtSerializer(typeof(SavedLevel));
+            SavedLevel level = (SavedLevel)serializer.Deserialize(data);
+
+            Name = level.LevelName;
+            Time = level.Time;
+            GameMode = (GameMode)level.GameMode;
+            MapFeatures = level.MapFeatures;
+            Seed = level.Seed;
 
             // Find world generator
-            string generatorName = data.Get<NbtString>("generatorName").Value;
+            string generatorName = level.GeneratorName;
             WorldGenerator = GetGenerator(generatorName);
             WorldGenerator.Seed = Seed;
-            if (data.Get<NbtString>("generatorOptions") != null)
-                GeneratorOptions = data.Get<NbtString>("generatorOptions").Value;
+                GeneratorOptions = level.GeneratorOptions;
             WorldGenerator.Initialize(this);
 
-            int x, y, z;
-            x = data.Get<NbtInt>("SpawnX").Value;
-            y = data.Get<NbtInt>("SpawnY").Value;
-            z = data.Get<NbtInt>("SpawnZ").Value;
-            SpawnPoint = new Vector3(x, y, z);
+            SpawnPoint = level.SpawnPoint;
 
             World = new World(WorldGenerator, Path.Combine(directory, "region"));
         }

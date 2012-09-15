@@ -368,6 +368,7 @@
     <Compile Include="Metadata\MetadataSlot.cs" />
     <Compile Include="Metadata\MetadataString.cs" />
     <Compile Include="Metadata\MetadataVector3.cs" />
+    <Compile Include="NbtSerialization\IgnoreOnNullAttribute.cs" />
     <Compile Include="NbtSerialization\NbtIgnoreAttribute.cs" />
     <Compile Include="NbtSerialization\NbtSerializer.cs" />
     <Compile Include="NbtSerialization\TagNameAttribute.cs" />
@@ -375,6 +376,7 @@
     <Compile Include="PlayerAbilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Region.cs" />
+    <Compile Include="SavedLevel.cs" />
     <Compile Include="Section.cs" />
     <Compile Include="Size.cs" />
     <Compile Include="Slot.cs" />
