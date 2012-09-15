@@ -31,7 +31,6 @@ namespace Craft.Net.Server.Packets
                 return;
             client.Entity.Pitch = Pitch;
             client.Entity.Yaw = Yaw;
-            server.EntityManager.UpdateEntity(client.Entity);
         }
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)

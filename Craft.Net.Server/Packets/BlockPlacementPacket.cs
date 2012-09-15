@@ -49,16 +49,12 @@ namespace Craft.Net.Server.Packets
             var item = client.Entity.Inventory [client.Entity.SelectedSlot];
             if (item != null && item.Id == 0xFFFF)
                 item.Id = 0;
-            if (item != null)
+            if (item != null && item.Item != null)
             {
                 item.Item.OnItemUsed(client.World, Position, AdjustByDirection(Direction), CursorPosition, client.Entity);
 
                 if (client.Entity.GameMode != GameMode.Creative)
                     client.Entity.Inventory [client.Entity.SelectedSlot].Count--;
-            } else
-            {
-                client.SendPacket(new DisconnectPacket("Unrecognized item!"));
-                server.ProcessSendQueue();
             }
         }
 

@@ -52,6 +52,9 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{4488498D-976D-4DA3-BF72-109531AF0488} = {59CA5728-83B9-48C5-A822-90FB20E8133E}
 	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Craft.Net.Server.Test\Craft.Net.Server.Test.csproj
 	EndGlobalSection

@@ -34,9 +34,9 @@ namespace Craft.Net.Server.Packets
             Abilities.WalkingSpeed = walkingSpeed;
             Abilities.FlyingSpeed = flyingSpeed;
             Abilities.Invulnerable = (flags & 1) == 1;
-            Abilities.IsFlying = (flags & 2) == 1;
-            Abilities.MayFly = (flags & 4) == 1;
-            Abilities.InstantMine = (flags & 8) == 1;
+            Abilities.IsFlying = (flags & 2) == 2;
+            Abilities.MayFly = (flags & 4) == 4;
+            Abilities.InstantMine = (flags & 8) == 8;
             return offset;
         }
 

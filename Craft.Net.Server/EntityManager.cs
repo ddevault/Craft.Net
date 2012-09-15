@@ -107,54 +107,6 @@ namespace Craft.Net.Server
                 client.SendPacket(new EntityStatusPacket(entity.Id, EntityStatus.Dead));
         }
 
-        public void UpdateEntity(Entity entity)
-        {
-            if (!server.Levels.Any(l => l.World.Entities.Contains(entity)))
-                return;
-            var world = GetEntityWorld(entity);
-            var flooredPosition = entity.Position.Floor();
-
-            // check for walked on blocks
-            if (flooredPosition.Y == entity.Position.Y && entity.OldPosition.Floor() != entity.OldPosition)
-            {
-                if ((flooredPosition + Vector3.Down).Y >= 0 && (flooredPosition + Vector3.Down).Y <= Chunk.Height)
-                {
-                    var blockOn = world.GetBlock(flooredPosition + Vector3.Down);
-                    blockOn.OnBlockWalkedOn(world, flooredPosition + Vector3.Down, entity);
-                }
-            }
-
-            if ((int)(entity.Position.X) != (int)(entity.OldPosition.X) ||
-                (int)(entity.Position.Y) != (int)(entity.OldPosition.Y) ||
-                (int)(entity.Position.Z) != (int)(entity.OldPosition.Z))
-            {
-                if (flooredPosition.Y >= 0 && flooredPosition.Y <= Chunk.Height)
-                {
-                    var blockIn = world.GetBlock(flooredPosition);
-                    blockIn.OnBlockWalkedIn(world, flooredPosition, entity);
-                }
-            }
-
-            // Update location with known clients
-            if (entity.Position.DistanceTo(entity.OldPosition) > 0.1d ||
-                entity.Pitch != entity.OldPitch || entity.Yaw != entity.OldYaw)
-            {
-                var knownClients = GetClientsInWorld(world).Where(c => c.KnownEntities.Contains(entity.Id));
-                foreach (var client in knownClients)
-                {
-                    client.SendPacket(new EntityTeleportPacket(entity));
-                    if (entity.Yaw != entity.OldYaw)
-                        client.SendPacket(new EntityHeadLookPacket(entity));
-                    // TODO: Further research into relative movement
-                    // When relative movement packets are used, the remote
-                    // clients inevitably see each other in a very inaccurate
-                    // position.
-                }
-                server.ProcessSendQueue();
-                entity.OldPosition = entity.Position;
-            }
-        }
-
         /// <summary>
         /// Calculates which entities the client should be aware
         /// of, and sends them.
@@ -201,19 +153,34 @@ namespace Craft.Net.Server
                         client.SendPacket(new UpdateHealthPacket(player.Health, player.Food, player.FoodSaturation));
                         if (player.Health <= 0)
                             KillEntity(player);
-                        break;
+                        return;
                     case "SpawnPoint":
                         client.SendPacket(new SpawnPositionPacket(player.SpawnPoint));
-                        break;
+                        return;
                     case "GameMode":
                         client.SendPacket(new ChangeGameStatePacket(GameState.ChangeGameMode, client.Entity.GameMode));
-                        break;
+                        client.SendPacket(new PlayerAbilitiesPacket(player.Abilities));
+                        return;
                     case "Velocity":
                         client.SendPacket(new EntityVelocityPacket(player.Id, player.Velocity));
                         foreach (var knownClient in clients)
                             knownClient.SendPacket(new EntityVelocityPacket(player.Id, player.Velocity));
-                        break;
+                        return;
+                    case "GivenPosition":
+                        UpdateGivenPosition(player);
+                        return;
                 }
+            }
+            switch (propertyChangedEventArgs.PropertyName)
+            {
+                case "Position":
+                    UpdateEntityPosition(entity);
+                    break;
+                case "Pitch":
+                case "Yaw":
+                case "HeadLook":
+                    UpdateEntityLook(entity);
+                    break;
             }
         }
 
@@ -269,9 +236,57 @@ namespace Craft.Net.Server
 
         private void PlayerAbilitiesChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
+            if (propertyChangedEventArgs.PropertyName == "IsFlying")
+                return;
             var entity = (PlayerEntity)sender;
             var client = GetClient(entity);
             client.SendPacket(new PlayerAbilitiesPacket(entity.Abilities));
+        }
+
+        private void UpdateGivenPosition(PlayerEntity entity)
+        {
+            // Used to update a player's position based on the one provided by
+            // the client.
+            entity.Position = entity.GivenPosition;
+        }
+
+        private void UpdateEntityPosition(Entity entity)
+        {
+            var clients = GetKnownClients(entity);
+            if (entity is LivingEntity)
+            {
+                var world = GetEntityWorld(entity);
+                var flooredPosition = entity.Position.Floor();
+
+                // check for walked on blocks
+                if (flooredPosition.Y == entity.Position.Y && entity.OldPosition.Floor() != entity.OldPosition)
+                {
+                    if ((flooredPosition + Vector3.Down).Y >= 0 && (flooredPosition + Vector3.Down).Y <= Chunk.Height)
+                    {
+                        var blockOn = world.GetBlock(flooredPosition + Vector3.Down);
+                        blockOn.OnBlockWalkedOn(world, flooredPosition + Vector3.Down, entity);
+                    }
+                }
+                if ((int)(entity.Position.X) != (int)(entity.OldPosition.X) ||
+                    (int)(entity.Position.Y) != (int)(entity.OldPosition.Y) ||
+                    (int)(entity.Position.Z) != (int)(entity.OldPosition.Z))
+                {
+                    if (flooredPosition.Y >= 0 && flooredPosition.Y <= Chunk.Height)
+                    {
+                        var blockIn = world.GetBlock(flooredPosition);
+                        blockIn.OnBlockWalkedIn(world, flooredPosition, entity);
+                    }
+                }
+            }
+            foreach (var client in clients)
+                client.SendPacket(new EntityTeleportPacket(entity));
+        }
+
+        private void UpdateEntityLook(Entity entity)
+        {
+            var clients = GetKnownClients(entity);
+            foreach (var client in clients)
+                client.SendPacket(new EntityHeadLookPacket(entity));
         }
 
         #region Utility methods

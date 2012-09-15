@@ -59,16 +59,8 @@ namespace Craft.Net.Server.Packets
             client.Entity.Position = new Vector3(X, Y, Z);
             client.Entity.Pitch = Pitch;
             client.Entity.Yaw = Yaw;
-            if (client.Entity.Position.DistanceTo(client.Entity.OldPosition) >
-                client.MaxMoveDistance)
-            {
-                client.SendPacket(new DisconnectPacket("Hacking: You moved too fast!"));
-                server.ProcessSendQueue();
-                return;
-            }
             client.UpdateChunksAsync();
             server.ProcessSendQueue();
-            server.EntityManager.UpdateEntity(client.Entity);
         }
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)

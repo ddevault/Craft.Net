@@ -12,17 +12,20 @@ namespace Craft.Net.Data.Entities
         }
 
         public int Id { get; set; }
+        public Vector3 OldPosition { get; set; }
+        public DateTime LastPositionUpdate { get; set; }
         public Vector3 Position
         {
             get { return position; }
             set
             {
+                OldPosition = position;
+                LastPositionUpdate = DateTime.Now;
                 position = value;
                 OnPropertyChanged("Position");
             }
         }
 
-        public Vector3 OldPosition { get; set; }
         /// <summary>
         /// In meters per tick
         /// </summary>

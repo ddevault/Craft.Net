@@ -17,6 +17,8 @@ namespace Craft.Net.Data
             Invulnerable = false;
             InstantMine = false;
             FirePropertyChanged = true;
+            WalkingSpeed = 12;
+            FlyingSpeed = 25;
             PlayerEntity = entity;
         }
 
@@ -24,6 +26,8 @@ namespace Craft.Net.Data
         private bool mayFly;
         private bool invulnerable;
         private bool instantMine;
+        private byte flyingSpeed;
+        private byte walkingSpeed;
 
         public bool IsFlying
         {
@@ -65,8 +69,26 @@ namespace Craft.Net.Data
             }
         }
 
-        public byte FlyingSpeed { get; set; } // TODO
-        public byte WalkingSpeed { get; set; } // TODO
+        public byte FlyingSpeed
+        {
+            get { return flyingSpeed; }
+            set
+            {
+                flyingSpeed = value;
+                OnPropertyChanged("FlyingSpeed");
+            }
+        }
+
+        public byte WalkingSpeed
+        {
+            get { return walkingSpeed; }
+            set
+            {
+                walkingSpeed = value;
+                OnPropertyChanged("WalkingSpeed");
+            }
+        }
+
         private PlayerEntity PlayerEntity { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -79,6 +101,18 @@ namespace Craft.Net.Data
                 return;
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null) handler(PlayerEntity, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("IsFlying: " + IsFlying);
+            sb.Append(", MayFly: " + MayFly);
+            sb.Append(", Invulnerable: " + Invulnerable);
+            sb.Append(", InstantMine: " + InstantMine);
+            sb.Append(", WalkingSpeed: " + WalkingSpeed);
+            sb.Append(", FlyingSpeed: " + FlyingSpeed);
+            return sb.ToString();
         }
     }
 }

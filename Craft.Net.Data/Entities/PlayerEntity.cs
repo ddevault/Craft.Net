@@ -170,17 +170,16 @@ namespace Craft.Net.Data.Entities
                 Abilities.FirePropertyChanged = false;
                 if (value == GameMode.Creative)
                 {
+                    Abilities.InstantMine = true;
+                    Abilities.Invulnerable = true;
+                    Abilities.MayFly = true;
+                }
+                else
+                {
                     Abilities.InstantMine = false;
                     Abilities.Invulnerable = false;
                     Abilities.MayFly = false;
                     Abilities.IsFlying = false;
-                }
-                else
-                {
-                    Abilities.InstantMine = true;
-                    Abilities.Invulnerable = true;
-                    Abilities.MayFly = true;
-                    Abilities.IsFlying = true;
                 }
                 Abilities.FirePropertyChanged = true;
                 OnPropertyChanged("GameMode");
@@ -204,6 +203,21 @@ namespace Craft.Net.Data.Entities
             get { return Abilities.Invulnerable; }
         }
 
+        /// <summary>
+        /// The position provided by the client.
+        /// </summary>
+        public Vector3 GivenPosition
+        {
+            get { return givenPosition; }
+            set
+            {
+                givenPosition = value;
+                LastGivenPositionUpdate = DateTime.Now;
+                OnPropertyChanged("GivenPosition");
+            }
+        }
+        public DateTime LastGivenPositionUpdate { get; set; }
+
         private Timer bedUseTimer;
         private short food;
         private float foodSaturation;
@@ -215,6 +229,7 @@ namespace Craft.Net.Data.Entities
         private Vector3 bedPosition;
         private short selectedSlot;
         private Vector3 spawnPoint;
+        private Vector3 givenPosition;
 
         public event EventHandler BedStateChanged, BedTimerExpired;
         /// <summary>

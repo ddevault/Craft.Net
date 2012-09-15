@@ -146,11 +146,11 @@ namespace Craft.Net.Data
                 SpawnPoint = SpawnPoint,
                 SizeOnDisk = 0,
                 ThunderTime = ThunderTime,
-               RainTime = RainTime,
-               Version = 19133,
-               Thundering = Thundering,
-               LevelName = Name,
-               LastPlayed = DateTime.UtcNow.Ticks
+                RainTime = RainTime,
+                Version = 19133,
+                Thundering = Thundering,
+                LevelName = Name,
+                LastPlayed = DateTime.UtcNow.Ticks
             });
             file.RootTag = new NbtCompound();
             file.RootTag.Tags.Add(data);
@@ -180,18 +180,14 @@ namespace Craft.Net.Data
             NbtFile file = new NbtFile();
             using (var stream = File.Open(Path.Combine(LevelDirectory, "level.dat"), FileMode.Open))
                 file.LoadFile(stream, true);
-            // TODO: Gracefully handle missing tags
             var data = file.RootTag.Get<NbtCompound>("Data");
-
             var serializer = new NbtSerializer(typeof(SavedLevel));
             SavedLevel level = (SavedLevel)serializer.Deserialize(data);
-
             Name = level.LevelName;
             Time = level.Time;
             GameMode = (GameMode)level.GameMode;
             MapFeatures = level.MapFeatures;
             Seed = level.Seed;
-
             // Find world generator
             string generatorName = level.GeneratorName;
             WorldGenerator = GetGenerator(generatorName);
