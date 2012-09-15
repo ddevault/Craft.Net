@@ -1,9 +1,9 @@
 using Craft.Net.Data;
 namespace Craft.Net.Server.Packets
 {
-    public class CloseWindowPacket : Packet
+    public sealed class CloseWindowPacket : Packet
     {
-        public byte WindowId;
+        private byte WindowId;
 
         public override byte PacketId
         {

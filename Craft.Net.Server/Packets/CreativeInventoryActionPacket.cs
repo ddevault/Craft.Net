@@ -3,10 +3,10 @@ using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
-    public class CreativeInventoryActionPacket : Packet
+    public sealed class CreativeInventoryActionPacket : Packet
     {
-        public short Index;
-        public Slot Item;
+        private short Index;
+        private Slot Item;
 
         public override byte PacketId
         {
@@ -27,12 +27,12 @@ namespace Craft.Net.Server.Packets
         {
             if (Index < client.Entity.Inventory.Length && Index > 0)
             {
-                client.Entity.Inventory[Index] = Item;
+                client.Entity.Inventory [Index] = Item;
                 if (Index == client.Entity.SelectedSlot)
                 {
                     var clients = server.EntityManager.GetKnownClients(client.Entity);
                     foreach (var _client in clients)
-                        _client.SendPacket(new EntityEquipmentPacket(client.Entity.Id, EntityEquipmentSlot.HeldItem, client.Entity.Inventory[Index]));
+                        _client.SendPacket(new EntityEquipmentPacket(client.Entity.Id, EntityEquipmentSlot.HeldItem, client.Entity.Inventory [Index]));
                 }
             }
         }

@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Craft.Net.Server.Packets
 {
-    public class ServerListPingPacket : Packet
+    public sealed class ServerListPingPacket : Packet
     {
         public override byte PacketId
         {
@@ -30,8 +30,8 @@ namespace Craft.Net.Server.Packets
         public string GetPingValue(MinecraftServer server)
         {
             return server.Settings.MotD + "§" +
-                   server.Clients.Count(c => c.IsLoggedIn) + "§" +
-                   server.Settings.MaxPlayers;
+                server.Clients.Count(c => c.IsLoggedIn) + "§" +
+                server.Settings.MaxPlayers;
         }
     }
 }

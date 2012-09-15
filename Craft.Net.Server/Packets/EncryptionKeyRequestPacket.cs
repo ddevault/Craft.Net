@@ -4,14 +4,10 @@ using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
-    public class EncryptionKeyRequestPacket : Packet
+    public sealed class EncryptionKeyRequestPacket : Packet
     {
         private readonly string authenticationHash;
         private readonly RSAParameters serverKey;
-
-        public EncryptionKeyRequestPacket()
-        {
-        }
 
         public EncryptionKeyRequestPacket(string authenticationHash, RSAParameters serverKey)
         {

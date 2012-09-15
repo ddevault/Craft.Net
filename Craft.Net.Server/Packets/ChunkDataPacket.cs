@@ -4,9 +4,9 @@ using Ionic.Zlib;
 
 namespace Craft.Net.Server.Packets
 {
-    public class ChunkDataPacket : Packet
+    public sealed class ChunkDataPacket : Packet
     {
-        public static byte[] ChunkRemovalSequence =
+        public readonly static byte[] ChunkRemovalSequence =
             new byte[]
             {
                 0x78,
@@ -26,7 +26,7 @@ namespace Craft.Net.Server.Packets
         private const int BlockDataLength = Section.Width * Section.Depth * Section.Height;
         private const int NibbleDataLength = BlockDataLength / 2;
 
-        public ushort AddBitMap;
+        public ushort AddBitMap; //TODO after finishing TODO MinecraftClient logic-move, make them private!
         public byte[] CompressedData;
         public bool GroundUpContiguous;
         public ushort PrimaryBitMap;
@@ -34,6 +34,7 @@ namespace Craft.Net.Server.Packets
 
         public ChunkDataPacket()
         {
+
         }
 
         public ChunkDataPacket(ref Chunk chunk)

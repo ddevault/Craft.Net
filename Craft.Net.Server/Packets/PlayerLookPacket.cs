@@ -3,10 +3,10 @@ using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
-    public class PlayerLookPacket : Packet
+    public sealed class PlayerLookPacket : Packet
     {
-        public bool OnGround;
-        public float Pitch, Yaw;
+        private bool OnGround;
+        private float Pitch, Yaw;
 
         public override byte PacketId
         {

@@ -1,14 +1,10 @@
 using Craft.Net.Data;
 namespace Craft.Net.Server.Packets
 {
-    public class PlayerAbilitiesPacket : Packet
+    public sealed class PlayerAbilitiesPacket : Packet
     {
-        public byte FlyingSpeed;
-        public byte WalkingSpeed;
-
-        public PlayerAbilitiesPacket()
-        {
-        }
+        private byte FlyingSpeed;
+        private byte WalkingSpeed;
 
         public PlayerAbilitiesPacket(byte walkingSpeed, byte flyingSpeed)
         {

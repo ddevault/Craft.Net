@@ -5,12 +5,12 @@ using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
-    public class HandshakePacket : Packet
+    public sealed class HandshakePacket : Packet
     {
-        public string Hostname;
-        public int Port;
-        public byte ProtocolVersion;
-        public string Username;
+        private string Hostname;
+        private int Port;
+        private byte ProtocolVersion;
+        private string Username;
 
         public override byte PacketId
         {

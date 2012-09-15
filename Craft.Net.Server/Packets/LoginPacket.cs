@@ -2,18 +2,14 @@ using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
-    public class LoginPacket : Packet
+    public sealed class LoginPacket : Packet
     {
-        public Difficulty Difficulty;
-        public Dimension Dimension;
-        public int EntityId;
-        public GameMode GameMode;
-        public string LevelType;
-        public byte MaxPlayers;
-
-        public LoginPacket()
-        {
-        }
+        private Difficulty Difficulty;
+        private Dimension Dimension;
+        private int EntityId;
+        private GameMode GameMode;
+        private string LevelType;
+        private byte MaxPlayers;
 
         public LoginPacket(int entityId, string levelType,
                            GameMode gameMode, Dimension dimension,

@@ -3,14 +3,10 @@ using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
-    public class SpawnLightningPacket : Packet
+    public sealed class SpawnLightningPacket : Packet
     {
-        public int EntityId;
-        public Vector3 Position;
-
-        public SpawnLightningPacket()
-        {
-        }
+        private int EntityId;
+        private Vector3 Position;
 
         public SpawnLightningPacket(int entityId, Vector3 position)
         {

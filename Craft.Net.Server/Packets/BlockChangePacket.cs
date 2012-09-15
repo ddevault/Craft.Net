@@ -3,14 +3,10 @@ using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
-    public class BlockChangePacket : Packet
+    public sealed class BlockChangePacket : Packet
     {
-        public Vector3 Position;
-        public Block Value;
-
-        public BlockChangePacket()
-        {
-        }
+        private Vector3 Position;
+        private Block Value;
 
         public BlockChangePacket(Vector3 position, Block value)
         {

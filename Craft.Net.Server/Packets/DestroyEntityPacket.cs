@@ -4,13 +4,9 @@ using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
-    public class DestroyEntityPacket : Packet
+    public sealed class DestroyEntityPacket : Packet
     {
-        public int[] EntityIds;
-
-        public DestroyEntityPacket()
-        {
-        }
+        private int[] EntityIds;
 
         public DestroyEntityPacket(params int[] entities) // TODO: I don't really like this
         {

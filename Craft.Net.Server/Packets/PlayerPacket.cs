@@ -3,9 +3,9 @@ using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
-    public class PlayerPacket : Packet
+    public sealed class PlayerPacket : Packet
     {
-        public bool OnGround;
+        private bool OnGround;
 
         public override byte PacketId
         {

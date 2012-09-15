@@ -12,10 +12,10 @@ namespace Craft.Net.Server.Packets
         StopSprinting = 5
     }
 
-    public class EntityActionPacket : Packet
+    public sealed class EntityActionPacket : Packet
     {
-        public EntityAction Action;
-        public int EntityId;
+        private EntityAction Action;
+        private int EntityId;
 
         public override byte PacketId
         {

@@ -3,13 +3,9 @@ using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
-    public class KeepAlivePacket : Packet
+    public sealed class KeepAlivePacket : Packet
     {
-        public int KeepAlive;
-
-        public KeepAlivePacket()
-        {
-        }
+        private int KeepAlive;
 
         public KeepAlivePacket(int keepAlive)
         {

@@ -3,13 +3,13 @@ using Craft.Net.Data.Blocks;
 
 namespace Craft.Net.Server.Packets
 {
-    public class UpdateSignPacket : Packet
+    public sealed class UpdateSignPacket : Packet
     {
-        public Vector3 Position;
-        public string Text1;
-        public string Text2;
-        public string Text3;
-        public string Text4;
+        private Vector3 Position;
+        private string Text1;
+        private string Text2;
+        private string Text3;
+        private string Text4;
 
         public UpdateSignPacket()
         {

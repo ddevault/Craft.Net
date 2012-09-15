@@ -11,13 +11,13 @@ namespace Craft.Net.Server.Packets
         Enabled = 0
     }
 
-    public class LocaleAndViewDistancePacket : Packet
+    public sealed class LocaleAndViewDistancePacket : Packet
     {
-        public ChatMode ChatMode;
-        public bool ColorsEnabled;
-        public Difficulty Difficulty;
-        public string Locale;
-        public int ViewDistance;
+        private ChatMode ChatMode;
+        private bool ColorsEnabled;
+        private Difficulty Difficulty;
+        private string Locale;
+        private int ViewDistance;
 
         public override byte PacketId
         {
@@ -52,8 +52,7 @@ namespace Craft.Net.Server.Packets
             try
             {
                 client.Locale = CultureInfo.GetCultureInfo(Locale.Replace("_", "-"));
-            }
-            catch
+            } catch
             {
                 client.Locale = CultureInfo.InvariantCulture;
             }

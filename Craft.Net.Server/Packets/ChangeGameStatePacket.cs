@@ -12,18 +12,10 @@ namespace Craft.Net.Server.Packets
         EnterCredits = 4
     }
 
-    public class ChangeGameStatePacket : Packet
+    public sealed class ChangeGameStatePacket : Packet
     {
-        public GameState GameState;
-        public GameMode GameMode;
-
-        public ChangeGameStatePacket()
-        {
-        }
-
-        public ChangeGameStatePacket(GameState gameState) : this(gameState, GameMode.Survival)
-        {
-        }
+        private GameState GameState;
+        private GameMode GameMode;
 
         public ChangeGameStatePacket(GameState gameState, GameMode gameMode)
         {

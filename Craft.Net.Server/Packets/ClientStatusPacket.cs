@@ -15,11 +15,11 @@ namespace Craft.Net.Server.Packets
         Respawn = 1
     }
 
-    public class ClientStatusPacket : Packet
+    public sealed class ClientStatusPacket : Packet
     {
         private const string sessionCheckUri = "http://session.minecraft.net/game/checkserver.jsp?user={0}&serverId={1}";
 
-        public ClientStatus ClientStatus;
+        private ClientStatus ClientStatus;
 
         public override byte PacketId
         {

@@ -20,14 +20,10 @@ namespace Craft.Net.Server.Packets
         SheepEating = 10
     }
 
-    public class EntityStatusPacket : Packet
+    public sealed class EntityStatusPacket : Packet
     {
-        public int EntityId;
-        public EntityStatus Status;
-
-        public EntityStatusPacket()
-        {
-        }
+        private int EntityId;
+        private EntityStatus Status;
 
         public EntityStatusPacket(int entityId, EntityStatus status)
         {

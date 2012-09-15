@@ -3,14 +3,10 @@ using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
-    public class EntityVelocityPacket : Packet
+    public sealed class EntityVelocityPacket : Packet
     {
-        public int EntityId { get; set; }
-        public Vector3 Velocity { get; set; }
-
-        public EntityVelocityPacket()
-        {
-        }
+        private int EntityId { get; set; }
+        private Vector3 Velocity { get; set; }
 
         /// <summary>
         /// Velocity is measured in blocks per second.

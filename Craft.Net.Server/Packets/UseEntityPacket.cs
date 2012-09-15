@@ -5,11 +5,11 @@ using Craft.Net.Data.Entities;
 
 namespace Craft.Net.Server.Packets
 {
-    public class UseEntityPacket : Packet
+    public sealed class UseEntityPacket : Packet
     {
-        public int UserId;
-        public int TargetId;
-        public bool LeftClick;
+        private int UserId;
+        private int TargetId;
+        private bool LeftClick;
 
         public override byte PacketId
         {

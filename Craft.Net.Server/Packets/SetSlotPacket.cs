@@ -3,15 +3,11 @@ using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
-    public class SetSlotPacket : Packet
+    public sealed class SetSlotPacket : Packet
     {
-        public byte WindowId;
-        public short Index;
-        public Slot Slot;
-
-        public SetSlotPacket()
-        {
-        }
+        private byte WindowId;
+        private short Index;
+        private Slot Slot;
 
         public SetSlotPacket(byte windowId, short index, Slot slot)
         {

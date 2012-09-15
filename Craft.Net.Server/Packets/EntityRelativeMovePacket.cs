@@ -4,14 +4,10 @@ using Craft.Net.Data.Entities;
 
 namespace Craft.Net.Server.Packets
 {
-    public class EntityRelativeMovePacket : Packet
+    public sealed class EntityRelativeMovePacket : Packet
     {
-        public int EntityId;
-        public sbyte DeltaX, DeltaY, DeltaZ;
-
-        public EntityRelativeMovePacket()
-        {
-        }
+        private int EntityId;
+        private sbyte DeltaX, DeltaY, DeltaZ;
 
         public EntityRelativeMovePacket(Entity entity)
         {

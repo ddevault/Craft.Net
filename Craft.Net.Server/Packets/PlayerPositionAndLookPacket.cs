@@ -3,18 +3,14 @@ using Craft.Net.Data.Entities;
 
 namespace Craft.Net.Server.Packets
 {
-    public class PlayerPositionAndLookPacket : Packet
+    public sealed class PlayerPositionAndLookPacket : Packet
     {
-        public bool OnGround;
-        public float Pitch;
-        public double Stance;
-        public double X, Y;
-        public float Yaw;
-        public double Z;
-
-        public PlayerPositionAndLookPacket()
-        {
-        }
+        private bool OnGround;
+        private float Pitch;
+        private double Stance;
+        private double X, Y;
+        private float Yaw;
+        private double Z;
 
         public PlayerPositionAndLookPacket(Vector3 position, float yaw, float pitch, bool onGround)
         {

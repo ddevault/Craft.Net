@@ -4,19 +4,15 @@ using Craft.Net.Data.Metadata;
 
 namespace Craft.Net.Server.Packets
 {
-    public class SpawnNamedEntityPacket : Packet
+    public sealed class SpawnNamedEntityPacket : Packet
     {
-        public short CurrentItem;
-        public int EntityId;
-        public float Pitch;
-        public string PlayerName;
-        public Vector3 Position;
-        public float Yaw;
-        public MetadataDictionary Metadata;
-
-        public SpawnNamedEntityPacket()
-        {
-        }
+        private short CurrentItem;
+        private int EntityId;
+        private float Pitch;
+        private string PlayerName;
+        private Vector3 Position;
+        private float Yaw;
+        private MetadataDictionary Metadata;
 
         public SpawnNamedEntityPacket(MinecraftClient client)
         {

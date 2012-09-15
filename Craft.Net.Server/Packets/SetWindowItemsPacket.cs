@@ -14,14 +14,10 @@ namespace Craft.Net.Server.Packets
         EnchantmentTable = 4
     }
 
-    public class SetWindowItemsPacket : Packet
+    public sealed class SetWindowItemsPacket : Packet
     {
-        public byte WindowId { get; set; }
-        public Slot[] Slots { get; set; }
-
-        public SetWindowItemsPacket()
-        {
-        }
+        private byte WindowId { get; set; }
+        private Slot[] Slots { get; set; }
 
         public SetWindowItemsPacket(byte windowId, Slot[] slots)
         {

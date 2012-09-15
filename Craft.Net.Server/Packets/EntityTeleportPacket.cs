@@ -4,15 +4,11 @@ using Craft.Net.Data.Entities;
 
 namespace Craft.Net.Server.Packets
 {
-    public class EntityTeleportPacket : Packet
+    public sealed class EntityTeleportPacket : Packet
     {
-        public int EntityId;
-        public Vector3 Position;
-        public float Yaw, Pitch;
-
-        public EntityTeleportPacket()
-        {
-        }
+        private int EntityId;
+        private Vector3 Position;
+        private float Yaw, Pitch;
 
         public EntityTeleportPacket(Entity entity)
         {

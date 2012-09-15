@@ -11,15 +11,11 @@ namespace Craft.Net.Server.Packets
         MobSpawner = 1,
     }
 
-    public class UpdateTileEntityPacket : Packet
+    public sealed class UpdateTileEntityPacket : Packet
     {
-        public Vector3 Position;
-        public TileEntityAction Action;
-        public NbtFile Data;
-
-        public UpdateTileEntityPacket()
-        {
-        }
+        private Vector3 Position;
+        private TileEntityAction Action;
+        private NbtFile Data;
 
         public UpdateTileEntityPacket(Vector3 position, TileEntityAction action, NbtCompound data)
         {
