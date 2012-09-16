@@ -7,6 +7,7 @@ using System.Threading;
 using Craft.Net.Data;
 using Craft.Net.Data.Entities;
 using Craft.Net.Data.Events;
+using Craft.Net.Data.Windows;
 using Craft.Net.Server.Packets;
 
 namespace Craft.Net.Server
@@ -45,6 +46,7 @@ namespace Craft.Net.Server
                 {
                     // Isolate the client being spawned
                     (entity as PlayerEntity).Abilities.PropertyChanged += PlayerAbilitiesChanged; 
+                    (entity as PlayerEntity).Inventory.WindowChange += PlayerInventoryChange; 
                     var client = clients.First(c => c.Entity == entity);
                     client.Entity.BedStateChanged += EntityOnUpdateBedState;
                     client.Entity.BedTimerExpired += EntityOnBedTimerExpired;
@@ -241,6 +243,39 @@ namespace Craft.Net.Server
             var entity = (PlayerEntity)sender;
             var client = GetClient(entity);
             client.SendPacket(new PlayerAbilitiesPacket(entity.Abilities));
+        }
+
+        private void PlayerInventoryChange(object sender, WindowChangeEventArgs windowChangeEventArgs)
+        {
+            var window = (Window)sender;
+            if (windowChangeEventArgs.SlotIndex >= InventoryWindow.ArmorIndex &&
+                windowChangeEventArgs.SlotIndex < InventoryWindow.ArmorIndex + 4)
+            {
+                // TODO: Prevent non-armor items from being used here
+                var source = server.Clients.First(c => c.Entity.Inventory == window);
+                var clients = GetKnownClients(source.Entity);
+                foreach (var client in clients)
+                {
+                    int index = windowChangeEventArgs.SlotIndex - InventoryWindow.ArmorIndex;
+                    EntityEquipmentSlot slot;
+                    switch (index)
+                    {
+                        case 0:
+                            slot = EntityEquipmentSlot.Footwear;
+                            break;
+                        case 1:
+                            slot = EntityEquipmentSlot.Pants;
+                            break;
+                        case 2:
+                            slot = EntityEquipmentSlot.Chestplate;
+                            break;
+                        default:
+                            slot = EntityEquipmentSlot.Headgear;
+                            break;
+                    }
+                    client.SendPacket(new EntityEquipmentPacket(source.Entity.Id, slot, windowChangeEventArgs.Value));
+                }
+            }
         }
 
         private void UpdateGivenPosition(PlayerEntity entity)
