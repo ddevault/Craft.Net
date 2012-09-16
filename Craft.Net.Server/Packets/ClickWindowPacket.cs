@@ -52,6 +52,11 @@ namespace Craft.Net.Server.Packets
                 window.MoveToAlternateArea(SlotIndex);
                 return;
             }
+            if (SlotIndex == -999)
+            {
+                // TODO: Throw items out of windows
+                return;
+            }
             var clickedItem = client.Entity.Inventory[SlotIndex];
             var heldItem = client.Entity.ItemInMouse;
             if (heldItem == null)
