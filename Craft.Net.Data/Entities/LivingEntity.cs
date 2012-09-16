@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using Craft.Net.Data.Events;
+using Craft.Net.Data.Windows;
 
 namespace Craft.Net.Data.Entities
 {
@@ -74,6 +75,18 @@ namespace Craft.Net.Data.Entities
             // TODO: Armor
             if (Invulnerable)
                 return;
+            if (accountForArmor)
+            {
+                var player = (PlayerEntity)this; // TODO: Fix for different kinds of mobs
+                double armorValue = 0;
+                for (int i = 0; i < 4; i++)
+                {
+                    var item = player.Inventory[InventoryWindow.ArmorIndex + i];
+                    if (!item.Empty)
+                        armorValue += (item.Item.ArmorBonus * 0.04);
+                }
+                damage = (int)(damage * (1 - armorValue));
+            }
             Health -= (short)damage;
             if (EntityDamaged != null)
                 EntityDamaged(this, new EntityDamageEventArgs(damage, Health));
