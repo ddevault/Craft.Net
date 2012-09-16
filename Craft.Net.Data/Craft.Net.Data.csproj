@@ -213,6 +213,7 @@
     <Compile Include="Generation\DebugGenerator.cs" />
     <Compile Include="Generation\FlatlandGenerator.cs" />
     <Compile Include="Generation\IWorldGenerator.cs" />
+    <Compile Include="IArmorItem.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="Items\AppleItem.cs" />
     <Compile Include="Items\ArrowItem.cs" />
@@ -338,7 +339,7 @@
     <Compile Include="Items\SkullItem.cs" />
     <Compile Include="Items\SlimeballItem.cs" />
     <Compile Include="Items\SnowballItem.cs" />
-    <Compile Include="Items\SpawnItem.cs" />
+    <Compile Include="Items\MobEggItem.cs" />
     <Compile Include="Items\SpiderEyeItem.cs" />
     <Compile Include="Items\SteakItem.cs" />
     <Compile Include="Items\StickItem.cs" />
@@ -350,6 +351,7 @@
     <Compile Include="Items\StringItem.cs" />
     <Compile Include="Items\SugarCanesItem.cs" />
     <Compile Include="Items\SugarItem.cs" />
+    <Compile Include="Items\ToolItem.cs" />
     <Compile Include="Items\WaterBucketItem.cs" />
     <Compile Include="Items\WheatItem.cs" />
     <Compile Include="Items\WoodenAxeItem.cs" />
@@ -386,6 +388,8 @@
     <Compile Include="Vector3.cs" />
     <Compile Include="Window.cs" />
     <Compile Include="WindowArea.cs" />
+    <Compile Include="Windows\ArmorWindowArea.cs" />
+    <Compile Include="Windows\CraftingWindowArea.cs" />
     <Compile Include="Windows\InventoryWindow.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>

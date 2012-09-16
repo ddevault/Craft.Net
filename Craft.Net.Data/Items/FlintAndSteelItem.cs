@@ -1,8 +1,8 @@
 using Craft.Net.Data.Blocks;
 namespace Craft.Net.Data.Items
 {
-    
-    public class FlintAndSteelItem : Item
+
+    public class FlintAndSteelItem : ToolItem
     {
         public override ushort Id
         {

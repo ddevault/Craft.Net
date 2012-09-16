@@ -11,8 +11,8 @@ namespace Craft.Net.Data.Windows
         {
             WindowAreas = new[]
                 {
-                    new WindowArea(CraftingOutputIndex, 5), // Crafting grid
-                    new WindowArea(ArmorIndex, 4), // Armor
+                    new CraftingWindowArea(CraftingOutputIndex),
+                    new ArmorWindowArea(ArmorIndex),
                     new WindowArea(MainIndex, 27), // Main inventory
                     new WindowArea(HotbarIndex, 9) // Hotbar
                 };
@@ -54,9 +54,10 @@ namespace Craft.Net.Data.Windows
 
         #endregion
 
-        protected override WindowArea GetLinkedArea(int index)
+        protected override WindowArea GetLinkedArea(int index, Slot slot)
         {
-            // TODO: Shift-click armor
+            if (!slot.Empty && slot.Item is IArmorItem && (index == 2 || index == 3))
+                return Armor;
             if (index == 0 || index == 1 || index == 3)
                 return MainInventory;
             return Hotbar;

@@ -81,9 +81,12 @@ namespace Craft.Net.Server.Packets
                 if (RightClick && ((clickedItem.Id == heldItem.Id &&
                     clickedItem.Metadata == heldItem.Metadata) || clickedItem.Empty))
                 {
-                    client.Entity.Inventory[SlotIndex] = new Slot(heldItem.Id, 
-                        (byte)(clickedItem.Count + (clickedItem.Empty ? 0 : 1)), heldItem.Metadata);
-                    client.Entity.ItemInMouse.Count--;
+                    if (!clickedItem.Empty && clickedItem.Count < clickedItem.Item.MaximumStack)
+                    {
+                        client.Entity.Inventory[SlotIndex] = new Slot(heldItem.Id,
+                            (byte)(clickedItem.Count + (clickedItem.Empty ? 0 : 1)), heldItem.Metadata);
+                        client.Entity.ItemInMouse.Count--;
+                    }
                 }
                 else
                 {

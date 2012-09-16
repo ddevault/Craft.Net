@@ -20,35 +20,13 @@ namespace Craft.Net.Data
         {
             int fromIndex = GetAreaIndex(index);
             var from = GetArea(ref index);
-            var to = GetLinkedArea(fromIndex);
             var slot = from[index];
-            int emptyIndex = -1;
-            for (int i = 0; i < to.Length; i++)
-            {
-                if (to[i].Empty && emptyIndex == -1)
-                    emptyIndex = i;
-                else if (to[i].Id == slot.Id &&
-                    to[i].Metadata == slot.Metadata &&
-                    to[i].Count < slot.Item.MaximumStack)
-                {
-                    // Merging takes precedence over empty slots
-                    emptyIndex = -1;
-                    from[index] = new Slot();
-                    if (to[i].Count + slot.Count > slot.Item.MaximumStack)
-                    {
-                        slot.Count -= (byte)(slot.Item.MaximumStack - to[i].Count);
-                        to[i].Count = slot.Item.MaximumStack;
-                        continue;
-                    }
-                    to[i].Count += slot.Count;
-                    break;
-                }
-            }
-            if (emptyIndex != -1)
-            {
-                from[index] = new Slot();
-                to[emptyIndex] = slot;
-            }
+            if (slot.Empty)
+                return;
+            var to = GetLinkedArea(fromIndex, slot);
+            int destination = to.MoveOrMergeItem(index, slot, from);
+            if (WindowChange != null && destination != -1)
+                WindowChange(this, new WindowChangeEventArgs(destination + to.StartIndex, slot));
         }
 
         /// <summary>
@@ -56,8 +34,9 @@ namespace Craft.Net.Data
         /// to determine which area links to which.
         /// </summary>
         /// <param name="index">The index of the area the item is coming from</param>
+        /// <param name="slot">The item being moved</param>
         /// <returns>The area to place the item into</returns>
-        protected abstract WindowArea GetLinkedArea(int index);
+        protected abstract WindowArea GetLinkedArea(int index, Slot slot);
 
         /// <summary>
         /// Gets the window area to handle this index and adjust index accordingly

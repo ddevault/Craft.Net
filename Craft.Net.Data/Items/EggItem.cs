@@ -10,7 +10,6 @@
 
 namespace Craft.Net.Data.Items
 {
-    
     public class EggItem : Item
     {
         public override ushort Id
@@ -19,6 +18,11 @@ namespace Craft.Net.Data.Items
             {
                 return 344;
             }
+        }
+
+        public override byte MaximumStack
+        {
+            get { return 16; }
         }
     }
 }

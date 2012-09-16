@@ -1,6 +1,6 @@
 namespace Craft.Net.Data.Items
 {
-    public class DiamondSwordItem : Item
+    public class DiamondSwordItem : ToolItem
     {
         public override ushort Id
         {

@@ -81,9 +81,14 @@ namespace Craft.Net.Data.Entities
                 double armorValue = 0;
                 for (int i = 0; i < 4; i++)
                 {
-                    var item = player.Inventory[InventoryWindow.ArmorIndex + i];
-                    if (!item.Empty)
-                        armorValue += (item.Item.ArmorBonus * 0.04);
+                    var slot = player.Inventory[InventoryWindow.ArmorIndex + i];
+                    if (!slot.Empty)
+                    {
+                        var item = slot.Item as IArmorItem;
+                        if (item == null)
+                            continue;
+                        armorValue += (item.ArmorBonus * 0.04);
+                    }
                 }
                 damage = (int)(damage * (1 - armorValue));
             }

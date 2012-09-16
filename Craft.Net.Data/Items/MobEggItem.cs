@@ -1,12 +1,12 @@
 namespace Craft.Net.Data.Items
 {
-    public class ClockItem : ToolItem
+    public class MobEggItem : Item
     {
         public override ushort Id
         {
             get
             {
-                return 347;
+                return 383;
             }
         }
     }

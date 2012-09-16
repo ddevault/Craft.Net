@@ -6,7 +6,7 @@ using Craft.Net.Data.Blocks;
 
 namespace Craft.Net.Data.Items
 {
-    public abstract class HoeItem : Item
+    public abstract class HoeItem : ToolItem
     {
         public override void OnItemUsed(World world, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entities.Entity usedBy)
         {

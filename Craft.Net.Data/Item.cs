@@ -31,22 +31,6 @@ namespace Craft.Net.Data
             get { return 1; }
         }
 
-        /// <summary>
-        /// When placed in an armor slot, the amount of protection given.
-        /// </summary>
-        public virtual int ArmorBonus
-        {
-            get { return 0; }
-        }
-
-        /// <summary>
-        /// Used to determine if this item may be placed in an armor slot.
-        /// </summary>
-        public virtual bool IsArmor
-        {
-            get { return false; }
-        }
-
         public virtual byte MaximumStack
         {
             get { return 64; }
@@ -383,7 +367,7 @@ namespace Craft.Net.Data
             new CauldronItem(),
             new EyeOfEnderItem(),
             new GlisteringMelonItem(),
-            new SpawnItem(),
+            new MobEggItem(),
             new BottleOEnchantingItem(),
             new FireChargeItem(),
             new BookAndQuillItem(),

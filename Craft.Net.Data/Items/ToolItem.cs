@@ -5,11 +5,11 @@ using System.Text;
 
 namespace Craft.Net.Data.Items
 {
-    public class CarrotOnStickItem : ToolItem
+    public abstract class ToolItem : Item
     {
-        public override ushort Id
+        public override byte MaximumStack
         {
-            get { return 398; }
+            get { return 1; }
         }
     }
 }

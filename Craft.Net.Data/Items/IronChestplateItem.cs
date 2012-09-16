@@ -1,7 +1,6 @@
 namespace Craft.Net.Data.Items
 {
-    
-    public class IronChestplateItem : Item
+    public class IronChestplateItem : ToolItem, IArmorItem
     {
         public override ushort Id
         {
@@ -11,14 +10,14 @@ namespace Craft.Net.Data.Items
             }
         }
 
-        public override bool IsArmor
-        {
-            get { return true; }
-        }
-
-        public override int ArmorBonus
+        public int ArmorBonus
         {
             get { return 6; }
+        }
+
+        public ArmorSlot ArmorSlot
+        {
+            get { return ArmorSlot.Chestplate; }
         }
     }
 }
