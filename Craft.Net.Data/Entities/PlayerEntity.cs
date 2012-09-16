@@ -71,7 +71,8 @@ namespace Craft.Net.Data.Entities
             set
             {
                 foodSaturation = value;
-                OnPropertyChanged("FoodSaturation");
+                if (value == 0)
+                    OnPropertyChanged("FoodSaturation");
             }
         }
 
