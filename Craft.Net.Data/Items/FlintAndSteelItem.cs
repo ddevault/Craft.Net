@@ -12,7 +12,7 @@ namespace Craft.Net.Data.Items
             }
         }
 
-        public override void OnItemUsed(World world, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entities.Entity usedBy)
+        public override void OnItemUsedOnBlock(World world, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entities.Entity usedBy)
         {
             // TODO: Check flammability
             if (world.GetBlock(clickedBlock + clickedSide) == 0)

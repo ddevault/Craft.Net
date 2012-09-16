@@ -20,6 +20,8 @@ namespace Craft.Net.Server
     /// </summary>
     public class MinecraftClient
     {
+        public int Reach { get { return Entity.GameMode == GameMode.Creative ? 6 : 5; }}
+
         #region Fields
 
         /// <summary>
@@ -144,7 +146,7 @@ namespace Craft.Net.Server
             ViewDistance = 3;
             ReadyToSpawn = false;
             LoadedChunks = new List<Vector3>();
-            this.Server = server;
+            Server = server;
             WalkingSpeed = 12;
             FlyingSpeed = 25;
             LastKeepAlive = DateTime.MaxValue.AddSeconds(-10);

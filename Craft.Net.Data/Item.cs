@@ -39,8 +39,18 @@ namespace Craft.Net.Data
         /// <summary>
         /// Called when this item is used by a player.
         /// </summary>
-        public virtual void OnItemUsed(World world, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entity usedBy)
+        public virtual void OnItemUsedOnBlock(World world, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entity usedBy)
         {
+        }
+
+        /// <summary>
+        /// Called when this item is used, even when a block is not targeted.
+        /// </summary>
+        public virtual void OnItemUsed(World world, Entity usedBy)
+        {
+            var player = usedBy as PlayerEntity;
+            if (player != null && player.GameMode != GameMode.Creative)
+                player.Inventory[player.SelectedSlot].Count--;
         }
 
         #region Items Conversion

@@ -17,7 +17,7 @@ namespace Craft.Net.Data.Items
             get { return 16; }
         }
 
-        public override void OnItemUsed(World world, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entities.Entity usedBy)
+        public override void OnItemUsedOnBlock(World world, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entities.Entity usedBy)
         {
             var entity = (PlayerEntity)usedBy;
             // TODO: Check for source block

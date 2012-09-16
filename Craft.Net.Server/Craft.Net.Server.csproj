@@ -107,7 +107,7 @@
     <Compile Include="Packets\AnimationPacket.cs" />
     <Compile Include="Packets\CreativeInventoryActionPacket.cs" />
     <Compile Include="Packets\CloseWindowPacket.cs" />
-    <Compile Include="Packets\BlockPlacementPacket.cs" />
+    <Compile Include="Packets\RightClickPacket.cs" />
     <Compile Include="Packets\HeldItemChangePacket.cs" />
     <Compile Include="Packets\PlayerDiggingPacket.cs" />
     <Compile Include="Packets\BlockChangePacket.cs" />

@@ -3,7 +3,7 @@ using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
-    public class BlockPlacementPacket : Packet
+    public class RightClickPacket : Packet
     {
         public Vector3 CursorPosition;
         public byte Direction;
@@ -44,17 +44,23 @@ namespace Craft.Net.Server.Packets
 
         public override void HandlePacket(MinecraftServer server, MinecraftClient client)
         {
-            if (client.Entity.Position.DistanceTo(Position) > 6) // TODO: Use client.Reach
-                return;
-            var item = client.Entity.Inventory [client.Entity.SelectedSlot];
-            if (item != null && item.Id == 0xFFFF)
-                item.Id = 0;
-            if (item != null && item.Item != null)
+            var slot = client.Entity.Inventory[client.Entity.SelectedSlot];
+            Block block = null;
+            if (Position != -Vector3.One)
             {
-                item.Item.OnItemUsed(client.World, Position, AdjustByDirection(Direction), CursorPosition, client.Entity);
-
-                if (client.Entity.GameMode != GameMode.Creative)
-                    client.Entity.Inventory [client.Entity.SelectedSlot].Count--;
+                if (Position.DistanceTo(client.Entity.Position) > client.Reach)
+                    return;
+                block = client.World.GetBlock(Position);
+            }
+            bool use = true;
+            if (block != null)
+                use = block.OnBlockRightClicked(Position, AdjustByDirection(Direction), CursorPosition, client.World, client.Entity);
+            var item = slot.Item;
+            if (use && item != null)
+            {
+                item.OnItemUsed(client.World, client.Entity);
+                if (block != null)
+                    item.OnItemUsedOnBlock(client.World, Position, AdjustByDirection(Direction), CursorPosition, client.Entity);
             }
         }
 
