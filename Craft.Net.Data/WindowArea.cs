@@ -25,5 +25,11 @@ namespace Craft.Net.Data
             get { return Items[index]; }
             set { Items[index] = value; }
         }
+
+        public void CopyTo(WindowArea area)
+        {
+            for (int i = 0; i < area.Length && i < Length; i++)
+                area[i] = this[i];
+        }
     }
 }
