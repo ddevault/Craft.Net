@@ -106,7 +106,7 @@ namespace Craft.Net.Data
             return slots;
         }
 
-        public Slot this[int index]
+        public virtual Slot this[int index]
         {
             get
             {
