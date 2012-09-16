@@ -54,7 +54,7 @@ namespace Craft.Net.Server.Packets
 
         public override void HandlePacket(MinecraftServer server, MinecraftClient client)
         {
-            if (Position.DistanceTo(client.Entity.Position) > 6) // TODO: Client.Reach
+            if (Position.DistanceTo(client.Entity.Position) > client.Reach)
                 return;
             var block = client.World.GetBlock(Position);
             if (!(block is SignBlock))

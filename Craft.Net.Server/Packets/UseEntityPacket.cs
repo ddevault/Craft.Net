@@ -33,7 +33,7 @@ namespace Craft.Net.Server.Packets
             var target = server.EntityManager.GetEntity(TargetId);
             if (target == null || 
                 server.EntityManager.GetEntityWorld(target) != server.EntityManager.GetEntityWorld(client.Entity) ||
-                target.Position.DistanceTo(client.Entity.Position) > 6) // TODO: client.Reach
+                target.Position.DistanceTo(client.Entity.Position) > client.Reach)
                 return;
 
             if (target is LivingEntity)
