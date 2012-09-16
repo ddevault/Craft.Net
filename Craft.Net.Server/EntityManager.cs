@@ -54,6 +54,13 @@ namespace Craft.Net.Server
                     clients.ToList().ForEach(c => {
                         c.SendPacket(new SpawnNamedEntityPacket(client));
                         c.SendPacket(new EntityHeadLookPacket(client.Entity));
+                        for (int i = 0; i < 4; i++)
+                        {
+                            var item = client.Entity.Inventory[InventoryWindow.ArmorIndex + i];
+                            if (!item.Empty)
+                                c.SendPacket(new EntityEquipmentPacket(client.Entity.Id,
+                                    (EntityEquipmentSlot)(4 - i), item));
+                        }
                         c.KnownEntities.Add(client.Entity.Id);
                     });
                 }
