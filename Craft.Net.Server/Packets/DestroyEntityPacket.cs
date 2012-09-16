@@ -34,10 +34,9 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
-            byte[] payload = new[] {(byte)EntityIds.Length};
+            byte[] payload = new[] { PacketId, (byte)EntityIds.Length };
             foreach (int id in EntityIds)
-                payload = payload.Concat(DataUtility.CreateInt32(id)).ToArray(); //TODO make this nicer
-
+                payload = payload.Concat(DataUtility.CreateInt32(id)).ToArray();
             client.SendData(payload);
         }
     }

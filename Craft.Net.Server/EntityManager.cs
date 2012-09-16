@@ -37,7 +37,7 @@ namespace Craft.Net.Server
             entity.PropertyChanged += EntityOnPropertyChanged;
 
             if (entity is LivingEntity)
-                (entity as LivingEntity).EntityDamaged += EntityDamaged; 
+                (entity as LivingEntity).EntityDamaged += EntityDamaged;
 
             if (clients.Count() != 0)
             {
@@ -53,6 +53,7 @@ namespace Craft.Net.Server
                     clients = clients.Where(c => c.Entity != entity);
                     clients.ToList().ForEach(c => {
                         c.SendPacket(new SpawnNamedEntityPacket(client));
+                        c.SendPacket(new EntityHeadLookPacket(client.Entity));
                         c.KnownEntities.Add(client.Entity.Id);
                     });
                 }
@@ -123,7 +124,15 @@ namespace Craft.Net.Server
             {
                 client.KnownEntities.Add(_client.Entity.Id);
                 client.SendPacket(new SpawnNamedEntityPacket(_client));
-                client.SendPacket(new EntityEquipmentPacket(_client.Entity.Id, EntityEquipmentSlot.HeldItem, _client.Entity.Inventory[_client.Entity.SelectedSlot]));
+                client.SendPacket(new EntityEquipmentPacket(_client.Entity.Id, EntityEquipmentSlot.HeldItem, 
+                    _client.Entity.Inventory[_client.Entity.SelectedSlot]));
+                for (int i = 0; i < 4; i ++)
+                {
+                    var item = _client.Entity.Inventory[InventoryWindow.ArmorIndex + i];
+                    if (!item.Empty)
+                        client.SendPacket(new EntityEquipmentPacket(_client.Entity.Id, 
+                            (EntityEquipmentSlot)(4 - i), item));
+                }
             }
         }
 
