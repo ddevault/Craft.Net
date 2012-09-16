@@ -66,7 +66,7 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
-            throw new NotImplementedException();
+            throw new InvalidOperationException();
         }
 
         private static Vector3 AdjustByDirection(byte direction)
