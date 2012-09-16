@@ -26,11 +26,17 @@ namespace Craft.Net.Data
                     emptyIndex = i;
                 else if (to[i].Id == slot.Id &&
                     to[i].Metadata == slot.Metadata &&
-                    to[i].Count + slot.Count < slot.Item.MaximumStack)
+                    to[i].Count < slot.Item.MaximumStack)
                 {
                     // Merging takes precedence over empty slots
                     emptyIndex = -1;
                     from[index] = new Slot();
+                    if (to[i].Count + slot.Count > slot.Item.MaximumStack)
+                    {
+                        slot.Count -= (byte)(slot.Item.MaximumStack - to[i].Count);
+                        to[i].Count = slot.Item.MaximumStack;
+                        continue;
+                    }
                     to[i].Count += slot.Count;
                     break;
                 }

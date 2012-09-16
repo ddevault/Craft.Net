@@ -47,7 +47,7 @@ namespace Craft.Net.Data
             get { return false; }
         }
 
-        public virtual int MaximumStack
+        public virtual byte MaximumStack
         {
             get { return 64; }
         }
