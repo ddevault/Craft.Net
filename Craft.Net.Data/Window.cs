@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Craft.Net.Data.Events;
 
 namespace Craft.Net.Data
 {
     public abstract class Window
     {
         public abstract WindowArea[] WindowAreas { get; protected set; }
+
+        public event EventHandler<WindowChangeEventArgs> WindowChange;
 
         /// <summary>
         /// Called when an item is "shift+clicked" to move it from
@@ -120,7 +123,11 @@ namespace Craft.Net.Data
                 {
                     if (index >= area.StartIndex && index < area.StartIndex + area.Length)
                     {
-                        area[index - area.StartIndex] = value;
+                        var eventArgs = new WindowChangeEventArgs(index, value);
+                        if (WindowChange != null)
+                            WindowChange(this, eventArgs);
+                        if (!eventArgs.Handled)
+                            area[index - area.StartIndex] = value;
                         return;
                     }
                 }
