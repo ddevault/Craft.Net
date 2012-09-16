@@ -14,39 +14,74 @@ namespace Craft.Net.Data
     /// <remarks></remarks>
     public class Slot
     {
+        private byte count;
+        private ushort id;
+        private ushort metadata;
+        private NbtFile nbt;
+        private int index;
+
         /// <summary>
         /// Gets or sets the item count.
         /// </summary>
         /// <value>The item count.</value>
         /// <remarks></remarks>
-        public byte Count;
+        public byte Count
+        {
+            get { return count; }
+            set
+            {
+                count = value;
+                if (count == 0)
+                {
+                    // Reset to empty slot
+                    Id = 0xFFFF;
+                    Metadata = 0;
+                }
+            }
+        }
 
         /// <summary>
         /// Gets or sets the item ID.
         /// </summary>
         /// <value>The item ID.</value>
         /// <remarks>This ID may be a block or an item.</remarks>
-        public ushort Id;
+        public ushort Id
+        {
+            get { return id; }
+            set { id = value; }
+        }
 
         /// <summary>
         /// Gets or sets the item metadata.
         /// </summary>
         /// <value>The item metadata.</value>
         /// <remarks></remarks>
-        public ushort Metadata;
+        public ushort Metadata
+        {
+            get { return metadata; }
+            set { metadata = value; }
+        }
 
         /// <summary>
         /// Gets or sets the NBT data.
         /// </summary>
         /// <value>The NBT data.</value>
         /// <remarks>This is used for enchanting equipment</remarks>
-        public NbtFile Nbt;
+        public NbtFile Nbt
+        {
+            get { return nbt; }
+            set { nbt = value; }
+        }
 
         /// <summary>
         /// Almost never set, but if provided, this will be set to the
         /// index in an inventory this slot appears.
         /// </summary>
-        public int Index;
+        public int Index
+        {
+            get { return index; }
+            set { index = value; }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Slot"/> class.
@@ -54,7 +89,7 @@ namespace Craft.Net.Data
         /// <remarks></remarks>
         public Slot()
         {
-            Id = 0;
+            Id = 0xFFFF;
             Count = 1;
             Metadata = 0;
             Nbt = new NbtFile();
@@ -143,20 +178,20 @@ namespace Craft.Net.Data
         public static bool TryReadSlot(byte[] buffer, ref int offset, out Slot slot)
         {
             slot = new Slot();
-            if (!DataUtility.TryReadUInt16(buffer, ref offset, out slot.Id))
+            if (!DataUtility.TryReadUInt16(buffer, ref offset, out slot.id))
                 return false;
             if (slot.Id == 0xFFFF)
                 return true;
-            if (!DataUtility.TryReadByte(buffer, ref offset, out slot.Count))
+            if (!DataUtility.TryReadByte(buffer, ref offset, out slot.count))
                 return false;
-            if (!DataUtility.TryReadUInt16(buffer, ref offset, out slot.Metadata))
+            if (!DataUtility.TryReadUInt16(buffer, ref offset, out slot.metadata))
                 return false;
             short length = 0;
             if (!DataUtility.TryReadInt16(buffer, ref offset, out length))
                 return false;
             if (length == -1)
                 return true;
-            var compressed = new byte[length];
+            byte[] compressed;
             if (!DataUtility.TryReadArray(buffer, length, ref offset, out compressed))
                 return false;
             if (length != -1)
@@ -203,7 +238,7 @@ namespace Craft.Net.Data
         /// <remarks></remarks>
         public byte[] GetFullData()
         {
-            byte[] data = DataUtility.CreateUInt16(Id).Concat(new[] {Count})
+            byte[] data = DataUtility.CreateUInt16(Id).Concat(new[] { Count })
                 .Concat(DataUtility.CreateUInt16(Metadata)).ToArray();
 
             var ms = new MemoryStream();
@@ -256,7 +291,7 @@ namespace Craft.Net.Data
 
         public bool Empty
         {
-            get { return Id == 0xFFFF || Id == 0; }
+            get { return Id == 0xFFFF || Id == 0 || Count == 0; }
         }
     }
 }

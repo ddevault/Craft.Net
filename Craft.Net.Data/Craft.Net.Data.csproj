@@ -383,6 +383,9 @@
     <Compile Include="TileEntity.cs" />
     <Compile Include="Transparency.cs" />
     <Compile Include="Vector3.cs" />
+    <Compile Include="Window.cs" />
+    <Compile Include="WindowArea.cs" />
+    <Compile Include="Windows\InventoryWindow.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -391,6 +394,7 @@
       <Name>LibNbt</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

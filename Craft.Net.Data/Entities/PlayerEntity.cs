@@ -2,16 +2,15 @@ using System;
 using System.ComponentModel;
 using System.Threading;
 using Craft.Net.Data.Events;
+using Craft.Net.Data.Windows;
 namespace Craft.Net.Data.Entities
 {
     public class PlayerEntity : LivingEntity
     {
         public PlayerEntity()
         {
-            Inventory = new Slot[45];
-            for (int i = 0; i < Inventory.Length; i++)
-                Inventory[i] = new Slot(0xFFFF, 0);
-            SelectedSlot = InventoryHotbar;
+            Inventory = new InventoryWindow();
+            SelectedSlot = InventoryWindow.HotbarIndex;
             bedUseTimer = new Timer(state =>
             {
                 if (BedTimerExpired != null)
@@ -22,16 +21,6 @@ namespace Craft.Net.Data.Entities
             Food = 20;
             Abilities = new PlayerAbilities(this);
         }
-
-        #region Constants
-
-        public const int InventoryHotbar = 36;
-        public const int InventoryCraftingGrid = 1;
-        public const int InventoryCraftingOutput = 0;
-        public const int InventoryArmor = 5;
-        public const int InventoryMain = 9;
-
-        #endregion
 
         #region Properties
 
@@ -132,7 +121,7 @@ namespace Craft.Net.Data.Entities
         /// <summary>
         /// The client's current inventory.
         /// </summary>
-        public Slot[] Inventory { get; set; }
+        public InventoryWindow Inventory { get; set; }
         public short SelectedSlot
         {
             get { return selectedSlot; }
@@ -197,6 +186,12 @@ namespace Craft.Net.Data.Entities
         }
 
         public PlayerAbilities Abilities { get; set; }
+
+        /// <summary>
+        /// When moving items around in a survival inventory,
+        /// this represents the item the player is holding.
+        /// </summary>
+        public Slot ItemInMouse { get; set; }
 
         public override bool Invulnerable
         {

@@ -114,11 +114,11 @@ namespace Craft.Net.Server
                 null, // 0x63
                 null, // 0x64
                 typeof(CloseWindowPacket), // 0x65
-                null, // 0x66
+                typeof(ClickWindowPacket), // 0x66
                 typeof(SetSlotPacket), // 0x67
                 typeof(SetWindowItemsPacket), // 0x68
                 null, // 0x69
-                null, // 0x6a
+                typeof(ConfirmTransactionPacket), // 0x6a
                 typeof(CreativeInventoryActionPacket), // 0x6b
                 null, // 0x6c
                 null, // 0x6d

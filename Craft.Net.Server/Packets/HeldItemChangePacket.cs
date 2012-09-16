@@ -1,6 +1,7 @@
 using System;
 using Craft.Net.Data;
 using Craft.Net.Data.Entities;
+using Craft.Net.Data.Windows;
 
 namespace Craft.Net.Server.Packets
 {
@@ -25,7 +26,7 @@ namespace Craft.Net.Server.Packets
         {
             if (SlotId < 10 && SlotId >= 0)
             {
-                client.Entity.SelectedSlot = (short)(PlayerEntity.InventoryHotbar + SlotId);
+                client.Entity.SelectedSlot = (short)(InventoryWindow.HotbarIndex + SlotId);
                 var clients = server.EntityManager.GetKnownClients(client.Entity);
                 foreach (var _client in clients)
                     _client.SendPacket(new EntityEquipmentPacket(client.Entity.Id, EntityEquipmentSlot.HeldItem,

@@ -47,6 +47,11 @@ namespace Craft.Net.Data
             get { return false; }
         }
 
+        public virtual int MaximumStack
+        {
+            get { return 64; }
+        }
+
         /// <summary>
         /// Called when this item is used by a player.
         /// </summary>

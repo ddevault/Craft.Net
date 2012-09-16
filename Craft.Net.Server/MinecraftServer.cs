@@ -265,7 +265,7 @@ namespace Craft.Net.Server
             // Send entities
             EntityManager.SendClientEntities(client);
 
-            client.SendPacket(new SetWindowItemsPacket(0, client.Entity.Inventory));
+            client.SendPacket(new SetWindowItemsPacket(0, client.Entity.Inventory.GetSlots()));
             client.SendPacket(new UpdateHealthPacket(client.Entity.Health, client.Entity.Food, client.Entity.FoodSaturation));
             client.SendPacket(new SpawnPositionPacket(client.Entity.SpawnPoint));
             client.SendPacket(new TimeUpdatePacket(DefaultLevel.Time));

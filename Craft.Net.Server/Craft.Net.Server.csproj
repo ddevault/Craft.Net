@@ -59,6 +59,8 @@
     <Compile Include="PacketReader.cs" />
     <Compile Include="Packet.cs" />
     <Compile Include="Packets\ChangeGameStatePacket.cs" />
+    <Compile Include="Packets\ClickWindowPacket.cs" />
+    <Compile Include="Packets\ConfirmTransactionPacket.cs" />
     <Compile Include="Packets\DestroyEntityPacket.cs" />
     <Compile Include="Packets\DisconnectPacket.cs" />
     <Compile Include="Packets\EntityEquipmentPacket.cs" />

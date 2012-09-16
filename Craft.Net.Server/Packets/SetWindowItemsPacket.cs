@@ -4,7 +4,7 @@ using Craft.Net.Data;
 
 namespace Craft.Net.Server.Packets
 {
-    public enum Window // TODO: Move
+    public enum WindowType
     {
         Inventory = 0,
         Chest = 0,
