@@ -7,6 +7,7 @@ using System.Threading;
 using Craft.Net.Data;
 using Craft.Net.Data.Entities;
 using Craft.Net.Data.Events;
+using Craft.Net.Data.Items;
 using Craft.Net.Data.Windows;
 using Craft.Net.Server.Packets;
 
@@ -50,6 +51,7 @@ namespace Craft.Net.Server
                     var client = clients.First(c => c.Entity == entity);
                     client.Entity.BedStateChanged += EntityOnUpdateBedState;
                     client.Entity.BedTimerExpired += EntityOnBedTimerExpired;
+                    client.Entity.StartEating += PlayerStartEating; 
                     clients = clients.Where(c => c.Entity != entity);
                     clients.ToList().ForEach(c => {
                         c.SendPacket(new SpawnNamedEntityPacket(client));
@@ -292,6 +294,33 @@ namespace Craft.Net.Server
                     client.SendPacket(new EntityEquipmentPacket(source.Entity.Id, slot, windowChangeEventArgs.Value));
                 }
             }
+        }
+
+        private void PlayerStartEating(object sender, EventArgs eventArgs)
+        {
+            var player = (PlayerEntity)sender;
+            var client = GetClient(player);
+            var slot = player.Inventory[player.SelectedSlot];
+            slot.Index = player.SelectedSlot;
+            var item = player.Inventory[player.SelectedSlot].Item as FoodItem;
+            var known = GetKnownClients(player).Concat(new[] { client });
+            var timer = new Timer(discarded =>
+                {
+                    if (player.SelectedSlot != slot.Index ||
+                        player.SelectedItem.Empty || !(player.SelectedItem.Item is FoodItem))
+                        return;
+                    client.SendPacket(new EntityStatusPacket(player.Id, EntityStatus.EatingAccepted));
+                    slot.Count--;
+                    player.SetSlot(player.SelectedSlot, slot);
+                    int food = player.Food;
+                    food += item.FoodPoints;
+                    if (food > 20) food = 0;
+                    player.Food = (short)food;
+                    float saturation = player.FoodSaturation;
+                    saturation += item.Saturation;
+                    if (saturation > food) saturation = food;
+                    player.FoodSaturation = saturation;
+                }, null, 1500, Timeout.Infinite);
         }
 
         private void UpdateGivenPosition(PlayerEntity entity)

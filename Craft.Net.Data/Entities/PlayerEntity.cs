@@ -226,7 +226,7 @@ namespace Craft.Net.Data.Entities
         private Vector3 spawnPoint;
         private Vector3 givenPosition;
 
-        public event EventHandler BedStateChanged, BedTimerExpired;
+        public event EventHandler BedStateChanged, BedTimerExpired, StartEating;
         /// <summary>
         /// Note: Only fired when the inventory is changed via SetSlot.
         /// </summary>
@@ -266,6 +266,12 @@ namespace Craft.Net.Data.Entities
             deathTimer.Change(3000, Timeout.Infinite);
             for (int i = 0; i < Inventory.Length; i++)
                 Inventory[i] = new Slot(0xFFFF, 0);
+        }
+
+        protected internal virtual void OnStartEating()
+        {
+            if (StartEating != null)
+                StartEating(this, new EventArgs());
         }
     }
 }

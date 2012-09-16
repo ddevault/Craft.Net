@@ -269,6 +269,7 @@
     <Compile Include="Items\FlintAndSteelItem.cs" />
     <Compile Include="Items\FlintItem.cs" />
     <Compile Include="Items\FlowerPotItem.cs" />
+    <Compile Include="Items\FoodItem.cs" />
     <Compile Include="Items\GhastTearItem.cs" />
     <Compile Include="Items\GlassBottleItem.cs" />
     <Compile Include="Items\GlisteringMelonItem.cs" />

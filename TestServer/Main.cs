@@ -112,6 +112,9 @@ namespace TestServer
                     case "instantmine":
                         e.Origin.Entity.Abilities.InstantMine = !e.Origin.Entity.Abilities.InstantMine;
                         break;
+                    case "hunger":
+                        e.Origin.Entity.Food--;
+                        break;
                 }
             }
         }

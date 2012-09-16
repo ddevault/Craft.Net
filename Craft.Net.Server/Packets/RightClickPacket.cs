@@ -37,7 +37,7 @@ namespace Craft.Net.Server.Packets
                 return -1;
             if (!DataUtility.TryReadByte(buffer, ref offset, out curZ))
                 return -1;
-            Position = new Vector3(x, y, z);
+            Position = new Vector3(x, (sbyte)y, z);
             CursorPosition = new Vector3(curX, curY, curZ);
             return offset;
         }

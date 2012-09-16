@@ -300,6 +300,15 @@ namespace Craft.Net.Server
             Server.ProcessSendQueue();
         }
 
+        public void DelaySendPacket(Packet packet, int milliseconds)
+        {
+            new Timer((discarded) =>
+                          {
+                              SendPacket(packet);
+                              Server.ProcessSendQueue();
+                          }, null, milliseconds, Timeout.Infinite);
+        }
+
         internal void StartWorkers()
         {
             KeepAliveTimer = new Timer(KeepAlive, null, 1000, 5000);
