@@ -142,6 +142,12 @@ namespace Craft.Net.Data
             // TODO: Default handler to kick the entity out
         }
 
+        public virtual void OnBlockMined(World world, Vector3 destroyedBlock)
+        {
+            world.OnSpawnEntity(new ItemEntity(destroyedBlock + new Vector3(0.5, 0.5, 0.5), 
+                new Slot(Id, 1, Metadata)));
+        }
+
         /// <summary>
         /// Called when a block update occurs. Default handler will handle
         /// common activities such as destroying blocks that lose support,

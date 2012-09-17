@@ -15,5 +15,11 @@ namespace Craft.Net.Data
             this.Height = height;
             this.Depth = depth;
         }
+
+        // TODO: More operators
+        public static Size operator /(Size a, double b)
+        {
+            return new Size(a.Width / b, a.Height / b, a.Depth / b);
+        }
     }
 }

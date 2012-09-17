@@ -52,7 +52,7 @@ namespace Craft.Net.Server
                     var client = clients.First(c => c.Entity == entity);
                     client.Entity.BedStateChanged += EntityOnUpdateBedState;
                     client.Entity.BedTimerExpired += EntityOnBedTimerExpired;
-                    client.Entity.StartEating += PlayerStartEating; 
+                    client.Entity.StartEating += PlayerStartEating;
                     clients = clients.Where(c => c.Entity != entity);
                     clients.ToList().ForEach(c => {
                         c.SendPacket(new SpawnNamedEntityPacket(client));
@@ -65,6 +65,14 @@ namespace Craft.Net.Server
                                     (EntityEquipmentSlot)(4 - i), item));
                         }
                         c.KnownEntities.Add(client.Entity.Id);
+                    });
+                }
+                else if (entity is ItemEntity)
+                {
+                    clients.ToList().ForEach(c =>
+                    {
+                        c.SendPacket(new SpawnDroppedItemPacket(entity as ItemEntity));
+                        c.KnownEntities.Add(entity.Id);
                     });
                 }
             }
@@ -135,6 +143,8 @@ namespace Craft.Net.Server
             var clients = GetClientsInWorld(world)
                 .Where(c => !c.IsDisconnected && c.Entity.Position.DistanceTo(client.Entity.Position) <
                     (c.ViewDistance * Chunk.Width) && c != client);
+            var entities = world.Entities.Where(e => !(e is PlayerEntity) && 
+                e.Position.DistanceTo(client.Entity.Position) < (client.ViewDistance * Chunk.Width)); // TODO: Refactor into same thing
             foreach (var _client in clients)
             {
                 client.KnownEntities.Add(_client.Entity.Id);
@@ -148,6 +158,12 @@ namespace Craft.Net.Server
                         client.SendPacket(new EntityEquipmentPacket(_client.Entity.Id, 
                             (EntityEquipmentSlot)(4 - i), item));
                 }
+            }
+            foreach (var entity in entities)
+            {
+                client.KnownEntities.Add(entity.Id);
+                if (entity is ItemEntity)
+                    client.SendPacket(new SpawnDroppedItemPacket(entity as ItemEntity));
             }
         }
 

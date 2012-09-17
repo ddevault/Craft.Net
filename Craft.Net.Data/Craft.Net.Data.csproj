@@ -206,10 +206,12 @@
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\IBreedableEntity.cs" />
     <Compile Include="Entities\ITamableEntity.cs" />
+    <Compile Include="Entities\ItemEntity.cs" />
     <Compile Include="Entities\LivingEntity.cs" />
     <Compile Include="Entities\PlayerEntity.cs" />
     <Compile Include="Events\EntityDamageEventArgs.cs" />
     <Compile Include="Events\InventoryChangedEventArgs.cs" />
+    <Compile Include="Events\SpawnEntityEventArgs.cs" />
     <Compile Include="Events\WindowChangeEventArgs.cs" />
     <Compile Include="GameMode.cs" />
     <Compile Include="Generation\DebugGenerator.cs" />

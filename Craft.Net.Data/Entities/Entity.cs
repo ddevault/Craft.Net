@@ -31,7 +31,8 @@ namespace Craft.Net.Data.Entities
                 OldPosition = position;
                 LastPositionUpdate = DateTime.Now;
                 position = value;
-                OnPropertyChanged("Position");
+                if (EnablePhysicsNotifications)
+                    OnPropertyChanged("Position");
             }
         }
 

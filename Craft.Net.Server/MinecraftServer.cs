@@ -204,11 +204,13 @@ namespace Craft.Net.Server
         }
 
         /// <summary>
-        /// Adds a world to this server's list of worlds.
+        /// Adds a worldBlockChangedr's list of worlds.
         /// </summary>
         public void AddLevel(Level level)
         {
-            level.World.OnBlockChanged += HandleOnBlockChanged;
+            level.World.BlockChanged += HandleOnBlockChanged;
+            level.World.SpawnEntity += (sender, args) => 
+                EntityManager.SpawnEntity(sender as World, args.Entity);
             Levels.Add(level);
         }
 

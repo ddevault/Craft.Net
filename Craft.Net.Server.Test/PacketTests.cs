@@ -36,6 +36,7 @@ namespace Craft.Net.Server.Test
                     values += "typeof(" + type.Name + "),";
                 values += " // 0x" + i.ToString("x") + "\n";
             }
+            Console.WriteLine("Expected array code:\n" + values);
             for (int i = 0; i <= 0xFF; i++)
             {
                 var type = packetTypes.FirstOrDefault(p => ((Packet)Activator.CreateInstance(p)).PacketId == i);

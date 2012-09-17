@@ -1,0 +1,18 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Craft.Net.Data.Entities;
+
+namespace Craft.Net.Data.Events
+{
+    public class SpawnEntityEventArgs : EventArgs
+    {
+        public Entity Entity { get; set; }
+
+        public SpawnEntityEventArgs(Entity entity)
+        {
+            Entity = entity;
+        }
+    }
+}

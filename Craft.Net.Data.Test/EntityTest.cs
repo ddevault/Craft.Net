@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using Craft.Net.Data.Blocks;
 using Craft.Net.Data.Entities;
 using Craft.Net.Data.Generation;
 using NUnit.Framework;
@@ -19,29 +21,28 @@ namespace Craft.Net.Data.Test
 
             Level level = new Level();
             // TODO: Don't use player entities
-            var player = new PlayerEntity(Difficulty.Normal);
-            player.Position = new Vector3(0, 10, 0);
-            level.World.Entities.Add(player);
+            var entity = new ItemEntity(new Vector3(0, 10, 0), new Slot(1, 1));
+            level.World.EntityUpdateTimer.Change(Timeout.Infinite, Timeout.Infinite);
+            level.World.Entities.Add(entity);
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             for (int i = 0; i < iterations; i++)
-                player.PhysicsUpdate(level.World);
+                entity.PhysicsUpdate(level.World);
             stopwatch.Stop();
             double sleepSeconds = stopwatch.Elapsed.TotalSeconds;
-            Assert.AreEqual(4, player.Position.Y);
+            Assert.AreEqual(4, entity.Position.Y);
 
             Entity.EnableEntitySleeping = false;
 
-            player = new PlayerEntity(Difficulty.Normal);
-            player.Position = new Vector3(0, 10, 0);
-            level.World.Entities.Add(player);
+            entity = new ItemEntity(new Vector3(0, 10, 0), new Slot(1, 1));
+            level.World.Entities.Add(entity);
             stopwatch = new Stopwatch();
             stopwatch.Start();
             for (int i = 0; i < iterations; i++)
-                player.PhysicsUpdate(level.World);
+                entity.PhysicsUpdate(level.World);
             stopwatch.Stop();
             double unsleepSeconds = stopwatch.Elapsed.TotalSeconds;
-            Assert.AreEqual(4, player.Position.Y);
+            Assert.AreEqual(4, entity.Position.Y);
 
             Console.WriteLine("Speed results (seconds): " +
                 "\nWith sleeping: " + sleepSeconds + 

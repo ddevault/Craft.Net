@@ -5,6 +5,7 @@ using Craft.Net.Data.Generation;
 using Craft.Net.Data.Entities;
 using System.IO;
 using System.Threading;
+using Craft.Net.Data.Events;
 
 namespace Craft.Net.Data
 {
@@ -38,6 +39,8 @@ namespace Craft.Net.Data
         /// </summary>
         public bool EnableBlockUpdates { get; set; }
 
+        public Timer EntityUpdateTimer { get; set; }
+
         /// <summary>
         /// Creates a new world for client-side use.
         /// </summary>
@@ -47,6 +50,7 @@ namespace Craft.Net.Data
             Entities = new List<Entity>();
             Regions = new Dictionary<Vector3, Region>();
             EnableBlockUpdates = true;
+            EntityUpdateTimer = new Timer(DoEntityUpdates, null, 1000, 1000);
         }
 
         /// <summary>
@@ -79,7 +83,9 @@ namespace Craft.Net.Data
         /// <summary>
         /// Fires when a block in the world is changed.
         /// </summary>
-        public event EventHandler<BlockChangedEventArgs> OnBlockChanged;
+        public event EventHandler<BlockChangedEventArgs> BlockChanged;
+
+        public event EventHandler<SpawnEntityEventArgs> SpawnEntity;
 
         /// <summary>
         /// Returns the chunk at the specific position
@@ -136,27 +142,34 @@ namespace Craft.Net.Data
             Vector3 blockPosition = FindBlockPosition(position, out chunk);
 
             chunk.SetBlock(blockPosition, value);
-            DoUpdates(position);
+            DoBlockUpdates(position);
 
-            if (OnBlockChanged != null)
-                OnBlockChanged(this, new BlockChangedEventArgs(this, position, value));
+            if (BlockChanged != null)
+                BlockChanged(this, new BlockChangedEventArgs(this, position, value));
         }
 
-        private void DoUpdates(Vector3 blockPosition)
+        private void DoBlockUpdates(Vector3 blockPosition)
         {
+            if (!EnableBlockUpdates)
+                return;
+
             if ((blockPosition + Vector3.Up).Y <= Chunk.Height)
                 GetBlock(blockPosition + Vector3.Up).BlockUpdate(this, blockPosition + Vector3.Up, blockPosition);
-
             if ((blockPosition + Vector3.Down).Y >= 0)
                 GetBlock(blockPosition + Vector3.Down).BlockUpdate(this, blockPosition + Vector3.Down, blockPosition);
 
             GetBlock(blockPosition + Vector3.Left).BlockUpdate(this, blockPosition + Vector3.Left, blockPosition);
-
             GetBlock(blockPosition + Vector3.Right).BlockUpdate(this, blockPosition + Vector3.Right, blockPosition);
-
             GetBlock(blockPosition + Vector3.Backwards).BlockUpdate(this, blockPosition + Vector3.Backwards, blockPosition);
-
             GetBlock(blockPosition + Vector3.Forwards).BlockUpdate(this, blockPosition + Vector3.Forwards, blockPosition);
+        }
+
+        private void DoEntityUpdates(object discarded)
+        {
+            for (int i = 0; i < Entities.Count; i++) // TODO: Marshall entities into chunks
+            {
+                Entities[i].PhysicsUpdate(this);
+            }
         }
 
         public void Save()
@@ -238,6 +251,12 @@ namespace Craft.Net.Data
             int chunkZ = z / (Chunk.Depth) - ((z < 0) ? 1 : 0);
 
             return new Vector3(x - chunkX * Chunk.Width, y, z - chunkZ * Chunk.Depth);
+        }
+
+        protected internal virtual void OnSpawnEntity(Entity entity)
+        {
+            if (SpawnEntity != null)
+                SpawnEntity(this, new SpawnEntityEventArgs(entity));
         }
     }
 }
