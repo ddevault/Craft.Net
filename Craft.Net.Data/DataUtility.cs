@@ -123,6 +123,43 @@ namespace Craft.Net.Data
             return radians * (180 / Math.PI);
         }
 
+        /// <summary>
+        /// Returns a value indicating the most extreme value of the
+        /// provided Vector.
+        /// </summary>
+        public static unsafe CollisionPoint GetCollisionPoint(Vector3 velocity)
+        {
+            // TODO: Does this really need to be so unsafe
+            int index = 0;
+            void* vPtr = &velocity;
+            double* ptr = (double*)vPtr;
+            double max = 0;
+            for (int i = 0; i < 3; i++)
+            {
+                double value = *(ptr + i);
+                if (max < Math.Abs(value))
+                {
+                    index = i;
+                    max = Math.Abs(value);
+                }
+            }
+            switch (index)
+            {
+                case 0:
+                    if (velocity.X < 0)
+                        return CollisionPoint.NegativeX;
+                    return CollisionPoint.PositiveX;
+                case 1:
+                    if (velocity.Y < 0)
+                        return CollisionPoint.NegativeY;
+                    return CollisionPoint.PositiveY;
+                default:
+                    if (velocity.Z < 0)
+                        return CollisionPoint.NegativeZ;
+                    return CollisionPoint.PositiveZ;
+            }
+        }
+
         #endregion
 
         #region Logging/Debugging
@@ -472,5 +509,15 @@ namespace Craft.Net.Data
         South = 3,
         West = 4,
         East = 5 
+    }
+
+    public enum CollisionPoint
+    {
+        PositiveX,
+        NegativeX,
+        PositiveY,
+        NegativeY,
+        PositiveZ,
+        NegativeZ
     }
 }

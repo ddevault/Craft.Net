@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataUtilityTest.cs" />
+    <Compile Include="EntityTest.cs" />
     <Compile Include="ItemTest.cs" />
     <Compile Include="MetadataTest.cs" />
     <Compile Include="NbtTest.cs" />

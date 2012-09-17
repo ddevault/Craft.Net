@@ -98,6 +98,11 @@ namespace Craft.Net.Data
             set { }
         }
 
+        public virtual Size Size
+        {
+            get { return new Size(1, 1, 1); } // TODO: Size.One
+        }
+
         /// <summary>
         /// When the block is placed, this will be called. Return
         /// false to cancel block placement. The default behavoir

@@ -1,13 +1,20 @@
 using System;
+using System.Runtime.InteropServices;
 
 namespace Craft.Net.Data
 {
     /// <summary>
     /// Represents the location of an object in 3D space.
     /// </summary>
+    [StructLayout(LayoutKind.Explicit)]
     public struct Vector3 : IEquatable<Vector3>
     {
-        public double X, Y, Z;
+        [FieldOffset(0)]
+        public double X;
+        [FieldOffset(8)]
+        public double Y;
+        [FieldOffset(16)]
+        public double Z;
 
         public Vector3(double value)
         {
@@ -37,7 +44,7 @@ namespace Craft.Net.Data
         /// </summary>
         public Vector3 Floor()
         {
-            return new Vector3((int)X, (int)Y, (int)Z);
+            return new Vector3(Math.Floor(X), Math.Floor(Y), Math.Floor(Z));
         }
 
         /// <summary>
@@ -107,6 +114,22 @@ namespace Craft.Net.Data
                 a.X - b.X,
                 a.Y - b.Y,
                 a.Z - b.Z);
+        }
+
+        public static Vector3 operator +(Vector3 a, Size b)
+        {
+            return new Vector3(
+                a.X + b.Width,
+                a.Y + b.Height,
+                a.Z + b.Depth);
+        }
+
+        public static Vector3 operator -(Vector3 a, Size b)
+        {
+            return new Vector3(
+                a.X - b.Width,
+                a.Y - b.Height,
+                a.Z - b.Depth);
         }
 
         public static Vector3 operator -(Vector3 a)

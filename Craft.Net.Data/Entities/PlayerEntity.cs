@@ -75,6 +75,19 @@ namespace Craft.Net.Data.Entities
             get { return 0.6; }
         }
 
+        public override float AccelerationDueToGravity
+        {
+            get { return 1.6f; }
+        }
+
+        public override float TerminalVelocity
+        {
+            get
+            {
+                return 78.4f;
+            }
+        }
+
         #endregion
 
         #region Food & XP

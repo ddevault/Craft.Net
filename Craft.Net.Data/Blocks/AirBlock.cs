@@ -6,5 +6,13 @@
         {
             get { return 0; }
         }
+
+        public override Size Size
+        {
+            get
+            {
+                return new Size(0, 0, 0);
+            }
+        }
     }
 }

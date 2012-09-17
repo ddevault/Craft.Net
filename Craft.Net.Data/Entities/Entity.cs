@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using Craft.Net.Data.Metadata;
 
@@ -9,11 +10,19 @@ namespace Craft.Net.Data.Entities
         protected Entity()
         {
             Fire = -20;
+            EnablePhysicsNotifications = true;
         }
+
+        #region State
 
         public int Id { get; set; }
         public Vector3 OldPosition { get; set; }
         public DateTime LastPositionUpdate { get; set; }
+        /// <summary>
+        /// When set to false, OnPropertyChanged is not fired for
+        /// Position or Velocity.
+        /// </summary>
+        protected bool EnablePhysicsNotifications { get; set; }
         public Vector3 Position
         {
             get { return position; }
@@ -122,13 +131,114 @@ namespace Craft.Net.Data.Entities
 
         public abstract Size Size { get; }
 
-        public virtual bool AffectedByGravity
+        #endregion
+
+        #region Physics
+
+        public virtual BoundingBox BoundingBox
         {
             get
             {
-                return true;
+                return new BoundingBox(Position, Position + Size);
             }
         }
+
+        // All units are in meters per second squared
+
+        public virtual float AccelerationDueToGravity
+        {
+            get { return 0; }
+        }
+
+        public virtual float TerminalVelocity
+        {
+            get { return -1; }
+        }
+
+        public virtual float Drag
+        {
+            get { return 0.4f; }
+        }
+
+        /// <summary>
+        /// Run to recalculate velocity and movement.
+        /// Should run once a second.
+        /// </summary>
+        public virtual void PhysicsUpdate(World world)
+        {
+            EnablePhysicsNotifications = false;
+            Velocity += new Vector3(0, -AccelerationDueToGravity, 0);
+            // TODO: Apply velocity changes in increments of one to avoid falling through blocks
+            Position += Velocity;
+            Velocity *= 1 - Drag;
+            // Handle block intersections
+            for (double x = Math.Floor(Position.X); x < Position.X + Size.Width; x++)
+                for (double y = Math.Floor(Position.Y); y < Position.Y + Size.Height; y++)
+                    for (double z = Math.Floor(Position.Z); z < Position.Z + Size.Depth; z++)
+                    {
+                        if (y >= 0 && y <= Chunk.Height)
+                        {
+                            var blockPosition = new Vector3(x, y, z);
+                            var block = world.GetBlock(blockPosition);
+                            if (block == 0)
+                                continue;
+                            var box = new BoundingBox(blockPosition, blockPosition + block.Size);
+                            if (box.Intersects(BoundingBox))
+                            {
+                                var collision = DataUtility.GetCollisionPoint(Velocity);
+                                // Apply velocity change and reset position
+                                switch (collision)
+                                {
+                                    case CollisionPoint.PositiveX:
+                                        Velocity = new Vector3(0, Velocity.Y, Velocity.Z);
+                                        Position = new Vector3(
+                                            blockPosition.X - Size.Width,
+                                            Position.Y,
+                                            Position.Z);
+                                        break;
+                                    case CollisionPoint.NegativeX:
+                                        Velocity = new Vector3(0, Velocity.Y, Velocity.Z);
+                                        Position = new Vector3(
+                                            blockPosition.X + block.Size.Width,
+                                            Position.Y,
+                                            Position.Z);
+                                        break;
+                                    case CollisionPoint.PositiveY:
+                                        Velocity = new Vector3(Velocity.X, 0, Velocity.Z);
+                                        Position = new Vector3(
+                                            Position.X,
+                                            blockPosition.Y - Size.Height,
+                                            Position.Z);
+                                        break;
+                                    case CollisionPoint.NegativeY:
+                                        Velocity = new Vector3(0, Velocity.Y, Velocity.Z);
+                                        Position = new Vector3(
+                                            Position.X,
+                                            blockPosition.Y + block.Size.Height,
+                                            Position.Z);
+                                        break;
+                                    case CollisionPoint.PositiveZ:
+                                        Velocity = new Vector3(Velocity.X, Velocity.Y, 0);
+                                        Position = new Vector3(
+                                            Position.X,
+                                            Position.Y,
+                                            blockPosition.Z - Size.Depth);
+                                        break;
+                                    case CollisionPoint.NegativeZ:
+                                        Velocity = new Vector3(Velocity.X, Velocity.Y, 0);
+                                        Position = new Vector3(
+                                            Position.X,
+                                            Position.Y,
+                                            blockPosition.Z + block.Size.Depth);
+                                        break;
+                                }
+                            }
+                        }
+                    }
+            EnablePhysicsNotifications = true;
+        }
+
+        #endregion
 
         public virtual MetadataDictionary Metadata
         {
