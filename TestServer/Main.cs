@@ -34,7 +34,8 @@ namespace TestServer
             if (Directory.Exists("world"))
                 Directory.Delete("world", true);
 #endif
-            minecraftServer.AddLevel(new Level(Path.Combine(Directory.GetCurrentDirectory(), "world")));
+            IWorldGenerator generator = new FlatlandGenerator();
+            minecraftServer.AddLevel(new Level(generator, Path.Combine(Directory.GetCurrentDirectory(), "world")));
             // Register the chat handler
             minecraftServer.ChatMessage += HandleOnChatMessage;
             // Start the server

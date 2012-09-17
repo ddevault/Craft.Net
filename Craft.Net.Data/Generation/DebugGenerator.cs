@@ -74,5 +74,7 @@ namespace Craft.Net.Data.Generation
         {
             get { return "DebugGenerator"; }
         }
+
+        public string GeneratorOptions { get; set; }
     }
 }

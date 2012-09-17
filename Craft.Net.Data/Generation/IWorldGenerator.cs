@@ -4,6 +4,7 @@ namespace Craft.Net.Data.Generation
     {
         string LevelType { get; }
         string GeneratorName { get; }
+        string GeneratorOptions { get; set; }
         long Seed { get; set; }
         Vector3 SpawnPoint { get; }
 

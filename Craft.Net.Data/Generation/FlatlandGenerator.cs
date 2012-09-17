@@ -15,27 +15,59 @@ namespace Craft.Net.Data.Generation
             DefaultGeneratorOptions = "1;7,2x3,2;1";
         }
 
+        public FlatlandGenerator()
+        {
+            SpawnPoint = new Vector3(0, 4, 0);
+        }
+
+        public FlatlandGenerator(string generatorOptions)
+        {
+            GeneratorOptions = generatorOptions;
+        }
+
         public static string DefaultGeneratorOptions { get; set; }
 
-        public string GeneratorOptions { get; set; }
+        public string GeneratorOptions
+        {
+            get { return generatorOptions; }
+            set
+            {
+                generatorOptions = value;
+                CreateLayers();
+            }
+        }
+
         public Biome Biome { get; set; }
 
         protected List<GeneratorLayer> Layers;
+        private string generatorOptions;
 
         public void Initialize(Level level)
         {
+            if (GeneratorOptions != null)
+                return;
             if (level != null)
                 GeneratorOptions = level.GeneratorOptions ?? DefaultGeneratorOptions;
             else
                 GeneratorOptions = DefaultGeneratorOptions;
             if (string.IsNullOrEmpty(GeneratorOptions))
                 GeneratorOptions = DefaultGeneratorOptions;
+        }
+
+        private void CreateLayers()
+        {
             var parts = GeneratorOptions.Split(';');
             var layers = parts[1].Split(',');
             Layers = new List<GeneratorLayer>();
+            double y = 0;
             foreach (var layer in layers)
-                Layers.Add(new GeneratorLayer(layer));
+            {
+                var generatorLayer = new GeneratorLayer(layer);
+                y += generatorLayer.Height;
+                Layers.Add(generatorLayer);
+            }
             Biome = (Biome)byte.Parse(parts[2]);
+            SpawnPoint = new Vector3(0, y, 0);
         }
 
         public Chunk GenerateChunk(Vector3 position, Region parentRegion)
@@ -78,10 +110,7 @@ namespace Craft.Net.Data.Generation
 
         public long Seed { get; set; }
 
-        public Vector3 SpawnPoint
-        {
-            get { return new Vector3(0, 4, 0); }
-        }
+        public Vector3 SpawnPoint { get; set; }
 
         protected class GeneratorLayer
         {
