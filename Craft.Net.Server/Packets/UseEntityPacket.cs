@@ -39,17 +39,27 @@ namespace Craft.Net.Server.Packets
             if (target is LivingEntity)
             {
                 // Do damage
-                var livingEntity = target as LivingEntity;
-                if (livingEntity.Invulnerable)
-                    return;
+                if (LeftClick)
+                {
+                    var livingEntity = target as LivingEntity;
+                    if (livingEntity.Invulnerable)
+                        return;
 
-                var item = client.Entity.SelectedItem.Item;
-                if (item == null)
-                    item = new AirBlock();
-                client.Entity.FoodExhaustion += 0.3f;
-                livingEntity.Damage(item.AttackDamage);
-                livingEntity.Velocity /*+*/ = DataUtility.RotateY(new Vector3(0, 0, client.IsSprinting ? 10 : 3), // TODO: Knockback enchantment
-                    DataUtility.DegreesToRadians(client.Entity.Yaw));                  // TODO: Physics
+                    var item = client.Entity.SelectedItem.Item;
+                    if (item == null)
+                        item = new AirBlock();
+                    client.Entity.FoodExhaustion += 0.3f;
+                    livingEntity.Damage(item.AttackDamage);
+                    livingEntity.Velocity /*+*/= DataUtility.RotateY(new Vector3(0, 0, client.IsSprinting ? 10 : 3),
+                                                                     // TODO: Knockback enchantment
+                                                                     DataUtility.DegreesToRadians(client.Entity.Yaw));
+                    if (livingEntity is PlayerEntity)
+                    {
+                        (livingEntity as PlayerEntity).LastDamageType = DamageType.Combat;
+                        (livingEntity as PlayerEntity).LastAttackingEntity = client.Entity;
+                    }
+                    // TODO: Physics
+                }
             }
         }
 

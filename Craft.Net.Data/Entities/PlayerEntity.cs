@@ -23,7 +23,7 @@ namespace Craft.Net.Data.Entities
             Difficulty = difficulty;
             FoodTickTimer = new Timer(discarded =>
                 {
-                    if (Food > 17 && Health < 20) // TODO: HealthMax constant?
+                    if (Food > 17 && Health < 20 && Health != 0) // TODO: HealthMax constant?
                     {
                         Health++;
                     }
@@ -256,6 +256,17 @@ namespace Craft.Net.Data.Entities
             }
         }
         public DateTime LastGivenPositionUpdate { get; set; }
+
+        /// <summary>
+        /// The last entity that attacked the player, used to determine
+        /// the killer.
+        /// </summary>
+        public Entity LastAttackingEntity { get; set; }
+
+        /// <summary>
+        /// The type of damage last recieved.
+        /// </summary>
+        public DamageType LastDamageType { get; set; }
 
         private Timer bedUseTimer;
         private short food;

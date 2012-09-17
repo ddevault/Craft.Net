@@ -104,6 +104,10 @@ namespace Craft.Net.Server
         /// Fired after the server recieves a packet from a client.
         /// </summary>
         public event EventHandler<PacketEventArgs> PacketRecieved;
+        /// <summary>
+        /// Fired when a player dies.
+        /// </summary>
+        public event EventHandler<PlayerDeathEventArgs> PlayerDeath;
 
         #endregion
 
@@ -335,6 +339,31 @@ namespace Craft.Net.Server
         {
             if (PacketRecieved != null)
                 PacketRecieved(this, e);
+        }
+
+        protected internal virtual void OnPlayerDeath(PlayerDeathEventArgs e)
+        {
+            if (PlayerDeath != null)
+                PlayerDeath(this, e);
+            if (!e.Handled)
+            {
+                switch (e.DeathType)
+                {
+                    case DamageType.Combat:
+                        if (e.Killer is PlayerEntity)
+                        {
+                            var killer = e.Killer as PlayerEntity;
+                            SendChat(e.Player.Username + " was killed by " + killer.Username);
+                        }
+                        else
+                            SendChat(e.Player.Username + " died.");
+                        // TODO: Mobs
+                        break;
+                    default:
+                        SendChat(e.Player.Username + " died.");
+                        break;
+                }
+            }
         }
 
         #endregion

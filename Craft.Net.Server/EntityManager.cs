@@ -9,6 +9,7 @@ using Craft.Net.Data.Entities;
 using Craft.Net.Data.Events;
 using Craft.Net.Data.Items;
 using Craft.Net.Data.Windows;
+using Craft.Net.Server.Events;
 using Craft.Net.Server.Packets;
 
 namespace Craft.Net.Server
@@ -114,6 +115,11 @@ namespace Craft.Net.Server
                 if (entity.Health <= 0)
                     DespawnEntity(entity);
             };
+            if (entity is PlayerEntity)
+            {
+                var player = entity as PlayerEntity;
+                server.OnPlayerDeath(new PlayerDeathEventArgs(player.LastDamageType, player, player.LastAttackingEntity));
+            }
             entity.Kill();
             foreach (var client in GetKnownClients(entity))
                 client.SendPacket(new EntityStatusPacket(entity.Id, EntityStatus.Dead));

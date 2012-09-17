@@ -198,6 +198,7 @@
     <Compile Include="Blocks\YellowFlowerBlock.cs" />
     <Compile Include="ChatColors.cs" />
     <Compile Include="Chunk.cs" />
+    <Compile Include="DamageType.cs" />
     <Compile Include="DataUtility.cs" />
     <Compile Include="Difficulty.cs" />
     <Compile Include="Dimension.cs" />
