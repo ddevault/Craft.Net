@@ -6,7 +6,7 @@ using Craft.Net.Data.Blocks;
 
 namespace Craft.Net.Data.Items
 {
-    public class CarrotItem : Item
+    public class CarrotItem : FoodItem
     {
         public override ushort Id
         {
@@ -17,6 +17,16 @@ namespace Craft.Net.Data.Items
         {
             if (world.GetBlock(clickedBlock + clickedSide) == 0)
                 world.SetBlock(clickedBlock + clickedSide, new CarrotBlock());
+        }
+
+        public override int FoodPoints
+        {
+            get { return 4; }
+        }
+
+        public override float Saturation
+        {
+            get { return 5; }
         }
     }
 }
