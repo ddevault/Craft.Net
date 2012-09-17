@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Craft.Net.Data.Blocks;
 using Craft.Net.Data.Metadata;
 
 namespace Craft.Net.Data.Entities
@@ -275,6 +276,26 @@ namespace Craft.Net.Data.Entities
                 dictionary[8] = new MetadataInt(8, 0); // Potion effects
                 return dictionary;
             }
+        }
+
+        public bool IsUnderwater(World world)
+        {
+            var position = new Vector3(Position.X,
+                Position.Y + Size.Height, Position.Z);
+            if (!World.IsValidPosition(position))
+                return false;
+            var block = world.GetBlock(position);
+            return block is WaterFlowingBlock || block is WaterStillBlock;
+        }
+
+        public bool IsOnGround(World world)
+        {
+            if (Math.Truncate(Position.Y) != Position.Y)
+                return false;
+            if (!World.IsValidPosition(Position))
+                return false;
+            var block = world.GetBlock(Position + Vector3.Down);
+            return block != 0;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

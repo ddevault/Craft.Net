@@ -18,5 +18,10 @@ namespace Craft.Net.Data.Items
             if (world.GetBlock(clickedBlock + clickedSide) == 0)
                 world.SetBlock(clickedBlock + clickedSide, new FireBlock());
         }
+
+        public override ToolType ToolType
+        {
+            get { return ToolType.Other; }
+        }
     }
 }

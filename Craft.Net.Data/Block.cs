@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Craft.Net.Data.Blocks;
 using Craft.Net.Data.Entities;
+using Craft.Net.Data.Items;
 
 namespace Craft.Net.Data
 {
@@ -19,14 +20,8 @@ namespace Craft.Net.Data
         /// </summary>
         public override ushort Data
         {
-            get
-            {
-                return Metadata;
-            }
-            set
-            {
-                Metadata = (byte)(value & 0xF);
-            }
+            get { return Metadata; }
+            set { Metadata = (byte)(value & 0xF); }
         }
 
         /// <summary>
@@ -49,7 +44,8 @@ namespace Craft.Net.Data
 
         #region Overriden Members
 
-        public override void OnItemUsedOnBlock(World world, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entity usedBy)
+        public override void OnItemUsedOnBlock(World world, Vector3 clickedBlock, Vector3 clickedSide,
+                                               Vector3 cursorPosition, Entity usedBy)
         {
             var clicked = world.GetBlock(clickedBlock);
             if (clicked.OnBlockRightClicked(clickedBlock, clickedSide, cursorPosition, world, usedBy))
@@ -65,6 +61,21 @@ namespace Craft.Net.Data
         #endregion
 
         #region Virtual Members
+
+        public virtual double Hardness
+        {
+            get { return 0; }
+        }
+
+        public virtual ToolType HarvestingTools
+        {
+            get { return ToolType.All; }
+        }
+
+        public virtual ToolType EffecientTools
+        {
+            get { return ToolType.None; }
+        }
 
         /// <summary>
         /// The transparency of this block.
@@ -156,6 +167,89 @@ namespace Craft.Net.Data
         public virtual void BlockUpdate(World world, Vector3 updatedBlock, Vector3 modifiedBlock)
         {
             // TODO: Stuff described in XML comments
+        }
+
+        public virtual int GetHarvestTime(ToolItem tool, World world, PlayerEntity entity, out int damage)
+        {
+            int time = GetHarvestTime(tool, out damage);
+            if ((EffecientTools & tool.ToolType) != EffecientTools)
+            {
+                if (entity.IsUnderwater(world) && !entity.IsOnGround(world))
+                    time *= 25;
+                else if (entity.IsUnderwater(world) || !entity.IsOnGround(world))
+                    time *= 5;
+            }
+            return time;
+        }
+
+        // Used to simplify calculating harvest time and such
+        private class HandTool : ToolItem
+        {
+            public override ToolType ToolType
+            {
+                get { return ToolType.None; }
+            }
+            public override ushort Id
+            {
+                get { return 0; }
+            }
+        }
+
+        // TODO: This is done horribly
+        private const ToolType InstantBreakNoDamage =
+            ToolType.Axe | ToolType.Pick | ToolType.Shovel | ToolType.Sword;
+
+        private const ToolType AllMaterials =
+            ToolType.Wood | ToolType.Stone | ToolType.Iron | ToolType.Gold | ToolType.Diamond;
+
+        /// <summary>
+        /// Gets the amount of time (in milliseconds) it takes to harvest this
+        /// block with the given tool.
+        /// </summary>
+        public virtual int GetHarvestTime(Item item, out int damage)
+        {
+            // time is in seconds until returned
+            double time = Hardness * 1.5;
+            var tool = item as ToolItem;
+            if (tool == null)
+                tool = new HandTool();
+            if (!CanHarvest(tool))
+                time *= 3.33;
+            if (EffecientTools != ToolType.None &&
+                (EffecientTools & ~tool.ToolType) == ToolType.None)
+            {
+                if ((tool.ToolType & ToolType.Wood) == ToolType.Wood)
+                    time /= 2;
+                else if ((tool.ToolType & ToolType.Stone) == ToolType.Stone)
+                    time /= 4;
+                else if ((tool.ToolType & ToolType.Iron) == ToolType.Iron)
+                    time /= 6;
+                else if ((tool.ToolType & ToolType.Diamond) == ToolType.Diamond)
+                    time /= 8;
+                else if ((tool.ToolType & ToolType.Gold) == ToolType.Gold)
+                    time /= 12;
+                // TODO: Enchantments
+            }
+
+            // Calculate damage
+            damage = 1;
+            if ((tool.ToolType & InstantBreakNoDamage) == tool.ToolType && Hardness == 0)
+                damage = 0;
+            else if ((tool.ToolType & ToolType.Sword) == ToolType.Sword)
+                damage = 2;
+            if ((tool.ToolType & ToolType.Hoe) == ToolType.Hoe)
+                damage = 0;
+            if (tool is ShearsItem && !ShearsItem.DamagingBlocks.Contains(GetType()))
+                damage = 0;
+
+            return (int)(time * 1000);
+        }
+
+        public virtual bool CanHarvest(ToolItem tool)
+        {
+            if (Hardness == -1)
+                return false;
+            return (HarvestingTools & tool.ToolType) == tool.ToolType;
         }
 
         #endregion

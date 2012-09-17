@@ -10,5 +10,10 @@ namespace Craft.Net.Data.Items
                 return 290;
             }
         }
+
+        public override ToolType ToolType
+        {
+            get { return ToolType.Hoe | ToolType.Wood; }
+        }
     }
 }

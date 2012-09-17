@@ -253,6 +253,11 @@ namespace Craft.Net.Data
             return new Vector3(x - chunkX * Chunk.Width, y, z - chunkZ * Chunk.Depth);
         }
 
+        public static bool IsValidPosition(Vector3 position)
+        {
+            return position.Y >= 0 && position.Y <= 255;
+        }
+
         protected internal virtual void OnSpawnEntity(Entity entity)
         {
             if (SpawnEntity != null)

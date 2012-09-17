@@ -11,5 +11,10 @@ namespace Craft.Net.Data.Items
         {
             get { return 398; }
         }
+
+        public override ToolType ToolType
+        {
+            get { return ToolType.Other; }
+        }
     }
 }

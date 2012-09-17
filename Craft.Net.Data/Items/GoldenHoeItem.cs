@@ -9,5 +9,10 @@ namespace Craft.Net.Data.Items
                 return 294;
             }
         }
+
+        public override ToolType ToolType
+        {
+            get { return ToolType.Hoe | ToolType.Gold; }
+        }
     }
 }

@@ -130,5 +130,23 @@ namespace Craft.Net.Data.Test
                 testBlock.X++;
             }
         }
+
+        [Test]
+        public void TestHarvesting()
+        {
+            var block = new ObsidianBlock();
+            Assert.IsFalse(block.CanHarvest(new StonePickaxeItem()));
+            Assert.IsTrue(block.CanHarvest(new DiamondPickaxeItem()));
+            int damage;
+            int time = block.GetHarvestTime(new DiamondPickaxeItem(), out damage);
+            Assert.AreEqual(9375, time);
+            time = block.GetHarvestTime(new IronShovelItem(), out damage);
+            Assert.AreEqual(249750, time);
+            //Assert.AreEqual(1, damage);
+            //new RedFlowerBlock().GetHarvestTime(new IronPickaxeItem(), out damage);
+            //Assert.AreEqual(0, damage);
+            //new ObsidianBlock().GetHarvestTime(new DiamondSwordItem(), out damage);
+            //Assert.AreEqual(2, damage);
+        }
     }
 }

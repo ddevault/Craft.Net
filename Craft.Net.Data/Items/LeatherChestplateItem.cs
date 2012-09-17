@@ -19,5 +19,10 @@ namespace Craft.Net.Data.Items
         {
             get { return ArmorSlot.Chestplate; }
         }
+
+        public override ToolType ToolType
+        {
+            get { return ToolType.Other; }
+        }
     }
 }

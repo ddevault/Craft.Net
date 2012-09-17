@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using Craft.Net.Data.Events;
 using Craft.Net.Data.Windows;
+using Craft.Net.Data.Blocks;
 
 namespace Craft.Net.Data.Entities
 {

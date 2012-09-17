@@ -15,5 +15,10 @@ namespace Craft.Net.Data.Items
         {
             get { return 4; }
         }
+
+        public override ToolType ToolType
+        {
+            get { return ToolType.Sword | ToolType.Gold; }
+        }
     }
 }
