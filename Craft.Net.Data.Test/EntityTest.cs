@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Craft.Net.Data.Entities;
@@ -14,14 +15,38 @@ namespace Craft.Net.Data.Test
         [Test]
         public void TestBlockCollision()
         {
+            const int iterations = 100000;
+
             Level level = new Level();
             // TODO: Don't use player entities
             var player = new PlayerEntity(Difficulty.Normal);
             player.Position = new Vector3(0, 10, 0);
             level.World.Entities.Add(player);
-            for (int i = 0; i < 10; i++)
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            for (int i = 0; i < iterations; i++)
                 player.PhysicsUpdate(level.World);
-            Assert.AreEqual(player.Position.Y, 4);
+            stopwatch.Stop();
+            double sleepSeconds = stopwatch.Elapsed.TotalSeconds;
+            Assert.AreEqual(4, player.Position.Y);
+
+            Entity.EnableEntitySleeping = false;
+
+            player = new PlayerEntity(Difficulty.Normal);
+            player.Position = new Vector3(0, 10, 0);
+            level.World.Entities.Add(player);
+            stopwatch = new Stopwatch();
+            stopwatch.Start();
+            for (int i = 0; i < iterations; i++)
+                player.PhysicsUpdate(level.World);
+            stopwatch.Stop();
+            double unsleepSeconds = stopwatch.Elapsed.TotalSeconds;
+            Assert.AreEqual(4, player.Position.Y);
+
+            Console.WriteLine("Speed results (seconds): " +
+                "\nWith sleeping: " + sleepSeconds + 
+                "\nWithout sleeping: " + unsleepSeconds +
+                "\n" + iterations + " total iterations");
         }
 
         [Test]

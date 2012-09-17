@@ -268,6 +268,11 @@ namespace Craft.Net.Data.Entities
         }
         public DateTime LastGivenPositionUpdate { get; set; }
 
+        //public override CollisionTests TestsToPerform
+        //{
+        //    get { return CollisionTests.None; } // TODO: Is this a good idea?
+        //}
+
         /// <summary>
         /// The last entity that attacked the player, used to determine
         /// the killer.

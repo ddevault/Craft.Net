@@ -74,6 +74,11 @@ namespace Craft.Net.Data
             get { return Transparency.Opaque; }
         }
 
+        public virtual bool IsSolid
+        {
+            get { return true; }
+        }
+
         /// <summary>
         /// True if this block should be destroyed when the block
         /// it rests upon is destroyed.
