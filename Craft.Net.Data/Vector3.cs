@@ -50,6 +50,35 @@ namespace Craft.Net.Data
                              Math.Pow(other.Y - Y, 2));
         }
 
+        /// <summary>
+        /// Finds the distance of this vector from Vector3.Zero
+        /// </summary>
+        public double Distance
+        {
+            get
+            {
+                return DistanceTo(Zero);
+            }
+        }
+
+        public static Vector3 Min(Vector3 value1, Vector3 value2)
+        {
+            return new Vector3(
+                Math.Min(value1.X, value2.X),
+                Math.Min(value1.Y, value2.Y),
+                Math.Min(value1.Z, value2.Z)
+                );
+        }
+
+        public static Vector3 Max(Vector3 value1, Vector3 value2)
+        {
+            return new Vector3(
+                Math.Max(value1.X, value2.X),
+                Math.Max(value1.Y, value2.Y),
+                Math.Max(value1.Z, value2.Z)
+                );
+        }
+
         #endregion
 
         #region Operators

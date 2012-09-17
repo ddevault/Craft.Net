@@ -196,6 +196,7 @@
     <Compile Include="Blocks\WoodenSlabBlock.cs" />
     <Compile Include="Blocks\WoolBlock.cs" />
     <Compile Include="Blocks\YellowFlowerBlock.cs" />
+    <Compile Include="BoundingBox.cs" />
     <Compile Include="ChatColors.cs" />
     <Compile Include="Chunk.cs" />
     <Compile Include="DamageType.cs" />
@@ -380,6 +381,7 @@
     <Compile Include="NibbleArray.cs" />
     <Compile Include="PlayerAbilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Ray.cs" />
     <Compile Include="Region.cs" />
     <Compile Include="SavedLevel.cs" />
     <Compile Include="Section.cs" />
