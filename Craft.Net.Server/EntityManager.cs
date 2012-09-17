@@ -18,8 +18,8 @@ namespace Craft.Net.Server
     /// </summary>
     public class EntityManager
     {
-        internal static int nextEntityId = 1;
-        internal MinecraftServer server;
+        protected internal static int nextEntityId = 1;
+        protected internal MinecraftServer server;
 
         public EntityManager(MinecraftServer server)
         {
