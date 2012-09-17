@@ -46,6 +46,7 @@ namespace Craft.Net.Server.Packets
                 var item = client.Entity.SelectedItem.Item;
                 if (item == null)
                     item = new AirBlock();
+                client.Entity.FoodExhaustion += 0.3f;
                 livingEntity.Damage(item.AttackDamage);
                 livingEntity.Velocity /*+*/ = DataUtility.RotateY(new Vector3(0, 0, client.IsSprinting ? 10 : 3), // TODO: Knockback enchantment
                     DataUtility.DegreesToRadians(client.Entity.Yaw));                  // TODO: Physics

@@ -48,6 +48,7 @@ namespace Craft.Net.Data
         public bool Thundering { get; set; }
         public int RainTime { get; set; }
         public int ThunderTime { get; set; }
+        public Difficulty Difficulty { get; set; }
 
         /// <summary>
         /// Default constructor for a level that only exists in memory.
@@ -64,11 +65,13 @@ namespace Craft.Net.Data
             WorldGenerator.Initialize(this);
             SpawnPoint = WorldGenerator.SpawnPoint;
             tickTimer = new Timer(Tick, null, TickLength, TickLength);
+            Difficulty = Difficulty.Normal;
         }
 
         // TODO: Refactor constructors
         public Level(string directory)
         {
+            Difficulty = Difficulty.Normal;
             Name = "world";
             LevelDirectory = directory;
             if (!Directory.Exists(LevelDirectory))
@@ -101,6 +104,7 @@ namespace Craft.Net.Data
 
         public Level(IWorldGenerator worldGenerator, string directory)
         {
+            Difficulty = Difficulty.Normal;
             Name = "world";
             if (!Directory.Exists(directory))
                 Directory.CreateDirectory(directory);
@@ -207,7 +211,7 @@ namespace Craft.Net.Data
 
         public PlayerEntity LoadPlayer(string name)
         {
-            PlayerEntity entity = new PlayerEntity();
+            PlayerEntity entity = new PlayerEntity(Difficulty);
             if (!File.Exists(Path.Combine(LevelDirectory, "players", name + ".dat")))
             {
                 // Return default player entity

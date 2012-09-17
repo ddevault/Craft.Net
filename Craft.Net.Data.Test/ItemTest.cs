@@ -39,7 +39,7 @@ namespace Craft.Net.Data.Test
         {
             World world = new World(new FlatlandGenerator());
             world.WorldGenerator.Initialize(new Level());
-            PlayerEntity player = new PlayerEntity()
+            PlayerEntity player = new PlayerEntity(Difficulty.Normal)
             {
                 GameMode = GameMode.Creative
             };

@@ -7,7 +7,7 @@ namespace Craft.Net.Data.Entities
 {
     public class PlayerEntity : LivingEntity
     {
-        public PlayerEntity()
+        public PlayerEntity(Difficulty difficulty)
         {
             Inventory = new InventoryWindow();
             SelectedSlot = InventoryWindow.HotbarIndex;
@@ -20,6 +20,32 @@ namespace Craft.Net.Data.Entities
             Health = 20;
             Food = 20;
             Abilities = new PlayerAbilities(this);
+            Difficulty = difficulty;
+            FoodTickTimer = new Timer(discarded =>
+                {
+                    if (Food > 17 && Health < 20) // TODO: HealthMax constant?
+                    {
+                        Health++;
+                    }
+                    if (Food == 0)
+                    {
+                        switch (Difficulty)
+                        {
+                            case Difficulty.Hard:
+                                if (Health > 0)
+                                    Health--;
+                                break;
+                            case Difficulty.Normal:
+                                if (Health > 1)
+                                    Health--;
+                                break;
+                            default:
+                                if (Health > 10)
+                                    Health--;
+                                break;
+                        }
+                    }
+                }, null, 80 * Level.TickLength, 80 * Level.TickLength);
         }
 
         #region Properties
@@ -81,10 +107,25 @@ namespace Craft.Net.Data.Entities
             get { return foodExhaustion; }
             set
             {
+                if (Difficulty == Difficulty.Peaceful)
+                    return;
                 foodExhaustion = value;
+                if (foodExhaustion > 4)
+                {
+                    if (FoodSaturation > 0)
+                        FoodSaturation--;
+                    else
+                    {
+                        if (Food > 0)
+                            Food--;
+                    }
+                    foodExhaustion -= 4;
+                }
                 OnPropertyChanged("FoodExhaustion");
             }
         }
+
+        protected Timer FoodTickTimer { get; set; }
 
         public int XpLevel
         {
@@ -175,6 +216,8 @@ namespace Craft.Net.Data.Entities
                 OnPropertyChanged("GameMode");
             }
         }
+
+        public Difficulty Difficulty { get; set; }
 
         public Vector3 SpawnPoint
         {
@@ -273,6 +316,12 @@ namespace Craft.Net.Data.Entities
         {
             if (StartEating != null)
                 StartEating(this, new EventArgs());
+        }
+
+        public override void Damage(int damage, bool accountForArmor = true)
+        {
+            FoodExhaustion += 0.3f;
+            base.Damage(damage, accountForArmor);
         }
     }
 }

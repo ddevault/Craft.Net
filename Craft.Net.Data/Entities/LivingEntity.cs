@@ -70,7 +70,7 @@ namespace Craft.Net.Data.Entities
 
         public EventHandler<EntityDamageEventArgs> EntityDamaged;
 
-        public void Damage(int damage, bool accountForArmor = true)
+        public virtual void Damage(int damage, bool accountForArmor = true)
         {
             // TODO: Armor
             if (Invulnerable)

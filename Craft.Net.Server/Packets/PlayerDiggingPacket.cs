@@ -57,6 +57,7 @@ namespace Craft.Net.Server.Packets
                         break;
                     case PlayerAction.FinishedDigging:
                         client.World.SetBlock(Position, new AirBlock());
+                        client.Entity.FoodExhaustion += 0.025f;
                         break;
                 }
             }

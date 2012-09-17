@@ -34,6 +34,10 @@ namespace Craft.Net.Server.Packets
         {
             if (!client.ReadyToSpawn)
                 return;
+            client.Entity.FoodExhaustion += (float)client.Entity.GivenPosition.DistanceTo(new Vector3(X, Y, Z)) * 
+                (client.IsSprinting ? 0.1f : 0.01f); // TODO: Swimming
+            if (client.Entity.GivenPosition.Y < Y)
+                client.Entity.FoodExhaustion += (client.IsSprinting ? 0.8f : 0.2f);
             client.Entity.GivenPosition = new Vector3(X, Y, Z);
             client.UpdateChunksAsync();
             server.ProcessSendQueue();

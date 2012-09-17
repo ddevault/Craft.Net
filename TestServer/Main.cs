@@ -115,6 +115,9 @@ namespace TestServer
                     case "hunger":
                         e.Origin.Entity.Food--;
                         break;
+                    case "damage":
+                        e.Origin.Entity.Health--;
+                        break;
                 }
             }
         }
