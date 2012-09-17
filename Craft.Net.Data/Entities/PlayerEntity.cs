@@ -24,9 +24,7 @@ namespace Craft.Net.Data.Entities
             FoodTickTimer = new Timer(discarded =>
                 {
                     if (Food > 17 && Health < 20 && Health != 0) // TODO: HealthMax constant?
-                    {
                         Health++;
-                    }
                     if (Food == 0)
                     {
                         switch (Difficulty)
