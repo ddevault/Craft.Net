@@ -303,7 +303,9 @@ namespace Craft.Net.Server
             var slot = player.Inventory[player.SelectedSlot];
             slot.Index = player.SelectedSlot;
             var item = player.Inventory[player.SelectedSlot].Item as FoodItem;
-            var known = GetKnownClients(player).Concat(new[] { client });
+            var known = GetKnownClients(player);
+            foreach (var c in known)
+                c.SendPacket(new AnimationPacket(client.Entity.Id, Animation.EatFood)); // TODO: Why doesn't this work
             var timer = new Timer(discarded =>
                 {
                     if (player.SelectedSlot != slot.Index ||
