@@ -185,7 +185,11 @@ namespace Craft.Net.Data.Entities
             if (PhysicsAsleep && EnableEntitySleeping)
                 return; // TODO: Wake up on collision
             EnablePhysicsNotifications = false;
-            if (Velocity == Vector3.Zero && world.GetBlock(Position + Vector3.Down).Solid && EnableEntitySleeping)
+            if (!(this is PlayerEntity))
+                Console.WriteLine(Position);
+            if (Velocity == Vector3.Zero && Math.Floor(Position.Y) == Position.Y &&
+                (World.IsValidPosition(Position + Vector3.Down) && world.GetBlock(Position + Vector3.Down).Solid) &&
+                EnableEntitySleeping)
             {
                 PhysicsAsleep = true;
                 return;
@@ -236,7 +240,7 @@ namespace Craft.Net.Data.Entities
                                                 Position.Z);
                                             break;
                                         case CollisionPoint.NegativeY:
-                                            Velocity = new Vector3(0, Velocity.Y, Velocity.Z);
+                                            Velocity = new Vector3(Velocity.X, 0, Velocity.Z);
                                             Position = new Vector3(
                                                 Position.X,
                                                 blockPosition.Y + block.Size.Height,
