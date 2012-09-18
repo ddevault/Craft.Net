@@ -85,7 +85,9 @@ namespace Craft.Net.Data
         /// </summary>
         public event EventHandler<BlockChangedEventArgs> BlockChanged;
 
-        public event EventHandler<SpawnEntityEventArgs> SpawnEntity;
+        public event EventHandler<EntityEventArgs> SpawnEntity;
+
+        public event EventHandler<EntityEventArgs> DestroyEntity; // TODO: Move some code out of EntityManager
 
         /// <summary>
         /// Returns the chunk at the specific position
@@ -152,6 +154,8 @@ namespace Craft.Net.Data
         {
             if (!EnableBlockUpdates)
                 return;
+
+            GetBlock(blockPosition).BlockUpdate(this, blockPosition, blockPosition);
 
             if ((blockPosition + Vector3.Up).Y <= Chunk.Height)
                 GetBlock(blockPosition + Vector3.Up).BlockUpdate(this, blockPosition + Vector3.Up, blockPosition);
@@ -261,7 +265,13 @@ namespace Craft.Net.Data
         protected internal virtual void OnSpawnEntity(Entity entity)
         {
             if (SpawnEntity != null)
-                SpawnEntity(this, new SpawnEntityEventArgs(entity));
+                SpawnEntity(this, new EntityEventArgs(entity));
+        }
+
+        protected internal virtual void OnDestroyEntity(Entity entity)
+        {
+            if (DestroyEntity != null)
+                DestroyEntity(this, new EntityEventArgs(entity));
         }
     }
 }

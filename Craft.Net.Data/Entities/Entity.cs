@@ -185,19 +185,17 @@ namespace Craft.Net.Data.Entities
             if (PhysicsAsleep && EnableEntitySleeping)
                 return; // TODO: Wake up on collision
             EnablePhysicsNotifications = false;
-            if (!(this is PlayerEntity))
-                Console.WriteLine(Position);
             if (Velocity == Vector3.Zero && Math.Floor(Position.Y) == Position.Y &&
                 (World.IsValidPosition(Position + Vector3.Down) && world.GetBlock(Position + Vector3.Down).Solid) &&
                 EnableEntitySleeping)
             {
                 PhysicsAsleep = true;
+                OnSleep(world);
                 return;
             }
             Velocity += new Vector3(0, -AccelerationDueToGravity, 0);
             // TODO: Apply velocity changes in increments of one to avoid falling through blocks
             Position += Velocity;
-            Velocity *= 1 - Drag;
             if ((TestsToPerform & CollisionTests.EntityToEnviornment) == CollisionTests.EntityToEnviornment)
             {
                 // Handle block intersections
@@ -212,7 +210,7 @@ namespace Craft.Net.Data.Entities
                                 if (block == 0)
                                     continue;
                                 var box = new BoundingBox(blockPosition, blockPosition + block.Size);
-                                if (box.Intersects(BoundingBox))
+                                if (box.Intersects(BoundingBox) && Velocity != Vector3.Zero)
                                 {
                                     var collision = DataUtility.GetCollisionPoint(Velocity);
                                     // Apply velocity change and reset position
@@ -265,8 +263,13 @@ namespace Craft.Net.Data.Entities
                             }
                         }
             }
+            Velocity *= 1 - Drag;
             OnPropertyChanged("Position");
             EnablePhysicsNotifications = true;
+        }
+
+        protected virtual void OnSleep(World world) // TODO: Add world object to class
+        {
         }
 
         #endregion

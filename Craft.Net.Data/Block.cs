@@ -264,5 +264,12 @@ namespace Craft.Net.Data
         }
 
         #endregion
+
+        internal static Block Create(ushort id, byte metadata)
+        {
+            var b = (Block)id;
+            b.Metadata = metadata;
+            return b;
+        }
     }
 }

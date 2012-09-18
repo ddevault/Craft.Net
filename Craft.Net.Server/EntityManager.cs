@@ -75,6 +75,14 @@ namespace Craft.Net.Server
                         c.KnownEntities.Add(entity.Id);
                     });
                 }
+                else if (entity is ObjectEntity)
+                {
+                    clients.ToList().ForEach(c =>
+                    {
+                        c.SendPacket(new SpawnObjectPacket(entity as ObjectEntity));
+                        c.KnownEntities.Add(entity.Id);
+                    });
+                }
             }
             server.ProcessSendQueue();
         }

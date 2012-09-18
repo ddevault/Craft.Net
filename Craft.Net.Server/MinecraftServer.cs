@@ -211,6 +211,8 @@ namespace Craft.Net.Server
             level.World.BlockChanged += HandleOnBlockChanged;
             level.World.SpawnEntity += (sender, args) => 
                 EntityManager.SpawnEntity(sender as World, args.Entity);
+            level.World.DestroyEntity += (sender, args) =>
+                EntityManager.DespawnEntity(sender as World, args.Entity);
             Levels.Add(level);
         }
 
