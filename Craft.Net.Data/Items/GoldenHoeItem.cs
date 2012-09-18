@@ -12,7 +12,12 @@ namespace Craft.Net.Data.Items
 
         public override ToolType ToolType
         {
-            get { return ToolType.Hoe | ToolType.Gold; }
+            get { return ToolType.Hoe; }
+        }
+
+        public override ToolMaterial ToolMaterial
+        {
+            get { return ToolMaterial.Gold; }
         }
     }
 }

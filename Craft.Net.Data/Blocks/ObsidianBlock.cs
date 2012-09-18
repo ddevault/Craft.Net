@@ -18,14 +18,9 @@ namespace Craft.Net.Data.Blocks
             get { return 50; }
         }
 
-        public override ToolType EffecientTools
+        public override bool CanHarvest(ToolItem tool)
         {
-            get { return ToolType.Pick; }
-        }
-
-        public override ToolType HarvestingTools
-        {
-            get { return ToolType.Pick | ToolType.Diamond; }
+            return tool is DiamondPickaxeItem;
         }
     }
 }

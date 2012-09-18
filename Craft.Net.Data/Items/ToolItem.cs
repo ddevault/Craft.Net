@@ -5,22 +5,25 @@ using System.Text;
 
 namespace Craft.Net.Data.Items
 {
-    [Flags]
     public enum ToolType
     {
-        None = 0,
-        Pick = 1,
-        Axe = 2,
-        Shovel = 4,
-        Sword = 8,
-        Hoe = 16,
-        Other = 32,
-        Wood = 64,
-        Stone = 128,
-        Iron = 256,
-        Gold = 512,
-        Diamond = 1024,
-        All = Pick | Axe | Shovel | Sword | Other | Wood | Stone | Iron | Gold | Diamond
+        None,
+        Pick,
+        Axe,
+        Shovel,
+        Sword,
+        Hoe,
+        Other
+    }
+
+    public enum ToolMaterial
+    {
+        Wood,
+        Stone,
+        Iron,
+        Gold,
+        Diamond,
+        Other
     }
 
     public abstract class ToolItem : Item
@@ -31,10 +34,16 @@ namespace Craft.Net.Data.Items
         }
 
         public abstract ToolType ToolType { get; }
+        public abstract ToolMaterial ToolMaterial { get; }
 
         public bool CanHarvest(Block block)
         {
             return block.CanHarvest(this);
+        }
+
+        public virtual bool IsEfficient(Block block)
+        {
+            return false;
         }
     }
 }

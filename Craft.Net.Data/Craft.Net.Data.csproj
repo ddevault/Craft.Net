@@ -221,6 +221,7 @@
     <Compile Include="Item.cs" />
     <Compile Include="Items\AppleItem.cs" />
     <Compile Include="Items\ArrowItem.cs" />
+    <Compile Include="Items\AxeItem.cs" />
     <Compile Include="Items\BakedPotatoItem.cs" />
     <Compile Include="Items\BedItem.cs" />
     <Compile Include="Items\BlazePowderItem.cs" />
@@ -325,6 +326,7 @@
     <Compile Include="Items\NetherWartItem.cs" />
     <Compile Include="Items\PaintingItem.cs" />
     <Compile Include="Items\PaperItem.cs" />
+    <Compile Include="Items\PickaxeItem.cs" />
     <Compile Include="Items\PoisonousPotatoItem.cs" />
     <Compile Include="Items\PotatoItem.cs" />
     <Compile Include="Items\PotionItem.cs" />
@@ -340,6 +342,7 @@
     <Compile Include="Items\SaddleItem.cs" />
     <Compile Include="Items\SeedsItem.cs" />
     <Compile Include="Items\ShearsItem.cs" />
+    <Compile Include="Items\ShovelItem.cs" />
     <Compile Include="Items\SignItem.cs" />
     <Compile Include="Items\SkullItem.cs" />
     <Compile Include="Items\SlimeballItem.cs" />
@@ -356,6 +359,7 @@
     <Compile Include="Items\StringItem.cs" />
     <Compile Include="Items\SugarCanesItem.cs" />
     <Compile Include="Items\SugarItem.cs" />
+    <Compile Include="Items\SwordItem.cs" />
     <Compile Include="Items\ToolItem.cs" />
     <Compile Include="Items\WaterBucketItem.cs" />
     <Compile Include="Items\WheatItem.cs" />

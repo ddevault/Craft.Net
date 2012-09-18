@@ -27,5 +27,10 @@ namespace Craft.Net.Data.Items
         {
             get { return ToolType.Other; }
         }
+
+        public override ToolMaterial ToolMaterial
+        {
+            get { return ToolMaterial.Other; }
+        }
     }
 }

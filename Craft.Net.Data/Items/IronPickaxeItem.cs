@@ -1,6 +1,6 @@
 namespace Craft.Net.Data.Items
 {
-    public class IronPickaxeItem : ToolItem
+    public class IronPickaxeItem : PickaxeItem
     {
         public override ushort Id
         {
@@ -15,9 +15,9 @@ namespace Craft.Net.Data.Items
             get { return 4; }
         }
 
-        public override ToolType ToolType
+        public override ToolMaterial ToolMaterial
         {
-            get { return ToolType.Pick | ToolType.Iron; }
+            get { return ToolMaterial.Iron; }
         }
     }
 }

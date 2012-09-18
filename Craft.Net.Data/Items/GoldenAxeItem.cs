@@ -1,6 +1,6 @@
 namespace Craft.Net.Data.Items
 {
-    public class GoldenAxeItem : ToolItem
+    public class GoldenAxeItem : AxeItem
     {
         public override ushort Id
         {
@@ -15,9 +15,9 @@ namespace Craft.Net.Data.Items
             get { return 3; }
         }
 
-        public override ToolType ToolType
+        public override ToolMaterial ToolMaterial
         {
-            get { return ToolType.Axe | ToolType.Gold; }
+            get { return ToolMaterial.Gold; }
         }
     }
 }

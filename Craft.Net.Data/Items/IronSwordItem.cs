@@ -1,7 +1,7 @@
 namespace Craft.Net.Data.Items
 {
 
-    public class IronSwordItem : ToolItem
+    public class IronSwordItem : SwordItem
     {
         public override ushort Id
         {
@@ -16,9 +16,9 @@ namespace Craft.Net.Data.Items
             get { return 6; }
         }
 
-        public override ToolType ToolType
+        public override ToolMaterial ToolMaterial
         {
-            get { return ToolType.Iron | ToolType.Sword; }
+            get { return ToolMaterial.Iron; }
         }
     }
 }

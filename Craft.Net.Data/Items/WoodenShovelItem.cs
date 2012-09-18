@@ -1,6 +1,6 @@
 namespace Craft.Net.Data.Items
 {
-    public class WoodenShovelItem : ToolItem
+    public class WoodenShovelItem : ShovelItem
     {
         public override ushort Id
         {
@@ -15,9 +15,9 @@ namespace Craft.Net.Data.Items
             get { return 1; }
         }
 
-        public override ToolType ToolType
+        public override ToolMaterial ToolMaterial
         {
-            get { return ToolType.Shovel | ToolType.Wood; }
+            get { return ToolMaterial.Wood; }
         }
     }
 }
