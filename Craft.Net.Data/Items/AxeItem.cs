@@ -17,7 +17,7 @@ namespace Craft.Net.Data.Items
                    block is FenceBlock ||
                    block is FenceGateBlock ||
                    block is JukeboxBlock ||
-                   block is LogBlock ||
+                   block is WoodBlock ||
                    block is WoodenSlabBlock ||
                    block is WoodenPlanksBlock ||
                    block is BirchWoodStairBlock ||

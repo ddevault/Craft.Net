@@ -6,11 +6,16 @@ using Craft.Net.Data.Entities;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class LogBlock : Block
+    public class WoodBlock : Block
     {
         public override ushort Id
         {
             get { return 17; }
+        }
+
+        public override double Hardness
+        {
+            get { return 2; }
         }
 
         public override bool OnBlockPlaced(World world, Vector3 position, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entities.Entity usedBy)

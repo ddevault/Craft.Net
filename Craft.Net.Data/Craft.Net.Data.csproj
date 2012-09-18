@@ -166,7 +166,7 @@
     <Compile Include="Blocks\SnowBlock.cs" />
     <Compile Include="Blocks\SnowfallBlock.cs" />
     <Compile Include="Blocks\SoulSandBlock.cs" />
-    <Compile Include="Blocks\SpiderwebBlock.cs" />
+    <Compile Include="Blocks\CobwebBlock.cs" />
     <Compile Include="Blocks\SpongeBlock.cs" />
     <Compile Include="Blocks\SpruceWoodStairBlock.cs" />
     <Compile Include="Blocks\StairBlock.cs" />
@@ -187,7 +187,7 @@
     <Compile Include="Blocks\WallSignBlock.cs" />
     <Compile Include="Blocks\WaterFlowingBlock.cs" />
     <Compile Include="Blocks\WaterStillBlock.cs" />
-    <Compile Include="Blocks\LogBlock.cs" />
+    <Compile Include="Blocks\WoodBlock.cs" />
     <Compile Include="Blocks\WoodenButtonBlock.cs" />
     <Compile Include="Blocks\WoodenDoorBlock.cs" />
     <Compile Include="Blocks\WoodenDoubleSlabBlock.cs" />

@@ -5,11 +5,16 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class SpiderwebBlock : Block
+    public class CobwebBlock : Block
     {
         public override ushort Id
         {
             get { return 30; }
+        }
+
+        public override double Hardness
+        {
+            get { return 4; }
         }
     }
 }

@@ -12,6 +12,11 @@ namespace Craft.Net.Data.Blocks
             get { return 60; }
         }
 
+        public override double Hardness
+        {
+            get { return 0.6; }
+        }
+
         public override void OnBlockWalkedOn(World world, Vector3 position, Entities.Entity entity)
         {
             if (entity.Velocity.Y < -0.25)

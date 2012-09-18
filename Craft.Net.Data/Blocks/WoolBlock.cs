@@ -27,6 +27,12 @@ namespace Craft.Net.Data.Blocks
 
     public class WoolBlock : Block
     {
+        public WoolColor Color
+        {
+            get { return (WoolColor)Metadata; }
+            set { Metadata = (byte)value; }
+        }
+
         public WoolBlock()
         {
         }
@@ -39,6 +45,11 @@ namespace Craft.Net.Data.Blocks
         public override ushort Id
         {
             get { return 35; }
+        }
+
+        public override double Hardness
+        {
+            get { return 0.8; }
         }
     }
 }

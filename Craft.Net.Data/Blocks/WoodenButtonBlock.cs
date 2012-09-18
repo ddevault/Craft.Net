@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class WoodenButtonBlock : Block
+    public class WoodenButtonBlock : StoneButtonBlock // TODO: Generic ButtonBlock
     {
         public override ushort Id
         {

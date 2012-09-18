@@ -1,4 +1,6 @@
-﻿namespace Craft.Net.Data.Blocks
+﻿using Craft.Net.Data.Items;
+
+namespace Craft.Net.Data.Blocks
 {
     public class AirBlock : Block
     {
@@ -12,9 +14,19 @@
             get { return new Size(0, 0, 0); }
         }
 
-        public override bool IsSolid
+        public override double Hardness
         {
-            get { return false; }
+            get { return -1; }
+        }
+
+        public override bool CanHarvest(ToolItem tool)
+        {
+            return false;
+        }
+
+        public override Transparency Transparency
+        {
+            get { return Transparency.Transparent; } // TODO: More transparency options
         }
     }
 }

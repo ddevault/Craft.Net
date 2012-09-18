@@ -12,6 +12,11 @@ namespace Craft.Net.Data.Blocks
             SignData = new SignTileEntity();
         }
 
+        public override double Hardness
+        {
+            get { return 1; }
+        }
+
         public SignTileEntity SignData { get; set; }
 
         public override TileEntity TileEntity

@@ -8,7 +8,7 @@ namespace Craft.Net.Data.Items
     {
         public static Type[] DamagingBlocks = new Type[]
             {
-                typeof(SpiderwebBlock),
+                typeof(CobwebBlock),
                 typeof(LeavesBlock),
                 typeof(TallGrassBlock), 
                 typeof(TripwireBlock), 

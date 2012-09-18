@@ -11,5 +11,10 @@ namespace Craft.Net.Data.Blocks
         {
             get { return 8; }
         }
+
+        public override double Hardness
+        {
+            get { return 100; } // TODO: -1? Burger reports 100
+        }
     }
 }

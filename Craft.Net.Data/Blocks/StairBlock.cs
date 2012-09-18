@@ -15,6 +15,11 @@ namespace Craft.Net.Data.Blocks
 
     public abstract class StairBlock : Block
     {
+        public override double Hardness
+        {
+            get { return 2; }
+        }
+
         public override bool OnBlockPlaced(World world, Vector3 position, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entities.Entity usedBy)
         {
             Metadata = (byte)DataUtility.DirectionByRotationFlat(usedBy);

@@ -11,5 +11,10 @@ namespace Craft.Net.Data.Blocks
         {
             get { return 110; }
         }
+
+        public override double Hardness
+        {
+            get { return 0.6; }
+        }
     }
 }

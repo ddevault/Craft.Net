@@ -40,6 +40,11 @@ namespace Craft.Net.Data
         /// </summary>
         public byte SkyLight { get; set; }
 
+        public bool Solid
+        {
+            get { return Transparency == Transparency.Transparent; } // TODO: More transparency types
+        }
+
         #endregion
 
         #region Overriden Members
@@ -73,11 +78,6 @@ namespace Craft.Net.Data
         public virtual Transparency Transparency
         {
             get { return Transparency.Opaque; }
-        }
-
-        public virtual bool IsSolid
-        {
-            get { return true; }
         }
 
         /// <summary>
@@ -221,7 +221,7 @@ namespace Craft.Net.Data
                 {
                     damage = Hardness != 0 ? 2 : 0;
                     time /= 1.5;
-                    if (this is SpiderwebBlock)
+                    if (this is CobwebBlock)
                         time /= 15;
                 }
                 else if (tool.ToolType == ToolType.Hoe)
@@ -230,9 +230,9 @@ namespace Craft.Net.Data
                 {
                     if (this is WoolBlock)
                         time /= 5;
-                    if (this is LeavesBlock || this is SpiderwebBlock)
+                    if (this is LeavesBlock || this is CobwebBlock)
                         time /= 15;
-                    if (this is SpiderwebBlock || this is LeavesBlock || this is TallGrassBlock ||
+                    if (this is CobwebBlock || this is LeavesBlock || this is TallGrassBlock ||
                         this is TripwireBlock || this is VineBlock)
                         damage = 1;
                     else

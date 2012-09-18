@@ -185,7 +185,7 @@ namespace Craft.Net.Data.Entities
             if (PhysicsAsleep && EnableEntitySleeping)
                 return; // TODO: Wake up on collision
             EnablePhysicsNotifications = false;
-            if (Velocity == Vector3.Zero && world.GetBlock(Position + Vector3.Down).IsSolid && EnableEntitySleeping)
+            if (Velocity == Vector3.Zero && world.GetBlock(Position + Vector3.Down).Solid && EnableEntitySleeping)
             {
                 PhysicsAsleep = true;
                 return;

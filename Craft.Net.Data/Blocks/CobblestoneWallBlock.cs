@@ -11,5 +11,10 @@ namespace Craft.Net.Data.Blocks
         {
             get { return 139; }
         }
+
+        public override double Hardness
+        {
+            get { return 2; } // TODO: Estimated, burger provides 0
+        }
     }
 }

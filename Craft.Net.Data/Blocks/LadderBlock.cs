@@ -12,6 +12,11 @@ namespace Craft.Net.Data.Blocks
             get { return 65; }
         }
 
+        public override double Hardness
+        {
+            get { return 0.4; }
+        }
+
         public override bool OnBlockPlaced(World world, Vector3 position, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entities.Entity usedBy)
         {
             this.Metadata = (byte)DataUtility.DirectionByRotationFlat(usedBy, true);
