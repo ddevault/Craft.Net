@@ -179,6 +179,11 @@ namespace Craft.Net.Data
         public virtual int GetHarvestTime(Item item, out int damage)
         {
             // time is in seconds until returned
+            if (Hardness == -1)
+            {
+                damage = 0;
+                return -1;
+            }
             double time = Hardness * 1.5;
             var tool = item as ToolItem;
             damage = 0;
