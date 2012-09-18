@@ -28,6 +28,31 @@ namespace Craft.Net.Data.Items
 
     public abstract class ToolItem : Item
     {
+        protected ToolItem()
+        {
+            if (ToolType != ToolType.Other)
+            {
+                switch (ToolMaterial)
+                {
+                    case ToolMaterial.Wood:
+                        Data = 60;
+                        break;
+                    case ToolMaterial.Stone:
+                        Data = 132;
+                        break;
+                    case ToolMaterial.Iron:
+                        Data = 251;
+                        break;
+                    case ToolMaterial.Gold:
+                        Data = 33;
+                        break;
+                    case ToolMaterial.Diamond:
+                        Data = 1562;
+                        break;
+                }
+            }
+        }
+
         public override byte MaximumStack
         {
             get { return 1; }

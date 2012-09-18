@@ -49,13 +49,32 @@ namespace Craft.Net.Server.Packets
         {
             if (client.Entity.Position.DistanceTo(Position) <= MaxDigDistance)
             {
+                // TODO: Enforce line-of-sight
+                var block = client.World.GetBlock(Position);
+                int damage;
                 switch (Action)
                 {
                     case PlayerAction.StartedDigging:
-                        if (client.Entity.Abilities.InstantMine)
+                        if (client.Entity.Abilities.InstantMine || block.Hardness == 0)
                             client.World.SetBlock(Position, new AirBlock());
+                        else
+                        {
+                            client.ExpectedMiningEnd = DateTime.Now.AddMilliseconds(
+                                block.GetHarvestTime(client.Entity.SelectedItem.Item,
+                                client.World, client.Entity, out damage) - (client.Ping + 100));
+                        }
                         break;
                     case PlayerAction.FinishedDigging:
+                        // TODO: Check that they're finishing the same block as before
+                        if (client.ExpectedMiningEnd > DateTime.Now)
+                            return;
+                        block.GetHarvestTime(client.Entity.SelectedItem.Item,
+                                client.World, client.Entity, out damage);
+                        if (damage != 0)
+                        {
+                            client.Entity.Inventory[client.Entity.SelectedSlot].Metadata -= (ushort)damage;
+                            client.Entity.SetSlot(client.Entity.SelectedSlot, client.Entity.SelectedItem);
+                        }
                         var old = client.World.GetBlock(Position);
                         client.World.SetBlock(Position, new AirBlock());
                         old.OnBlockMined(client.World, Position);

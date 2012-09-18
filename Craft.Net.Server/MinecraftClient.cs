@@ -103,6 +103,7 @@ namespace Craft.Net.Server
         /// The speed at which this client is permitted to walk.
         /// </summary>
         public byte WalkingSpeed;
+        internal DateTime ExpectedMiningEnd;
         /// <summary>
         /// Plugin channels this client has requested to listen to.
         /// </summary>

@@ -159,15 +159,19 @@ namespace Craft.Net.Data
             // TODO: Stuff described in XML comments
         }
 
-        public virtual int GetHarvestTime(ToolItem tool, World world, PlayerEntity entity, out int damage)
+        public virtual int GetHarvestTime(Item item, World world, PlayerEntity entity, out int damage)
         {
-            int time = GetHarvestTime(tool, out damage);
-            if (!tool.IsEfficient(this))
+            int time = GetHarvestTime(item, out damage);
+            var tool = item as ToolItem;
+            if (tool != null)
             {
-                if (entity.IsUnderwater(world) && !entity.IsOnGround(world))
-                    time *= 25;
-                else if (entity.IsUnderwater(world) || !entity.IsOnGround(world))
-                    time *= 5;
+                if (!tool.IsEfficient(this))
+                {
+                    if (entity.IsUnderwater(world) && !entity.IsOnGround(world))
+                        time *= 25;
+                    else if (entity.IsUnderwater(world) || !entity.IsOnGround(world))
+                        time *= 5;
+                }
             }
             return time;
         }
