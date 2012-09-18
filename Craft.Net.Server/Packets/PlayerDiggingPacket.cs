@@ -57,7 +57,7 @@ namespace Craft.Net.Server.Packets
                 {
                     case PlayerAction.StartedDigging:
                         if (client.Entity.Abilities.InstantMine || block.Hardness == 0)
-                            client.World.SetBlock(Position, new AirBlock());
+                            block.OnBlockMined(client.World, Position, client.Entity);
                         else
                         {
                             // TODO: Investigate exploitability with respect to ping time
@@ -89,9 +89,8 @@ namespace Craft.Net.Server.Packets
                                 }
                             }
                         }
-                        var old = client.World.GetBlock(Position);
-                        client.World.SetBlock(Position, new AirBlock());
-                        old.OnBlockMined(client.World, Position);
+                        //client.World.SetBlock(Position, new AirBlock());
+                        block.OnBlockMined(client.World, Position, client.Entity);
                         client.Entity.FoodExhaustion += 0.025f;
                         break;
                 }

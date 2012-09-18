@@ -143,10 +143,18 @@ namespace Craft.Net.Data
             // TODO: Default handler to kick the entity out
         }
 
-        public virtual void OnBlockMined(World world, Vector3 destroyedBlock)
+        public virtual void OnBlockMined(World world, Vector3 destroyedBlock, PlayerEntity player)
         {
-            world.OnSpawnEntity(new ItemEntity(destroyedBlock + new Vector3(0.5, 0.5, 0.5), 
-                new Slot(Id, 1, Metadata)));
+            if (Hardness != -1)
+            {
+                var slot = player.Inventory[player.SelectedSlot];
+                world.SetBlock(destroyedBlock, new AirBlock());
+                if (CanHarvest(slot.Item as ToolItem) && player.GameMode != GameMode.Creative)
+                {
+                    world.OnSpawnEntity(new ItemEntity(destroyedBlock + new Vector3(0.5, 0.5, 0.5),
+                                                       new Slot(Id, 1, Metadata)));
+                }
+            }
         }
 
         /// <summary>
