@@ -1,6 +1,7 @@
 using System;
 using Craft.Net.Data;
 using Craft.Net.Data.Blocks;
+using Craft.Net.Data.Items;
 
 namespace Craft.Net.Server.Packets
 {
@@ -59,6 +60,7 @@ namespace Craft.Net.Server.Packets
                             client.World.SetBlock(Position, new AirBlock());
                         else
                         {
+                            // TODO: Investigate exploitability with respect to ping time
                             client.ExpectedMiningEnd = DateTime.Now.AddMilliseconds(
                                 block.GetHarvestTime(client.Entity.SelectedItem.Item,
                                 client.World, client.Entity, out damage) - (client.Ping + 100));
@@ -72,8 +74,20 @@ namespace Craft.Net.Server.Packets
                                 client.World, client.Entity, out damage);
                         if (damage != 0)
                         {
-                            client.Entity.Inventory[client.Entity.SelectedSlot].Metadata -= (ushort)damage;
-                            client.Entity.SetSlot(client.Entity.SelectedSlot, client.Entity.SelectedItem);
+                            var slot = client.Entity.Inventory[client.Entity.SelectedSlot];
+                            if (!slot.Empty)
+                            {
+                                if (slot.Item is ToolItem)
+                                {
+                                    var tool = slot.Item as ToolItem;
+                                    bool destroy = tool.Damage(damage);
+                                    slot.Metadata = tool.Data;
+                                    if (destroy)
+                                        client.Entity.SetSlot(client.Entity.SelectedSlot, new Slot());
+                                    else
+                                        client.Entity.SetSlot(client.Entity.SelectedSlot, slot);
+                                }
+                            }
                         }
                         var old = client.World.GetBlock(Position);
                         client.World.SetBlock(Position, new AirBlock());

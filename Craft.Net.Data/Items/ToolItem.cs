@@ -28,31 +28,6 @@ namespace Craft.Net.Data.Items
 
     public abstract class ToolItem : Item
     {
-        protected ToolItem()
-        {
-            if (ToolType != ToolType.Other)
-            {
-                switch (ToolMaterial)
-                {
-                    case ToolMaterial.Wood:
-                        Data = 60;
-                        break;
-                    case ToolMaterial.Stone:
-                        Data = 132;
-                        break;
-                    case ToolMaterial.Iron:
-                        Data = 251;
-                        break;
-                    case ToolMaterial.Gold:
-                        Data = 33;
-                        break;
-                    case ToolMaterial.Diamond:
-                        Data = 1562;
-                        break;
-                }
-            }
-        }
-
         public override byte MaximumStack
         {
             get { return 1; }
@@ -64,6 +39,40 @@ namespace Craft.Net.Data.Items
         public bool CanHarvest(Block block)
         {
             return block.CanHarvest(this);
+        }
+
+        /// <summary>
+        /// Returns true if the item is destroyed.
+        /// </summary>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        public bool Damage(int amount)
+        {
+            if (ToolType == ToolType.Other)
+                return false;
+            Data += (ushort)amount;
+            return Data >= GetIdealUses();
+        }
+
+        private ushort GetIdealUses()
+        {
+            if (ToolType != ToolType.Other)
+            {
+                switch (ToolMaterial)
+                {
+                    case ToolMaterial.Wood:
+                        return 60;
+                    case ToolMaterial.Stone:
+                        return 132;
+                    case ToolMaterial.Iron:
+                        return 251;
+                    case ToolMaterial.Gold:
+                        return 33;
+                    case ToolMaterial.Diamond:
+                        return 1562;
+                }
+            }
+            return 0xFFFF;
         }
 
         public virtual bool IsEfficient(Block block)
