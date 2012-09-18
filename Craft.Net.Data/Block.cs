@@ -42,7 +42,7 @@ namespace Craft.Net.Data
 
         public bool Solid
         {
-            get { return Transparency == Transparency.Transparent; } // TODO: More transparency types
+            get { return Transparency != Transparency.Transparent; } // TODO: More transparency types
         }
 
         #endregion
