@@ -117,16 +117,16 @@ namespace Craft.Net.Data
         /// </summary>
         private static int GetSectionNumber(double yPos)
     	{
-			return ((int)yPos) >> 4; //divide by 16 ;)
-		}
+		return ((int)yPos) >> 4; //divide by 16 ;)
+	}
 
         /// <summary>
         /// Gets the position inside of the section.
         /// </summary>
-		private static int GetPositionInSection(double yPos)
-		{
-			return ((int)yPos) & (16 - 1); // http://graphics.stanford.edu/~seander/bithacks.html#ModulusDivisionEasy
-		}
+	private static int GetPositionInSection(double yPos)
+	{
+		return ((int)yPos) & (16 - 1); // http://graphics.stanford.edu/~seander/bithacks.html#ModulusDivisionEasy
+	}
 
         /// <summary>
         /// Gets the biome at the given column.
