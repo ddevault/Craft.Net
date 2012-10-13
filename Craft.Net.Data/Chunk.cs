@@ -84,9 +84,9 @@ namespace Craft.Net.Data
         /// </summary>
         public void SetBlock(Vector3 position, Block value)
         {
-            var y = (byte)position.Y;
-            y /= 16;
-            position.Y = position.Y % 16;
+            var y = GetSectionNumber(position.Y);
+            position.Y = GetPositionInSection(position.Y);
+            
             Sections[y].SetBlock(position, value);
             var heightIndex = (byte)(position.Z * Depth) + (byte)position.X;
             if (HeightMap[heightIndex] < position.Y)
@@ -103,14 +103,30 @@ namespace Craft.Net.Data
         /// </summary>
         public Block GetBlock(Vector3 position)
         {
-            var y = (byte)position.Y;
-            y /= 16;
-            position.Y = position.Y % 16;
+            var y = GetSectionNumber(position.Y);
+            position.Y = GetPositionInSection(position.Y);
+            
             var block = Sections[y].GetBlock(position);
             if (TileEntities.ContainsKey(position))
                 block.TileEntity = TileEntities[position];
             return block;
         }
+        
+        /// <summary>
+        /// Gets section number from the position.
+        /// </summary>
+        private static int GetSectionNumber(double yPos)
+    	{
+			return ((int)yPos) >> 4; //divide by 16 ;)
+		}
+
+        /// <summary>
+        /// Gets the position inside of the section.
+        /// </summary>
+		private static int GetPositionInSection(double yPos)
+		{
+			return ((int)yPos) & (16 - 1); // http://graphics.stanford.edu/~seander/bithacks.html#ModulusDivisionEasy
+		}
 
         /// <summary>
         /// Gets the biome at the given column.
