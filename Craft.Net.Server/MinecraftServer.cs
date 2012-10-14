@@ -20,7 +20,7 @@ namespace Craft.Net.Server
         /// <summary>
         /// The protocol version supported by this server.
         /// </summary>
-        public const int ProtocolVersion = 43;
+        public const int ProtocolVersion = 46;
 
         #region Properties
 

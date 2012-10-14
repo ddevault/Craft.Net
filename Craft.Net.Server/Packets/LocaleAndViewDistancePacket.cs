@@ -18,6 +18,7 @@ namespace Craft.Net.Server.Packets
         public Difficulty Difficulty;
         public string Locale;
         public int ViewDistance;
+        public bool ShowCape; // TODO: How is this used
 
         public override byte PacketId
         {
@@ -36,6 +37,8 @@ namespace Craft.Net.Server.Packets
             if (!DataUtility.TryReadByte(buffer, ref offset, out chatFlags))
                 return -1;
             if (!DataUtility.TryReadByte(buffer, ref offset, out difficulty))
+                return -1;
+            if (!DataUtility.TryReadBoolean(buffer, ref offset, out ShowCape))
                 return -1;
 
             // Adds an extra 2 chunk buffer to make loading look nice

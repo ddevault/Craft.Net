@@ -12,6 +12,7 @@ namespace Craft.Net.Server.Packets
         public byte WindowId;
         public short SlotIndex;
         public bool RightClick;
+        public bool MiddleClick;
         public short ActionNumber;
         public bool Shift;
         public Slot ClickedItem;
@@ -24,23 +25,31 @@ namespace Craft.Net.Server.Packets
         public override int TryReadPacket(byte[] buffer, int length)
         {
             int offset = 1;
+            byte shift, rightClick;
             if (!DataUtility.TryReadByte(buffer, ref offset, out WindowId))
                 return -1;
             if (!DataUtility.TryReadInt16(buffer, ref offset, out SlotIndex))
                 return -1;
-            if (!DataUtility.TryReadBoolean(buffer, ref offset, out RightClick))
+            if (!DataUtility.TryReadByte(buffer, ref offset, out rightClick))
                 return -1;
             if (!DataUtility.TryReadInt16(buffer, ref offset, out ActionNumber))
                 return -1;
-            if (!DataUtility.TryReadBoolean(buffer, ref offset, out Shift))
+            if (!DataUtility.TryReadByte(buffer, ref offset, out shift))
                 return -1;
             if (!Slot.TryReadSlot(buffer, ref offset, out ClickedItem))
                 return -1;
+            Console.WriteLine("Window click: " + shift + ", " + rightClick);
+            Shift = shift == 1;
+            RightClick = rightClick == 1;
+            if (shift == 2 && rightClick == 3)
+                MiddleClick = true;
             return offset;
         }
 
         public override void HandlePacket(MinecraftServer server, MinecraftClient client)
         {
+            if (MiddleClick)
+                return; // No effect in vanilla minecraft
             Window window = null;
             if (WindowId == 0)
                 window = client.Entity.Inventory;
@@ -87,6 +96,8 @@ namespace Craft.Net.Server.Packets
                             (byte)(clickedItem.Count + (clickedItem.Empty ? 0 : 1)), heldItem.Metadata);
                         client.Entity.ItemInMouse.Count--;
                     }
+                    else
+                        client.Entity.Inventory[SlotIndex] = new Slot(heldItem.Id, 1, heldItem.Metadata);
                 }
                 else
                 {
