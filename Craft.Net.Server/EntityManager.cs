@@ -203,22 +203,22 @@ namespace Craft.Net.Server
                         client.SendPacket(new UpdateHealthPacket(player.Health, player.Food, player.FoodSaturation));
                         if (player.Health <= 0)
                             KillEntity(player);
-                        return;
+                        break;
                     case "SpawnPoint":
                         client.SendPacket(new SpawnPositionPacket(player.SpawnPoint));
-                        return;
+                        break;
                     case "GameMode":
                         client.SendPacket(new ChangeGameStatePacket(GameState.ChangeGameMode, client.Entity.GameMode));
                         client.SendPacket(new PlayerAbilitiesPacket(player.Abilities));
-                        return;
+                        break;
                     case "Velocity":
                         client.SendPacket(new EntityVelocityPacket(player.Id, player.Velocity));
                         foreach (var knownClient in clients)
                             knownClient.SendPacket(new EntityVelocityPacket(player.Id, player.Velocity));
-                        return;
+                        break;
                     case "GivenPosition":
                         UpdateGivenPosition(player);
-                        return;
+                        break;
                 }
             }
             switch (propertyChangedEventArgs.PropertyName)
@@ -357,9 +357,11 @@ namespace Craft.Net.Server
 
         private void UpdateGivenPosition(PlayerEntity entity)
         {
-            // Used to update a player's position based on the one provided by
-            // the client.
+            // Used to update a player's position based on the one provided by the client.
             entity.Position = entity.GivenPosition;
+            // Firing an event within the same event's event handler cannot be done in .NET, so
+            // we manually call UpdateEntityPosition
+            UpdateEntityPosition(entity);
         }
 
         private void UpdateEntityPosition(Entity entity)
