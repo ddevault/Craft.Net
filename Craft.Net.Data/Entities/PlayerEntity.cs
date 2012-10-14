@@ -267,6 +267,17 @@ namespace Craft.Net.Data.Entities
             }
         }
         public DateTime LastGivenPositionUpdate { get; set; }
+        public bool ShowCape { get; set; }
+
+        public override Metadata.MetadataDictionary Metadata
+        {
+            get
+            {
+                var metadata = base.Metadata;
+                metadata[16] = new Metadata.MetadataInt(16, ShowCape ? 1 : 0);
+                return metadata;
+            }
+        }
 
         //public override CollisionTests TestsToPerform
         //{
