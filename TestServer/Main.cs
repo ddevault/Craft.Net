@@ -53,8 +53,12 @@ namespace TestServer
             {
                 e.Handled = true;
                 string command = e.RawMessage.Substring(1);
+                string[] parameters = null;
                 if (command.Contains(" "))
+                {
+                    parameters = command.Substring(command.IndexOf(' ') + 1).Split(' ');
                     command = command.Remove(command.IndexOf(' '));
+                }
                 command = command.ToLower();
                 switch (command)
                 {
@@ -118,6 +122,9 @@ namespace TestServer
                         break;
                     case "damage":
                         e.Origin.Entity.Health--;
+                        break;
+                    case "se":
+                        e.Origin.SendPacket(new NamedSoundEffectPacket(e.RawMessage.Substring(4), e.Origin.Entity.Position));
                         break;
                 }
             }

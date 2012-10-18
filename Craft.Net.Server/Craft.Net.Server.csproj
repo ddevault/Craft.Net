@@ -138,6 +138,7 @@
     <Compile Include="Packets\LoginPacket.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Packets\NamedSoundEffectPacket.cs" />
     <Compile Include="Packets\PlayerAbilitiesPacket.cs">
       <SubType>Code</SubType>
     </Compile>

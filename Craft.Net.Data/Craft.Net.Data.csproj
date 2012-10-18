@@ -396,6 +396,7 @@
     <Compile Include="Section.cs" />
     <Compile Include="Size.cs" />
     <Compile Include="Slot.cs" />
+    <Compile Include="SoundEffect.cs" />
     <Compile Include="TileEntity.cs" />
     <Compile Include="Transparency.cs" />
     <Compile Include="Vector3.cs" />

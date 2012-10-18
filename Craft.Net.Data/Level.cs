@@ -212,7 +212,7 @@ namespace Craft.Net.Data
         public PlayerEntity LoadPlayer(string name)
         {
             PlayerEntity entity = new PlayerEntity(Difficulty);
-            if (!File.Exists(Path.Combine(LevelDirectory, "players", name + ".dat")))
+            if (LevelDirectory == null || !File.Exists(Path.Combine(LevelDirectory, "players", name + ".dat")))
             {
                 // Return default player entity
                 entity.Position = SpawnPoint;

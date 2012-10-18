@@ -25,7 +25,7 @@ namespace Craft.Net.Data.Entities
                 {
                     if (Food > 17 && Health < 20 && Health != 0) // TODO: HealthMax constant?
                         Health++;
-                    if (Food == 0)
+                    if (Food == 0 && GameMode != GameMode.Creative)
                     {
                         switch (Difficulty)
                         {
@@ -97,7 +97,10 @@ namespace Craft.Net.Data.Entities
             get { return food; }
             set
             {
-                food = value;
+                if (GameMode == GameMode.Creative)
+                    food = 20;
+                else
+                    food = value;
                 OnPropertyChanged("Food");
             }
         }
