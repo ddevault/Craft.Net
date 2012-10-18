@@ -251,6 +251,7 @@ namespace Craft.Net.Data
             new PotatoBlock(),
             new WoodenButtonBlock(),
             new SkullBlock(),
+            new AnvilBlock(),
             new IronShovelItem(),
             new IronPickaxeItem(),
             new IronAxeItem(),
