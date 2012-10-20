@@ -98,6 +98,13 @@ namespace Craft.Net.Data.Entities
                 EntityDamaged(this, new EntityDamageEventArgs(damage, Health));
         }
 
+        public override void PhysicsUpdate(World world)
+        {
+            if (Position.Y < -32)
+                Health -= 4;
+            base.PhysicsUpdate(world);
+        }
+
         // TODO: Potion effects
         // TODO: Equipment
     }
