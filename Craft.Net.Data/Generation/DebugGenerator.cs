@@ -1,4 +1,4 @@
-﻿using Craft.Net.Data.Blocks;
+using Craft.Net.Data.Blocks;
 
 namespace Craft.Net.Data.Generation
 {

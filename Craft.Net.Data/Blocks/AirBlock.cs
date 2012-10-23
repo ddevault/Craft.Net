@@ -1,4 +1,4 @@
-﻿using Craft.Net.Data.Items;
+using Craft.Net.Data.Items;
 
 namespace Craft.Net.Data.Blocks
 {

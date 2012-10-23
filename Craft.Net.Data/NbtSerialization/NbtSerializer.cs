@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -75,12 +75,12 @@ namespace Craft.Net.Data.NbtSerialization
                     if(propValue == null)
                     {
                         if (ignoreOnNullAttribute != null) continue;
-                    	if(property.PropertyType.IsValueType)
-                    	{
-                    		propValue = Activator.CreateInstance(property.PropertyType);
-                    	}
-                    	else if (property.PropertyType == typeof(string))
-                    		propValue = "";
+                        if(property.PropertyType.IsValueType)
+                        {
+                            propValue = Activator.CreateInstance(property.PropertyType);
+                        }
+                        else if (property.PropertyType == typeof(string))
+                            propValue = "";
                     }
                     
                     tag = innerSerializer.Serialize(propValue);

@@ -1,4 +1,4 @@
-﻿using Craft.Net.Data.Entities;
+using Craft.Net.Data.Entities;
 
 namespace Craft.Net.Data.Items
 {

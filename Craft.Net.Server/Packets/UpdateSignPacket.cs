@@ -1,4 +1,4 @@
-﻿using Craft.Net.Data;
+using Craft.Net.Data;
 using Craft.Net.Data.Blocks;
 
 namespace Craft.Net.Server.Packets

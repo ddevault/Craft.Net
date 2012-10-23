@@ -22,7 +22,7 @@ namespace TestServer
         {
             // Create a server on 0.0.0.0:25565
             minecraftServer = new MinecraftServer(
-		        new IPEndPoint(IPAddress.Any, 25565));
+                new IPEndPoint(IPAddress.Any, 25565));
             minecraftServer.Settings.OnlineMode = false;
             minecraftServer.Settings.EnableEncryption = true;
             // Add a console logger
