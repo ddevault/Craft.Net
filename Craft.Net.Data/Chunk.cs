@@ -87,7 +87,7 @@ namespace Craft.Net.Data
             var y = GetSectionNumber(position.Y);
             position.Y = GetPositionInSection(position.Y);
 
-			Sections[y].SetBlock(position, value);
+            Sections[y].SetBlock(position, value);
             var heightIndex = (byte)(position.Z * Depth) + (byte)position.X;
             if (HeightMap[heightIndex] < position.Y)
                 HeightMap[heightIndex] = (byte)position.Y;

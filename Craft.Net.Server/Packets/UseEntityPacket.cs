@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Craft.Net.Data;
 using Craft.Net.Data.Blocks;
 using Craft.Net.Data.Entities;

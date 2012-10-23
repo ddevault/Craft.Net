@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Craft.Net.Server.Packets;
 
 namespace Craft.Net.Server

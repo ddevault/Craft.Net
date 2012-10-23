@@ -1,4 +1,4 @@
-﻿using Craft.Net.Data.NbtSerialization;
+using Craft.Net.Data.NbtSerialization;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
