@@ -18,6 +18,7 @@ namespace Craft.Net.Server
         /// The protocol version supported by this server.
         /// </summary>
         public const int ProtocolVersion = 47;
+        public const string TargetClientVersion = "1.4.2";
 
         #region Properties
 
