@@ -93,6 +93,8 @@ namespace Craft.Net.Server
             foreach (FieldInfo field in fields)
             {
                 var fieldValue = field.GetValue(this);
+                if (fieldValue == null)
+                    continue;
                 if (fieldValue is NbtFile)
                     fieldValue = ((NbtFile)fieldValue).RootTag;
                 value += "\t" + field.Name + ": " + fieldValue.ToString() + "\n";

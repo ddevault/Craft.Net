@@ -12,15 +12,12 @@ using Craft.Net.Data.Entities;
 
 namespace Craft.Net.Server
 {
-    /// <summary>
-    /// A Minecraft 12w39b server.
-    /// </summary>
     public class MinecraftServer
     {
         /// <summary>
         /// The protocol version supported by this server.
         /// </summary>
-        public const int ProtocolVersion = 46;
+        public const int ProtocolVersion = 47;
 
         #region Properties
 

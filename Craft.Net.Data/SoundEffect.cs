@@ -7,7 +7,8 @@ namespace Craft.Net.Data
 {
     public class SoundEffect
     {
-        // Generated from http://s3.amazonaws.com/MinecraftResources
+        // Partially generated from http://s3.amazonaws.com/MinecraftResources
+        // TODO: Clear out some sounds that don't do anything on the client
         public const string AmbientCave = "ambient.cave.cave";
         public const string AmbientWeatherRain = "ambient.weather.rain";
         public const string AmbientWeatherThunder = "ambient.weather.thunder";
@@ -155,5 +156,24 @@ namespace Craft.Net.Data
         public const string MobZombieStep = "mob.zombie.step";
         public const string RandomClassicHurt = "random.classic_hurt";
         public const string StepLadder = "step.ladder";
+        public const string MobBatDeath = "mob.bat.death";
+        public const string MobBatHurt = "mob.bat.hurt";
+        public const string MobBatIdle = "mob.bat.idle";
+        public const string MobBatTakeoff = "mob.bat.takeoff";
+        public const string MobEnderdragonEnd = "mob.enderdragon.end";
+        public const string MobEnderdragonGrowl = "mob.enderdragon.growl";
+        public const string MobEnderdragonHit = "mob.enderdragon.hit";
+        public const string MobEnderdragonWings = "mob.enderdragon.wings";
+        public const string MobWitherDeath = "mob.wither.death";
+        public const string MobWitherHurt = "mob.wither.hurt";
+        public const string MobWitherIdle = "mob.wither.idle";
+        public const string MobWitherShoot = "mob.wither.shoot";
+        public const string MobWitherSpawn = "mob.wither.spawn";
+        public const string MobZombieInfect = "mob.zombie.infect";
+        public const string MobZombieRemedy = "mob.zombie.remedy";
+        public const string MobZombieUnfect = "mob.zombie.unfect";
+        public const string RandomAnvilBreak = "random.anvil_break";
+        public const string RandomAnvilLand = "random.anvil_land";
+        public const string RandomAnvilUse = "random.anvil_use";
     }
 }
