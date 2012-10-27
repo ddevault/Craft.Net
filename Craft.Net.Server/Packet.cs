@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
 using Craft.Net.Data;
@@ -29,6 +30,8 @@ namespace Craft.Net.Server
         /// This packet's packet ID.
         /// </summary>
         public abstract byte PacketId { get; }
+
+        protected internal Socket Socket { get; set; }
 
         /// <summary>
         /// This event fires after the packet has been sent.

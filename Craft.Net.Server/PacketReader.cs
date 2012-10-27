@@ -300,6 +300,7 @@ namespace Craft.Net.Server
                 }
                 var workingPacket = (Packet)Activator.CreateInstance(packetType);
                 workingPacket.PacketContext = PacketContext.ClientToServer;
+                workingPacket.Socket = client.Socket;
                 // Attempt to read the packet
                 int workingLength = workingPacket.TryReadPacket(buffer, length);
                 if (workingLength == -1) // Incomplete packet
