@@ -245,6 +245,11 @@ namespace Craft.Net.Server
             channel.ChannelRegistered(this);
         }
 
+        public MinecraftClient GetClient(string name)
+        {
+            return Clients.FirstOrDefault(c => c.Username == name && c.IsLoggedIn);
+        }
+
         #endregion
 
         #region Internal Methods
