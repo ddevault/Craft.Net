@@ -173,7 +173,7 @@ namespace Craft.Net.Server
         /// the queued packet.
         /// </summary>
         /// <param name="packet"></param>
-        public void SendPacket(Packet packet)
+        public virtual void SendPacket(Packet packet)
         {
             if (packet == null)
                 return;
@@ -185,7 +185,7 @@ namespace Craft.Net.Server
         /// Sends the specified raw data to the client. This data
         /// will be encrypted if encryption is enabled.
         /// </summary>
-        public void SendData(byte[] data)
+        public virtual void SendData(byte[] data)
         {
             if (IsDisconnected)
                 return;
@@ -223,7 +223,7 @@ namespace Craft.Net.Server
         /// <summary>
         /// Updates which chunks are loaded on the client.
         /// </summary>
-        public void UpdateChunks(bool forceUpdate)
+        public virtual void UpdateChunks(bool forceUpdate)
         {
             if (forceUpdate ||
                 (int)(Entity.Position.X) >> 4 != (int)(Entity.OldPosition.X) >> 4 ||
@@ -258,7 +258,7 @@ namespace Craft.Net.Server
         /// <summary>
         /// Loads the given chunk on the client.
         /// </summary>
-        public void LoadChunk(Vector3 position)
+        public virtual void LoadChunk(Vector3 position)
         {
             World world = Server.EntityManager.GetEntityWorld(Entity);
             Chunk chunk = world.GetChunk(position);
@@ -279,7 +279,7 @@ namespace Craft.Net.Server
         /// <summary>
         /// Unloads the given chunk on the client.
         /// </summary>
-        public void UnloadChunk(Vector3 position)
+        public virtual void UnloadChunk(Vector3 position)
         {
             var dataPacket = new ChunkDataPacket();
             dataPacket.AddBitMap = 0;
@@ -295,7 +295,7 @@ namespace Craft.Net.Server
         /// <summary>
         /// Sends a <see cref="ChatMessagePacket"/> to the client.
         /// </summary>
-        public void SendChat(string message)
+        public virtual void SendChat(string message)
         {
             SendPacket(new ChatMessagePacket(message));
             Server.ProcessSendQueue();
@@ -316,7 +316,7 @@ namespace Craft.Net.Server
             UpdateLoadedChunksTimer = new Timer(UpdateLoadedChunks, null, 1000, 1000);
         }
 
-        internal void KeepAlive(object discarded)
+        protected internal virtual void KeepAlive(object discarded)
         {
             if (LastKeepAlive.AddSeconds(10) < DateTime.Now && false) // TODO
             {
