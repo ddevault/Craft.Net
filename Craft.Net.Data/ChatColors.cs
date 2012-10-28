@@ -23,5 +23,11 @@ namespace Craft.Net.Data
         public const string Pink = "§d";
         public const string Yellow = "§e";
         public const string White = "§f";
+        public const string Gibberish = "§k";
+        public const string Bold = "§l";
+        public const string Strikethrough = "§m";
+        public const string Underline = "§n";
+        public const string Italic = "§o";
+        public const string Plain = "§r";
     }
 }
