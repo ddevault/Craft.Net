@@ -153,6 +153,7 @@ namespace Craft.Net.Server
             LastKeepAlive = DateTime.MaxValue.AddSeconds(-10);
             KnownEntities = new List<int>();
             PluginChannels = new List<string>();
+            Tags = new Dictionary<string, object>();
         }
 
         /// <summary>
