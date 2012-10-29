@@ -20,6 +20,6 @@ namespace Craft.Net.Data
         /// Similar to survival, with the exception that players may
         /// not place or remove blocks.
         /// </summary>
-        AdventureMode = 2
+        Adventure = 2
     }
 }
