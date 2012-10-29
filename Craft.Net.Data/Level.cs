@@ -16,7 +16,7 @@ namespace Craft.Net.Data
     /// <summary>
     /// Represents a Minecraft level
     /// </summary>
-    public class Level
+    public class Level // : INotifyPropertyChanged // TODO
     {
         /// <summary>
         /// Craft.Net will use this world generator if it does not recognize the provided one.

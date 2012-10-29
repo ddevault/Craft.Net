@@ -64,11 +64,12 @@ namespace Craft.Net.Server.Packets
                             client.ExpectedMiningEnd = DateTime.Now.AddMilliseconds(
                                 block.GetHarvestTime(client.Entity.SelectedItem.Item,
                                 client.World, client.Entity, out damage) - (client.Ping + 100));
+                            client.ExpectedBlockToMine = Position;
                         }
                         break;
                     case PlayerAction.FinishedDigging:
                         // TODO: Check that they're finishing the same block as before
-                        if (client.ExpectedMiningEnd > DateTime.Now)
+                        if (client.ExpectedMiningEnd > DateTime.Now || client.ExpectedBlockToMine != Position)
                             return;
                         block.GetHarvestTime(client.Entity.SelectedItem.Item,
                                 client.World, client.Entity, out damage);

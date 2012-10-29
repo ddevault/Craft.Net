@@ -104,6 +104,7 @@ namespace Craft.Net.Server
         /// </summary>
         public byte WalkingSpeed;
         internal DateTime ExpectedMiningEnd;
+        internal Vector3 ExpectedBlockToMine;
         /// <summary>
         /// Plugin channels this client has requested to listen to.
         /// </summary>
