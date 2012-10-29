@@ -18,7 +18,7 @@ namespace Craft.Net.Data
             InstantMine = false;
             FirePropertyChanged = true;
             WalkingSpeed = 12;
-            FlyingSpeed = 25;
+            FlyingSpeed = 24;
             PlayerEntity = entity;
         }
 
