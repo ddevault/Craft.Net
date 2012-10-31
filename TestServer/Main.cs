@@ -40,7 +40,7 @@ namespace TestServer
             minecraftServer.ChatMessage += HandleOnChatMessage;
             // Start the server
             minecraftServer.Start();
-            Console.WriteLine("Press any key to exit.");
+            Console.WriteLine("Press 'q' key to exit.");
             while (Console.ReadKey(true).Key != ConsoleKey.Q) { }
             // Stop the server
             minecraftServer.Stop();
