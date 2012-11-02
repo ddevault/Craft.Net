@@ -29,11 +29,7 @@ namespace Craft.Net.Server
         {
             string result = "";
             for (int i = 0; i < p.Length; i++)
-            {
-                if (p[i] < 0x10)
-                    result += "0";
-                result += p[i].ToString("x"); // Converts to hex string
-            }
+                result += p[i].ToString("X2");
             return result;
         }
 
