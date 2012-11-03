@@ -7,7 +7,7 @@ namespace Craft.Net.Data.Metadata
 {
     public class MetadataFloat : MetadataEntry
     {
-        public override byte Identifier { get { return 2; } }
+        public override byte Identifier { get { return 3; } }
         public override string FriendlyName { get { return "float"; } }
 
         public float Value;

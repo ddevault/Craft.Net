@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -7,8 +8,8 @@ namespace Craft.Net.Data.Metadata
 {
     public class MetadataSlot : MetadataEntry
     {
-        public override byte Identifier { get { return 2; } }
-        public override string FriendlyName { get { return "float"; } }
+        public override byte Identifier { get { return 5; } }
+        public override string FriendlyName { get { return "slot"; } }
 
         public Slot Value;
 
@@ -47,10 +48,19 @@ namespace Craft.Net.Data.Metadata
                                   GetKey(),
                                   0, 0,
                                   Value.Count,
-                                  0, 0
+                                  0, 0,
+                                  0, Value.Nbt != null && Value.Nbt.RootTag != null ? (byte)1 : (byte)0
                               };
             Array.Copy(DataUtility.CreateUInt16(Value.Id), 0, data, 1, 2);
             Array.Copy(DataUtility.CreateUInt16(Value.Metadata), 0, data, 4, 2);
+            if (Value.Nbt == null && Value.Nbt.RootTag != null)
+            {
+                MemoryStream ms = new MemoryStream();
+                Value.Nbt.SaveFile(ms, false);
+                var nbt = ms.GetBuffer();
+                Array.Resize<byte>(ref data, data.Length + nbt.Length);
+                Array.Copy(nbt, 0, data, 8, nbt.Length);
+            }
             return data;
         }
     }

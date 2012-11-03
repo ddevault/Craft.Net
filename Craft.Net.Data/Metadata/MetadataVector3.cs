@@ -7,8 +7,8 @@ namespace Craft.Net.Data.Metadata
 {
     public class MetadataVector3 : MetadataEntry
     {
-        public override byte Identifier { get { return 2; } }
-        public override string FriendlyName { get { return "float"; } }
+        public override byte Identifier { get { return 6; } }
+        public override string FriendlyName { get { return "vector3"; } }
 
         public Vector3 Value;
 

@@ -131,6 +131,11 @@ namespace Craft.Net.Data
             s.Metadata = (ushort)compound.Get<NbtShort>("Damage").Value;
             s.Count = compound.Get<NbtByte>("Count").Value;
             s.Index = compound.Get<NbtByte>("Slot").Value;
+            if (compound.Get<NbtCompound>("tag") != null)
+            {
+                s.Nbt = new NbtFile();
+                s.Nbt.RootTag = compound.Get<NbtCompound>("tag");
+            }
             return s;
         }
 
@@ -141,6 +146,11 @@ namespace Craft.Net.Data
             c.Tags.Add(new NbtShort("Damage", (short)Metadata));
             c.Tags.Add(new NbtByte("Count", Count));
             c.Tags.Add(new NbtByte("Slot", (byte)Index));
+            if (Nbt != null && Nbt.RootTag != null)
+            {
+                Nbt.RootTag = new NbtCompound("tag");
+                c.Tags.Add(Nbt.RootTag);
+            }
             return c;
         }
 
