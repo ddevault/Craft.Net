@@ -74,7 +74,7 @@ namespace Craft.Net.Server
                 null, // 0x3b
                 null, // 0x3c
                 null, // 0x3d
-                null, // 0x3e
+                typeof(NamedSoundEffectPacket), // 0x3e
                 null, // 0x3f
                 null, // 0x40
                 null, // 0x41

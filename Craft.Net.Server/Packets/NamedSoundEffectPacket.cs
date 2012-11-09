@@ -13,6 +13,10 @@ namespace Craft.Net.Server.Packets
         public float Volume;
         public byte Pitch;
 
+        public NamedSoundEffectPacket()
+        {
+        }
+
         public NamedSoundEffectPacket(string soundName, Vector3 position)
         {
             SoundName = soundName;

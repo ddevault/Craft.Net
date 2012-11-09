@@ -52,6 +52,7 @@ namespace Craft.Net.Server.Test
         }
 
         [Test]
+        [Explicit]
         public void TestSoundEffects()
         {
             var server = new MinecraftServer(new IPEndPoint(IPAddress.Loopback, 25565));
