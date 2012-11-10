@@ -17,6 +17,11 @@ namespace Craft.Net.Data.Blocks
             get { return 1; }
         }
 
+        public override BoundingBox? BoundingBox
+        {
+            get { return null; }
+        }
+
         public SignTileEntity SignData { get; set; }
 
         public override TileEntity TileEntity

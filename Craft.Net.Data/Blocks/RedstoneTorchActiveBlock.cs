@@ -12,6 +12,11 @@ namespace Craft.Net.Data.Blocks
             get { return 76; }
         }
 
+        public override BoundingBox? BoundingBox
+        {
+            get { return null; }
+        }
+
         public override bool OnBlockPlaced(World world, Vector3 position, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entities.Entity usedBy)
         {
             if (clickedSide == Vector3.East)

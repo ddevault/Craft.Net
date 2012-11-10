@@ -11,5 +11,10 @@ namespace Craft.Net.Data.Blocks
         {
             get { return 40; }
         }
+
+        public override BoundingBox? BoundingBox
+        {
+            get { return null; }
+        }
     }
 }

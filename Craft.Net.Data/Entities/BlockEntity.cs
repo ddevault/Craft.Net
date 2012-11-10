@@ -43,11 +43,12 @@ namespace Craft.Net.Data.Entities
             }
         }
 
-        protected override void OnSleep(World world)
-        {
-            world.SetBlock(Position - new Vector3(0.5, -1, 0.5),
-                Block.Create(Item.Id, (byte)Item.Metadata));
-            world.OnDestroyEntity(this);
-        }
+        // TODO
+        //protected override void OnSleep(World world)
+        //{
+        //    world.SetBlock(Position - new Vector3(0.5, -1, 0.5),
+        //        Block.Create(Item.Id, (byte)Item.Metadata));
+        //    world.OnDestroyEntity(this);
+        //}
     }
 }

@@ -11,7 +11,6 @@ namespace Craft.Net.Data.Entities
         protected Entity()
         {
             Fire = -20;
-            EnablePhysicsNotifications = true;
         }
 
         #region State
@@ -19,11 +18,6 @@ namespace Craft.Net.Data.Entities
         public int Id { get; set; }
         public Vector3 OldPosition { get; set; }
         public DateTime LastPositionUpdate { get; set; }
-        /// <summary>
-        /// When set to false, OnPropertyChanged is not fired for
-        /// Position or Velocity.
-        /// </summary>
-        protected bool EnablePhysicsNotifications { get; set; }
         public Vector3 Position
         {
             get { return position; }
@@ -32,8 +26,7 @@ namespace Craft.Net.Data.Entities
                 OldPosition = position;
                 LastPositionUpdate = DateTime.Now;
                 position = value;
-                if (EnablePhysicsNotifications)
-                    OnPropertyChanged("Position");
+                OnPropertyChanged("Position");
             }
         }
 
@@ -164,113 +157,114 @@ namespace Craft.Net.Data.Entities
             get { return 0.4f; }
         }
 
-        /// <summary>
-        /// Determines whether or not this entity will be updated in
-        /// collision tests.
-        /// </summary>
-        public bool PhysicsAsleep { get; private set; }
-
         public virtual CollisionTests TestsToPerform
         {
             get { return CollisionTests.EntityToEnviornment; }
         }
 
-        // TODO: Consider refactoring physics into seperate namespace
         /// <summary>
         /// Run to recalculate velocity and movement.
         /// Should run once a second.
         /// </summary>
+        private BoundingBox TempBoundingBox;
         public virtual void PhysicsUpdate(World world)
         {
-            if (PhysicsAsleep && EnableEntitySleeping)
-                return; // TODO: Wake up on collision
-            EnablePhysicsNotifications = false;
-            if (Velocity == Vector3.Zero && Math.Floor(Position.Y) == Position.Y &&
-                (World.IsValidPosition(Position + Vector3.Down) && world.GetBlock(Position + Vector3.Down).Solid) &&
-                EnableEntitySleeping)
-            {
-                PhysicsAsleep = true;
-                OnSleep(world);
-                return;
-            }
-            Velocity += new Vector3(0, -AccelerationDueToGravity, 0);
-            // TODO: Apply velocity changes in increments of one to avoid falling through blocks
+            // I don't know much about game physics, this code is open for pull requests.
+
+            // Calculate movement
+            Velocity -= new Vector3(0, AccelerationDueToGravity, 0);
+            Velocity *= Drag;
+            // Do terrain collisions
+            AdjustVelocityY(world);
+
             Position += Velocity;
-            if ((TestsToPerform & CollisionTests.EntityToEnviornment) == CollisionTests.EntityToEnviornment)
-            {
-                // Handle block intersections
-                for (double x = Math.Floor(Position.X); x < Position.X + Size.Width; x++)
-                    for (double y = Math.Floor(Position.Y); y < Position.Y + Size.Height; y++)
-                        for (double z = Math.Floor(Position.Z); z < Position.Z + Size.Depth; z++)
-                        {
-                            if (y >= 0 && y <= Chunk.Height)
-                            {
-                                var blockPosition = new Vector3(x, y, z);
-                                var block = world.GetBlock(blockPosition);
-                                if (block == 0)
-                                    continue;
-                                var box = new BoundingBox(blockPosition, blockPosition + block.Size);
-                                if (box.Intersects(BoundingBox) && Velocity != Vector3.Zero)
-                                {
-                                    var collision = DataUtility.GetCollisionPoint(Velocity);
-                                    // Apply velocity change and reset position
-                                    switch (collision)
-                                    {
-                                        case CollisionPoint.PositiveX:
-                                            Velocity = new Vector3(0, Velocity.Y, Velocity.Z);
-                                            Position = new Vector3(
-                                                blockPosition.X - Size.Width,
-                                                Position.Y,
-                                                Position.Z);
-                                            break;
-                                        case CollisionPoint.NegativeX:
-                                            Velocity = new Vector3(0, Velocity.Y, Velocity.Z);
-                                            Position = new Vector3(
-                                                blockPosition.X + block.Size.Width,
-                                                Position.Y,
-                                                Position.Z);
-                                            break;
-                                        case CollisionPoint.PositiveY:
-                                            Velocity = new Vector3(Velocity.X, 0, Velocity.Z);
-                                            Position = new Vector3(
-                                                Position.X,
-                                                blockPosition.Y - Size.Height,
-                                                Position.Z);
-                                            break;
-                                        case CollisionPoint.NegativeY:
-                                            Velocity = new Vector3(Velocity.X, 0, Velocity.Z);
-                                            Position = new Vector3(
-                                                Position.X,
-                                                blockPosition.Y + block.Size.Height,
-                                                Position.Z);
-                                            break;
-                                        case CollisionPoint.PositiveZ:
-                                            Velocity = new Vector3(Velocity.X, Velocity.Y, 0);
-                                            Position = new Vector3(
-                                                Position.X,
-                                                Position.Y,
-                                                blockPosition.Z - Size.Depth);
-                                            break;
-                                        case CollisionPoint.NegativeZ:
-                                            Velocity = new Vector3(Velocity.X, Velocity.Y, 0);
-                                            Position = new Vector3(
-                                                Position.X,
-                                                Position.Y,
-                                                blockPosition.Z + block.Size.Depth);
-                                            break;
-                                    }
-                                }
-                            }
-                        }
-            }
-            Velocity *= 1 - Drag;
-            OnPropertyChanged("Position");
-            EnablePhysicsNotifications = true;
         }
 
-        protected virtual void OnSleep(World world) // TODO: Add world object to class
+        #region Per-axis Physics
+
+        /// <summary>
+        /// Performs terrain collision tests and adjusts the Y-axis velocity accordingly
+        /// </summary>
+        protected void AdjustVelocityY(World world)
         {
+            if (Velocity.Y == 0)
+                return;
+            // Do some enviornment guessing to improve speed
+            int minX = (int)Position.X - (Position.X < 0 ? 1 : 0);
+            int maxX = (int)(Position.X + Size.Width) - (Position.X < 0 ? 1 : 0);
+            int minZ = (int)Position.Z - (Position.Z < 0 ? 1 : 0);
+            int maxZ = (int)(Position.Z + Size.Depth) - (Position.Z < 0 ? 1 : 0);
+            int minY, maxY;
+
+            // Expand bounding box to include area to be tested
+            if (Velocity.Y < 0)
+            {
+                TempBoundingBox = new BoundingBox(
+                    new Vector3(BoundingBox.Min.X, BoundingBox.Min.Y + Velocity.Y, BoundingBox.Min.Z),
+                    new Vector3(BoundingBox.Max.X, BoundingBox.Max.Y, BoundingBox.Max.Z));
+
+                maxY = (int)(TempBoundingBox.Min.Y);
+                minY = (int)(TempBoundingBox.Min.Y + Velocity.Y);
+            }
+            else
+            {
+                TempBoundingBox = new BoundingBox(BoundingBox.Min, new Vector3(
+                    BoundingBox.Max.X, BoundingBox.Max.Y + Velocity.Y, BoundingBox.Max.Z));
+                minY = (int)(BoundingBox.Max.Y);
+                maxY = (int)(BoundingBox.Max.Y + Velocity.Y);
+            }
+
+            // Clamp Y into map boundaries
+            if (minY < 0) minY = 0; if (minY >= World.Height) minY = World.Height - 1;
+
+            // Do terrain checks
+            double? collisionPoint = null;
+            BoundingBox blockBox;
+            for (int x = minX; x <= maxX; x++)
+            {
+                for (int y = minY; y <= maxY; y++)
+                {
+                    for (int z = minZ; z <= maxZ; z++)
+                    {
+                        var position = new Vector3(x, y, z);
+                        var block = world.GetBlock(position);
+                        if (block.BoundingBox == null)
+                            continue;
+                        blockBox = new BoundingBox(block.BoundingBox.Value.Min + position,
+                            block.BoundingBox.Value.Max + position);
+                        if (TempBoundingBox.Intersects(blockBox))
+                        {
+                            if (Velocity.Y < 0)
+                            {
+                                if (!collisionPoint.HasValue)
+                                    collisionPoint = blockBox.Max.Y;
+                                else if (collisionPoint.Value < blockBox.Max.Y)
+                                    collisionPoint = blockBox.Max.Y;
+                            }
+                            else
+                            {
+                                if (!collisionPoint.HasValue)
+                                    collisionPoint = blockBox.Min.Y;
+                                else if (collisionPoint.Value > blockBox.Min.Y)
+                                    collisionPoint = blockBox.Min.Y;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (collisionPoint != null)
+            {
+                if (Velocity.Y < 0)
+                {
+                    Velocity = new Vector3(Velocity.X,
+                        Velocity.Y + (collisionPoint.Value - TempBoundingBox.Min.Y),
+                        Velocity.Z);                    
+                }
+            }
         }
+
+        #endregion
 
         #endregion
 

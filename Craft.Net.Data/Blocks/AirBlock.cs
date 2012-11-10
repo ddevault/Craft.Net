@@ -28,5 +28,10 @@ namespace Craft.Net.Data.Blocks
         {
             get { return Transparency.Transparent; } // TODO: More transparency options
         }
+
+        public override BoundingBox? BoundingBox
+        {
+            get { return null; }
+        }
     }
 }

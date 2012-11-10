@@ -15,39 +15,28 @@ namespace Craft.Net.Data.Test
     public class EntityTest
     {
         [Test]
-        public void TestBlockCollision()
+        public void TestVerticalBlockCollision()
         {
-            const int iterations = 100000;
-
             Level level = new Level();
-            // TODO: Don't use player entities
-            var entity = new ItemEntity(new Vector3(0, 10, 0), new Slot(1, 1));
-            level.World.EntityUpdateTimer.Change(Timeout.Infinite, Timeout.Infinite);
-            level.World.Entities.Add(entity);
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            for (int i = 0; i < iterations; i++)
-                entity.PhysicsUpdate(level.World);
-            stopwatch.Stop();
-            double sleepSeconds = stopwatch.Elapsed.TotalSeconds;
-            Assert.AreEqual(4, entity.Position.Y);
+            level.World.EntityUpdateTimer.Change(Timeout.Infinite, Timeout.Infinite); // Manual updates only
 
-            Entity.EnableEntitySleeping = false;
+            for (double x = 3; x >= -3; x -= 0.5)
+            {
+                for (double z = 3; z >= -3; z -= 0.5)
+                {
+                    for (int y = 10; y < 100; y += 10)
+                    {
+                        var entity = new ItemEntity(new Vector3(x, y, z), new Slot(1, 1));
+                        level.World.Entities.Add(entity);
 
-            entity = new ItemEntity(new Vector3(0, 10, 0), new Slot(1, 1));
-            level.World.Entities.Add(entity);
-            stopwatch = new Stopwatch();
-            stopwatch.Start();
-            for (int i = 0; i < iterations; i++)
-                entity.PhysicsUpdate(level.World);
-            stopwatch.Stop();
-            double unsleepSeconds = stopwatch.Elapsed.TotalSeconds;
-            Assert.AreEqual(4, entity.Position.Y);
+                        for (int i = 0; i < 500; i++)
+                            entity.PhysicsUpdate(level.World);
+                        Assert.AreEqual(4, entity.Position.Y);
 
-            Console.WriteLine("Speed results (seconds): " +
-                "\nWith sleeping: " + sleepSeconds + 
-                "\nWithout sleeping: " + unsleepSeconds +
-                "\n" + iterations + " total iterations");
+                        level.World.Entities.Remove(entity);
+                    }
+                }
+            }
         }
 
         [Test]

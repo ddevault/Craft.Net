@@ -40,11 +40,6 @@ namespace Craft.Net.Data
         /// </summary>
         public byte SkyLight { get; set; }
 
-        public bool Solid
-        {
-            get { return Transparency != Transparency.Transparent; } // TODO: More transparency types
-        }
-
         #endregion
 
         #region Overriden Members
@@ -107,6 +102,15 @@ namespace Craft.Net.Data
         public virtual Size Size
         {
             get { return new Size(1, 1, 1); } // TODO: Size.One
+        }
+
+        /// <summary>
+        /// The bounding box, used for physics, that this block inhabits. Return null
+        /// if entities may exist within the block.
+        /// </summary>
+        public virtual BoundingBox? BoundingBox
+        {
+            get { return new BoundingBox(Vector3.Zero, Vector3.Zero + Size); }
         }
 
         /// <summary>

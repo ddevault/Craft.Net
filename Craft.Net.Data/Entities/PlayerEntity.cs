@@ -364,5 +364,10 @@ namespace Craft.Net.Data.Entities
             FoodExhaustion += 0.3f;
             base.Damage(damage, accountForArmor);
         }
+
+        public override void PhysicsUpdate(World world)
+        {
+            // TODO: Keep players in line so they don't stray too far away from where they should logically be
+        }
     }
 }
