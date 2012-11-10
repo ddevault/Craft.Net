@@ -39,16 +39,23 @@ namespace Craft.Net.Data.Entities
         {
             get
             {
-                return base.Drag / 2;
+                return 0.4f;
             }
         }
 
-        // TODO
-        //protected override void OnSleep(World world)
-        //{
-        //    world.SetBlock(Position - new Vector3(0.5, -1, 0.5),
-        //        Block.Create(Item.Id, (byte)Item.Metadata));
-        //    world.OnDestroyEntity(this);
-        //}
+        public override void PhysicsUpdate(World world)
+        {
+            base.PhysicsUpdate(world);
+            // TODO: See about doing this in a better way
+            if (Velocity.Y == 0 && Position.Y - 1 >= 0)
+            {
+                var block = world.GetBlock(Position + Vector3.Down);
+                if (block.BoundingBox == null)
+                {
+                    world.SetBlock(Position, (Block)Item.Id);
+                    world.OnDestroyEntity(this);
+                }
+            }
+        }
     }
 }

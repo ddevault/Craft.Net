@@ -126,6 +126,9 @@ namespace TestServer
                     case "se":
                         e.Origin.SendPacket(new NamedSoundEffectPacket(e.RawMessage.Substring(4), e.Origin.Entity.Position));
                         break;
+                    case "destroy":
+                        minecraftServer.DefaultWorld.SetBlock(new Vector3(0, 10, 0), new AirBlock());
+                        break;
                 }
             }
         }
