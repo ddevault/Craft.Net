@@ -52,7 +52,7 @@ namespace Craft.Net.Data
             Entities = new List<Entity>();
             Regions = new Dictionary<Vector3, Region>();
             EnableBlockUpdates = true;
-            EntityUpdateTimer = new Timer(DoEntityUpdates, null, Level.TickLength, Timeout.Infinite);
+            EntityUpdateTimer = new Timer(DoEntityUpdates, null, Level.TickLength, Level.TickLength);
         }
 
         /// <summary>
@@ -173,12 +173,8 @@ namespace Craft.Net.Data
         private void DoEntityUpdates(object discarded)
         {
             for (int i = 0; i < Entities.Count; i++) // TODO: Marshall entities into chunks?
-            {
                 Entities[i].PhysicsUpdate(this);
-                if (Entities[i] is ItemEntity)
-                    Console.WriteLine(Entities[i].Position);
-            }
-            EntityUpdateTimer.Change(Level.TickLength, Timeout.Infinite);
+            //EntityUpdateTimer.Change(Level.TickLength, Timeout.Infinite);
         }
 
         public void Save()

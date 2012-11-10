@@ -31,6 +31,7 @@ namespace Craft.Net.Data.Test
 
                         for (int i = 0; i < 500; i++)
                             entity.PhysicsUpdate(level.World);
+
                         Assert.AreEqual(4, entity.Position.Y);
 
                         level.World.Entities.Remove(entity);
