@@ -11,6 +11,7 @@ using System.Reflection;
 using Craft.Net.Data.Blocks;
 using System.IO;
 using Craft.Net.Server.Packets;
+using Craft.Net.Data.Windows;
 
 namespace TestServer
 {
@@ -128,6 +129,14 @@ namespace TestServer
                         break;
                     case "destroy":
                         minecraftServer.DefaultWorld.SetBlock(new Vector3(0, 10, 0), new AirBlock());
+                        break;
+                    case "give":
+                        try
+                        {
+                            var type = ((Block)int.Parse(parameters[0])).GetType();
+                            var item = (Item)Activator.CreateInstance(type);
+                            e.Origin.Entity.SetSlot(InventoryWindow.HotbarIndex, new Slot(item.Id, 1));
+                        } catch { }
                         break;
                 }
             }

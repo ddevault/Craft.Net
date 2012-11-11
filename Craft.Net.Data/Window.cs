@@ -103,8 +103,7 @@ namespace Craft.Net.Data
                     if (index >= area.StartIndex && index < area.StartIndex + area.Length)
                     {
                         var eventArgs = new WindowChangeEventArgs(index, value);
-                        if (WindowChange != null)
-                            WindowChange(this, eventArgs);
+                        OnWindowChange(eventArgs);
                         if (!eventArgs.Handled)
                             area[index - area.StartIndex] = value;
                         return;
@@ -112,6 +111,12 @@ namespace Craft.Net.Data
                 }
                 throw new IndexOutOfRangeException();
             }
+        }
+
+        protected internal virtual void OnWindowChange(WindowChangeEventArgs e)
+        {
+            if (WindowChange != null)
+                WindowChange(this, e);
         }
     }
 }

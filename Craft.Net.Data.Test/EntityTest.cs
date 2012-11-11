@@ -29,10 +29,10 @@ namespace Craft.Net.Data.Test
                         var entity = new ItemEntity(new Vector3(x, y, z), new Slot(1, 1));
                         level.World.Entities.Add(entity);
 
-                        for (int i = 0; i < 500; i++)
+                        for (int i = 0; i < 1000; i++)
                             entity.PhysicsUpdate(level.World);
 
-                        Assert.AreEqual(4, entity.Position.Y);
+                        Assert.AreEqual(4, (int)entity.Position.Y);
 
                         level.World.Entities.Remove(entity);
                     }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Craft.Net.Data.Events;
 
 namespace Craft.Net.Data.Windows
 {
@@ -16,6 +17,9 @@ namespace Craft.Net.Data.Windows
                     new WindowArea(MainIndex, 27), // Main inventory
                     new WindowArea(HotbarIndex, 9) // Hotbar
                 };
+            foreach (var area in WindowAreas)
+                area.WindowChange += (s, e) => OnWindowChange(new WindowChangeEventArgs(
+                    (s as WindowArea).StartIndex + e.SlotIndex, e.Value));
         }
 
         #region Variables

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Craft.Net.Data.Events;
 
 namespace Craft.Net.Data
 {
@@ -19,6 +20,7 @@ namespace Craft.Net.Data
         public int StartIndex { get; set; }
         public int Length { get; set; }
         public Slot[] Items { get; set; }
+        public event EventHandler<WindowChangeEventArgs> WindowChange;
 
         public virtual Slot this[int index]
         {
@@ -27,6 +29,7 @@ namespace Craft.Net.Data
             {
                 if (IsValid(value, index))
                     Items[index] = value;
+                OnWindowChange(new WindowChangeEventArgs(index, value));
             }
         }
 
@@ -75,6 +78,12 @@ namespace Craft.Net.Data
         {
             for (int i = 0; i < area.Length && i < Length; i++)
                 area[i] = this[i];
+        }
+
+        protected internal virtual void OnWindowChange(WindowChangeEventArgs e)
+        {
+            if (WindowChange != null)
+                WindowChange(this, e);
         }
     }
 }
