@@ -41,7 +41,7 @@ namespace Craft.Net.Data.Entities
         {
             get
             {
-                return 0.02f;
+                return 0.98f;
             }
         }
 
