@@ -154,21 +154,32 @@ namespace Craft.Net.Data
                 var slot = player.Inventory[player.SelectedSlot];
                 world.SetBlock(destroyedBlock, new AirBlock());
                 if (CanHarvest(slot.Item as ToolItem) && player.GameMode != GameMode.Creative)
-                {
-                    world.OnSpawnEntity(new ItemEntity(destroyedBlock + new Vector3(0.5, 0.5, 0.5),
-                                                       new Slot(Id, 1, Metadata)));
-                }
+                    world.OnSpawnEntity(new ItemEntity(destroyedBlock + new Vector3(0.5), GetDrop()));
             }
         }
 
         /// <summary>
         /// Called when a block update occurs. Default handler will handle
-        /// common activities such as destroying blocks that lose support,
+        /// common activities such as destroying blocks that lose support -
         /// make sure you call it if you don't want to lose this functionality.
         /// </summary>
         public virtual void BlockUpdate(World world, Vector3 updatedBlock, Vector3 modifiedBlock)
         {
-            // TODO: Stuff described in XML comments
+            if (RequiresSupport)
+            {
+                // Ensure that it hasn't lost support
+                var block = world.GetBlock(updatedBlock + SupportDirection);
+                if (block is AirBlock)
+                {
+                    world.SetBlock(updatedBlock, new AirBlock());
+                    world.OnSpawnEntity(new ItemEntity(updatedBlock + new Vector3(0.5), GetDrop()));
+                }
+            }
+        }
+
+        public virtual Slot GetDrop()
+        {
+            return new Slot(this.Id, 1);
         }
 
         public virtual int GetHarvestTime(Item item, World world, PlayerEntity entity, out int damage)

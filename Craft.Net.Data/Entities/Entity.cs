@@ -170,13 +170,12 @@ namespace Craft.Net.Data.Entities
         public virtual void PhysicsUpdate(World world)
         {
             // I don't know much about game physics, this code is open for pull requests.
-            const double perSecondMultipler = 1d / 20d;
 
             // Calculate movement
             bool fireEvent = Velocity != Vector3.Zero;
 
-            Velocity -= new Vector3(0, AccelerationDueToGravity * perSecondMultipler, 0);
-            Velocity *= (Drag * perSecondMultipler);
+            Velocity *= Drag;
+            Velocity -= new Vector3(0, AccelerationDueToGravity, 0);
             Vector3 collisionPoint;
             // Do terrain collisions
             if (!AdjustVelocityY(world, out collisionPoint))

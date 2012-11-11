@@ -34,14 +34,14 @@ namespace Craft.Net.Data.Entities
 
         public override float AccelerationDueToGravity
         {
-            get { return 16f; }
+            get { return 0.04f; }
         }
 
         public override float Drag
         {
             get
             {
-                return 4f;
+                return 0.02f;
             }
         }
 
