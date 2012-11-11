@@ -169,8 +169,8 @@ namespace Craft.Net.Data.Entities
             // Calculate movement
             bool fireEvent = Velocity != Vector3.Zero;
 
-            Velocity -= new Vector3(0, AccelerationDueToGravity, 0);
             Velocity *= Drag;
+            Velocity -= new Vector3(0, AccelerationDueToGravity, 0);
             Vector3 collisionPoint;
             // Do terrain collisions
             if (!AdjustVelocityY(world, out collisionPoint))
