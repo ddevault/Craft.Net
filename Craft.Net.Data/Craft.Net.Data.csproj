@@ -213,6 +213,7 @@
     <Compile Include="Entities\ObjectEntity.cs" />
     <Compile Include="Entities\PlayerEntity.cs" />
     <Compile Include="Events\EntityDamageEventArgs.cs" />
+    <Compile Include="Events\EntityTerrainCollisionEventArgs.cs" />
     <Compile Include="Events\InventoryChangedEventArgs.cs" />
     <Compile Include="Events\EntityEventArgs.cs" />
     <Compile Include="Events\WindowChangeEventArgs.cs" />

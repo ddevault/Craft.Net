@@ -146,10 +146,11 @@ namespace Craft.Net.Data
             Vector3 blockPosition = FindBlockPosition(position, out chunk);
 
             chunk.SetBlock(blockPosition, value);
-            DoBlockUpdates(position);
 
             if (BlockChanged != null)
                 BlockChanged(this, new BlockChangedEventArgs(this, position, value));
+
+            DoBlockUpdates(position);
         }
 
         private void DoBlockUpdates(Vector3 blockPosition)

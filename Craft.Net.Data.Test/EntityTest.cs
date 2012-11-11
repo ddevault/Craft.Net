@@ -41,6 +41,25 @@ namespace Craft.Net.Data.Test
         }
 
         [Test]
+        public void TestSandDrop()
+        {
+            Level level = new Level();
+            level.World.EntityUpdateTimer.Change(Timeout.Infinite, Timeout.Infinite); // Manual updates only
+
+            var entity = new BlockEntity(new Vector3(0, 10, 0), new SandBlock());
+            level.World.Entities.Add(entity);
+
+            for (int i = 0; i < 500; i++)
+            {
+                if (level.World.Entities.Count == 0)
+                    break;
+                entity.PhysicsUpdate(level.World);
+            }
+
+            Assert.AreEqual(new SandBlock(), level.World.GetBlock(new Vector3(0, 4, 0)));
+        }
+
+        [Test]
         public void TestCollisionPoint()
         {
             CollisionPoint point;

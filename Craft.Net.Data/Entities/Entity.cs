@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Craft.Net.Data.Blocks;
+using Craft.Net.Data.Events;
 using Craft.Net.Data.Metadata;
 
 namespace Craft.Net.Data.Entities
@@ -126,11 +127,11 @@ namespace Craft.Net.Data.Entities
 
         public abstract Size Size { get; }
 
+        public event EventHandler<EntityTerrainCollisionEventArgs> TerrainCollision;
+
         #endregion
 
         #region Physics
-
-        public static bool EnableEntitySleeping = true;
 
         public virtual BoundingBox BoundingBox
         {
@@ -141,7 +142,6 @@ namespace Craft.Net.Data.Entities
         }
 
         // All units are in meters per second squared
-
         public virtual float AccelerationDueToGravity
         {
             get { return 0; }
@@ -170,12 +170,25 @@ namespace Craft.Net.Data.Entities
         public virtual void PhysicsUpdate(World world)
         {
             // I don't know much about game physics, this code is open for pull requests.
+            const double perSecondMultipler = 1d / 20d;
 
             // Calculate movement
-            Velocity -= new Vector3(0, AccelerationDueToGravity, 0);
-            Velocity *= Drag;
+            bool fireEvent = Velocity != Vector3.Zero;
+
+            Velocity -= new Vector3(0, AccelerationDueToGravity * perSecondMultipler, 0);
+            Velocity *= (Drag * perSecondMultipler);
+            Vector3 collisionPoint;
             // Do terrain collisions
-            AdjustVelocityY(world);
+            if (!AdjustVelocityY(world, out collisionPoint))
+                fireEvent = false;
+
+            if (fireEvent && TerrainCollision != null)
+                TerrainCollision(this, new EntityTerrainCollisionEventArgs
+                    {
+                        Entity = this,
+                        Block = collisionPoint,
+                        World = world
+                    });
 
             Position += Velocity;
         }
@@ -185,10 +198,11 @@ namespace Craft.Net.Data.Entities
         /// <summary>
         /// Performs terrain collision tests and adjusts the Y-axis velocity accordingly
         /// </summary>
-        protected void AdjustVelocityY(World world)
+        protected bool AdjustVelocityY(World world, out Vector3 collision)
         {
+            collision = Vector3.Zero;
             if (Velocity.Y == 0)
-                return;
+                return false;
             // Do some enviornment guessing to improve speed
             int minX = (int)Position.X - (Position.X < 0 ? 1 : 0);
             int maxX = (int)(Position.X + Size.Width) - (Position.X < 0 ? 1 : 0);
@@ -200,16 +214,16 @@ namespace Craft.Net.Data.Entities
             if (Velocity.Y < 0)
             {
                 TempBoundingBox = new BoundingBox(
-                    new Vector3(BoundingBox.Min.X, BoundingBox.Min.Y + Velocity.Y, BoundingBox.Min.Z),
-                    new Vector3(BoundingBox.Max.X, BoundingBox.Max.Y, BoundingBox.Max.Z));
+                    new Vector3(BoundingBox.Min.X, BoundingBox.Min.Y + Velocity.Y, BoundingBox.Min.Z) - (Size / 2),
+                    new Vector3(BoundingBox.Max.X, BoundingBox.Max.Y, BoundingBox.Max.Z) - (Size / 2));
 
                 maxY = (int)(TempBoundingBox.Min.Y);
                 minY = (int)(TempBoundingBox.Min.Y + Velocity.Y);
             }
             else
             {
-                TempBoundingBox = new BoundingBox(BoundingBox.Min, new Vector3(
-                    BoundingBox.Max.X, BoundingBox.Max.Y + Velocity.Y, BoundingBox.Max.Z));
+                TempBoundingBox = new BoundingBox(BoundingBox.Min - (Size / 2), new Vector3(
+                    BoundingBox.Max.X, BoundingBox.Max.Y + Velocity.Y, BoundingBox.Max.Z) - (Size / 2));
                 minY = (int)(BoundingBox.Max.Y);
                 maxY = (int)(BoundingBox.Max.Y + Velocity.Y);
             }
@@ -248,6 +262,7 @@ namespace Craft.Net.Data.Entities
                                 else if (collisionPoint.Value > blockBox.Min.Y)
                                     collisionPoint = blockBox.Min.Y;
                             }
+                            collision = position;
                         }
                     }
                 }
@@ -259,9 +274,13 @@ namespace Craft.Net.Data.Entities
                 {
                     Velocity = new Vector3(Velocity.X,
                         Velocity.Y + (collisionPoint.Value - TempBoundingBox.Min.Y),
-                        Velocity.Z);                    
+                        Velocity.Z);
                 }
+                // TODO: Collisions for entities moving up
+                return true;
             }
+
+            return false;
         }
 
         #endregion

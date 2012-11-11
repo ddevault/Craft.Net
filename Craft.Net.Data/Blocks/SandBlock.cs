@@ -22,8 +22,9 @@ namespace Craft.Net.Data.Blocks
         {
             if (world.GetBlock(updatedBlock + Vector3.Down) == 0)
             {
+                Console.WriteLine("Creating sand entity");
                 world.SetBlock(updatedBlock, new AirBlock());
-                //world.OnSpawnEntity(new BlockEntity(updatedBlock, this));
+                world.OnSpawnEntity(new BlockEntity(updatedBlock, this));
             }
         }
     }

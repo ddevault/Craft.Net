@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Craft.Net.Data.Events;
 
 namespace Craft.Net.Data.Entities
 {
@@ -11,13 +12,14 @@ namespace Craft.Net.Data.Entities
         {
             Position = position + new Vector3(0.5, 0, 0.5);
             Item = new Slot(block.Id, 1, block.Metadata);
+            TerrainCollision += BlockEntity_TerrainCollision;
         }
 
         public Slot Item { get; set; }
 
         public override Size Size
         {
-            get { return new Size(1, 1, 1); }
+            get { return new Size(0.9, 0.9, 0.9); } // TODO: See if this needs to be changed
         }
 
         public override byte EntityType
@@ -32,30 +34,21 @@ namespace Craft.Net.Data.Entities
 
         public override float AccelerationDueToGravity
         {
-            get { return 0.8f; }
+            get { return 16f; }
         }
 
         public override float Drag
         {
             get
             {
-                return 0.4f;
+                return 4f;
             }
         }
 
-        public override void PhysicsUpdate(World world)
+        void BlockEntity_TerrainCollision(object sender, EntityTerrainCollisionEventArgs e)
         {
-            base.PhysicsUpdate(world);
-            // TODO: See about doing this in a better way
-            if (Velocity.Y == 0 && Position.Y - 1 >= 0)
-            {
-                var block = world.GetBlock(Position + Vector3.Down);
-                if (block.BoundingBox == null)
-                {
-                    world.SetBlock(Position, (Block)Item.Id);
-                    world.OnDestroyEntity(this);
-                }
-            }
+            e.World.OnDestroyEntity(this);
+            e.World.SetBlock(e.Block + Vector3.Up, (Block)Item.Id);
         }
     }
 }
