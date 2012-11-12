@@ -11,5 +11,6 @@ namespace Craft.Net.Data.Events
         public Entity Entity { get; set; }
         public Vector3 Block { get; set; }
         public World World { get; set; }
+        public Vector3 Direction { get; set; }
     }
 }

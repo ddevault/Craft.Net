@@ -21,6 +21,7 @@ namespace Craft.Net.Data.Entities
             Food = 20;
             Abilities = new PlayerAbilities(this);
             Difficulty = difficulty;
+            TerrainCollision += OnTerrainCollision;
             FoodTickTimer = new Timer(discarded =>
                 {
                     if (Food > 17 && Health < 20 && Health != 0) // TODO: HealthMax constant?
@@ -44,6 +45,21 @@ namespace Craft.Net.Data.Entities
                         }
                     }
                 }, null, 80 * Level.TickLength, 80 * Level.TickLength);
+        }
+
+        private double LastCollisionY = -1;
+        private void OnTerrainCollision(object sender, EntityTerrainCollisionEventArgs entityTerrainCollisionEventArgs)
+        {
+            if (entityTerrainCollisionEventArgs.Direction.Y < -0.25f && !Abilities.IsFlying)
+            {
+                if (LastCollisionY != -1 && LastCollisionY > Position.Y)
+                {
+                    short diff = (short)((LastCollisionY - Position.Y) - 3);
+                    if (diff > 0)
+                        Health -= diff;
+                }
+                LastCollisionY = Position.Y;
+            }
         }
 
         #region Properties
@@ -77,7 +93,12 @@ namespace Craft.Net.Data.Entities
 
         public override float AccelerationDueToGravity
         {
-            get { return 1.6f; }
+            get { return 0.08f; }
+        }
+
+        public override float Drag
+        {
+            get { return 0.98f; }
         }
 
         #endregion
@@ -167,6 +188,24 @@ namespace Craft.Net.Data.Entities
 
         public bool IsSprinting { get; set; }
         public bool IsCrouching { get; set; }
+
+        private Vector3 position;
+        private bool EnablePositionUpdates = true;
+        public override Vector3 Position
+        {
+            get
+            {
+                return position;
+            }
+            set
+            {
+                position = value;
+                // The player entity is remotely controlled, so we
+                // don't send it updates when we do physics calculations.
+                if (EnablePositionUpdates)
+                    OnPropertyChanged("Position");
+            }
+        }
 
         public string Username { get; set; }
         /// <summary>
@@ -376,6 +415,10 @@ namespace Craft.Net.Data.Entities
         public override void PhysicsUpdate(World world)
         {
             // TODO: Keep players in line so they don't stray too far away from where they should logically be
+            EnablePositionUpdates = false;
+            base.PhysicsUpdate(world);
+            EnablePositionUpdates = true;
+            Velocity *= 0.1f; // We don't get GivenPosition updates often enough to account for slowing down
         }
 
         public virtual void OnPickUpItem(EntityEventArgs e)

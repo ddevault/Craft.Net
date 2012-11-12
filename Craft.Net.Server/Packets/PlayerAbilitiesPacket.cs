@@ -21,7 +21,7 @@ namespace Craft.Net.Server.Packets
 
         public override int TryReadPacket(byte[] buffer, int length)
         {
-            byte flags = 0;
+            byte flags;
             byte walkingSpeed, flyingSpeed;
             int offset = 1;
             if (!DataUtility.TryReadByte(buffer, ref offset, out flags))
@@ -42,7 +42,8 @@ namespace Craft.Net.Server.Packets
 
         public override void HandlePacket(MinecraftServer server, MinecraftClient client)
         {
-            client.Entity.Abilities.IsFlying = Abilities.IsFlying;
+            if (client.Entity.GameMode == GameMode.Creative)
+                client.Entity.Abilities.IsFlying = Abilities.IsFlying;
         }
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
