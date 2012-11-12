@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Craft.Net.Data.Items;
 
 namespace Craft.Net.Data.Blocks
 {
@@ -20,6 +21,12 @@ namespace Craft.Net.Data.Blocks
         public override Vector3 SupportDirection
         {
             get { return Vector3.Down; }
+        }
+
+        public override bool GetDrop(ToolItem tool, out Slot[] drops)
+        {
+            drops = new[] { new Slot((ushort)new CarrotItem(), (byte)DataUtility.Random.Next(1, 4)) };
+            return true;
         }
     }
 }

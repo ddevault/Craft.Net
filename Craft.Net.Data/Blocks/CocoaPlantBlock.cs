@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Craft.Net.Data.Items;
 
 namespace Craft.Net.Data.Blocks
 {
@@ -20,6 +21,15 @@ namespace Craft.Net.Data.Blocks
         public override BoundingBox? BoundingBox
         {
             get { return null; }
+        }
+
+        public override bool GetDrop(ToolItem tool, out Slot[] drop)
+        {
+            if ((Metadata & 0xC) <= 4)
+                drop = new[] { new Slot((ushort)new CocoaBeanItem(), 1) };
+            else
+                drop = new[] { new Slot((ushort)new CocoaBeanItem(), 3) };
+            return true;
         }
 
         public override bool RequiresSupport

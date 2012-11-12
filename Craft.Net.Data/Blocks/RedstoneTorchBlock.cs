@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Craft.Net.Data.Items;
 
 namespace Craft.Net.Data.Blocks
 {
@@ -35,6 +36,12 @@ namespace Craft.Net.Data.Blocks
                     default:  return Vector3.Down;
                 }
             }
+        }
+
+        public override bool GetDrop(ToolItem tool, out Slot[] drop)
+        {
+            drop = new[] { new Slot((ushort)new RedstoneTorchActiveBlock(), 1) };
+            return true;
         }
 
         public override bool OnBlockPlaced(World world, Vector3 position, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entities.Entity usedBy)

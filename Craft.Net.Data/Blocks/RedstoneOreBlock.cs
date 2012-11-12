@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Craft.Net.Data.Entities;
+using Craft.Net.Data.Items;
 
 namespace Craft.Net.Data.Blocks
 {
@@ -17,9 +19,26 @@ namespace Craft.Net.Data.Blocks
             get { return 3; }
         }
 
-        public override void OnBlockWalkedOn(World world, Vector3 position, Entities.Entity entity)
+        public override void OnBlockWalkedOn(World world, Vector3 position, Entity entity)
         {
             world.SetBlock(position, new RedstoneOreActiveBlock());
+        }
+
+        public override bool CanHarvest(ToolItem tool)
+        {
+            return tool is PickaxeItem &&
+                (tool.ToolMaterial == ToolMaterial.Iron ||
+                tool.ToolMaterial == ToolMaterial.Gold ||
+                tool.ToolMaterial == ToolMaterial.Diamond);
+        }
+
+        public override bool GetDrop(ToolItem tool, out Slot[] drop)
+        {
+            drop = new[] { new Slot((ushort)new RedstoneItem(), (byte)DataUtility.Random.Next(4, 5)) };
+            return tool is PickaxeItem &&
+                (tool.ToolMaterial == ToolMaterial.Iron ||
+                tool.ToolMaterial == ToolMaterial.Gold ||
+                tool.ToolMaterial == ToolMaterial.Diamond);
         }
     }
 }

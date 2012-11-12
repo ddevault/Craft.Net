@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Craft.Net.Data.Items;
 
 namespace Craft.Net.Data.Blocks
 {
@@ -31,6 +32,12 @@ namespace Craft.Net.Data.Blocks
                 return SignData;
             }
             set { SignData = (SignTileEntity)value; }
+        }
+
+        public override bool GetDrop(ToolItem tool, out Slot[] drop)
+        {
+            drop = new[] { new Slot((ushort)new SignItem(), 1) };
+            return true;
         }
     }
 

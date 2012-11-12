@@ -11,5 +11,11 @@ namespace Craft.Net.Data.Blocks
         {
             get { return 62; }
         }
+
+        public override bool GetDrop(Items.ToolItem tool, out Slot[] drop)
+        {
+            drop = new[] { new Slot((ushort)new FurnaceBlock(), 1) };
+            return true;
+        }
     }
 }

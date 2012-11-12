@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Craft.Net.Data.Items;
 
 namespace Craft.Net.Data.Blocks
 {
@@ -31,6 +32,11 @@ namespace Craft.Net.Data.Blocks
             UpperHalf = upperHalf;
             if (!UpperHalf)
                 Direction = direction;
+        }
+
+        public override bool CanHarvest(Items.ToolItem tool)
+        {
+            return tool is PickaxeItem || tool is AxeItem;
         }
     }
 }

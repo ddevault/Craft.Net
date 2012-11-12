@@ -214,8 +214,6 @@ namespace Craft.Net.Server
                         break;
                     case "Velocity":
                         client.SendPacket(new EntityVelocityPacket(player.Id, player.Velocity));
-                        foreach (var knownClient in clients)
-                            knownClient.SendPacket(new EntityVelocityPacket(player.Id, player.Velocity));
                         break;
                     case "GivenPosition":
                         UpdateGivenPosition(player);
@@ -231,6 +229,10 @@ namespace Craft.Net.Server
                 case "Yaw":
                 case "HeadLook":
                     UpdateEntityLook(entity);
+                    break;
+                case "Velocity":
+                    foreach (var knownClient in clients)
+                        knownClient.SendPacket(new EntityVelocityPacket(entity.Id, entity.Velocity));
                     break;
             }
         }

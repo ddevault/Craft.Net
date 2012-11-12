@@ -154,7 +154,15 @@ namespace Craft.Net.Data
                 var slot = player.Inventory[player.SelectedSlot];
                 world.SetBlock(destroyedBlock, new AirBlock());
                 if (CanHarvest(slot.Item as ToolItem) && player.GameMode != GameMode.Creative)
-                    world.OnSpawnEntity(new ItemEntity(destroyedBlock + new Vector3(0.5), GetDrop()));
+                {
+                    Slot[] drops;
+                    bool spawnEntity = GetDrop(slot.Item as ToolItem, out drops);
+                    if (spawnEntity)
+                    {
+                        foreach (var drop in drops)
+                            world.OnSpawnEntity(new ItemEntity(destroyedBlock + new Vector3(0.5), drop));
+                    }
+                }
             }
         }
 
@@ -172,14 +180,21 @@ namespace Craft.Net.Data
                 if (block is AirBlock)
                 {
                     world.SetBlock(updatedBlock, new AirBlock());
-                    world.OnSpawnEntity(new ItemEntity(updatedBlock + new Vector3(0.5), GetDrop()));
+                    Slot[] drops;
+                    bool spawnEntity = GetDrop(null, out drops);
+                    if (spawnEntity)
+                    {
+                        foreach (var drop in drops)
+                            world.OnSpawnEntity(new ItemEntity(updatedBlock + new Vector3(0.5), drop));
+                    }
                 }
             }
         }
 
-        public virtual Slot GetDrop()
+        public virtual bool GetDrop(ToolItem tool, out Slot[] drop)
         {
-            return new Slot(this.Id, 1);
+            drop = new[] { new Slot(this.Id, 1) };
+            return CanHarvest(tool);
         }
 
         public virtual int GetHarvestTime(Item item, World world, PlayerEntity entity, out int damage)

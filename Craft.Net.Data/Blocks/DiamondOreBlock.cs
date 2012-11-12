@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Craft.Net.Data.Items;
 
 namespace Craft.Net.Data.Blocks
 {
@@ -12,9 +13,12 @@ namespace Craft.Net.Data.Blocks
             get { return 56; }
         }
 
-        public override double Hardness
+        public override bool CanHarvest(Items.ToolItem tool)
         {
-            get { return 3; }
+            return tool is PickaxeItem &&
+                (tool.ToolMaterial == ToolMaterial.Iron ||
+                tool.ToolMaterial == ToolMaterial.Gold ||
+                tool.ToolMaterial == ToolMaterial.Diamond);
         }
     }
 }

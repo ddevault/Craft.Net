@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Craft.Net.Data.Items;
 
 namespace Craft.Net.Data.Blocks
 {
@@ -17,9 +18,10 @@ namespace Craft.Net.Data.Blocks
             get { return 0.6; }
         }
 
-        public override Slot GetDrop()
+        public override bool GetDrop(ToolItem tool, out Slot[] drop)
         {
-            return new Slot((ushort)new DirtBlock(), 1);
+            drop = new[] { new Slot((ushort)new DirtBlock(), 1) };
+            return true;
         }
     }
 }

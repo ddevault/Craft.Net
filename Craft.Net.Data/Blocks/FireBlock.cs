@@ -16,5 +16,10 @@ namespace Craft.Net.Data.Blocks
         {
             get { return null; }
         }
+
+        public override bool CanHarvest(Items.ToolItem tool)
+        {
+            return false;
+        }
     }
 }

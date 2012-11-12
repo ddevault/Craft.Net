@@ -12,6 +12,10 @@ namespace Craft.Net.Data.Entities
         {
             Position = position;
             Item = item;
+            Velocity = new Vector3(
+                (DataUtility.Random.NextDouble() - 0.5) * 0.1,
+                (DataUtility.Random.NextDouble() - 0.5) * 0.1,
+                (DataUtility.Random.NextDouble() - 0.5) * 0.1);
         }
 
         public override Size Size
@@ -34,7 +38,7 @@ namespace Craft.Net.Data.Entities
         public override void PhysicsUpdate(World world)
         {
             base.PhysicsUpdate(world);
-            if (world.Level.Time % 5 == 0)
+            if (world.Level.Time % 10 == 0)
             {
                 var player = (PlayerEntity)world.Entities.Where(e => e is PlayerEntity &&
                     e.Position.DistanceTo(Position) < 2).FirstOrDefault();

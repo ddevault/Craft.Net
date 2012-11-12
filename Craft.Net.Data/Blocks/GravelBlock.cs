@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Craft.Net.Data.Entities;
+using Craft.Net.Data.Items;
 
 namespace Craft.Net.Data.Blocks
 {
@@ -16,6 +17,16 @@ namespace Craft.Net.Data.Blocks
         public override double Hardness
         {
             get { return 0.6; }
+        }
+
+        public override bool GetDrop(ToolItem tool, out Slot[] drop)
+        {
+            if (DataUtility.Random.Next(10) == 0)
+            {
+                drop = new[] { new Slot((ushort)new FlintItem(), 1) };
+                return true;
+            }
+            return base.GetDrop(tool, out drop);
         }
 
         public override void BlockUpdate(World world, Vector3 updatedBlock, Vector3 modifiedBlock)

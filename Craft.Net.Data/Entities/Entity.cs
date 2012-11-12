@@ -31,6 +31,7 @@ namespace Craft.Net.Data.Entities
             }
         }
 
+        protected bool EnableVelocityUpdates = true;
         /// <summary>
         /// In meters per tick
         /// </summary>
@@ -40,7 +41,8 @@ namespace Craft.Net.Data.Entities
             set
             {
                 velocity = value;
-                OnPropertyChanged("Velocity");
+                if (EnableVelocityUpdates)
+                    OnPropertyChanged("Velocity");
             }
         }
 
@@ -165,6 +167,7 @@ namespace Craft.Net.Data.Entities
         public virtual void PhysicsUpdate(World world)
         {
             // I don't know much about game physics, this code is open for pull requests.
+            EnableVelocityUpdates = false;
 
             // Calculate movement
             bool fireEvent = Velocity != Vector3.Zero;
@@ -183,6 +186,9 @@ namespace Craft.Net.Data.Entities
                         Block = collisionPoint,
                         World = world
                     });
+
+            EnableVelocityUpdates = true;
+            OnPropertyChanged("Velocity");
 
             Position += Velocity;
         }
