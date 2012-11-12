@@ -25,7 +25,7 @@ namespace Craft.Net.Server
         {
             var chunk = world.GetChunk(World.WorldToChunkCoordinates(position));
             var block = World.FindBlockPosition(position);
-            byte y = (byte)(chunk.GetHeight((byte)block.X, (byte)block.Z) + 1);
+            int y = chunk.GetHeight((byte)block.X, (byte)block.Z) + 1;
 
             var strike = new Vector3(position.X, y, position.Z);
             if (world.GetBlock(strike + Vector3.Down).Transparency == Transparency.Opaque)
