@@ -45,14 +45,6 @@ namespace Craft.Net.Server
         /// </summary>
         public string Hostname;
         /// <summary>
-        /// Set to true if the client is currently crouching.
-        /// </summary>
-        public bool IsCrouching;
-        /// <summary>
-        /// Set to true if the client is currently sprinting.
-        /// </summary>
-        public bool IsSprinting;
-        /// <summary>
         /// Set to true if the client has completed the login sequence and
         /// has been spawned.
         /// </summary>

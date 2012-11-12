@@ -34,8 +34,8 @@ namespace Craft.Net.Server.Packets
         {
             if (!client.ReadyToSpawn)
                 return;
-            client.Entity.FoodExhaustion += (float)client.Entity.GivenPosition.DistanceTo(new Vector3(X, Y, Z)) * 
-                (client.IsSprinting ? 0.1f : 0.01f); // TODO: Swimming
+            client.Entity.FoodExhaustion += (float)client.Entity.GivenPosition.DistanceTo(new Vector3(X, Y, Z)) *
+                (client.Entity.IsSprinting ? 0.1f : 0.01f); // TODO: Swimming
 
             if ((Y - client.Entity.GivenPosition.Y) > 0)
                 client.Entity.PositiveDeltaY += (Y - client.Entity.GivenPosition.Y);
@@ -43,7 +43,6 @@ namespace Craft.Net.Server.Packets
                 client.Entity.PositiveDeltaY = 0;
 
             client.Entity.GivenPosition = new Vector3(X, Y, Z);
-            client.Entity.UpdateFoodForJump(client.IsSprinting);
             client.UpdateChunksAsync();
             server.ProcessSendQueue();
         }

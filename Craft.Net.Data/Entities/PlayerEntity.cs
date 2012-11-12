@@ -165,6 +165,9 @@ namespace Craft.Net.Data.Entities
 
         #endregion
 
+        public bool IsSprinting { get; set; }
+        public bool IsCrouching { get; set; }
+
         public string Username { get; set; }
         /// <summary>
         /// The client's current inventory.
@@ -257,7 +260,10 @@ namespace Craft.Net.Data.Entities
             set
             {
                 if (PositiveDeltaY > 1.20d && !Abilities.IsFlying)
+                {
+                    FoodExhaustion += (IsSprinting ? 0.8f : 0.2f);
                     OnJumped();
+                }
                 givenPosition = value;
                 LastGivenPositionUpdate = DateTime.Now;
                 OnPropertyChanged("GivenPosition");
@@ -275,11 +281,6 @@ namespace Craft.Net.Data.Entities
                 return metadata;
             }
         }
-
-        //public override CollisionTests TestsToPerform
-        //{
-        //    get { return CollisionTests.None; } // TODO: Is this a good idea?
-        //}
 
         /// <summary>
         /// The last entity that attacked the player, used to determine
@@ -311,12 +312,12 @@ namespace Craft.Net.Data.Entities
         private Vector3 spawnPoint;
         private Vector3 givenPosition;
 
-        public event EventHandler BedStateChanged, BedTimerExpired, StartEating, Jumped;
+        public event EventHandler BedStateChanged, BedTimerExpired, StartEating;
         /// <summary>
         /// Note: Only fired when the inventory is changed via SetSlot.
         /// </summary>
         public event EventHandler<InventoryChangedEventArgs> InventoryChanged;
-        public event EventHandler<EntityEventArgs> PickUpItem;
+        public event EventHandler<EntityEventArgs> PickUpItem, Jumped;
 
         #endregion
 
@@ -345,11 +346,6 @@ namespace Craft.Net.Data.Entities
             BedPosition = -Vector3.One;
             if (BedStateChanged != null)
                 BedStateChanged(this, null);
-        }
-
-        public void UpdateFoodForJump(Boolean Spriting)
-        {
-            FoodExhaustion += (Spriting ? 0.8f : 0.2f);
         }
 
         public override void Kill()

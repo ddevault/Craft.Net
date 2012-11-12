@@ -39,16 +39,16 @@ namespace Craft.Net.Server.Packets
             switch (Action)
             {
                 case EntityAction.Crouch:
-                    client.IsCrouching = true;
+                    client.Entity.IsCrouching = true;
                     break;
                 case EntityAction.Uncrouch:
-                    client.IsCrouching = false;
+                    client.Entity.IsCrouching = false;
                     break;
                 case EntityAction.StartSprinting:
-                    client.IsSprinting = true;
+                    client.Entity.IsSprinting = true;
                     break;
                 case EntityAction.StopSprinting:
-                    client.IsSprinting = false;
+                    client.Entity.IsSprinting = false;
                     break;
                 case EntityAction.LeaveBed:
                     client.Entity.LeaveBed();
