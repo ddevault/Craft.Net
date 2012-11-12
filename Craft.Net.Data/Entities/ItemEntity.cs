@@ -22,12 +22,12 @@ namespace Craft.Net.Data.Entities
 
         public override float AccelerationDueToGravity
         {
-            get { return 16f; } // TODO: Double check these values, they aren't quite on-par with vanilla
+            get { return 0.04f; }
         }
 
         public override float Drag
         {
-            get { return 4f; }
+            get { return 0.98f; }
         }
     }
 }

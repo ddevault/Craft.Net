@@ -41,14 +41,14 @@ namespace Craft.Net.Data.Entities
         {
             get
             {
-                return 0.98f;
+                return 0.99f;
             }
         }
 
         void BlockEntity_TerrainCollision(object sender, EntityTerrainCollisionEventArgs e)
         {
-            e.World.OnDestroyEntity(this);
             e.World.SetBlock(e.Block + Vector3.Up, (Block)Item.Id);
+            e.World.OnDestroyEntity(this);
         }
     }
 }
