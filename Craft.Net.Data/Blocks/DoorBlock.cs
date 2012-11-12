@@ -68,5 +68,15 @@ namespace Craft.Net.Data.Blocks
                 return DoorDirection.South;
             return DoorDirection.West;
         }
+
+        public override bool RequiresSupport
+        {
+            get { return true; }
+        }
+
+        public override Vector3 SupportDirection
+        {
+            get { return Vector3.Down; }
+        }
     }
 }

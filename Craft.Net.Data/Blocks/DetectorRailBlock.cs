@@ -16,5 +16,15 @@ namespace Craft.Net.Data.Blocks
         {
             get { return 0.7; }
         }
+
+        public override bool RequiresSupport
+        {
+            get { return true; }
+        }
+
+        public override Vector3 SupportDirection
+        {
+            get { return Vector3.Down; }
+        }
     }
 }
