@@ -16,5 +16,10 @@ namespace Craft.Net.Data.Blocks
         {
             get { return 0.6; }
         }
+
+        public override Slot GetDrop()
+        {
+            return new Slot((ushort)new DirtBlock(), 1);
+        }
     }
 }

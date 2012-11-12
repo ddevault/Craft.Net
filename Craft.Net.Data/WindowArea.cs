@@ -46,20 +46,22 @@ namespace Craft.Net.Data
                 {
                     // Merging takes precedence over empty slots
                     emptyIndex = -1;
-                    from[index] = new Slot();
+                    if (from != null)
+                        from[index] = new Slot();
                     if (this[i].Count + slot.Count > slot.Item.MaximumStack)
                     {
                         slot.Count -= (byte)(slot.Item.MaximumStack - this[i].Count);
                         this[i].Count = slot.Item.MaximumStack;
                         continue;
                     }
-                    this[i].Count += slot.Count;
-                    break;
+                    this[i] = new Slot(slot.Id, (byte)(this[i].Count + slot.Count));
+                    return i;
                 }
             }
             if (emptyIndex != -1)
             {
-                from[index] = new Slot();
+                if (from != null)
+                    from[index] = new Slot();
                 this[emptyIndex] = slot;
             }
             return emptyIndex;

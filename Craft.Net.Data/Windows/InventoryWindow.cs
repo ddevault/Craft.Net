@@ -66,5 +66,20 @@ namespace Craft.Net.Data.Windows
                 return MainInventory;
             return Hotbar;
         }
+
+        public bool PickUpStack(Slot slot)
+        {
+            var area = MainInventory;
+            foreach (var item in Hotbar.Items)
+            {
+                if (item.Empty || (slot.Id == item.Id && item.Count + slot.Count < item.Item.MaximumStack))
+                {
+                    area = Hotbar;
+                    break;
+                }
+            }
+            int index = area.MoveOrMergeItem(-1, slot, null);
+            return index != -1;
+        }
     }
 }

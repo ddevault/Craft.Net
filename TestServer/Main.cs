@@ -25,7 +25,7 @@ namespace TestServer
             minecraftServer = new MinecraftServer(
                 new IPEndPoint(IPAddress.Any, 25565));
             minecraftServer.Settings.OnlineMode = false;
-            minecraftServer.Settings.EnableEncryption = false;
+            minecraftServer.Settings.EnableEncryption = true;
             // Add a console logger
             LogProvider.RegisterProvider(new ConsoleLogWriter(LogImportance.Medium));
             LogProvider.RegisterProvider(new FileLogWriter("packetLog.txt", LogImportance.Low));

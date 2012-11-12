@@ -18,8 +18,9 @@ namespace Craft.Net.Data.Test
         [TestFixtureSetUp]
         public void SetUp()
         {
-            World = new World(new FlatlandGenerator(), "world");
-            World.WorldGenerator.Initialize(new Level());
+            Level level = new Level();
+            World = new World(level, new FlatlandGenerator(), "world");
+            World.WorldGenerator.Initialize(level);
         }
 
         [Test]

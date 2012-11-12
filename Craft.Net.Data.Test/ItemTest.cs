@@ -37,7 +37,7 @@ namespace Craft.Net.Data.Test
         [Test]
         public void TestBuckets()
         {
-            World world = new World(new FlatlandGenerator());
+            World world = new World(new Level(), new FlatlandGenerator());
             world.WorldGenerator.Initialize(new Level());
             PlayerEntity player = new PlayerEntity(Difficulty.Normal)
             {
@@ -73,7 +73,7 @@ namespace Craft.Net.Data.Test
         [Test]
         public void TestFlintAndSteel()
         {
-            World world = new World(new FlatlandGenerator());
+            World world = new World(new Level(), new FlatlandGenerator());
             world.WorldGenerator.Initialize(new Level());
             Vector3 targetBlock = new Vector3(0, 3, 0);
             Vector3 alteredBlock = targetBlock + Vector3.Up;
@@ -87,7 +87,7 @@ namespace Craft.Net.Data.Test
         [Test]
         public void TestBrewingStand()
         {
-            World world = new World(new FlatlandGenerator());
+            World world = new World(new Level(), new FlatlandGenerator());
             world.WorldGenerator.Initialize(new Level());
 
             BrewingStandItem brewingStand = new BrewingStandItem();
@@ -99,7 +99,7 @@ namespace Craft.Net.Data.Test
         [Test]
         public void TestHoe()
         {
-            World world = new World(new FlatlandGenerator());
+            World world = new World(new Level(), new FlatlandGenerator());
             world.WorldGenerator.Initialize(new Level());
             Vector3 grassBlock = new Vector3(0, 3, 0);
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Craft.Net.Data.Events;
 
 namespace Craft.Net.Data.Entities
 {
@@ -28,6 +29,18 @@ namespace Craft.Net.Data.Entities
         public override float Drag
         {
             get { return 0.98f; }
+        }
+
+        public override void PhysicsUpdate(World world)
+        {
+            base.PhysicsUpdate(world);
+            if (world.Level.Time % 5 == 0)
+            {
+                var player = (PlayerEntity)world.Entities.Where(e => e is PlayerEntity &&
+                    e.Position.DistanceTo(Position) < 2).FirstOrDefault();
+                if (player != null)
+                    player.OnPickUpItem(new EntityEventArgs(this));
+            }
         }
     }
 }

@@ -53,6 +53,7 @@ namespace Craft.Net.Server
                     client.Entity.BedStateChanged += EntityOnUpdateBedState;
                     client.Entity.BedTimerExpired += EntityOnBedTimerExpired;
                     client.Entity.StartEating += PlayerStartEating;
+                    client.Entity.PickUpItem += Entity_PickUpItem;
                     clients = clients.Where(c => c.Entity != entity);
                     clients.ToList().ForEach(c => {
                         c.SendPacket(new SpawnNamedEntityPacket(client));
@@ -284,6 +285,19 @@ namespace Craft.Net.Server
             server.ProcessSendQueue();
         }
 
+        void Entity_PickUpItem(object sender, EntityEventArgs e)
+        {
+            var player = sender as PlayerEntity;
+            var client = GetClient(player);
+            var item = e.Entity as ItemEntity;
+            var pickUp = player.Inventory.PickUpStack(item.Item);
+            if (pickUp)
+            {
+                client.SendPacket(new CollectItemPacket(item.Id, player.Id));
+                DespawnEntity(item);
+            }
+        }
+
         private void PlayerAbilitiesChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
             if (propertyChangedEventArgs.PropertyName == "IsFlying")
@@ -296,11 +310,11 @@ namespace Craft.Net.Server
         private void PlayerInventoryChange(object sender, WindowChangeEventArgs windowChangeEventArgs)
         {
             var window = (Window)sender;
+            var source = server.Clients.First(c => c.Entity.Inventory == window);
             if (windowChangeEventArgs.SlotIndex >= InventoryWindow.ArmorIndex &&
                 windowChangeEventArgs.SlotIndex < InventoryWindow.ArmorIndex + 4)
             {
                 // TODO: Prevent non-armor items from being used here
-                var source = server.Clients.First(c => c.Entity.Inventory == window);
                 var clients = GetKnownClients(source.Entity);
                 foreach (var client in clients)
                 {
@@ -324,6 +338,7 @@ namespace Craft.Net.Server
                     client.SendPacket(new EntityEquipmentPacket(source.Entity.Id, slot, windowChangeEventArgs.Value));
                 }
             }
+            source.SendPacket(new SetSlotPacket(0, (short)windowChangeEventArgs.SlotIndex, windowChangeEventArgs.Value));
         }
 
         private void PlayerStartEating(object sender, EventArgs eventArgs)

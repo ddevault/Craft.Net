@@ -308,6 +308,7 @@ namespace Craft.Net.Data.Entities
         /// Note: Only fired when the inventory is changed via SetSlot.
         /// </summary>
         public event EventHandler<InventoryChangedEventArgs> InventoryChanged;
+        public event EventHandler<EntityEventArgs> PickUpItem;
 
         #endregion
 
@@ -360,6 +361,12 @@ namespace Craft.Net.Data.Entities
         public override void PhysicsUpdate(World world)
         {
             // TODO: Keep players in line so they don't stray too far away from where they should logically be
+        }
+
+        public virtual void OnPickUpItem(EntityEventArgs e)
+        {
+            if (PickUpItem != null)
+                PickUpItem(this, e);
         }
     }
 }

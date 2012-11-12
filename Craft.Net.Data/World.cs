@@ -41,13 +41,16 @@ namespace Craft.Net.Data
         /// </summary>
         public bool EnableBlockUpdates { get; set; }
 
+        public Level Level { get; set; }
+
         public Timer EntityUpdateTimer { get; set; }
 
         /// <summary>
         /// Creates a new world for client-side use.
         /// </summary>
-        public World()
+        public World(Level level)
         {
+            Level = level;
             Name = "world";
             Entities = new List<Entity>();
             Regions = new Dictionary<Vector3, Region>();
@@ -58,7 +61,7 @@ namespace Craft.Net.Data
         /// <summary>
         /// Creates a new world for server-side use with the specified world generator.
         /// </summary>
-        public World(IWorldGenerator worldGenerator) : this()
+        public World(Level level, IWorldGenerator worldGenerator) : this(level)
         {
             WorldGenerator = worldGenerator;
         }
@@ -67,7 +70,7 @@ namespace Craft.Net.Data
         /// Creates a new world for server-side use with the specified world generator
         /// and the specified working directory.
         /// </summary>
-        public World(IWorldGenerator worldGenerator, string directory) : this(worldGenerator)
+        public World(Level level, IWorldGenerator worldGenerator, string directory) : this(level, worldGenerator)
         {
             Directory = directory;
             if (!System.IO.Directory.Exists(directory))

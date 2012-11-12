@@ -55,7 +55,7 @@ namespace Craft.Net.Data
         /// </summary>
         public Level()
         {
-            World = new World(DefaultGenerator);
+            World = new World(this, DefaultGenerator);
             Name = "world";
             GameMode = GameMode.Survival;
             MapFeatures = false;
@@ -82,7 +82,7 @@ namespace Craft.Net.Data
                 WorldGenerator = DefaultGenerator;
                 WorldGenerator.Initialize(this);
                 SpawnPoint = WorldGenerator.SpawnPoint;
-                World = new World(WorldGenerator, Path.Combine(directory, "region"));
+                World = new World(this, WorldGenerator, Path.Combine(directory, "region"));
 
                 SaveInterval = TimeSpan.FromSeconds(5);
                 saveTimer = new Timer(Save, null, (int)SaveInterval.TotalMilliseconds, Timeout.Infinite);
@@ -112,7 +112,7 @@ namespace Craft.Net.Data
             WorldGenerator = worldGenerator;
             WorldGenerator.Initialize(this);
             SpawnPoint = WorldGenerator.SpawnPoint;
-            World = new World(WorldGenerator, Path.Combine(directory, "region"));
+            World = new World(this, WorldGenerator, Path.Combine(directory, "region"));
             SaveInterval = TimeSpan.FromSeconds(5);
             saveTimer = new Timer(Save, null, (int)SaveInterval.TotalMilliseconds, Timeout.Infinite);
             tickTimer = new Timer(Tick, null, TickLength, TickLength);
@@ -201,7 +201,7 @@ namespace Craft.Net.Data
 
             SpawnPoint = level.SpawnPoint;
 
-            World = new World(WorldGenerator, Path.Combine(directory, "region"));
+            World = new World(this, WorldGenerator, Path.Combine(directory, "region"));
         }
 
         private void Tick(object discarded)

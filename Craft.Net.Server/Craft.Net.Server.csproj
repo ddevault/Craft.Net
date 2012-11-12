@@ -84,6 +84,7 @@
     <Compile Include="Packets\CloseWindowPacket.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Packets\CollectItemPacket.cs" />
     <Compile Include="Packets\ConfirmTransactionPacket.cs">
       <SubType>Code</SubType>
     </Compile>

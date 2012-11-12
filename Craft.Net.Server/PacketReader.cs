@@ -34,7 +34,7 @@ namespace Craft.Net.Server
                 typeof(EntityActionPacket), // 0x13
                 typeof(SpawnNamedEntityPacket), // 0x14
                 typeof(SpawnDroppedItemPacket), // 0x15
-                null, // 0x16
+                typeof(CollectItemPacket), // 0x16
                 typeof(SpawnObjectPacket), // 0x17
                 null, // 0x18
                 null, // 0x19
