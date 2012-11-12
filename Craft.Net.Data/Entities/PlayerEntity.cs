@@ -256,6 +256,8 @@ namespace Craft.Net.Data.Entities
             get { return givenPosition; }
             set
             {
+                if (PositiveDeltaY > 1.20d && !Abilities.IsFlying)
+                    OnJumped();
                 givenPosition = value;
                 LastGivenPositionUpdate = DateTime.Now;
                 OnPropertyChanged("GivenPosition");
@@ -290,6 +292,12 @@ namespace Craft.Net.Data.Entities
         /// </summary>
         public DamageType LastDamageType { get; set; }
 
+        /// <summary>
+        /// The cumulative positive Y delta motion, used to determine if the player
+        /// is jumping.
+        /// </summary>
+        public double PositiveDeltaY { get; set; }
+
         private Timer bedUseTimer;
         private short food;
         private float foodSaturation;
@@ -303,7 +311,7 @@ namespace Craft.Net.Data.Entities
         private Vector3 spawnPoint;
         private Vector3 givenPosition;
 
-        public event EventHandler BedStateChanged, BedTimerExpired, StartEating;
+        public event EventHandler BedStateChanged, BedTimerExpired, StartEating, Jumped;
         /// <summary>
         /// Note: Only fired when the inventory is changed via SetSlot.
         /// </summary>
@@ -339,6 +347,11 @@ namespace Craft.Net.Data.Entities
                 BedStateChanged(this, null);
         }
 
+        public void UpdateFoodForJump(Boolean Spriting)
+        {
+            FoodExhaustion += (Spriting ? 0.8f : 0.2f);
+        }
+
         public override void Kill()
         {
             deathTimer.Change(3000, Timeout.Infinite);
@@ -350,6 +363,12 @@ namespace Craft.Net.Data.Entities
         {
             if (StartEating != null)
                 StartEating(this, new EventArgs());
+        }
+
+        protected internal virtual void OnJumped()
+        {
+            if (Jumped != null)
+                Jumped(this, new EntityEventArgs(this));
         }
 
         public override void Damage(int damage, bool accountForArmor = true)
