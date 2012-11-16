@@ -4,7 +4,7 @@ Craft.Net is consists of several libraries for .NET that that accomplish various
 Minecraft-related tasks. Included in Craft.Net are:
 
 * Craft.Net.Data: A library to work with various kinds of Minecraft-related data.
-* Craft.Net.Server: An implementation of the 1.4.4 Minecraft server protocol.
+* Craft.Net.Server: An implementation of the 1.4.5 Minecraft server protocol.
 
 Craft.Net runs well on Microsoft.Net or [Mono](https://github.com/mono/mono).
 
@@ -29,7 +29,7 @@ Some cool technical things about Craft.Net that are already implemented:
 ## Usage
 
 Craft.Net is a library, and will not work as a standalone server. However, the basic usage
-is simple. To get started, the following code will create a Minecraft 1.4.4 server:
+is simple. To get started, the following code will create a Minecraft 1.4.5 server:
 
     MinecraftServer server = new MinecraftServer(new IPEndPoint(IPAddress.Any, 25565));
     server.AddLevel(new Level("world"));
