@@ -10,15 +10,15 @@
 
 namespace Craft.Net.Data.Items
 {
-    
-    public class SugarCanesItem : Item
-    {
-        public override ushort Id
-        {
-            get
-            {
-                return 338;
-            }
-        }
-    }
+
+   public class SugarCanesItem : Item
+   {
+      public override ushort Id
+      {
+         get
+         {
+            return 338;
+         }
+      }
+   }
 }

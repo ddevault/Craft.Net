@@ -1,23 +1,23 @@
 namespace Craft.Net.Data.Items
 {
-    public class IronHoeItem : HoeItem
-    {
-        public override ushort Id
-        {
-            get
-            {
-                return 292;
-            }
-        }
+   public class IronHoeItem : HoeItem
+   {
+      public override ushort Id
+      {
+         get
+         {
+            return 292;
+         }
+      }
 
-        public override ToolType ToolType
-        {
-            get { return ToolType.Hoe; }
-        }
+      public override ToolType ToolType
+      {
+         get { return ToolType.Hoe; }
+      }
 
-        public override ToolMaterial ToolMaterial
-        {
-            get { return ToolMaterial.Iron; }
-        }
-    }
+      public override ToolMaterial ToolMaterial
+      {
+         get { return ToolMaterial.Iron; }
+      }
+   }
 }

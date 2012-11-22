@@ -7,38 +7,38 @@ using Craft.Net.Data.Items;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class RedstoneOreBlock : Block
-    {
-        public override ushort Id
-        {
-            get { return 73; }
-        }
+   public class RedstoneOreBlock : Block
+   {
+      public override ushort Id
+      {
+         get { return 73; }
+      }
 
-        public override double Hardness
-        {
-            get { return 3; }
-        }
+      public override double Hardness
+      {
+         get { return 3; }
+      }
 
-        public override void OnBlockWalkedOn(World world, Vector3 position, Entity entity)
-        {
-            world.SetBlock(position, new RedstoneOreActiveBlock());
-        }
+      public override void OnBlockWalkedOn(World world, Vector3 position, Entity entity)
+      {
+         world.SetBlock(position, new RedstoneOreActiveBlock());
+      }
 
-        public override bool CanHarvest(ToolItem tool)
-        {
-            return tool is PickaxeItem &&
-                (tool.ToolMaterial == ToolMaterial.Iron ||
-                tool.ToolMaterial == ToolMaterial.Gold ||
-                tool.ToolMaterial == ToolMaterial.Diamond);
-        }
+      public override bool CanHarvest(ToolItem tool)
+      {
+         return tool is PickaxeItem &&
+            (tool.ToolMaterial == ToolMaterial.Iron ||
+            tool.ToolMaterial == ToolMaterial.Gold ||
+            tool.ToolMaterial == ToolMaterial.Diamond);
+         }
 
-        public override bool GetDrop(ToolItem tool, out Slot[] drop)
-        {
+         public override bool GetDrop(ToolItem tool, out Slot[] drop)
+         {
             drop = new[] { new Slot((ushort)new RedstoneItem(), (byte)DataUtility.Random.Next(4, 5)) };
             return tool is PickaxeItem &&
-                (tool.ToolMaterial == ToolMaterial.Iron ||
-                tool.ToolMaterial == ToolMaterial.Gold ||
-                tool.ToolMaterial == ToolMaterial.Diamond);
-        }
-    }
+               (tool.ToolMaterial == ToolMaterial.Iron ||
+               tool.ToolMaterial == ToolMaterial.Gold ||
+               tool.ToolMaterial == ToolMaterial.Diamond);
+            }
+         }
 }

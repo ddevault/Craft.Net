@@ -10,15 +10,15 @@
 
 namespace Craft.Net.Data.Items
 {
-    
-    public class GoldIngotItem : Item
-    {
-        public override ushort Id
-        {
-            get
-            {
-                return 266;
-            }
-        }
-    }
+
+   public class GoldIngotItem : Item
+   {
+      public override ushort Id
+      {
+         get
+         {
+            return 266;
+         }
+      }
+   }
 }

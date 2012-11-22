@@ -1,23 +1,23 @@
 namespace Craft.Net.Data.Items
 {
-    public class GoldenShovelItem : ShovelItem
-    {
-        public override ushort Id
-        {
-            get
-            {
-                return 284;
-            }
-        }
+   public class GoldenShovelItem : ShovelItem
+   {
+      public override ushort Id
+      {
+         get
+         {
+            return 284;
+         }
+      }
 
-        public override int AttackDamage
-        {
-            get { return 1; }
-        }
+      public override int AttackDamage
+      {
+         get { return 1; }
+      }
 
-        public override ToolMaterial ToolMaterial
-        {
-            get { return ToolMaterial.Gold; }
-        }
-    }
+      public override ToolMaterial ToolMaterial
+      {
+         get { return ToolMaterial.Gold; }
+      }
+   }
 }

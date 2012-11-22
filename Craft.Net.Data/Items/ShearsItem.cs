@@ -4,33 +4,33 @@ using System;
 namespace Craft.Net.Data.Items
 {
 
-    public class ShearsItem : ToolItem
-    {
-        public static Type[] DamagingBlocks = new Type[]
-            {
-                typeof(CobwebBlock),
-                typeof(LeavesBlock),
-                typeof(TallGrassBlock), 
-                typeof(TripwireBlock), 
-                typeof(VineBlock)
-            };
+   public class ShearsItem : ToolItem
+   {
+      public static Type[] DamagingBlocks = new Type[]
+         {
+            typeof(CobwebBlock),
+            typeof(LeavesBlock),
+            typeof(TallGrassBlock),
+            typeof(TripwireBlock),
+            typeof(VineBlock)
+         };
 
-        public override ushort Id
-        {
-            get
-            {
-                return 359;
-            }
-        }
+      public override ushort Id
+      {
+         get
+         {
+            return 359;
+         }
+      }
 
-        public override ToolType ToolType
-        {
-            get { return ToolType.Other; }
-        }
+      public override ToolType ToolType
+      {
+         get { return ToolType.Other; }
+      }
 
-        public override ToolMaterial ToolMaterial
-        {
-            get { return ToolMaterial.Other; }
-        }
-    }
+      public override ToolMaterial ToolMaterial
+      {
+         get { return ToolMaterial.Other; }
+      }
+   }
 }

@@ -6,80 +6,80 @@ using Craft.Net.Data.Events;
 
 namespace Craft.Net.Data.Windows
 {
-    public class InventoryWindow : Window
-    {
-        public InventoryWindow()
-        {
-            WindowAreas = new[]
-                {
-                    new CraftingWindowArea(CraftingOutputIndex),
-                    new ArmorWindowArea(ArmorIndex),
-                    new WindowArea(MainIndex, 27), // Main inventory
-                    new WindowArea(HotbarIndex, 9) // Hotbar
-                };
-            foreach (var area in WindowAreas)
-                area.WindowChange += (s, e) => OnWindowChange(new WindowChangeEventArgs(
-                    (s as WindowArea).StartIndex + e.SlotIndex, e.Value));
-        }
-
-        #region Variables
-
-        public const int HotbarIndex = 36;
-        public const int CraftingGridIndex = 1;
-        public const int CraftingOutputIndex = 0;
-        public const int ArmorIndex = 5;
-        public const int MainIndex = 9;
-
-        public override WindowArea[] WindowAreas { get; protected set; }
-
-        #region Properties
-
-        public WindowArea CraftingGrid 
-        {
-            get { return WindowAreas[0]; }
-        }
-
-        public WindowArea Armor
-        {
-            get { return WindowAreas[1]; }
-        }
-
-        public WindowArea MainInventory
-        {
-            get { return WindowAreas[2]; }
-        }
-
-        public WindowArea Hotbar
-        {
-            get { return WindowAreas[3]; }
-        }
-
-        #endregion
-
-        #endregion
-
-        protected override WindowArea GetLinkedArea(int index, Slot slot)
-        {
-            if (!slot.Empty && slot.Item is IArmorItem && (index == 2 || index == 3))
-                return Armor;
-            if (index == 0 || index == 1 || index == 3)
-                return MainInventory;
-            return Hotbar;
-        }
-
-        public bool PickUpStack(Slot slot)
-        {
-            var area = MainInventory;
-            foreach (var item in Hotbar.Items)
+   public class InventoryWindow : Window
+   {
+      public InventoryWindow()
+      {
+         WindowAreas = new[]
             {
-                if (item.Empty || (slot.Id == item.Id && item.Count + slot.Count < item.Item.MaximumStack))
-                {
-                    area = Hotbar;
-                    break;
-                }
+               new CraftingWindowArea(CraftingOutputIndex),
+               new ArmorWindowArea(ArmorIndex),
+               new WindowArea(MainIndex, 27), // Main inventory
+               new WindowArea(HotbarIndex, 9) // Hotbar
+            };
+         foreach (var area in WindowAreas)
+            area.WindowChange += (s, e) => OnWindowChange(new WindowChangeEventArgs(
+               (s as WindowArea).StartIndex + e.SlotIndex, e.Value));
             }
-            int index = area.MoveOrMergeItem(-1, slot, null);
-            return index != -1;
-        }
-    }
+
+            #region Variables
+
+            public const int HotbarIndex = 36;
+            public const int CraftingGridIndex = 1;
+            public const int CraftingOutputIndex = 0;
+            public const int ArmorIndex = 5;
+            public const int MainIndex = 9;
+
+            public override WindowArea[] WindowAreas { get; protected set; }
+
+            #region Properties
+
+            public WindowArea CraftingGrid
+            {
+               get { return WindowAreas[0]; }
+            }
+
+            public WindowArea Armor
+            {
+               get { return WindowAreas[1]; }
+            }
+
+            public WindowArea MainInventory
+            {
+               get { return WindowAreas[2]; }
+            }
+
+            public WindowArea Hotbar
+            {
+               get { return WindowAreas[3]; }
+            }
+
+            #endregion
+
+            #endregion
+
+            protected override WindowArea GetLinkedArea(int index, Slot slot)
+            {
+               if (!slot.Empty && slot.Item is IArmorItem && (index == 2 || index == 3))
+                  return Armor;
+               if (index == 0 || index == 1 || index == 3)
+                  return MainInventory;
+               return Hotbar;
+            }
+
+            public bool PickUpStack(Slot slot)
+            {
+               var area = MainInventory;
+               foreach (var item in Hotbar.Items)
+               {
+                  if (item.Empty || (slot.Id == item.Id && item.Count + slot.Count < item.Item.MaximumStack))
+                  {
+                     area = Hotbar;
+                     break;
+                  }
+               }
+               int index = area.MoveOrMergeItem(-1, slot, null);
+               return index != -1;
+            }
+         }
 }

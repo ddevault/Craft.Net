@@ -6,13 +6,13 @@ using Craft.Net.Data.Entities;
 
 namespace Craft.Net.Data.Events
 {
-    public class EntityEventArgs : EventArgs
-    {
-        public Entity Entity { get; set; }
+   public class EntityEventArgs : EventArgs
+   {
+      public Entity Entity { get; set; }
 
-        public EntityEventArgs(Entity entity)
-        {
-            Entity = entity;
-        }
-    }
+      public EntityEventArgs(Entity entity)
+      {
+         Entity = entity;
+      }
+   }
 }

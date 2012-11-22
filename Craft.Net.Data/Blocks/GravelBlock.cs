@@ -7,35 +7,35 @@ using Craft.Net.Data.Items;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class GravelBlock : Block
-    {
-        public override ushort Id
-        {
-            get { return 13; }
-        }
+   public class GravelBlock : Block
+   {
+      public override ushort Id
+      {
+         get { return 13; }
+      }
 
-        public override double Hardness
-        {
-            get { return 0.6; }
-        }
+      public override double Hardness
+      {
+         get { return 0.6; }
+      }
 
-        public override bool GetDrop(ToolItem tool, out Slot[] drop)
-        {
-            if (DataUtility.Random.Next(10) == 0)
-            {
-                drop = new[] { new Slot((ushort)new FlintItem(), 1) };
-                return true;
-            }
-            return base.GetDrop(tool, out drop);
-        }
+      public override bool GetDrop(ToolItem tool, out Slot[] drop)
+      {
+         if (DataUtility.Random.Next(10) == 0)
+         {
+            drop = new[] { new Slot((ushort)new FlintItem(), 1) };
+            return true;
+         }
+         return base.GetDrop(tool, out drop);
+      }
 
-        public override void BlockUpdate(World world, Vector3 updatedBlock, Vector3 modifiedBlock)
-        {
-            if (world.GetBlock(updatedBlock + Vector3.Down) == 0)
-            {
-                world.SetBlock(updatedBlock, new AirBlock());
-                world.OnSpawnEntity(new BlockEntity(updatedBlock, this));
-            }
-        }
-    }
+      public override void BlockUpdate(World world, Vector3 updatedBlock, Vector3 modifiedBlock)
+      {
+         if (world.GetBlock(updatedBlock + Vector3.Down) == 0)
+         {
+            world.SetBlock(updatedBlock, new AirBlock());
+            world.OnSpawnEntity(new BlockEntity(updatedBlock, this));
+         }
+      }
+   }
 }

@@ -10,15 +10,15 @@
 
 namespace Craft.Net.Data.Items
 {
-    
-    public class ClayItem : Item
-    {
-        public override ushort Id
-        {
-            get
-            {
-                return 337;
-            }
-        }
-    }
+
+   public class ClayItem : Item
+   {
+      public override ushort Id
+      {
+         get
+         {
+            return 337;
+         }
+      }
+   }
 }

@@ -12,21 +12,21 @@ using Craft.Net.Data.Blocks;
 
 namespace Craft.Net.Data.Items
 {
-    
-    public class RedstoneRepeaterItem : Item
-    {
-        public override ushort Id
-        {
-            get
-            {
-                return 356;
-            }
-        }
 
-        public override void OnItemUsedOnBlock(World world, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entities.Entity usedBy)
-        {
-            if (world.GetBlock(clickedBlock + clickedSide) == 0)
-                world.SetBlock(clickedBlock + clickedSide, new RedstoneRepeaterBlock(DataUtility.DirectionByRotationFlat(usedBy)));
-        }
-    }
+   public class RedstoneRepeaterItem : Item
+   {
+      public override ushort Id
+      {
+         get
+         {
+            return 356;
+         }
+      }
+
+      public override void OnItemUsedOnBlock(World world, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entities.Entity usedBy)
+      {
+         if (world.GetBlock(clickedBlock + clickedSide) == 0)
+            world.SetBlock(clickedBlock + clickedSide, new RedstoneRepeaterBlock(DataUtility.DirectionByRotationFlat(usedBy)));
+         }
+      }
 }
