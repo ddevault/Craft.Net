@@ -5,11 +5,11 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class TNTBlock : Block
-    {
-        public override ushort Id
-        {
-            get { return 46; }
-        }
-    }
+   public class TNTBlock : Block
+   {
+      public override ushort Id
+      {
+         get { return 46; }
+      }
+   }
 }

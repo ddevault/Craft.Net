@@ -10,15 +10,15 @@
 
 namespace Craft.Net.Data.Items
 {
-    
-    public class SnowballItem : Item
-    {
-        public override ushort Id
-        {
-            get
-            {
-                return 332;
-            }
-        }
-    }
+
+   public class SnowballItem : Item
+   {
+      public override ushort Id
+      {
+         get
+         {
+            return 332;
+         }
+      }
+   }
 }

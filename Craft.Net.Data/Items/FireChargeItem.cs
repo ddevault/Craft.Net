@@ -10,15 +10,15 @@
 
 namespace Craft.Net.Data.Items
 {
-    
-    public class FireChargeItem : Item
-    {
-        public override ushort Id
-        {
-            get
-            {
-                return 385;
-            }
-        }
-    }
+
+   public class FireChargeItem : Item
+   {
+      public override ushort Id
+      {
+         get
+         {
+            return 385;
+         }
+      }
+   }
 }

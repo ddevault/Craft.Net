@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Craft.Net.Data.Events
 {
-    public class InventoryChangedEventArgs : EventArgs
-    {
-        public Slot NewValue, OldValue;
-        public short Index;
-    }
+   public class InventoryChangedEventArgs : EventArgs
+   {
+      public Slot NewValue, OldValue;
+      public short Index;
+   }
 }

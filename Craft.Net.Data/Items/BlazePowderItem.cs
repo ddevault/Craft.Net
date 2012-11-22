@@ -10,15 +10,15 @@
 
 namespace Craft.Net.Data.Items
 {
-    
-    public class BlazePowderItem : Item
-    {
-        public override ushort Id
-        {
-            get
-            {
-                return 377;
-            }
-        }
-    }
+
+   public class BlazePowderItem : Item
+   {
+      public override ushort Id
+      {
+         get
+         {
+            return 377;
+         }
+      }
+   }
 }

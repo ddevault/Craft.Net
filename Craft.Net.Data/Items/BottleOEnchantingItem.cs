@@ -10,15 +10,15 @@
 
 namespace Craft.Net.Data.Items
 {
-    
-    public class BottleOEnchantingItem : Item
-    {
-        public override ushort Id
-        {
-            get
-            {
-                return 384;
-            }
-        }
-    }
+
+   public class BottleOEnchantingItem : Item
+   {
+      public override ushort Id
+      {
+         get
+         {
+            return 384;
+         }
+      }
+   }
 }

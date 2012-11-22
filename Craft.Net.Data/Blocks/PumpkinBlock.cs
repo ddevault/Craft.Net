@@ -5,16 +5,16 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class PumpkinBlock : Block
-    {
-        public override ushort Id
-        {
-            get { return 86; }
-        }
+   public class PumpkinBlock : Block
+   {
+      public override ushort Id
+      {
+         get { return 86; }
+      }
 
-        public override double Hardness
-        {
-            get { return 1; }
-        }
-    }
+      public override double Hardness
+      {
+         get { return 1; }
+      }
+   }
 }

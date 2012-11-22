@@ -5,21 +5,21 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class FireBlock : Block
-    {
-        public override ushort Id
-        {
-            get { return 51; }
-        }
+   public class FireBlock : Block
+   {
+      public override ushort Id
+      {
+         get { return 51; }
+      }
 
-        public override BoundingBox? BoundingBox
-        {
-            get { return null; }
-        }
+      public override BoundingBox? BoundingBox
+      {
+         get { return null; }
+      }
 
-        public override bool CanHarvest(Items.ToolItem tool)
-        {
-            return false;
-        }
-    }
+      public override bool CanHarvest(Items.ToolItem tool)
+      {
+         return false;
+      }
+   }
 }

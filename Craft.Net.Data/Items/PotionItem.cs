@@ -10,15 +10,15 @@
 
 namespace Craft.Net.Data.Items
 {
-    
-    public class PotionItem : Item
-    {
-        public override ushort Id
-        {
-            get
-            {
-                return 373;
-            }
-        }
-    }
+
+   public class PotionItem : Item
+   {
+      public override ushort Id
+      {
+         get
+         {
+            return 373;
+         }
+      }
+   }
 }

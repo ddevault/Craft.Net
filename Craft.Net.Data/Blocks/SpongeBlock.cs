@@ -5,16 +5,16 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class SpongeBlock : Block
-    {
-        public override ushort Id
-        {
-            get { return 19; }
-        }
+   public class SpongeBlock : Block
+   {
+      public override ushort Id
+      {
+         get { return 19; }
+      }
 
-        public override double Hardness
-        {
-            get { return 0.6; }
-        }
-    }
+      public override double Hardness
+      {
+         get { return 0.6; }
+      }
+   }
 }
