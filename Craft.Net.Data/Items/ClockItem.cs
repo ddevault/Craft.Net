@@ -1,23 +1,23 @@
 namespace Craft.Net.Data.Items
 {
-    public class ClockItem : ToolItem
-    {
-        public override ushort Id
-        {
-            get
-            {
-                return 347;
-            }
-        }
+   public class ClockItem : ToolItem
+   {
+      public override ushort Id
+      {
+         get
+         {
+            return 347;
+         }
+      }
 
-        public override ToolType ToolType
-        {
-            get { return ToolType.Other; }
-        }
+      public override ToolType ToolType
+      {
+         get { return ToolType.Other; }
+      }
 
-        public override ToolMaterial ToolMaterial
-        {
-            get { return ToolMaterial.Other; }
-        }
-    }
+      public override ToolMaterial ToolMaterial
+      {
+         get { return ToolMaterial.Other; }
+      }
+   }
 }

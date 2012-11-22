@@ -6,15 +6,15 @@ using NUnit.Framework;
 
 namespace Craft.Net.Data.Test
 {
-    [TestFixture]
-    public class DataUtilityTest
-    {
-        [Test]
-        public void TestRotation()
-        {
-            Assert.AreEqual(Vector3.Left, DataUtility.RotateY(Vector3.Forwards, DataUtility.DegreesToRadians(90)).Floor());
-            Assert.AreEqual(Vector3.Right, DataUtility.RotateY(Vector3.Forwards, DataUtility.DegreesToRadians(-90)).Floor());
-            // TODO: Investigate rotation on X axis
-        }
-    }
+   [TestFixture]
+   public class DataUtilityTest
+   {
+      [Test]
+      public void TestRotation()
+      {
+         Assert.AreEqual(Vector3.Left, DataUtility.RotateY(Vector3.Forwards, DataUtility.DegreesToRadians(90)).Floor());
+         Assert.AreEqual(Vector3.Right, DataUtility.RotateY(Vector3.Forwards, DataUtility.DegreesToRadians(-90)).Floor());
+         // TODO: Investigate rotation on X axis
+      }
+   }
 }

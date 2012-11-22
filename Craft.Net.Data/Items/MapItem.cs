@@ -10,15 +10,15 @@
 
 namespace Craft.Net.Data.Items
 {
-    
-    public class MapItem : Item
-    {
-        public override ushort Id
-        {
-            get
-            {
-                return 358;
-            }
-        }
-    }
+
+   public class MapItem : Item
+   {
+      public override ushort Id
+      {
+         get
+         {
+            return 358;
+         }
+      }
+   }
 }

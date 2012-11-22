@@ -5,16 +5,16 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class LeavesBlock : Block
-    {
-        public override ushort Id
-        {
-            get { return 18; }
-        }
+   public class LeavesBlock : Block
+   {
+      public override ushort Id
+      {
+         get { return 18; }
+      }
 
-        public override double Hardness
-        {
-            get { return 0.2; }
-        }
-    }
+      public override double Hardness
+      {
+         get { return 0.2; }
+      }
+   }
 }

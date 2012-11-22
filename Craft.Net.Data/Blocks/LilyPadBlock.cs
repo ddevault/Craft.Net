@@ -5,11 +5,11 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class LilyPadBlock : Block
-    {
-        public override ushort Id
-        {
-            get { return 111; }
-        }
-    }
+   public class LilyPadBlock : Block
+   {
+      public override ushort Id
+      {
+         get { return 111; }
+      }
+   }
 }

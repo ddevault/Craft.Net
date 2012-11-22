@@ -5,11 +5,11 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class NetherBrickStairBlock : StairBlock
-    {
-        public override ushort Id
-        {
-            get { return 114; }
-        }
-    }
+   public class NetherBrickStairBlock : StairBlock
+   {
+      public override ushort Id
+      {
+         get { return 114; }
+      }
+   }
 }

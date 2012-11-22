@@ -10,15 +10,15 @@
 
 namespace Craft.Net.Data.Items
 {
-    
-    public class FlintItem : Item
-    {
-        public override ushort Id
-        {
-            get
-            {
-                return 318;
-            }
-        }
-    }
+
+   public class FlintItem : Item
+   {
+      public override ushort Id
+      {
+         get
+         {
+            return 318;
+         }
+      }
+   }
 }

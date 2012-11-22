@@ -10,15 +10,15 @@
 
 namespace Craft.Net.Data.Items
 {
-    
-    public class GlowstoneDustItem : Item
-    {
-        public override ushort Id
-        {
-            get
-            {
-                return 348;
-            }
-        }
-    }
+
+   public class GlowstoneDustItem : Item
+   {
+      public override ushort Id
+      {
+         get
+         {
+            return 348;
+         }
+      }
+   }
 }

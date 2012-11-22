@@ -10,15 +10,15 @@
 
 namespace Craft.Net.Data.Items
 {
-    
-    public class BrickItem : Item
-    {
-        public override ushort Id
-        {
-            get
-            {
-                return 336;
-            }
-        }
-    }
+
+   public class BrickItem : Item
+   {
+      public override ushort Id
+      {
+         get
+         {
+            return 336;
+         }
+      }
+   }
 }

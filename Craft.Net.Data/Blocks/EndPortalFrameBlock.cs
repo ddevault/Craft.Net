@@ -5,16 +5,16 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class EndPortalFrameBlock : Block
-    {
-        public override ushort Id
-        {
-            get { return 120; }
-        }
+   public class EndPortalFrameBlock : Block
+   {
+      public override ushort Id
+      {
+         get { return 120; }
+      }
 
-        public override double Hardness
-        {
-            get { return -1; }
-        }
-    }
+      public override double Hardness
+      {
+         get { return -1; }
+      }
+   }
 }

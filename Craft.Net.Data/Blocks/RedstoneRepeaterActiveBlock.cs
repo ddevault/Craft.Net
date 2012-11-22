@@ -5,11 +5,11 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class RedstoneRepeaterActiveBlock : RedstoneRepeaterBlock
-    {
-        public override ushort Id
-        {
-            get { return 94; }
-        }
-    }
+   public class RedstoneRepeaterActiveBlock : RedstoneRepeaterBlock
+   {
+      public override ushort Id
+      {
+         get { return 94; }
+      }
+   }
 }

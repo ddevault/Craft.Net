@@ -10,15 +10,15 @@
 
 namespace Craft.Net.Data.Items
 {
-    
-    public class DiamondItem : Item
-    {
-        public override ushort Id
-        {
-            get
-            {
-                return 264;
-            }
-        }
-    }
+
+   public class DiamondItem : Item
+   {
+      public override ushort Id
+      {
+         get
+         {
+            return 264;
+         }
+      }
+   }
 }

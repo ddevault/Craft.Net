@@ -5,16 +5,16 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class MossyCobblestoneBlock : Block
-    {
-        public override ushort Id
-        {
-            get { return 48; }
-        }
+   public class MossyCobblestoneBlock : Block
+   {
+      public override ushort Id
+      {
+         get { return 48; }
+      }
 
-        public override double Hardness
-        {
-            get { return 2; }
-        }
-    }
+      public override double Hardness
+      {
+         get { return 2; }
+      }
+   }
 }
