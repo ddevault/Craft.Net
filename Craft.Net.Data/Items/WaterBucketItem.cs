@@ -2,7 +2,7 @@ using Craft.Net.Data.Blocks;
 using Craft.Net.Data.Entities;
 namespace Craft.Net.Data.Items
 {
-    
+
     public class WaterBucketItem : Item
     {
         public override ushort Id

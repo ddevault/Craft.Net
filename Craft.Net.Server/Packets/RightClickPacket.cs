@@ -61,31 +61,31 @@ namespace Craft.Net.Server.Packets
                 item.OnItemUsed(client.World, client.Entity);
                 if (block != null)
                     item.OnItemUsedOnBlock(client.World, Position, AdjustByDirection(Direction), CursorPosition, client.Entity);
+                }
             }
-        }
 
-        public override void SendPacket(MinecraftServer server, MinecraftClient client)
-        {
-            throw new InvalidOperationException();
-        }
-
-        private static Vector3 AdjustByDirection(byte direction)
-        {
-            switch (direction)
+            public override void SendPacket(MinecraftServer server, MinecraftClient client)
             {
-                case 0:
-                    return Vector3.Down;
-                case 1:
-                    return Vector3.Up;
-                case 2:
-                    return Vector3.Backwards;
-                case 3:
-                    return Vector3.Forwards;
-                case 4:
-                    return Vector3.Left;
-                default:
-                    return Vector3.Right;
+                throw new InvalidOperationException();
             }
-        }
-    }
+
+            private static Vector3 AdjustByDirection(byte direction)
+            {
+                switch (direction)
+                {
+                    case 0:
+                        return Vector3.Down;
+                    case 1:
+                        return Vector3.Up;
+                    case 2:
+                        return Vector3.Backwards;
+                    case 3:
+                        return Vector3.Forwards;
+                    case 4:
+                        return Vector3.Left;
+                    default:
+                        return Vector3.Right;
+                    }
+                }
+            }
 }

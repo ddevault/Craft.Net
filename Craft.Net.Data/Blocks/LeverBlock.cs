@@ -30,7 +30,7 @@ namespace Craft.Net.Data.Blocks
 
         public override Vector3 SupportDirection
         {
-            get 
+            get
             {
                 switch (Metadata & 0xF7)
                 {

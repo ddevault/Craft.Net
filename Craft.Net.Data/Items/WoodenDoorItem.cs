@@ -29,9 +29,9 @@ namespace Craft.Net.Data.Items
                 // Place door
                 world.SetBlock(clickedBlock + clickedSide,
                     new WoodenDoorBlock(DoorBlock.Vector3ToDoorDirection(away), false));
-                world.SetBlock(clickedBlock + clickedSide + Vector3.Up, 
+                world.SetBlock(clickedBlock + clickedSide + Vector3.Up,
                     new WoodenDoorBlock(DoorBlock.Vector3ToDoorDirection(away), true));
+                }
             }
         }
-    }
 }

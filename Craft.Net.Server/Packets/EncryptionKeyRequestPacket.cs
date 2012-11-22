@@ -49,6 +49,6 @@ namespace Craft.Net.Server.Packets
                 DataUtility.CreateInt16((short)verifyToken.Length),
                 verifyToken));
 //            client.Socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, null, null); //What the heck?
-        }
-    }
+}
+}
 }

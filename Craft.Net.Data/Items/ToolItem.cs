@@ -70,14 +70,14 @@ namespace Craft.Net.Data.Items
                         return 33;
                     case ToolMaterial.Diamond:
                         return 1562;
+                    }
                 }
+                return 0xFFFF;
             }
-            return 0xFFFF;
-        }
 
-        public virtual bool IsEfficient(Block block)
-        {
-            return false;
+            public virtual bool IsEfficient(Block block)
+            {
+                return false;
+            }
         }
-    }
 }

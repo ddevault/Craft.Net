@@ -46,28 +46,28 @@ namespace Craft.Net.Data.Metadata
                     return false;
                 if (offset >= buffer.Length)
                     return false;
+                }
+                offset++;
+                return true;
             }
-            offset++;
-            return true;
-        }
 
-        private static Type[] EntryTypes = new Type[]
+            private static Type[] EntryTypes = new Type[]
+                {
+                    typeof(MetadataByte), // 0
+                    typeof(MetadataShort), // 1
+                    typeof(MetadataInt), // 2
+                    typeof(MetadataFloat), // 3
+                    typeof(MetadataString), // 4
+                    typeof(MetadataSlot), // 5
+                    typeof(MetadataVector3) // 6
+                };
+
+            public override string ToString()
             {
-                typeof(MetadataByte), // 0
-                typeof(MetadataShort), // 1
-                typeof(MetadataInt), // 2
-                typeof(MetadataFloat), // 3
-                typeof(MetadataString), // 4
-                typeof(MetadataSlot), // 5
-                typeof(MetadataVector3) // 6
-            };
-
-        public override string ToString()
-        {
-            var value = "";
-            foreach (var entry in entries)
-                value += entry.Value.ToString() + ", ";
-            return value.Remove(value.Length - 2);
+                var value = "";
+                foreach (var entry in entries)
+                    value += entry.Value.ToString() + ", ";
+                return value.Remove(value.Length - 2);
+            }
         }
-    }
 }

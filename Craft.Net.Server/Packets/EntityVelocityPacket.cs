@@ -47,6 +47,6 @@ namespace Craft.Net.Server.Packets
                 DataUtility.CreateInt16(x),
                 DataUtility.CreateInt16(y),
                 DataUtility.CreateInt16(z)));
+            }
         }
-    }
 }

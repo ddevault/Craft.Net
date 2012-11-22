@@ -31,12 +31,12 @@ namespace Craft.Net.Server.Packets
                 foreach (var _client in clients)
                     _client.SendPacket(new EntityEquipmentPacket(client.Entity.Id, EntityEquipmentSlot.HeldItem,
                         client.Entity.Inventory[client.Entity.SelectedSlot]));
-            }
-        }
+                    }
+                }
 
-        public override void SendPacket(MinecraftServer server, MinecraftClient client)
-        {
-            throw new NotImplementedException();
-        }
-    }
+                public override void SendPacket(MinecraftServer server, MinecraftClient client)
+                {
+                    throw new NotImplementedException();
+                }
+            }
 }

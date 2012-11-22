@@ -53,6 +53,6 @@ namespace Craft.Net.Server.Packets
                 DataUtility.CreateInt32(EntityId),
                 DataUtility.CreateInt16(SlotIndex),
                 Item.GetData()));
+            }
         }
-    }
 }

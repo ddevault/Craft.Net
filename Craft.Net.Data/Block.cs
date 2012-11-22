@@ -45,15 +45,15 @@ namespace Craft.Net.Data
         #region Overriden Members
 
         public override void OnItemUsedOnBlock(World world, Vector3 clickedBlock, Vector3 clickedSide,
-                                               Vector3 cursorPosition, Entity usedBy)
+        Vector3 cursorPosition, Entity usedBy)
+    {
+        var clicked = world.GetBlock(clickedBlock);
+        if (clicked.OnBlockRightClicked(clickedBlock, clickedSide, cursorPosition, world, usedBy))
         {
-            var clicked = world.GetBlock(clickedBlock);
-            if (clicked.OnBlockRightClicked(clickedBlock, clickedSide, cursorPosition, world, usedBy))
+            if (OnBlockPlaced(world, clickedBlock + clickedSide, clickedBlock, clickedSide, cursorPosition, usedBy))
             {
-                if (OnBlockPlaced(world, clickedBlock + clickedSide, clickedBlock, clickedSide, cursorPosition, usedBy))
-                {
-                    if ((clickedBlock + clickedSide).Y >= 0 && (clickedBlock + clickedSide).Y <= Chunk.Height)
-                        world.SetBlock(clickedBlock + clickedSide, this);
+                if ((clickedBlock + clickedSide).Y >= 0 && (clickedBlock + clickedSide).Y <= Chunk.Height)
+                    world.SetBlock(clickedBlock + clickedSide, this);
                 }
             }
         }
@@ -161,145 +161,145 @@ namespace Craft.Net.Data
                     {
                         foreach (var drop in drops)
                             world.OnSpawnEntity(new ItemEntity(destroyedBlock + new Vector3(0.5), drop));
+                        }
                     }
                 }
             }
-        }
 
-        /// <summary>
-        /// Called when a block update occurs. Default handler will handle
-        /// common activities such as destroying blocks that lose support -
-        /// make sure you call it if you don't want to lose this functionality.
-        /// </summary>
-        public virtual void BlockUpdate(World world, Vector3 updatedBlock, Vector3 modifiedBlock)
-        {
-            if (RequiresSupport)
+            /// <summary>
+            /// Called when a block update occurs. Default handler will handle
+            /// common activities such as destroying blocks that lose support -
+            /// make sure you call it if you don't want to lose this functionality.
+            /// </summary>
+            public virtual void BlockUpdate(World world, Vector3 updatedBlock, Vector3 modifiedBlock)
             {
-                // Ensure that it hasn't lost support
-                var block = world.GetBlock(updatedBlock + SupportDirection);
-                if (block is AirBlock)
+                if (RequiresSupport)
                 {
-                    world.SetBlock(updatedBlock, new AirBlock());
-                    Slot[] drops;
-                    bool spawnEntity = GetDrop(null, out drops);
-                    if (spawnEntity)
+                    // Ensure that it hasn't lost support
+                    var block = world.GetBlock(updatedBlock + SupportDirection);
+                    if (block is AirBlock)
                     {
-                        foreach (var drop in drops)
-                            world.OnSpawnEntity(new ItemEntity(updatedBlock + new Vector3(0.5), drop));
+                        world.SetBlock(updatedBlock, new AirBlock());
+                        Slot[] drops;
+                        bool spawnEntity = GetDrop(null, out drops);
+                        if (spawnEntity)
+                        {
+                            foreach (var drop in drops)
+                                world.OnSpawnEntity(new ItemEntity(updatedBlock + new Vector3(0.5), drop));
+                            }
+                        }
                     }
                 }
-            }
-        }
 
-        public virtual bool GetDrop(ToolItem tool, out Slot[] drop)
-        {
-            drop = new[] { new Slot(this.Id, 1) };
-            return CanHarvest(tool);
-        }
-
-        public virtual int GetHarvestTime(Item item, World world, PlayerEntity entity, out int damage)
-        {
-            int time = GetHarvestTime(item, out damage);
-            var tool = item as ToolItem;
-            if (tool != null)
-            {
-                if (!tool.IsEfficient(this))
+                public virtual bool GetDrop(ToolItem tool, out Slot[] drop)
                 {
-                    if (entity.IsUnderwater(world) && !entity.IsOnGround(world))
-                        time *= 25;
-                    else if (entity.IsUnderwater(world) || !entity.IsOnGround(world))
-                        time *= 5;
+                    drop = new[] { new Slot(this.Id, 1) };
+                    return CanHarvest(tool);
                 }
-            }
-            return time;
-        }
 
-        /// <summary>
-        /// Gets the amount of time (in milliseconds) it takes to harvest this
-        /// block with the given tool.
-        /// </summary>
-        public virtual int GetHarvestTime(Item item, out int damage)
-        {
-            // time is in seconds until returned
-            if (Hardness == -1)
-            {
-                damage = 0;
-                return -1;
-            }
-            double time = Hardness * 1.5;
-            var tool = item as ToolItem;
-            damage = 0;
-            // Adjust for tool in use
-            if (tool != null)
-            {
-                if (!CanHarvest(tool))
-                    time *= 3.33;
-                if (tool.IsEfficient(this))
+                public virtual int GetHarvestTime(Item item, World world, PlayerEntity entity, out int damage)
                 {
-                    switch (tool.ToolMaterial)
+                    int time = GetHarvestTime(item, out damage);
+                    var tool = item as ToolItem;
+                    if (tool != null)
                     {
-                        case ToolMaterial.Wood:
-                            time /= 2;
-                            break;
-                        case ToolMaterial.Stone:
-                            time /= 4;
-                            break;
-                        case ToolMaterial.Iron:
-                            time /= 6;
-                            break;
-                        case ToolMaterial.Diamond:
-                            time /= 8;
-                            break;
-                        case ToolMaterial.Gold:
-                            time /= 12;
-                            break;
+                        if (!tool.IsEfficient(this))
+                        {
+                            if (entity.IsUnderwater(world) && !entity.IsOnGround(world))
+                                time *= 25;
+                            else if (entity.IsUnderwater(world) || !entity.IsOnGround(world))
+                                time *= 5;
+                            }
+                        }
+                        return time;
                     }
-                }
-                // Do tool damage
-                damage = 1;
-                if (tool.ToolType == ToolType.Pick || tool.ToolType == ToolType.Axe || tool.ToolType == ToolType.Shovel)
-                    damage = Hardness != 0 ? 1 : 0;
-                else if (tool.ToolType == ToolType.Sword)
-                {
-                    damage = Hardness != 0 ? 2 : 0;
-                    time /= 1.5;
-                    if (this is CobwebBlock)
-                        time /= 15;
-                }
-                else if (tool.ToolType == ToolType.Hoe)
-                    damage = 0;
-                else if (tool is ShearsItem)
-                {
-                    if (this is WoolBlock)
-                        time /= 5;
-                    if (this is LeavesBlock || this is CobwebBlock)
-                        time /= 15;
-                    if (this is CobwebBlock || this is LeavesBlock || this is TallGrassBlock ||
-                        this is TripwireBlock || this is VineBlock)
-                        damage = 1;
-                    else
+
+                    /// <summary>
+                    /// Gets the amount of time (in milliseconds) it takes to harvest this
+                    /// block with the given tool.
+                    /// </summary>
+                    public virtual int GetHarvestTime(Item item, out int damage)
+                    {
+                        // time is in seconds until returned
+                        if (Hardness == -1)
+                        {
+                            damage = 0;
+                            return -1;
+                        }
+                        double time = Hardness * 1.5;
+                        var tool = item as ToolItem;
                         damage = 0;
-                }
-                else
-                    damage = 0;
-            }
-            return (int)(time * 1000);
-        }
+                        // Adjust for tool in use
+                        if (tool != null)
+                        {
+                            if (!CanHarvest(tool))
+                                time *= 3.33;
+                            if (tool.IsEfficient(this))
+                            {
+                                switch (tool.ToolMaterial)
+                                {
+                                    case ToolMaterial.Wood:
+                                        time /= 2;
+                                        break;
+                                    case ToolMaterial.Stone:
+                                        time /= 4;
+                                        break;
+                                    case ToolMaterial.Iron:
+                                        time /= 6;
+                                        break;
+                                    case ToolMaterial.Diamond:
+                                        time /= 8;
+                                        break;
+                                    case ToolMaterial.Gold:
+                                        time /= 12;
+                                        break;
+                                    }
+                                }
+                                // Do tool damage
+                                damage = 1;
+                                if (tool.ToolType == ToolType.Pick || tool.ToolType == ToolType.Axe || tool.ToolType == ToolType.Shovel)
+                                    damage = Hardness != 0 ? 1 : 0;
+                                else if (tool.ToolType == ToolType.Sword)
+                                {
+                                    damage = Hardness != 0 ? 2 : 0;
+                                    time /= 1.5;
+                                    if (this is CobwebBlock)
+                                        time /= 15;
+                                    }
+                                    else if (tool.ToolType == ToolType.Hoe)
+                                        damage = 0;
+                                    else if (tool is ShearsItem)
+                                    {
+                                        if (this is WoolBlock)
+                                            time /= 5;
+                                        if (this is LeavesBlock || this is CobwebBlock)
+                                            time /= 15;
+                                        if (this is CobwebBlock || this is LeavesBlock || this is TallGrassBlock ||
+                                            this is TripwireBlock || this is VineBlock)
+                                            damage = 1;
+                                        else
+                                            damage = 0;
+                                        }
+                                        else
+                                            damage = 0;
+                                        }
+                                        return (int)(time * 1000);
+                                    }
 
-        public virtual bool CanHarvest(ToolItem tool)
-        {
-            if (Hardness == -1)
-                return false;
-            return true;
-        }
+                                    public virtual bool CanHarvest(ToolItem tool)
+                                    {
+                                        if (Hardness == -1)
+                                            return false;
+                                        return true;
+                                    }
 
-        #endregion
+                                    #endregion
 
-        internal static Block Create(ushort id, byte metadata)
-        {
-            var b = (Block)id;
-            b.Metadata = metadata;
-            return b;
-        }
-    }
+                                    internal static Block Create(ushort id, byte metadata)
+                                    {
+                                        var b = (Block)id;
+                                        b.Metadata = metadata;
+                                        return b;
+                                    }
+                                }
 }

@@ -67,45 +67,45 @@ namespace Craft.Net.Data.Entities
         {
             if (DeathAnimationComplete != null)
                 DeathAnimationComplete(this, null);
-        }
-
-        public EventHandler<EntityDamageEventArgs> EntityDamaged;
-
-        public virtual void Damage(int damage, bool accountForArmor = true)
-        {
-            // TODO: Armor
-            if (Invulnerable)
-                return;
-            if (accountForArmor)
-            {
-                var player = (PlayerEntity)this; // TODO: Fix for different kinds of mobs
-                double armorValue = 0;
-                for (int i = 0; i < 4; i++)
-                {
-                    var slot = player.Inventory[InventoryWindow.ArmorIndex + i];
-                    if (!slot.Empty)
-                    {
-                        var item = slot.Item as IArmorItem;
-                        if (item == null)
-                            continue;
-                        armorValue += (item.ArmorBonus * 0.04);
-                    }
-                }
-                damage = (int)(damage * (1 - armorValue));
             }
-            Health -= (short)damage;
-            if (EntityDamaged != null)
-                EntityDamaged(this, new EntityDamageEventArgs(damage, Health));
-        }
 
-        public override void PhysicsUpdate(World world)
-        {
-            if (Position.Y < -32)
-                Health -= 4;
-            base.PhysicsUpdate(world);
-        }
+            public EventHandler<EntityDamageEventArgs> EntityDamaged;
 
-        // TODO: Potion effects
-        // TODO: Equipment
-    }
+            public virtual void Damage(int damage, bool accountForArmor = true)
+            {
+                // TODO: Armor
+                if (Invulnerable)
+                    return;
+                if (accountForArmor)
+                {
+                    var player = (PlayerEntity)this; // TODO: Fix for different kinds of mobs
+                    double armorValue = 0;
+                    for (int i = 0; i < 4; i++)
+                    {
+                        var slot = player.Inventory[InventoryWindow.ArmorIndex + i];
+                        if (!slot.Empty)
+                        {
+                            var item = slot.Item as IArmorItem;
+                            if (item == null)
+                                continue;
+                            armorValue += (item.ArmorBonus * 0.04);
+                        }
+                    }
+                    damage = (int)(damage * (1 - armorValue));
+                }
+                Health -= (short)damage;
+                if (EntityDamaged != null)
+                    EntityDamaged(this, new EntityDamageEventArgs(damage, Health));
+                }
+
+                public override void PhysicsUpdate(World world)
+                {
+                    if (Position.Y < -32)
+                        Health -= 4;
+                    base.PhysicsUpdate(world);
+                }
+
+                // TODO: Potion effects
+                // TODO: Equipment
+            }
 }

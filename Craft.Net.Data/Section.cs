@@ -71,36 +71,36 @@ namespace Craft.Net.Data
                 nonAirCount--;
             else
                 nonAirCount++;
-        }
-
-        /// <summary>
-        /// Gets the block at the given position in local coordinates.
-        /// </summary>
-        public Block GetBlock(Vector3 position)
-        {
-            var x = (int)position.X;
-            var y = (int)position.Y;
-            var z = (int)position.Z;
-            int index = x + (z*Width) + (y*Height*Width);
-            Block block = (Block)Blocks[index];
-            block.Data = Metadata[index];
-            block.SkyLight = SkyLight[index];
-            block.BlockLight = BlockLight[index];
-            return block;
-        }
-
-        /// <summary>
-        /// Reschedules block updates and air counts.
-        /// </summary>
-        public void ProcessSection()
-        {
-            // TODO: Schedule updates
-            nonAirCount = 0;
-            for (int i = 0; i < Blocks.Length; i++)
-            {
-                if (Blocks[i] != 0)
-                    nonAirCount++;
             }
-        }
-    }
+
+            /// <summary>
+            /// Gets the block at the given position in local coordinates.
+            /// </summary>
+            public Block GetBlock(Vector3 position)
+            {
+                var x = (int)position.X;
+                var y = (int)position.Y;
+                var z = (int)position.Z;
+                int index = x + (z*Width) + (y*Height*Width);
+                Block block = (Block)Blocks[index];
+                block.Data = Metadata[index];
+                block.SkyLight = SkyLight[index];
+                block.BlockLight = BlockLight[index];
+                return block;
+            }
+
+            /// <summary>
+            /// Reschedules block updates and air counts.
+            /// </summary>
+            public void ProcessSection()
+            {
+                // TODO: Schedule updates
+                nonAirCount = 0;
+                for (int i = 0; i < Blocks.Length; i++)
+                {
+                    if (Blocks[i] != 0)
+                        nonAirCount++;
+                    }
+                }
+            }
 }

@@ -20,10 +20,10 @@ namespace Craft.Net.Data.Blocks
 
         public override bool CanHarvest(Items.ToolItem tool)
         {
-            return tool is PickaxeItem && 
+            return tool is PickaxeItem &&
                 (tool.ToolMaterial == ToolMaterial.Iron ||
                 tool.ToolMaterial == ToolMaterial.Gold ||
                 tool.ToolMaterial == ToolMaterial.Diamond);
+            }
         }
-    }
 }

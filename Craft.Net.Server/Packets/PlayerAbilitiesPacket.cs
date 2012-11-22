@@ -44,18 +44,18 @@ namespace Craft.Net.Server.Packets
         {
             if (client.Entity.GameMode == GameMode.Creative)
                 client.Entity.Abilities.IsFlying = Abilities.IsFlying;
-        }
+            }
 
-        public override void SendPacket(MinecraftServer server, MinecraftClient client)
-        {
-            client.SendData(CreateBuffer(
-                new[] { (byte)(
-                        (Abilities.Invulnerable ? 1 : 0) | 
-                        (Abilities.IsFlying ? 2 : 0) | 
-                        (Abilities.MayFly? 4 : 0) | 
-                        (Abilities.InstantMine ? 8 : 0)
-                        ), Abilities.WalkingSpeed, Abilities.FlyingSpeed }
+            public override void SendPacket(MinecraftServer server, MinecraftClient client)
+            {
+                client.SendData(CreateBuffer(
+                    new[] { (byte)(
+                    (Abilities.Invulnerable ? 1 : 0) |
+                    (Abilities.IsFlying ? 2 : 0) |
+                    (Abilities.MayFly? 4 : 0) |
+                    (Abilities.InstantMine ? 8 : 0)
+                    ), Abilities.WalkingSpeed, Abilities.FlyingSpeed }
                 ));
+            }
         }
-    }
 }

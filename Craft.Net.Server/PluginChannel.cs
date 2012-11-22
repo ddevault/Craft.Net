@@ -9,32 +9,32 @@ namespace Craft.Net.Server
     public abstract class PluginChannel
     {
 #pragma warning disable
-        internal MinecraftServer Server;
+internal MinecraftServer Server;
 #pragma warning restore
 
-        /// <summary>
-        /// This channel name.
-        /// </summary>
-        public abstract string Channel { get; }
+/// <summary>
+/// This channel name.
+/// </summary>
+public abstract string Channel { get; }
 
-        /// <summary>
-        /// Run when a plugin message is recieved.
-        /// </summary>
-        public abstract void MessageRecieved(MinecraftClient client, byte[] data);
+/// <summary>
+/// Run when a plugin message is recieved.
+/// </summary>
+public abstract void MessageRecieved(MinecraftClient client, byte[] data);
 
-        /// <summary>
-        /// Run when the channel is successfully registered.
-        /// </summary>
-        public abstract void ChannelRegistered(MinecraftServer server);
+/// <summary>
+/// Run when the channel is successfully registered.
+/// </summary>
+public abstract void ChannelRegistered(MinecraftServer server);
 
-        /// <summary>
-        /// Sends a channel message to the given client.
-        /// </summary>
-        public void SendMessage(byte[] data, MinecraftClient client)
-        {
-            if (data.Length > short.MaxValue)
-                throw new ArgumentOutOfRangeException("Maximum plugin message length is " + short.MaxValue);
-            client.SendPacket(new PluginMessagePacket(Channel, data));
-        }
-    }
+/// <summary>
+/// Sends a channel message to the given client.
+/// </summary>
+public void SendMessage(byte[] data, MinecraftClient client)
+{
+    if (data.Length > short.MaxValue)
+        throw new ArgumentOutOfRangeException("Maximum plugin message length is " + short.MaxValue);
+    client.SendPacket(new PluginMessagePacket(Channel, data));
+}
+}
 }

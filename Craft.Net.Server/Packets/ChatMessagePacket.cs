@@ -36,11 +36,11 @@ namespace Craft.Net.Server.Packets
             server.OnChatMessage(args);
             if (!args.Handled)
                 server.SendChat("<" + client.Username + "> " + Message);
-        }
+            }
 
-        public override void SendPacket(MinecraftServer server, MinecraftClient client)
-        {
-            client.SendData(CreateBuffer(DataUtility.CreateString(Message)));
+            public override void SendPacket(MinecraftServer server, MinecraftClient client)
+            {
+                client.SendData(CreateBuffer(DataUtility.CreateString(Message)));
+            }
         }
-    }
 }

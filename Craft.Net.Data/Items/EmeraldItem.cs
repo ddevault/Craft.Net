@@ -10,7 +10,7 @@
 
 namespace Craft.Net.Data.Items
 {
-    
+
     public class EmeraldItem : Item
     {
         public override ushort Id

@@ -98,26 +98,26 @@ namespace Craft.Net.Server.Packets
                     }
                     else
                         client.Entity.Inventory[SlotIndex] = new Slot(heldItem.Id, 1, heldItem.Metadata);
-                }
-                else
-                {
-                    if (clickedItem.Empty)
-                    {
-                        client.Entity.Inventory[SlotIndex] = heldItem;
-                        client.Entity.ItemInMouse = new Slot();
                     }
                     else
                     {
-                        client.Entity.ItemInMouse = clickedItem;
-                        client.Entity.Inventory[SlotIndex] = heldItem;
+                        if (clickedItem.Empty)
+                        {
+                            client.Entity.Inventory[SlotIndex] = heldItem;
+                            client.Entity.ItemInMouse = new Slot();
+                        }
+                        else
+                        {
+                            client.Entity.ItemInMouse = clickedItem;
+                            client.Entity.Inventory[SlotIndex] = heldItem;
+                        }
                     }
                 }
             }
-        }
 
-        public override void SendPacket(MinecraftServer server, MinecraftClient client)
-        {
-            throw new InvalidOperationException();
+            public override void SendPacket(MinecraftServer server, MinecraftClient client)
+            {
+                throw new InvalidOperationException();
+            }
         }
-    }
 }

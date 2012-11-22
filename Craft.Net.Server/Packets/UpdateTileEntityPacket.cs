@@ -58,6 +58,6 @@ namespace Craft.Net.Server.Packets
                 new[] {(byte)Action},
                 DataUtility.CreateInt16((short)nbt.Length),
                 nbt));
+            }
         }
-    }
 }

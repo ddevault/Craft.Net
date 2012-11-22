@@ -37,10 +37,10 @@ namespace Craft.Net.Data.Blocks
                 case Direction.East:
                     Metadata = (byte)StairDirections.East;
                     break;
+                }
+                if (clickedBlock.Equals(position + Vector3.Up))
+                    this.Metadata |= 4;
+                return true;
             }
-            if (clickedBlock.Equals(position + Vector3.Up))
-                this.Metadata |= 4;
-            return true;
         }
-    }
 }

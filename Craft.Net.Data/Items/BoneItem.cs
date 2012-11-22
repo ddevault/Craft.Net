@@ -10,7 +10,7 @@
 
 namespace Craft.Net.Data.Items
 {
-    
+
     public class BoneItem : Item
     {
         public override ushort Id

@@ -31,8 +31,8 @@ namespace Craft.Net.Data.Blocks
                 case Direction.West:
                     this.Metadata |= 0x8;
                     break;
+                }
+                return true;
             }
-            return true;
         }
-    }
 }

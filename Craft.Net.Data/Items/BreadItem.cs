@@ -1,6 +1,6 @@
 namespace Craft.Net.Data.Items
 {
-    
+
     public class BreadItem : FoodItem
     {
         public override ushort Id

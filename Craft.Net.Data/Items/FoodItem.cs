@@ -12,6 +12,6 @@ namespace Craft.Net.Data.Items
             var player = usedBy as PlayerEntity;
             if (player != null)
                 player.OnStartEating();
+            }
         }
-    }
 }

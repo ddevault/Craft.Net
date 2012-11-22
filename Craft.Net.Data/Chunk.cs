@@ -46,7 +46,7 @@ namespace Craft.Net.Data
         /// The location of this chunk in global,
         /// world-wide coordinates.
         /// </summary>
-        public Vector3 AbsolutePosition 
+        public Vector3 AbsolutePosition
         {
             get { return (ParentRegion.Position * new Vector3(Region.Width, 0, Region.Depth)) + RelativePosition; }
         }
@@ -117,7 +117,7 @@ namespace Craft.Net.Data
     /// </summary>
         private static int GetSectionNumber(double yPos)
         {
-             return ((int)yPos) >> 4; //divide by 16 ;)
+            return ((int)yPos) >> 4; //divide by 16 ;)
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace Craft.Net.Data
         {
             NbtFile file = new NbtFile();
             NbtCompound level = new NbtCompound("Level");
-            
+
             // Entities // TODO
             level.Tags.Add(new NbtList("Entities"));
 
@@ -239,9 +239,9 @@ namespace Craft.Net.Data
                     var entity = TileEntity.FromNbt(tag as NbtCompound, out tilePosition);
                     if (entity != null)
                         chunk.TileEntities.Add(tilePosition, entity);
+                    }
                 }
+                return chunk;
             }
-            return chunk;
         }
-    }
 }

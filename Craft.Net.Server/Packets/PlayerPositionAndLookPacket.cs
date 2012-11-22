@@ -75,6 +75,6 @@ namespace Craft.Net.Server.Packets
                 DataUtility.CreateFloat(Yaw),
                 DataUtility.CreateFloat(Pitch),
                 DataUtility.CreateBoolean(OnGround)));
+            }
         }
-    }
 }

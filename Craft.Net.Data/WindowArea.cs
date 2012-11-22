@@ -15,34 +15,34 @@ namespace Craft.Net.Data
             Items = new Slot[Length];
             for (int i = 0; i < Items.Length; i++)
                 Items[i] = new Slot();
-        }
-
-        public int StartIndex { get; set; }
-        public int Length { get; set; }
-        public Slot[] Items { get; set; }
-        public event EventHandler<WindowChangeEventArgs> WindowChange;
-
-        public virtual Slot this[int index]
-        {
-            get { return Items[index]; }
-            set
-            {
-                if (IsValid(value, index))
-                    Items[index] = value;
-                OnWindowChange(new WindowChangeEventArgs(index, value));
             }
-        }
 
-        protected internal virtual int MoveOrMergeItem(int index, Slot slot, WindowArea from)
-        {
-            int emptyIndex = -1;
-            for (int i = 0; i < Length; i++)
+            public int StartIndex { get; set; }
+            public int Length { get; set; }
+            public Slot[] Items { get; set; }
+            public event EventHandler<WindowChangeEventArgs> WindowChange;
+
+            public virtual Slot this[int index]
             {
-                if (this[i].Empty && emptyIndex == -1)
-                    emptyIndex = i;
-                else if (this[i].Id == slot.Id &&
-                         this[i].Metadata == slot.Metadata &&
-                         this[i].Count < slot.Item.MaximumStack)
+                get { return Items[index]; }
+                set
+                {
+                    if (IsValid(value, index))
+                        Items[index] = value;
+                    OnWindowChange(new WindowChangeEventArgs(index, value));
+                }
+            }
+
+            protected internal virtual int MoveOrMergeItem(int index, Slot slot, WindowArea from)
+            {
+                int emptyIndex = -1;
+                for (int i = 0; i < Length; i++)
+                {
+                    if (this[i].Empty && emptyIndex == -1)
+                        emptyIndex = i;
+                    else if (this[i].Id == slot.Id &&
+                    this[i].Metadata == slot.Metadata &&
+                    this[i].Count < slot.Item.MaximumStack)
                 {
                     // Merging takes precedence over empty slots
                     emptyIndex = -1;
@@ -80,12 +80,12 @@ namespace Craft.Net.Data
         {
             for (int i = 0; i < area.Length && i < Length; i++)
                 area[i] = this[i];
-        }
+            }
 
-        protected internal virtual void OnWindowChange(WindowChangeEventArgs e)
-        {
-            if (WindowChange != null)
-                WindowChange(this, e);
-        }
-    }
+            protected internal virtual void OnWindowChange(WindowChangeEventArgs e)
+            {
+                if (WindowChange != null)
+                    WindowChange(this, e);
+                }
+            }
 }

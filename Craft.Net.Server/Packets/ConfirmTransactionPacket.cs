@@ -39,6 +39,6 @@ namespace Craft.Net.Server.Packets
             client.SendData(CreateBuffer(new[] { WindowId },
                 DataUtility.CreateInt16(ActionNumber),
                 DataUtility.CreateBoolean(Accepted)));
+            }
         }
-    }
 }

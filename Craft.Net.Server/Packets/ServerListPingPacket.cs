@@ -34,6 +34,6 @@ namespace Craft.Net.Server.Packets
                 MinecraftServer.TargetClientVersion + "\0" +
                 server.Settings.MotD + "\0" + server.Clients.Count(c => c.IsLoggedIn) +
                 "\0" + server.Settings.MaxPlayers;
+            }
         }
-    }
 }

@@ -137,6 +137,6 @@ namespace Craft.Net.Server.Packets
                 DataUtility.CreateUInt16(AddBitMap),
                 DataUtility.CreateInt32(CompressedData.Length),
                 CompressedData));
+            }
         }
-    }
 }

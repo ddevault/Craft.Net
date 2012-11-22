@@ -47,13 +47,13 @@
         <member name="T:NUnit.Framework.DatapointsAttribute">
             <summary>
             Used to mark an array as containing a set of datapoints to be used
-            executing a theory within the same fixture that requires an argument 
+            executing a theory within the same fixture that requires an argument
             of the Type of the array elements.
             </summary>
         </member>
         <member name="T:NUnit.Framework.DescriptionAttribute">
             <summary>
-            Attribute used to provide descriptive text about a 
+            Attribute used to provide descriptive text about a
             test case or fixture.
             </summary>
         </member>
@@ -89,7 +89,7 @@
             <summary>
             ExpectedExceptionAttribute
             </summary>
-            
+
         </member>
         <member name="M:NUnit.Framework.ExpectedExceptionAttribute.#ctor">
             <summary>
@@ -130,12 +130,12 @@
         </member>
         <member name="P:NUnit.Framework.ExpectedExceptionAttribute.MatchType">
             <summary>
-             Gets or sets the type of match to be performed on the expected message
+            Gets or sets the type of match to be performed on the expected message
             </summary>
         </member>
         <member name="P:NUnit.Framework.ExpectedExceptionAttribute.Handler">
             <summary>
-             Gets the name of a method to be used as an exception handler
+            Gets the name of a method to be used as an exception handler
             </summary>
         </member>
         <member name="T:NUnit.Framework.ExplicitAttribute">
@@ -171,7 +171,7 @@
         </member>
         <member name="M:NUnit.Framework.IgnoreAttribute.#ctor">
             <summary>
-            Constructs the attribute without giving a reason 
+            Constructs the attribute without giving a reason
             for ignoring the test.
             </summary>
         </member>
@@ -260,8 +260,8 @@
         </member>
         <member name="T:NUnit.Framework.CombinatorialAttribute">
             <summary>
-            Marks a test to use a combinatorial join of any argument data 
-            provided. NUnit will create a test case for every combination of 
+            Marks a test to use a combinatorial join of any argument data
+            provided. NUnit will create a test case for every combination of
             the arguments provided. This can result in a large number of test
             cases and so should be used judiciously. This is the default join
             type, so the attribute need not be used except as documentation.
@@ -321,8 +321,8 @@
         </member>
         <member name="T:NUnit.Framework.PairwiseAttribute">
             <summary>
-            Marks a test to use pairwise join of any argument data provided. 
-            NUnit will attempt too excercise every pair of argument values at 
+            Marks a test to use pairwise join of any argument data provided.
+            NUnit will attempt too excercise every pair of argument values at
             least once, using as small a number of test cases as it can. With
             only two arguments, this is the same as a combinatorial join.
             </summary>
@@ -372,7 +372,7 @@
         </member>
         <member name="T:NUnit.Framework.ParameterDataAttribute">
             <summary>
-            Abstract base class for attributes that apply to parameters 
+            Abstract base class for attributes that apply to parameters
             and supply data for the parameter.
             </summary>
         </member>
@@ -465,7 +465,7 @@
         </member>
         <member name="M:NUnit.Framework.RangeAttribute.#ctor(System.Int32,System.Int32,System.Int32)">
             <summary>
-            Construct a range of ints specifying the step size 
+            Construct a range of ints specifying the step size
             </summary>
             <param name="from"></param>
             <param name="to"></param>
@@ -552,14 +552,14 @@
         <member name="T:NUnit.Framework.SetUpAttribute">
             <summary>
             SetUpAttribute is used in a TestFixture to identify a method
-            that is called immediately before each test is run. It is 
+            that is called immediately before each test is run. It is
             also used in a SetUpFixture to identify the method that is
             called once, before any of the subordinate tests are run.
             </summary>
         </member>
         <member name="T:NUnit.Framework.SetUpFixtureAttribute">
             <summary>
-            Attribute used to mark a class that contains one-time SetUp 
+            Attribute used to mark a class that contains one-time SetUp
             and/or TearDown methods that apply to all the tests in a
             namespace or an assembly.
             </summary>
@@ -572,10 +572,10 @@
         </member>
         <member name="T:NUnit.Framework.TearDownAttribute">
             <summary>
-            Attribute used in a TestFixture to identify a method that is 
+            Attribute used in a TestFixture to identify a method that is
             called immediately after each test is run. It is also used
             in a SetUpFixture to identify the method that is called once,
-            after all subordinate tests have run. In either case, the method 
+            after all subordinate tests have run. In either case, the method
             is guaranteed to be called, even if an exception is thrown.
             </summary>
         </member>
@@ -609,26 +609,26 @@
         </member>
         <member name="T:NUnit.Framework.TestAttribute">
             <summary>
-            Adding this attribute to a method within a <seealso cref="T:NUnit.Framework.TestFixtureAttribute"/> 
-            class makes the method callable from the NUnit test runner. There is a property 
+            Adding this attribute to a method within a <seealso cref="T:NUnit.Framework.TestFixtureAttribute"/>
+            class makes the method callable from the NUnit test runner. There is a property
             called Description which is optional which you can provide a more detailed test
             description. This class cannot be inherited.
             </summary>
-            
+
             <example>
             [TestFixture]
             public class Fixture
             {
-              [Test]
-              public void MethodToTest()
-              {}
-              
-              [Test(Description = "more detailed description")]
-              publc void TestDescriptionMethod()
-              {}
+                [Test]
+                public void MethodToTest()
+                {}
+
+                [Test(Description = "more detailed description")]
+                publc void TestDescriptionMethod()
+                {}
             }
             </example>
-            
+
         </member>
         <member name="P:NUnit.Framework.TestAttribute.Description">
             <summary>
@@ -646,7 +646,7 @@
             The ITestCaseData interface is implemented by a class
             that is able to return complete testcases for use by
             a parameterized test method.
-            
+
             NOTE: This interface is used in both the framework
             and the core, even though that results in two different
             types. However, sharing the source code guarantees that
@@ -674,7 +674,7 @@
         </member>
         <member name="P:NUnit.Framework.ITestCaseData.ExpectedException">
             <summary>
-             Gets the expected exception Type
+            Gets the expected exception Type
             </summary>
         </member>
         <member name="P:NUnit.Framework.ITestCaseData.ExpectedExceptionName">
@@ -792,7 +792,7 @@
         </member>
         <member name="P:NUnit.Framework.TestCaseAttribute.MatchType">
             <summary>
-             Gets or sets the type of match to be performed on the expected message
+            Gets or sets the type of match to be performed on the expected message
             </summary>
         </member>
         <member name="P:NUnit.Framework.TestCaseAttribute.Description">
@@ -874,7 +874,7 @@
         <member name="T:NUnit.Framework.TestFixtureAttribute">
             <example>
             [TestFixture]
-            public class ExampleClass 
+            public class ExampleClass
             {}
             </example>
         </member>
@@ -885,7 +885,7 @@
         </member>
         <member name="M:NUnit.Framework.TestFixtureAttribute.#ctor(System.Object[])">
             <summary>
-            Construct with a object[] representing a set of arguments. 
+            Construct with a object[] representing a set of arguments.
             In .NET 2.0, the arguments may later be separated into
             type arguments and constructor arguments.
             </summary>
@@ -933,45 +933,45 @@
         </member>
         <member name="T:NUnit.Framework.TestFixtureSetUpAttribute">
             <summary>
-            Attribute used to identify a method that is 
+            Attribute used to identify a method that is
             called before any tests in a fixture are run.
             </summary>
         </member>
         <member name="T:NUnit.Framework.TestFixtureTearDownAttribute">
             <summary>
             Attribute used to identify a method that is called after
-            all the tests in a fixture have run. The method is 
+            all the tests in a fixture have run. The method is
             guaranteed to be called, even if an exception is thrown.
             </summary>
         </member>
         <member name="T:NUnit.Framework.TheoryAttribute">
             <summary>
-            Adding this attribute to a method within a <seealso cref="T:NUnit.Framework.TestFixtureAttribute"/> 
-            class makes the method callable from the NUnit test runner. There is a property 
+            Adding this attribute to a method within a <seealso cref="T:NUnit.Framework.TestFixtureAttribute"/>
+            class makes the method callable from the NUnit test runner. There is a property
             called Description which is optional which you can provide a more detailed test
             description. This class cannot be inherited.
             </summary>
-            
+
             <example>
             [TestFixture]
             public class Fixture
             {
-              [Test]
-              public void MethodToTest()
-              {}
-              
-              [Test(Description = "more detailed description")]
-              publc void TestDescriptionMethod()
-              {}
+                [Test]
+                public void MethodToTest()
+                {}
+
+                [Test(Description = "more detailed description")]
+                publc void TestDescriptionMethod()
+                {}
             }
             </example>
-            
+
         </member>
         <member name="T:NUnit.Framework.TimeoutAttribute">
             <summary>
-            Used on a method, marks the test with a timeout value in milliseconds. 
-            The test will be run in a separate thread and is cancelled if the timeout 
-            is exceeded. Used on a method or assembly, sets the default timeout 
+            Used on a method, marks the test with a timeout value in milliseconds.
+            The test will be run in a separate thread and is cancelled if the timeout
+            is exceeded. Used on a method or assembly, sets the default timeout
             for all contained test methods.
             </summary>
         </member>
@@ -985,7 +985,7 @@
             <summary>
             Marks a test that must run in the STA, causing it
             to run in a separate thread if necessary.
-            
+
             On methods, you may also use STAThreadAttribute
             to serve the same purpose.
             </summary>
@@ -999,7 +999,7 @@
             <summary>
             Marks a test that must run in the MTA, causing it
             to run in a separate thread if necessary.
-            
+
             On methods, you may also use MTAThreadAttribute
             to serve the same purpose.
             </summary>
@@ -1064,7 +1064,7 @@
         <member name="T:NUnit.Framework.Constraints.Constraint">
             <summary>
             The Constraint class is the base of all built-in constraints
-            within NUnit. It provides the operator overloads used to combine 
+            within NUnit. It provides the operator overloads used to combine
             constraints.
             </summary>
         </member>
@@ -1132,7 +1132,7 @@
             as an argument. The default implementation simply passes
             the constraint and the actual value to the writer, which
             then displays the constraint description and the value.
-            
+
             Constraints that need to provide additional details,
             such as where the error occured can override this.
             </summary>
@@ -1150,7 +1150,7 @@
             Test whether the constraint is satisfied by an
             ActualValueDelegate that returns the value to be tested.
             The default implementation simply evaluates the delegate
-            but derived classes may override it to provide for delayed 
+            but derived classes may override it to provide for delayed
             processing.
             </summary>
             <param name="del">An ActualValueDelegate</param>
@@ -1194,19 +1194,19 @@
         </member>
         <member name="M:NUnit.Framework.Constraints.Constraint.op_BitwiseAnd(NUnit.Framework.Constraints.Constraint,NUnit.Framework.Constraints.Constraint)">
             <summary>
-            This operator creates a constraint that is satisfied only if both 
+            This operator creates a constraint that is satisfied only if both
             argument constraints are satisfied.
             </summary>
         </member>
         <member name="M:NUnit.Framework.Constraints.Constraint.op_BitwiseOr(NUnit.Framework.Constraints.Constraint,NUnit.Framework.Constraints.Constraint)">
             <summary>
-            This operator creates a constraint that is satisfied if either 
+            This operator creates a constraint that is satisfied if either
             of the argument constraints is satisfied.
             </summary>
         </member>
         <member name="M:NUnit.Framework.Constraints.Constraint.op_LogicalNot(NUnit.Framework.Constraints.Constraint)">
             <summary>
-            This operator creates a constraint that is satisfied if the 
+            This operator creates a constraint that is satisfied if the
             argument constraint is not satisfied.
             </summary>
         </member>
@@ -1310,7 +1310,7 @@
         </member>
         <member name="M:NUnit.Framework.Constraints.AttributeConstraint.Matches(System.Object)">
             <summary>
-            Determines whether the Type or other provider has the 
+            Determines whether the Type or other provider has the
             expected attribute and if its value matches the
             additional constraint specified.
             </summary>
@@ -1441,7 +1441,7 @@
         </member>
         <member name="M:NUnit.Framework.Constraints.AndConstraint.Matches(System.Object)">
             <summary>
-            Apply both member constraints to an actual value, succeeding 
+            Apply both member constraints to an actual value, succeeding
             succeeding only if both of them succeed.
             </summary>
             <param name="actual">The actual value</param>
@@ -1476,7 +1476,7 @@
         </member>
         <member name="M:NUnit.Framework.Constraints.OrConstraint.Matches(System.Object)">
             <summary>
-            Apply the member constraints to an actual value, succeeding 
+            Apply the member constraints to an actual value, succeeding
             succeeding as soon as one of them succeeds.
             </summary>
             <param name="actual">The actual value</param>
@@ -1599,7 +1599,7 @@
         </member>
         <member name="T:NUnit.Framework.Constraints.EmptyCollectionConstraint">
             <summary>
-            EmptyCollectionConstraint tests whether a collection is empty. 
+            EmptyCollectionConstraint tests whether a collection is empty.
             </summary>
         </member>
         <member name="M:NUnit.Framework.Constraints.EmptyCollectionConstraint.doMatch(System.Collections.IEnumerable)">
@@ -1617,7 +1617,7 @@
         </member>
         <member name="T:NUnit.Framework.Constraints.UniqueItemsConstraint">
             <summary>
-            UniqueItemsConstraint tests whether all the items in a 
+            UniqueItemsConstraint tests whether all the items in a
             collection are unique.
             </summary>
         </member>
@@ -1698,7 +1698,7 @@
         </member>
         <member name="M:NUnit.Framework.Constraints.CollectionSubsetConstraint.doMatch(System.Collections.IEnumerable)">
             <summary>
-            Test whether the actual collection is a subset of 
+            Test whether the actual collection is a subset of
             the expected collection provided.
             </summary>
             <param name="actual"></param>
@@ -1762,7 +1762,7 @@
         </member>
         <member name="P:NUnit.Framework.Constraints.CollectionOrderedConstraint.Descending">
             <summary>
-             If used performs a reverse comparison
+            If used performs a reverse comparison
             </summary>
         </member>
         <member name="T:NUnit.Framework.Constraints.CollectionTally">
@@ -1921,7 +1921,7 @@
             ConstraintBuilder maintains the stacks that are used in
             processing a ConstraintExpression. An OperatorStack
             is used to hold operators that are waiting for their
-            operands to be reognized. a ConstraintStack holds 
+            operands to be reognized. a ConstraintStack holds
             input constraints as well as the results of each
             operator applied.
             </summary>
@@ -2023,7 +2023,7 @@
         <member name="M:NUnit.Framework.Constraints.ConstraintBuilder.ConstraintStack.Push(NUnit.Framework.Constraints.Constraint)">
             <summary>
             Pushes the specified constraint. As a side effect,
-            the constraint's builder field is set to the 
+            the constraint's builder field is set to the
             ConstraintBuilder owning this stack.
             </summary>
             <param name="constraint">The constraint.</param>
@@ -2050,9 +2050,9 @@
         </member>
         <member name="T:NUnit.Framework.Constraints.ConstraintExpression">
             <summary>
-            ConstraintExpression represents a compound constraint in the 
+            ConstraintExpression represents a compound constraint in the
             process of being constructed from a series of syntactic elements.
-            
+
             Individual elements are appended to the expression as they are
             reognized. Once an actual Constraint is appended, the expression
             returns a resolvable Constraint.
@@ -2060,11 +2060,11 @@
         </member>
         <member name="T:NUnit.Framework.Constraints.ConstraintExpressionBase">
             <summary>
-            ConstraintExpressionBase is the abstract base class for the 
-            ConstraintExpression class, which represents a 
-            compound constraint in the process of being constructed 
+            ConstraintExpressionBase is the abstract base class for the
+            ConstraintExpression class, which represents a
+            compound constraint in the process of being constructed
             from a series of syntactic elements.
-            
+
             NOTE: ConstraintExpressionBase is separate because the
             ConstraintExpression class was generated in earlier
             versions of NUnit. The two classes may be combined
@@ -2083,7 +2083,7 @@
         </member>
         <member name="M:NUnit.Framework.Constraints.ConstraintExpressionBase.#ctor(NUnit.Framework.Constraints.ConstraintBuilder)">
             <summary>
-            Initializes a new instance of the <see cref="T:ConstraintExpressionBase"/> 
+            Initializes a new instance of the <see cref="T:ConstraintExpressionBase"/>
             class passing in a ConstraintBuilder, which may be pre-populated.
             </summary>
             <param name="builder">The builder.</param>
@@ -2122,7 +2122,7 @@
         </member>
         <member name="M:NUnit.Framework.Constraints.ConstraintExpression.#ctor(NUnit.Framework.Constraints.ConstraintBuilder)">
             <summary>
-            Initializes a new instance of the <see cref="T:ConstraintExpression"/> 
+            Initializes a new instance of the <see cref="T:ConstraintExpression"/>
             class passing in a ConstraintBuilder, which may be pre-populated.
             </summary>
             <param name="builder">The builder.</param>
@@ -2274,7 +2274,7 @@
         <member name="M:NUnit.Framework.Constraints.ConstraintExpression.EquivalentTo(System.Collections.IEnumerable)">
             <summary>
             Returns a constraint that tests whether the actual value
-            is a collection containing the same elements as the 
+            is a collection containing the same elements as the
             collection supplied as an argument.
             </summary>
         </member>
@@ -2300,9 +2300,9 @@
             <summary>
             Returns a new ContainsConstraint. This constraint
             will, in turn, make use of the appropriate second-level
-            constraint, depending on the type of the actual argument. 
+            constraint, depending on the type of the actual argument.
             This overload is only used if the item sought is a string,
-            since any other type implies that we are looking for a 
+            since any other type implies that we are looking for a
             collection member.
             </summary>
         </member>
@@ -2356,25 +2356,25 @@
         </member>
         <member name="M:NUnit.Framework.Constraints.ConstraintExpression.SamePath(System.String)">
             <summary>
-            Returns a constraint that tests whether the path provided 
+            Returns a constraint that tests whether the path provided
             is the same as an expected path after canonicalization.
             </summary>
         </member>
         <member name="M:NUnit.Framework.Constraints.ConstraintExpression.SubPath(System.String)">
             <summary>
-            Returns a constraint that tests whether the path provided 
+            Returns a constraint that tests whether the path provided
             is the same path or under an expected path after canonicalization.
             </summary>
         </member>
         <member name="M:NUnit.Framework.Constraints.ConstraintExpression.SamePathOrUnder(System.String)">
             <summary>
-            Returns a constraint that tests whether the path provided 
+            Returns a constraint that tests whether the path provided
             is the same path or under an expected path after canonicalization.
             </summary>
         </member>
         <member name="M:NUnit.Framework.Constraints.ConstraintExpression.InRange``1(``0,``0)">
             <summary>
-            Returns a constraint that tests whether the actual value falls 
+            Returns a constraint that tests whether the actual value falls
             within a specified range.
             </summary>
         </member>
@@ -2477,7 +2477,7 @@
         </member>
         <member name="P:NUnit.Framework.Constraints.ConstraintExpression.Unique">
             <summary>
-            Returns a constraint that tests whether a collection 
+            Returns a constraint that tests whether a collection
             contains all unique items.
             </summary>
         </member>
@@ -2637,7 +2637,7 @@
         <member name="M:NUnit.Framework.Constraints.ConstraintFactory.EquivalentTo(System.Collections.IEnumerable)">
             <summary>
             Returns a constraint that tests whether the actual value
-            is a collection containing the same elements as the 
+            is a collection containing the same elements as the
             collection supplied as an argument.
             </summary>
         </member>
@@ -2663,9 +2663,9 @@
             <summary>
             Returns a new ContainsConstraint. This constraint
             will, in turn, make use of the appropriate second-level
-            constraint, depending on the type of the actual argument. 
+            constraint, depending on the type of the actual argument.
             This overload is only used if the item sought is a string,
-            since any other type implies that we are looking for a 
+            since any other type implies that we are looking for a
             collection member.
             </summary>
         </member>
@@ -2743,25 +2743,25 @@
         </member>
         <member name="M:NUnit.Framework.Constraints.ConstraintFactory.SamePath(System.String)">
             <summary>
-            Returns a constraint that tests whether the path provided 
+            Returns a constraint that tests whether the path provided
             is the same as an expected path after canonicalization.
             </summary>
         </member>
         <member name="M:NUnit.Framework.Constraints.ConstraintFactory.SubPath(System.String)">
             <summary>
-            Returns a constraint that tests whether the path provided 
+            Returns a constraint that tests whether the path provided
             is the same path or under an expected path after canonicalization.
             </summary>
         </member>
         <member name="M:NUnit.Framework.Constraints.ConstraintFactory.SamePathOrUnder(System.String)">
             <summary>
-            Returns a constraint that tests whether the path provided 
+            Returns a constraint that tests whether the path provided
             is the same path or under an expected path after canonicalization.
             </summary>
         </member>
         <member name="M:NUnit.Framework.Constraints.ConstraintFactory.InRange``1(``0,``0)">
             <summary>
-            Returns a constraint that tests whether the actual value falls 
+            Returns a constraint that tests whether the actual value falls
             within a specified range.
             </summary>
         </member>
@@ -2859,7 +2859,7 @@
         </member>
         <member name="P:NUnit.Framework.Constraints.ConstraintFactory.Unique">
             <summary>
-            Returns a constraint that tests whether a collection 
+            Returns a constraint that tests whether a collection
             contains all unique items.
             </summary>
         </member>
@@ -2881,9 +2881,9 @@
         <member name="T:NUnit.Framework.Constraints.ConstraintOperator">
             <summary>
             The ConstraintOperator class is used internally by a
-            ConstraintBuilder to represent an operator that 
-            modifies or combines constraints. 
-            
+            ConstraintBuilder to represent an operator that
+            modifies or combines constraints.
+
             Constraint operators use left and right precedence
             values to determine whether the top operator on the
             stack should be reduced before pushing a new operator.
@@ -2903,8 +2903,8 @@
         </member>
         <member name="M:NUnit.Framework.Constraints.ConstraintOperator.Reduce(NUnit.Framework.Constraints.ConstraintBuilder.ConstraintStack)">
             <summary>
-            Reduce produces a constraint from the operator and 
-            any arguments. It takes the arguments from the constraint 
+            Reduce produces a constraint from the operator and
+            any arguments. It takes the arguments from the constraint
             stack and pushes the resulting constraint on it.
             </summary>
             <param name="stack"></param>
@@ -2939,8 +2939,8 @@
         </member>
         <member name="M:NUnit.Framework.Constraints.PrefixOperator.Reduce(NUnit.Framework.Constraints.ConstraintBuilder.ConstraintStack)">
             <summary>
-            Reduce produces a constraint from the operator and 
-            any arguments. It takes the arguments from the constraint 
+            Reduce produces a constraint from the operator and
+            any arguments. It takes the arguments from the constraint
             stack and pushes the resulting constraint on it.
             </summary>
             <param name="stack"></param>
@@ -2981,7 +2981,7 @@
         </member>
         <member name="T:NUnit.Framework.Constraints.AllOperator">
             <summary>
-            Represents a constraint that succeeds if all the 
+            Represents a constraint that succeeds if all the
             members of a collection match a base constraint.
             </summary>
         </member>
@@ -2994,7 +2994,7 @@
         </member>
         <member name="T:NUnit.Framework.Constraints.SomeOperator">
             <summary>
-            Represents a constraint that succeeds if any of the 
+            Represents a constraint that succeeds if any of the
             members of a collection match a base constraint.
             </summary>
         </member>
@@ -3007,7 +3007,7 @@
         </member>
         <member name="T:NUnit.Framework.Constraints.NoneOperator">
             <summary>
-            Represents a constraint that succeeds if none of the 
+            Represents a constraint that succeeds if none of the
             members of a collection match a base constraint.
             </summary>
         </member>
@@ -3020,7 +3020,7 @@
         </member>
         <member name="T:NUnit.Framework.Constraints.ExactCountOperator">
             <summary>
-            Represents a constraint that succeeds if the specified 
+            Represents a constraint that succeeds if the specified
             count of members of a collection match a base constraint.
             </summary>
         </member>
@@ -3057,7 +3057,7 @@
         </member>
         <member name="T:NUnit.Framework.Constraints.SelfResolvingOperator">
             <summary>
-            Abstract base class for operators that are able to reduce to a 
+            Abstract base class for operators that are able to reduce to a
             constraint whether or not another syntactic element follows.
             </summary>
         </member>
@@ -3075,8 +3075,8 @@
         </member>
         <member name="M:NUnit.Framework.Constraints.PropOperator.Reduce(NUnit.Framework.Constraints.ConstraintBuilder.ConstraintStack)">
             <summary>
-            Reduce produces a constraint from the operator and 
-            any arguments. It takes the arguments from the constraint 
+            Reduce produces a constraint from the operator and
+            any arguments. It takes the arguments from the constraint
             stack and pushes the resulting constraint on it.
             </summary>
             <param name="stack"></param>
@@ -3100,8 +3100,8 @@
         </member>
         <member name="M:NUnit.Framework.Constraints.AttributeOperator.Reduce(NUnit.Framework.Constraints.ConstraintBuilder.ConstraintStack)">
             <summary>
-            Reduce produces a constraint from the operator and 
-            any arguments. It takes the arguments from the constraint 
+            Reduce produces a constraint from the operator and
+            any arguments. It takes the arguments from the constraint
             stack and pushes the resulting constraint on it.
             </summary>
         </member>
@@ -3118,8 +3118,8 @@
         </member>
         <member name="M:NUnit.Framework.Constraints.ThrowsOperator.Reduce(NUnit.Framework.Constraints.ConstraintBuilder.ConstraintStack)">
             <summary>
-            Reduce produces a constraint from the operator and 
-            any arguments. It takes the arguments from the constraint 
+            Reduce produces a constraint from the operator and
+            any arguments. It takes the arguments from the constraint
             stack and pushes the resulting constraint on it.
             </summary>
         </member>
@@ -3130,8 +3130,8 @@
         </member>
         <member name="M:NUnit.Framework.Constraints.BinaryOperator.Reduce(NUnit.Framework.Constraints.ConstraintBuilder.ConstraintStack)">
             <summary>
-            Reduce produces a constraint from the operator and 
-            any arguments. It takes the arguments from the constraint 
+            Reduce produces a constraint from the operator and
+            any arguments. It takes the arguments from the constraint
             stack and pushes the resulting constraint on it.
             </summary>
             <param name="stack"></param>
@@ -3252,12 +3252,12 @@
         </member>
         <member name="T:NUnit.Framework.Constraints.DelayedConstraint">
             <summary>
-             Applies a delay to the match so that a match can be evaluated in the future.
+            Applies a delay to the match so that a match can be evaluated in the future.
             </summary>
         </member>
         <member name="M:NUnit.Framework.Constraints.DelayedConstraint.#ctor(NUnit.Framework.Constraints.Constraint,System.Int32)">
             <summary>
-             Creates a new DelayedConstraint
+            Creates a new DelayedConstraint
             </summary>
             <param name="baseConstraint">The inner constraint two decorate</param>
             <param name="delayInMilliseconds">The time interval after which the match is performed</param>
@@ -3265,7 +3265,7 @@
         </member>
         <member name="M:NUnit.Framework.Constraints.DelayedConstraint.#ctor(NUnit.Framework.Constraints.Constraint,System.Int32,System.Int32)">
             <summary>
-             Creates a new DelayedConstraint
+            Creates a new DelayedConstraint
             </summary>
             <param name="baseConstraint">The inner constraint two decorate</param>
             <param name="delayInMilliseconds">The time interval after which the match is performed</param>
@@ -3362,8 +3362,8 @@
         <member name="T:NUnit.Framework.Constraints.EqualConstraint">
             <summary>
             EqualConstraint is able to compare an actual value with the
-            expected value provided in its constructor. Two objects are 
-            considered equal if both are null, or if both have the same 
+            expected value provided in its constructor. Two objects are
+            considered equal if both are null, or if both have the same
             value. NUnit has special semantics for some object types.
             </summary>
         </member>
@@ -3441,7 +3441,7 @@
         </member>
         <member name="M:NUnit.Framework.Constraints.EqualConstraint.WriteMessageTo(NUnit.Framework.Constraints.MessageWriter)">
             <summary>
-            Write a failure message. Overridden to provide custom 
+            Write a failure message. Overridden to provide custom
             failure messages for EqualConstraint.
             </summary>
             <param name="writer">The MessageWriter to write to</param>
@@ -3464,7 +3464,7 @@
         <member name="M:NUnit.Framework.Constraints.EqualConstraint.DisplayTypesAndSizes(NUnit.Framework.Constraints.MessageWriter,System.Collections.IEnumerable,System.Collections.IEnumerable,System.Int32)">
             <summary>
             Displays a single line showing the types and sizes of the expected
-            and actual enumerations, collections or arrays. If both are identical, 
+            and actual enumerations, collections or arrays. If both are identical,
             the value is only shown once.
             </summary>
             <param name="writer">The MessageWriter on which to display</param>
@@ -3500,7 +3500,7 @@
         </member>
         <member name="P:NUnit.Framework.Constraints.EqualConstraint.NoClip">
             <summary>
-            Flag the constraint to suppress string clipping 
+            Flag the constraint to suppress string clipping
             and return self.
             </summary>
         </member>
@@ -3632,21 +3632,21 @@
         <member name="T:NUnit.Framework.Constraints.FloatingPointNumerics">
             <summary>Helper routines for working with floating point numbers</summary>
             <remarks>
-              <para>
-                The floating point comparison code is based on this excellent article:
-                http://www.cygnus-software.com/papers/comparingfloats/comparingfloats.htm
-              </para>
-              <para>
-                "ULP" means Unit in the Last Place and in the context of this library refers to
-                the distance between two adjacent floating point numbers. IEEE floating point
-                numbers can only represent a finite subset of natural numbers, with greater
-                accuracy for smaller numbers and lower accuracy for very large numbers.
-              </para>
-              <para>
-                If a comparison is allowed "2 ulps" of deviation, that means the values are
-                allowed to deviate by up to 2 adjacent floating point values, which might be
-                as low as 0.0000001 for small numbers or as high as 10.0 for large numbers.
-              </para>
+                <para>
+                    The floating point comparison code is based on this excellent article:
+                    http://www.cygnus-software.com/papers/comparingfloats/comparingfloats.htm
+                </para>
+                <para>
+                    "ULP" means Unit in the Last Place and in the context of this library refers to
+                    the distance between two adjacent floating point numbers. IEEE floating point
+                    numbers can only represent a finite subset of natural numbers, with greater
+                    accuracy for smaller numbers and lower accuracy for very large numbers.
+                </para>
+                <para>
+                    If a comparison is allowed "2 ulps" of deviation, that means the values are
+                    allowed to deviate by up to 2 adjacent floating point values, which might be
+                    as low as 0.0000001 for small numbers or as high as 10.0 for large numbers.
+                </para>
             </remarks>
         </member>
         <member name="M:NUnit.Framework.Constraints.FloatingPointNumerics.AreAlmostEqualUlps(System.Single,System.Single,System.Int32)">
@@ -3654,26 +3654,26 @@
             <param name="left">First floating point value to be compared</param>
             <param name="right">Second floating point value t be compared</param>
             <param name="maxUlps">
-              Maximum number of representable floating point values that are allowed to
-              be between the left and the right floating point values
+                Maximum number of representable floating point values that are allowed to
+                be between the left and the right floating point values
             </param>
             <returns>True if both numbers are equal or close to being equal</returns>
             <remarks>
-              <para>
-                Floating point values can only represent a finite subset of natural numbers.
-                For example, the values 2.00000000 and 2.00000024 can be stored in a float,
-                but nothing inbetween them.
-              </para>
-              <para>
-                This comparison will count how many possible floating point values are between
-                the left and the right number. If the number of possible values between both
-                numbers is less than or equal to maxUlps, then the numbers are considered as
-                being equal.
-              </para>
-              <para>
-                Implementation partially follows the code outlined here:
-                http://www.anttirt.net/2007/08/19/proper-floating-point-comparisons/
-              </para>
+                <para>
+                    Floating point values can only represent a finite subset of natural numbers.
+                    For example, the values 2.00000000 and 2.00000024 can be stored in a float,
+                    but nothing inbetween them.
+                </para>
+                <para>
+                    This comparison will count how many possible floating point values are between
+                    the left and the right number. If the number of possible values between both
+                    numbers is less than or equal to maxUlps, then the numbers are considered as
+                    being equal.
+                </para>
+                <para>
+                    Implementation partially follows the code outlined here:
+                    http://www.anttirt.net/2007/08/19/proper-floating-point-comparisons/
+                </para>
             </remarks>
         </member>
         <member name="M:NUnit.Framework.Constraints.FloatingPointNumerics.AreAlmostEqualUlps(System.Double,System.Double,System.Int64)">
@@ -3681,70 +3681,70 @@
             <param name="left">First double precision floating point value to be compared</param>
             <param name="right">Second double precision floating point value t be compared</param>
             <param name="maxUlps">
-              Maximum number of representable double precision floating point values that are
-              allowed to be between the left and the right double precision floating point values
+                Maximum number of representable double precision floating point values that are
+                allowed to be between the left and the right double precision floating point values
             </param>
             <returns>True if both numbers are equal or close to being equal</returns>
             <remarks>
-              <para>
-                Double precision floating point values can only represent a limited series of
-                natural numbers. For example, the values 2.0000000000000000 and 2.0000000000000004
-                can be stored in a double, but nothing inbetween them.
-              </para>
-              <para>
-                This comparison will count how many possible double precision floating point
-                values are between the left and the right number. If the number of possible
-                values between both numbers is less than or equal to maxUlps, then the numbers
-                are considered as being equal.
-              </para>
-              <para>
-                Implementation partially follows the code outlined here:
-                http://www.anttirt.net/2007/08/19/proper-floating-point-comparisons/
-              </para>
+                <para>
+                    Double precision floating point values can only represent a limited series of
+                    natural numbers. For example, the values 2.0000000000000000 and 2.0000000000000004
+                    can be stored in a double, but nothing inbetween them.
+                </para>
+                <para>
+                    This comparison will count how many possible double precision floating point
+                    values are between the left and the right number. If the number of possible
+                    values between both numbers is less than or equal to maxUlps, then the numbers
+                    are considered as being equal.
+                </para>
+                <para>
+                    Implementation partially follows the code outlined here:
+                    http://www.anttirt.net/2007/08/19/proper-floating-point-comparisons/
+                </para>
             </remarks>
         </member>
         <member name="M:NUnit.Framework.Constraints.FloatingPointNumerics.ReinterpretAsInt(System.Single)">
             <summary>
-              Reinterprets the memory contents of a floating point value as an integer value
+                Reinterprets the memory contents of a floating point value as an integer value
             </summary>
             <param name="value">
-              Floating point value whose memory contents to reinterpret
+                Floating point value whose memory contents to reinterpret
             </param>
             <returns>
-              The memory contents of the floating point value interpreted as an integer
+                The memory contents of the floating point value interpreted as an integer
             </returns>
         </member>
         <member name="M:NUnit.Framework.Constraints.FloatingPointNumerics.ReinterpretAsLong(System.Double)">
             <summary>
-              Reinterprets the memory contents of a double precision floating point
-              value as an integer value
+                Reinterprets the memory contents of a double precision floating point
+                value as an integer value
             </summary>
             <param name="value">
-              Double precision floating point value whose memory contents to reinterpret
+                Double precision floating point value whose memory contents to reinterpret
             </param>
             <returns>
-              The memory contents of the double precision floating point value
-              interpreted as an integer
+                The memory contents of the double precision floating point value
+                interpreted as an integer
             </returns>
         </member>
         <member name="M:NUnit.Framework.Constraints.FloatingPointNumerics.ReinterpretAsFloat(System.Int32)">
             <summary>
-              Reinterprets the memory contents of an integer as a floating point value
+                Reinterprets the memory contents of an integer as a floating point value
             </summary>
             <param name="value">Integer value whose memory contents to reinterpret</param>
             <returns>
-              The memory contents of the integer value interpreted as a floating point value
+                The memory contents of the integer value interpreted as a floating point value
             </returns>
         </member>
         <member name="M:NUnit.Framework.Constraints.FloatingPointNumerics.ReinterpretAsDouble(System.Int64)">
             <summary>
-              Reinterprets the memory contents of an integer value as a double precision
-              floating point value
+                Reinterprets the memory contents of an integer value as a double precision
+                floating point value
             </summary>
             <param name="value">Integer whose memory contents to reinterpret</param>
             <returns>
-              The memory contents of the integer interpreted as a double precision
-              floating point value
+                The memory contents of the integer interpreted as a double precision
+                floating point value
             </returns>
         </member>
         <member name="T:NUnit.Framework.Constraints.FloatingPointNumerics.FloatIntUnion">
@@ -3912,7 +3912,7 @@
         <member name="M:NUnit.Framework.Constraints.MessageWriter.WriteMessageLine(System.Int32,System.String,System.Object[])">
             <summary>
             Method to write single line  message with optional args, usually
-            written to precede the general failure message, at a givel 
+            written to precede the general failure message, at a givel
             indentation level.
             </summary>
             <param name="level">The indentation level of the message</param>
@@ -3922,8 +3922,8 @@
         <member name="M:NUnit.Framework.Constraints.MessageWriter.DisplayDifferences(NUnit.Framework.Constraints.Constraint)">
             <summary>
             Display Expected and Actual lines for a constraint. This
-            is called by MessageWriter's default implementation of 
-            WriteMessageTo and provides the generic two-line display. 
+            is called by MessageWriter's default implementation of
+            WriteMessageTo and provides the generic two-line display.
             </summary>
             <param name="constraint">The constraint that failed</param>
         </member>
@@ -4029,7 +4029,7 @@
         </member>
         <member name="M:NUnit.Framework.Constraints.MsgUtils.EscapeControlChars(System.String)">
             <summary>
-            Converts any control characters in a string 
+            Converts any control characters in a string
             to their escaped representation.
             </summary>
             <param name="s">The string to be converted</param>
@@ -4043,8 +4043,8 @@
         </member>
         <member name="M:NUnit.Framework.Constraints.MsgUtils.GetArrayIndicesFromCollectionIndex(System.Collections.IEnumerable,System.Int32)">
             <summary>
-            Get an array of indices representing the point in a enumerable, 
-            collection or array corresponding to a single int index into the 
+            Get an array of indices representing the point in a enumerable,
+            collection or array corresponding to a single int index into the
             collection.
             </summary>
             <param name="collection">The collection to which the indices apply</param>
@@ -4063,7 +4063,7 @@
         </member>
         <member name="M:NUnit.Framework.Constraints.MsgUtils.ClipExpectedAndActual(System.String@,System.String@,System.Int32,System.Int32)">
             <summary>
-            Clip the expected and actual strings in a coordinated fashion, 
+            Clip the expected and actual strings in a coordinated fashion,
             so that they may be displayed together.
             </summary>
             <param name="expected"></param>
@@ -4073,7 +4073,7 @@
         </member>
         <member name="M:NUnit.Framework.Constraints.MsgUtils.FindMismatchPosition(System.String,System.String,System.Int32,System.Boolean)">
             <summary>
-            Shows the position two strings start to differ.  Comparison 
+            Shows the position two strings start to differ.  Comparison
             starts at the start index.
             </summary>
             <param name="expected">The expected string</param>
@@ -4113,8 +4113,8 @@
         </member>
         <member name="M:NUnit.Framework.Constraints.Numerics.AreEqual(System.Object,System.Object,NUnit.Framework.Constraints.Tolerance@)">
             <summary>
-            Test two numeric values for equality, performing the usual numeric 
-            conversions and using a provided or default tolerance. If the tolerance 
+            Test two numeric values for equality, performing the usual numeric
+            conversions and using a provided or default tolerance. If the tolerance
             provided is Empty, this method may set it to a default tolerance.
             </summary>
             <param name="expected">The expected value</param>
@@ -4168,7 +4168,7 @@
         </member>
         <member name="T:NUnit.Framework.INUnitEqualityComparer">
             <summary>
-            
+
             </summary>
         </member>
         <member name="M:NUnit.Framework.INUnitEqualityComparer.AreEqual(System.Object,System.Object,NUnit.Framework.Constraints.Tolerance@)">
@@ -4600,7 +4600,7 @@
             <summary>
             PropertyExistsConstraint tests that a named property
             exists on the object provided through Match.
-            
+
             Originally, PropertyConstraint provided this feature
             in addition to making optional tests on the vaue
             of the property. The two constraints are now separate.
@@ -4681,7 +4681,7 @@
         </member>
         <member name="T:NUnit.Framework.Constraints.RangeConstraint`1">
             <summary>
-            RangeConstraint tests whethe two values are within a 
+            RangeConstraint tests whethe two values are within a
             specified range.
             </summary>
         </member>
@@ -4709,12 +4709,12 @@
             <summary>
             ResolvableConstraintExpression is used to represent a compound
             constraint being constructed at a point where the last operator
-            may either terminate the expression or may have additional 
-            qualifying constraints added to it. 
-            
+            may either terminate the expression or may have additional
+            qualifying constraints added to it.
+
             It is used, for example, for a Property element or for
             an Exception element, either of which may be optionally
-            followed by constraints that apply to the property or 
+            followed by constraints that apply to the property or
             exception.
             </summary>
         </member>
@@ -4736,43 +4736,43 @@
         </member>
         <member name="M:NUnit.Framework.Constraints.ResolvableConstraintExpression.op_BitwiseAnd(NUnit.Framework.Constraints.ResolvableConstraintExpression,NUnit.Framework.Constraints.ResolvableConstraintExpression)">
             <summary>
-            This operator creates a constraint that is satisfied only if both 
+            This operator creates a constraint that is satisfied only if both
             argument constraints are satisfied.
             </summary>
         </member>
         <member name="M:NUnit.Framework.Constraints.ResolvableConstraintExpression.op_BitwiseAnd(NUnit.Framework.Constraints.Constraint,NUnit.Framework.Constraints.ResolvableConstraintExpression)">
             <summary>
-            This operator creates a constraint that is satisfied only if both 
+            This operator creates a constraint that is satisfied only if both
             argument constraints are satisfied.
             </summary>
         </member>
         <member name="M:NUnit.Framework.Constraints.ResolvableConstraintExpression.op_BitwiseAnd(NUnit.Framework.Constraints.ResolvableConstraintExpression,NUnit.Framework.Constraints.Constraint)">
             <summary>
-            This operator creates a constraint that is satisfied only if both 
+            This operator creates a constraint that is satisfied only if both
             argument constraints are satisfied.
             </summary>
         </member>
         <member name="M:NUnit.Framework.Constraints.ResolvableConstraintExpression.op_BitwiseOr(NUnit.Framework.Constraints.ResolvableConstraintExpression,NUnit.Framework.Constraints.ResolvableConstraintExpression)">
             <summary>
-            This operator creates a constraint that is satisfied if either 
+            This operator creates a constraint that is satisfied if either
             of the argument constraints is satisfied.
             </summary>
         </member>
         <member name="M:NUnit.Framework.Constraints.ResolvableConstraintExpression.op_BitwiseOr(NUnit.Framework.Constraints.ResolvableConstraintExpression,NUnit.Framework.Constraints.Constraint)">
             <summary>
-            This operator creates a constraint that is satisfied if either 
+            This operator creates a constraint that is satisfied if either
             of the argument constraints is satisfied.
             </summary>
         </member>
         <member name="M:NUnit.Framework.Constraints.ResolvableConstraintExpression.op_BitwiseOr(NUnit.Framework.Constraints.Constraint,NUnit.Framework.Constraints.ResolvableConstraintExpression)">
             <summary>
-            This operator creates a constraint that is satisfied if either 
+            This operator creates a constraint that is satisfied if either
             of the argument constraints is satisfied.
             </summary>
         </member>
         <member name="M:NUnit.Framework.Constraints.ResolvableConstraintExpression.op_LogicalNot(NUnit.Framework.Constraints.ResolvableConstraintExpression)">
             <summary>
-            This operator creates a constraint that is satisfied if the 
+            This operator creates a constraint that is satisfied if the
             argument constraint is not satisfied.
             </summary>
         </member>
@@ -4845,7 +4845,7 @@
         </member>
         <member name="T:NUnit.Framework.Constraints.BinarySerializableConstraint">
             <summary>
-            BinarySerializableConstraint tests whether 
+            BinarySerializableConstraint tests whether
             an object is serializable in binary format.
             </summary>
         </member>
@@ -4878,7 +4878,7 @@
         </member>
         <member name="T:NUnit.Framework.Constraints.XmlSerializableConstraint">
             <summary>
-            BinarySerializableConstraint tests whether 
+            BinarySerializableConstraint tests whether
             an object is serializable in binary format.
             </summary>
         </member>
@@ -5084,7 +5084,7 @@
         </member>
         <member name="T:NUnit.Framework.Constraints.ThrowsConstraint">
             <summary>
-            ThrowsConstraint is used to test the exception thrown by 
+            ThrowsConstraint is used to test the exception thrown by
             a delegate by applying a constraint to it.
             </summary>
         </member>
@@ -5181,7 +5181,7 @@
         </member>
         <member name="F:NUnit.Framework.Constraints.ToleranceMode.None">
             <summary>
-            The tolerance was created with a value, without specifying 
+            The tolerance was created with a value, without specifying
             how the value would be used. This is used to prevent setting
             the mode more than once and is generally changed to Linear
             upon execution of the test.
@@ -5210,7 +5210,7 @@
             The Tolerance class generalizes the notion of a tolerance
             within which an equality test succeeds. Normally, it is
             used with numeric types, but it can be used with any
-            type that supports taking a difference between two 
+            type that supports taking a difference between two
             objects and comparing that difference to a value.
             </summary>
         </member>
@@ -5226,7 +5226,7 @@
         </member>
         <member name="M:NUnit.Framework.Constraints.Tolerance.CheckLinearAndNumeric">
             <summary>
-            Tests that the current Tolerance is linear with a 
+            Tests that the current Tolerance is linear with a
             numeric value, throwing an exception if it is not.
             </summary>
         </member>
@@ -5240,7 +5240,7 @@
         </member>
         <member name="P:NUnit.Framework.Constraints.Tolerance.Zero">
             <summary>
-            Returns a zero Tolerance object, equivalent to 
+            Returns a zero Tolerance object, equivalent to
             specifying an exact match.
             </summary>
         </member>
@@ -5266,37 +5266,37 @@
         </member>
         <member name="P:NUnit.Framework.Constraints.Tolerance.Days">
             <summary>
-            Returns a new tolerance with a TimeSpan as the amount, using 
+            Returns a new tolerance with a TimeSpan as the amount, using
             the current amount as a number of days.
             </summary>
         </member>
         <member name="P:NUnit.Framework.Constraints.Tolerance.Hours">
             <summary>
-            Returns a new tolerance with a TimeSpan as the amount, using 
+            Returns a new tolerance with a TimeSpan as the amount, using
             the current amount as a number of hours.
             </summary>
         </member>
         <member name="P:NUnit.Framework.Constraints.Tolerance.Minutes">
             <summary>
-            Returns a new tolerance with a TimeSpan as the amount, using 
+            Returns a new tolerance with a TimeSpan as the amount, using
             the current amount as a number of minutes.
             </summary>
         </member>
         <member name="P:NUnit.Framework.Constraints.Tolerance.Seconds">
             <summary>
-            Returns a new tolerance with a TimeSpan as the amount, using 
+            Returns a new tolerance with a TimeSpan as the amount, using
             the current amount as a number of seconds.
             </summary>
         </member>
         <member name="P:NUnit.Framework.Constraints.Tolerance.Milliseconds">
             <summary>
-            Returns a new tolerance with a TimeSpan as the amount, using 
+            Returns a new tolerance with a TimeSpan as the amount, using
             the current amount as a number of milliseconds.
             </summary>
         </member>
         <member name="P:NUnit.Framework.Constraints.Tolerance.Ticks">
             <summary>
-            Returns a new tolerance with a TimeSpan as the amount, using 
+            Returns a new tolerance with a TimeSpan as the amount, using
             the current amount as a number of clock ticks.
             </summary>
         </member>
@@ -5370,7 +5370,7 @@
         <member name="M:NUnit.Framework.Constraints.ExceptionTypeConstraint.WriteActualValueTo(NUnit.Framework.Constraints.MessageWriter)">
             <summary>
             Write the actual value for a failing constraint test to a
-            MessageWriter. Overriden to write additional information 
+            MessageWriter. Overriden to write additional information
             in the case of an Exception.
             </summary>
             <param name="writer">The MessageWriter to use</param>
@@ -5454,16 +5454,16 @@
             <summary>
             Thrown when an assertion failed.
             </summary>
-            
+
         </member>
         <member name="M:NUnit.Framework.AssertionException.#ctor(System.String)">
-            <param name="message">The error message that explains 
+            <param name="message">The error message that explains
             the reason for the exception</param>
         </member>
         <member name="M:NUnit.Framework.AssertionException.#ctor(System.String,System.Exception)">
-            <param name="message">The error message that explains 
+            <param name="message">The error message that explains
             the reason for the exception</param>
-            <param name="inner">The exception that caused the 
+            <param name="inner">The exception that caused the
             current exception</param>
         </member>
         <member name="M:NUnit.Framework.AssertionException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
@@ -5480,9 +5480,9 @@
             <param name="message"></param>
         </member>
         <member name="M:NUnit.Framework.IgnoreException.#ctor(System.String,System.Exception)">
-            <param name="message">The error message that explains 
+            <param name="message">The error message that explains
             the reason for the exception</param>
-            <param name="inner">The exception that caused the 
+            <param name="inner">The exception that caused the
             current exception</param>
         </member>
         <member name="M:NUnit.Framework.IgnoreException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
@@ -5494,16 +5494,16 @@
             <summary>
             Thrown when a test executes inconclusively.
             </summary>
-            
+
         </member>
         <member name="M:NUnit.Framework.InconclusiveException.#ctor(System.String)">
-            <param name="message">The error message that explains 
+            <param name="message">The error message that explains
             the reason for the exception</param>
         </member>
         <member name="M:NUnit.Framework.InconclusiveException.#ctor(System.String,System.Exception)">
-            <param name="message">The error message that explains 
+            <param name="message">The error message that explains
             the reason for the exception</param>
-            <param name="inner">The exception that caused the 
+            <param name="inner">The exception that caused the
             current exception</param>
         </member>
         <member name="M:NUnit.Framework.InconclusiveException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
@@ -5520,9 +5520,9 @@
             <param name="message"></param>
         </member>
         <member name="M:NUnit.Framework.SuccessException.#ctor(System.String,System.Exception)">
-            <param name="message">The error message that explains 
+            <param name="message">The error message that explains
             the reason for the exception</param>
-            <param name="inner">The exception that caused the 
+            <param name="inner">The exception that caused the
             current exception</param>
         </member>
         <member name="M:NUnit.Framework.SuccessException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
@@ -5532,7 +5532,7 @@
         </member>
         <member name="T:NUnit.Framework.INUnitEqualityComparer`1">
             <summary>
-            
+
             </summary>
             <typeparam name="T"></typeparam>
         </member>
@@ -5581,12 +5581,12 @@
             <summary>
             We don't actually want any instances of this object, but some people
             like to inherit from it to add other static methods. Hence, the
-            protected constructor disallows any instances of this object. 
+            protected constructor disallows any instances of this object.
             </summary>
         </member>
         <member name="M:NUnit.Framework.Assert.Equals(System.Object,System.Object)">
             <summary>
-            The Equals method throws an AssertionException. This is done 
+            The Equals method throws an AssertionException. This is done
             to make sure there is no mistake by calling this function.
             </summary>
             <param name="a"></param>
@@ -5594,9 +5594,9 @@
         </member>
         <member name="M:NUnit.Framework.Assert.ReferenceEquals(System.Object,System.Object)">
             <summary>
-            override the default ReferenceEquals to throw an AssertionException. This 
-            implementation makes sure there is no mistake in calling this function 
-            as part of Assert. 
+            override the default ReferenceEquals to throw an AssertionException. This
+            implementation makes sure there is no mistake in calling this function
+            as part of Assert.
             </summary>
             <param name="a"></param>
             <param name="b"></param>
@@ -5615,7 +5615,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.Pass(System.String,System.Object[])">
             <summary>
-            Throws a <see cref="T:NUnit.Framework.SuccessException"/> with the message and arguments 
+            Throws a <see cref="T:NUnit.Framework.SuccessException"/> with the message and arguments
             that are passed in. This allows a test to be cut short, with a result
             of success returned to NUnit.
             </summary>
@@ -5624,7 +5624,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.Pass(System.String)">
             <summary>
-            Throws a <see cref="T:NUnit.Framework.SuccessException"/> with the message and arguments 
+            Throws a <see cref="T:NUnit.Framework.SuccessException"/> with the message and arguments
             that are passed in. This allows a test to be cut short, with a result
             of success returned to NUnit.
             </summary>
@@ -5632,35 +5632,35 @@
         </member>
         <member name="M:NUnit.Framework.Assert.Pass">
             <summary>
-            Throws a <see cref="T:NUnit.Framework.SuccessException"/> with the message and arguments 
+            Throws a <see cref="T:NUnit.Framework.SuccessException"/> with the message and arguments
             that are passed in. This allows a test to be cut short, with a result
             of success returned to NUnit.
             </summary>
         </member>
         <member name="M:NUnit.Framework.Assert.Fail(System.String,System.Object[])">
             <summary>
-            Throws an <see cref="T:NUnit.Framework.AssertionException"/> with the message and arguments 
-            that are passed in. This is used by the other Assert functions. 
+            Throws an <see cref="T:NUnit.Framework.AssertionException"/> with the message and arguments
+            that are passed in. This is used by the other Assert functions.
             </summary>
             <param name="message">The message to initialize the <see cref="T:NUnit.Framework.AssertionException"/> with.</param>
             <param name="args">Arguments to be used in formatting the message</param>
         </member>
         <member name="M:NUnit.Framework.Assert.Fail(System.String)">
             <summary>
-            Throws an <see cref="T:NUnit.Framework.AssertionException"/> with the message that is 
-            passed in. This is used by the other Assert functions. 
+            Throws an <see cref="T:NUnit.Framework.AssertionException"/> with the message that is
+            passed in. This is used by the other Assert functions.
             </summary>
             <param name="message">The message to initialize the <see cref="T:NUnit.Framework.AssertionException"/> with.</param>
         </member>
         <member name="M:NUnit.Framework.Assert.Fail">
             <summary>
-            Throws an <see cref="T:NUnit.Framework.AssertionException"/>. 
-            This is used by the other Assert functions. 
+            Throws an <see cref="T:NUnit.Framework.AssertionException"/>.
+            This is used by the other Assert functions.
             </summary>
         </member>
         <member name="M:NUnit.Framework.Assert.Ignore(System.String,System.Object[])">
             <summary>
-            Throws an <see cref="T:NUnit.Framework.IgnoreException"/> with the message and arguments 
+            Throws an <see cref="T:NUnit.Framework.IgnoreException"/> with the message and arguments
             that are passed in.  This causes the test to be reported as ignored.
             </summary>
             <param name="message">The message to initialize the <see cref="T:NUnit.Framework.AssertionException"/> with.</param>
@@ -5668,20 +5668,20 @@
         </member>
         <member name="M:NUnit.Framework.Assert.Ignore(System.String)">
             <summary>
-            Throws an <see cref="T:NUnit.Framework.IgnoreException"/> with the message that is 
-            passed in. This causes the test to be reported as ignored. 
+            Throws an <see cref="T:NUnit.Framework.IgnoreException"/> with the message that is
+            passed in. This causes the test to be reported as ignored.
             </summary>
             <param name="message">The message to initialize the <see cref="T:NUnit.Framework.AssertionException"/> with.</param>
         </member>
         <member name="M:NUnit.Framework.Assert.Ignore">
             <summary>
-            Throws an <see cref="T:NUnit.Framework.IgnoreException"/>. 
-            This causes the test to be reported as ignored. 
+            Throws an <see cref="T:NUnit.Framework.IgnoreException"/>.
+            This causes the test to be reported as ignored.
             </summary>
         </member>
         <member name="M:NUnit.Framework.Assert.Inconclusive(System.String,System.Object[])">
             <summary>
-            Throws an <see cref="T:NUnit.Framework.InconclusiveException"/> with the message and arguments 
+            Throws an <see cref="T:NUnit.Framework.InconclusiveException"/> with the message and arguments
             that are passed in.  This causes the test to be reported as inconclusive.
             </summary>
             <param name="message">The message to initialize the <see cref="T:NUnit.Framework.InconclusiveException"/> with.</param>
@@ -5689,15 +5689,15 @@
         </member>
         <member name="M:NUnit.Framework.Assert.Inconclusive(System.String)">
             <summary>
-            Throws an <see cref="T:NUnit.Framework.InconclusiveException"/> with the message that is 
-            passed in. This causes the test to be reported as inconclusive. 
+            Throws an <see cref="T:NUnit.Framework.InconclusiveException"/> with the message that is
+            passed in. This causes the test to be reported as inconclusive.
             </summary>
             <param name="message">The message to initialize the <see cref="T:NUnit.Framework.InconclusiveException"/> with.</param>
         </member>
         <member name="M:NUnit.Framework.Assert.Inconclusive">
             <summary>
-            Throws an <see cref="T:NUnit.Framework.InconclusiveException"/>. 
-            This causes the test to be reported as Inconclusive. 
+            Throws an <see cref="T:NUnit.Framework.InconclusiveException"/>.
+            This causes the test to be reported as Inconclusive.
             </summary>
         </member>
         <member name="M:NUnit.Framework.Assert.That(System.Object,NUnit.Framework.Constraints.IResolveConstraint)">
@@ -5785,7 +5785,7 @@
             <summary>
             Asserts that a condition is true. If the condition is false the method throws
             an <see cref="T:NUnit.Framework.AssertionException"/>.
-            </summary> 
+            </summary>
             <param name="condition">The evaluated condition</param>
             <param name="message">The message to display if the condition is false</param>
             <param name="args">Arguments to be used in formatting the message</param>
@@ -5817,7 +5817,7 @@
             <summary>
             Apply a constraint to an actual value, succeeding if the constraint
             is satisfied and throwing an assertion exception on failure.
-            Used as a synonym for That in rare cases where a private setter 
+            Used as a synonym for That in rare cases where a private setter
             causes a Visual Basic compilation error.
             </summary>
             <param name="expression">A Constraint to be applied</param>
@@ -5827,7 +5827,7 @@
             <summary>
             Apply a constraint to an actual value, succeeding if the constraint
             is satisfied and throwing an assertion exception on failure.
-            Used as a synonym for That in rare cases where a private setter 
+            Used as a synonym for That in rare cases where a private setter
             causes a Visual Basic compilation error.
             </summary>
             <param name="expression">A Constraint to be applied</param>
@@ -5837,8 +5837,8 @@
         <member name="M:NUnit.Framework.Assert.ByVal(System.Object,NUnit.Framework.Constraints.IResolveConstraint,System.String,System.Object[])">
             <summary>
             Apply a constraint to an actual value, succeeding if the constraint
-            is satisfied and throwing an assertion exception on failure. 
-            Used as a synonym for That in rare cases where a private setter 
+            is satisfied and throwing an assertion exception on failure.
+            Used as a synonym for That in rare cases where a private setter
             causes a Visual Basic compilation error.
             </summary>
             <remarks>
@@ -6073,7 +6073,7 @@
             <summary>
             Asserts that a condition is false. If the condition is true the method throws
             an <see cref="T:NUnit.Framework.AssertionException"/>.
-            </summary> 
+            </summary>
             <param name="condition">The evaluated condition</param>
             <param name="message">The message to display in case of failure</param>
             <param name="args">Array of objects to be used in formatting the message</param>
@@ -6082,7 +6082,7 @@
             <summary>
             Asserts that a condition is false. If the condition is true the method throws
             an <see cref="T:NUnit.Framework.AssertionException"/>.
-            </summary> 
+            </summary>
             <param name="condition">The evaluated condition</param>
             <param name="message">The message to display in case of failure</param>
         </member>
@@ -6090,14 +6090,14 @@
             <summary>
             Asserts that a condition is false. If the condition is true the method throws
             an <see cref="T:NUnit.Framework.AssertionException"/>.
-            </summary> 
+            </summary>
             <param name="condition">The evaluated condition</param>
         </member>
         <member name="M:NUnit.Framework.Assert.IsFalse(System.Boolean,System.String,System.Object[])">
             <summary>
             Asserts that a condition is false. If the condition is true the method throws
             an <see cref="T:NUnit.Framework.AssertionException"/>.
-            </summary> 
+            </summary>
             <param name="condition">The evaluated condition</param>
             <param name="message">The message to display in case of failure</param>
             <param name="args">Array of objects to be used in formatting the message</param>
@@ -6106,7 +6106,7 @@
             <summary>
             Asserts that a condition is false. If the condition is true the method throws
             an <see cref="T:NUnit.Framework.AssertionException"/>.
-            </summary> 
+            </summary>
             <param name="condition">The evaluated condition</param>
             <param name="message">The message to display in case of failure</param>
         </member>
@@ -6114,7 +6114,7 @@
             <summary>
             Asserts that a condition is false. If the condition is true the method throws
             an <see cref="T:NUnit.Framework.AssertionException"/>.
-            </summary> 
+            </summary>
             <param name="condition">The evaluated condition</param>
         </member>
         <member name="M:NUnit.Framework.Assert.NotNull(System.Object,System.String,System.Object[])">
@@ -6647,7 +6647,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreEqual(System.Int32,System.Int32,System.String,System.Object[])">
             <summary>
-            Verifies that two values are equal. If they are not, then an 
+            Verifies that two values are equal. If they are not, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -6657,7 +6657,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreEqual(System.Int32,System.Int32,System.String)">
             <summary>
-            Verifies that two values are equal. If they are not, then an 
+            Verifies that two values are equal. If they are not, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -6666,7 +6666,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreEqual(System.Int32,System.Int32)">
             <summary>
-            Verifies that two values are equal. If they are not, then an 
+            Verifies that two values are equal. If they are not, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -6674,7 +6674,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreEqual(System.Int64,System.Int64,System.String,System.Object[])">
             <summary>
-            Verifies that two values are equal. If they are not, then an 
+            Verifies that two values are equal. If they are not, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -6684,7 +6684,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreEqual(System.Int64,System.Int64,System.String)">
             <summary>
-            Verifies that two values are equal. If they are not, then an 
+            Verifies that two values are equal. If they are not, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -6693,7 +6693,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreEqual(System.Int64,System.Int64)">
             <summary>
-            Verifies that two values are equal. If they are not, then an 
+            Verifies that two values are equal. If they are not, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -6701,7 +6701,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreEqual(System.UInt32,System.UInt32,System.String,System.Object[])">
             <summary>
-            Verifies that two values are equal. If they are not, then an 
+            Verifies that two values are equal. If they are not, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -6711,7 +6711,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreEqual(System.UInt32,System.UInt32,System.String)">
             <summary>
-            Verifies that two values are equal. If they are not, then an 
+            Verifies that two values are equal. If they are not, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -6720,7 +6720,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreEqual(System.UInt32,System.UInt32)">
             <summary>
-            Verifies that two values are equal. If they are not, then an 
+            Verifies that two values are equal. If they are not, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -6728,7 +6728,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreEqual(System.UInt64,System.UInt64,System.String,System.Object[])">
             <summary>
-            Verifies that two values are equal. If they are not, then an 
+            Verifies that two values are equal. If they are not, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -6738,7 +6738,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreEqual(System.UInt64,System.UInt64,System.String)">
             <summary>
-            Verifies that two values are equal. If they are not, then an 
+            Verifies that two values are equal. If they are not, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -6747,7 +6747,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreEqual(System.UInt64,System.UInt64)">
             <summary>
-            Verifies that two values are equal. If they are not, then an 
+            Verifies that two values are equal. If they are not, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -6755,7 +6755,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreEqual(System.Decimal,System.Decimal,System.String,System.Object[])">
             <summary>
-            Verifies that two values are equal. If they are not, then an 
+            Verifies that two values are equal. If they are not, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -6765,7 +6765,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreEqual(System.Decimal,System.Decimal,System.String)">
             <summary>
-            Verifies that two values are equal. If they are not, then an 
+            Verifies that two values are equal. If they are not, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -6774,7 +6774,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreEqual(System.Decimal,System.Decimal)">
             <summary>
-            Verifies that two values are equal. If they are not, then an 
+            Verifies that two values are equal. If they are not, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -6783,7 +6783,7 @@
         <member name="M:NUnit.Framework.Assert.AreEqual(System.Double,System.Double,System.Double,System.String,System.Object[])">
             <summary>
             Verifies that two doubles are equal considering a delta. If the
-            expected value is infinity then the delta value is ignored. If 
+            expected value is infinity then the delta value is ignored. If
             they are not equal then an <see cref="T:NUnit.Framework.AssertionException"/> is
             thrown.
             </summary>
@@ -6797,7 +6797,7 @@
         <member name="M:NUnit.Framework.Assert.AreEqual(System.Double,System.Double,System.Double,System.String)">
             <summary>
             Verifies that two doubles are equal considering a delta. If the
-            expected value is infinity then the delta value is ignored. If 
+            expected value is infinity then the delta value is ignored. If
             they are not equal then an <see cref="T:NUnit.Framework.AssertionException"/> is
             thrown.
             </summary>
@@ -6810,7 +6810,7 @@
         <member name="M:NUnit.Framework.Assert.AreEqual(System.Double,System.Double,System.Double)">
             <summary>
             Verifies that two doubles are equal considering a delta. If the
-            expected value is infinity then the delta value is ignored. If 
+            expected value is infinity then the delta value is ignored. If
             they are not equal then an <see cref="T:NUnit.Framework.AssertionException"/> is
             thrown.
             </summary>
@@ -6822,7 +6822,7 @@
         <member name="M:NUnit.Framework.Assert.AreEqual(System.Double,System.Nullable{System.Double},System.Double,System.String,System.Object[])">
             <summary>
             Verifies that two doubles are equal considering a delta. If the
-            expected value is infinity then the delta value is ignored. If 
+            expected value is infinity then the delta value is ignored. If
             they are not equal then an <see cref="T:NUnit.Framework.AssertionException"/> is
             thrown.
             </summary>
@@ -6836,7 +6836,7 @@
         <member name="M:NUnit.Framework.Assert.AreEqual(System.Double,System.Nullable{System.Double},System.Double,System.String)">
             <summary>
             Verifies that two doubles are equal considering a delta. If the
-            expected value is infinity then the delta value is ignored. If 
+            expected value is infinity then the delta value is ignored. If
             they are not equal then an <see cref="T:NUnit.Framework.AssertionException"/> is
             thrown.
             </summary>
@@ -6849,7 +6849,7 @@
         <member name="M:NUnit.Framework.Assert.AreEqual(System.Double,System.Nullable{System.Double},System.Double)">
             <summary>
             Verifies that two doubles are equal considering a delta. If the
-            expected value is infinity then the delta value is ignored. If 
+            expected value is infinity then the delta value is ignored. If
             they are not equal then an <see cref="T:NUnit.Framework.AssertionException"/> is
             thrown.
             </summary>
@@ -6893,7 +6893,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreNotEqual(System.Int32,System.Int32,System.String,System.Object[])">
             <summary>
-            Verifies that two values are not equal. If they are equal, then an 
+            Verifies that two values are not equal. If they are equal, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -6903,7 +6903,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreNotEqual(System.Int32,System.Int32,System.String)">
             <summary>
-            Verifies that two values are not equal. If they are equal, then an 
+            Verifies that two values are not equal. If they are equal, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -6912,7 +6912,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreNotEqual(System.Int32,System.Int32)">
             <summary>
-            Verifies that two values are not equal. If they are equal, then an 
+            Verifies that two values are not equal. If they are equal, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -6920,7 +6920,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreNotEqual(System.Int64,System.Int64,System.String,System.Object[])">
             <summary>
-            Verifies that two values are not equal. If they are equal, then an 
+            Verifies that two values are not equal. If they are equal, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -6930,7 +6930,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreNotEqual(System.Int64,System.Int64,System.String)">
             <summary>
-            Verifies that two values are not equal. If they are equal, then an 
+            Verifies that two values are not equal. If they are equal, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -6939,7 +6939,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreNotEqual(System.Int64,System.Int64)">
             <summary>
-            Verifies that two values are not equal. If they are equal, then an 
+            Verifies that two values are not equal. If they are equal, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -6947,7 +6947,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreNotEqual(System.UInt32,System.UInt32,System.String,System.Object[])">
             <summary>
-            Verifies that two values are not equal. If they are equal, then an 
+            Verifies that two values are not equal. If they are equal, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -6957,7 +6957,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreNotEqual(System.UInt32,System.UInt32,System.String)">
             <summary>
-            Verifies that two values are not equal. If they are equal, then an 
+            Verifies that two values are not equal. If they are equal, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -6966,7 +6966,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreNotEqual(System.UInt32,System.UInt32)">
             <summary>
-            Verifies that two values are not equal. If they are equal, then an 
+            Verifies that two values are not equal. If they are equal, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -6974,7 +6974,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreNotEqual(System.UInt64,System.UInt64,System.String,System.Object[])">
             <summary>
-            Verifies that two values are not equal. If they are equal, then an 
+            Verifies that two values are not equal. If they are equal, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -6984,7 +6984,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreNotEqual(System.UInt64,System.UInt64,System.String)">
             <summary>
-            Verifies that two values are not equal. If they are equal, then an 
+            Verifies that two values are not equal. If they are equal, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -6993,7 +6993,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreNotEqual(System.UInt64,System.UInt64)">
             <summary>
-            Verifies that two values are not equal. If they are equal, then an 
+            Verifies that two values are not equal. If they are equal, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -7001,7 +7001,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreNotEqual(System.Decimal,System.Decimal,System.String,System.Object[])">
             <summary>
-            Verifies that two values are not equal. If they are equal, then an 
+            Verifies that two values are not equal. If they are equal, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -7011,7 +7011,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreNotEqual(System.Decimal,System.Decimal,System.String)">
             <summary>
-            Verifies that two values are not equal. If they are equal, then an 
+            Verifies that two values are not equal. If they are equal, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -7020,7 +7020,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreNotEqual(System.Decimal,System.Decimal)">
             <summary>
-            Verifies that two values are not equal. If they are equal, then an 
+            Verifies that two values are not equal. If they are equal, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -7028,7 +7028,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreNotEqual(System.Single,System.Single,System.String,System.Object[])">
             <summary>
-            Verifies that two values are not equal. If they are equal, then an 
+            Verifies that two values are not equal. If they are equal, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -7038,7 +7038,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreNotEqual(System.Single,System.Single,System.String)">
             <summary>
-            Verifies that two values are not equal. If they are equal, then an 
+            Verifies that two values are not equal. If they are equal, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -7047,7 +7047,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreNotEqual(System.Single,System.Single)">
             <summary>
-            Verifies that two values are not equal. If they are equal, then an 
+            Verifies that two values are not equal. If they are equal, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -7055,7 +7055,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreNotEqual(System.Double,System.Double,System.String,System.Object[])">
             <summary>
-            Verifies that two values are not equal. If they are equal, then an 
+            Verifies that two values are not equal. If they are equal, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -7065,7 +7065,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreNotEqual(System.Double,System.Double,System.String)">
             <summary>
-            Verifies that two values are not equal. If they are equal, then an 
+            Verifies that two values are not equal. If they are equal, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -7074,7 +7074,7 @@
         </member>
         <member name="M:NUnit.Framework.Assert.AreNotEqual(System.Double,System.Double)">
             <summary>
-            Verifies that two values are not equal. If they are equal, then an 
+            Verifies that two values are not equal. If they are equal, then an
             <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="expected">The expected value</param>
@@ -7171,7 +7171,7 @@
             <summary>
             Verifies that the first value is greater than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7182,7 +7182,7 @@
             <summary>
             Verifies that the first value is greater than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7192,7 +7192,7 @@
             <summary>
             Verifies that the first value is greater than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7201,7 +7201,7 @@
             <summary>
             Verifies that the first value is greater than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7212,7 +7212,7 @@
             <summary>
             Verifies that the first value is greater than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7222,7 +7222,7 @@
             <summary>
             Verifies that the first value is greater than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7231,7 +7231,7 @@
             <summary>
             Verifies that the first value is greater than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7242,7 +7242,7 @@
             <summary>
             Verifies that the first value is greater than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7252,7 +7252,7 @@
             <summary>
             Verifies that the first value is greater than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7261,7 +7261,7 @@
             <summary>
             Verifies that the first value is greater than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7272,7 +7272,7 @@
             <summary>
             Verifies that the first value is greater than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7282,7 +7282,7 @@
             <summary>
             Verifies that the first value is greater than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7291,7 +7291,7 @@
             <summary>
             Verifies that the first value is greater than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7302,7 +7302,7 @@
             <summary>
             Verifies that the first value is greater than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7312,7 +7312,7 @@
             <summary>
             Verifies that the first value is greater than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7321,7 +7321,7 @@
             <summary>
             Verifies that the first value is greater than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7332,7 +7332,7 @@
             <summary>
             Verifies that the first value is greater than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7342,7 +7342,7 @@
             <summary>
             Verifies that the first value is greater than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7351,7 +7351,7 @@
             <summary>
             Verifies that the first value is greater than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7362,7 +7362,7 @@
             <summary>
             Verifies that the first value is greater than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7372,7 +7372,7 @@
             <summary>
             Verifies that the first value is greater than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7381,7 +7381,7 @@
             <summary>
             Verifies that the first value is greater than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7392,7 +7392,7 @@
             <summary>
             Verifies that the first value is greater than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7402,7 +7402,7 @@
             <summary>
             Verifies that the first value is greater than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7411,7 +7411,7 @@
             <summary>
             Verifies that the first value is less than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7422,7 +7422,7 @@
             <summary>
             Verifies that the first value is less than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7432,7 +7432,7 @@
             <summary>
             Verifies that the first value is less than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7441,7 +7441,7 @@
             <summary>
             Verifies that the first value is less than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7452,7 +7452,7 @@
             <summary>
             Verifies that the first value is less than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7462,7 +7462,7 @@
             <summary>
             Verifies that the first value is less than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7471,7 +7471,7 @@
             <summary>
             Verifies that the first value is less than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7482,7 +7482,7 @@
             <summary>
             Verifies that the first value is less than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7492,7 +7492,7 @@
             <summary>
             Verifies that the first value is less than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7501,7 +7501,7 @@
             <summary>
             Verifies that the first value is less than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7512,7 +7512,7 @@
             <summary>
             Verifies that the first value is less than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7522,7 +7522,7 @@
             <summary>
             Verifies that the first value is less than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7531,7 +7531,7 @@
             <summary>
             Verifies that the first value is less than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7542,7 +7542,7 @@
             <summary>
             Verifies that the first value is less than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7552,7 +7552,7 @@
             <summary>
             Verifies that the first value is less than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7561,7 +7561,7 @@
             <summary>
             Verifies that the first value is less than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7572,7 +7572,7 @@
             <summary>
             Verifies that the first value is less than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7582,7 +7582,7 @@
             <summary>
             Verifies that the first value is less than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7591,7 +7591,7 @@
             <summary>
             Verifies that the first value is less than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7602,7 +7602,7 @@
             <summary>
             Verifies that the first value is less than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7612,7 +7612,7 @@
             <summary>
             Verifies that the first value is less than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7621,7 +7621,7 @@
             <summary>
             Verifies that the first value is less than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7632,7 +7632,7 @@
             <summary>
             Verifies that the first value is less than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7642,7 +7642,7 @@
             <summary>
             Verifies that the first value is less than the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7651,7 +7651,7 @@
             <summary>
             Verifies that the first value is greater than or equal tothe second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7662,7 +7662,7 @@
             <summary>
             Verifies that the first value is greater than or equal tothe second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7672,7 +7672,7 @@
             <summary>
             Verifies that the first value is greater than or equal tothe second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7681,7 +7681,7 @@
             <summary>
             Verifies that the first value is greater than or equal tothe second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7692,7 +7692,7 @@
             <summary>
             Verifies that the first value is greater than or equal tothe second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7702,7 +7702,7 @@
             <summary>
             Verifies that the first value is greater than or equal tothe second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7711,7 +7711,7 @@
             <summary>
             Verifies that the first value is greater than or equal tothe second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7722,7 +7722,7 @@
             <summary>
             Verifies that the first value is greater than or equal tothe second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7732,7 +7732,7 @@
             <summary>
             Verifies that the first value is greater than or equal tothe second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7741,7 +7741,7 @@
             <summary>
             Verifies that the first value is greater than or equal tothe second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7752,7 +7752,7 @@
             <summary>
             Verifies that the first value is greater than or equal tothe second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7762,7 +7762,7 @@
             <summary>
             Verifies that the first value is greater than or equal tothe second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7771,7 +7771,7 @@
             <summary>
             Verifies that the first value is greater than or equal tothe second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7782,7 +7782,7 @@
             <summary>
             Verifies that the first value is greater than or equal tothe second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7792,7 +7792,7 @@
             <summary>
             Verifies that the first value is greater than or equal tothe second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7801,7 +7801,7 @@
             <summary>
             Verifies that the first value is greater than or equal tothe second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7812,7 +7812,7 @@
             <summary>
             Verifies that the first value is greater than or equal tothe second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7822,7 +7822,7 @@
             <summary>
             Verifies that the first value is greater than or equal tothe second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7831,7 +7831,7 @@
             <summary>
             Verifies that the first value is greater than or equal tothe second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7842,7 +7842,7 @@
             <summary>
             Verifies that the first value is greater than or equal tothe second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7852,7 +7852,7 @@
             <summary>
             Verifies that the first value is greater than or equal tothe second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7861,7 +7861,7 @@
             <summary>
             Verifies that the first value is greater than or equal tothe second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7872,7 +7872,7 @@
             <summary>
             Verifies that the first value is greater than or equal tothe second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7882,7 +7882,7 @@
             <summary>
             Verifies that the first value is greater than or equal tothe second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be greater</param>
             <param name="arg2">The second value, expected to be less</param>
@@ -7891,7 +7891,7 @@
             <summary>
             Verifies that the first value is less than or equal to the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7902,7 +7902,7 @@
             <summary>
             Verifies that the first value is less than or equal to the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7912,7 +7912,7 @@
             <summary>
             Verifies that the first value is less than or equal to the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7921,7 +7921,7 @@
             <summary>
             Verifies that the first value is less than or equal to the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7932,7 +7932,7 @@
             <summary>
             Verifies that the first value is less than or equal to the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7942,7 +7942,7 @@
             <summary>
             Verifies that the first value is less than or equal to the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7951,7 +7951,7 @@
             <summary>
             Verifies that the first value is less than or equal to the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7962,7 +7962,7 @@
             <summary>
             Verifies that the first value is less than or equal to the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7972,7 +7972,7 @@
             <summary>
             Verifies that the first value is less than or equal to the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7981,7 +7981,7 @@
             <summary>
             Verifies that the first value is less than or equal to the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -7992,7 +7992,7 @@
             <summary>
             Verifies that the first value is less than or equal to the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -8002,7 +8002,7 @@
             <summary>
             Verifies that the first value is less than or equal to the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -8011,7 +8011,7 @@
             <summary>
             Verifies that the first value is less than or equal to the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -8022,7 +8022,7 @@
             <summary>
             Verifies that the first value is less than or equal to the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -8032,7 +8032,7 @@
             <summary>
             Verifies that the first value is less than or equal to the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -8041,7 +8041,7 @@
             <summary>
             Verifies that the first value is less than or equal to the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -8052,7 +8052,7 @@
             <summary>
             Verifies that the first value is less than or equal to the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -8062,7 +8062,7 @@
             <summary>
             Verifies that the first value is less than or equal to the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -8071,7 +8071,7 @@
             <summary>
             Verifies that the first value is less than or equal to the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -8082,7 +8082,7 @@
             <summary>
             Verifies that the first value is less than or equal to the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -8092,7 +8092,7 @@
             <summary>
             Verifies that the first value is less than or equal to the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -8101,7 +8101,7 @@
             <summary>
             Verifies that the first value is less than or equal to the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -8112,7 +8112,7 @@
             <summary>
             Verifies that the first value is less than or equal to the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -8122,7 +8122,7 @@
             <summary>
             Verifies that the first value is less than or equal to the second
             value. If it is not, then an
-            <see cref="T:NUnit.Framework.AssertionException"/> is thrown. 
+            <see cref="T:NUnit.Framework.AssertionException"/> is thrown.
             </summary>
             <param name="arg1">The first value, expected to be less</param>
             <param name="arg2">The second value, expected to be greater</param>
@@ -8153,7 +8153,7 @@
         </member>
         <member name="P:NUnit.Framework.Assert.Counter">
             <summary>
-            Gets the number of assertions executed so far and 
+            Gets the number of assertions executed so far and
             resets the counter to zero.
             </summary>
         </member>
@@ -8161,7 +8161,7 @@
             <summary>
             AssertionHelper is an optional base class for user tests,
             allowing the use of shorter names for constraints and
-            asserts and avoiding conflict with the definition of 
+            asserts and avoiding conflict with the definition of
             <see cref="T:NUnit.Framework.Is"/>, from which it inherits much of its
             behavior, in certain mock object frameworks.
             </summary>
@@ -8254,7 +8254,7 @@
             <summary>
             Asserts that a condition is true. If the condition is false the method throws
             an <see cref="T:NUnit.Framework.AssertionException"/>. Works Identically to Assert.That.
-            </summary> 
+            </summary>
             <param name="condition">The evaluated condition</param>
             <param name="message">The message to display if the condition is false</param>
             <param name="args">Arguments to be used in formatting the message</param>
@@ -8299,7 +8299,7 @@
         </member>
         <member name="M:NUnit.Framework.Assume.Equals(System.Object,System.Object)">
             <summary>
-            The Equals method throws an AssertionException. This is done 
+            The Equals method throws an AssertionException. This is done
             to make sure there is no mistake by calling this function.
             </summary>
             <param name="a"></param>
@@ -8307,9 +8307,9 @@
         </member>
         <member name="M:NUnit.Framework.Assume.ReferenceEquals(System.Object,System.Object)">
             <summary>
-            override the default ReferenceEquals to throw an AssertionException. This 
-            implementation makes sure there is no mistake in calling this function 
-            as part of Assert. 
+            override the default ReferenceEquals to throw an AssertionException. This
+            implementation makes sure there is no mistake in calling this function
+            as part of Assert.
             </summary>
             <param name="a"></param>
             <param name="b"></param>
@@ -8399,7 +8399,7 @@
             <summary>
             Asserts that a condition is true. If the condition is false the method throws
             an <see cref="T:NUnit.Framework.InconclusiveException"/>.
-            </summary> 
+            </summary>
             <param name="condition">The evaluated condition</param>
             <param name="message">The message to display if the condition is false</param>
             <param name="args">Arguments to be used in formatting the message</param>
@@ -8414,7 +8414,7 @@
         </member>
         <member name="M:NUnit.Framework.Assume.That(System.Boolean)">
             <summary>
-            Asserts that a condition is true. If the condition is false the 
+            Asserts that a condition is true. If the condition is false the
             method throws an <see cref="T:NUnit.Framework.InconclusiveException"/>.
             </summary>
             <param name="condition">The evaluated condition</param>
@@ -8434,7 +8434,7 @@
         </member>
         <member name="M:NUnit.Framework.CollectionAssert.Equals(System.Object,System.Object)">
             <summary>
-            The Equals method throws an AssertionException. This is done 
+            The Equals method throws an AssertionException. This is done
             to make sure there is no mistake by calling this function.
             </summary>
             <param name="a"></param>
@@ -8442,9 +8442,9 @@
         </member>
         <member name="M:NUnit.Framework.CollectionAssert.ReferenceEquals(System.Object,System.Object)">
             <summary>
-            override the default ReferenceEquals to throw an AssertionException. This 
-            implementation makes sure there is no mistake in calling this function 
-            as part of Assert. 
+            override the default ReferenceEquals to throw an AssertionException. This
+            implementation makes sure there is no mistake in calling this function
+            as part of Assert.
             </summary>
             <param name="a"></param>
             <param name="b"></param>
@@ -8520,7 +8520,7 @@
         </member>
         <member name="M:NUnit.Framework.CollectionAssert.AreEqual(System.Collections.IEnumerable,System.Collections.IEnumerable)">
             <summary>
-            Asserts that expected and actual are exactly equal.  The collections must have the same count, 
+            Asserts that expected and actual are exactly equal.  The collections must have the same count,
             and contain the exact same objects in the same order.
             </summary>
             <param name="expected">The first IEnumerable of objects to be considered</param>
@@ -8528,7 +8528,7 @@
         </member>
         <member name="M:NUnit.Framework.CollectionAssert.AreEqual(System.Collections.IEnumerable,System.Collections.IEnumerable,System.Collections.IComparer)">
             <summary>
-            Asserts that expected and actual are exactly equal.  The collections must have the same count, 
+            Asserts that expected and actual are exactly equal.  The collections must have the same count,
             and contain the exact same objects in the same order.
             If comparer is not null then it will be used to compare the objects.
             </summary>
@@ -8538,7 +8538,7 @@
         </member>
         <member name="M:NUnit.Framework.CollectionAssert.AreEqual(System.Collections.IEnumerable,System.Collections.IEnumerable,System.String)">
             <summary>
-            Asserts that expected and actual are exactly equal.  The collections must have the same count, 
+            Asserts that expected and actual are exactly equal.  The collections must have the same count,
             and contain the exact same objects in the same order.
             </summary>
             <param name="expected">The first IEnumerable of objects to be considered</param>
@@ -8547,7 +8547,7 @@
         </member>
         <member name="M:NUnit.Framework.CollectionAssert.AreEqual(System.Collections.IEnumerable,System.Collections.IEnumerable,System.Collections.IComparer,System.String)">
             <summary>
-            Asserts that expected and actual are exactly equal.  The collections must have the same count, 
+            Asserts that expected and actual are exactly equal.  The collections must have the same count,
             and contain the exact same objects in the same order.
             If comparer is not null then it will be used to compare the objects.
             </summary>
@@ -8558,7 +8558,7 @@
         </member>
         <member name="M:NUnit.Framework.CollectionAssert.AreEqual(System.Collections.IEnumerable,System.Collections.IEnumerable,System.String,System.Object[])">
             <summary>
-            Asserts that expected and actual are exactly equal.  The collections must have the same count, 
+            Asserts that expected and actual are exactly equal.  The collections must have the same count,
             and contain the exact same objects in the same order.
             </summary>
             <param name="expected">The first IEnumerable of objects to be considered</param>
@@ -8568,7 +8568,7 @@
         </member>
         <member name="M:NUnit.Framework.CollectionAssert.AreEqual(System.Collections.IEnumerable,System.Collections.IEnumerable,System.Collections.IComparer,System.String,System.Object[])">
             <summary>
-            Asserts that expected and actual are exactly equal.  The collections must have the same count, 
+            Asserts that expected and actual are exactly equal.  The collections must have the same count,
             and contain the exact same objects in the same order.
             If comparer is not null then it will be used to compare the objects.
             </summary>
@@ -8889,7 +8889,7 @@
         </member>
         <member name="M:NUnit.Framework.DirectoryAssert.Equals(System.Object,System.Object)">
             <summary>
-            The Equals method throws an AssertionException. This is done 
+            The Equals method throws an AssertionException. This is done
             to make sure there is no mistake by calling this function.
             </summary>
             <param name="a"></param>
@@ -8897,9 +8897,9 @@
         </member>
         <member name="M:NUnit.Framework.DirectoryAssert.ReferenceEquals(System.Object,System.Object)">
             <summary>
-            override the default ReferenceEquals to throw an AssertionException. This 
-            implementation makes sure there is no mistake in calling this function 
-            as part of Assert. 
+            override the default ReferenceEquals to throw an AssertionException. This
+            implementation makes sure there is no mistake in calling this function
+            as part of Assert.
             </summary>
             <param name="a"></param>
             <param name="b"></param>
@@ -8908,7 +8908,7 @@
             <summary>
             We don't actually want any instances of this object, but some people
             like to inherit from it to add other static methods. Hence, the
-            protected constructor disallows any instances of this object. 
+            protected constructor disallows any instances of this object.
             </summary>
         </member>
         <member name="M:NUnit.Framework.DirectoryAssert.AreEqual(System.IO.DirectoryInfo,System.IO.DirectoryInfo,System.String,System.Object[])">
@@ -9236,7 +9236,7 @@
         </member>
         <member name="M:NUnit.Framework.FileAssert.Equals(System.Object,System.Object)">
             <summary>
-            The Equals method throws an AssertionException. This is done 
+            The Equals method throws an AssertionException. This is done
             to make sure there is no mistake by calling this function.
             </summary>
             <param name="a"></param>
@@ -9244,9 +9244,9 @@
         </member>
         <member name="M:NUnit.Framework.FileAssert.ReferenceEquals(System.Object,System.Object)">
             <summary>
-            override the default ReferenceEquals to throw an AssertionException. This 
-            implementation makes sure there is no mistake in calling this function 
-            as part of Assert. 
+            override the default ReferenceEquals to throw an AssertionException. This
+            implementation makes sure there is no mistake in calling this function
+            as part of Assert.
             </summary>
             <param name="a"></param>
             <param name="b"></param>
@@ -9255,7 +9255,7 @@
             <summary>
             We don't actually want any instances of this object, but some people
             like to inherit from it to add other static methods. Hence, the
-            protected constructor disallows any instances of this object. 
+            protected constructor disallows any instances of this object.
             </summary>
         </member>
         <member name="M:NUnit.Framework.FileAssert.AreEqual(System.IO.Stream,System.IO.Stream,System.String,System.Object[])">
@@ -9658,7 +9658,7 @@
         <member name="M:NUnit.Framework.Is.EquivalentTo(System.Collections.IEnumerable)">
             <summary>
             Returns a constraint that tests whether the actual value
-            is a collection containing the same elements as the 
+            is a collection containing the same elements as the
             collection supplied as an argument.
             </summary>
         </member>
@@ -9694,25 +9694,25 @@
         </member>
         <member name="M:NUnit.Framework.Is.SamePath(System.String)">
             <summary>
-            Returns a constraint that tests whether the path provided 
+            Returns a constraint that tests whether the path provided
             is the same as an expected path after canonicalization.
             </summary>
         </member>
         <member name="M:NUnit.Framework.Is.SubPath(System.String)">
             <summary>
-            Returns a constraint that tests whether the path provided 
+            Returns a constraint that tests whether the path provided
             is the same path or under an expected path after canonicalization.
             </summary>
         </member>
         <member name="M:NUnit.Framework.Is.SamePathOrUnder(System.String)">
             <summary>
-            Returns a constraint that tests whether the path provided 
+            Returns a constraint that tests whether the path provided
             is the same path or under an expected path after canonicalization.
             </summary>
         </member>
         <member name="M:NUnit.Framework.Is.InRange``1(``0,``0)">
             <summary>
-            Returns a constraint that tests whether the actual value falls 
+            Returns a constraint that tests whether the actual value falls
             within a specified range.
             </summary>
         </member>
@@ -9766,7 +9766,7 @@
         </member>
         <member name="P:NUnit.Framework.Is.Unique">
             <summary>
-            Returns a constraint that tests whether a collection 
+            Returns a constraint that tests whether a collection
             contains all unique items.
             </summary>
         </member>
@@ -9886,7 +9886,7 @@
         </member>
         <member name="F:NUnit.Framework.SpecialValue.Null">
             <summary>
-            Null represents a null value, which cannot be used as an 
+            Null represents a null value, which cannot be used as an
             argument to an attriute under .NET 1.x
             </summary>
         </member>
@@ -9897,7 +9897,7 @@
         </member>
         <member name="M:NUnit.Framework.StringAssert.Equals(System.Object,System.Object)">
             <summary>
-            The Equals method throws an AssertionException. This is done 
+            The Equals method throws an AssertionException. This is done
             to make sure there is no mistake by calling this function.
             </summary>
             <param name="a"></param>
@@ -9905,9 +9905,9 @@
         </member>
         <member name="M:NUnit.Framework.StringAssert.ReferenceEquals(System.Object,System.Object)">
             <summary>
-            override the default ReferenceEquals to throw an AssertionException. This 
-            implementation makes sure there is no mistake in calling this function 
-            as part of Assert. 
+            override the default ReferenceEquals to throw an AssertionException. This
+            implementation makes sure there is no mistake in calling this function
+            as part of Assert.
             </summary>
             <param name="a"></param>
             <param name="b"></param>
@@ -10158,7 +10158,7 @@
             and other parameter info to be used for a parameterized
             test case. It provides a number of instance modifiers
             for use in initializing the test case.
-            
+
             Note: Instance modifiers are getters that return
             the same instance after modifying it's state.
             </summary>
@@ -10180,7 +10180,7 @@
         </member>
         <member name="F:NUnit.Framework.TestCaseData.expectedExceptionType">
             <summary>
-             The expected exception Type
+            The expected exception Type
             </summary>
         </member>
         <member name="F:NUnit.Framework.TestCaseData.expectedExceptionName">
@@ -10355,7 +10355,7 @@
         </member>
         <member name="P:NUnit.Framework.TestCaseData.ExpectedException">
             <summary>
-             Gets the expected exception Type
+            Gets the expected exception Type
             </summary>
         </member>
         <member name="P:NUnit.Framework.TestCaseData.ExpectedExceptionName">
@@ -10427,7 +10427,7 @@
         </member>
         <member name="P:NUnit.Framework.TestContext.Result">
             <summary>
-            Gets a ResultAdapter representing the current result for the test 
+            Gets a ResultAdapter representing the current result for the test
             executing in this context.
             </summary>
         </member>
@@ -10501,7 +10501,7 @@
         </member>
         <member name="M:NUnit.Framework.TestDetails.#ctor(System.Object,System.Reflection.MethodInfo,System.String,System.String,System.Boolean)">
             <summary>
-             Creates an instance of TestDetails
+            Creates an instance of TestDetails
             </summary>
             <param name="fixture">The fixture that the test is a member of, if available.</param>
             <param name="method">The method that implements the test, if available.</param>
@@ -10511,7 +10511,7 @@
         </member>
         <member name="P:NUnit.Framework.TestDetails.Fixture">
             <summary>
-             The fixture that the test is a member of, if available.
+            The fixture that the test is a member of, if available.
             </summary>
         </member>
         <member name="P:NUnit.Framework.TestDetails.Method">
@@ -10551,7 +10551,7 @@
         </member>
         <member name="F:NUnit.Framework.TestState.Skipped">
             <summary>
-            The test has been skipped. 
+            The test has been skipped.
             </summary>
         </member>
         <member name="F:NUnit.Framework.TestState.Ignored">
@@ -10591,7 +10591,7 @@
         </member>
         <member name="F:NUnit.Framework.TestStatus.Skipped">
             <summary>
-            The test has skipped 
+            The test has skipped
             </summary>
         </member>
         <member name="F:NUnit.Framework.TestStatus.Passed">
@@ -10704,7 +10704,7 @@
         <member name="M:NUnit.Framework.TextMessageWriter.WriteMessageLine(System.Int32,System.String,System.Object[])">
             <summary>
             Method to write single line  message with optional args, usually
-            written to precede the general failure message, at a givel 
+            written to precede the general failure message, at a givel
             indentation level.
             </summary>
             <param name="level">The indentation level of the message</param>
@@ -10714,8 +10714,8 @@
         <member name="M:NUnit.Framework.TextMessageWriter.DisplayDifferences(NUnit.Framework.Constraints.Constraint)">
             <summary>
             Display Expected and Actual lines for a constraint. This
-            is called by MessageWriter's default implementation of 
-            WriteMessageTo and provides the generic two-line display. 
+            is called by MessageWriter's default implementation of
+            WriteMessageTo and provides the generic two-line display.
             </summary>
             <param name="constraint">The constraint that failed</param>
         </member>

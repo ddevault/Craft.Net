@@ -41,6 +41,6 @@ namespace Craft.Net.Server.Packets
                 DataUtility.CreateInt32((int)HeadboardPosition.X),
                 new[] {(byte)HeadboardPosition.Y},
                 DataUtility.CreateInt32((int)HeadboardPosition.Z)));
+            }
         }
-    }
 }

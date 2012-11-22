@@ -27,96 +27,96 @@ namespace Craft.Net.Data
             int destination = to.MoveOrMergeItem(index, slot, from);
             if (WindowChange != null && destination != -1)
                 WindowChange(this, new WindowChangeEventArgs(destination + to.StartIndex, slot));
-        }
-
-        /// <summary>
-        /// When shift-clicking items between areas, this method is used
-        /// to determine which area links to which.
-        /// </summary>
-        /// <param name="index">The index of the area the item is coming from</param>
-        /// <param name="slot">The item being moved</param>
-        /// <returns>The area to place the item into</returns>
-        protected abstract WindowArea GetLinkedArea(int index, Slot slot);
-
-        /// <summary>
-        /// Gets the window area to handle this index and adjust index accordingly
-        /// </summary>
-        protected WindowArea GetArea(ref int index)
-        {
-            foreach (var area in WindowAreas)
-            {
-                if (area.StartIndex <= index && area.StartIndex + area.Length > index)
-                {
-                    index = index - area.StartIndex;
-                    return area;
-                }
             }
-            throw new IndexOutOfRangeException();
-        }
 
-        /// <summary>
-        /// Gets the index of the appropriate area from the WindowAreas array.
-        /// </summary>
-        protected int GetAreaIndex(int index)
-        {
-            for (int i = 0; i < WindowAreas.Length; i++)
-            {
-                var area = WindowAreas[i];
-                if (index >= area.StartIndex && index < area.StartIndex + area.Length)
-                    return i;
-            }
-            throw new IndexOutOfRangeException();
-        }
+            /// <summary>
+            /// When shift-clicking items between areas, this method is used
+            /// to determine which area links to which.
+            /// </summary>
+            /// <param name="index">The index of the area the item is coming from</param>
+            /// <param name="slot">The item being moved</param>
+            /// <returns>The area to place the item into</returns>
+            protected abstract WindowArea GetLinkedArea(int index, Slot slot);
 
-        public int Length
-        {
-            get 
-            {
-                return WindowAreas.Sum(a => a.Length);
-            }
-        }
-
-        public Slot[] GetSlots()
-        {
-            int length = WindowAreas.Sum(area => area.Length);
-            var slots = new Slot[length];
-            foreach (var windowArea in WindowAreas)
-                Array.Copy(windowArea.Items, 0, slots, windowArea.StartIndex, windowArea.Length);
-            return slots;
-        }
-
-        public virtual Slot this[int index]
-        {
-            get
+            /// <summary>
+            /// Gets the window area to handle this index and adjust index accordingly
+            /// </summary>
+            protected WindowArea GetArea(ref int index)
             {
                 foreach (var area in WindowAreas)
                 {
-                    if (index >= area.StartIndex && index < area.StartIndex + area.Length)
-                        return area[index - area.StartIndex];
-                }
-                throw new IndexOutOfRangeException();
-            }
-            set
-            {
-                foreach (var area in WindowAreas)
-                {
-                    if (index >= area.StartIndex && index < area.StartIndex + area.Length)
+                    if (area.StartIndex <= index && area.StartIndex + area.Length > index)
                     {
-                        var eventArgs = new WindowChangeEventArgs(index, value);
-                        OnWindowChange(eventArgs);
-                        if (!eventArgs.Handled)
-                            area[index - area.StartIndex] = value;
-                        return;
+                        index = index - area.StartIndex;
+                        return area;
                     }
                 }
                 throw new IndexOutOfRangeException();
             }
-        }
 
-        protected internal virtual void OnWindowChange(WindowChangeEventArgs e)
-        {
-            if (WindowChange != null)
-                WindowChange(this, e);
-        }
-    }
+            /// <summary>
+            /// Gets the index of the appropriate area from the WindowAreas array.
+            /// </summary>
+            protected int GetAreaIndex(int index)
+            {
+                for (int i = 0; i < WindowAreas.Length; i++)
+                {
+                    var area = WindowAreas[i];
+                    if (index >= area.StartIndex && index < area.StartIndex + area.Length)
+                        return i;
+                    }
+                    throw new IndexOutOfRangeException();
+                }
+
+                public int Length
+                {
+                    get
+                    {
+                        return WindowAreas.Sum(a => a.Length);
+                    }
+                }
+
+                public Slot[] GetSlots()
+                {
+                    int length = WindowAreas.Sum(area => area.Length);
+                    var slots = new Slot[length];
+                    foreach (var windowArea in WindowAreas)
+                        Array.Copy(windowArea.Items, 0, slots, windowArea.StartIndex, windowArea.Length);
+                    return slots;
+                }
+
+                public virtual Slot this[int index]
+                {
+                    get
+                    {
+                        foreach (var area in WindowAreas)
+                        {
+                            if (index >= area.StartIndex && index < area.StartIndex + area.Length)
+                                return area[index - area.StartIndex];
+                            }
+                            throw new IndexOutOfRangeException();
+                        }
+                        set
+                        {
+                            foreach (var area in WindowAreas)
+                            {
+                                if (index >= area.StartIndex && index < area.StartIndex + area.Length)
+                                {
+                                    var eventArgs = new WindowChangeEventArgs(index, value);
+                                    OnWindowChange(eventArgs);
+                                    if (!eventArgs.Handled)
+                                        area[index - area.StartIndex] = value;
+                                    return;
+                                }
+                            }
+                            throw new IndexOutOfRangeException();
+                        }
+                    }
+
+                    protected internal virtual void OnWindowChange(WindowChangeEventArgs e)
+                    {
+                        if (WindowChange != null)
+                            WindowChange(this, e);
+                        }
+                    }
 }

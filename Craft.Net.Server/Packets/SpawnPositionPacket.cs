@@ -37,6 +37,6 @@ namespace Craft.Net.Server.Packets
                 DataUtility.CreateInt32((int)SpawnPosition.X),
                 DataUtility.CreateInt32((int)SpawnPosition.Y),
                 DataUtility.CreateInt32((int)SpawnPosition.Z)));
+            }
         }
-    }
 }

@@ -2,7 +2,7 @@ using Craft.Net.Data.Blocks;
 
 namespace Craft.Net.Data.Items
 {
-    
+
     public class BedItem : Item
     {
         public override ushort Id

@@ -60,6 +60,6 @@ namespace Craft.Net.Server.Packets
             client.SendData(CreateBuffer(
                 DataUtility.CreateInt32(EntityId),
                 new[] {(byte)Animation}));
+            }
         }
-    }
 }

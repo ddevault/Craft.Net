@@ -17,16 +17,16 @@ namespace Craft.Net.Data.Items
             // TODO: Check flammability
             if (world.GetBlock(clickedBlock + clickedSide) == 0)
                 world.SetBlock(clickedBlock + clickedSide, new FireBlock());
-        }
+            }
 
-        public override ToolType ToolType
-        {
-            get { return ToolType.Other; }
-        }
+            public override ToolType ToolType
+            {
+                get { return ToolType.Other; }
+            }
 
-        public override ToolMaterial ToolMaterial
-        {
-            get { return ToolMaterial.Other; }
+            public override ToolMaterial ToolMaterial
+            {
+                get { return ToolMaterial.Other; }
+            }
         }
-    }
 }

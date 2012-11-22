@@ -30,15 +30,15 @@ namespace Craft.Net.Data.Blocks
                 (tool.ToolMaterial == ToolMaterial.Iron ||
                 tool.ToolMaterial == ToolMaterial.Gold ||
                 tool.ToolMaterial == ToolMaterial.Diamond);
-        }
+            }
 
-        public override bool GetDrop(ToolItem tool, out Slot[] drop)
-        {
-            drop = new[] { new Slot((ushort)new RedstoneItem(), (byte)DataUtility.Random.Next(4, 5)) };
-            return tool is PickaxeItem &&
-                (tool.ToolMaterial == ToolMaterial.Iron ||
-                tool.ToolMaterial == ToolMaterial.Gold ||
-                tool.ToolMaterial == ToolMaterial.Diamond);
-        }
-    }
+            public override bool GetDrop(ToolItem tool, out Slot[] drop)
+            {
+                drop = new[] { new Slot((ushort)new RedstoneItem(), (byte)DataUtility.Random.Next(4, 5)) };
+                return tool is PickaxeItem &&
+                    (tool.ToolMaterial == ToolMaterial.Iron ||
+                    tool.ToolMaterial == ToolMaterial.Gold ||
+                    tool.ToolMaterial == ToolMaterial.Diamond);
+                }
+            }
 }

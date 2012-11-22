@@ -1,6 +1,6 @@
 namespace Craft.Net.Data.Items
 {
-    
+
     public class ChainBootsItem : ToolItem, IArmorItem
     {
         public override ushort Id

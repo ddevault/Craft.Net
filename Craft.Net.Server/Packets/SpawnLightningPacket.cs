@@ -41,6 +41,6 @@ namespace Craft.Net.Server.Packets
                 DataUtility.CreateAbsoluteInteger(Position.X),
                 DataUtility.CreateAbsoluteInteger(Position.Y),
                 DataUtility.CreateAbsoluteInteger(Position.Z)));
+            }
         }
-    }
 }

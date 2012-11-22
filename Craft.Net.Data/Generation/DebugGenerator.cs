@@ -48,33 +48,33 @@ namespace Craft.Net.Data.Generation
                     }
                     for (int z = 0; z < Chunk.Width; z++)
                         chunk.SetBlock(new Vector3(0, y, z), new WoolBlock(WoolColor.Blue));
+                    }
+                    chunk.SetBlock(new Vector3(0, y, 0), new WoolBlock(WoolColor.Yellow));
                 }
-                chunk.SetBlock(new Vector3(0, y, 0), new WoolBlock(WoolColor.Yellow));
+                return chunk;
             }
-            return chunk;
-        }
 
-        /// <summary>
-        /// Generates a chunk with red wool across the X axis, blue
-        /// wool across the Z axis, and yellow wool across the Y axis,
-        /// divided into sections by glass.
-        /// </summary>
-        public Chunk GenerateChunk(Vector3 position)
-        {
-            var chunk = new Chunk(position);
-            for (int x = 0; x < Chunk.Width; x++)
-                for (int z = 0; z < Chunk.Width; z++)
-                {
-                    chunk.SetBlock(new Vector3(x, 0, z), new GoldBlock());
-                }
-            return chunk;
-        }
+            /// <summary>
+            /// Generates a chunk with red wool across the X axis, blue
+            /// wool across the Z axis, and yellow wool across the Y axis,
+            /// divided into sections by glass.
+            /// </summary>
+            public Chunk GenerateChunk(Vector3 position)
+            {
+                var chunk = new Chunk(position);
+                for (int x = 0; x < Chunk.Width; x++)
+                    for (int z = 0; z < Chunk.Width; z++)
+                    {
+                        chunk.SetBlock(new Vector3(x, 0, z), new GoldBlock());
+                    }
+                return chunk;
+            }
 
-        public string GeneratorName
-        {
-            get { return "DebugGenerator"; }
-        }
+            public string GeneratorName
+            {
+                get { return "DebugGenerator"; }
+            }
 
-        public string GeneratorOptions { get; set; }
-    }
+            public string GeneratorOptions { get; set; }
+        }
 }
