@@ -5,11 +5,11 @@ using System.Text;
 
 namespace Craft.Net.Data.Items
 {
-    public class ItemFrameItem : Item
-    {
-        public override ushort Id
-        {
-            get { return 389; }
-        }
-    }
+   public class ItemFrameItem : Item
+   {
+      public override ushort Id
+      {
+         get { return 389; }
+      }
+   }
 }

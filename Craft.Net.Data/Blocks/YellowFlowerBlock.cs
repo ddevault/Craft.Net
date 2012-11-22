@@ -5,16 +5,16 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class YellowFlowerBlock : Block
-    {
-        public override ushort Id
-        {
-            get { return 37; }
-        }
+   public class YellowFlowerBlock : Block
+   {
+      public override ushort Id
+      {
+         get { return 37; }
+      }
 
-        public override BoundingBox? BoundingBox
-        {
-            get { return null; }
-        }
-    }
+      public override BoundingBox? BoundingBox
+      {
+         get { return null; }
+      }
+   }
 }

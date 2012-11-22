@@ -10,15 +10,15 @@
 
 namespace Craft.Net.Data.Items
 {
-    
-    public class BoneItem : Item
-    {
-        public override ushort Id
-        {
-            get
-            {
-                return 352;
-            }
-        }
-    }
+
+   public class BoneItem : Item
+   {
+      public override ushort Id
+      {
+         get
+         {
+            return 352;
+         }
+      }
+   }
 }

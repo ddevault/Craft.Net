@@ -10,15 +10,15 @@
 
 namespace Craft.Net.Data.Items
 {
-    
-    public class FeatherItem : Item
-    {
-        public override ushort Id
-        {
-            get
-            {
-                return 288;
-            }
-        }
-    }
+
+   public class FeatherItem : Item
+   {
+      public override ushort Id
+      {
+         get
+         {
+            return 288;
+         }
+      }
+   }
 }

@@ -10,15 +10,15 @@
 
 namespace Craft.Net.Data.Items
 {
-    
-    public class GhastTearItem : Item
-    {
-        public override ushort Id
-        {
-            get
-            {
-                return 370;
-            }
-        }
-    }
+
+   public class GhastTearItem : Item
+   {
+      public override ushort Id
+      {
+         get
+         {
+            return 370;
+         }
+      }
+   }
 }

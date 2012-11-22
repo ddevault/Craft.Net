@@ -10,15 +10,15 @@
 
 namespace Craft.Net.Data.Items
 {
-    
-    public class StickItem : Item
-    {
-        public override ushort Id
-        {
-            get
-            {
-                return 280;
-            }
-        }
-    }
+
+   public class StickItem : Item
+   {
+      public override ushort Id
+      {
+         get
+         {
+            return 280;
+         }
+      }
+   }
 }

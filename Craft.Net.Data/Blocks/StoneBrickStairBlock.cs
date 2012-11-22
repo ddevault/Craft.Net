@@ -5,11 +5,11 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class StoneBrickStairBlock : StairBlock
-    {
-        public override ushort Id
-        {
-            get { return 109; }
-        }
-    }
+   public class StoneBrickStairBlock : StairBlock
+   {
+      public override ushort Id
+      {
+         get { return 109; }
+      }
+   }
 }

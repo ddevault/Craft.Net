@@ -2,36 +2,36 @@ using Craft.Net.Data.Items;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class AirBlock : Block
-    {
-        public override ushort Id
-        {
-            get { return 0; }
-        }
+   public class AirBlock : Block
+   {
+      public override ushort Id
+      {
+         get { return 0; }
+      }
 
-        public override Size Size
-        {
-            get { return new Size(0, 0, 0); }
-        }
+      public override Size Size
+      {
+         get { return new Size(0, 0, 0); }
+      }
 
-        public override double Hardness
-        {
-            get { return -1; }
-        }
+      public override double Hardness
+      {
+         get { return -1; }
+      }
 
-        public override bool CanHarvest(ToolItem tool)
-        {
-            return false;
-        }
+      public override bool CanHarvest(ToolItem tool)
+      {
+         return false;
+      }
 
-        public override Transparency Transparency
-        {
-            get { return Transparency.Transparent; } // TODO: More transparency options
-        }
+      public override Transparency Transparency
+      {
+         get { return Transparency.Transparent; } // TODO: More transparency options
+      }
 
-        public override BoundingBox? BoundingBox
-        {
-            get { return null; }
-        }
-    }
+      public override BoundingBox? BoundingBox
+      {
+         get { return null; }
+      }
+   }
 }

@@ -10,15 +10,15 @@
 
 namespace Craft.Net.Data.Items
 {
-    
-    public class NetherWartItem : Item
-    {
-        public override ushort Id
-        {
-            get
-            {
-                return 372;
-            }
-        }
-    }
+
+   public class NetherWartItem : Item
+   {
+      public override ushort Id
+      {
+         get
+         {
+            return 372;
+         }
+      }
+   }
 }

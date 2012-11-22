@@ -5,21 +5,21 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public enum SkullDirection
-    {
-        Floor = 1,
-    }
+   public enum SkullDirection
+   {
+      Floor = 1,
+   }
 
-    public class SkullBlock : Block // TODO: Tile entity
-    {
-        public override ushort Id
-        {
-            get { return 144; }
-        }
+   public class SkullBlock : Block // TODO: Tile entity
+   {
+      public override ushort Id
+      {
+         get { return 144; }
+      }
 
-        public override double Hardness
-        {
-            get { return 1; }
-        }
-    }
+      public override double Hardness
+      {
+         get { return 1; }
+      }
+   }
 }

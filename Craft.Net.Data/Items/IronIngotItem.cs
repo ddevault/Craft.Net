@@ -10,15 +10,15 @@
 
 namespace Craft.Net.Data.Items
 {
-    
-    public class IronIngotItem : Item
-    {
-        public override ushort Id
-        {
-            get
-            {
-                return 265;
-            }
-        }
-    }
+
+   public class IronIngotItem : Item
+   {
+      public override ushort Id
+      {
+         get
+         {
+            return 265;
+         }
+      }
+   }
 }

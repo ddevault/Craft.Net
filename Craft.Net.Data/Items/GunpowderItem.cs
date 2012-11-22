@@ -10,15 +10,15 @@
 
 namespace Craft.Net.Data.Items
 {
-    
-    public class GunpowderItem : Item
-    {
-        public override ushort Id
-        {
-            get
-            {
-                return 289;
-            }
-        }
-    }
+
+   public class GunpowderItem : Item
+   {
+      public override ushort Id
+      {
+         get
+         {
+            return 289;
+         }
+      }
+   }
 }

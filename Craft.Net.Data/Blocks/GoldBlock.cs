@@ -5,16 +5,16 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class GoldBlock : Block
-    {
-        public override ushort Id
-        {
-            get { return 41; }
-        }
+   public class GoldBlock : Block
+   {
+      public override ushort Id
+      {
+         get { return 41; }
+      }
 
-        public override double Hardness
-        {
-            get { return 3; }
-        }
-    }
+      public override double Hardness
+      {
+         get { return 3; }
+      }
+   }
 }

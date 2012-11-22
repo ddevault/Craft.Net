@@ -5,21 +5,21 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class FenceGateBlock : Block
-    {
-        public override ushort Id
-        {
-            get { return 107; }
-        }
+   public class FenceGateBlock : Block
+   {
+      public override ushort Id
+      {
+         get { return 107; }
+      }
 
-        public override double Hardness
-        {
-            get { return 2; }
-        }
+      public override double Hardness
+      {
+         get { return 2; }
+      }
 
-        public override bool OnBlockRightClicked(Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, World world, Entities.Entity usedBy)
-        {
-            return false;
-        }
-    }
+      public override bool OnBlockRightClicked(Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, World world, Entities.Entity usedBy)
+      {
+         return false;
+      }
+   }
 }
