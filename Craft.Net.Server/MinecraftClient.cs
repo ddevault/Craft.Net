@@ -184,87 +184,87 @@ namespace Craft.Net.Server
             if (IsDisconnected)
                 return;
 #if DEBUG
-            LogProvider.Log(DataUtility.DumpArray(data), LogImportance.Low);
+LogProvider.Log(DataUtility.DumpArray(data), LogImportance.Low);
 #endif
-            if (EncryptionEnabled)
-                data = Encrypter.ProcessBytes(data);
-            Socket.BeginSend(data, 0, data.Length, SocketFlags.None, null, null);
-        }
+if (EncryptionEnabled)
+    data = Encrypter.ProcessBytes(data);
+Socket.BeginSend(data, 0, data.Length, SocketFlags.None, null, null);
+}
 
-        /// <summary>
-        /// Asyncronously updates chunks loaded on the client
-        /// </summary>
-        /// <returns></returns>
-        public Task UpdateChunksAsync()
+/// <summary>
+/// Asyncronously updates chunks loaded on the client
+/// </summary>
+/// <returns></returns>
+public Task UpdateChunksAsync()
+{
+if ((int)(Entity.Position.X) >> 4 != (int)(Entity.OldPosition.X) >> 4 ||
+    (int)(Entity.Position.Z) >> 4 != (int)(Entity.OldPosition.Z) >> 4)
+{
+    return Task.Factory.StartNew(() => UpdateChunks(true));
+}
+return null;
+}
+
+/// <summary>
+/// Asyncronously updates chunks loaded on the client and forces a
+/// recalculation of which chunks should be loaded.
+/// </summary>
+public Task ForceUpdateChunksAsync()
+{
+return Task.Factory.StartNew(() => UpdateChunks(true));
+}
+
+/// <summary>
+/// Updates which chunks are loaded on the client.
+/// </summary>
+public virtual void UpdateChunks(bool forceUpdate)
+{
+if (forceUpdate ||
+    (int)(Entity.Position.X) >> 4 != (int)(Entity.OldPosition.X) >> 4 ||
+    (int)(Entity.Position.Z) >> 4 != (int)(Entity.OldPosition.Z) >> 4
+    )
+{
+    var newChunks = new List<Vector3>();
+    for (int x = -ViewDistance; x < ViewDistance; x++)
+        for (int z = -ViewDistance; z < ViewDistance; z++)
         {
-            if ((int)(Entity.Position.X) >> 4 != (int)(Entity.OldPosition.X) >> 4 ||
-                (int)(Entity.Position.Z) >> 4 != (int)(Entity.OldPosition.Z) >> 4)
-            {
-                return Task.Factory.StartNew(() => UpdateChunks(true));
+            newChunks.Add(new Vector3(
+            ((int)Entity.Position.X >> 4) + x,
+            0,
+            ((int)Entity.Position.Z >> 4) + z));
+        }
+    // Unload extraneous columns
+    var currentChunks = new List<Vector3>(LoadedChunks);
+    foreach (Vector3 chunk in currentChunks)
+    {
+        if (!newChunks.Contains(chunk))
+            UnloadChunk(chunk);
+        }
+        // Load new columns
+        foreach (Vector3 chunk in newChunks)
+        {
+            if (!LoadedChunks.Contains(chunk))
+                LoadChunk(chunk);
             }
-            return null;
         }
+    }
 
-        /// <summary>
-        /// Asyncronously updates chunks loaded on the client and forces a
-        /// recalculation of which chunks should be loaded.
-        /// </summary>
-        public Task ForceUpdateChunksAsync()
+    /// <summary>
+    /// Loads the given chunk on the client.
+    /// </summary>
+    public virtual void LoadChunk(Vector3 position)
+    {
+        World world = Server.EntityManager.GetEntityWorld(Entity);
+        Chunk chunk = world.GetChunk(position);
+        var dataPacket = new ChunkDataPacket(ref chunk);
+        SendPacket(dataPacket);
+        if (chunk.TileEntities.Count != 0)
         {
-            return Task.Factory.StartNew(() => UpdateChunks(true));
-        }
-
-        /// <summary>
-        /// Updates which chunks are loaded on the client.
-        /// </summary>
-        public virtual void UpdateChunks(bool forceUpdate)
-        {
-            if (forceUpdate ||
-                (int)(Entity.Position.X) >> 4 != (int)(Entity.OldPosition.X) >> 4 ||
-                (int)(Entity.Position.Z) >> 4 != (int)(Entity.OldPosition.Z) >> 4
-                )
+            foreach (var tileEntity in chunk.TileEntities)
             {
-                var newChunks = new List<Vector3>();
-                for (int x = -ViewDistance; x < ViewDistance; x++)
-                    for (int z = -ViewDistance; z < ViewDistance; z++)
-                    {
-                        newChunks.Add(new Vector3(
-                                          ((int)Entity.Position.X >> 4) + x,
-                                          0,
-                                          ((int)Entity.Position.Z >> 4) + z));
-                    }
-                // Unload extraneous columns
-                var currentChunks = new List<Vector3>(LoadedChunks);
-                foreach (Vector3 chunk in currentChunks)
-                {
-                    if (!newChunks.Contains(chunk))
-                        UnloadChunk(chunk);
-                }
-                // Load new columns
-                foreach (Vector3 chunk in newChunks)
-                {
-                    if (!LoadedChunks.Contains(chunk))
-                        LoadChunk(chunk);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Loads the given chunk on the client.
-        /// </summary>
-        public virtual void LoadChunk(Vector3 position)
-        {
-            World world = Server.EntityManager.GetEntityWorld(Entity);
-            Chunk chunk = world.GetChunk(position);
-            var dataPacket = new ChunkDataPacket(ref chunk);
-            SendPacket(dataPacket);
-            if (chunk.TileEntities.Count != 0)
-            {
-                foreach (var tileEntity in chunk.TileEntities)
-                {
-                    Console.WriteLine("Handling tile entity: " + tileEntity.Value.GetType().Name);
-                    if (tileEntity.Value is SignTileEntity)
-                        SendPacket(new UpdateSignPacket(tileEntity.Key, tileEntity.Value as SignTileEntity));
+                Console.WriteLine("Handling tile entity: " + tileEntity.Value.GetType().Name);
+                if (tileEntity.Value is SignTileEntity)
+                    SendPacket(new UpdateSignPacket(tileEntity.Key, tileEntity.Value as SignTileEntity));
                 }
             }
             this.LoadedChunks.Add(position);
@@ -298,10 +298,10 @@ namespace Craft.Net.Server
         public void DelaySendPacket(Packet packet, int milliseconds)
         {
             new Timer((discarded) =>
-                          {
-                              SendPacket(packet);
-                              Server.ProcessSendQueue();
-                          }, null, milliseconds, Timeout.Infinite);
+            {
+                SendPacket(packet);
+                Server.ProcessSendQueue();
+            }, null, milliseconds, Timeout.Infinite);
         }
 
         internal void StartWorkers()

@@ -11,31 +11,31 @@ namespace Craft.Net.Data.Items
         public override bool IsEfficient(Block block)
         {
             return block is TrapDoorBlock ||
-                   block is WoodenDoorBlock ||
-                   block is ChestBlock ||
-                   block is CraftingTableBlock ||
-                   block is FenceBlock ||
-                   block is FenceGateBlock ||
-                   block is JukeboxBlock ||
-                   block is WoodBlock ||
-                   block is WoodenSlabBlock ||
-                   block is WoodenPlanksBlock ||
-                   block is BirchWoodStairBlock ||
-                   block is SpruceWoodStairBlock ||
-                   block is OakStairBlock ||
-                   block is JungleWoodStairBlock ||
-                   block is BookshelfBlock ||
-                   block is PumpkinBlock ||
-                   block is SignBlock ||
-                   block is NoteBlock ||
-                   block is WoodenPressurePlateBlock ||
-                   block is HugeBrownMushroomBlock ||
-                   block is HugeRedMushroomBlock;
-        }
+                block is WoodenDoorBlock ||
+                block is ChestBlock ||
+                block is CraftingTableBlock ||
+                block is FenceBlock ||
+                block is FenceGateBlock ||
+                block is JukeboxBlock ||
+                block is WoodBlock ||
+                block is WoodenSlabBlock ||
+                block is WoodenPlanksBlock ||
+                block is BirchWoodStairBlock ||
+                block is SpruceWoodStairBlock ||
+                block is OakStairBlock ||
+                block is JungleWoodStairBlock ||
+                block is BookshelfBlock ||
+                block is PumpkinBlock ||
+                block is SignBlock ||
+                block is NoteBlock ||
+                block is WoodenPressurePlateBlock ||
+                block is HugeBrownMushroomBlock ||
+                block is HugeRedMushroomBlock;
+            }
 
-        public override ToolType ToolType
-        {
-            get { return ToolType.Axe; }
+            public override ToolType ToolType
+            {
+                get { return ToolType.Axe; }
+            }
         }
-    }
 }

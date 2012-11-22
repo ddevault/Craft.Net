@@ -80,11 +80,11 @@ namespace Craft.Net.Server.Packets
                     client.SendPacket(new RespawnPacket(Dimension.Overworld, server.Settings.Difficulty,
                         client.Entity.GameMode, world.LevelType));
                     client.SendPacket(new PlayerPositionAndLookPacket(
-                                  client.Entity.Position, client.Entity.Yaw, client.Entity.Pitch, true));
-                    server.ProcessSendQueue();
-                    break;
-                default:
-                    throw new InvalidOperationException();
+                    client.Entity.Position, client.Entity.Yaw, client.Entity.Pitch, true));
+                server.ProcessSendQueue();
+                break;
+            default:
+                throw new InvalidOperationException();
             }
         }
 

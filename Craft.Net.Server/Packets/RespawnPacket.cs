@@ -44,13 +44,13 @@ namespace Craft.Net.Server.Packets
         {
             client.SendData(CreateBuffer(
                 DataUtility.CreateInt32((int)Dimension),
-                new[] 
+                new[]
                 {
-                   (byte)Difficulty,
-                   (byte)GameMode,
+                    (byte)Difficulty,
+                    (byte)GameMode,
                 },
                 DataUtility.CreateInt16(WorldHeight),
                 DataUtility.CreateString(client.World.LevelType)));
+            }
         }
-    }
 }

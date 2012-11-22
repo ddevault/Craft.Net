@@ -46,6 +46,6 @@ namespace Craft.Net.Server.Packets
                     (byte)DeltaY,
                     (byte)DeltaZ
                 }));
+            }
         }
-    }
 }

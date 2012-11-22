@@ -36,48 +36,48 @@ namespace Craft.Net.Data.Blocks
                         return Direction.South;
                     default:
                         return Direction.West;
+                    }
                 }
-            }
-            set
-            {
-                Metadata &= unchecked((byte)~0x3);
-                switch (value)
+                set
                 {
-                    case Direction.North:
-                        Metadata |= 0;
-                        break;
-                    case Direction.East:
-                        Metadata |= 1;
-                        break;
-                    case Direction.South:
-                        Metadata |= 2;
-                        break;
-                    case Direction.West:
-                        Metadata |= 3;
-                        break;
+                    Metadata &= unchecked((byte)~0x3);
+                    switch (value)
+                    {
+                        case Direction.North:
+                            Metadata |= 0;
+                            break;
+                        case Direction.East:
+                            Metadata |= 1;
+                            break;
+                        case Direction.South:
+                            Metadata |= 2;
+                            break;
+                        case Direction.West:
+                            Metadata |= 3;
+                            break;
+                        }
+                    }
+                }
+
+                public RedstoneRepeaterBlock()
+                {
+                }
+
+                public RedstoneRepeaterBlock(Direction direction)
+                {
+                    Direction = direction;
+                }
+
+                public override ushort Id
+                {
+                    get { return 93; }
+                }
+
+                public override bool OnBlockRightClicked(Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, World world, Entities.Entity usedBy)
+                {
+                    Ticks++;
+                    world.SetBlock(clickedBlock, this);
+                    return false;
                 }
             }
-        }
-
-        public RedstoneRepeaterBlock()
-        {
-        }
-
-        public RedstoneRepeaterBlock(Direction direction)
-        {
-            Direction = direction;
-        }
-
-        public override ushort Id
-        {
-            get { return 93; }
-        }
-
-        public override bool OnBlockRightClicked(Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, World world, Entities.Entity usedBy)
-        {
-            Ticks++;
-            world.SetBlock(clickedBlock, this);
-            return false;
-        }
-    }
 }

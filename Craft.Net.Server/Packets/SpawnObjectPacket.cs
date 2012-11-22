@@ -49,17 +49,17 @@ namespace Craft.Net.Server.Packets
                     DataUtility.CreateInt16((short)Entity.Velocity.X),
                     DataUtility.CreateInt16((short)Entity.Velocity.Y),
                     DataUtility.CreateInt16((short)Entity.Velocity.Z)));
+                }
+                else
+                {
+                    client.SendData(CreateBuffer(
+                        DataUtility.CreateInt32(Entity.Id),
+                        new[] { Entity.EntityType },
+                        DataUtility.CreateAbsoluteInteger(Entity.Position.X),
+                        DataUtility.CreateAbsoluteInteger(Entity.Position.Y),
+                        DataUtility.CreateAbsoluteInteger(Entity.Position.Z),
+                        DataUtility.CreateInt32(Entity.Data)));
+                    }
+                }
             }
-            else
-            {
-                client.SendData(CreateBuffer(
-                    DataUtility.CreateInt32(Entity.Id),
-                    new[] { Entity.EntityType },
-                    DataUtility.CreateAbsoluteInteger(Entity.Position.X),
-                    DataUtility.CreateAbsoluteInteger(Entity.Position.Y),
-                    DataUtility.CreateAbsoluteInteger(Entity.Position.Z),
-                    DataUtility.CreateInt32(Entity.Data)));
-            }
-        }
-    }
 }

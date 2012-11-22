@@ -31,7 +31,7 @@ namespace Craft.Net.Server.Packets
         public override void HandlePacket(MinecraftServer server, MinecraftClient client)
         {
             var target = server.EntityManager.GetEntity(TargetId);
-            if (target == null || 
+            if (target == null ||
                 server.EntityManager.GetEntityWorld(target) != server.EntityManager.GetEntityWorld(client.Entity) ||
                 target.Position.DistanceTo(client.Entity.Position) > client.Reach)
                 return;
@@ -51,21 +51,21 @@ namespace Craft.Net.Server.Packets
                     client.Entity.FoodExhaustion += 0.3f;
                     livingEntity.Damage(item.AttackDamage);
                     livingEntity.Velocity /*+*/= DataUtility.RotateY(new Vector3(0, 0, client.Entity.IsSprinting ? 10 : 3),
-                                                                     // TODO: Knockback enchantment
-                                                                     DataUtility.DegreesToRadians(client.Entity.Yaw));
-                    if (livingEntity is PlayerEntity)
-                    {
-                        (livingEntity as PlayerEntity).LastDamageType = DamageType.Combat;
-                        (livingEntity as PlayerEntity).LastAttackingEntity = client.Entity;
-                    }
-                    // TODO: Physics
+                    // TODO: Knockback enchantment
+                    DataUtility.DegreesToRadians(client.Entity.Yaw));
+                if (livingEntity is PlayerEntity)
+                {
+                    (livingEntity as PlayerEntity).LastDamageType = DamageType.Combat;
+                    (livingEntity as PlayerEntity).LastAttackingEntity = client.Entity;
                 }
+                // TODO: Physics
             }
         }
-
-        public override void SendPacket(MinecraftServer server, MinecraftClient client)
-        {
-            throw new InvalidOperationException();
-        }
     }
+
+    public override void SendPacket(MinecraftServer server, MinecraftClient client)
+    {
+        throw new InvalidOperationException();
+    }
+}
 }

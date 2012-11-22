@@ -10,7 +10,7 @@
 
 namespace Craft.Net.Data.Items
 {
-    
+
     public class PumpkinSeedsItem : Item
     {
         public override ushort Id

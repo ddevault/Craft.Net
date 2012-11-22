@@ -36,6 +36,6 @@ namespace Craft.Net.Server.Packets
             client.SendData(CreateBuffer(
                 DataUtility.CreateInt64(0), //TODO update this to the latest packet definition
                 DataUtility.CreateInt64(Time)));
+            }
         }
-    }
 }

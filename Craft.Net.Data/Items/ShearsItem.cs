@@ -10,8 +10,8 @@ namespace Craft.Net.Data.Items
             {
                 typeof(CobwebBlock),
                 typeof(LeavesBlock),
-                typeof(TallGrassBlock), 
-                typeof(TripwireBlock), 
+                typeof(TallGrassBlock),
+                typeof(TripwireBlock),
                 typeof(VineBlock)
             };
 

@@ -17,6 +17,6 @@ namespace Craft.Net.Data.Items
         {
             if (world.GetBlock(clickedBlock + clickedSide) == 0)
                 world.SetBlock(clickedBlock + clickedSide, new FlowerPotBlock());
+            }
         }
-    }
 }

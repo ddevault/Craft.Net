@@ -10,7 +10,7 @@
 
 namespace Craft.Net.Data.Items
 {
-    
+
     public class MagmaCreamItem : Item
     {
         public override ushort Id

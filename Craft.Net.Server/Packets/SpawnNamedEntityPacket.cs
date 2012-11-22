@@ -56,6 +56,6 @@ namespace Craft.Net.Server.Packets
                 DataUtility.CreatePackedByte(Yaw),
                 DataUtility.CreateInt16(CurrentItem),
                 Metadata.Encode()));
+            }
         }
-    }
 }

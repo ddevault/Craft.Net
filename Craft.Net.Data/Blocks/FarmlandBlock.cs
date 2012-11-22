@@ -27,6 +27,6 @@ namespace Craft.Net.Data.Blocks
         {
             if (entity.Velocity.Y < -0.25)
                 Console.WriteLine("Entity " + entity.Id + " jumped onto farmland with velocity " + entity.Velocity);
+            }
         }
-    }
 }

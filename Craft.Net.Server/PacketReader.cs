@@ -296,7 +296,7 @@ namespace Craft.Net.Server
                 if (packetType == null)
                 {
                     throw new InvalidOperationException("Invalid packet ID 0x" +
-                                                        buffer[0].ToString("x").ToUpper());
+                    buffer[0].ToString("x").ToUpper());
                 }
                 var workingPacket = (Packet)Activator.CreateInstance(packetType);
                 workingPacket.PacketContext = PacketContext.ClientToServer;

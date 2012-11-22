@@ -10,7 +10,7 @@
 
 namespace Craft.Net.Data.Items
 {
-    
+
     public class BlazeRodItem : Item
     {
         public override ushort Id

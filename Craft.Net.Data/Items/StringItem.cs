@@ -2,7 +2,7 @@ using Craft.Net.Data.Blocks;
 
 namespace Craft.Net.Data.Items
 {
-    
+
     public class StringItem : Item
     {
         public override ushort Id
@@ -17,6 +17,6 @@ namespace Craft.Net.Data.Items
         {
             if (world.GetBlock(clickedBlock + clickedSide) == 0)
                 world.SetBlock(clickedSide + clickedSide, new TripwireBlock());
+            }
         }
-    }
 }

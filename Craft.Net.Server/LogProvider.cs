@@ -28,6 +28,6 @@ namespace Craft.Net.Server
         {
             foreach (ILogProvider provider in logProviders)
                 provider.Log(text, importance);
+            }
         }
-    }
 }

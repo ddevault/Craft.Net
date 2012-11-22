@@ -286,7 +286,7 @@ namespace Craft.Net.Server
         /// <returns>Returns the AsnType representing an ASN.1
         /// encoded sequence.</returns>
         /// <seealso cref="CreateSet(AsnType)"/>
-        /// <seealso cref="CreateSet(AsnType[])"/> 
+        /// <seealso cref="CreateSet(AsnType[])"/>
         /// <seealso cref="CreateSetOf(AsnType)"/>
         /// <seealso cref="CreateSetOf(AsnType[])"/>
         /// <seealso cref="CreateSequence(AsnType)"/>
@@ -319,7 +319,7 @@ namespace Craft.Net.Server
         /// <returns>Returns the AsnType representing an ASN.1
         /// encoded Set.</returns>
         /// <seealso cref="CreateSet(AsnType)"/>
-        /// <seealso cref="CreateSet(AsnType[])"/> 
+        /// <seealso cref="CreateSet(AsnType[])"/>
         /// <seealso cref="CreateSetOf(AsnType)"/>
         /// <seealso cref="CreateSetOf(AsnType[])"/>
         /// <seealso cref="CreateSequence(AsnType)"/>
@@ -352,7 +352,7 @@ namespace Craft.Net.Server
         /// <returns>Returns the AsnType representing an ASN.1
         /// encoded sequence.</returns>
         /// <seealso cref="CreateSet(AsnType)"/>
-        /// <seealso cref="CreateSet(AsnType[])"/> 
+        /// <seealso cref="CreateSet(AsnType[])"/>
         /// <seealso cref="CreateSetOf(AsnType)"/>
         /// <seealso cref="CreateSetOf(AsnType[])"/>
         /// <seealso cref="CreateSequence(AsnType)"/>
@@ -382,7 +382,7 @@ namespace Craft.Net.Server
         /// <returns>Returns the AsnType representing an ASN.1
         /// encoded sequence.</returns>
         /// <seealso cref="CreateSet(AsnType)"/>
-        /// <seealso cref="CreateSet(AsnType[])"/> 
+        /// <seealso cref="CreateSet(AsnType[])"/>
         /// <seealso cref="CreateSetOf(AsnType)"/>
         /// <seealso cref="CreateSetOf(AsnType[])"/>
         /// <seealso cref="CreateSequence(AsnType)"/>
@@ -1039,7 +1039,7 @@ namespace Craft.Net.Server
             var octets = new List<byte>();
 
             // Guard the case of a small list
-            // The list has at least 1 item...    
+            // The list has at least 1 item...
             if (arcs.Count >= 1)
             {
                 a = arcs[0]*40;
@@ -1462,120 +1462,120 @@ namespace Craft.Net.Server
                     return Concatenate(
                         new[] {mTag, mLength, mOctets}
                         );
-                }
-
-                SetLength();
-
-                // Special case
-                // Null does not use length
-                if (0x05 == mTag[0])
-                {
-                    return Concatenate(
-                        new[] {mTag, mOctets}
-                        );
-                }
-
-                return Concatenate(
-                    new[] {mTag, mLength, mOctets}
-                    );
-            }
-
-            private void SetLength()
-            {
-                if (null == mOctets)
-                {
-                    mLength = Zero;
-                    return;
-                }
-
-                // Special case
-                // Null does not use length
-                if (0x05 == mTag[0])
-                {
-                    mLength = Empty;
-                    return;
-                }
-
-                byte[] length = null;
-
-                // Length: 0 <= l < 0x80
-                if (mOctets.Length < 0x80)
-                {
-                    length = new byte[1];
-                    length[0] = (byte)mOctets.Length;
-                }
-                    // 0x80 < length <= 0xFF
-                else if (mOctets.Length <= 0xFF)
-                {
-                    length = new byte[2];
-                    length[0] = 0x81;
-                    length[1] = (byte)((mOctets.Length & 0xFF));
-                }
-
-                    //
-                    // We should almost never see these...
-                    //
-
-                    // 0xFF < length <= 0xFFFF
-                else if (mOctets.Length <= 0xFFFF)
-                {
-                    length = new byte[3];
-                    length[0] = 0x82;
-                    length[1] = (byte)((mOctets.Length & 0xFF00) >> 8);
-                    length[2] = (byte)((mOctets.Length & 0xFF));
-                }
-
-                    // 0xFFFF < length <= 0xFFFFFF
-                else if (mOctets.Length <= 0xFFFFFF)
-                {
-                    length = new byte[4];
-                    length[0] = 0x83;
-                    length[1] = (byte)((mOctets.Length & 0xFF0000) >> 16);
-                    length[2] = (byte)((mOctets.Length & 0xFF00) >> 8);
-                    length[3] = (byte)((mOctets.Length & 0xFF));
-                }
-                    // 0xFFFFFF < length <= 0xFFFFFFFF
-                else
-                {
-                    length = new byte[5];
-                    length[0] = 0x84;
-                    length[1] = (byte)((mOctets.Length & 0xFF000000) >> 24);
-                    length[2] = (byte)((mOctets.Length & 0xFF0000) >> 16);
-                    length[3] = (byte)((mOctets.Length & 0xFF00) >> 8);
-                    length[4] = (byte)((mOctets.Length & 0xFF));
-                }
-
-                mLength = length;
-            }
-
-            private byte[] Concatenate(byte[][] values)
-            {
-                // Nothing in, nothing out
-                if (IsEmpty(values))
-                    return new byte[] {};
-
-                int length = 0;
-                foreach (var b in values)
-                {
-                    if (null != b) length += b.Length;
-                }
-
-                var cated = new byte[length];
-
-                int current = 0;
-                foreach (var b in values)
-                {
-                    if (null != b)
-                    {
-                        Array.Copy(b, 0, cated, current, b.Length);
-                        current += b.Length;
                     }
+
+                    SetLength();
+
+                    // Special case
+                    // Null does not use length
+                    if (0x05 == mTag[0])
+                    {
+                        return Concatenate(
+                            new[] {mTag, mOctets}
+                            );
+                        }
+
+                        return Concatenate(
+                            new[] {mTag, mLength, mOctets}
+                            );
+                        }
+
+                        private void SetLength()
+                        {
+                            if (null == mOctets)
+                            {
+                                mLength = Zero;
+                                return;
+                            }
+
+                            // Special case
+                            // Null does not use length
+                            if (0x05 == mTag[0])
+                            {
+                                mLength = Empty;
+                                return;
+                            }
+
+                            byte[] length = null;
+
+                            // Length: 0 <= l < 0x80
+                            if (mOctets.Length < 0x80)
+                            {
+                                length = new byte[1];
+                                length[0] = (byte)mOctets.Length;
+                            }
+                                // 0x80 < length <= 0xFF
+                            else if (mOctets.Length <= 0xFF)
+                            {
+                                length = new byte[2];
+                                length[0] = 0x81;
+                                length[1] = (byte)((mOctets.Length & 0xFF));
+                            }
+
+                                //
+                                // We should almost never see these...
+                                //
+
+                                // 0xFF < length <= 0xFFFF
+                            else if (mOctets.Length <= 0xFFFF)
+                            {
+                                length = new byte[3];
+                                length[0] = 0x82;
+                                length[1] = (byte)((mOctets.Length & 0xFF00) >> 8);
+                                length[2] = (byte)((mOctets.Length & 0xFF));
+                            }
+
+                                // 0xFFFF < length <= 0xFFFFFF
+                            else if (mOctets.Length <= 0xFFFFFF)
+                            {
+                                length = new byte[4];
+                                length[0] = 0x83;
+                                length[1] = (byte)((mOctets.Length & 0xFF0000) >> 16);
+                                length[2] = (byte)((mOctets.Length & 0xFF00) >> 8);
+                                length[3] = (byte)((mOctets.Length & 0xFF));
+                            }
+                                // 0xFFFFFF < length <= 0xFFFFFFFF
+                            else
+                            {
+                                length = new byte[5];
+                                length[0] = 0x84;
+                                length[1] = (byte)((mOctets.Length & 0xFF000000) >> 24);
+                                length[2] = (byte)((mOctets.Length & 0xFF0000) >> 16);
+                                length[3] = (byte)((mOctets.Length & 0xFF00) >> 8);
+                                length[4] = (byte)((mOctets.Length & 0xFF));
+                            }
+
+                            mLength = length;
+                        }
+
+                        private byte[] Concatenate(byte[][] values)
+                        {
+                            // Nothing in, nothing out
+                            if (IsEmpty(values))
+                                return new byte[] {};
+
+                            int length = 0;
+                            foreach (var b in values)
+                            {
+                                if (null != b) length += b.Length;
+                            }
+
+                            var cated = new byte[length];
+
+                            int current = 0;
+                            foreach (var b in values)
+                            {
+                                if (null != b)
+                                {
+                                    Array.Copy(b, 0, cated, current, b.Length);
+                                    current += b.Length;
+                                }
+                            }
+
+                            return cated;
+                        }
+                    };
+
+                    #endregion
                 }
-
-                return cated;
-            }
-        };
-
-        #endregion
-    }
 }

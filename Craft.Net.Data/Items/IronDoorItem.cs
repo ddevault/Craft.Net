@@ -31,7 +31,7 @@ namespace Craft.Net.Data.Items
                     new IronDoorBlock(DoorBlock.Vector3ToDoorDirection(away), false));
                 world.SetBlock(clickedBlock + clickedSide + Vector3.Up,
                     new IronDoorBlock(DoorBlock.Vector3ToDoorDirection(away), true));
+                }
             }
         }
-    }
 }

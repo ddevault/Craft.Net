@@ -17,16 +17,16 @@ namespace Craft.Net.Data.Items
         {
             if (world.GetBlock(clickedBlock + clickedSide) == 0)
                 world.SetBlock(clickedBlock + clickedSide, new PotatoBlock());
-        }
+            }
 
-        public override int FoodPoints
-        {
-            get { return 1; }
-        }
+            public override int FoodPoints
+            {
+                get { return 1; }
+            }
 
-        public override float Saturation
-        {
-            get { return 0.8f; }
+            public override float Saturation
+            {
+                get { return 0.8f; }
+            }
         }
-    }
 }

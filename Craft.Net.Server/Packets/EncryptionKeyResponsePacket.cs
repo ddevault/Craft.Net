@@ -42,25 +42,25 @@ namespace Craft.Net.Server.Packets
 
             client.Encrypter = new BufferedBlockCipher(new CfbBlockCipher(new AesFastEngine(), 8));
             client.Encrypter.Init(true,
-                                  new ParametersWithIV(new KeyParameter(client.SharedKey), client.SharedKey, 0, 16));
+            new ParametersWithIV(new KeyParameter(client.SharedKey), client.SharedKey, 0, 16));
 
-            client.Decrypter = new BufferedBlockCipher(new CfbBlockCipher(new AesFastEngine(), 8));
-            client.Decrypter.Init(false,
-                                  new ParametersWithIV(new KeyParameter(client.SharedKey), client.SharedKey, 0, 16));
+        client.Decrypter = new BufferedBlockCipher(new CfbBlockCipher(new AesFastEngine(), 8));
+        client.Decrypter.Init(false,
+        new ParametersWithIV(new KeyParameter(client.SharedKey), client.SharedKey, 0, 16));
 
-            client.SendPacket(new EncryptionKeyResponsePacket());
-            server.ProcessSendQueue();
-        }
+    client.SendPacket(new EncryptionKeyResponsePacket());
+    server.ProcessSendQueue();
+}
 
-        public override void SendPacket(MinecraftServer server, MinecraftClient client)
-        {
-            // Send packet and enable encryption
-            client.SendData(CreateBuffer(
-                DataUtility.CreateInt16((short)SharedSecret.Length),
-                SharedSecret,
-                DataUtility.CreateInt16((short)VerifyToken.Length),
-                VerifyToken));
-            client.EncryptionEnabled = true;
-        }
-    }
+public override void SendPacket(MinecraftServer server, MinecraftClient client)
+{
+    // Send packet and enable encryption
+    client.SendData(CreateBuffer(
+        DataUtility.CreateInt16((short)SharedSecret.Length),
+        SharedSecret,
+        DataUtility.CreateInt16((short)VerifyToken.Length),
+        VerifyToken));
+    client.EncryptionEnabled = true;
+}
+}
 }

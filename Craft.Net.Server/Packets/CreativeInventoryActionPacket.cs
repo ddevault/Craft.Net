@@ -33,13 +33,13 @@ namespace Craft.Net.Server.Packets
                     var clients = server.EntityManager.GetKnownClients(client.Entity);
                     foreach (var _client in clients)
                         _client.SendPacket(new EntityEquipmentPacket(client.Entity.Id, EntityEquipmentSlot.HeldItem, client.Entity.Inventory[Index]));
+                    }
                 }
             }
-        }
 
-        public override void SendPacket(MinecraftServer server, MinecraftClient client)
-        {
-            throw new InvalidOperationException();
+            public override void SendPacket(MinecraftServer server, MinecraftClient client)
+            {
+                throw new InvalidOperationException();
+            }
         }
-    }
 }

@@ -1,6 +1,6 @@
 namespace Craft.Net.Data.Items
 {
-    
+
     public class MinecartWithFurnaceItem : Item
     {
         public override ushort Id

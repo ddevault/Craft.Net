@@ -57,6 +57,6 @@ namespace Craft.Net.Server.Packets
                 DataUtility.CreateInt32((int)(Position.Z * 8)),
                 DataUtility.CreateFloat(Volume),
                 new[] { Pitch }));
+            }
         }
-    }
 }

@@ -10,7 +10,7 @@
 
 namespace Craft.Net.Data.Items
 {
-    
+
     public class BookAndQuillItem : Item
     {
         public override ushort Id

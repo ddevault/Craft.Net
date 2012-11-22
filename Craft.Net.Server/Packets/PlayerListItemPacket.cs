@@ -41,6 +41,6 @@ namespace Craft.Net.Server.Packets
                 DataUtility.CreateString(PlayerName),
                 DataUtility.CreateBoolean(Online),
                 DataUtility.CreateInt16(Ping)));
+            }
         }
-    }
 }

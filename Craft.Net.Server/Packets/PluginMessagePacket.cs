@@ -39,14 +39,14 @@ namespace Craft.Net.Server.Packets
         {
             if (server.PluginChannels.ContainsKey(Channel))
                 server.PluginChannels [Channel].MessageRecieved(client, Message);
-        }
+            }
 
-        public override void SendPacket(MinecraftServer server, MinecraftClient client)
-        {
-            client.SendData(CreateBuffer(
-                DataUtility.CreateString(Channel),
-                DataUtility.CreateInt16((short)Message.Length),
-                Message));
-        }
-    }
+            public override void SendPacket(MinecraftServer server, MinecraftClient client)
+            {
+                client.SendData(CreateBuffer(
+                    DataUtility.CreateString(Channel),
+                    DataUtility.CreateInt16((short)Message.Length),
+                    Message));
+                }
+            }
 }

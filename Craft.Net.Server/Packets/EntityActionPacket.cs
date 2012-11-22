@@ -53,16 +53,16 @@ namespace Craft.Net.Server.Packets
                 case EntityAction.LeaveBed:
                     client.Entity.LeaveBed();
                     break;
+                }
+                if (Action != EntityAction.LeaveBed) // NOTE: Does this matter?
+                {
+                    // TODO ?
+                }
             }
-            if (Action != EntityAction.LeaveBed) // NOTE: Does this matter?
-            {
-                // TODO ?
-            }
-        }
 
-        public override void SendPacket(MinecraftServer server, MinecraftClient client)
-        {
-            throw new NotImplementedException();
+            public override void SendPacket(MinecraftServer server, MinecraftClient client)
+            {
+                throw new NotImplementedException();
+            }
         }
-    }
 }

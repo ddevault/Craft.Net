@@ -41,42 +41,42 @@ namespace Craft.Net.Data.Test
             var chunk = region.GetChunk(Vector3.Zero);
             for (int y = 0; y < Chunk.Height - 1; y++ )
                 Assert.AreEqual(new GoldBlock(), chunk.GetBlock(new Vector3(0, y, 0)));
-        }
+            }
 
-        [Test]
-        public void TestSaveRegion()
-        {
-            Region region = new Region(Vector3.Zero, new FlatlandGenerator(), "r.0.0.mca");
-            region.WorldGenerator.Initialize(null);
-            region.GetChunk(Vector3.Zero);
-            region.SetBlock(Vector3.Zero, new GoldBlock());
-            region.Save();
-            region.Dispose();
-            region = new Region(Vector3.Zero, new FlatlandGenerator(), "r.0.0.mca");
-        }
+            [Test]
+            public void TestSaveRegion()
+            {
+                Region region = new Region(Vector3.Zero, new FlatlandGenerator(), "r.0.0.mca");
+                region.WorldGenerator.Initialize(null);
+                region.GetChunk(Vector3.Zero);
+                region.SetBlock(Vector3.Zero, new GoldBlock());
+                region.Save();
+                region.Dispose();
+                region = new Region(Vector3.Zero, new FlatlandGenerator(), "r.0.0.mca");
+            }
 
-        [Test]
-        public void TestGetBlock()
-        {
-            // Test vertical sections
-            Assert.AreEqual(new BedrockBlock(), World.GetBlock(Vector3.Zero));
-            Assert.AreEqual(new DirtBlock(), World.GetBlock(Vector3.Up));
-            Assert.AreEqual(new GrassBlock(), World.GetBlock(new Vector3(0, 3, 0)));
+            [Test]
+            public void TestGetBlock()
+            {
+                // Test vertical sections
+                Assert.AreEqual(new BedrockBlock(), World.GetBlock(Vector3.Zero));
+                Assert.AreEqual(new DirtBlock(), World.GetBlock(Vector3.Up));
+                Assert.AreEqual(new GrassBlock(), World.GetBlock(new Vector3(0, 3, 0)));
 
-            // Test quadrants
-            Assert.AreEqual(new BedrockBlock(), World.GetBlock(new Vector3(1, 0, 1)));
-            Assert.AreEqual(new BedrockBlock(), World.GetBlock(new Vector3(-1, 0, 1)));
-            Assert.AreEqual(new BedrockBlock(), World.GetBlock(new Vector3(1, 0, -1)));
-            Assert.AreEqual(new BedrockBlock(), World.GetBlock(new Vector3(-1, 0, -1)));
-        }
+                // Test quadrants
+                Assert.AreEqual(new BedrockBlock(), World.GetBlock(new Vector3(1, 0, 1)));
+                Assert.AreEqual(new BedrockBlock(), World.GetBlock(new Vector3(-1, 0, 1)));
+                Assert.AreEqual(new BedrockBlock(), World.GetBlock(new Vector3(1, 0, -1)));
+                Assert.AreEqual(new BedrockBlock(), World.GetBlock(new Vector3(-1, 0, -1)));
+            }
 
-        [Test]
-        public void TestSetBlock()
-        {
-            World.SetBlock(Vector3.Zero, new GoldBlock());
-            Assert.AreEqual(new GoldBlock(), World.GetBlock(Vector3.Zero));
-            World.SetBlock(new Vector3(-15, 0, 5), new GoldBlock());
-            Assert.AreEqual(new GoldBlock(), World.GetBlock(new Vector3(-15, 0, 5)));
+            [Test]
+            public void TestSetBlock()
+            {
+                World.SetBlock(Vector3.Zero, new GoldBlock());
+                Assert.AreEqual(new GoldBlock(), World.GetBlock(Vector3.Zero));
+                World.SetBlock(new Vector3(-15, 0, 5), new GoldBlock());
+                Assert.AreEqual(new GoldBlock(), World.GetBlock(new Vector3(-15, 0, 5)));
+            }
         }
-    }
 }

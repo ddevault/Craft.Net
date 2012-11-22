@@ -41,6 +41,6 @@ namespace Craft.Net.Server.Packets
                 new[] {WindowId},
                 DataUtility.CreateInt16(Index),
                 Slot.GetData()));
+            }
         }
-    }
 }

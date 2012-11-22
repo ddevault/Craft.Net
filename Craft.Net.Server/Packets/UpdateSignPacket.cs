@@ -77,6 +77,6 @@ namespace Craft.Net.Server.Packets
                 DataUtility.CreateString(Text2),
                 DataUtility.CreateString(Text3),
                 DataUtility.CreateString(Text4)));
+            }
         }
-    }
 }

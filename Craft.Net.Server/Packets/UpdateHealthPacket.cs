@@ -40,6 +40,6 @@ namespace Craft.Net.Server.Packets
                 DataUtility.CreateInt16(Health),
                 DataUtility.CreateInt16(Food),
                 DataUtility.CreateFloat(FoodSaturation)));
+            }
         }
-    }
 }

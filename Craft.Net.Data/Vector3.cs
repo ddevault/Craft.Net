@@ -53,8 +53,8 @@ namespace Craft.Net.Data
         public double DistanceTo(Vector3 other)
         {
             return Math.Sqrt(Math.Pow(other.Z - Z, 2) +
-                             Math.Sqrt(Math.Pow(other.X - X, 2)) +
-                             Math.Pow(other.Y - Y, 2));
+            Math.Sqrt(Math.Pow(other.X - X, 2)) +
+            Math.Pow(other.Y - Y, 2));
         }
 
         /// <summary>
@@ -75,238 +75,238 @@ namespace Craft.Net.Data
                 Math.Min(value1.Y, value2.Y),
                 Math.Min(value1.Z, value2.Z)
                 );
-        }
-
-        public static Vector3 Max(Vector3 value1, Vector3 value2)
-        {
-            return new Vector3(
-                Math.Max(value1.X, value2.X),
-                Math.Max(value1.Y, value2.Y),
-                Math.Max(value1.Z, value2.Z)
-                );
-        }
-
-        #endregion
-
-        #region Operators
-
-        public static bool operator !=(Vector3 a, Vector3 b)
-        {
-            return !a.Equals(b);
-        }
-
-        public static bool operator ==(Vector3 a, Vector3 b)
-        {
-            return a.Equals(b);
-        }
-
-        public static Vector3 operator +(Vector3 a, Vector3 b)
-        {
-            return new Vector3(
-                a.X + b.X,
-                a.Y + b.Y,
-                a.Z + b.Z);
-        }
-
-        public static Vector3 operator -(Vector3 a, Vector3 b)
-        {
-            return new Vector3(
-                a.X - b.X,
-                a.Y - b.Y,
-                a.Z - b.Z);
-        }
-
-        public static Vector3 operator +(Vector3 a, Size b)
-        {
-            return new Vector3(
-                a.X + b.Width,
-                a.Y + b.Height,
-                a.Z + b.Depth);
-        }
-
-        public static Vector3 operator -(Vector3 a, Size b)
-        {
-            return new Vector3(
-                a.X - b.Width,
-                a.Y - b.Height,
-                a.Z - b.Depth);
-        }
-
-        public static Vector3 operator -(Vector3 a)
-        {
-            return new Vector3(
-                -a.X,
-                -a.Y,
-                -a.Z);
-        }
-
-        public static Vector3 operator *(Vector3 a, Vector3 b)
-        {
-            return new Vector3(
-                a.X * b.X,
-                a.Y * b.Y,
-                a.Z * b.Z);
-        }
-
-        public static Vector3 operator /(Vector3 a, Vector3 b)
-        {
-            return new Vector3(
-                a.X / b.X,
-                a.Y / b.Y,
-                a.Z / b.Z);
-        }
-
-        public static Vector3 operator +(Vector3 a, double b)
-        {
-            return new Vector3(
-                a.X + b,
-                a.Y + b,
-                a.Z + b);
-        }
-
-        public static Vector3 operator -(Vector3 a, double b)
-        {
-            return new Vector3(
-                a.X - b,
-                a.Y - b,
-                a.Z - b);
-        }
-
-        public static Vector3 operator *(Vector3 a, double b)
-        {
-            return new Vector3(
-                a.X * b,
-                a.Y * b,
-                a.Z * b);
-        }
-
-        public static Vector3 operator /(Vector3 a, double b)
-        {
-            return new Vector3(
-                a.X / b,
-                a.Y / b,
-                a.Z / b);
-        }
-
-        public static Vector3 operator +(double a, Vector3 b)
-        {
-            return new Vector3(
-                a + b.X,
-                a + b.Y,
-                a + b.Z);
-        }
-
-        public static Vector3 operator -(double a, Vector3 b)
-        {
-            return new Vector3(
-                a - b.X,
-                a - b.Y,
-                a - b.Z);
-        }
-
-        public static Vector3 operator *(double a, Vector3 b)
-        {
-            return new Vector3(
-                a * b.X,
-                a * b.Y,
-                a * b.Z);
-        }
-
-        public static Vector3 operator /(double a, Vector3 b)
-        {
-            return new Vector3(
-                a / b.X,
-                a / b.Y,
-                a / b.Z);
-        }
-
-        #endregion
-
-        #region Constants
-
-        public static Vector3 Zero
-        {
-            get { return new Vector3(0); }
-        }
-
-        public static Vector3 One
-        {
-            get { return new Vector3(1); }
-        }
-
-        public static Vector3 Up
-        {
-            get { return new Vector3(0, 1, 0); }
-        }
-
-        public static Vector3 Down
-        {
-            get { return new Vector3(0, -1, 0); }
-        }
-
-        public static Vector3 Left
-        {
-            get { return new Vector3(-1, 0, 0); }
-        }
-
-        public static Vector3 Right
-        {
-            get { return new Vector3(1, 0, 0); }
-        }
-
-        public static Vector3 Backwards
-        {
-            get { return new Vector3(0, 0, -1); }
-        }
-
-        public static Vector3 Forwards
-        {
-            get { return new Vector3(0, 0, 1); }
-        }
-
-        public static Vector3 South
-        {
-            get { return new Vector3(0, 0, 1); }
-        }
-
-        public static Vector3 North
-        {
-            get { return new Vector3(0, 0, -1); }
-        }
-
-        public static Vector3 West
-        {
-            get { return new Vector3(-1, 0, 0); }
-        }
-
-        public static Vector3 East
-        {
-            get { return new Vector3(1, 0, 0); }
-        }
-
-        #endregion
-
-        public bool Equals(Vector3 other)
-        {
-            return other.X.Equals(X) && other.Y.Equals(Y) && other.Z.Equals(Z);
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (obj.GetType() != typeof(Vector3)) return false;
-            return Equals((Vector3)obj);
-        }
-
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int result = X.GetHashCode();
-                result = (result * 397) ^ Y.GetHashCode();
-                result = (result * 397) ^ Z.GetHashCode();
-                return result;
             }
-        }
-    }
+
+            public static Vector3 Max(Vector3 value1, Vector3 value2)
+            {
+                return new Vector3(
+                    Math.Max(value1.X, value2.X),
+                    Math.Max(value1.Y, value2.Y),
+                    Math.Max(value1.Z, value2.Z)
+                    );
+                }
+
+                #endregion
+
+                #region Operators
+
+                public static bool operator !=(Vector3 a, Vector3 b)
+                {
+                    return !a.Equals(b);
+                }
+
+                public static bool operator ==(Vector3 a, Vector3 b)
+                {
+                    return a.Equals(b);
+                }
+
+                public static Vector3 operator +(Vector3 a, Vector3 b)
+                {
+                    return new Vector3(
+                        a.X + b.X,
+                        a.Y + b.Y,
+                        a.Z + b.Z);
+                    }
+
+                    public static Vector3 operator -(Vector3 a, Vector3 b)
+                    {
+                        return new Vector3(
+                            a.X - b.X,
+                            a.Y - b.Y,
+                            a.Z - b.Z);
+                        }
+
+                        public static Vector3 operator +(Vector3 a, Size b)
+                        {
+                            return new Vector3(
+                                a.X + b.Width,
+                                a.Y + b.Height,
+                                a.Z + b.Depth);
+                            }
+
+                            public static Vector3 operator -(Vector3 a, Size b)
+                            {
+                                return new Vector3(
+                                    a.X - b.Width,
+                                    a.Y - b.Height,
+                                    a.Z - b.Depth);
+                                }
+
+                                public static Vector3 operator -(Vector3 a)
+                                {
+                                    return new Vector3(
+                                        -a.X,
+                                        -a.Y,
+                                        -a.Z);
+                                    }
+
+                                    public static Vector3 operator *(Vector3 a, Vector3 b)
+                                    {
+                                        return new Vector3(
+                                            a.X * b.X,
+                                            a.Y * b.Y,
+                                            a.Z * b.Z);
+                                        }
+
+                                        public static Vector3 operator /(Vector3 a, Vector3 b)
+                                        {
+                                            return new Vector3(
+                                                a.X / b.X,
+                                                a.Y / b.Y,
+                                                a.Z / b.Z);
+                                            }
+
+                                            public static Vector3 operator +(Vector3 a, double b)
+                                            {
+                                                return new Vector3(
+                                                    a.X + b,
+                                                    a.Y + b,
+                                                    a.Z + b);
+                                                }
+
+                                                public static Vector3 operator -(Vector3 a, double b)
+                                                {
+                                                    return new Vector3(
+                                                        a.X - b,
+                                                        a.Y - b,
+                                                        a.Z - b);
+                                                    }
+
+                                                    public static Vector3 operator *(Vector3 a, double b)
+                                                    {
+                                                        return new Vector3(
+                                                            a.X * b,
+                                                            a.Y * b,
+                                                            a.Z * b);
+                                                        }
+
+                                                        public static Vector3 operator /(Vector3 a, double b)
+                                                        {
+                                                            return new Vector3(
+                                                                a.X / b,
+                                                                a.Y / b,
+                                                                a.Z / b);
+                                                            }
+
+                                                            public static Vector3 operator +(double a, Vector3 b)
+                                                            {
+                                                                return new Vector3(
+                                                                    a + b.X,
+                                                                    a + b.Y,
+                                                                    a + b.Z);
+                                                                }
+
+                                                                public static Vector3 operator -(double a, Vector3 b)
+                                                                {
+                                                                    return new Vector3(
+                                                                        a - b.X,
+                                                                        a - b.Y,
+                                                                        a - b.Z);
+                                                                    }
+
+                                                                    public static Vector3 operator *(double a, Vector3 b)
+                                                                    {
+                                                                        return new Vector3(
+                                                                            a * b.X,
+                                                                            a * b.Y,
+                                                                            a * b.Z);
+                                                                        }
+
+                                                                        public static Vector3 operator /(double a, Vector3 b)
+                                                                        {
+                                                                            return new Vector3(
+                                                                                a / b.X,
+                                                                                a / b.Y,
+                                                                                a / b.Z);
+                                                                            }
+
+                                                                            #endregion
+
+                                                                            #region Constants
+
+                                                                            public static Vector3 Zero
+                                                                            {
+                                                                                get { return new Vector3(0); }
+                                                                            }
+
+                                                                            public static Vector3 One
+                                                                            {
+                                                                                get { return new Vector3(1); }
+                                                                            }
+
+                                                                            public static Vector3 Up
+                                                                            {
+                                                                                get { return new Vector3(0, 1, 0); }
+                                                                            }
+
+                                                                            public static Vector3 Down
+                                                                            {
+                                                                                get { return new Vector3(0, -1, 0); }
+                                                                            }
+
+                                                                            public static Vector3 Left
+                                                                            {
+                                                                                get { return new Vector3(-1, 0, 0); }
+                                                                            }
+
+                                                                            public static Vector3 Right
+                                                                            {
+                                                                                get { return new Vector3(1, 0, 0); }
+                                                                            }
+
+                                                                            public static Vector3 Backwards
+                                                                            {
+                                                                                get { return new Vector3(0, 0, -1); }
+                                                                            }
+
+                                                                            public static Vector3 Forwards
+                                                                            {
+                                                                                get { return new Vector3(0, 0, 1); }
+                                                                            }
+
+                                                                            public static Vector3 South
+                                                                            {
+                                                                                get { return new Vector3(0, 0, 1); }
+                                                                            }
+
+                                                                            public static Vector3 North
+                                                                            {
+                                                                                get { return new Vector3(0, 0, -1); }
+                                                                            }
+
+                                                                            public static Vector3 West
+                                                                            {
+                                                                                get { return new Vector3(-1, 0, 0); }
+                                                                            }
+
+                                                                            public static Vector3 East
+                                                                            {
+                                                                                get { return new Vector3(1, 0, 0); }
+                                                                            }
+
+                                                                            #endregion
+
+                                                                            public bool Equals(Vector3 other)
+                                                                            {
+                                                                                return other.X.Equals(X) && other.Y.Equals(Y) && other.Z.Equals(Z);
+                                                                            }
+
+                                                                            public override bool Equals(object obj)
+                                                                            {
+                                                                                if (ReferenceEquals(null, obj)) return false;
+                                                                                if (obj.GetType() != typeof(Vector3)) return false;
+                                                                                return Equals((Vector3)obj);
+                                                                            }
+
+                                                                            public override int GetHashCode()
+                                                                            {
+                                                                                unchecked
+                                                                                {
+                                                                                    int result = X.GetHashCode();
+                                                                                    result = (result * 397) ^ Y.GetHashCode();
+                                                                                    result = (result * 397) ^ Z.GetHashCode();
+                                                                                    return result;
+                                                                                }
+                                                                            }
+                                                                        }
 }

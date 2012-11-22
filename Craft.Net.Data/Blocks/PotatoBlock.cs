@@ -34,12 +34,12 @@ namespace Craft.Net.Data.Blocks
             {
                 drop = new[] { new Slot((ushort)new PotatoItem(), (byte)DataUtility.Random.Next(1, 4)),
                     new Slot((ushort)new PoisonousPotatoItem(), 1) };
+                }
+                else
+                {
+                    drop = new[] { new Slot((ushort)new PotatoItem(), (byte)DataUtility.Random.Next(1, 4)) };
+                }
+                return true;
             }
-            else
-            {
-                drop = new[] { new Slot((ushort)new PotatoItem(), (byte)DataUtility.Random.Next(1, 4)) };
-            }
-            return true;
         }
-    }
 }

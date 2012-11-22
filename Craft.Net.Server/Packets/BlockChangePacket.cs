@@ -41,6 +41,6 @@ namespace Craft.Net.Server.Packets
                 DataUtility.CreateInt32((int)Position.Z),
                 DataUtility.CreateUInt16(Value.Id),
                 new[] {Value.Metadata}));
+            }
         }
-    }
 }

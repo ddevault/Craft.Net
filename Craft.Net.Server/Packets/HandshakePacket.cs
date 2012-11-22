@@ -62,29 +62,29 @@ namespace Craft.Net.Server.Packets
             {
                 var keyRequest =
                     new EncryptionKeyRequestPacket(client.AuthenticationHash,
-                                                   server.ServerKey);
+                    server.ServerKey);
                 client.SendPacket(keyRequest);
                 server.ProcessSendQueue();
             } else
                 server.LogInPlayer(client);
-        }
-
-        public override void SendPacket(MinecraftServer server, MinecraftClient client)
-        {
-            throw new InvalidOperationException();
-        }
-
-        private string CreateHash()
-        {
-            byte[] hash = DataUtility.CreateInt32(new Random().Next());
-            string response = "";
-            foreach (byte b in hash)
-            {
-                if (b < 0x10)
-                    response += "0";
-                response += b.ToString("x");
             }
-            return response;
+
+            public override void SendPacket(MinecraftServer server, MinecraftClient client)
+            {
+                throw new InvalidOperationException();
+            }
+
+            private string CreateHash()
+            {
+                byte[] hash = DataUtility.CreateInt32(new Random().Next());
+                string response = "";
+                foreach (byte b in hash)
+                {
+                    if (b < 0x10)
+                        response += "0";
+                    response += b.ToString("x");
+                }
+                return response;
+            }
         }
-    }
 }

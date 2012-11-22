@@ -46,6 +46,6 @@ namespace Craft.Net.Server.Packets
                 DataUtility.CreateAbsoluteInteger(Position.Z),
                 DataUtility.CreatePackedByte(Yaw),
                 DataUtility.CreatePackedByte(Pitch)));
+            }
         }
-    }
 }

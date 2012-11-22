@@ -29,8 +29,8 @@ namespace Craft.Net.Server
         {
             if (level >= MinimumImportance)
                 Console.WriteLine(text);
-        }
+            }
 
-        #endregion
-    }
+            #endregion
+        }
 }

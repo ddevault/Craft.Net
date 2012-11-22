@@ -49,6 +49,6 @@ namespace Craft.Net.Data.Blocks
             UpperHalf = upperHalf;
             if (!UpperHalf)
                 Direction = direction;
+            }
         }
-    }
 }

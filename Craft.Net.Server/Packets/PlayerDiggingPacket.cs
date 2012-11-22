@@ -72,21 +72,21 @@ namespace Craft.Net.Server.Packets
                         if (client.ExpectedMiningEnd > DateTime.Now || client.ExpectedBlockToMine != Position)
                             return;
                         block.GetHarvestTime(client.Entity.SelectedItem.Item,
-                                client.World, client.Entity, out damage);
-                        if (damage != 0)
+                        client.World, client.Entity, out damage);
+                    if (damage != 0)
+                    {
+                        var slot = client.Entity.Inventory[client.Entity.SelectedSlot];
+                        if (!slot.Empty)
                         {
-                            var slot = client.Entity.Inventory[client.Entity.SelectedSlot];
-                            if (!slot.Empty)
+                            if (slot.Item is ToolItem)
                             {
-                                if (slot.Item is ToolItem)
-                                {
-                                    var tool = slot.Item as ToolItem;
-                                    bool destroy = tool.Damage(damage);
-                                    slot.Metadata = tool.Data;
-                                    if (destroy)
-                                        client.Entity.SetSlot(client.Entity.SelectedSlot, new Slot());
-                                    else
-                                        client.Entity.SetSlot(client.Entity.SelectedSlot, slot);
+                                var tool = slot.Item as ToolItem;
+                                bool destroy = tool.Damage(damage);
+                                slot.Metadata = tool.Data;
+                                if (destroy)
+                                    client.Entity.SetSlot(client.Entity.SelectedSlot, new Slot());
+                                else
+                                    client.Entity.SetSlot(client.Entity.SelectedSlot, slot);
                                 }
                             }
                         }
@@ -94,13 +94,13 @@ namespace Craft.Net.Server.Packets
                         block.OnBlockMined(client.World, Position, client.Entity);
                         client.Entity.FoodExhaustion += 0.025f;
                         break;
+                    }
                 }
             }
-        }
 
-        public override void SendPacket(MinecraftServer server, MinecraftClient client)
-        {
-            throw new InvalidOperationException();
+            public override void SendPacket(MinecraftServer server, MinecraftClient client)
+            {
+                throw new InvalidOperationException();
+            }
         }
-    }
 }

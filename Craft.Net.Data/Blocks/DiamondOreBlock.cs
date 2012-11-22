@@ -19,6 +19,6 @@ namespace Craft.Net.Data.Blocks
                 (tool.ToolMaterial == ToolMaterial.Iron ||
                 tool.ToolMaterial == ToolMaterial.Gold ||
                 tool.ToolMaterial == ToolMaterial.Diamond);
+            }
         }
-    }
 }

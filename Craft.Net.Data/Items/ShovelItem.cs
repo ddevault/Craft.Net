@@ -11,19 +11,19 @@ namespace Craft.Net.Data.Items
         public override bool IsEfficient(Block block)
         {
             return block is ClayBlock ||
-                   block is DirtBlock ||
-                   block is GrassBlock ||
-                   block is GravelBlock ||
-                   block is MyceliumBlock ||
-                   block is SandBlock ||
-                   block is SnowBlock ||
-                   block is SnowfallBlock ||
-                   block is SoulSandBlock;
-        }
+                block is DirtBlock ||
+                block is GrassBlock ||
+                block is GravelBlock ||
+                block is MyceliumBlock ||
+                block is SandBlock ||
+                block is SnowBlock ||
+                block is SnowfallBlock ||
+                block is SoulSandBlock;
+            }
 
-        public override ToolType ToolType
-        {
-            get { return ToolType.Axe; }
+            public override ToolType ToolType
+            {
+                get { return ToolType.Axe; }
+            }
         }
-    }
 }

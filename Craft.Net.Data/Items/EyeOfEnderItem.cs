@@ -10,7 +10,7 @@
 
 namespace Craft.Net.Data.Items
 {
-    
+
     public class EyeOfEnderItem : Item
     {
         public override ushort Id
