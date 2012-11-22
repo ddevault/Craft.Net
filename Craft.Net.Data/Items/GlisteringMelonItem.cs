@@ -10,15 +10,15 @@
 
 namespace Craft.Net.Data.Items
 {
-    
-    public class GlisteringMelonItem : Item
-    {
-        public override ushort Id
-        {
-            get
-            {
-                return 382;
-            }
-        }
-    }
+
+   public class GlisteringMelonItem : Item
+   {
+      public override ushort Id
+      {
+         get
+         {
+            return 382;
+         }
+      }
+   }
 }

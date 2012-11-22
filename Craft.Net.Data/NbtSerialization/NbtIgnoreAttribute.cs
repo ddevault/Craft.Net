@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Craft.Net.Data.NbtSerialization
 {
-    public class NbtIgnoreAttribute : Attribute
-    {
-    }
+   public class NbtIgnoreAttribute : Attribute
+   {
+   }
 }

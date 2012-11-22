@@ -5,6 +5,6 @@ using System.Text;
 
 namespace Craft.Net.Data.NbtSerialization
 {
-    [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
-    public sealed class IgnoreOnNullAttribute : Attribute { }
+   [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
+   public sealed class IgnoreOnNullAttribute : Attribute { }
 }

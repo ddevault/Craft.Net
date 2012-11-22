@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Craft.Net.Data.Entities
 {
-    public interface ITamableEntity
-    {
-        string Owner { get; set; }
-        bool Sitting { get; set; }
-    }
+   public interface ITamableEntity
+   {
+      string Owner { get; set; }
+      bool Sitting { get; set; }
+   }
 }

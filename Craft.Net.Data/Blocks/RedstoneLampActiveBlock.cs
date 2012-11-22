@@ -6,17 +6,17 @@ using Craft.Net.Data.Items;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class RedstoneLampActiveBlock : RedstoneLampBlock
-    {
-        public override ushort Id
-        {
-            get { return 124; }
-        }
+   public class RedstoneLampActiveBlock : RedstoneLampBlock
+   {
+      public override ushort Id
+      {
+         get { return 124; }
+      }
 
-        public override bool GetDrop(ToolItem tool, out Slot[] drop)
-        {
-            drop = new[] { new Slot((ushort)new RedstoneLampBlock(), 1) };
-            return true;
-        }
-    }
+      public override bool GetDrop(ToolItem tool, out Slot[] drop)
+      {
+         drop = new[] { new Slot((ushort)new RedstoneLampBlock(), 1) };
+         return true;
+      }
+   }
 }

@@ -10,15 +10,15 @@
 
 namespace Craft.Net.Data.Items
 {
-    
-    public class SlimeballItem : Item
-    {
-        public override ushort Id
-        {
-            get
-            {
-                return 341;
-            }
-        }
-    }
+
+   public class SlimeballItem : Item
+   {
+      public override ushort Id
+      {
+         get
+         {
+            return 341;
+         }
+      }
+   }
 }

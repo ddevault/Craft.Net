@@ -5,16 +5,16 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class SaplingBlock : Block
-    {
-        public override ushort Id
-        {
-            get { return 6; }
-        }
+   public class SaplingBlock : Block
+   {
+      public override ushort Id
+      {
+         get { return 6; }
+      }
 
-        public override BoundingBox? BoundingBox
-        {
-            get { return null; }
-        }
-    }
+      public override BoundingBox? BoundingBox
+      {
+         get { return null; }
+      }
+   }
 }

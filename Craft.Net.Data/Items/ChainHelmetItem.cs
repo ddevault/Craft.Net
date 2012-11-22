@@ -1,34 +1,34 @@
 namespace Craft.Net.Data.Items
 {
 
-    public class ChainHelmetItem : ToolItem, IArmorItem
-    {
-        public override ushort Id
-        {
-            get
-            {
-                return 302;
-            }
-        }
+   public class ChainHelmetItem : ToolItem, IArmorItem
+   {
+      public override ushort Id
+      {
+         get
+         {
+            return 302;
+         }
+      }
 
-        public int ArmorBonus
-        {
-            get { return 2; }
-        }
+      public int ArmorBonus
+      {
+         get { return 2; }
+      }
 
-        public ArmorSlot ArmorSlot
-        {
-            get { return ArmorSlot.Headgear; }
-        }
+      public ArmorSlot ArmorSlot
+      {
+         get { return ArmorSlot.Headgear; }
+      }
 
-        public override ToolType ToolType
-        {
-            get { return ToolType.Other; }
-        }
+      public override ToolType ToolType
+      {
+         get { return ToolType.Other; }
+      }
 
-        public override ToolMaterial ToolMaterial
-        {
-            get { return ToolMaterial.Other; }
-        }
-    }
+      public override ToolMaterial ToolMaterial
+      {
+         get { return ToolMaterial.Other; }
+      }
+   }
 }

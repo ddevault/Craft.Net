@@ -5,21 +5,21 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class HugeBrownMushroomBlock : Block
-    {
-        public override ushort Id
-        {
-            get { return 99; }
-        }
+   public class HugeBrownMushroomBlock : Block
+   {
+      public override ushort Id
+      {
+         get { return 99; }
+      }
 
-        public override double Hardness
-        {
-            get { return 0.2; }
-        }
+      public override double Hardness
+      {
+         get { return 0.2; }
+      }
 
-        public override bool CanHarvest(Items.ToolItem tool)
-        {
-            return false;
-        }
-    }
+      public override bool CanHarvest(Items.ToolItem tool)
+      {
+         return false;
+      }
+   }
 }

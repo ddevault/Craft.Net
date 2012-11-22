@@ -5,16 +5,16 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class LavaFlowingBlock : Block
-    {
-        public override ushort Id
-        {
-            get { return 10; }
-        }
+   public class LavaFlowingBlock : Block
+   {
+      public override ushort Id
+      {
+         get { return 10; }
+      }
 
-        public override double Hardness
-        {
-            get { return 0; }
-        }
-    }
+      public override double Hardness
+      {
+         get { return 0; }
+      }
+   }
 }

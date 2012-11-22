@@ -5,12 +5,12 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class RedstoneOreActiveBlock : RedstoneOreBlock
-    {
-        // TODO: Schedule update to deactivate
-        public override ushort Id
-        {
-            get { return 74; }
-        }
-    }
+   public class RedstoneOreActiveBlock : RedstoneOreBlock
+   {
+      // TODO: Schedule update to deactivate
+      public override ushort Id
+      {
+         get { return 74; }
+      }
+   }
 }

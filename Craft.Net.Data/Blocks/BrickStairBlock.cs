@@ -6,11 +6,11 @@ using Craft.Net.Data.Entities;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class BrickStairBlock : StairBlock
-    {
-        public override ushort Id
-        {
-            get { return 108; }
-        }
-    }
+   public class BrickStairBlock : StairBlock
+   {
+      public override ushort Id
+      {
+         get { return 108; }
+      }
+   }
 }

@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Craft.Net.Data
 {
-    public enum Transparency
-    {
-        Opaque,
-        Transparent
-    }
+   public enum Transparency
+   {
+      Opaque,
+      Transparent
+   }
 }

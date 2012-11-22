@@ -5,16 +5,16 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class EnchantmentTableBlock : Block
-    {
-        public override ushort Id
-        {
-            get { return 116; }
-        }
+   public class EnchantmentTableBlock : Block
+   {
+      public override ushort Id
+      {
+         get { return 116; }
+      }
 
-        public override double Hardness
-        {
-            get { return 5; }
-        }
-    }
+      public override double Hardness
+      {
+         get { return 5; }
+      }
+   }
 }
