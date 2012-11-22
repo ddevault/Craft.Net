@@ -5,15 +5,15 @@ using System.Text;
 
 namespace Craft.Net.Data
 {
-    public enum DamageType
-    {
-        Combat,
-        Drowning,
-        Falling,
-        Burning,
-        Lava,
-        Explosion,
-        Suicide,
-        Unknown
-    }
+   public enum DamageType
+   {
+      Combat,
+      Drowning,
+      Falling,
+      Burning,
+      Lava,
+      Explosion,
+      Suicide,
+      Unknown
+   }
 }

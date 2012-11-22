@@ -6,21 +6,21 @@ using Craft.Net.Data.Items;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class CobwebBlock : Block
-    {
-        public override ushort Id
-        {
-            get { return 30; }
-        }
+   public class CobwebBlock : Block
+   {
+      public override ushort Id
+      {
+         get { return 30; }
+      }
 
-        public override double Hardness
-        {
-            get { return 4; }
-        }
+      public override double Hardness
+      {
+         get { return 4; }
+      }
 
-        public override bool CanHarvest(ToolItem tool)
-        {
-            return false;
-        }
-    }
+      public override bool CanHarvest(ToolItem tool)
+      {
+         return false;
+      }
+   }
 }

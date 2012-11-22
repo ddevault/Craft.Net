@@ -5,16 +5,16 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class PoweredRailBlock : Block
-    {
-        public override ushort Id
-        {
-            get { return 27; }
-        }
+   public class PoweredRailBlock : Block
+   {
+      public override ushort Id
+      {
+         get { return 27; }
+      }
 
-        public override double Hardness
-        {
-            get { return 0.7; }
-        }
-    }
+      public override double Hardness
+      {
+         get { return 0.7; }
+      }
+   }
 }

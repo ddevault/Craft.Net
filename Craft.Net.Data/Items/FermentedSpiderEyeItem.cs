@@ -10,15 +10,15 @@
 
 namespace Craft.Net.Data.Items
 {
-    
-    public class FermentedSpiderEyeItem : Item
-    {
-        public override ushort Id
-        {
-            get
-            {
-                return 376;
-            }
-        }
-    }
+
+   public class FermentedSpiderEyeItem : Item
+   {
+      public override ushort Id
+      {
+         get
+         {
+            return 376;
+         }
+      }
+   }
 }

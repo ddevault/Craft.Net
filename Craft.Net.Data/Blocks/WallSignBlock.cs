@@ -5,25 +5,25 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class WallSignBlock : SignBlock
-    {
-        public WallSignBlock()
-        {
-        }
+   public class WallSignBlock : SignBlock
+   {
+      public WallSignBlock()
+      {
+      }
 
-        public WallSignBlock(Direction direction)
-        {
-            Metadata = (byte)direction;
-        }
+      public WallSignBlock(Direction direction)
+      {
+         Metadata = (byte)direction;
+      }
 
-        public override ushort Id
-        {
-            get { return 68; }
-        }
+      public override ushort Id
+      {
+         get { return 68; }
+      }
 
-        public override BoundingBox? BoundingBox
-        {
-            get { return null; }
-        }
-    }
+      public override BoundingBox? BoundingBox
+      {
+         get { return null; }
+      }
+   }
 }

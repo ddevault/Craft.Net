@@ -5,16 +5,16 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class NetherWartBlock : Block
-    {
-        public override ushort Id
-        {
-            get { return 115; }
-        }
+   public class NetherWartBlock : Block
+   {
+      public override ushort Id
+      {
+         get { return 115; }
+      }
 
-        public override BoundingBox? BoundingBox
-        {
-            get { return null; }
-        }
-    }
+      public override BoundingBox? BoundingBox
+      {
+         get { return null; }
+      }
+   }
 }

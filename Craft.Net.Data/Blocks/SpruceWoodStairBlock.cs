@@ -5,16 +5,16 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class SpruceWoodStairBlock : StairBlock
-    {
-        public override ushort Id
-        {
-            get { return 134; }
-        }
+   public class SpruceWoodStairBlock : StairBlock
+   {
+      public override ushort Id
+      {
+         get { return 134; }
+      }
 
-        public override double Hardness
-        {
-            get { return 2; }
-        }
-    }
+      public override double Hardness
+      {
+         get { return 2; }
+      }
+   }
 }

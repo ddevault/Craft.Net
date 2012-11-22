@@ -5,16 +5,16 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class CauldronBlock : Block
-    {
-        public override ushort Id
-        {
-            get { return 118; }
-        }
+   public class CauldronBlock : Block
+   {
+      public override ushort Id
+      {
+         get { return 118; }
+      }
 
-        public override double Hardness
-        {
-            get { return 2; }
-        }
-    }
+      public override double Hardness
+      {
+         get { return 2; }
+      }
+   }
 }

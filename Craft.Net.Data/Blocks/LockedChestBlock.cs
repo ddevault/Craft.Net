@@ -5,16 +5,16 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class LockedChestBlock : Block
-    {
-        public override ushort Id
-        {
-            get { return 95; }
-        }
+   public class LockedChestBlock : Block
+   {
+      public override ushort Id
+      {
+         get { return 95; }
+      }
 
-        public override double Hardness
-        {
-            get { return -1; }
-        }
-    }
+      public override double Hardness
+      {
+         get { return -1; }
+      }
+   }
 }
