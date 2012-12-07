@@ -270,11 +270,14 @@
     <Compile Include="Items\DiamondSwordItem.cs" />
     <Compile Include="Items\EggItem.cs" />
     <Compile Include="Items\EmeraldItem.cs" />
+    <Compile Include="Items\EnchantedBookItem.cs" />
     <Compile Include="Items\EnderPearlItem.cs" />
     <Compile Include="Items\EyeOfEnderItem.cs" />
     <Compile Include="Items\FeatherItem.cs" />
     <Compile Include="Items\FermentedSpiderEyeItem.cs" />
     <Compile Include="Items\FireChargeItem.cs" />
+    <Compile Include="Items\FireworkRocketItem.cs" />
+    <Compile Include="Items\FireworkStarItem.cs" />
     <Compile Include="Items\FishingRodItem.cs" />
     <Compile Include="Items\FlintAndSteelItem.cs" />
     <Compile Include="Items\FlintItem.cs" />
