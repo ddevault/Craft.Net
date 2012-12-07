@@ -36,7 +36,9 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
-            throw new NotImplementedException();
+            client.SendData(CreateBuffer(
+                DataUtility.CreateInt32(SlotId)
+                ));
         }
     }
 }

@@ -45,6 +45,8 @@ namespace Craft.Net.Server.Packets
                     DataUtility.CreateAbsoluteInteger(Entity.Position.X),
                     DataUtility.CreateAbsoluteInteger(Entity.Position.Y),
                     DataUtility.CreateAbsoluteInteger(Entity.Position.Z),
+                    DataUtility.CreatePackedByte(Entity.Yaw),
+                    DataUtility.CreatePackedByte(Entity.Pitch),
                     DataUtility.CreateInt32(Entity.Data),
                     DataUtility.CreateInt16((short)Entity.Velocity.X),
                     DataUtility.CreateInt16((short)Entity.Velocity.Y),
@@ -58,6 +60,8 @@ namespace Craft.Net.Server.Packets
                     DataUtility.CreateAbsoluteInteger(Entity.Position.X),
                     DataUtility.CreateAbsoluteInteger(Entity.Position.Y),
                     DataUtility.CreateAbsoluteInteger(Entity.Position.Z),
+                    DataUtility.CreatePackedByte(Entity.Yaw),
+                    DataUtility.CreatePackedByte(Entity.Pitch),
                     DataUtility.CreateInt32(Entity.Data)));
             }
         }
