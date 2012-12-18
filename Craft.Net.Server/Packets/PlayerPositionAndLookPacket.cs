@@ -57,7 +57,7 @@ namespace Craft.Net.Server.Packets
             if (!client.ReadyToSpawn)
                 return;
             client.Entity.FoodExhaustion += (float)client.Entity.GivenPosition.DistanceTo(new Vector3(X, Y, Z)) *
-                (client.IsSprinting ? 0.1f : 0.01f); // TODO: Swimming
+                (client.Entity.IsSprinting ? 0.1f : 0.01f); // TODO: Swimming
             client.Entity.GivenPosition = new Vector3(X, Y, Z);
             client.Entity.Pitch = Pitch;
             client.Entity.Yaw = Yaw;

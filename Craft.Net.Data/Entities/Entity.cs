@@ -19,7 +19,7 @@ namespace Craft.Net.Data.Entities
         public int Id { get; set; }
         public Vector3 OldPosition { get; set; }
         public DateTime LastPositionUpdate { get; set; }
-        public Vector3 Position
+        public virtual Vector3 Position
         {
             get { return position; }
             set
@@ -32,6 +32,7 @@ namespace Craft.Net.Data.Entities
         }
 
         protected bool EnableVelocityUpdates = true;
+        protected Vector3 PrePhysicsVelocity { get; set; }
         /// <summary>
         /// In meters per tick
         /// </summary>
@@ -167,28 +168,32 @@ namespace Craft.Net.Data.Entities
         public virtual void PhysicsUpdate(World world)
         {
             // I don't know much about game physics, this code is open for pull requests.
+            bool oldVelocityEnabled = EnableVelocityUpdates;
             EnableVelocityUpdates = false;
+            PrePhysicsVelocity = Velocity;
 
             // Calculate movement
             bool fireEvent = Velocity != Vector3.Zero;
 
             Velocity *= Drag;
             Velocity -= new Vector3(0, AccelerationDueToGravity, 0);
-            Vector3 collisionPoint;
+            Vector3 collisionPoint, collisionDirection;
             // Do terrain collisions
-            if (!AdjustVelocityY(world, out collisionPoint))
-                fireEvent = false;
-
-            if (fireEvent && TerrainCollision != null)
-                TerrainCollision(this, new EntityTerrainCollisionEventArgs
+            if (AdjustVelocityY(world, out collisionPoint, out collisionDirection))
+            {
+                if (TerrainCollision != null && fireEvent)
+                    TerrainCollision(this, new EntityTerrainCollisionEventArgs
                     {
                         Entity = this,
                         Block = collisionPoint,
-                        World = world
+                        World = world,
+                        Direction = collisionDirection
                     });
+            }
 
-            EnableVelocityUpdates = true;
-            OnPropertyChanged("Velocity");
+            EnableVelocityUpdates = oldVelocityEnabled;
+            if (EnableVelocityUpdates)
+                OnPropertyChanged("Velocity");
 
             Position += Velocity;
         }
@@ -198,9 +203,10 @@ namespace Craft.Net.Data.Entities
         /// <summary>
         /// Performs terrain collision tests and adjusts the Y-axis velocity accordingly
         /// </summary>
-        protected bool AdjustVelocityY(World world, out Vector3 collision)
+        protected bool AdjustVelocityY(World world, out Vector3 collision, out Vector3 collisionDirection)
         {
             collision = Vector3.Zero;
+            collisionDirection = Vector3.Zero;
             if (Velocity.Y == 0)
                 return false;
             // Do some enviornment guessing to improve speed
@@ -275,6 +281,7 @@ namespace Craft.Net.Data.Entities
                     Velocity = new Vector3(Velocity.X,
                         Velocity.Y + (collisionPoint.Value - TempBoundingBox.Min.Y),
                         Velocity.Z);
+                    collisionDirection = Vector3.Down;
                 }
                 // TODO: Collisions for entities moving up
                 return true;
