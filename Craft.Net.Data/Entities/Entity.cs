@@ -130,6 +130,17 @@ namespace Craft.Net.Data.Entities
 
         public abstract Size Size { get; }
 
+        /// <summary>
+        /// Determines whether or not Entity.Metadata shall be sent to the client.
+        /// </summary>
+        public virtual bool IncludeMetadataOnClient
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public event EventHandler<EntityTerrainCollisionEventArgs> TerrainCollision;
 
         #endregion
@@ -300,7 +311,7 @@ namespace Craft.Net.Data.Entities
             {
                 var dictionary = new MetadataDictionary();
                 dictionary[0] = new MetadataByte(0, 0); // Flags
-                dictionary[8] = new MetadataInt(8, 0); // Potion effects
+                dictionary[1] = new MetadataShort(1, 300);
                 return dictionary;
             }
         }

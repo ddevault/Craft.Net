@@ -3,19 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Craft.Net.Data.Events;
+using Craft.Net.Data.Metadata;
 
 namespace Craft.Net.Data.Entities
 {
-    public class ItemEntity : Entity
+    public class ItemEntity : ObjectEntity
     {
         public ItemEntity(Vector3 position, Slot item)
         {
             Position = position;
             Item = item;
-            Velocity = new Vector3(
-                (DataUtility.Random.NextDouble() - 0.5) * 0.1,
-                (DataUtility.Random.NextDouble() - 0.5) * 0.1,
-                (DataUtility.Random.NextDouble() - 0.5) * 0.1);
         }
 
         public override Size Size
@@ -44,6 +41,34 @@ namespace Craft.Net.Data.Entities
                     e.Position.DistanceTo(Position) < 2).FirstOrDefault();
                 if (player != null)
                     player.OnPickUpItem(new EntityEventArgs(this));
+            }
+        }
+
+        public override byte EntityType
+        {
+            get { return 2; }
+        }
+
+        public override int Data
+        {
+            get { return 1; }
+        }
+
+        public override MetadataDictionary Metadata
+        {
+            get
+            {
+                var metadata = base.Metadata;
+                metadata[10] = new MetadataSlot(10, Item);
+                return metadata;
+            }
+        }
+
+        public override bool IncludeMetadataOnClient
+        {
+            get
+            {
+                return true;
             }
         }
     }
