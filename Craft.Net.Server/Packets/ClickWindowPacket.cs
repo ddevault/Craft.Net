@@ -38,7 +38,6 @@ namespace Craft.Net.Server.Packets
                 return -1;
             if (!Slot.TryReadSlot(buffer, ref offset, out ClickedItem))
                 return -1;
-            Console.WriteLine("Window click: " + shift + ", " + rightClick);
             Shift = shift == 1;
             RightClick = rightClick == 1;
             if (shift == 2 && rightClick == 3)

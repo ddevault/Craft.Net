@@ -193,7 +193,7 @@ namespace Craft.Net.Data
 
         public virtual bool GetDrop(ToolItem tool, out Slot[] drop)
         {
-            drop = new[] { new Slot(this.Id, 1) };
+            drop = new[] { new Slot(this.Id, 1, this.Metadata) };
             return CanHarvest(tool);
         }
 
