@@ -12,7 +12,7 @@ namespace Craft.Net.Data
     /// Represents an inventory slot.
     /// </summary>
     /// <remarks></remarks>
-    public class Slot
+    public class Slot : ICloneable
     {
         private byte count;
         private ushort id;
@@ -303,5 +303,15 @@ namespace Craft.Net.Data
         {
             get { return Id == 0xFFFF || Id == 0 || Count == 0; }
         }
+
+        public Slot Clone()
+        {
+            return (Slot) this.MemberwiseClone();
+        }
+
+        object ICloneable.Clone() {
+            return Clone(); 
+        }
+
     }
 }
