@@ -112,6 +112,7 @@
     <Compile Include="Packets\EntityHeadLookPacket.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Packets\EntityMetadataPacket.cs" />
     <Compile Include="Packets\EntityRelativeMovePacket.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -37,7 +37,7 @@ namespace Craft.Net.Server.Packets
 
         public override void SendPacket(MinecraftServer server, MinecraftClient client)
         {
-            if (Entity.Data != 0)
+            if (Entity.Data > 0)
             {
                 client.SendData(CreateBuffer(
                     DataUtility.CreateInt32(Entity.Id),

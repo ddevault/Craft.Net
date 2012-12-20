@@ -52,7 +52,7 @@ namespace Craft.Net.Server
                 null, // 0x25
                 typeof(EntityStatusPacket), // 0x26
                 null, // 0x27
-                null, // 0x28
+                typeof(EntityMetadataPacket), // 0x28
                 null, // 0x29
                 null, // 0x2a
                 null, // 0x2b

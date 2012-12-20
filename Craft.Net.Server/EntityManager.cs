@@ -68,19 +68,13 @@ namespace Craft.Net.Server
                         c.KnownEntities.Add(client.Entity.Id);
                     });
                 }
-                else if (entity is ItemEntity)
-                {
-                    clients.ToList().ForEach(c =>
-                    {
-                        c.SendPacket(new SpawnDroppedItemPacket(entity as ItemEntity));
-                        c.KnownEntities.Add(entity.Id);
-                    });
-                }
                 else if (entity is ObjectEntity)
                 {
                     clients.ToList().ForEach(c =>
                     {
                         c.SendPacket(new SpawnObjectPacket(entity as ObjectEntity));
+                        if (entity.IncludeMetadataOnClient)
+                            c.SendPacket(new EntityMetadataPacket(entity));
                         c.KnownEntities.Add(entity.Id);
                     });
                 }
@@ -171,8 +165,12 @@ namespace Craft.Net.Server
             foreach (var entity in entities)
             {
                 client.KnownEntities.Add(entity.Id);
-                if (entity is ItemEntity)
-                    client.SendPacket(new SpawnDroppedItemPacket(entity as ItemEntity));
+                if (entity is ObjectEntity)
+                {
+                    client.SendPacket(new SpawnObjectPacket(entity as ObjectEntity));
+                    if (entity.IncludeMetadataOnClient)
+                        client.SendPacket(new EntityMetadataPacket(entity));
+                }
             }
         }
 

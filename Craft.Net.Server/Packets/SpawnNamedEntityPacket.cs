@@ -49,9 +49,9 @@ namespace Craft.Net.Server.Packets
             client.SendData(CreateBuffer(
                 DataUtility.CreateInt32(EntityId),
                 DataUtility.CreateString(PlayerName),
-                DataUtility.CreateAbsoluteInteger((int)Position.X),
-                DataUtility.CreateAbsoluteInteger((int)Position.Y),
-                DataUtility.CreateAbsoluteInteger((int)Position.Z),
+                DataUtility.CreateAbsoluteInteger(Position.X),
+                DataUtility.CreateAbsoluteInteger(Position.Y),
+                DataUtility.CreateAbsoluteInteger(Position.Z),
                 DataUtility.CreatePackedByte(Pitch),
                 DataUtility.CreatePackedByte(Yaw),
                 DataUtility.CreateInt16(CurrentItem),

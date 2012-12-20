@@ -414,7 +414,8 @@ namespace Craft.Net.Data.Entities
 
         public override void PhysicsUpdate(World world)
         {
-            // TODO: Keep players in line so they don't stray too far away from where they should logically be
+            // This doesn't quite work properly, and it becomes a hassle for the user
+            return;
             EnablePositionUpdates = false;
             base.PhysicsUpdate(world);
             EnablePositionUpdates = true;
