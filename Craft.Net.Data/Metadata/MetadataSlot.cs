@@ -43,23 +43,26 @@ namespace Craft.Net.Data.Metadata
 
         public override byte[] Encode()
         {
-            byte[] data = new byte[]
-                              {
-                                  GetKey(),
-                                  0, 0,
-                                  Value.Count,
-                                  0, 0,
-                                  0, Value.Nbt != null && Value.Nbt.RootTag != null ? (byte)1 : (byte)0
-                              };
-            Array.Copy(DataUtility.CreateUInt16(Value.Id), 0, data, 1, 2);
-            Array.Copy(DataUtility.CreateUInt16(Value.Metadata), 0, data, 4, 2);
-            if (Value.Nbt == null && Value.Nbt.RootTag != null)
+            byte[] data = new byte[8];
+            data[0] = GetKey();
+            Array.Copy(DataUtility.CreateInt16((short)Value.Id), 0, data, 1, 2);
+            if (Value.Id != 0xFFFF)
             {
-                MemoryStream ms = new MemoryStream();
-                Value.Nbt.SaveFile(ms, false);
-                var nbt = ms.GetBuffer();
-                Array.Resize<byte>(ref data, data.Length + nbt.Length);
-                Array.Copy(nbt, 0, data, 8, nbt.Length);
+                data[3] = Value.Count;
+                Array.Copy(DataUtility.CreateInt16((short)Value.Metadata), 0, data, 4, 2);
+                if (Value.Nbt == null && Value.Nbt.RootTag != null)
+                {
+                    MemoryStream ms = new MemoryStream();
+                    Value.Nbt.SaveFile(ms, false);
+                    var nbt = ms.GetBuffer();
+                    Array.Resize<byte>(ref data, data.Length + nbt.Length + 2);
+                    Array.Copy(DataUtility.CreateInt16((short)nbt.Length), 0, data, 6, 2);
+                    Array.Copy(nbt, 0, data, 8, nbt.Length);
+                }
+                else
+                {
+                    Array.Copy(DataUtility.CreateInt16((short)-1), 0, data, 6, 2);
+                }
             }
             return data;
         }
