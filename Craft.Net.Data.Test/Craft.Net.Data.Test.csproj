@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LibNbt, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\LibNbt.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.6.1.12217, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\nunit.framework.dll</HintPath>
@@ -60,10 +64,6 @@
     <ProjectReference Include="..\Craft.Net.Data\Craft.Net.Data.csproj">
       <Project>{30c3f936-8d95-4113-ba48-8b798b056309}</Project>
       <Name>Craft.Net.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\externals\libnbt\LibNbt\LibNbt.csproj">
-      <Project>{4488498D-976D-4DA3-BF72-109531AF0488}</Project>
-      <Name>LibNbt</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

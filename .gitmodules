@@ -1,3 +1,0 @@
-[submodule "externals/libnbt"]
-	path = externals/libnbt
-	url = git://github.com/SirCmpwn/libnbt.git

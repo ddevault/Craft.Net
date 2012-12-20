@@ -41,6 +41,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\Ionic.Zip.Reduced.dll</HintPath>
     </Reference>
+    <Reference Include="LibNbt, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\LibNbt.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Xml.Linq" />
@@ -223,10 +227,6 @@
     <ProjectReference Include="..\Craft.Net.Data\Craft.Net.Data.csproj">
       <Project>{30C3F936-8D95-4113-BA48-8B798B056309}</Project>
       <Name>Craft.Net.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\externals\libnbt\LibNbt\LibNbt.csproj">
-      <Project>{4488498D-976D-4DA3-BF72-109531AF0488}</Project>
-      <Name>LibNbt</Name>
     </ProjectReference>
   </ItemGroup>
   <ProjectExtensions>
