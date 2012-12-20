@@ -2,6 +2,7 @@ using System;
 using Craft.Net.Data;
 using Craft.Net.Data.Blocks;
 using Craft.Net.Data.Items;
+using Craft.Net.Data.Entities;
 
 namespace Craft.Net.Server.Packets
 {
@@ -93,6 +94,25 @@ namespace Craft.Net.Server.Packets
                         //client.World.SetBlock(Position, new AirBlock());
                         block.OnBlockMined(client.World, Position, client.Entity);
                         client.Entity.FoodExhaustion += 0.025f;
+                        break;
+                    case PlayerAction.DropItem:
+                        var SlotItem = client.Entity.Inventory[client.Entity.SelectedSlot];
+                        if (!SlotItem.Empty)
+                        {
+                            Slot ItemCopy = SlotItem.Clone();
+                            ItemCopy.Count = 1;
+
+                            SlotItem.Count--; // Decrease the player's item by 1
+                            if (SlotItem.Count == 0)
+                            {
+                                client.Entity.SetSlot(client.Entity.SelectedSlot, new Slot());
+                            }
+                            else
+                            {
+                                client.Entity.SetSlot(client.Entity.SelectedSlot, SlotItem);
+                            }
+                            server.EntityManager.SpawnEntity(client.World, new ItemEntity(client.Entity.GivenPosition + new Vector3(0.5), ItemCopy));
+                        }
                         break;
                 }
             }
