@@ -43,7 +43,7 @@ namespace Craft.Net.Data.Metadata
 
         public override byte[] Encode()
         {
-            byte[] data = new byte[8];
+            byte[] data = new byte[Value.Id == 0xFFFF ? 3 : 8];
             data[0] = GetKey();
             Array.Copy(DataUtility.CreateInt16((short)Value.Id), 0, data, 1, 2);
             if (Value.Id != 0xFFFF)

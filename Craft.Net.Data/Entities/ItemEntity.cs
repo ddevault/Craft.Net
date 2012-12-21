@@ -9,10 +9,13 @@ namespace Craft.Net.Data.Entities
 {
     public class ItemEntity : ObjectEntity
     {
+        private DateTime SpawnTime { get; set; }
+
         public ItemEntity(Vector3 position, Slot item)
         {
             Position = position;
             Item = item;
+            SpawnTime = DateTime.Now;
         }
 
         public override Size Size
@@ -35,7 +38,7 @@ namespace Craft.Net.Data.Entities
         public override void PhysicsUpdate(World world)
         {
             base.PhysicsUpdate(world);
-            if (world.Level.Time % 10 == 0)
+            if ((DateTime.Now - SpawnTime).TotalSeconds > 0.5 && world.Level.Time % 10 == 0)
             {
                 var player = (PlayerEntity)world.Entities.Where(e => e is PlayerEntity &&
                     e.Position.DistanceTo(Position) < 2).FirstOrDefault();
