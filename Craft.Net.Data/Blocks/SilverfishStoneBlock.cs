@@ -8,7 +8,7 @@ namespace Craft.Net.Data.Blocks
 {
     public class SilverfishStoneBlock : Block
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 97; }
         }

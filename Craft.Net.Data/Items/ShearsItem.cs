@@ -15,7 +15,7 @@ namespace Craft.Net.Data.Items
                 typeof(VineBlock)
             };
 
-        public override ushort Id
+        public override short Id
         {
             get
             {

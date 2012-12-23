@@ -8,7 +8,6 @@ using System.Threading;
 using Craft.Net.Data.Entities;
 using Craft.Net.Data.Generation;
 using LibNbt;
-using LibNbt.Tags;
 using Craft.Net.Data.NbtSerialization;
 
 namespace Craft.Net.Data
@@ -120,7 +119,7 @@ namespace Craft.Net.Data
 
         private static unsafe long GenerateSeed()
         {
-            double seed = DataUtility.Random.NextDouble();
+            double seed = MathHelper.Random.NextDouble();
             void* seedPtr = &seed;
             long Seed = *(long*)seedPtr;
             return Seed;
@@ -157,9 +156,9 @@ namespace Craft.Net.Data
                 LastPlayed = DateTime.UtcNow.Ticks
             });
             file.RootTag = new NbtCompound();
-            file.RootTag.Tags.Add(data);
+            file.RootTag.Add(data);
             using (var stream = File.Open(Path.Combine(LevelDirectory, "level.dat"), FileMode.Create))
-                file.SaveFile(stream, true);
+                file.SaveToStream(stream, NbtCompression.GZip);
 
             World.Save();
         }
@@ -183,7 +182,7 @@ namespace Craft.Net.Data
         {
             NbtFile file = new NbtFile();
             using (var stream = File.Open(Path.Combine(LevelDirectory, "level.dat"), FileMode.Open))
-                file.LoadFile(stream, true);
+                file.LoadFromStream(stream, NbtCompression.None, null);
             var data = file.RootTag.Get<NbtCompound>("Data");
             var serializer = new NbtSerializer(typeof(SavedLevel));
             SavedLevel level = (SavedLevel)serializer.Deserialize(data);
@@ -224,7 +223,7 @@ namespace Craft.Net.Data
             
             NbtFile file = new NbtFile();
             using (Stream stream = File.Open(Path.Combine(LevelDirectory, "players", name + ".dat"), FileMode.Open))
-                file.LoadFile(stream, true);
+                file.LoadFromStream(stream, NbtCompression.GZip, null);
             var data = file.RootTag;
             entity.OnGround = data.Get<NbtByte>("OnGround").Value == 1;
             entity.Air = data.Get<NbtShort>("Air").Value;
@@ -248,7 +247,7 @@ namespace Craft.Net.Data
             // Appears to be unused, is overriden by the inventory contents
             // foreach (var item in equipment.Tags)
 
-            foreach (var item in inventory.Tags)
+            foreach (var item in inventory)
             {
                 var slot = Slot.FromNbt((NbtCompound)item);
                 slot.Index = DataSlotToNetworkSlot(slot.Index);
@@ -256,14 +255,14 @@ namespace Craft.Net.Data
             }
 
             entity.Velocity = new Vector3(
-                ((NbtDouble)motion.Tags[0]).Value,
-                ((NbtDouble)motion.Tags[1]).Value,
-                ((NbtDouble)motion.Tags[2]).Value);
+                ((NbtDouble)motion[0]).Value,
+                ((NbtDouble)motion[1]).Value,
+                ((NbtDouble)motion[2]).Value);
 
             entity.Position = new Vector3(
-                ((NbtDouble)pos.Tags[0]).Value,
-                ((NbtDouble)pos.Tags[1]).Value,
-                ((NbtDouble)pos.Tags[2]).Value);
+                ((NbtDouble)pos[0]).Value,
+                ((NbtDouble)pos[1]).Value,
+                ((NbtDouble)pos[2]).Value);
 
             if (data.Get<NbtInt>("SpawnX") != null)
             {
@@ -273,8 +272,8 @@ namespace Craft.Net.Data
                     data.Get<NbtInt>("SpawnZ").Value);
             }
 
-            entity.Yaw = ((NbtFloat)rotation.Tags[0]).Value;
-            entity.Pitch = ((NbtFloat)rotation.Tags[1]).Value;
+            entity.Yaw = ((NbtFloat)rotation[0]).Value;
+            entity.Pitch = ((NbtFloat)rotation[1]).Value;
 
             // TODO: Abilities
 
@@ -286,17 +285,17 @@ namespace Craft.Net.Data
             // TODO: Generalize to all mobs
             NbtFile file = new NbtFile();
             var data = new NbtCompound();
-            data.Tags.Add(new NbtByte("OnGround", (byte)(entity.OnGround ? 1 : 0)));
-            data.Tags.Add(new NbtShort("Air", entity.Air));
-            data.Tags.Add(new NbtShort("Health", entity.Health));
-            data.Tags.Add(new NbtInt("Dimension", 0)); // TODO
-            data.Tags.Add(new NbtInt("foodLevel", entity.Food));
-            data.Tags.Add(new NbtInt("XpLevel", entity.XpLevel));
-            data.Tags.Add(new NbtInt("XpTotal", entity.XpTotal));
-            data.Tags.Add(new NbtFloat("foodExhaustionLevel", entity.FoodExhaustion));
-            data.Tags.Add(new NbtFloat("foodSaturationLevel", entity.FoodSaturation));
-            data.Tags.Add(new NbtFloat("XpP", entity.XpProgress));
-            data.Tags.Add(new NbtList("Equipment"));
+            data.Add(new NbtByte("OnGround", (byte)(entity.OnGround ? 1 : 0)));
+            data.Add(new NbtShort("Air", entity.Air));
+            data.Add(new NbtShort("Health", entity.Health));
+            data.Add(new NbtInt("Dimension", 0)); // TODO
+            data.Add(new NbtInt("foodLevel", entity.Food));
+            data.Add(new NbtInt("XpLevel", entity.XpLevel));
+            data.Add(new NbtInt("XpTotal", entity.XpTotal));
+            data.Add(new NbtFloat("foodExhaustionLevel", entity.FoodExhaustion));
+            data.Add(new NbtFloat("foodSaturationLevel", entity.FoodSaturation));
+            data.Add(new NbtFloat("XpP", entity.XpProgress));
+            data.Add(new NbtList("Equipment"));
             var inventory = new NbtList("Inventory");
             for (int index = 0; index < entity.Inventory.Length; index++)
             {
@@ -304,33 +303,33 @@ namespace Craft.Net.Data
                 if (slot.Empty)
                     continue;
                 slot.Index = NetworkSlotToDataSlot(index);
-                inventory.Tags.Add(slot.ToNbt());
+                inventory.Add(slot.ToNbt());
             }
-            data.Tags.Add(inventory);
+            data.Add(inventory);
             var motion = new NbtList("Motion");
-            motion.Tags.Add(new NbtDouble(entity.Velocity.X));
-            motion.Tags.Add(new NbtDouble(entity.Velocity.Y));
-            motion.Tags.Add(new NbtDouble(entity.Velocity.Z));
-            data.Tags.Add(motion);
+            motion.Add(new NbtDouble(entity.Velocity.X));
+            motion.Add(new NbtDouble(entity.Velocity.Y));
+            motion.Add(new NbtDouble(entity.Velocity.Z));
+            data.Add(motion);
 
             var pos = new NbtList("Pos");
-            pos.Tags.Add(new NbtDouble(entity.Position.X));
-            pos.Tags.Add(new NbtDouble(entity.Position.Y));
-            pos.Tags.Add(new NbtDouble(entity.Position.Z));
-            data.Tags.Add(pos);
+            pos.Add(new NbtDouble(entity.Position.X));
+            pos.Add(new NbtDouble(entity.Position.Y));
+            pos.Add(new NbtDouble(entity.Position.Z));
+            data.Add(pos);
 
             var rotation = new NbtList("Rotation");
-            rotation.Tags.Add(new NbtFloat(entity.Yaw));
-            rotation.Tags.Add(new NbtFloat(entity.Pitch));
-            data.Tags.Add(rotation);
+            rotation.Add(new NbtFloat(entity.Yaw));
+            rotation.Add(new NbtFloat(entity.Pitch));
+            data.Add(rotation);
 
-            data.Tags.Add(new NbtCompound("abilities"));
+            data.Add(new NbtCompound("abilities"));
 
             file.RootTag = data;
             if (!Directory.Exists(Path.Combine(LevelDirectory, "players")))
                 Directory.CreateDirectory(Path.Combine(LevelDirectory, "players"));
             using (Stream stream = File.Open(Path.Combine(LevelDirectory, "players", entity.Username + ".dat"), FileMode.OpenOrCreate))
-                file.SaveFile(stream, true);
+                file.SaveToStream(stream, NbtCompression.GZip);
         }
 
         /// <summary>

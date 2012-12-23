@@ -4,7 +4,7 @@ namespace Craft.Net.Data.Items
 {
     public class LavaBucketItem : Item
     {
-        public override ushort Id
+        public override short Id
         {
             get
             {

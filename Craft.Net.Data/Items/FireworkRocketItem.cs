@@ -7,7 +7,7 @@ namespace Craft.Net.Data.Items
 {
     public class FireworkRocketItem : Item
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 401; }
         }

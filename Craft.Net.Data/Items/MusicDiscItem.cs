@@ -2,7 +2,7 @@ namespace Craft.Net.Data.Items
 {
     public class MusicDiscItem : Item
     {
-        public override ushort Id
+        public override short Id
         {
             get
             {

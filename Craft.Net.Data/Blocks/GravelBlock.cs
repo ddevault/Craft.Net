@@ -9,7 +9,7 @@ namespace Craft.Net.Data.Blocks
 {
     public class GravelBlock : Block
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 13; }
         }
@@ -21,9 +21,9 @@ namespace Craft.Net.Data.Blocks
 
         public override bool GetDrop(ToolItem tool, out Slot[] drop)
         {
-            if (DataUtility.Random.Next(10) == 0)
+            if (MathHelper.Random.Next(10) == 0)
             {
-                drop = new[] { new Slot((ushort)new FlintItem(), 1) };
+                drop = new[] { new Slot(new FlintItem(), 1) };
                 return true;
             }
             return base.GetDrop(tool, out drop);

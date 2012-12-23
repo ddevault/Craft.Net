@@ -2,7 +2,7 @@ namespace Craft.Net.Data.Items
 {
     public class BoatItem : Item
     {
-        public override ushort Id
+        public override short Id
         {
             get
             {

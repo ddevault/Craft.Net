@@ -3,7 +3,7 @@ namespace Craft.Net.Data.Items
 {
     public class CakeItem : Item
     {
-        public override ushort Id
+        public override short Id
         {
             get
             {

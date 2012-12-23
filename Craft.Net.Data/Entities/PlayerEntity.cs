@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Threading;
 using Craft.Net.Data.Events;
 using Craft.Net.Data.Windows;
+using Craft.Net.Metadata;
 namespace Craft.Net.Data.Entities
 {
     public class PlayerEntity : LivingEntity
@@ -311,7 +312,7 @@ namespace Craft.Net.Data.Entities
         public DateTime LastGivenPositionUpdate { get; set; }
         public bool ShowCape { get; set; }
 
-        public override Metadata.MetadataDictionary Metadata
+        public override MetadataDictionary Metadata
         {
             get
             {
@@ -391,7 +392,7 @@ namespace Craft.Net.Data.Entities
         {
             deathTimer.Change(3000, Timeout.Infinite);
             for (int i = 0; i < Inventory.Length; i++)
-                Inventory[i] = new Slot(0xFFFF, 0);
+                Inventory[i] = new Slot();
         }
 
         protected internal virtual void OnStartEating()

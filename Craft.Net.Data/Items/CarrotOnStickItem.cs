@@ -7,7 +7,7 @@ namespace Craft.Net.Data.Items
 {
     public class CarrotOnStickItem : ToolItem
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 398; }
         }

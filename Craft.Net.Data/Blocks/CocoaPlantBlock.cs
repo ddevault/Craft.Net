@@ -8,7 +8,7 @@ namespace Craft.Net.Data.Blocks
 {
     public class CocoaPlantBlock : Block
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 127; }
         }
@@ -26,9 +26,9 @@ namespace Craft.Net.Data.Blocks
         public override bool GetDrop(ToolItem tool, out Slot[] drop)
         {
             if ((Metadata & 0xC) <= 4)
-                drop = new[] { new Slot((ushort)new CocoaBeanItem(), 1) };
+                drop = new[] { new Slot(new CocoaBeanItem(), 1) };
             else
-                drop = new[] { new Slot((ushort)new CocoaBeanItem(), 3) };
+                drop = new[] { new Slot(new CocoaBeanItem(), 3) };
             return true;
         }
 

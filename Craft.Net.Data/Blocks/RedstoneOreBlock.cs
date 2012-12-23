@@ -9,7 +9,7 @@ namespace Craft.Net.Data.Blocks
 {
     public class RedstoneOreBlock : Block
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 73; }
         }
@@ -34,7 +34,7 @@ namespace Craft.Net.Data.Blocks
 
         public override bool GetDrop(ToolItem tool, out Slot[] drop)
         {
-            drop = new[] { new Slot((ushort)new RedstoneItem(), (byte)DataUtility.Random.Next(4, 5)) };
+            drop = new[] { new Slot(new RedstoneItem(), (sbyte)MathHelper.Random.Next(4, 5)) };
             return tool is PickaxeItem &&
                 (tool.ToolMaterial == ToolMaterial.Iron ||
                 tool.ToolMaterial == ToolMaterial.Gold ||

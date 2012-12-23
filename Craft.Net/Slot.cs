@@ -16,6 +16,7 @@ namespace Craft.Net
             Count = 1;
             Metadata = 0;
             Nbt = null;
+            Index = 0;
         }
 
         public Slot(short id, sbyte count) : this(id)
@@ -69,6 +70,36 @@ namespace Craft.Net
             stream.WriteUInt8Array(buffer);
         }
 
+        public static Slot FromNbt(NbtCompound compound)
+        {
+            var s = new Slot();
+            s.Id = compound.Get<NbtShort>("id").Value;
+            s.Metadata = compound.Get<NbtShort>("Damage").Value;
+            s.Count = (sbyte)compound.Get<NbtByte>("Count").Value;
+            s.Index = compound.Get<NbtByte>("Slot").Value;
+            if (compound.Get<NbtCompound>("tag") != null)
+            {
+                s.Nbt = new NbtFile();
+                s.Nbt.RootTag = compound.Get<NbtCompound>("tag");
+            }
+            return s;
+        }
+
+        public NbtCompound ToNbt()
+        {
+            var c = new NbtCompound();
+            c.Add(new NbtShort("id", Id));
+            c.Add(new NbtShort("Damage", Metadata));
+            c.Add(new NbtByte("Count", (byte)Count));
+            c.Add(new NbtByte("Slot", (byte)Index));
+            if (Nbt != null && Nbt.RootTag != null)
+            {
+                Nbt.RootTag = new NbtCompound("tag");
+                c.Add(Nbt.RootTag);
+            }
+            return c;
+        }
+
         public bool Empty
         {
             get { return Id == -1; }
@@ -78,6 +109,7 @@ namespace Craft.Net
         public sbyte Count;
         public short Metadata;
         public NbtFile Nbt;
+        public int Index;
 
         public override string ToString()
         {

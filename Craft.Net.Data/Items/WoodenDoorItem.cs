@@ -4,7 +4,7 @@ namespace Craft.Net.Data.Items
 {
     public class WoodenDoorItem : Item
     {
-        public override ushort Id
+        public override short Id
         {
             get
             {
@@ -21,7 +21,7 @@ namespace Craft.Net.Data.Items
         {
             if (clickedSide != Vector3.Up)
                 return;
-            Vector3 away = DataUtility.FowardVector(usedBy, true);
+            Vector3 away = MathHelper.FowardVector(usedBy, true);
             var near = world.GetBlock(clickedBlock + clickedSide);
             var far = world.GetBlock(clickedBlock + clickedSide + Vector3.Up);
             if (near is AirBlock && far is AirBlock)

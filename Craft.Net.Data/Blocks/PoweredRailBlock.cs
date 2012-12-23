@@ -7,7 +7,7 @@ namespace Craft.Net.Data.Blocks
 {
     public class PoweredRailBlock : Block
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 27; }
         }

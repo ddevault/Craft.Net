@@ -121,7 +121,7 @@ namespace Craft.Net.Data.Generation
                 if (parts.Length == 2)
                     idIndex++;
                 var idParts = parts[idIndex].Split(':');
-                BlockId = ushort.Parse(idParts[0]);
+                BlockId = short.Parse(idParts[0]);
                 if (idParts.Length == 2)
                     Metadata = (byte)(byte.Parse(idParts[1]) & 0xF);
                 Height = 1;
@@ -139,7 +139,7 @@ namespace Craft.Net.Data.Generation
                 }
             }
 
-            public ushort BlockId { get; set; }
+            public short BlockId { get; set; }
             public byte Metadata { get; set; }
             public int Height { get; set; }
         }

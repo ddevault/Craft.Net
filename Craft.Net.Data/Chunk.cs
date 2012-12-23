@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Runtime.Serialization;
 using LibNbt;
-using LibNbt.Tags;
 using System.Collections.Generic;
 using Craft.Net.Data.NbtSerialization;
 using System.Reflection;
@@ -159,50 +158,50 @@ namespace Craft.Net.Data
             NbtCompound level = new NbtCompound("Level");
             
             // Entities // TODO
-            level.Tags.Add(new NbtList("Entities"));
+            level.Add(new NbtList("Entities"));
 
             // Biomes
-            level.Tags.Add(new NbtByteArray("Biomes", Biomes));
+            level.Add(new NbtByteArray("Biomes", Biomes));
 
             // Last Update // TODO: What is this
-            level.Tags.Add(new NbtLong("LastUpdate", 15));
+            level.Add(new NbtLong("LastUpdate", 15));
 
             // Position
-            level.Tags.Add(new NbtInt("xPos", (int)AbsolutePosition.X));
-            level.Tags.Add(new NbtInt("zPos", (int)AbsolutePosition.Z));
+            level.Add(new NbtInt("xPos", (int)AbsolutePosition.X));
+            level.Add(new NbtInt("zPos", (int)AbsolutePosition.Z));
 
             // Tile Entities
             var tileEntityList = new NbtList("TileEntities");
             foreach (var tileEntity in TileEntities)
             {
                 // Get properties
-                tileEntityList.Tags.Add(tileEntity.Value.ToNbt(tileEntity.Key));
+                tileEntityList.Add(tileEntity.Value.ToNbt(tileEntity.Key));
             }
-            level.Tags.Add(tileEntityList);
+            level.Add(tileEntityList);
 
             // Terrain Populated // TODO: When is this 0? Will vanilla use this?
-            level.Tags.Add(new NbtByte("TerrainPopualted", 0));
+            level.Add(new NbtByte("TerrainPopualted", 0));
 
             // Sections and height
-            level.Tags.Add(new NbtIntArray("HeightMap", HeightMap));
+            level.Add(new NbtIntArray("HeightMap", HeightMap));
             NbtList sectionList = new NbtList("Sections");
             foreach (var section in Sections)
             {
                 if (!section.IsAir)
                 {
                     NbtCompound sectionTag = new NbtCompound();
-                    sectionTag.Tags.Add(new NbtByte("Y", section.Y));
-                    sectionTag.Tags.Add(new NbtByteArray("Blocks", section.Blocks));
-                    sectionTag.Tags.Add(new NbtByteArray("Data", section.Metadata.Data));
-                    sectionTag.Tags.Add(new NbtByteArray("SkyLight", section.SkyLight.Data));
-                    sectionTag.Tags.Add(new NbtByteArray("BlockLight", section.BlockLight.Data));
-                    sectionList.Tags.Add(sectionTag);
+                    sectionTag.Add(new NbtByte("Y", section.Y));
+                    sectionTag.Add(new NbtByteArray("Blocks", section.Blocks));
+                    sectionTag.Add(new NbtByteArray("Data", section.Metadata.Data));
+                    sectionTag.Add(new NbtByteArray("SkyLight", section.SkyLight.Data));
+                    sectionTag.Add(new NbtByteArray("BlockLight", section.BlockLight.Data));
+                    sectionList.Add(sectionTag);
                 }
             }
-            level.Tags.Add(sectionList);
+            level.Add(sectionList);
 
             var rootCompound = new NbtCompound();
-            rootCompound.Tags.Add(level);
+            rootCompound.Add(level);
             file.RootTag = rootCompound;
 
             return file;
@@ -216,7 +215,7 @@ namespace Craft.Net.Data
             chunk.Biomes = root.Get<NbtByteArray>("Biomes").Value;
             chunk.HeightMap = root.Get<NbtIntArray>("HeightMap").Value;
             var sections = root.Get<NbtList>("Sections");
-            foreach (var sectionTag in sections.Tags)
+            foreach (var sectionTag in sections) // TODO: This might not work properly
             {
                 // Load data
                 var compound = (NbtCompound)sectionTag;
@@ -233,7 +232,7 @@ namespace Craft.Net.Data
             var tileEntities = root.Get<NbtList>("TileEntities");
             if (tileEntities != null)
             {
-                foreach (var tag in tileEntities.Tags)
+                foreach (var tag in tileEntities)
                 {
                     Vector3 tilePosition;
                     var entity = TileEntity.FromNbt(tag as NbtCompound, out tilePosition);

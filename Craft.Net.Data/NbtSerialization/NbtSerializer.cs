@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
-using LibNbt.Tags;
+using LibNbt;
 
 namespace Craft.Net.Data.NbtSerialization
 {
@@ -19,39 +18,43 @@ namespace Craft.Net.Data.NbtSerialization
         {
             Type = type;
         }
-        
+
         public NbtTag Serialize(object value)
         {
+            return Serialize(value, "");
+        }
+
+        public NbtTag Serialize(object value, string tagName)
+        {
             if (value is byte)
-                return new NbtByte("", (byte)value);
+                return new NbtByte(tagName, (byte)value);
             if (value is bool)
-                return new NbtByte("", (byte)((bool)value ? 1 : 0));
+                return new NbtByte(tagName, (byte)((bool)value ? 1 : 0));
             else if (value is byte[])
-                return new NbtByteArray("", (byte[])value);
+                return new NbtByteArray(tagName, (byte[])value);
             else if (value is double)
-                return new NbtDouble("", (double)value);
+                return new NbtDouble(tagName, (double)value);
             else if (value is float)
-                return new NbtFloat("", (float)value);
+                return new NbtFloat(tagName, (float)value);
             else if (value is int)
-                return new NbtInt("", (int)value);
+                return new NbtInt(tagName, (int)value);
             else if (value is int[])
-                return new NbtIntArray("", (int[])value);
+                return new NbtIntArray(tagName, (int[])value);
             else if (value is long)
-                return new NbtLong("", (long)value);
+                return new NbtLong(tagName, (long)value);
             else if (value is short)
-                return new NbtShort("", (short)value);
+                return new NbtShort(tagName, (short)value);
             else if (value is string)
-                return new NbtString("", (string)value);
+                return new NbtString(tagName, (string)value);
             else
             {
-
-                var compound = new NbtCompound();
+                var compound = new NbtCompound(tagName);
                
                 if(value == null) return compound;
                 var nameAttributes = Attribute.GetCustomAttributes(value.GetType(), typeof(TagNameAttribute));
 
                 if (nameAttributes.Length > 0)
-                    compound.Name = ((TagNameAttribute)nameAttributes[0]).Name;
+                    compound = new NbtCompound(((TagNameAttribute)nameAttributes[0]).Name);
 
                 var properties = Type.GetProperties().Where(p =>
                     !Attribute.GetCustomAttributes(p, typeof(NbtIgnoreAttribute)).Any());
@@ -83,9 +86,8 @@ namespace Craft.Net.Data.NbtSerialization
                             propValue = "";
                     }
                     
-                    tag = innerSerializer.Serialize(propValue);
-                    tag.Name = name;
-                    compound.Tags.Add(tag);
+                    tag = innerSerializer.Serialize(propValue, name);
+                    compound.Add(tag);
                 }
                 
                 return compound;

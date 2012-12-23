@@ -4,7 +4,7 @@ namespace Craft.Net.Data.Items
 {
     public class SignItem : Item
     {
-        public override ushort Id
+        public override short Id
         {
             get
             {
@@ -26,7 +26,7 @@ namespace Craft.Net.Data.Items
             else if (clickedSide != Vector3.Down)
             {
                 // Wall sign
-                world.SetBlock(clickedBlock + clickedSide, new WallSignBlock(DataUtility.DirectionByRotationFlat(usedBy, true)));
+                world.SetBlock(clickedBlock + clickedSide, new WallSignBlock(MathHelper.DirectionByRotationFlat(usedBy, true)));
             }
         }
     }

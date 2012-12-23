@@ -2,7 +2,7 @@ namespace Craft.Net.Data.Items
 {
     public class DiamondLeggingsItem : ToolItem, IArmorItem
     {
-        public override ushort Id
+        public override short Id
         {
             get
             {

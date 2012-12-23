@@ -8,7 +8,7 @@ namespace Craft.Net.Data.Blocks
     public class RedstoneOreActiveBlock : RedstoneOreBlock
     {
         // TODO: Schedule update to deactivate
-        public override ushort Id
+        public override short Id
         {
             get { return 74; }
         }

@@ -13,7 +13,7 @@ namespace Craft.Net.Data.Items
     
     public class GoldIngotItem : Item
     {
-        public override ushort Id
+        public override short Id
         {
             get
             {

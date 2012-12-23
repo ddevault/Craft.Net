@@ -5,7 +5,7 @@ namespace Craft.Net.Data.Items
     
     public class WaterBucketItem : Item
     {
-        public override ushort Id
+        public override short Id
         {
             get
             {

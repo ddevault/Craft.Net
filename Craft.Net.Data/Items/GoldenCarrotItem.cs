@@ -7,7 +7,7 @@ namespace Craft.Net.Data.Items
 {
     public class GoldenCarrotItem : FoodItem
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 396; }
         }

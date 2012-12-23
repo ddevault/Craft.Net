@@ -1,10 +1,9 @@
 using Craft.Net.Data.Blocks;
 namespace Craft.Net.Data.Items
 {
-    
     public class BrewingStandItem : Item
     {
-        public override ushort Id
+        public override short Id
         {
             get
             {

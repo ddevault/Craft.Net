@@ -12,13 +12,13 @@ namespace Craft.Net.Data
     {
         #region Properties
 
-        private static Dictionary<ushort, Block> OverridenBlocks { get; set; }
+        private static Dictionary<short, Block> OverridenBlocks { get; set; }
 
         /// <summary>
         /// Gets or sets this block's metadata value as a
         /// 16-bit unsigned integer.
         /// </summary>
-        public override ushort Data
+        public override short Data
         {
             get { return Metadata; }
             set { Metadata = (byte)(value & 0xF); }
@@ -295,7 +295,7 @@ namespace Craft.Net.Data
 
         #endregion
 
-        internal static Block Create(ushort id, byte metadata)
+        internal static Block Create(short id, byte metadata)
         {
             var b = (Block)id;
             b.Metadata = metadata;

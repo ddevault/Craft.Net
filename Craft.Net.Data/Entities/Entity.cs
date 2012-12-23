@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Craft.Net.Data.Blocks;
 using Craft.Net.Data.Events;
-using Craft.Net.Data.Metadata;
+using Craft.Net.Metadata;
 
 namespace Craft.Net.Data.Entities
 {

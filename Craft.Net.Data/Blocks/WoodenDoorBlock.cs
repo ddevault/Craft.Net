@@ -8,7 +8,7 @@ namespace Craft.Net.Data.Blocks
 {
     public class WoodenDoorBlock : DoorBlock
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 64; }
         }
@@ -36,7 +36,7 @@ namespace Craft.Net.Data.Blocks
 
         public override bool GetDrop(ToolItem tool, out Slot[] drop)
         {
-            drop = new[] { new Slot((ushort)new WoodenDoorItem(), 1) };
+            drop = new[] { new Slot(new WoodenDoorItem(), 1) };
             return UpperHalf;
         }
 

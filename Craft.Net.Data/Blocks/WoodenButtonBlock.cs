@@ -7,7 +7,7 @@ namespace Craft.Net.Data.Blocks
 {
     public class WoodenButtonBlock : StoneButtonBlock // TODO: Generic ButtonBlock
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 143; }
         }

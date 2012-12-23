@@ -3,7 +3,7 @@ namespace Craft.Net.Data.Items
     
     public class MinecartWithChestItem : Item
     {
-        public override ushort Id
+        public override short Id
         {
             get
             {

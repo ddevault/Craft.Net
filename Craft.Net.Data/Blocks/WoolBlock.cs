@@ -42,7 +42,7 @@ namespace Craft.Net.Data.Blocks
             Metadata = (byte)color;
         }
 
-        public override ushort Id
+        public override short Id
         {
             get { return 35; }
         }

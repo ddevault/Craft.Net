@@ -16,11 +16,11 @@ namespace Craft.Net.Data
         /// <summary>
         /// This item's ID.
         /// </summary>
-        public abstract ushort Id { get; }
+        public abstract short Id { get; }
         /// <summary>
         /// The metadata or durability of this item.
         /// </summary>
-        public virtual ushort Data { get; set; }
+        public virtual short Data { get; set; }
 
         /// <summary>
         /// The amount of damage hitting a living entity with this item
@@ -50,17 +50,21 @@ namespace Craft.Net.Data
         {
             var player = usedBy as PlayerEntity;
             if (player != null && player.GameMode != GameMode.Creative)
-                player.Inventory[player.SelectedSlot].Count--;
+            {
+                var slot = player.Inventory[player.SelectedSlot];
+                player.Inventory[player.SelectedSlot] = 
+                    new Slot(slot.Id, (sbyte)(slot.Count - 1), slot.Metadata, slot.Nbt);
+            }
         }
 
         #region Items Conversion
 
-        public static implicit operator ushort(Item i)
+        public static implicit operator short(Item i)
         {
             return i.Id;
         }
 
-        public static implicit operator Item(ushort u)
+        public static implicit operator Item(short u)
         {
             // Binary search through items
             int index = GetItemIndex(u);
@@ -69,7 +73,7 @@ namespace Craft.Net.Data
             return (Item)Activator.CreateInstance(Items[index].GetType());
         }
 
-        private static int GetItemIndex(ushort item)
+        private static int GetItemIndex(short item)
         {
             // Binary search for items
             if (item > Items[Items.Count - 1].Id)

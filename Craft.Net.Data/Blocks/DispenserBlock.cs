@@ -7,7 +7,7 @@ namespace Craft.Net.Data.Blocks
 {
     public class DispenserBlock : Block
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 23; }
         }
@@ -24,7 +24,7 @@ namespace Craft.Net.Data.Blocks
 
         public override bool OnBlockPlaced(World world, Vector3 position, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entities.Entity usedBy)
         {
-            this.Metadata = (byte)DataUtility.DirectionByRotationFlat(usedBy, true);
+            this.Metadata = (byte)MathHelper.DirectionByRotationFlat(usedBy, true);
             return true;
         }
     }

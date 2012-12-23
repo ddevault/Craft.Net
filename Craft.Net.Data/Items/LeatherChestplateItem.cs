@@ -2,7 +2,7 @@ namespace Craft.Net.Data.Items
 {
     public class LeatherChestplateItem : ToolItem, IArmorItem
     {
-        public override ushort Id
+        public override short Id
         {
             get
             {

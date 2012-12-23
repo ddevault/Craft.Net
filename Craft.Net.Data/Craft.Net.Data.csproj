@@ -36,10 +36,6 @@
     <Reference Include="Ionic.Zip.Reduced">
       <HintPath>..\lib\Ionic.Zip.Reduced.dll</HintPath>
     </Reference>
-    <Reference Include="LibNbt, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\LibNbt.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -383,15 +379,6 @@
     <Compile Include="Items\WrittenBookItem.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="MathHelper.cs" />
-    <Compile Include="Metadata\MetadataByte.cs" />
-    <Compile Include="Metadata\MetadataDictionary.cs" />
-    <Compile Include="Metadata\MetadataEntry.cs" />
-    <Compile Include="Metadata\MetadataFloat.cs" />
-    <Compile Include="Metadata\MetadataInt.cs" />
-    <Compile Include="Metadata\MetadataShort.cs" />
-    <Compile Include="Metadata\MetadataSlot.cs" />
-    <Compile Include="Metadata\MetadataString.cs" />
-    <Compile Include="Metadata\MetadataVector3.cs" />
     <Compile Include="NbtSerialization\IgnoreOnNullAttribute.cs" />
     <Compile Include="NbtSerialization\NbtIgnoreAttribute.cs" />
     <Compile Include="NbtSerialization\NbtSerializer.cs" />
@@ -415,7 +402,16 @@
     <Compile Include="Windows\InventoryWindow.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Craft.Net\Craft.Net.csproj">
+      <Project>{c3bbab7e-606f-420e-9461-c8cfaec2476b}</Project>
+      <Name>Craft.Net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\externals\libnbt2012\LibNbt\LibNbt.csproj">
+      <Project>{b843bf2d-8ced-4a61-a5c7-3f4d2ab459bf}</Project>
+      <Name>LibNbt</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

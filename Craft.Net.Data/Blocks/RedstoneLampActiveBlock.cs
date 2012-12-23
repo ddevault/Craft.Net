@@ -8,14 +8,14 @@ namespace Craft.Net.Data.Blocks
 {
     public class RedstoneLampActiveBlock : RedstoneLampBlock
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 124; }
         }
 
         public override bool GetDrop(ToolItem tool, out Slot[] drop)
         {
-            drop = new[] { new Slot((ushort)new RedstoneLampBlock(), 1) };
+            drop = new[] { new Slot(new RedstoneLampBlock(), 1) };
             return true;
         }
     }

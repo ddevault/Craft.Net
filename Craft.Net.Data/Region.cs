@@ -95,7 +95,7 @@ namespace Craft.Net.Data
                                 return Chunks[position];
                             }
                             regionFile.Seek(chunkData.Item1, SeekOrigin.Begin);
-                            int length = DataUtility.ReadInt32(regionFile);
+                            int length = MathHelper.ReadInt32(regionFile);
                             int compressionMode = regionFile.ReadByte();
                             switch (compressionMode)
                             {
@@ -107,7 +107,7 @@ namespace Craft.Net.Data
                                     byte[] uncompressed = ZlibStream.UncompressBuffer(compressed);
                                     MemoryStream memoryStream = new MemoryStream(uncompressed);
                                     NbtFile nbt = new NbtFile();
-                                    nbt.LoadFile(memoryStream, false);
+                                    nbt.LoadFromStream(memoryStream, NbtCompression.None, null);
                                     var chunk = Chunk.FromNbt(position, nbt);
                                     chunk.ParentRegion = this;
                                     Chunks.Add(position, chunk);
@@ -210,7 +210,7 @@ namespace Craft.Net.Data
                         {
                             var data = chunk.ToNbt();
                             MemoryStream stream = new MemoryStream();
-                            data.SaveFile(stream, false);
+                            data.SaveToStream(stream, NbtCompression.GZip);
                             byte[] raw = new byte[stream.Length];
                             Array.Copy(stream.GetBuffer(), raw, raw.Length);
                             raw = ZlibStream.CompressBuffer(raw);
@@ -220,7 +220,7 @@ namespace Craft.Net.Data
                                 header = AllocateNewChunks(kvp.Key, raw.Length);
 
                             regionFile.Seek(header.Item1, SeekOrigin.Begin);
-                            DataUtility.WriteInt32(regionFile, raw.Length);
+                            MathHelper.WriteInt32(regionFile, raw.Length);
                             regionFile.WriteByte(2); // Compressed with zlib
                             regionFile.Write(raw, 0, raw.Length);
                         }

@@ -8,7 +8,7 @@ namespace Craft.Net.Data.Blocks
 {
     public class TorchBlock : Block
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 50; }
         }

@@ -46,11 +46,11 @@ namespace Craft.Net.Data.Items
         /// </summary>
         /// <param name="amount"></param>
         /// <returns></returns>
-        public bool Damage(int amount)
+        public bool Damage(short amount)
         {
             if (ToolType == ToolType.Other)
                 return false;
-            Data += (ushort)amount;
+            Data += amount;
             return Data >= GetIdealUses();
         }
 

@@ -15,7 +15,7 @@ namespace Craft.Net.Data.Items
     
     public class RedstoneRepeaterItem : Item
     {
-        public override ushort Id
+        public override short Id
         {
             get
             {
@@ -26,7 +26,7 @@ namespace Craft.Net.Data.Items
         public override void OnItemUsedOnBlock(World world, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entities.Entity usedBy)
         {
             if (world.GetBlock(clickedBlock + clickedSide) == 0)
-                world.SetBlock(clickedBlock + clickedSide, new RedstoneRepeaterBlock(DataUtility.DirectionByRotationFlat(usedBy)));
+                world.SetBlock(clickedBlock + clickedSide, new RedstoneRepeaterBlock(MathHelper.DirectionByRotationFlat(usedBy)));
         }
     }
 }

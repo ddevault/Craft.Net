@@ -7,7 +7,7 @@ namespace Craft.Net.Data.Blocks
 {
     public class VineBlock : Block
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 106; }
         }

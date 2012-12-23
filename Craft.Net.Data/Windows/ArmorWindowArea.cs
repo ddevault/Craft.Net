@@ -20,7 +20,7 @@ namespace Craft.Net.Data.Windows
         {
             if (slot.Empty)
                 return true;
-            var item = slot.Item as IArmorItem;
+            var item = (IArmorItem)(Item)slot.Id;
             if (item == null)
                 return false;
             if (index == Footwear && item.ArmorSlot != ArmorSlot.Footwear)

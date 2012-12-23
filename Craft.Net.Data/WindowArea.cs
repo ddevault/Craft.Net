@@ -54,7 +54,7 @@ namespace Craft.Net.Data
                         this[i].Count = slot.Item.MaximumStack;
                         continue;
                     }
-                    this[i] = new Slot(slot.Id, (byte)(this[i].Count + slot.Count));
+                    this[i] = new Slot(slot.Id, (sbyte)(this[i].Count + slot.Count));
                     return i;
                 }
             }

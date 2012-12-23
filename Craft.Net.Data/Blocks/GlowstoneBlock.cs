@@ -8,7 +8,7 @@ namespace Craft.Net.Data.Blocks
 {
     public class GlowstoneBlock : Block
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 89; }
         }
@@ -20,7 +20,7 @@ namespace Craft.Net.Data.Blocks
 
         public override bool GetDrop(ToolItem tool, out Slot[] drop)
         {
-            drop = new[] { new Slot((ushort)new GlowstoneDustItem(), (byte)DataUtility.Random.Next(2, 4)) };
+            drop = new[] { new Slot(new GlowstoneDustItem(), (sbyte)MathHelper.Random.Next(2, 4)) };
             return true;
         }
     }

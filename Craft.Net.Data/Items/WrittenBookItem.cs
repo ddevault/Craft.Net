@@ -13,7 +13,7 @@ namespace Craft.Net.Data.Items
     
     public class WrittenBookItem : Item
     {
-        public override ushort Id
+        public override short Id
         {
             get
             {

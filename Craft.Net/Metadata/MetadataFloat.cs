@@ -1,6 +1,6 @@
 using System;
 
-namespace Craft.Net
+namespace Craft.Net.Metadata
 {
     public class MetadataFloat : MetadataEntry
     {

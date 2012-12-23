@@ -7,7 +7,7 @@ namespace Craft.Net.Data.Blocks
 {
     public class SpruceWoodStairBlock : StairBlock
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 134; }
         }

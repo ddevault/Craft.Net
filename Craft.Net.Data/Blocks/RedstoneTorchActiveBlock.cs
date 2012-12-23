@@ -8,7 +8,7 @@ namespace Craft.Net.Data.Blocks
 {
     public class RedstoneTorchActiveBlock : Block
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 76; }
         }

@@ -8,7 +8,7 @@ namespace Craft.Net.Data.Blocks
 {
     public class TallGrassBlock : Block
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 31; }
         }
@@ -30,8 +30,8 @@ namespace Craft.Net.Data.Blocks
 
         public override bool GetDrop(ToolItem tool, out Slot[] drop)
         {
-            drop = new[] { new Slot((ushort)new SeedsItem(), 1) };
-            return DataUtility.Random.Next(0, 5) == 0; // TODO: Find exact value
+            drop = new[] { new Slot(new SeedsItem(), 1) };
+            return MathHelper.Random.Next(0, 5) == 0; // TODO: Find exact value
         }
     }
 }

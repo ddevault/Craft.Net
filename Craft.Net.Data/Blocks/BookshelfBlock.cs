@@ -8,7 +8,7 @@ namespace Craft.Net.Data.Blocks
 {
     public class BookshelfBlock : Block
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 47; }
         }
@@ -20,7 +20,7 @@ namespace Craft.Net.Data.Blocks
 
         public override bool GetDrop(ToolItem tool, out Slot[] drops)
         {
-            drops = new[] { new Slot((ushort)new BookItem(), 3) };
+            drops = new[] { new Slot(new BookItem(), 3) };
             return true;
         }
     }

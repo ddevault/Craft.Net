@@ -68,7 +68,7 @@ namespace Craft.Net.Data.Blocks
             Direction = direction;
         }
 
-        public override ushort Id
+        public override short Id
         {
             get { return 93; }
         }

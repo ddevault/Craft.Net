@@ -2,7 +2,7 @@ namespace Craft.Net.Data.Items
 {
     public class GoldenHelmetItem : ToolItem, IArmorItem
     {
-        public override ushort Id
+        public override short Id
         {
             get
             {

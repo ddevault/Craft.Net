@@ -8,7 +8,7 @@ namespace Craft.Net.Data.Blocks
 {
     public class SugarCaneBlock : Block
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 83; }
         }
@@ -20,7 +20,7 @@ namespace Craft.Net.Data.Blocks
 
         public override bool GetDrop(ToolItem tool, out Slot[] drop)
         {
-            drop = new[] { new Slot((ushort)new SugarCanesItem(), 1) };
+            drop = new[] { new Slot(new SugarCanesItem(), 1) };
             return true;
         }
     }

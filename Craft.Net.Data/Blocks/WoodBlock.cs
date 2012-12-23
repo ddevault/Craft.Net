@@ -8,7 +8,7 @@ namespace Craft.Net.Data.Blocks
 {
     public class WoodBlock : Block
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 17; }
         }
@@ -20,7 +20,7 @@ namespace Craft.Net.Data.Blocks
 
         public override bool OnBlockPlaced(World world, Vector3 position, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entities.Entity usedBy)
         {
-            var direction = (Direction)DataUtility.DirectionByRotation((PlayerEntity)usedBy, position, true);
+            var direction = (Direction)MathHelper.DirectionByRotation((PlayerEntity)usedBy, position, true);
             switch (direction)
             {
                 case Direction.North:

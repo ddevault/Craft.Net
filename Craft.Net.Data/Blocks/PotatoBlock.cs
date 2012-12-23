@@ -8,7 +8,7 @@ namespace Craft.Net.Data.Blocks
 {
     public class PotatoBlock : Block
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 142; }
         }
@@ -30,14 +30,14 @@ namespace Craft.Net.Data.Blocks
 
         public override bool GetDrop(ToolItem tool, out Slot[] drop)
         {
-            if (DataUtility.Random.Next(100) == 0)
+            if (MathHelper.Random.Next(100) == 0)
             {
-                drop = new[] { new Slot((ushort)new PotatoItem(), (byte)DataUtility.Random.Next(1, 4)),
-                    new Slot((ushort)new PoisonousPotatoItem(), 1) };
+                drop = new[] { new Slot(new PotatoItem(), (sbyte)MathHelper.Random.Next(1, 4)),
+                    new Slot(new PoisonousPotatoItem(), 1) };
             }
             else
             {
-                drop = new[] { new Slot((ushort)new PotatoItem(), (byte)DataUtility.Random.Next(1, 4)) };
+                drop = new[] { new Slot(new PotatoItem(), (sbyte)MathHelper.Random.Next(1, 4)) };
             }
             return true;
         }

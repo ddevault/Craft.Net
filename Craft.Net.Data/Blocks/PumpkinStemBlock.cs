@@ -8,7 +8,7 @@ namespace Craft.Net.Data.Blocks
 {
     public class PumpkinStemBlock : Block
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 104; }
         }
@@ -30,7 +30,7 @@ namespace Craft.Net.Data.Blocks
 
         public override bool GetDrop(ToolItem tool, out Slot[] drop)
         {
-            drop = new[] { new Slot((ushort)new PumpkinSeedsItem(), 1) };
+            drop = new[] { new Slot(new PumpkinSeedsItem(), 1) };
             return true;
         }
     }

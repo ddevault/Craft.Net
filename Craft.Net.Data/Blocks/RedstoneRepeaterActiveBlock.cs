@@ -7,7 +7,7 @@ namespace Craft.Net.Data.Blocks
 {
     public class RedstoneRepeaterActiveBlock : RedstoneRepeaterBlock
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 94; }
         }

@@ -16,7 +16,7 @@ namespace Craft.Net.Data.Blocks
             Metadata = (byte)direction;
         }
 
-        public override ushort Id
+        public override short Id
         {
             get { return 68; }
         }

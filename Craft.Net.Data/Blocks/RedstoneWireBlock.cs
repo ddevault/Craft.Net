@@ -8,7 +8,7 @@ namespace Craft.Net.Data.Blocks
 {
     public class RedstoneWireBlock : Block
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 55; }
         }
@@ -25,7 +25,7 @@ namespace Craft.Net.Data.Blocks
 
         public override bool GetDrop(ToolItem tool, out Slot[] drop)
         {
-            drop = new[] { new Slot((ushort)new RedstoneItem(), 1) };
+            drop = new[] { new Slot(new RedstoneItem(), 1) };
             return true;
         }
     }

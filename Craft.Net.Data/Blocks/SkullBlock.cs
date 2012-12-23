@@ -12,7 +12,7 @@ namespace Craft.Net.Data.Blocks
 
     public class SkullBlock : Block // TODO: Tile entity
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 144; }
         }

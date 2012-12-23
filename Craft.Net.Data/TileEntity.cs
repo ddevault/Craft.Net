@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
 using Craft.Net.Data.NbtSerialization;
-using LibNbt.Tags;
+using LibNbt;
 
 namespace Craft.Net.Data
 {
@@ -52,9 +52,9 @@ namespace Craft.Net.Data
             
             var entity = (NbtCompound)serializer.Serialize(this);
             
-            entity.Tags.Add(new NbtInt("x", (int)position.X));
-            entity.Tags.Add(new NbtInt("y", (int)position.Y));
-            entity.Tags.Add(new NbtInt("z", (int)position.Z));
+            entity.Add(new NbtInt("x", (int)position.X));
+            entity.Add(new NbtInt("y", (int)position.Y));
+            entity.Add(new NbtInt("z", (int)position.Z));
            
             return entity;
         }

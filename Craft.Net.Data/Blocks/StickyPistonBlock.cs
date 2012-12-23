@@ -8,7 +8,7 @@ namespace Craft.Net.Data.Blocks
 {
     public class StickyPistonBlock : Block
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 29; }
         }
@@ -20,7 +20,7 @@ namespace Craft.Net.Data.Blocks
 
         public override bool OnBlockPlaced(World world, Vector3 position, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entity usedBy)
         {
-            this.Metadata = (byte)DataUtility.DirectionByRotation((PlayerEntity)usedBy, position, true);
+            this.Metadata = (byte)MathHelper.DirectionByRotation((PlayerEntity)usedBy, position, true);
             return true;
         }
     }

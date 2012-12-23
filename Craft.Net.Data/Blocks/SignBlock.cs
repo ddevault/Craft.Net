@@ -36,7 +36,7 @@ namespace Craft.Net.Data.Blocks
 
         public override bool GetDrop(ToolItem tool, out Slot[] drop)
         {
-            drop = new[] { new Slot((ushort)new SignItem(), 1) };
+            drop = new[] { new Slot(new SignItem(), 1) };
             return true;
         }
     }

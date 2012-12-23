@@ -8,7 +8,7 @@ namespace Craft.Net.Data.Blocks
 {
     public class StoneBlock : Block
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 1; }
         }
@@ -25,7 +25,7 @@ namespace Craft.Net.Data.Blocks
 
         public override bool GetDrop(ToolItem tool, out Slot[] drop)
         {
-            drop = new[] { new Slot((ushort)new CobblestoneBlock(), 1) };
+            drop = new[] { new Slot(new CobblestoneBlock(), 1) };
             return CanHarvest(tool);
         }
     }

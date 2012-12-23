@@ -2,7 +2,7 @@ namespace Craft.Net.Data.Items
 {
     public class RawChickenItem : FoodItem
     {
-        public override ushort Id
+        public override short Id
         {
             get
             {

@@ -8,7 +8,7 @@ namespace Craft.Net.Data.Blocks
 {
     public class CarrotBlock : Block
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 141; }
         }
@@ -25,7 +25,7 @@ namespace Craft.Net.Data.Blocks
 
         public override bool GetDrop(ToolItem tool, out Slot[] drops)
         {
-            drops = new[] { new Slot((ushort)new CarrotItem(), (byte)DataUtility.Random.Next(1, 4)) };
+            drops = new[] { new Slot(new CarrotItem(), (sbyte)MathHelper.Random.Next(1, 4)) };
             return true;
         }
     }

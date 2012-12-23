@@ -2,7 +2,7 @@ namespace Craft.Net.Data.Items
 {
     public class BowlItem : Item
     {
-        public override ushort Id
+        public override short Id
         {
             get
             {

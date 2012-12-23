@@ -9,7 +9,7 @@ namespace Craft.Net.Data.Blocks
 {
     public class SnowfallBlock : Block
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 78; }
         }
@@ -38,7 +38,7 @@ namespace Craft.Net.Data.Blocks
         {
             drop = new Slot[0];
             if (tool is ShovelItem)
-                drop = new[] { new Slot((ushort)new SnowballItem(), 1) };
+                drop = new[] { new Slot(new SnowballItem(), 1) };
             return tool is ShovelItem;
         }
     }

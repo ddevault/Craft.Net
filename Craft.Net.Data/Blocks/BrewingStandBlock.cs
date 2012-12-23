@@ -7,7 +7,7 @@ namespace Craft.Net.Data.Blocks
 {
     public class BrewingStandBlock : Block
     {
-        public override ushort Id
+        public override short Id
         {
             get { return 117; }
         }

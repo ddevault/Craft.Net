@@ -2,7 +2,7 @@ namespace Craft.Net.Data.Items
 {
     public class StoneShovelItem : ShovelItem
     {
-        public override ushort Id
+        public override short Id
         {
             get
             {
