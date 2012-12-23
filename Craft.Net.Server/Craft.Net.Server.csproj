@@ -33,17 +33,9 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BouncyCastle.Crypto, Version=1.7.4114.6375, Culture=neutral, PublicKeyToken=0e99375e54769942">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\BouncyCastle.Crypto.dll</HintPath>
-    </Reference>
     <Reference Include="Ionic.Zip.Reduced, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\Ionic.Zip.Reduced.dll</HintPath>
-    </Reference>
-    <Reference Include="LibNbt, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\LibNbt.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data.Linq" />
@@ -53,7 +45,6 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Channels\TexturePackChannel.cs" />
-    <Compile Include="Cryptography.cs" />
     <Compile Include="EntityManager.cs" />
     <Compile Include="Events\PacketEventArgs.cs" />
     <Compile Include="Events\PlayerDeathEventArgs.cs" />
@@ -61,160 +52,7 @@
     <Compile Include="LogProvider.cs" />
     <Compile Include="MinecraftServer.cs" />
     <Compile Include="MinecraftClient.cs" />
-    <Compile Include="PacketReader.cs" />
-    <Compile Include="Packet.cs" />
     <Compile Include="ILogProvider.cs" />
-    <Compile Include="Packets\AnimationPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\BlockChangePacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\ChangeGameStatePacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\ChatMessagePacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\ChunkDataPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\ClickWindowPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\ClientStatusPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\CloseWindowPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\CollectItemPacket.cs" />
-    <Compile Include="Packets\ConfirmTransactionPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\CreativeInventoryActionPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\DestroyEntityPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\DisconnectPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\EncryptionKeyRequestPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\EncryptionKeyResponsePacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\EntityActionPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\EntityEquipmentPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\EntityHeadLookPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\EntityMetadataPacket.cs" />
-    <Compile Include="Packets\EntityRelativeMovePacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\EntityStatusPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\EntityTeleportPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\EntityVelocityPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\HandshakePacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\HeldItemChangePacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\KeepAlivePacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\LocaleAndViewDistancePacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\LoginPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\NamedSoundEffectPacket.cs" />
-    <Compile Include="Packets\PlayerAbilitiesPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\PlayerDiggingPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\PlayerListItemPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\PlayerLookPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\PlayerPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\PlayerPositionAndLookPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\PlayerPositionPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\PluginMessagePacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\RespawnPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\RightClickPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\ServerListPingPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\SetSlotPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\SetWindowItemsPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\SpawnDroppedItemPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\SpawnLightningPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\SpawnNamedEntityPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\SpawnObjectPacket.cs" />
-    <Compile Include="Packets\SpawnPositionPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\TimeUpdatePacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\UpdateHealthPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\UpdateSignPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\UpdateTileEntityPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\UseBedPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Packets\UseEntityPacket.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="PluginChannel.cs" />
     <Compile Include="ConsoleLogWriter.cs" />
     <Compile Include="FileLogWriter.cs" />
