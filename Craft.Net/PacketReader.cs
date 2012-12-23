@@ -32,10 +32,10 @@ namespace Craft.Net
             typeof(UseBedPacket), // 0x11
             typeof(AnimationPacket), // 0x12
             typeof(EntityActionPacket), // 0x13
-            typeof(SpawnNamedEntityPacket), // 0x14
+            typeof(SpawnPlayerPacket), // 0x14
             null, // 0x15
             typeof(CollectItemPacket), // 0x16
-            typeof(SpawnObjectOrVehiclePacket), // 0x17
+            typeof(SpawnObjectPacket), // 0x17
             typeof(SpawnMobPacket), // 0x18
             typeof(SpawnPaintingPacket), // 0x19
             typeof(SpawnExperienceOrbPacket), // 0x1A

@@ -205,7 +205,6 @@
     <Compile Include="ChatColors.cs" />
     <Compile Include="Chunk.cs" />
     <Compile Include="DamageType.cs" />
-    <Compile Include="DataUtility.cs" />
     <Compile Include="Difficulty.cs" />
     <Compile Include="Dimension.cs" />
     <Compile Include="Entities\BlockEntity.cs" />
@@ -383,6 +382,7 @@
     <Compile Include="Items\WoodenSwordItem.cs" />
     <Compile Include="Items\WrittenBookItem.cs" />
     <Compile Include="Level.cs" />
+    <Compile Include="MathHelper.cs" />
     <Compile Include="Metadata\MetadataByte.cs" />
     <Compile Include="Metadata\MetadataDictionary.cs" />
     <Compile Include="Metadata\MetadataEntry.cs" />
@@ -404,7 +404,6 @@
     <Compile Include="SavedLevel.cs" />
     <Compile Include="Section.cs" />
     <Compile Include="Size.cs" />
-    <Compile Include="Slot.cs" />
     <Compile Include="SoundEffect.cs" />
     <Compile Include="TileEntity.cs" />
     <Compile Include="Transparency.cs" />

@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using LibNbt;
-using Craft.Net.Data;
 
 namespace Craft.Net
 {
@@ -43,7 +42,13 @@ namespace Craft.Net
         public LoginRequestPacket(int entityId, string levelType, GameMode gameMode,
             Dimension dimension, Difficulty difficulty, byte maxPlayers)
         {
-            
+            EntityId = entityId;
+            LevelType = levelType;
+            GameMode = gameMode;
+            Dimension = dimension;
+            Difficulty = difficulty;
+            MaxPlayers = maxPlayers;
+            Discarded = 0;
         }
 
         public int EntityId;
@@ -82,6 +87,15 @@ namespace Craft.Net
 
     public struct HandshakePacket : IPacket
     {
+        public HandshakePacket(byte protocolVersion, string username, string hostname, 
+            int port)
+        {
+            ProtocolVersion = protocolVersion;
+            Username = username;
+            ServerHostname = hostname;
+            ServerPort = port;
+        }
+
         public byte ProtocolVersion;
         public string Username;
         public string ServerHostname;
@@ -109,6 +123,11 @@ namespace Craft.Net
 
     public struct ChatMessagePacket : IPacket
     {
+        public ChatMessagePacket(string message)
+        {
+            Message = message;
+        }
+
         public string Message;
 
         public byte Id { get { return 0x03; } }
@@ -127,6 +146,12 @@ namespace Craft.Net
 
     public struct TimeUpdatePacket : IPacket
     {
+        public TimeUpdatePacket(long worldAge, long timeOfDay)
+        {
+            WorldAge = worldAge;
+            TimeOfDay = timeOfDay;
+        }
+
         public long WorldAge, TimeOfDay;
 
         public byte Id { get { return 0x04; } }
@@ -147,6 +172,13 @@ namespace Craft.Net
 
     public struct EntityEquipmentPacket : IPacket
     {
+        public EntityEquipmentPacket(int entityId, short slotIndex, Slot slot)
+        {
+            EntityId = entityId;
+            SlotIndex = slotIndex;
+            Slot = slot;
+        }
+
         public int EntityId;
         public short SlotIndex;
         public Slot Slot;
@@ -171,6 +203,13 @@ namespace Craft.Net
 
     public struct SpawnPositionPacket : IPacket
     {
+        public SpawnPositionPacket(int x, int y, int z)
+        {
+            X = x;
+            Y = y;
+            Z = z;
+        }
+
         public int X, Y, Z;
 
         public byte Id { get { return 0x06; } }
@@ -193,6 +232,13 @@ namespace Craft.Net
 
     public struct UseEntityPacket : IPacket
     {
+        public UseEntityPacket(int user, int target, bool mouseButton)
+        {
+            User = user;
+            Target = target;
+            MouseButton = mouseButton;
+        }
+
         public int User, Target;
         public bool MouseButton;
 
@@ -216,6 +262,13 @@ namespace Craft.Net
 
     public struct UpdateHealthPacket : IPacket
     {
+        public UpdateHealthPacket(short health, short food, float saturation)
+        {
+            Health = health;
+            Food = food;
+            FoodSaturation = saturation;
+        }
+
         public short Health, Food;
         public float FoodSaturation;
 
@@ -239,6 +292,16 @@ namespace Craft.Net
 
     public struct RespawnPacket : IPacket
     {
+        public RespawnPacket(Dimension dimension, Difficulty difficulty, GameMode gameMode,
+            short worldHeight, string levelType)
+        {
+            Dimension = dimension;
+            Difficulty = difficulty;
+            GameMode = gameMode;
+            WorldHeight = worldHeight;
+            LevelType = levelType;
+        }
+
         public Dimension Dimension;
         public Difficulty Difficulty;
         public GameMode GameMode;
@@ -269,6 +332,11 @@ namespace Craft.Net
 
     public struct PlayerPacket : IPacket
     {
+        public PlayerPacket(bool onGround)
+        {
+            OnGround = onGround;
+        }
+
         public bool OnGround;
 
         public byte Id { get { return 0x0A; } }
@@ -287,6 +355,15 @@ namespace Craft.Net
 
     public struct PlayerPositionPacket : IPacket
     {
+        public PlayerPositionPacket(double x, double y, double z, double stance, bool onGround)
+        {
+            X = x;
+            Y = y;
+            Z = z;
+            Stance = stance;
+            OnGround = onGround;
+        }
+
         public double X, Y, Stance, Z;
         public bool OnGround;
 
@@ -314,6 +391,13 @@ namespace Craft.Net
 
     public struct PlayerLookPacket : IPacket
     {
+        public PlayerLookPacket(float yaw, float pitch, bool onGround)
+        {
+            Yaw = yaw;
+            Pitch = pitch;
+            OnGround = onGround;
+        }
+
         public float Yaw, Pitch;
         public bool OnGround;
 
@@ -337,6 +421,18 @@ namespace Craft.Net
 
     public struct PlayerPositionAndLookPacket : IPacket
     {
+        public PlayerPositionAndLookPacket(double x, double y, double z, double stance,
+            float yaw, float pitch, bool onGround)
+        {
+            X = x;
+            Y = y;
+            Z = z;
+            Stance = stance;
+            Yaw = yaw;
+            Pitch = pitch;
+            OnGround = onGround;
+        }
+
         public double X, Y, Stance, Z;
         public float Yaw, Pitch;
         public bool OnGround;
@@ -370,6 +466,16 @@ namespace Craft.Net
 
     public struct PlayerDiggingPacket : IPacket
     {
+        public PlayerDiggingPacket(byte status, int x, byte y,
+            int z, byte face)
+        {
+            Status = status;
+            X = x;
+            Y = y;
+            Z = z;
+            Face = face;
+        }
+
         public byte Status;
         public int X;
         public byte Y;
@@ -400,6 +506,20 @@ namespace Craft.Net
 
     public struct PlayerBlockPlacementPacket : IPacket
     {
+        public PlayerBlockPlacementPacket(int x, byte y, int z,
+            byte direction, Slot heldItem, byte cursorX,
+            byte cursorY, byte cursorZ)
+        {
+            X = x;
+            Y = y;
+            Z = z;
+            Direction = direction;
+            HeldItem = heldItem;
+            CursorX = cursorX;
+            CursorY = cursorY;
+            CursorZ = cursorZ;
+        }
+
         public int X;
         public byte Y;
         public int Z;
@@ -439,6 +559,11 @@ namespace Craft.Net
 
     public struct HeldItemChangePacket : IPacket
     {
+        public HeldItemChangePacket(short slotIndex)
+        {
+            SlotIndex = slotIndex;
+        }
+
         public short SlotIndex;
 
         public byte Id { get { return 0x10; } }
@@ -457,6 +582,15 @@ namespace Craft.Net
 
     public struct UseBedPacket : IPacket
     {
+        public UseBedPacket(int entityId, int x, byte y, int z)
+        {
+            EntityId = entityId;
+            X = x;
+            Y = y;
+            Z = z;
+            Unknown = 0;
+        }
+
         public int EntityId;
         public byte Unknown;
         public int X;
@@ -487,6 +621,12 @@ namespace Craft.Net
 
     public struct AnimationPacket : IPacket
     {
+        public AnimationPacket(int entityId, byte animation)
+        {
+            EntityId = entityId;
+            Animation = animation;
+        }
+
         public int EntityId;
         public byte Animation;
 
@@ -508,6 +648,12 @@ namespace Craft.Net
 
     public struct EntityActionPacket : IPacket
     {
+        public EntityActionPacket(int entityId, byte actionId)
+        {
+            EntityId = entityId;
+            ActionId = actionId;
+        }
+
         public int EntityId;
         public byte ActionId;
 
@@ -527,8 +673,23 @@ namespace Craft.Net
         }
     }
 
-    public struct SpawnNamedEntityPacket : IPacket
+    public struct SpawnPlayerPacket : IPacket
     {
+        public SpawnPlayerPacket(int entityId, string playerName, int x,
+            int y, int z, byte yaw,
+            byte pitch, short heldItem, MetadataDictionary metadata)
+        {
+            EntityId = entityId;
+            PlayerName = playerName;
+            X = x;
+            Y = y;
+            Z = z;
+            Yaw = yaw;
+            Pitch = pitch;
+            HeldItem = heldItem;
+            Metadata = metadata;
+        }
+
         public int EntityId;
         public string PlayerName;
         public int X, Y, Z;
@@ -568,6 +729,12 @@ namespace Craft.Net
 
     public struct CollectItemPacket : IPacket
     {
+        public CollectItemPacket(int itemId, int playerId)
+        {
+            ItemId = itemId;
+            PlayerId = playerId;
+        }
+
         public int ItemId;
         public int PlayerId;
 
@@ -587,8 +754,39 @@ namespace Craft.Net
         }
     }
 
-    public struct SpawnObjectOrVehiclePacket : IPacket
+    public struct SpawnObjectPacket : IPacket
     {
+        public SpawnObjectPacket(int entityId, byte type, int x,
+            int y, int z, byte yaw, byte pitch)
+        {
+            EntityId = entityId;
+            Type = type;
+            X = x;
+            Y = y;
+            Z = z;
+            Yaw = yaw;
+            Pitch = pitch;
+            Data = 0;
+            SpeedX = SpeedY = SpeedZ = null;
+        }
+
+        public SpawnObjectPacket(int entityId, byte type, int x,
+            int y, int z, byte yaw, byte pitch,
+            int data, short speedX, short speedY, short speedZ)
+        {
+            EntityId = entityId;
+            Type = type;
+            X = x;
+            Y = y;
+            Z = z;
+            Yaw = yaw;
+            Pitch = pitch;
+            Data = data;
+            SpeedX = speedX;
+            SpeedY = speedY;
+            SpeedZ = speedZ;
+        }
+
         public int EntityId;
         public byte Type;
         public int X, Y, Z;
@@ -638,6 +836,26 @@ namespace Craft.Net
 
     public struct SpawnMobPacket : IPacket
     {
+        public SpawnMobPacket(int entityId, byte type, int x,
+            int y, int z, byte yaw,
+            byte pitch, byte headYaw, short velocityX,
+            short velocityY, short velocityZ,
+            MetadataDictionary metadata)
+        {
+            EntityId = entityId;
+            Type = type;
+            X = x;
+            Y = y;
+            Z = z;
+            Yaw = yaw;
+            Pitch = pitch;
+            HeadYaw = headYaw;
+            VelocityX = velocityX;
+            VelocityY = velocityY;
+            VelocityZ = velocityZ;
+            Metadata = metadata;
+        }
+
         public int EntityId;
         public byte Type;
         public int X, Y, Z;
@@ -683,6 +901,17 @@ namespace Craft.Net
 
     public struct SpawnPaintingPacket : IPacket
     {
+        public SpawnPaintingPacket(int entityId, string title, int x,
+            int y, int z, int direction)
+        {
+            EntityId = entityId;
+            Title = title;
+            X = x;
+            Y = y;
+            Z = z;
+            Direction = direction;
+        }
+
         public int EntityId;
         public string Title;
         public int X, Y, Z;
@@ -714,6 +943,16 @@ namespace Craft.Net
 
     public struct SpawnExperienceOrbPacket : IPacket
     {
+        public SpawnExperienceOrbPacket(int entityId, int x, int y,
+            int z, short count)
+        {
+            EntityId = entityId;
+            X = x;
+            Y = y;
+            Z = z;
+            Count = count;
+        }
+
         public int EntityId;
         public int X, Y, Z;
         public short Count;
@@ -742,6 +981,15 @@ namespace Craft.Net
 
     public struct EntityVelocityPacket : IPacket
     {
+        public EntityVelocityPacket(int entityId, short velocityX, short velocityY,
+            short velocityZ)
+        {
+            EntityId = entityId;
+            VelocityX = velocityX;
+            VelocityY = velocityY;
+            VelocityZ = velocityZ;
+        }
+
         public int EntityId;
         public short VelocityX, VelocityY, VelocityZ;
 
@@ -767,6 +1015,11 @@ namespace Craft.Net
 
     public struct DestroyEntity : IPacket
     {
+        public DestroyEntity(int[] entityIds)
+        {
+            EntityIds = entityIds;
+        }
+
         public int[] EntityIds;
 
         public byte Id { get { return 0x1D; } }
@@ -787,6 +1040,11 @@ namespace Craft.Net
 
     public struct EntityPacket : IPacket
     {
+        public EntityPacket(int entityId)
+        {
+            EntityId = entityId;
+        }
+
         public int EntityId;
 
         public byte Id { get { return 0x1E; } }
@@ -805,6 +1063,15 @@ namespace Craft.Net
 
     public struct EntityRelativeMovePacket : IPacket
     {
+        public EntityRelativeMovePacket(int entityId, sbyte deltaX, sbyte deltaY,
+            sbyte deltaZ)
+        {
+            EntityId = entityId;
+            DeltaX = deltaX;
+            DeltaY = deltaY;
+            DeltaZ = deltaZ;
+        }
+
         public int EntityId;
         public sbyte DeltaX, DeltaY, DeltaZ;
 
@@ -830,6 +1097,13 @@ namespace Craft.Net
 
     public struct EntityLookPacket : IPacket
     {
+        public EntityLookPacket(int entityId, byte yaw, byte pitch)
+        {
+            EntityId = entityId;
+            Yaw = yaw;
+            Pitch = pitch;
+        }
+
         public int EntityId;
         public byte Yaw, Pitch;
 
@@ -853,6 +1127,17 @@ namespace Craft.Net
 
     public struct EntityLookAndRelativeMovePacket : IPacket
     {
+        public EntityLookAndRelativeMovePacket(int entityId, sbyte deltaX, sbyte deltaY,
+            sbyte deltaZ, byte yaw, byte pitch)
+        {
+            EntityId = entityId;
+            DeltaX = deltaX;
+            DeltaY = deltaY;
+            DeltaZ = deltaZ;
+            Yaw = yaw;
+            Pitch = pitch;
+        }
+
         public int EntityId;
         public sbyte DeltaX, DeltaY, DeltaZ;
         public byte Yaw, Pitch;
@@ -883,6 +1168,17 @@ namespace Craft.Net
 
     public struct EntityTeleportPacket : IPacket
     {
+        public EntityTeleportPacket(int entityId, int x, int y,
+            int z, byte yaw, byte pitch)
+        {
+            EntityId = entityId;
+            X = x;
+            Y = y;
+            Z = z;
+            Yaw = yaw;
+            Pitch = pitch;
+        }
+
         public int EntityId;
         public int X, Y, Z;
         public byte Yaw, Pitch;
@@ -913,6 +1209,12 @@ namespace Craft.Net
 
     public struct EntityHeadLook : IPacket
     {
+        public EntityHeadLook(int entityId, byte headYaw)
+        {
+            EntityId = entityId;
+            HeadYaw = headYaw;
+        }
+
         public int EntityId;
         public byte HeadYaw;
 
@@ -934,6 +1236,12 @@ namespace Craft.Net
 
     public struct EntityStatusPacket : IPacket
     {
+        public EntityStatusPacket(int entityId, byte status)
+        {
+            EntityId = entityId;
+            Status = status;
+        }
+
         public int EntityId;
         public byte Status;
 
@@ -955,6 +1263,12 @@ namespace Craft.Net
 
     public struct AttachEntityPacket : IPacket
     {
+        public AttachEntityPacket(int entityId, int vehicleId)
+        {
+            EntityId = entityId;
+            VehicleId = vehicleId;
+        }
+
         public int EntityId, VehicleId;
 
         public byte Id { get { return 0x27; } }
@@ -975,6 +1289,12 @@ namespace Craft.Net
 
     public struct EntityMetadataPacket : IPacket
     {
+        public EntityMetadataPacket(int entityId, MetadataDictionary metadata)
+        {
+            EntityId = entityId;
+            Metadata = metadata;
+        }
+
         public int EntityId;
         public MetadataDictionary Metadata;
 
@@ -996,6 +1316,15 @@ namespace Craft.Net
 
     public struct EntityEffectPacket : IPacket
     {
+        public EntityEffectPacket(int entityId, byte effectId, byte amplifier,
+            short duration)
+        {
+            EntityId = entityId;
+            EffectId = effectId;
+            Amplifier = amplifier;
+            Duration = duration;
+        }
+
         public int EntityId;
         public byte EffectId;
         public byte Amplifier;
@@ -1023,6 +1352,12 @@ namespace Craft.Net
 
     public struct RemoveEntityEffect : IPacket
     {
+        public RemoveEntityEffect(int entityId, byte effectId)
+        {
+            EntityId = entityId;
+            EffectId = effectId;
+        }
+
         public int EntityId;
         public byte EffectId;
 
@@ -1044,6 +1379,13 @@ namespace Craft.Net
 
     public struct SetExperiencePacket : IPacket
     {
+        public SetExperiencePacket(float experienceBar, short level, short totalExperience)
+        {
+            ExperienceBar = experienceBar;
+            Level = level;
+            TotalExperience = totalExperience;
+        }
+
         public float ExperienceBar;
         public short Level;
         public short TotalExperience;
@@ -1068,13 +1410,20 @@ namespace Craft.Net
 
     public struct ChunkDataPacket : IPacket
     {
-        //public static bool DecompressChunks = false; // TODO
+        public ChunkDataPacket(int x, int z, bool groundUpContinuous,
+            ushort primaryBitMap, ushort addBitMap, byte[] data)
+        {
+            X = x;
+            Z = z;
+            GroundUpContinuous = groundUpContinuous;
+            PrimaryBitMap = primaryBitMap;
+            AddBitMap = addBitMap;
+            Data = data;
+        }
 
         public int X, Z;
         public bool GroundUpContinuous;
-        [LogDisplay(LogDisplayType.Binary)]
         public ushort PrimaryBitMap;
-        [LogDisplay(LogDisplayType.Binary)]
         public ushort AddBitMap;
         public byte[] Data;
 
@@ -1106,9 +1455,18 @@ namespace Craft.Net
 
     public struct MultipleBlockChangePacket : IPacket
     {
+        public MultipleBlockChangePacket(int chunkX, int chunkZ, short recordCount, int[] data)
+        {
+            // TODO: Make this packet a little nicer
+            ChunkX = chunkX;
+            ChunkZ = chunkZ;
+            RecordCount = recordCount;
+            Data = data;
+        }
+
         public int ChunkX, ChunkZ;
         public short RecordCount;
-        public int[] Data; // TODO: Display this in a friendly manner
+        public int[] Data;
 
         public byte Id { get { return 0x34; } }
 
@@ -1134,6 +1492,16 @@ namespace Craft.Net
 
     public struct BlockChangePacket : IPacket
     {
+        public BlockChangePacket(int x, byte y, int z,
+            short blockType, byte blockMetadata)
+        {
+            X = x;
+            Y = y;
+            Z = z;
+            BlockType = blockType;
+            BlockMetadata = blockMetadata;
+        }
+
         public int X;
         public byte Y;
         public int Z;
@@ -1164,11 +1532,22 @@ namespace Craft.Net
 
     public struct BlockActionPacket : IPacket
     {
+        public BlockActionPacket(int x, short y, int z,
+            byte data1, byte data2, short blockId)
+        {
+            X = x;
+            Y = y;
+            Z = z;
+            Data1 = data1;
+            Data2 = data2;
+            BlockId = blockId;
+        }
+
         public int X;
         public short Y;
         public int Z;
         public byte Data1;
-        public byte Data2; // TODO: Perhaps expand on this
+        public byte Data2;
         public short BlockId;
 
         public byte Id { get { return 0x36; } }
@@ -1197,6 +1576,17 @@ namespace Craft.Net
 
     public struct BlockBreakAnimationPacket : IPacket
     {
+        public BlockBreakAnimationPacket(int entityId, int x, int y,
+            int z, byte destroyStage)
+        {
+            // TODO: Use this packet when mining begins
+            EntityId = entityId;
+            X = x;
+            Y = y;
+            Z = z;
+            DestroyStage = destroyStage;
+        }
+
         public int EntityId;
         public int X, Y, Z;
         public byte DestroyStage;
@@ -1225,9 +1615,18 @@ namespace Craft.Net
 
     public struct MapChunkBulkPacket : IPacket
     {
-        // TODO: See about making this packet more detailed in logs
+        public MapChunkBulkPacket(short chunkCount, bool lightIncluded, byte[] chunkData,
+            byte[] chunkMetadata)
+        {
+            // TODO: Improve this packet
+            ChunkCount = chunkCount;
+            LightIncluded = lightIncluded;
+            ChunkData = chunkData;
+            ChunkMetadata = chunkMetadata;
+        }
+
         public short ChunkCount;
-        public bool Unknown;
+        public bool LightIncluded;
         public byte[] ChunkData;
         public byte[] ChunkMetadata;
 
@@ -1237,7 +1636,7 @@ namespace Craft.Net
         {
             ChunkCount = stream.ReadInt16();
             var length = stream.ReadInt32();
-            Unknown = stream.ReadBoolean();
+            LightIncluded = stream.ReadBoolean();
             ChunkData = stream.ReadUInt8Array(length);
             ChunkMetadata = stream.ReadUInt8Array(ChunkCount * 12);
         }
@@ -1247,7 +1646,7 @@ namespace Craft.Net
             stream.WriteUInt8(Id);
             stream.WriteInt16(ChunkCount);
             stream.WriteInt32(ChunkData.Length);
-            stream.WriteBoolean(Unknown);
+            stream.WriteBoolean(LightIncluded);
             stream.WriteUInt8Array(ChunkData);
             stream.WriteUInt8Array(ChunkMetadata);
         }
@@ -1255,10 +1654,26 @@ namespace Craft.Net
 
     public struct ExplosionPacket : IPacket
     {
+        public ExplosionPacket(double x, double y, double z,
+            float radius, int recordCount, byte[] records,
+            float playerVelocityX, float playerVelocityY, float playerVelocityZ)
+        {
+            // TODO: Improve this packet
+            X = x;
+            Y = y;
+            Z = z;
+            Radius = radius;
+            RecordCount = recordCount;
+            Records = records;
+            PlayerVelocityX = playerVelocityX;
+            PlayerVelocityY = playerVelocityY;
+            PlayerVelocityZ = playerVelocityZ;
+        }
+
         public double X, Y, Z;
         public float Radius;
         public int RecordCount;
-        public byte[] Records; // TODO: Consider making more detailed
+        public byte[] Records;
         public float PlayerVelocityX, PlayerVelocityY, PlayerVelocityZ;
 
         public byte Id { get { return 0x3C; } }
@@ -1293,9 +1708,20 @@ namespace Craft.Net
 
     public struct SoundOrParticleEffectPacket : IPacket
     {
+        public SoundOrParticleEffectPacket(int entityId, int x, byte y, int z,
+            int data, bool disableRelativeVolume)
+        {
+            EntityId = entityId;
+            X = x;
+            Y = y;
+            Z = z;
+            Data = data;
+            DisableRelativeVolume = disableRelativeVolume;
+        }
+
         public int EntityId;
         public int X;
-        public sbyte Y;
+        public byte Y;
         public int Z;
         public int Data;
         public bool DisableRelativeVolume;
@@ -1306,7 +1732,7 @@ namespace Craft.Net
         {
             EntityId = stream.ReadInt32();
             X = stream.ReadInt32();
-            Y = stream.ReadInt8();
+            Y = stream.ReadUInt8();
             Z = stream.ReadInt32();
             Data = stream.ReadInt32();
             DisableRelativeVolume = stream.ReadBoolean();
@@ -1317,7 +1743,7 @@ namespace Craft.Net
             stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteInt32(X);
-            stream.WriteInt8(Y);
+            stream.WriteUInt8(Y);
             stream.WriteInt32(Z);
             stream.WriteInt32(Data);
             stream.WriteBoolean(DisableRelativeVolume);
@@ -1326,6 +1752,17 @@ namespace Craft.Net
 
     public struct NamedSoundEffectPacket : IPacket
     {
+        public NamedSoundEffectPacket(string soundName, int x, int y,
+            int z, float volume, byte pitch)
+        {
+            SoundName = soundName;
+            X = x;
+            Y = y;
+            Z = z;
+            Volume = volume;
+            Pitch = pitch;
+        }
+
         public string SoundName;
         public int X, Y, Z;
         public float Volume;
@@ -1357,27 +1794,58 @@ namespace Craft.Net
 
     public struct ChangeGameStatePacket : IPacket
     {
-        // TODO: Expand upon this, list reason from enum
-        public byte State, GameMode;
+        public enum GameState
+        {
+            InvalidBed = 0,
+            BeginRaining = 1,
+            EndRaining = 2,
+            ChangeGameMode = 3,
+            EnterCredits = 4
+        }
+
+        public ChangeGameStatePacket(GameState state)
+        {
+            State = state;
+            GameMode = GameMode.Survival;
+        }
+
+        public ChangeGameStatePacket(GameMode gameMode)
+        {
+            State = GameState.ChangeGameMode;
+            GameMode = gameMode;
+        }
+
+        public GameState State;
+        public GameMode GameMode;
 
         public byte Id { get { return 0x46; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
-            State = stream.ReadUInt8();
-            GameMode = stream.ReadUInt8();
+            State = (GameState)stream.ReadUInt8();
+            GameMode = (GameMode)stream.ReadUInt8();
         }
 
         public void WritePacket(MinecraftStream stream)
         {
             stream.WriteUInt8(Id);
-            stream.WriteUInt8(State);
-            stream.WriteUInt8(GameMode);
+            stream.WriteUInt8((byte)State);
+            stream.WriteUInt8((byte)GameMode);
         }
     }
 
     public struct SpawnGlobalEntityPacket : IPacket
     {
+        public SpawnGlobalEntityPacket(int entityId, byte type, int x,
+            int y, int z)
+        {
+            EntityId = entityId;
+            Type = type;
+            X = x;
+            Y = y;
+            Z = z;
+        }
+
         public int EntityId;
         public byte Type;
         public int X, Y, Z;
@@ -1765,7 +2233,6 @@ namespace Craft.Net
 
     public struct PlayerAbilitiesPacket : IPacket
     {
-        [LogDisplay(LogDisplayType.Binary)]
         public byte Flags;
         public byte FlyingSpeed, WalkingSpeed;
 
@@ -1809,7 +2276,6 @@ namespace Craft.Net
     {
         public string Locale;
         public byte ViewDistance;
-        [LogDisplay(LogDisplayType.Binary)]
         public byte ChatFlags;
         public byte Difficulty;
         public bool ShowCape;
