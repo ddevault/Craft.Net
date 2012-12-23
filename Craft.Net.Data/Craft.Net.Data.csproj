@@ -216,6 +216,7 @@
     <Compile Include="Events\InventoryChangedEventArgs.cs" />
     <Compile Include="Events\EntityEventArgs.cs" />
     <Compile Include="Events\WindowChangeEventArgs.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="GameMode.cs" />
     <Compile Include="Generation\DebugGenerator.cs" />
     <Compile Include="Generation\FlatlandGenerator.cs" />

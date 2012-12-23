@@ -60,7 +60,7 @@ namespace Craft.Net.Data.Windows
 
         protected override WindowArea GetLinkedArea(int index, Slot slot)
         {
-            if (!slot.Empty && slot.Item is IArmorItem && (index == 2 || index == 3))
+            if (!slot.Empty && slot.AsItem() is IArmorItem && (index == 2 || index == 3))
                 return Armor;
             if (index == 0 || index == 1 || index == 3)
                 return MainInventory;
@@ -72,7 +72,7 @@ namespace Craft.Net.Data.Windows
             var area = MainInventory;
             foreach (var item in Hotbar.Items)
             {
-                if (item.Empty || (slot.Id == item.Id && item.Count + slot.Count < item.Item.MaximumStack))
+                if (item.Empty || (slot.Id == item.Id && item.Count + slot.Count < item.AsItem().MaximumStack))
                 {
                     area = Hotbar;
                     break;

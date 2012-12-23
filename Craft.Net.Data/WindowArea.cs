@@ -42,16 +42,17 @@ namespace Craft.Net.Data
                     emptyIndex = i;
                 else if (this[i].Id == slot.Id &&
                          this[i].Metadata == slot.Metadata &&
-                         this[i].Count < slot.Item.MaximumStack)
+                         this[i].Count < slot.AsItem().MaximumStack)
                 {
                     // Merging takes precedence over empty slots
                     emptyIndex = -1;
                     if (from != null)
                         from[index] = new Slot();
-                    if (this[i].Count + slot.Count > slot.Item.MaximumStack)
+                    if (this[i].Count + slot.Count > slot.AsItem().MaximumStack)
                     {
-                        slot.Count -= (byte)(slot.Item.MaximumStack - this[i].Count);
-                        this[i].Count = slot.Item.MaximumStack;
+                        slot = new Slot(slot.Id, (sbyte)(slot.Count - (slot.AsItem().MaximumStack - this[i].Count)),
+                            slot.Metadata, slot.Nbt);
+                        this[i] = new Slot(slot.Id, (sbyte)slot.AsItem().MaximumStack, slot.Metadata, slot.Nbt);
                         continue;
                     }
                     this[i] = new Slot(slot.Id, (sbyte)(this[i].Count + slot.Count));

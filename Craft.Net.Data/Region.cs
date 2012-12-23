@@ -95,7 +95,7 @@ namespace Craft.Net.Data
                                 return Chunks[position];
                             }
                             regionFile.Seek(chunkData.Item1, SeekOrigin.Begin);
-                            int length = MathHelper.ReadInt32(regionFile);
+                            int length = new MinecraftStream(regionFile).ReadInt32(); // TODO: Avoid making new objects here, and in the WriteInt32
                             int compressionMode = regionFile.ReadByte();
                             switch (compressionMode)
                             {
@@ -220,7 +220,7 @@ namespace Craft.Net.Data
                                 header = AllocateNewChunks(kvp.Key, raw.Length);
 
                             regionFile.Seek(header.Item1, SeekOrigin.Begin);
-                            MathHelper.WriteInt32(regionFile, raw.Length);
+                            new MinecraftStream(regionFile).WriteInt32(raw.Length);
                             regionFile.WriteByte(2); // Compressed with zlib
                             regionFile.Write(raw, 0, raw.Length);
                         }

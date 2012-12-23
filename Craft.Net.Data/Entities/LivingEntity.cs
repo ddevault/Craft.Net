@@ -85,7 +85,7 @@ namespace Craft.Net.Data.Entities
                     var slot = player.Inventory[InventoryWindow.ArmorIndex + i];
                     if (!slot.Empty)
                     {
-                        var item = slot.Item as IArmorItem;
+                        var item = slot.AsItem() as IArmorItem;
                         if (item == null)
                             continue;
                         armorValue += (item.ArmorBonus * 0.04);

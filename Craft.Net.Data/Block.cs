@@ -153,10 +153,10 @@ namespace Craft.Net.Data
             {
                 var slot = player.Inventory[player.SelectedSlot];
                 world.SetBlock(destroyedBlock, new AirBlock());
-                if (CanHarvest(slot.Item as ToolItem) && player.GameMode != GameMode.Creative)
+                if (CanHarvest(slot.AsItem() as ToolItem) && player.GameMode != GameMode.Creative)
                 {
                     Slot[] drops;
-                    bool spawnEntity = GetDrop(slot.Item as ToolItem, out drops);
+                    bool spawnEntity = GetDrop(slot.AsItem() as ToolItem, out drops);
                     if (spawnEntity)
                     {
                         foreach (var drop in drops)
