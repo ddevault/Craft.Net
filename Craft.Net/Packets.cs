@@ -1874,6 +1874,15 @@ namespace Craft.Net
 
     public struct OpenWindowPacket : IPacket
     {
+        public OpenWindowPacket(byte windowId, byte inventoryType, string windowTitle,
+            byte slotCount) // TODO: InventoryTypes enum
+        {
+            WindowId = windowId;
+            InventoryType = inventoryType;
+            WindowTitle = windowTitle;
+            SlotCount = slotCount;
+        }
+        
         public byte WindowId;
         public byte InventoryType;
         public string WindowTitle;
@@ -1901,6 +1910,11 @@ namespace Craft.Net
 
     public struct CloseWindowPacket : IPacket
     {
+        public CloseWindowPacket(byte windowId)
+        {
+            WindowId = windowId;
+        }
+
         public byte WindowId;
 
         public byte Id { get { return 0x65; } }
@@ -1919,6 +1933,17 @@ namespace Craft.Net
 
     public struct ClickWindowPacket : IPacket
     {
+        public ClickWindowPacket(byte windowId, short slotIndex, byte mouseButton,
+            short actionNumber, bool shift, Slot clickedItem)
+        {
+            WindowId = windowId;
+            SlotIndex = slotIndex;
+            MouseButton = mouseButton;
+            ActionNumber = actionNumber;
+            Shift = shift;
+            ClickedItem = clickedItem;
+        }
+
         public byte WindowId;
         public short SlotIndex;
         public byte MouseButton;
@@ -1952,6 +1977,13 @@ namespace Craft.Net
 
     public struct SetSlotPacket : IPacket
     {
+        public SetSlotPacket(byte windowId, short slotIndex, Slot item)
+        {
+            WindowId = windowId;
+            SlotIndex = slotIndex;
+            Item = item;
+        }
+
         public byte WindowId;
         public short SlotIndex;
         public Slot Item;
@@ -1976,6 +2008,13 @@ namespace Craft.Net
 
     public struct SetWindowItemsPacket : IPacket
     {
+        public SetWindowItemsPacket(byte windowId, short count, Slot[] items)
+        {
+            WindowId = windowId;
+            Count = count;
+            Items = items;
+        }
+        
         public byte WindowId;
         public short Count;
         public Slot[] Items;
@@ -2003,6 +2042,13 @@ namespace Craft.Net
 
     public struct UpdateWindowPropertyPacket : IPacket
     {
+        public UpdateWindowPropertyPacket(byte windowId, short propertyId, short value)
+        {
+            WindowId = windowId;
+            PropertyId = propertyId;
+            Value = value;
+        }
+
         public byte WindowId;
         public short PropertyId;
         public short Value;
@@ -2027,6 +2073,13 @@ namespace Craft.Net
 
     public struct ConfirmTransactionPacket : IPacket
     {
+        public ConfirmTransactionPacket(byte windowId, short actionNumber, bool accepted)
+        {
+            WindowId = windowId;
+            ActionNumber = actionNumber;
+            Accepted = accepted;
+        }
+
         public byte WindowId;
         public short ActionNumber;
         public bool Accepted;
@@ -2051,6 +2104,12 @@ namespace Craft.Net
 
     public struct CreativeInventoryActionPacket : IPacket
     {
+        public CreativeInventoryActionPacket(short slotIndex, Slot item)
+        {
+            SlotIndex = slotIndex;
+            Item = item;
+        }
+
         public short SlotIndex;
         public Slot Item;
 
@@ -2072,6 +2131,12 @@ namespace Craft.Net
 
     public struct EnchantItemPacket : IPacket
     {
+        public EnchantItemPacket(byte windowId, byte enchantment)
+        {
+            WindowId = windowId;
+            Enchantment = enchantment;
+        }
+
         public byte WindowId;
         public byte Enchantment;
 
@@ -2093,6 +2158,18 @@ namespace Craft.Net
 
     public struct UpdateSignPacket : IPacket
     {
+        public UpdateSignPacket(int x, short y, int z,
+            string text1, string text2, string text3, string text4)
+        {
+            X = x;
+            Y = y;
+            Z = z;
+            Text1 = text1;
+            Text2 = text2;
+            Text3 = text3;
+            Text4 = text4;
+        }
+
         public int X;
         public short Y;
         public int Z;
@@ -2126,6 +2203,13 @@ namespace Craft.Net
 
     public struct ItemDataPacket : IPacket
     {
+        public ItemDataPacket(short itemType, short itemId, string text)
+        {
+            ItemType = itemType;
+            ItemId = itemId;
+            Text = text;
+        }
+        
         public short ItemType, ItemId;
         public string Text;
 
@@ -2151,6 +2235,16 @@ namespace Craft.Net
 
     public struct UpdateTileEntityPacket : IPacket
     {
+        public UpdateTileEntityPacket(int x, short y, int z,
+            byte action, NbtFile nbt)
+        {
+            X = x;
+            Y = y;
+            Z = z;
+            Action = action;
+            Nbt = nbt;
+        }
+
         public int X;
         public short Y;
         public int Z;
@@ -2188,6 +2282,12 @@ namespace Craft.Net
 
     public struct IncrementStatisticPacket : IPacket
     {
+        public IncrementStatisticPacket(int statisticId, byte amount)
+        {
+            StatisticId = statisticId;
+            Amount = amount;
+        }
+
         public int StatisticId;
         public byte Amount;
 
@@ -2209,6 +2309,13 @@ namespace Craft.Net
 
     public struct PlayerListItemPacket : IPacket
     {
+        public PlayerListItemPacket(string playerName, bool online, short ping)
+        {
+            PlayerName = playerName;
+            Online = online;
+            Ping = ping;
+        }
+
         public string PlayerName;
         public bool Online;
         public short Ping;
@@ -2233,6 +2340,13 @@ namespace Craft.Net
 
     public struct PlayerAbilitiesPacket : IPacket
     {
+        public PlayerAbilitiesPacket(byte flags, byte flyingSpeed, byte walkingSpeed)
+        {
+            Flags = flags;
+            FlyingSpeed = flyingSpeed;
+            WalkingSpeed = walkingSpeed;
+        }
+
         public byte Flags;
         public byte FlyingSpeed, WalkingSpeed;
 
@@ -2256,6 +2370,11 @@ namespace Craft.Net
 
     public struct TabCompletePacket : IPacket
     {
+        public TabCompletePacket(string text)
+        {
+            Text = text;
+        }
+
         public string Text;
 
         public byte Id { get { return 0xCB; } }
@@ -2274,10 +2393,20 @@ namespace Craft.Net
 
     public struct ClientSettingsPacket : IPacket
     {
+        public ClientSettingsPacket(string locale, byte viewDistance, byte chatFlags,
+            Difficulty difficulty, bool showCape)
+        {
+            Locale = locale;
+            ViewDistance = viewDistance;
+            ChatFlags = chatFlags;
+            Difficulty = difficulty;
+            ShowCape = showCape;
+        }
+
         public string Locale;
         public byte ViewDistance;
         public byte ChatFlags;
-        public byte Difficulty;
+        public Difficulty Difficulty;
         public bool ShowCape;
 
         public byte Id { get { return 0xCC; } }
@@ -2287,7 +2416,7 @@ namespace Craft.Net
             Locale = stream.ReadString();
             ViewDistance = stream.ReadUInt8();
             ChatFlags = stream.ReadUInt8();
-            Difficulty = stream.ReadUInt8();
+            Difficulty = (Difficulty)stream.ReadUInt8();
             ShowCape = stream.ReadBoolean();
         }
 
@@ -2297,13 +2426,18 @@ namespace Craft.Net
             stream.WriteString(Locale);
             stream.WriteUInt8(ViewDistance);
             stream.WriteUInt8(ChatFlags);
-            stream.WriteUInt8(Difficulty);
+            stream.WriteUInt8((byte)Difficulty);
             stream.WriteBoolean(ShowCape);
         }
     }
 
     public struct ClientStatusPacket : IPacket
     {
+        public ClientStatusPacket(byte payload)
+        {
+            Payload = payload;
+        }
+
         public byte Payload;
 
         public byte Id { get { return 0xCD; } }
@@ -2322,8 +2456,14 @@ namespace Craft.Net
 
     public struct PluginMessage : IPacket
     {
+        public PluginMessage(string channel, byte[] data)
+        {
+            Channel = channel;
+            Data = data;
+        }
+
         public string Channel;
-        public byte[] Data; // TODO: For known channels, elaborate on the data
+        public byte[] Data;
 
         public byte Id { get { return 0xFA; } }
 
@@ -2345,6 +2485,12 @@ namespace Craft.Net
 
     public struct EncryptionKeyResponsePacket : IPacket
     {
+        public EncryptionKeyResponsePacket(byte[] sharedSecret, byte[] verificationToken)
+        {
+            SharedSecret = sharedSecret;
+            VerificationToken = verificationToken;
+        }
+
         public byte[] SharedSecret;
         public byte[] VerificationToken;
 
@@ -2370,6 +2516,13 @@ namespace Craft.Net
 
     public struct EncryptionKeyRequestPacket : IPacket
     {
+        public EncryptionKeyRequestPacket(string serverId, byte[] publicKey, byte[] verificationToken)
+        {
+            ServerId = serverId;
+            PublicKey = publicKey;
+            VerificationToken = verificationToken;
+        }
+
         public string ServerId;
         public byte[] PublicKey;
         public byte[] VerificationToken;
@@ -2398,6 +2551,11 @@ namespace Craft.Net
 
     public struct ServerListPingPacket : IPacket
     {
+        public ServerListPingPacket(byte magic)
+        {
+            Magic = magic;
+        }
+
         public byte Magic;
 
         public byte Id { get { return 0xFE; } }
@@ -2416,6 +2574,11 @@ namespace Craft.Net
 
     public struct DisconnectPacket : IPacket
     {
+        public DisconnectPacket(string reason)
+        {
+            Reason = reason;
+        }
+
         public string Reason;
 
         public byte Id { get { return 0xFF; } }
