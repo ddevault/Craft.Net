@@ -696,14 +696,23 @@ namespace Craft.Net
 
     public struct EntityActionPacket : IPacket
     {
-        public EntityActionPacket(int entityId, byte actionId)
+        public enum EntityAction
+        {
+            Crouch = 1,
+            Uncrouch = 2,
+            LeaveBed = 3,
+            StartSprinting = 4,
+            StopSprinting = 5
+        }
+
+        public EntityActionPacket(int entityId, EntityAction action)
         {
             EntityId = entityId;
-            ActionId = actionId;
+            Action = action;
         }
 
         public int EntityId;
-        public byte ActionId;
+        public EntityAction Action;
 
         public const byte PacketId = 0x13;
         public byte Id { get { return 0x13; } }
@@ -711,14 +720,14 @@ namespace Craft.Net
         public void ReadPacket(MinecraftStream stream)
         {
             EntityId = stream.ReadInt32();
-            ActionId = stream.ReadUInt8();
+            Action = (EntityAction)stream.ReadUInt8();
         }
 
         public void WritePacket(MinecraftStream stream)
         {
             stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
-            stream.WriteUInt8(ActionId);
+            stream.WriteUInt8((byte)Action);
         }
     }
 

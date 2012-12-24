@@ -23,6 +23,8 @@ namespace Craft.Net.Server.Handlers
             MinecraftServer.RegisterPacketHandler(PlayerLookPacket.PacketId, PlayerMovementHandlers.PlayerLook);
             MinecraftServer.RegisterPacketHandler(PlayerPositionAndLookPacket.PacketId, PlayerMovementHandlers.PlayerPositionAndLook);
             MinecraftServer.RegisterPacketHandler(AnimationPacket.PacketId, PlayerMovementHandlers.Animation);
+            MinecraftServer.RegisterPacketHandler(EntityActionPacket.PacketId, PlayerMovementHandlers.EntityAction);
+            MinecraftServer.RegisterPacketHandler(PlayerAbilitiesPacket.PacketId, PlayerMovementHandlers.PlayerAbilities);
 
             MinecraftServer.RegisterPacketHandler(CreativeInventoryActionPacket.PacketId, InventoryHandlers.CreativeInventoryAction);
             MinecraftServer.RegisterPacketHandler(ClickWindowPacket.PacketId, InventoryHandlers.ClickWindow);

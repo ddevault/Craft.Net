@@ -276,8 +276,6 @@ namespace Craft.Net.Server
                                               client.Entity.Dimension, Settings.Difficulty,
                                               Settings.MaxPlayers));
             client.SendPacket(new SpawnPositionPacket((int)client.Entity.SpawnPoint.X, (int)client.Entity.SpawnPoint.Y, (int)client.Entity.SpawnPoint.Z));
-            client.SendPacket(new PlayerAbilitiesPacket(client.Entity.Abilities.AsFlags(), client.Entity.Abilities.FlyingSpeed, 
-                client.Entity.Abilities.WalkingSpeed));
             client.SendPacket(new TimeUpdatePacket(DefaultLevel.Time, DefaultLevel.Time));
             UpdatePlayerList(null);
             //client.SendPacket(new SetWindowItemsPacket(0, client.Entity.Inventory.GetSlots()));
@@ -425,7 +423,6 @@ namespace Craft.Net.Server
                             if (client.SendQueue.TryDequeue(out packet))
                             {
                                 packet.WritePacket(client.Stream);
-                                Console.WriteLine("Writing " + packet.GetType().Name);
 #if DEBUG
                                 LogProvider.Log(packet, false);
 #endif
@@ -461,7 +458,6 @@ namespace Craft.Net.Server
                             try
                             {
                                 var packet = PacketReader.ReadPacket(client.Stream);
-                                Console.WriteLine("Reading " + packet.GetType().Name);
 #if DEBUG
                                 LogProvider.Log(packet, true);
 #endif

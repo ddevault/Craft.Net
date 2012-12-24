@@ -87,7 +87,6 @@ the sake of others.
 Craft.Net depends on the following tools and assemblies, which are included in the repository:
 
 * [DotNetZip](http://dotnetzip.codeplex.com/) is used for data compression.
-* [BouncyCastle](http://www.bouncycastle.org/) is used for encryption.
 
 ## Licensing
 
