@@ -2692,7 +2692,7 @@ namespace Craft.Net
 
         public void ReadPacket(MinecraftStream stream)
         {
-            Magic = stream.ReadUInt8();
+            //Magic = stream.ReadUInt8();
         }
 
         public void WritePacket(MinecraftStream stream)
