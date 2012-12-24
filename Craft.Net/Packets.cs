@@ -178,7 +178,16 @@ namespace Craft.Net
 
     public struct EntityEquipmentPacket : IPacket
     {
-        public EntityEquipmentPacket(int entityId, short slotIndex, Slot slot)
+        public enum EntityEquipmentSlot
+        {
+            HeldItem = 0,
+            Headgear = 1,
+            Chestplate = 2,
+            Pants = 3,
+            Footwear = 4
+        }
+
+        public EntityEquipmentPacket(int entityId, EntityEquipmentSlot slotIndex, Slot slot)
         {
             EntityId = entityId;
             SlotIndex = slotIndex;
@@ -186,7 +195,7 @@ namespace Craft.Net
         }
 
         public int EntityId;
-        public short SlotIndex;
+        public EntityEquipmentSlot SlotIndex;
         public Slot Slot;
 
         public const byte PacketId = 0x05;
@@ -195,7 +204,7 @@ namespace Craft.Net
         public void ReadPacket(MinecraftStream stream)
         {
             EntityId = stream.ReadInt32();
-            SlotIndex = stream.ReadInt16();
+            SlotIndex = (EntityEquipmentSlot)stream.ReadInt16();
             Slot = Slot.FromStream(stream);
         }
 
@@ -203,7 +212,7 @@ namespace Craft.Net
         {
             stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
-            stream.WriteInt16(SlotIndex);
+            stream.WriteInt16((short)SlotIndex);
             Slot.WriteTo(stream);
         }
     }

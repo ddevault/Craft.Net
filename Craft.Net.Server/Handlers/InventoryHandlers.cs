@@ -1,0 +1,120 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Craft.Net.Data;
+using Craft.Net.Data.Windows;
+
+namespace Craft.Net.Server.Handlers
+{
+    internal class InventoryHandlers
+    {
+        public static void CreativeInventoryAction(MinecraftClient client, MinecraftServer server, IPacket packet)
+        {
+            var action = (CreativeInventoryActionPacket)packet;
+            if (action.SlotIndex < client.Entity.Inventory.Length && action.SlotIndex > 0)
+            {
+                client.Entity.Inventory[action.SlotIndex] = action.Item;
+                if (action.SlotIndex == client.Entity.SelectedSlot)
+                {
+                    var clients = server.EntityManager.GetKnownClients(client.Entity);
+                    foreach (var _client in clients)
+                        _client.SendPacket(new EntityEquipmentPacket(client.Entity.Id, EntityEquipmentPacket.EntityEquipmentSlot.HeldItem, 
+                            client.Entity.Inventory[action.SlotIndex]));
+                }
+            }
+        }
+
+        public static void HeldItemChange(MinecraftClient client, MinecraftServer server, IPacket packet)
+        {
+            var change = (HeldItemChangePacket)packet;
+            if (change.SlotIndex < 10 && change.SlotIndex >= 0)
+            {
+                // TODO: Move the equipment update packet to an OnPropertyChanged event handler
+                client.Entity.SelectedSlot = (short)(InventoryWindow.HotbarIndex + change.SlotIndex);
+                var clients = server.EntityManager.GetKnownClients(client.Entity);
+                foreach (var _client in clients)
+                    _client.SendPacket(new EntityEquipmentPacket(client.Entity.Id, EntityEquipmentPacket.EntityEquipmentSlot.HeldItem,
+                        client.Entity.Inventory[client.Entity.SelectedSlot]));
+            }
+        }
+
+        public static void ClickWindow(MinecraftClient client, MinecraftServer server, IPacket _packet)
+        {
+            var packet = (ClickWindowPacket)_packet;
+            if (packet.MouseButton == 3 && packet.Shift)
+                return; // No effect in vanilla minecraft
+            Window window = null;
+            if (packet.WindowId == 0)
+                window = client.Entity.Inventory;
+            // TODO: Fetch appropriate furnace/crafting bench/etc window
+            if (window == null)
+                return;
+            if (packet.Shift)
+            {
+                window.MoveToAlternateArea(packet.SlotIndex);
+                return;
+            }
+            if (packet.SlotIndex == -999)
+            {
+                // TODO: Throw items out of windows
+                return;
+            }
+            var clickedItem = client.Entity.Inventory[packet.SlotIndex];
+            var heldItem = client.Entity.ItemInMouse;
+            if (heldItem.Empty)
+            {
+                if (clickedItem.Empty)
+                    return;
+                if (packet.MouseButton == 1)
+                {
+                    var heldCount = (sbyte)(clickedItem.Count / 2 + (clickedItem.Count % 2));
+                    var leftCount = (sbyte)(clickedItem.Count / 2);
+                    client.Entity.ItemInMouse = new Slot(clickedItem.Id, heldCount, clickedItem.Metadata);
+                    var old = client.Entity.Inventory[packet.SlotIndex];
+                    client.Entity.Inventory[packet.SlotIndex] = new Slot(old.Id, leftCount, old.Metadata, old.Nbt);
+                }
+                else
+                {
+                    client.Entity.ItemInMouse = clickedItem;
+                    client.Entity.Inventory[packet.SlotIndex] = new Slot();
+                }
+            }
+            else
+            {
+                if (packet.MouseButton == 1 && ((clickedItem.Id == heldItem.Id &&
+                    clickedItem.Metadata == heldItem.Metadata) || clickedItem.Empty))
+                {
+                    if (!clickedItem.Empty && clickedItem.Count < clickedItem.AsItem().MaximumStack)
+                    {
+                        client.Entity.Inventory[packet.SlotIndex] = new Slot(heldItem.Id,
+                            (sbyte)(clickedItem.Count + (clickedItem.Empty ? 0 : 1)), heldItem.Metadata);
+                        client.Entity.ItemInMouse = new Slot(client.Entity.ItemInMouse.Id, (sbyte)(client.Entity.ItemInMouse.Count - 1),
+                            client.Entity.ItemInMouse.Metadata, client.Entity.ItemInMouse.Nbt);
+                    }
+                    else
+                        client.Entity.Inventory[packet.SlotIndex] = new Slot(heldItem.Id, 1, heldItem.Metadata);
+                }
+                else
+                {
+                    if (clickedItem.Empty)
+                    {
+                        client.Entity.Inventory[packet.SlotIndex] = heldItem;
+                        client.Entity.ItemInMouse = new Slot();
+                    }
+                    else
+                    {
+                        client.Entity.ItemInMouse = clickedItem;
+                        client.Entity.Inventory[packet.SlotIndex] = heldItem;
+                    }
+                }
+            }
+        }
+
+        public static void CloseWindow(MinecraftClient client, MinecraftServer server, IPacket packet)
+        {
+            // Do nothing
+            // TODO: Do something?
+        }
+    }
+}

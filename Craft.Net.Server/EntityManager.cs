@@ -65,7 +65,7 @@ namespace Craft.Net.Server
                         {
                             var item = client.Entity.Inventory[InventoryWindow.ArmorIndex + i];
                             if (!item.Empty)
-                                c.SendPacket(new EntityEquipmentPacket(client.Entity.Id, (short)(4 - i), item));
+                                c.SendPacket(new EntityEquipmentPacket(client.Entity.Id, (EntityEquipmentPacket.EntityEquipmentSlot)(4 - i), item));
                         }
                         c.KnownEntities.Add(client.Entity.Id);
                     });
@@ -168,7 +168,7 @@ namespace Craft.Net.Server
                 {
                     var item = _client.Entity.Inventory[InventoryWindow.ArmorIndex + i];
                     if (!item.Empty)
-                        client.SendPacket(new EntityEquipmentPacket(_client.Entity.Id, (short)(4 - i), item)); // TODO: Does this still work?
+                        client.SendPacket(new EntityEquipmentPacket(_client.Entity.Id, (EntityEquipmentPacket.EntityEquipmentSlot)(4 - i), item)); // TODO: Does this still work?
                 }
             }
             foreach (var entity in entities)
@@ -335,7 +335,7 @@ namespace Craft.Net.Server
                 foreach (var client in clients)
                 {
                     int index = windowChangeEventArgs.SlotIndex - InventoryWindow.ArmorIndex;
-                    client.SendPacket(new EntityEquipmentPacket(source.Entity.Id, (short)(4 - index), windowChangeEventArgs.Value));
+                    client.SendPacket(new EntityEquipmentPacket(source.Entity.Id, (EntityEquipmentPacket.EntityEquipmentSlot)(4 - index), windowChangeEventArgs.Value));
                 }
             }
             source.SendPacket(new SetSlotPacket(0, (short)windowChangeEventArgs.SlotIndex, windowChangeEventArgs.Value));
