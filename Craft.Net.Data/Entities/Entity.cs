@@ -194,17 +194,20 @@ namespace Craft.Net.Data.Entities
             Velocity *= Drag;
             Velocity -= new Vector3(0, AccelerationDueToGravity, 0);
             Vector3 collisionPoint, collisionDirection;
-            // Do terrain collisions
-            if (AdjustVelocityY(world, out collisionPoint, out collisionDirection))
+            if (Position.Y + Velocity.Y >= 0 && Position.Y + Velocity.Y <= 255) // Don't do checks outside the map
             {
-                if (TerrainCollision != null && fireEvent)
-                    TerrainCollision(this, new EntityTerrainCollisionEventArgs
-                    {
-                        Entity = this,
-                        Block = collisionPoint,
-                        World = world,
-                        Direction = collisionDirection
-                    });
+                // Do terrain collisions
+                if (AdjustVelocityY(world, out collisionPoint, out collisionDirection))
+                {
+                    if (TerrainCollision != null && fireEvent)
+                        TerrainCollision(this, new EntityTerrainCollisionEventArgs
+                            {
+                                Entity = this,
+                                Block = collisionPoint,
+                                World = world,
+                                Direction = collisionDirection
+                            });
+                }
             }
 
             EnableVelocityUpdates = oldVelocityEnabled;
@@ -252,6 +255,7 @@ namespace Craft.Net.Data.Entities
 
             // Clamp Y into map boundaries
             if (minY < 0) minY = 0; if (minY >= World.Height) minY = World.Height - 1;
+            if (maxY < 0) maxY = 0; if (maxY >= World.Height) maxY = World.Height - 1;
 
             // Do terrain checks
             double? collisionPoint = null;

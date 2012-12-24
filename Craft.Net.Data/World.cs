@@ -163,7 +163,7 @@ namespace Craft.Net.Data
 
             GetBlock(blockPosition).BlockUpdate(this, blockPosition, blockPosition);
 
-            if ((blockPosition + Vector3.Up).Y <= Chunk.Height)
+            if ((blockPosition + Vector3.Up).Y < Chunk.Height)
                 GetBlock(blockPosition + Vector3.Up).BlockUpdate(this, blockPosition + Vector3.Up, blockPosition);
             if ((blockPosition + Vector3.Down).Y >= 0)
                 GetBlock(blockPosition + Vector3.Down).BlockUpdate(this, blockPosition + Vector3.Down, blockPosition);

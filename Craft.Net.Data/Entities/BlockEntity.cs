@@ -47,7 +47,8 @@ namespace Craft.Net.Data.Entities
 
         void BlockEntity_TerrainCollision(object sender, EntityTerrainCollisionEventArgs e)
         {
-            e.World.SetBlock(e.Block + Vector3.Up, (Block)Item.Id);
+            if ((e.Block + Vector3.Up).Y < Chunk.Height)
+                e.World.SetBlock(e.Block + Vector3.Up, (Block)Item.Id);
             e.World.OnDestroyEntity(this);
         }
     }
