@@ -275,6 +275,12 @@ namespace Craft.Net.Server
                                               DefaultWorld.LevelType, DefaultLevel.GameMode,
                                               client.Entity.Dimension, Settings.Difficulty,
                                               Settings.MaxPlayers));
+            client.SendPacket(new SpawnPositionPacket((int)client.Entity.SpawnPoint.X, (int)client.Entity.SpawnPoint.Y, (int)client.Entity.SpawnPoint.Z));
+            client.SendPacket(new PlayerAbilitiesPacket(client.Entity.Abilities.AsFlags(), client.Entity.Abilities.FlyingSpeed, 
+                client.Entity.Abilities.WalkingSpeed));
+            client.SendPacket(new TimeUpdatePacket(DefaultLevel.Time, DefaultLevel.Time));
+            UpdatePlayerList(null);
+            //client.SendPacket(new SetWindowItemsPacket(0, client.Entity.Inventory.GetSlots()));
 
             // Send initial chunks
             client.UpdateChunks(true);
@@ -284,12 +290,7 @@ namespace Craft.Net.Server
             // Send entities
             EntityManager.SendClientEntities(client);
 
-            client.SendPacket(new SetWindowItemsPacket(0, client.Entity.Inventory.GetSlots()));
             client.SendPacket(new UpdateHealthPacket(client.Entity.Health, client.Entity.Food, client.Entity.FoodSaturation));
-            client.SendPacket(new SpawnPositionPacket((int)client.Entity.SpawnPoint.X, (int)client.Entity.SpawnPoint.Y, (int)client.Entity.SpawnPoint.Z));
-            client.SendPacket(new TimeUpdatePacket(DefaultLevel.Time, DefaultLevel.Time));
-
-            UpdatePlayerList(null);
 
             var args = new PlayerLogInEventArgs(client);
             OnPlayerLoggedIn(args);
@@ -437,6 +438,9 @@ namespace Craft.Net.Server
                                 if (packet is EncryptionKeyResponsePacket)
                                 {
                                     // Set up crypto stream
+#if DEBUG
+                                    LogProvider.Log("Encryption enabled with " + client.Username, LogImportance.Low);
+#endif
                                     client.Stream = new MinecraftStream(new BufferedStream(new AesStream(client.NetworkStream, client.SharedKey)));
                                     client.EncryptionEnabled = true;
                                 }
