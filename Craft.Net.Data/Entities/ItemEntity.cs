@@ -40,8 +40,8 @@ namespace Craft.Net.Data.Entities
             base.PhysicsUpdate(world);
             if ((DateTime.Now - SpawnTime).TotalSeconds > 0.5 && world.Level.Time % 10 == 0)
             {
-                var player = (PlayerEntity)world.Entities.Where(e => e is PlayerEntity &&
-                    e.Position.DistanceTo(Position) < 2).FirstOrDefault();
+                var player = (PlayerEntity)world.Entities.FirstOrDefault(e => e is PlayerEntity &&
+                    e.Position.DistanceTo(Position) <= 1);
                 if (player != null)
                     player.OnPickUpItem(new EntityEventArgs(this));
             }

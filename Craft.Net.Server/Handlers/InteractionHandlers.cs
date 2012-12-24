@@ -74,7 +74,8 @@ namespace Craft.Net.Server.Handlers
                                 client.Entity.SetSlot(client.Entity.SelectedSlot, Slot.EmptySlot);
                             else
                                 client.Entity.SetSlot(client.Entity.SelectedSlot, SlotItem);
-                            var entity = new ItemEntity(client.Entity.GivenPosition, ItemCopy);
+                            var entity = new ItemEntity(client.Entity.GivenPosition + 
+                                new Vector3(0, client.Entity.Size.Height, 0), ItemCopy);
                             entity.Velocity = MathHelper.FowardVector(client.Entity) * new Vector3(0.25);
                             server.EntityManager.SpawnEntity(client.World, entity);
                         }

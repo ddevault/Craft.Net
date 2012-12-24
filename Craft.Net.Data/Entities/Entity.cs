@@ -210,6 +210,9 @@ namespace Craft.Net.Data.Entities
                 }
                 if (AdjustVelocityY(world, out collisionPoint, out collisionDirection))
                 {
+                    // Adjust horizontal velocity for friction
+                    // TODO: Consider doing this in the X/Z direction
+                    Velocity *= new Vector3(0.2, 0, 0.2);
                     if (TerrainCollision != null && fireEvent)
                         TerrainCollision(this, new EntityTerrainCollisionEventArgs
                             {
@@ -230,8 +233,6 @@ namespace Craft.Net.Data.Entities
                             Direction = collisionDirection
                         });
                 }
-                if (collisionDirection != Vector3.Zero)
-                    Velocity *= new Vector3(0.02); // TODO: Better friction
             }
 
             EnableVelocityUpdates = oldVelocityEnabled;

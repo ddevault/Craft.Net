@@ -71,7 +71,7 @@ namespace Craft.Net.Data.Entities
 
         public override Size Size
         {
-            get { return new Size(0.6, 1.8, 0.6); }
+            get { return new Size(0.6, 1.62, 0.6); }
         }
 
         public override short MaxHealth
