@@ -454,6 +454,8 @@ namespace Craft.Net.Server
                             {
                                 var packet = PacketReader.ReadPacket(client.Stream);
                                 HandlePacket(client, packet);
+                                if (client.DisconnectPending)
+                                    break;
                                 if (packet is DisconnectPacket)
                                 {
                                     Clients.Remove(client);

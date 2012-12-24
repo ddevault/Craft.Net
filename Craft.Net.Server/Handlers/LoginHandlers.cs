@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -86,6 +87,22 @@ namespace Craft.Net.Server.Handlers
             else if (status.Status == ClientStatusPacket.ClientStatus.Respawn)
             {
                 // TODO
+            }
+        }
+
+        public static void ClientSettings(MinecraftClient client, MinecraftServer server, IPacket packet)
+        {
+            var settings = (ClientSettingsPacket)packet;
+            client.MaxViewDistance = (8 << settings.ViewDistance) + 2;
+            // TODO: Colors enabled
+            client.Entity.ShowCape = settings.ShowCape;
+            try
+            {
+                client.Locale = CultureInfo.GetCultureInfo(settings.Locale.Replace("_", "-"));
+            }
+            catch
+            {
+                client.Locale = CultureInfo.InvariantCulture;
             }
         }
 

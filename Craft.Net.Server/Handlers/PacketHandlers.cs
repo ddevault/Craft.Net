@@ -14,13 +14,28 @@ namespace Craft.Net.Server.Handlers
         {
             MinecraftServer.RegisterPacketHandler(HandshakePacket.PacketId, LoginHandlers.Handshake);
             MinecraftServer.RegisterPacketHandler(EncryptionKeyResponsePacket.PacketId, LoginHandlers.EncryptionKeyResponse);
+            MinecraftServer.RegisterPacketHandler(ClientStatusPacket.PacketId, LoginHandlers.ClientStatus);
+            MinecraftServer.RegisterPacketHandler(ClientSettingsPacket.PacketId, LoginHandlers.ClientSettings);
+
+            MinecraftServer.RegisterPacketHandler(PlayerPacket.PacketId, PlayerMovementHandlers.Player);
+            MinecraftServer.RegisterPacketHandler(PlayerPositionPacket.PacketId, PlayerMovementHandlers.PlayerPosition);
+            MinecraftServer.RegisterPacketHandler(PlayerLookPacket.PacketId, PlayerMovementHandlers.PlayerLook);
+            MinecraftServer.RegisterPacketHandler(PlayerPositionAndLookPacket.PacketId, PlayerMovementHandlers.PlayerPositionAndLook);
+            MinecraftServer.RegisterPacketHandler(AnimationPacket.PacketId, PlayerMovementHandlers.Animation);
 
             MinecraftServer.RegisterPacketHandler(ServerListPingPacket.PacketId, ServerListPing);
         }
 
-        internal static void ServerListPing(MinecraftClient client, MinecraftServer server, IPacket packet)
+        public static void ServerListPing(MinecraftClient client, MinecraftServer server, IPacket packet)
         {
             client.SendPacket(new DisconnectPacket(GetPingValue(server)));
+        }
+
+        public static void PluginMessage(MinecraftClient client, MinecraftServer server, IPacket packet)
+        {
+            var message = (PluginMessagePacket)packet;
+            if (server.PluginChannels.ContainsKey(message.Channel))
+                server.PluginChannels[message.Channel].MessageRecieved(client, message.Data);
         }
 
         private static string GetPingValue(MinecraftServer server)
