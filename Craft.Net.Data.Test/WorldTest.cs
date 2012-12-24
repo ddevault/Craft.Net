@@ -46,6 +46,8 @@ namespace Craft.Net.Data.Test
         [Test]
         public void TestSaveRegion()
         {
+            if (File.Exists("r.0.0.mca"))
+                File.Delete("r.0.0.mca");
             Region region = new Region(Vector3.Zero, new FlatlandGenerator(), "r.0.0.mca");
             region.WorldGenerator.Initialize(null);
             region.GetChunk(Vector3.Zero);

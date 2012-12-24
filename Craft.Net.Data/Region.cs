@@ -102,12 +102,8 @@ namespace Craft.Net.Data
                                 case 1: // gzip
                                     break;
                                 case 2: // zlib
-                                    byte[] compressed = new byte[length];
-                                    regionFile.Read(compressed, 0, compressed.Length);
-                                    byte[] uncompressed = ZlibStream.UncompressBuffer(compressed);
-                                    MemoryStream memoryStream = new MemoryStream(uncompressed);
-                                    NbtFile nbt = new NbtFile();
-                                    nbt.LoadFromStream(memoryStream, NbtCompression.None, null);
+                                    var nbt = new NbtFile();
+                                    nbt.LoadFromStream(regionFile, NbtCompression.ZLib, null);
                                     var chunk = Chunk.FromNbt(position, nbt);
                                     chunk.ParentRegion = this;
                                     Chunks.Add(position, chunk);

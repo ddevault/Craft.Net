@@ -93,10 +93,4 @@
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
-  <PropertyGroup Condition="'$(Configuration)|$(OS)'=='Release|Windows_NT'">
-    <PostBuildEvent>$(SolutionDir)lib/ILRepack.exe $(TargetDir)$(TargetFileName) /out:$(SolutionDir)$(TargetFileName) $(TargetDir)BouncyCastle.Crypto.dll $(TargetDir)Craft.Net.Data.dll $(TargetDir)Ionic.Zip.Reduced.dll $(SolutionDir)externals/libnbt/LibNbt/bin/LibNbt.dll</PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)'=='Release'And'$(OS)'!='Windows_NT'">
-    <PostBuildEvent>mono $(SolutionDir)lib/ILRepack.exe $(TargetDir)$(TargetFileName) /out:$(SolutionDir)$(TargetFileName) $(TargetDir)BouncyCastle.Crypto.dll $(TargetDir)Craft.Net.Data.dll $(TargetDir)Ionic.Zip.Reduced.dll $(SolutionDir)externals/libnbt/LibNbt/bin/LibNbt.dll</PostBuildEvent>
-  </PropertyGroup>
 </Project>
