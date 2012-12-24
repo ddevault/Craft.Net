@@ -435,6 +435,8 @@ namespace Craft.Net.Server
                         {
                             Clients.Remove(client);
                             i--;
+                            if (client.IsLoggedIn)
+                                OnPlayerLoggedOut(new PlayerLogInEventArgs(client));
                             continue;
                         }
                         // Each client has a maximum of 10 milliseconds per iteration for reads
@@ -449,6 +451,8 @@ namespace Craft.Net.Server
                                 {
                                     Clients.Remove(client);
                                     i--;
+                                    if (client.IsLoggedIn)
+                                        OnPlayerLoggedOut(new PlayerLogInEventArgs(client));
                                     continue;
                                 }
                             }
@@ -458,11 +462,15 @@ namespace Craft.Net.Server
                                 client.Stream.Flush();
                                 Clients.Remove(client);
                                 i--;
+                                if (client.IsLoggedIn)
+                                    OnPlayerLoggedOut(new PlayerLogInEventArgs(client));
                             }
                             catch (SocketException e)
                             {
                                 Clients.Remove(client);
                                 i--;
+                                if (client.IsLoggedIn)
+                                    OnPlayerLoggedOut(new PlayerLogInEventArgs(client));
                             }
                             catch (Exception e)
                             {
@@ -470,6 +478,8 @@ namespace Craft.Net.Server
                                 client.Stream.Flush();
                                 Clients.Remove(client);
                                 i--;
+                                if (client.IsLoggedIn)
+                                    OnPlayerLoggedOut(new PlayerLogInEventArgs(client));
                             }
                         }
                     }
