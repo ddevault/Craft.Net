@@ -114,5 +114,15 @@ namespace Craft.Net.Data
             sb.Append(", FlyingSpeed: " + FlyingSpeed);
             return sb.ToString();
         }
+
+        public byte AsFlags()
+        {
+            return (byte)(
+                        (Invulnerable ? 1 : 0) |
+                        (IsFlying ? 2 : 0) |
+                        (MayFly ? 4 : 0) |
+                        (InstantMine ? 8 : 0)
+                        );
+        }
     }
 }

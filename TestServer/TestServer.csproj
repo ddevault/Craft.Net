@@ -46,5 +46,9 @@
       <Project>{E00C6FF6-BCD8-44E0-BCD8-5F1BDF201617}</Project>
       <Name>Craft.Net.Server</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Craft.Net\Craft.Net.csproj">
+      <Project>{c3bbab7e-606f-420e-9461-c8cfaec2476b}</Project>
+      <Name>Craft.Net</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

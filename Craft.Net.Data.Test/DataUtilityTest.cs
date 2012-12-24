@@ -12,8 +12,8 @@ namespace Craft.Net.Data.Test
         [Test]
         public void TestRotation()
         {
-            Assert.AreEqual(Vector3.Left, DataUtility.RotateY(Vector3.Forwards, DataUtility.DegreesToRadians(90)).Floor());
-            Assert.AreEqual(Vector3.Right, DataUtility.RotateY(Vector3.Forwards, DataUtility.DegreesToRadians(-90)).Floor());
+            Assert.AreEqual(Vector3.Left, MathHelper.RotateY(Vector3.Forwards, MathHelper.DegreesToRadians(90)).Floor());
+            Assert.AreEqual(Vector3.Right, MathHelper.RotateY(Vector3.Forwards, MathHelper.DegreesToRadians(-90)).Floor());
             // TODO: Investigate rotation on X axis
         }
     }

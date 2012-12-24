@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using Craft.Net.Data;
 using Craft.Net.Data.Blocks;
-using Craft.Net.Server.Packets;
 
 namespace Craft.Net.Server
 {
@@ -33,9 +32,8 @@ namespace Craft.Net.Server
 
             var clients = Server.EntityManager.GetClientsInWorld(world);
             foreach (var minecraftClient in clients)
-                minecraftClient.SendPacket(new SpawnLightningPacket(EntityManager.nextEntityId++, strike));
-
-            Server.ProcessSendQueue();
+                minecraftClient.SendPacket(new SpawnGlobalEntityPacket(EntityManager.nextEntityId++, 1,
+                    (int)strike.X, (int)strike.Y, (int)strike.Z));
         }
     }
 }

@@ -14,6 +14,15 @@ namespace Craft.Net.Data
         public static Random Random = new Random();
 
         /// <summary>
+        /// Maps a float from 0...360 to 0...255
+        /// </summary>
+        /// <param name="value"></param>
+        public static byte CreateRotationByte(float value)
+        {
+            return (byte)(((value % 360) / 360) * 256);
+        }
+
+        /// <summary>
         /// Gets a byte representing block direction based on the rotation
         /// of the entity that placed it, on a flat plane.
         /// </summary>

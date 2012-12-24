@@ -62,6 +62,10 @@
       <Project>{e00c6ff6-bcd8-44e0-bcd8-5f1bdf201617}</Project>
       <Name>Craft.Net.Server</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Craft.Net\Craft.Net.csproj">
+      <Project>{c3bbab7e-606f-420e-9461-c8cfaec2476b}</Project>
+      <Name>Craft.Net</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

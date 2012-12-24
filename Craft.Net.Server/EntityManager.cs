@@ -10,7 +10,6 @@ using Craft.Net.Data.Events;
 using Craft.Net.Data.Items;
 using Craft.Net.Data.Windows;
 using Craft.Net.Server.Events;
-using Craft.Net.Server.Packets;
 
 namespace Craft.Net.Server
 {
@@ -35,7 +34,7 @@ namespace Craft.Net.Server
             world.Entities.Add(entity);
             // Get nearby clients in the same world
             var clients = GetClientsInWorld(world)
-                .Where(c => !c.IsDisconnected && c.Entity.Position.DistanceTo(entity.Position) < (c.ViewDistance * Chunk.Width));
+                .Where(c => c.Entity.Position.DistanceTo(entity.Position) < (c.ViewDistance * Chunk.Width));
             entity.PropertyChanged += EntityOnPropertyChanged;
 
             if (entity is LivingEntity)
@@ -56,30 +55,36 @@ namespace Craft.Net.Server
                     client.Entity.PickUpItem += Entity_PickUpItem;
                     clients = clients.Where(c => c.Entity != entity);
                     clients.ToList().ForEach(c => {
-                        c.SendPacket(new SpawnNamedEntityPacket(client));
-                        c.SendPacket(new EntityHeadLookPacket(client.Entity));
+                        c.SendPacket(new SpawnPlayerPacket(client.Entity.Id,
+                            client.Username, (int)client.Entity.Position.X, (int)client.Entity.Position.Y,
+                            (int)client.Entity.Position.Z, MathHelper.CreateRotationByte(client.Entity.Yaw),
+                            MathHelper.CreateRotationByte(client.Entity.Pitch), client.Entity.SelectedItem.Id,
+                            client.Entity.Metadata));
+                        c.SendPacket(new EntityHeadLookPacket(client.Entity.Id, MathHelper.CreateRotationByte(client.Entity.Yaw)));
                         for (int i = 0; i < 4; i++)
                         {
                             var item = client.Entity.Inventory[InventoryWindow.ArmorIndex + i];
                             if (!item.Empty)
-                                c.SendPacket(new EntityEquipmentPacket(client.Entity.Id,
-                                    (EntityEquipmentSlot)(4 - i), item));
+                                c.SendPacket(new EntityEquipmentPacket(client.Entity.Id, (short)(4 - i), item));
                         }
                         c.KnownEntities.Add(client.Entity.Id);
                     });
                 }
                 else if (entity is ObjectEntity)
                 {
+                    var objectEntity = entity as ObjectEntity;
                     clients.ToList().ForEach(c =>
                     {
-                        c.SendPacket(new SpawnObjectPacket(entity as ObjectEntity));
+                        c.SendPacket(new SpawnObjectPacket(objectEntity.Id, objectEntity.EntityType, (int)objectEntity.Position.X,
+                            (int)objectEntity.Position.Y, (int)objectEntity.Position.Z, MathHelper.CreateRotationByte(objectEntity.Yaw),
+                            MathHelper.CreateRotationByte(objectEntity.Pitch), objectEntity.Data, (short)objectEntity.Velocity.X,
+                            (short)objectEntity.Velocity.Y, (short)objectEntity.Velocity.Z));
                         if (entity.IncludeMetadataOnClient)
-                            c.SendPacket(new EntityMetadataPacket(entity));
+                            c.SendPacket(new EntityMetadataPacket(entity.Id, entity.Metadata));
                         c.KnownEntities.Add(entity.Id);
                     });
                 }
             }
-            server.ProcessSendQueue();
         }
 
         public void TeleportEntity(Entity entity, Vector3 position)
@@ -89,7 +94,9 @@ namespace Craft.Net.Server
                 clients = clients.Concat(new MinecraftClient[] { GetClient(entity as PlayerEntity) });
             entity.Position = position;
             foreach (var client in clients)
-                client.SendPacket(new EntityTeleportPacket(entity));
+                client.SendPacket(new EntityTeleportPacket(entity.Id, (int)entity.Position.X,
+                    (int)entity.Position.Y, (int)entity.Position.Z, MathHelper.CreateRotationByte(entity.Yaw),
+                    MathHelper.CreateRotationByte(entity.Pitch)));
         }
 
         public void DespawnEntity(Entity entity)
@@ -109,9 +116,8 @@ namespace Craft.Net.Server
             foreach (var client in clients)
             {
                 client.KnownEntities.Remove(entity.Id);
-                client.SendPacket(new DestroyEntityPacket(entity.Id));
+                client.SendPacket(new DestroyEntityPacket(new[] { entity.Id })); // TODO: Investigate handling this in bulk
             }
-            server.ProcessSendQueue();
         }
 
         /// <summary>
@@ -133,7 +139,7 @@ namespace Craft.Net.Server
             }
             entity.Kill();
             foreach (var client in GetKnownClients(entity))
-                client.SendPacket(new EntityStatusPacket(entity.Id, EntityStatus.Dead));
+                client.SendPacket(new EntityStatusPacket(entity.Id, EntityStatusPacket.EntityStatus.Dead));
         }
 
         /// <summary>
@@ -144,22 +150,25 @@ namespace Craft.Net.Server
         {
             var world = GetEntityWorld(client.Entity);
             var clients = GetClientsInWorld(world)
-                .Where(c => !c.IsDisconnected && c.Entity.Position.DistanceTo(client.Entity.Position) <
+                .Where(c => c.Entity.Position.DistanceTo(client.Entity.Position) <
                     (c.ViewDistance * Chunk.Width) && c != client);
             var entities = world.Entities.Where(e => !(e is PlayerEntity) && 
                 e.Position.DistanceTo(client.Entity.Position) < (client.ViewDistance * Chunk.Width)); // TODO: Refactor into same thing
             foreach (var _client in clients)
             {
                 client.KnownEntities.Add(_client.Entity.Id);
-                client.SendPacket(new SpawnNamedEntityPacket(_client));
-                client.SendPacket(new EntityEquipmentPacket(_client.Entity.Id, EntityEquipmentSlot.HeldItem, 
+                client.SendPacket(new SpawnPlayerPacket(_client.Entity.Id,
+                            _client.Username, (int)_client.Entity.Position.X, (int)_client.Entity.Position.Y,
+                            (int)_client.Entity.Position.Z, MathHelper.CreateRotationByte(_client.Entity.Yaw),
+                            MathHelper.CreateRotationByte(_client.Entity.Pitch), _client.Entity.SelectedItem.Id,
+                            _client.Entity.Metadata));
+                client.SendPacket(new EntityEquipmentPacket(_client.Entity.Id, 0, // TODO: Bring back EntityEquipmentSlot enum
                     _client.Entity.Inventory[_client.Entity.SelectedSlot]));
                 for (int i = 0; i < 4; i ++)
                 {
                     var item = _client.Entity.Inventory[InventoryWindow.ArmorIndex + i];
                     if (!item.Empty)
-                        client.SendPacket(new EntityEquipmentPacket(_client.Entity.Id, 
-                            (EntityEquipmentSlot)(4 - i), item));
+                        client.SendPacket(new EntityEquipmentPacket(_client.Entity.Id, (short)(4 - i), item)); // TODO: Does this still work?
                 }
             }
             foreach (var entity in entities)
@@ -167,9 +176,13 @@ namespace Craft.Net.Server
                 client.KnownEntities.Add(entity.Id);
                 if (entity is ObjectEntity)
                 {
-                    client.SendPacket(new SpawnObjectPacket(entity as ObjectEntity));
+                    var objectEntity = entity as ObjectEntity;
+                    client.SendPacket(new SpawnObjectPacket(objectEntity.Id, objectEntity.EntityType, (int)objectEntity.Position.X,
+                            (int)objectEntity.Position.Y, (int)objectEntity.Position.Z, MathHelper.CreateRotationByte(objectEntity.Yaw),
+                            MathHelper.CreateRotationByte(objectEntity.Pitch), objectEntity.Data, (short)objectEntity.Velocity.X,
+                            (short)objectEntity.Velocity.Y, (short)objectEntity.Velocity.Z));
                     if (entity.IncludeMetadataOnClient)
-                        client.SendPacket(new EntityMetadataPacket(entity));
+                        client.SendPacket(new EntityMetadataPacket(entity.Id, entity.Metadata));
                 }
             }
         }
@@ -181,8 +194,7 @@ namespace Craft.Net.Server
             var entity = (LivingEntity)sender;
             var clients = GetKnownClients(entity);
             foreach (var minecraftClient in clients)
-                minecraftClient.SendPacket(new EntityStatusPacket(entity.Id, EntityStatus.Hurt));
-            server.ProcessSendQueue();
+                minecraftClient.SendPacket(new EntityStatusPacket(entity.Id, EntityStatusPacket.EntityStatus.Hurt));
         }
 
         private void EntityOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
@@ -204,14 +216,16 @@ namespace Craft.Net.Server
                             KillEntity(player);
                         break;
                     case "SpawnPoint":
-                        client.SendPacket(new SpawnPositionPacket(player.SpawnPoint));
+                        client.SendPacket(new SpawnPositionPacket((int)player.SpawnPoint.X, (int)player.SpawnPoint.Y, (int)player.SpawnPoint.Z));
                         break;
                     case "GameMode":
-                        client.SendPacket(new ChangeGameStatePacket(GameState.ChangeGameMode, client.Entity.GameMode));
-                        client.SendPacket(new PlayerAbilitiesPacket(player.Abilities));
+                        client.SendPacket(new ChangeGameStatePacket(client.Entity.GameMode));
+                        client.SendPacket(new PlayerAbilitiesPacket(player.Abilities.AsFlags(), 
+                            player.Abilities.FlyingSpeed, player.Abilities.FlyingSpeed));
                         break;
                     case "Velocity":
-                        client.SendPacket(new EntityVelocityPacket(player.Id, player.Velocity));
+                        client.SendPacket(new EntityVelocityPacket(player.Id, (short)player.Velocity.X,
+                            (short)player.Velocity.Y, (short)player.Velocity.Z));
                         break;
                     case "GivenPosition":
                         UpdateGivenPosition(player);
@@ -230,7 +244,8 @@ namespace Craft.Net.Server
                     break;
                 case "Velocity":
                     foreach (var knownClient in clients)
-                        knownClient.SendPacket(new EntityVelocityPacket(entity.Id, entity.Velocity));
+                        knownClient.SendPacket(new EntityVelocityPacket(entity.Id, (short)entity.Velocity.X,
+                            (short)entity.Velocity.Y, (short)entity.Velocity.Z));
                     break;
             }
         }
@@ -249,13 +264,12 @@ namespace Craft.Net.Server
             level.Time = 0;
             foreach (var minecraftClient in clients)
             {
-                minecraftClient.SendPacket(new AnimationPacket(minecraftClient.Entity.Id, Animation.LeaveBed));
+                minecraftClient.SendPacket(new AnimationPacket(minecraftClient.Entity.Id, AnimationPacket.AnimationType.LeaveBed));
                 foreach (var client in GetKnownClients(minecraftClient.Entity))
-                    client.SendPacket(new AnimationPacket(minecraftClient.Entity.Id, Animation.LeaveBed));
-                minecraftClient.SendPacket(new TimeUpdatePacket(level.Time));
+                    client.SendPacket(new AnimationPacket(minecraftClient.Entity.Id, AnimationPacket.AnimationType.LeaveBed));
+                minecraftClient.SendPacket(new TimeUpdatePacket(level.Time, level.Time));
                 minecraftClient.Entity.BedPosition = -Vector3.One;
             }
-            server.ProcessSendQueue();
         }
 
         private void EntityOnUpdateBedState(object sender, EventArgs eventArgs)
@@ -265,9 +279,9 @@ namespace Craft.Net.Server
             if (player.BedPosition == -Vector3.One)
             {
                 // Leave bed
-                GetClient(player).SendPacket(new AnimationPacket(player.Id, Animation.LeaveBed));
+                GetClient(player).SendPacket(new AnimationPacket(player.Id, AnimationPacket.AnimationType.LeaveBed));
                 foreach (var minecraftClient in clients)
-                    minecraftClient.SendPacket(new AnimationPacket(player.Id, Animation.LeaveBed));
+                    minecraftClient.SendPacket(new AnimationPacket(player.Id, AnimationPacket.AnimationType.LeaveBed));
             }
             else
             {
@@ -277,12 +291,13 @@ namespace Craft.Net.Server
                     return;
                 }
                 // Enter bed
-                GetClient(player).SendPacket(new UseBedPacket(player.Id, player.BedPosition));
+                GetClient(player).SendPacket(new UseBedPacket(player.Id, 
+                    (byte)player.BedPosition.X, (byte)player.BedPosition.Y, (byte)player.BedPosition.Z));
                 foreach (var minecraftClient in clients)
-                    minecraftClient.SendPacket(new UseBedPacket(player.Id, player.BedPosition));
+                    minecraftClient.SendPacket(new UseBedPacket(player.Id,
+                        (byte)player.BedPosition.X, (byte)player.BedPosition.Y, (byte)player.BedPosition.Z));
                 player.SpawnPoint = player.BedPosition;
             }
-            server.ProcessSendQueue();
         }
 
         void Entity_PickUpItem(object sender, EntityEventArgs e)
@@ -304,7 +319,8 @@ namespace Craft.Net.Server
                 return;
             var entity = (PlayerEntity)sender;
             var client = GetClient(entity);
-            client.SendPacket(new PlayerAbilitiesPacket(entity.Abilities));
+            client.SendPacket(new PlayerAbilitiesPacket(entity.Abilities.AsFlags(), 
+                entity.Abilities.FlyingSpeed, entity.Abilities.WalkingSpeed));
         }
 
         private void PlayerInventoryChange(object sender, WindowChangeEventArgs windowChangeEventArgs)
@@ -319,23 +335,7 @@ namespace Craft.Net.Server
                 foreach (var client in clients)
                 {
                     int index = windowChangeEventArgs.SlotIndex - InventoryWindow.ArmorIndex;
-                    EntityEquipmentSlot slot;
-                    switch (index)
-                    {
-                        case 0:
-                            slot = EntityEquipmentSlot.Footwear;
-                            break;
-                        case 1:
-                            slot = EntityEquipmentSlot.Pants;
-                            break;
-                        case 2:
-                            slot = EntityEquipmentSlot.Chestplate;
-                            break;
-                        default:
-                            slot = EntityEquipmentSlot.Headgear;
-                            break;
-                    }
-                    client.SendPacket(new EntityEquipmentPacket(source.Entity.Id, slot, windowChangeEventArgs.Value));
+                    client.SendPacket(new EntityEquipmentPacket(source.Entity.Id, (short)(4 - index), windowChangeEventArgs.Value));
                 }
             }
             source.SendPacket(new SetSlotPacket(0, (short)windowChangeEventArgs.SlotIndex, windowChangeEventArgs.Value));
@@ -347,16 +347,16 @@ namespace Craft.Net.Server
             var client = GetClient(player);
             var slot = player.Inventory[player.SelectedSlot];
             slot.Index = player.SelectedSlot;
-            var item = player.Inventory[player.SelectedSlot].Item as FoodItem;
+            var item = player.Inventory[player.SelectedSlot].AsItem() as FoodItem;
             var known = GetKnownClients(player);
             foreach (var c in known)
-                c.SendPacket(new AnimationPacket(client.Entity.Id, Animation.EatFood)); // TODO: Why doesn't this work
+                c.SendPacket(new AnimationPacket(client.Entity.Id, AnimationPacket.AnimationType.EatFood)); // TODO: Why doesn't this work
             var timer = new Timer(discarded =>
                 {
                     if (player.SelectedSlot != slot.Index ||
-                        player.SelectedItem.Empty || !(player.SelectedItem.Item is FoodItem))
+                        player.SelectedItem.Empty || !(player.SelectedItem.AsItem() is FoodItem))
                         return;
-                    client.SendPacket(new EntityStatusPacket(player.Id, EntityStatus.EatingAccepted));
+                    client.SendPacket(new EntityStatusPacket(player.Id, EntityStatusPacket.EntityStatus.EatingAccepted));
                     slot.Count--;
                     player.SetSlot(player.SelectedSlot, slot);
                     int food = player.Food;
@@ -408,14 +408,16 @@ namespace Craft.Net.Server
                 }
             }
             foreach (var client in clients)
-                client.SendPacket(new EntityTeleportPacket(entity));
+                client.SendPacket(new EntityTeleportPacket(entity.Id, (int)entity.Position.X,
+                    (int)entity.Position.Y, (int)entity.Position.Z, MathHelper.CreateRotationByte(entity.Yaw),
+                    MathHelper.CreateRotationByte(entity.Pitch)));
         }
 
         private void UpdateEntityLook(Entity entity)
         {
             var clients = GetKnownClients(entity);
             foreach (var client in clients)
-                client.SendPacket(new EntityHeadLookPacket(entity));
+                client.SendPacket(new EntityHeadLookPacket(entity.Id, MathHelper.CreateRotationByte(entity.Yaw))); // TODO: Entity.HeadYaw
         }
 
         #region Utility methods

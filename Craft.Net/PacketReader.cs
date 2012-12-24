@@ -41,20 +41,20 @@ namespace Craft.Net
             typeof(SpawnExperienceOrbPacket), // 0x1A
             null, // 0x1B
             typeof(EntityVelocityPacket), // 0x1C
-            typeof(DestroyEntity), // 0x1D
+            typeof(DestroyEntityPacket), // 0x1D
             typeof(EntityPacket), // 0x1E
             typeof(EntityRelativeMovePacket), // 0x1F
             typeof(EntityLookPacket), // 0x20
             typeof(EntityLookAndRelativeMovePacket), // 0x21
             typeof(EntityTeleportPacket), // 0x22
-            typeof(EntityHeadLook), // 0x23
+            typeof(EntityHeadLookPacket), // 0x23
             null, // 0x24
             null, // 0x25
             typeof(EntityStatusPacket), // 0x26
             typeof(AttachEntityPacket), // 0x27
             typeof(EntityMetadataPacket), // 0x28
             typeof(EntityEffectPacket), // 0x29
-            typeof(RemoveEntityEffect), // 0x2A
+            typeof(RemoveEntityEffectPacket), // 0x2A
             typeof(SetExperiencePacket), // 0x2B
             null, // 0x2C
             null, // 0x2D
@@ -262,7 +262,7 @@ namespace Craft.Net
             null, // 0xF7
             null, // 0xF8
             null, // 0xF9
-            typeof(PluginMessage), // 0xFA
+            typeof(PluginMessagePacket), // 0xFA
             null, // 0xFB
             typeof(EncryptionKeyResponsePacket), // 0xFC
             typeof(EncryptionKeyRequestPacket), // 0xFD

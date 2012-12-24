@@ -2092,15 +2092,13 @@ namespace Craft.Net
 
     public struct SetWindowItemsPacket : IPacket
     {
-        public SetWindowItemsPacket(byte windowId, short count, Slot[] items)
+        public SetWindowItemsPacket(byte windowId, Slot[] items)
         {
             WindowId = windowId;
-            Count = count;
             Items = items;
         }
         
         public byte WindowId;
-        public short Count;
         public Slot[] Items;
 
         public const byte PacketId = 0x68;
@@ -2109,9 +2107,9 @@ namespace Craft.Net
         public void ReadPacket(MinecraftStream stream)
         {
             WindowId = stream.ReadUInt8();
-            Count = stream.ReadInt16();
-            Items = new Slot[Count];
-            for (int i = 0; i < Count; i++)
+            short count = stream.ReadInt16();
+            Items = new Slot[count];
+            for (int i = 0; i < count; i++)
                 Items[i] = Slot.FromStream(stream);
         }
 
@@ -2119,8 +2117,8 @@ namespace Craft.Net
         {
             stream.WriteUInt8(Id);
             stream.WriteUInt8(WindowId);
-            stream.WriteInt16(Count);
-            for (int i = 0; i < Count; i++)
+            stream.WriteInt16((short)Items.Length);
+            for (int i = 0; i < Items.Length; i++)
                 Items[i].WriteTo(stream);
         }
     }

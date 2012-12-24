@@ -7,19 +7,15 @@ namespace Craft.Net.Server.Events
 {
     public class PacketEventArgs : EventArgs
     {
-        public PacketEventArgs(Packet packet, MinecraftClient client, MinecraftServer server)
+        public PacketEventArgs(IPacket packet, MinecraftClient client, MinecraftServer server, PacketContext context)
         {
             Packet = packet;
             Client = client;
             Server = server;
         }
 
-        public PacketContext Context
-        {
-            get { return Packet.PacketContext; }
-        }
-
-        public Packet Packet { get; set; }
+        public IPacket Packet { get; set; }
+        public PacketContext Context { get; set; }
         public MinecraftClient Client { get; set; }
         public MinecraftServer Server { get; set; }
     }

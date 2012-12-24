@@ -155,7 +155,7 @@ namespace Craft.Net.Data
                 LevelName = Name,
                 LastPlayed = DateTime.UtcNow.Ticks
             });
-            file.RootTag = new NbtCompound();
+            file.RootTag = new NbtCompound("");
             file.RootTag.Add(data);
             using (var stream = File.Open(Path.Combine(LevelDirectory, "level.dat"), FileMode.Create))
                 file.SaveToStream(stream, NbtCompression.GZip);

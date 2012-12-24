@@ -5,10 +5,9 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Craft.Net.Server.Packets;
+using Craft.Net;
 using Craft.Net.Data;
 using Craft.Net.Data.Entities;
-using Org.BouncyCastle.Crypto;
 using System.Diagnostics;
 using System.Globalization;
 using Craft.Net.Data.Blocks;
@@ -24,10 +23,6 @@ namespace Craft.Net.Server
 
         #region Fields
 
-        /// <summary>
-        /// The client-provided chat modes.
-        /// </summary>
-        public ChatMode ChatMode;
         /// <summary>
         /// True if the client has enabled colors in chat.
         /// </summary>
@@ -70,15 +65,11 @@ namespace Craft.Net.Server
         /// <summary>
         /// The current queue of packets to be sent to this client.
         /// </summary>
-        public ConcurrentQueue<Packet> SendQueue;
+        public ConcurrentQueue<IPacket> SendQueue;
         /// <summary>
         /// The <see cref="MinecraftServer"/> managing this client's connection.
         /// </summary>
         public MinecraftServer Server;
-        /// <summary>
-        /// The TCP socket used to communicate with this client.
-        /// </summary>
-        public Socket Socket; // TODO: Private?
         /// <summary>
         /// 3rd party client-specific data may be saved here.
         /// </summary>
@@ -102,6 +93,9 @@ namespace Craft.Net.Server
         /// </summary>
         public List<string> PluginChannels { get; set; }
 
+        public NetworkStream NetworkStream { get; set; }
+        public MinecraftStream Stream { get; set; }
+
         public World World
         {
             get { return Server.EntityManager.GetEntityWorld(Entity); }
@@ -111,14 +105,10 @@ namespace Craft.Net.Server
         internal string AuthenticationHash;
         internal Timer KeepAliveTimer, UpdateLoadedChunksTimer;
         internal DateTime LastKeepAlive, LastKeepAliveSent;
-        internal BufferedBlockCipher Decrypter;
-        internal BufferedBlockCipher Encrypter;
         internal bool EncryptionEnabled;
         internal byte[] SharedKey;
-        internal bool ReadyToSpawn;
-        internal byte[] RecieveBuffer;
-        internal int RecieveBufferIndex;
-        internal bool IsDisconnected;
+        internal TcpClient TcpClient;
+        internal bool DisconnectPending;
 
         #endregion
 
@@ -126,19 +116,17 @@ namespace Craft.Net.Server
         /// Creates a new MinecraftClient with the specified socket to be
         /// managed by the given <see cref="MinecraftServer"/>.
         /// </summary>
-        public MinecraftClient(Socket socket, MinecraftServer server)
+        public MinecraftClient(TcpClient client, MinecraftServer server)
         {
-            this.Socket = socket;
-            RecieveBuffer = new byte[4096];
-            RecieveBufferIndex = 0;
-            SendQueue = new ConcurrentQueue<Packet>();
-            IsDisconnected = false;
+            TcpClient = client;
+            NetworkStream = client.GetStream();
+            Stream = new MinecraftStream(new BufferedStream(client.GetStream()));
+            SendQueue = new ConcurrentQueue<IPacket>();
             IsLoggedIn = false;
             EncryptionEnabled = false;
             Locale = CultureInfo.CurrentCulture;
             MaxViewDistance = 10;
             ViewDistance = 3;
-            ReadyToSpawn = false;
             LoadedChunks = new List<Vector3>();
             Server = server;
             WalkingSpeed = 12;
@@ -147,6 +135,7 @@ namespace Craft.Net.Server
             KnownEntities = new List<int>();
             PluginChannels = new List<string>();
             Tags = new Dictionary<string, object>();
+            DisconnectPending = false;
         }
 
         /// <summary>
@@ -167,28 +156,13 @@ namespace Craft.Net.Server
         /// the queued packet.
         /// </summary>
         /// <param name="packet"></param>
-        public virtual void SendPacket(Packet packet)
+        public virtual void SendPacket(IPacket packet)
         {
             if (packet == null)
                 return;
-            packet.PacketContext = PacketContext.ServerToClient;
+            if (packet is DisconnectPacket)
+                DisconnectPending = true;
             SendQueue.Enqueue(packet);
-        }
-
-        /// <summary>
-        /// Sends the specified raw data to the client. This data
-        /// will be encrypted if encryption is enabled.
-        /// </summary>
-        public virtual void SendData(byte[] data)
-        {
-            if (IsDisconnected)
-                return;
-#if DEBUG
-            LogProvider.Log(DataUtility.DumpArray(data), LogImportance.Low);
-#endif
-            if (EncryptionEnabled)
-                data = Encrypter.ProcessBytes(data);
-            Socket.BeginSend(data, 0, data.Length, SocketFlags.None, null, null);
         }
 
         /// <summary>
@@ -256,15 +230,18 @@ namespace Craft.Net.Server
         {
             World world = Server.EntityManager.GetEntityWorld(Entity);
             Chunk chunk = world.GetChunk(position);
-            var dataPacket = new ChunkDataPacket(ref chunk);
-            SendPacket(dataPacket);
+            SendPacket(ChunkHelper.CreatePacket(chunk));
             if (chunk.TileEntities.Count != 0)
             {
                 foreach (var tileEntity in chunk.TileEntities)
                 {
                     Console.WriteLine("Handling tile entity: " + tileEntity.Value.GetType().Name);
                     if (tileEntity.Value is SignTileEntity)
-                        SendPacket(new UpdateSignPacket(tileEntity.Key, tileEntity.Value as SignTileEntity));
+                    {
+                        var signData = tileEntity.Value as SignTileEntity;
+                        SendPacket(new UpdateSignPacket((int)tileEntity.Key.X, (short)tileEntity.Key.Y, (int)tileEntity.Key.Z,
+                            signData.Text1, signData.Text2, signData.Text3, signData.Text4));
+                    }
                 }
             }
             this.LoadedChunks.Add(position);
@@ -277,11 +254,11 @@ namespace Craft.Net.Server
         {
             var dataPacket = new ChunkDataPacket();
             dataPacket.AddBitMap = 0;
-            dataPacket.GroundUpContiguous = true;
+            dataPacket.GroundUpContinuous = true;
             dataPacket.PrimaryBitMap = 0;
             dataPacket.X = (int)position.X;
             dataPacket.Z = (int)position.Z;
-            dataPacket.CompressedData = ChunkDataPacket.ChunkRemovalSequence;
+            dataPacket.Data = ChunkHelper.ChunkRemovalSequence;
             SendPacket(dataPacket);
             this.LoadedChunks.Remove(position);
         }
@@ -292,16 +269,11 @@ namespace Craft.Net.Server
         public virtual void SendChat(string message)
         {
             SendPacket(new ChatMessagePacket(message));
-            Server.ProcessSendQueue();
         }
 
-        public void DelaySendPacket(Packet packet, int milliseconds)
+        public void DelaySendPacket(IPacket packet, int milliseconds)
         {
-            new Timer((discarded) =>
-                          {
-                              SendPacket(packet);
-                              Server.ProcessSendQueue();
-                          }, null, milliseconds, Timeout.Infinite);
+            new Timer((discarded) => SendPacket(packet), null, milliseconds, Timeout.Infinite);
         }
 
         internal void StartWorkers()
@@ -313,21 +285,17 @@ namespace Craft.Net.Server
         protected internal virtual void KeepAlive(object discarded)
         {
             if (LastKeepAlive.AddSeconds(10) < DateTime.Now && false) // TODO
-            {
                 LogProvider.Log("Client timed out");
-                IsDisconnected = true;
-            }
             else
             {
-                SendPacket(new KeepAlivePacket(DataUtility.Random.Next()));
-                Server.ProcessSendQueue();
+                SendPacket(new KeepAlivePacket(MathHelper.Random.Next()));
                 LastKeepAliveSent = DateTime.Now;
             }
         }
 
         internal void UpdateLoadedChunks(object discarded)
         {
-            if (ReadyToSpawn && ViewDistance < MaxViewDistance)
+            if (ViewDistance < MaxViewDistance)
             {
                 ViewDistance++;
                 ForceUpdateChunksAsync(); // TODO: Move this to its own timer

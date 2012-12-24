@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="AesStream.cs" />
     <Compile Include="BigInteger.cs" />
+    <Compile Include="BufferedStream.cs" />
     <Compile Include="Cryptography.cs" />
     <Compile Include="Difficulty.cs" />
     <Compile Include="Dimension.cs" />

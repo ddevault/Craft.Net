@@ -63,17 +63,17 @@ namespace Craft.Net.Data.Test
         public void TestCollisionPoint()
         {
             CollisionPoint point;
-            point = DataUtility.GetCollisionPoint(new Vector3(10, 1, 1));
+            point = MathHelper.GetCollisionPoint(new Vector3(10, 1, 1));
             Assert.AreEqual(CollisionPoint.PositiveX, point);
-            point = DataUtility.GetCollisionPoint(new Vector3(-10, 1, 1));
+            point = MathHelper.GetCollisionPoint(new Vector3(-10, 1, 1));
             Assert.AreEqual(CollisionPoint.NegativeX, point);
-            point = DataUtility.GetCollisionPoint(new Vector3(1, 10, 1));
+            point = MathHelper.GetCollisionPoint(new Vector3(1, 10, 1));
             Assert.AreEqual(CollisionPoint.PositiveY, point);
-            point = DataUtility.GetCollisionPoint(new Vector3(1, -10, 1));
+            point = MathHelper.GetCollisionPoint(new Vector3(1, -10, 1));
             Assert.AreEqual(CollisionPoint.NegativeY, point);
-            point = DataUtility.GetCollisionPoint(new Vector3(1, 1, 10));
+            point = MathHelper.GetCollisionPoint(new Vector3(1, 1, 10));
             Assert.AreEqual(CollisionPoint.PositiveZ, point);
-            point = DataUtility.GetCollisionPoint(new Vector3(1, 1, -10));
+            point = MathHelper.GetCollisionPoint(new Vector3(1, 1, -10));
             Assert.AreEqual(CollisionPoint.NegativeZ, point);
         }
     }

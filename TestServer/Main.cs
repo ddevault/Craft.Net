@@ -10,7 +10,7 @@ using Craft.Net.Server.Events;
 using System.Reflection;
 using Craft.Net.Data.Blocks;
 using System.IO;
-using Craft.Net.Server.Packets;
+using Craft.Net;
 using Craft.Net.Data.Windows;
 
 namespace TestServer
@@ -87,7 +87,7 @@ namespace TestServer
                         var clients = minecraftServer.EntityManager.GetClientsInWorld(e.Origin.World);
                         minecraftServer.GetLevel(e.Origin.World).Time = 18000;
                         foreach (var minecraftClient in clients)
-                            minecraftClient.SendPacket(new TimeUpdatePacket(18000));
+                            minecraftClient.SendPacket(new TimeUpdatePacket(18000, 18000));
                         break;
                     case "kill":
                         e.Origin.Entity.Health = 0;
@@ -106,9 +106,8 @@ namespace TestServer
                         e.Origin.Entity.Velocity = new Vector3(0, 10, 0);
                         break;
                     case "forward":
-                        Vector3 velocity = DataUtility.RotateY(Vector3.Forwards * 5,
-                            DataUtility.DegreesToRadians(e.Origin.Entity.Yaw));
-                        //velocity.X = -velocity.X;
+                        Vector3 velocity = MathHelper.RotateY(Vector3.Forwards * 5,
+                            MathHelper.DegreesToRadians(e.Origin.Entity.Yaw));
                         e.Origin.Entity.Velocity = velocity;
                         e.Origin.SendChat(e.Origin.Entity.Yaw.ToString(CultureInfo.InvariantCulture));
                         break;
@@ -125,7 +124,8 @@ namespace TestServer
                         e.Origin.Entity.Health--;
                         break;
                     case "se":
-                        e.Origin.SendPacket(new NamedSoundEffectPacket(e.RawMessage.Substring(4), e.Origin.Entity.Position));
+                        e.Origin.SendPacket(new NamedSoundEffectPacket(e.RawMessage.Substring(4), (int)e.Origin.Entity.Position.X,
+                            (int)e.Origin.Entity.Position.Y, (int)e.Origin.Entity.Position.Z, 1.0f, 63)); // TODO: Write 63 down somewhere
                         break;
                     case "destroy":
                         minecraftServer.DefaultWorld.SetBlock(new Vector3(0, 10, 0), new AirBlock());

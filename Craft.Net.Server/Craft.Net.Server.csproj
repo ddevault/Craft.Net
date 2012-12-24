@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Channels\TexturePackChannel.cs" />
+    <Compile Include="ChunkHelper.cs" />
     <Compile Include="EntityManager.cs" />
     <Compile Include="Events\PacketEventArgs.cs" />
     <Compile Include="Events\PlayerDeathEventArgs.cs" />
@@ -53,6 +54,9 @@
     <Compile Include="MinecraftServer.cs" />
     <Compile Include="MinecraftClient.cs" />
     <Compile Include="ILogProvider.cs" />
+    <Compile Include="PacketContext.cs" />
+    <Compile Include="Handlers\LoginHandlers.cs" />
+    <Compile Include="Handlers\PacketHandlers.cs" />
     <Compile Include="PluginChannel.cs" />
     <Compile Include="ConsoleLogWriter.cs" />
     <Compile Include="FileLogWriter.cs" />
@@ -66,7 +70,16 @@
       <Project>{30C3F936-8D95-4113-BA48-8B798B056309}</Project>
       <Name>Craft.Net.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Craft.Net\Craft.Net.csproj">
+      <Project>{c3bbab7e-606f-420e-9461-c8cfaec2476b}</Project>
+      <Name>Craft.Net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\externals\libnbt2012\LibNbt\LibNbt.csproj">
+      <Project>{b843bf2d-8ced-4a61-a5c7-3f4d2ab459bf}</Project>
+      <Name>LibNbt</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <ProjectExtensions>
     <MonoDevelop>
       <Properties>

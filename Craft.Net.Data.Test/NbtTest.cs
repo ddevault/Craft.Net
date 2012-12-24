@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Craft.Net.Data.Blocks;
-using Craft.Net.Data.Metadata;
 using Craft.Net.Data.NbtSerialization;
 using NUnit.Framework;
 

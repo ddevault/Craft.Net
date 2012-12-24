@@ -201,8 +201,6 @@
     <Compile Include="ChatColors.cs" />
     <Compile Include="Chunk.cs" />
     <Compile Include="DamageType.cs" />
-    <Compile Include="Difficulty.cs" />
-    <Compile Include="Dimension.cs" />
     <Compile Include="Entities\BlockEntity.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\IBreedableEntity.cs" />
@@ -217,7 +215,6 @@
     <Compile Include="Events\EntityEventArgs.cs" />
     <Compile Include="Events\WindowChangeEventArgs.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="GameMode.cs" />
     <Compile Include="Generation\DebugGenerator.cs" />
     <Compile Include="Generation\FlatlandGenerator.cs" />
     <Compile Include="Generation\IWorldGenerator.cs" />
