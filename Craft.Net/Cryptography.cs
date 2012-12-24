@@ -69,7 +69,7 @@ namespace Craft.Net
         /// <seealso cref="PrivateKeyToPKCS8(DSAParameters)"/>
         /// <seealso cref="PrivateKeyToPKCS8(RSAParameters)"/>
         /// <seealso cref="PublicKeyToX509(RSAParameters)"/>
-        internal static AsnMessage PublicKeyToX509(DSAParameters publicKey)
+        public static AsnMessage PublicKeyToX509(DSAParameters publicKey)
         {
             // Value Type cannot be null
             // Debug.Assert(null != publicKey);
@@ -122,7 +122,7 @@ namespace Craft.Net
         /// <seealso cref="PrivateKeyToPKCS8(DSAParameters)"/>
         /// <seealso cref="PrivateKeyToPKCS8(RSAParameters)"/>
         /// <seealso cref="PublicKeyToX509(DSAParameters)"/>
-        internal static AsnMessage PublicKeyToX509(RSAParameters publicKey)
+        public static AsnMessage PublicKeyToX509(RSAParameters publicKey)
         {
             // Value Type cannot be null
             // Debug.Assert(null != publicKey);
@@ -168,7 +168,7 @@ namespace Craft.Net
         /// <seealso cref="PrivateKeyToPKCS8(RSAParameters)"/>
         /// <seealso cref="PublicKeyToX509(DSAParameters)"/>
         /// <seealso cref="PublicKeyToX509(RSAParameters)"/>
-        internal static AsnMessage PrivateKeyToPKCS8(DSAParameters privateKey)
+        public static AsnMessage PrivateKeyToPKCS8(DSAParameters privateKey)
         {
             // Value Type cannot be null
             // Debug.Assert(null != privateKey);
@@ -226,7 +226,7 @@ namespace Craft.Net
         /// <seealso cref="PrivateKeyToPKCS8(DSAParameters)"/>
         /// <seealso cref="PublicKeyToX509(DSAParameters)"/>
         /// <seealso cref="PublicKeyToX509(RSAParameters)"/>
-        internal static AsnMessage PrivateKeyToPKCS8(RSAParameters privateKey)
+        public static AsnMessage PrivateKeyToPKCS8(RSAParameters privateKey)
         {
             // Value Type cannot be null
             // Debug.Assert(null != privateKey);
@@ -297,7 +297,7 @@ namespace Craft.Net
         /// <seealso cref="CreateSequence(AsnType[])"/>
         /// <seealso cref="CreateSequenceOf(AsnType)"/>
         /// <seealso cref="CreateSequenceOf(AsnType[])"/>
-        internal static AsnType CreateSequence(AsnType value)
+        public static AsnType CreateSequence(AsnType value)
         {
             // Should be at least 1...
             Debug.Assert(!IsEmpty(value));
@@ -330,7 +330,7 @@ namespace Craft.Net
         /// <seealso cref="CreateSequence(AsnType[])"/>
         /// <seealso cref="CreateSequenceOf(AsnType)"/>
         /// <seealso cref="CreateSequenceOf(AsnType[])"/>
-        internal static AsnType CreateSequence(AsnType[] values)
+        public static AsnType CreateSequence(AsnType[] values)
         {
             // Should be at least 1...
             Debug.Assert(!IsEmpty(values));
@@ -363,7 +363,7 @@ namespace Craft.Net
         /// <seealso cref="CreateSequence(AsnType[])"/>
         /// <seealso cref="CreateSequenceOf(AsnType)"/>
         /// <seealso cref="CreateSequenceOf(AsnType[])"/>
-        internal static AsnType CreateSequenceOf(AsnType value)
+        public static AsnType CreateSequenceOf(AsnType value)
         {
             // From the ASN.1 Mailing List
             if (IsEmpty(value))
@@ -393,7 +393,7 @@ namespace Craft.Net
         /// <seealso cref="CreateSequence(AsnType[])"/>
         /// <seealso cref="CreateSequenceOf(AsnType)"/>
         /// <seealso cref="CreateSequenceOf(AsnType[])"/>
-        internal static AsnType CreateSequenceOf(AsnType[] values)
+        public static AsnType CreateSequenceOf(AsnType[] values)
         {
             // From the ASN.1 Mailing List
             if (IsEmpty(values))
@@ -423,7 +423,7 @@ namespace Craft.Net
         /// <seealso cref="CreateOctetString(AsnType)"/>
         /// <seealso cref="CreateOctetString(AsnType[])"/>
         /// <seealso cref="CreateOctetString(String)"/>
-        internal static AsnType CreateBitString(byte[] octets)
+        public static AsnType CreateBitString(byte[] octets)
         {
             // BitString: Tag 0x03 (3, Universal, Primitive)
             return CreateBitString(octets, 0);
@@ -452,7 +452,7 @@ namespace Craft.Net
         /// <seealso cref="CreateOctetString(AsnType)"/>
         /// <seealso cref="CreateOctetString(AsnType[])"/>
         /// <seealso cref="CreateOctetString(String)"/>
-        internal static AsnType CreateBitString(byte[] octets, uint unusedBits)
+        public static AsnType CreateBitString(byte[] octets, uint unusedBits)
         {
             if (IsEmpty(octets))
             {
@@ -487,7 +487,7 @@ namespace Craft.Net
         /// <seealso cref="CreateOctetString(AsnType)"/>
         /// <seealso cref="CreateOctetString(AsnType[])"/>
         /// <seealso cref="CreateOctetString(String)"/>
-        internal static AsnType CreateBitString(AsnType value)
+        public static AsnType CreateBitString(AsnType value)
         {
             if (IsEmpty(value))
             {
@@ -515,7 +515,7 @@ namespace Craft.Net
         /// <seealso cref="CreateOctetString(AsnType)"/>
         /// <seealso cref="CreateOctetString(AsnType[])"/>
         /// <seealso cref="CreateOctetString(String)"/>
-        internal static AsnType CreateBitString(AsnType[] values)
+        public static AsnType CreateBitString(AsnType[] values)
         {
             if (IsEmpty(values))
             {
@@ -547,7 +547,7 @@ namespace Craft.Net
         /// <seealso cref="CreateOctetString(AsnType)"/>
         /// <seealso cref="CreateOctetString(AsnType[])"/>
         /// <seealso cref="CreateOctetString(String)"/>
-        internal static AsnType CreateBitString(String value)
+        public static AsnType CreateBitString(String value)
         {
             if (IsEmpty(value))
             {
@@ -615,7 +615,7 @@ namespace Craft.Net
         /// <seealso cref="CreateOctetString(AsnType)"/>
         /// <seealso cref="CreateOctetString(AsnType[])"/>
         /// <seealso cref="CreateOctetString(String)"/>
-        internal static AsnType CreateOctetString(byte[] value)
+        public static AsnType CreateOctetString(byte[] value)
         {
             if (IsEmpty(value))
             {
@@ -642,7 +642,7 @@ namespace Craft.Net
         /// <seealso cref="CreateBitString(String)"/>
         /// <seealso cref="CreateOctetString(byte[])"/>
         /// <seealso cref="CreateOctetString(String)"/>
-        internal static AsnType CreateOctetString(AsnType value)
+        public static AsnType CreateOctetString(AsnType value)
         {
             if (IsEmpty(value))
             {
@@ -670,7 +670,7 @@ namespace Craft.Net
         /// <seealso cref="CreateOctetString(byte[])"/>
         /// <seealso cref="CreateOctetString(AsnType)"/>
         /// <seealso cref="CreateOctetString(String)"/>
-        internal static AsnType CreateOctetString(AsnType[] values)
+        public static AsnType CreateOctetString(AsnType[] values)
         {
             if (IsEmpty(values))
             {
@@ -703,7 +703,7 @@ namespace Craft.Net
         /// <seealso cref="CreateOctetString(byte[])"/>
         /// <seealso cref="CreateOctetString(AsnType)"/>
         /// <seealso cref="CreateOctetString(AsnType[])"/>
-        internal static AsnType CreateOctetString(String value)
+        public static AsnType CreateOctetString(String value)
         {
             if (IsEmpty(value))
             {
@@ -761,7 +761,7 @@ namespace Craft.Net
         /// </example>
         /// <seealso cref="CreateIntegerPos"/>
         /// <seealso cref="CreateIntegerNeg"/>
-        internal static AsnType CreateInteger(byte[] value)
+        public static AsnType CreateInteger(byte[] value)
         {
             // Is it better to add a '0', or silently
             //   drop the Integer? Dropping integers
@@ -799,7 +799,7 @@ namespace Craft.Net
         /// </example>
         /// <seealso cref="CreateInteger"/>
         /// <seealso cref="CreateIntegerNeg"/>
-        internal static AsnType CreateIntegerPos(byte[] value)
+        public static AsnType CreateIntegerPos(byte[] value)
         {
             byte[] i = null, d = Duplicate(value);
 
@@ -868,7 +868,7 @@ namespace Craft.Net
         /// </example>
         /// <seealso cref="CreateInteger"/>
         /// <seealso cref="CreateIntegerPos"/>
-        internal static AsnType CreateIntegerNeg(byte[] value)
+        public static AsnType CreateIntegerNeg(byte[] value)
         {
             // Is it better to add a '0', or silently
             //   drop the Integer? Dropping integers
@@ -908,7 +908,7 @@ namespace Craft.Net
         /// </summary>
         /// <returns>Returns the AsnType representing an ASN.1
         /// encoded null.</returns>
-        internal static AsnType CreateNull()
+        public static AsnType CreateNull()
         {
             return new AsnType(0x05, new byte[] {0x00});
         }
@@ -919,7 +919,7 @@ namespace Craft.Net
         /// </summary>
         /// <param name="octets">An array of octets to trim.</param>
         /// <returns>A byte[] with leading 0x00 octets removed.</returns>
-        internal static byte[] TrimStart(byte[] octets)
+        public static byte[] TrimStart(byte[] octets)
         {
             if (IsEmpty(octets) || IsZero(octets))
             {
@@ -960,7 +960,7 @@ namespace Craft.Net
         /// </summary>
         /// <param name="octets">An array of octets to trim.</param>
         /// <returns>A byte[] with trailing 0x00 octets removed.</returns>
-        internal static byte[] TrimEnd(byte[] octets)
+        public static byte[] TrimEnd(byte[] octets)
         {
             if (IsEmpty(octets) || IsZero(octets))
             {
@@ -993,7 +993,7 @@ namespace Craft.Net
         /// <code>AsnType oid = CreateOid("1.2.840.113549.1.1.1")</code>
         /// </example>
         /// <seealso cref="CreateOid(byte[])"/>
-        internal static AsnType CreateOid(String value)
+        public static AsnType CreateOid(String value)
         {
             // Punt?
             if (IsEmpty(value))
@@ -1112,7 +1112,7 @@ namespace Craft.Net
         /// AsnType = CreateOid(rsa)</code>
         /// </example>
         /// <seealso cref="CreateOid(String)"/>
-        internal static AsnType CreateOid(byte[] value)
+        public static AsnType CreateOid(byte[] value)
         {
             // Punt...
             if (IsEmpty(value))
@@ -1337,18 +1337,18 @@ namespace Craft.Net
 
         #region Nested type: AsnMessage
 
-        internal class AsnMessage
+        public class AsnMessage
         {
             private readonly String mFormat;
             private readonly byte[] mOctets;
 
-            internal AsnMessage(byte[] octets, String format)
+            public AsnMessage(byte[] octets, String format)
             {
                 mOctets = octets;
                 mFormat = format;
             }
 
-            internal int Length
+            public int Length
             {
                 get
                 {
@@ -1361,7 +1361,7 @@ namespace Craft.Net
                 // set { m_length = value; }
             }
 
-            internal byte[] GetBytes()
+            public byte[] GetBytes()
             {
                 if (null == mOctets)
                 {
@@ -1371,7 +1371,7 @@ namespace Craft.Net
                 return mOctets;
             }
 
-            internal String GetFormat()
+            public String GetFormat()
             {
                 return mFormat;
             }
@@ -1381,7 +1381,7 @@ namespace Craft.Net
 
         #region Nested type: AsnType
 
-        internal class AsnType
+        public class AsnType
         {
             // Constructors
             // No default - must specify tag and data

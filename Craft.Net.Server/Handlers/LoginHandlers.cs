@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
+using Craft.Net.Data;
 
 namespace Craft.Net.Server.Handlers
 {
@@ -28,6 +30,43 @@ namespace Craft.Net.Server.Handlers
                 client.SendPacket(new DisconnectPacket(""));
                 return;
             }
+            client.Username = handshake.Username;
+            client.Hostname = handshake.ServerHostname + ":" + handshake.ServerPort;
+            if (server.Settings.OnlineMode)
+                client.AuthenticationHash = CreateHash();
+            else
+                client.AuthenticationHash = "-";
+            if (server.Settings.EnableEncryption)
+                client.SendPacket(CreateEncryptionRequest(client, server));
+            else
+                server.LogInPlayer(client);
+        }
+
+        private static EncryptionKeyRequestPacket CreateEncryptionRequest(MinecraftClient client, MinecraftServer server)
+        {
+            var verifyToken = new byte[4];
+            var csp = new RNGCryptoServiceProvider();
+            csp.GetBytes(verifyToken);
+            verifyToken = server.CryptoServiceProvider.Encrypt(verifyToken, false);
+            // TODO: Confirm verify token validity
+
+            var encodedKey = AsnKeyBuilder.PublicKeyToX509(server.ServerKey);
+            var request = new EncryptionKeyRequestPacket(client.AuthenticationHash,
+                encodedKey.GetBytes(), verifyToken);
+            return request;
+        }
+
+        private static string CreateHash()
+        {
+            byte[] hash = BitConverter.GetBytes(MathHelper.Random.Next());
+            string response = "";
+            foreach (byte b in hash)
+            {
+                if (b < 0x10)
+                    response += "0";
+                response += b.ToString("x");
+            }
+            return response;
         }
     }
 }
