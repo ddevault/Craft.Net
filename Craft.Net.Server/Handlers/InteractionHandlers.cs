@@ -71,11 +71,11 @@ namespace Craft.Net.Server.Handlers
 
                             SlotItem.Count--; // Decrease the player's item by 1
                             if (SlotItem.Count == 0)
-                                client.Entity.SetSlot(client.Entity.SelectedSlot, new Slot());
+                                client.Entity.SetSlot(client.Entity.SelectedSlot, Slot.EmptySlot);
                             else
                                 client.Entity.SetSlot(client.Entity.SelectedSlot, SlotItem);
                             var entity = new ItemEntity(client.Entity.GivenPosition, ItemCopy);
-                            entity.Velocity = MathHelper.FowardVector(client.Entity);
+                            entity.Velocity = MathHelper.FowardVector(client.Entity) * new Vector3(0.25);
                             server.EntityManager.SpawnEntity(client.World, entity);
                         }
                         break;
