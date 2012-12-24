@@ -425,11 +425,20 @@ namespace Craft.Net.Server
                             IPacket packet;
                             if (client.SendQueue.TryDequeue(out packet))
                             {
-                                packet.WritePacket(client.Stream);
+                                try
+                                {
+                                    packet.WritePacket(client.Stream);
 #if DEBUG
-                                LogProvider.Log(packet, false);
+                                    LogProvider.Log(packet, false);
 #endif
-                                client.Stream.Flush();
+                                    client.Stream.Flush();
+                                }
+                                catch
+                                {
+                                    // TODO: Consider more detail
+                                    disconnect = true;
+                                    break;
+                                }
                                 if (packet is DisconnectPacket)
                                 {
                                     disconnect = true;

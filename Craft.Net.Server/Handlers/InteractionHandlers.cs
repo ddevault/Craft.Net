@@ -59,7 +59,6 @@ namespace Craft.Net.Server.Handlers
                                 }
                             }
                         }
-                        //client.World.SetBlock(Position, new AirBlock());
                         block.OnBlockMined(client.World, position, client.Entity);
                         client.Entity.FoodExhaustion += 0.025f;
                         break;
@@ -67,19 +66,17 @@ namespace Craft.Net.Server.Handlers
                         var SlotItem = client.Entity.Inventory[client.Entity.SelectedSlot];
                         if (!SlotItem.Empty)
                         {
-                            Slot ItemCopy = (Slot)SlotItem.Clone();
+                            var ItemCopy = (Slot)SlotItem.Clone();
                             ItemCopy.Count = 1;
 
                             SlotItem.Count--; // Decrease the player's item by 1
                             if (SlotItem.Count == 0)
-                            {
                                 client.Entity.SetSlot(client.Entity.SelectedSlot, new Slot());
-                            }
                             else
-                            {
                                 client.Entity.SetSlot(client.Entity.SelectedSlot, SlotItem);
-                            }
-                            server.EntityManager.SpawnEntity(client.World, new ItemEntity(client.Entity.GivenPosition + new Vector3(0.5), ItemCopy));
+                            var entity = new ItemEntity(client.Entity.GivenPosition, ItemCopy);
+                            entity.Velocity = MathHelper.FowardVector(client.Entity);
+                            server.EntityManager.SpawnEntity(client.World, entity);
                         }
                         break;
                 }
