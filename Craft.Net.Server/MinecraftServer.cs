@@ -424,6 +424,7 @@ namespace Craft.Net.Server
                             if (client.SendQueue.TryDequeue(out packet))
                             {
                                 packet.WritePacket(client.Stream);
+                                Console.WriteLine("Writing " + packet.GetType().Name);
 #if DEBUG
                                 LogProvider.Log(packet, false);
 #endif
@@ -456,6 +457,8 @@ namespace Craft.Net.Server
                             try
                             {
                                 var packet = PacketReader.ReadPacket(client.Stream);
+                                Console.WriteLine("Reading " + packet.GetType().Name);
+                                packet.ReadPacket(client.Stream);
 #if DEBUG
                                 LogProvider.Log(packet, true);
 #endif

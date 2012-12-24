@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -19,7 +20,10 @@ namespace Craft.Net
 
         public byte ReadUInt8()
         {
-            return (byte)base.ReadByte();
+            int value = BaseStream.ReadByte();
+            if (value == -1)
+                throw new EndOfStreamException();
+            return (byte)value;
         }
 
         public void WriteUInt8(byte value)

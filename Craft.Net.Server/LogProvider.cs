@@ -85,7 +85,6 @@ namespace Craft.Net.Server
                 else
                     builder.Append(": " + fValue + "\n");
             }
-            builder.AppendLine();
             Log(builder.ToString(), LogImportance.Low);
         }
 

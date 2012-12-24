@@ -120,6 +120,7 @@ namespace Craft.Net.Server
         {
             TcpClient = client;
             NetworkStream = client.GetStream();
+            client.ReceiveBufferSize = 32768;
             Stream = new MinecraftStream(new BufferedStream(client.GetStream()));
             SendQueue = new ConcurrentQueue<IPacket>();
             IsLoggedIn = false;
