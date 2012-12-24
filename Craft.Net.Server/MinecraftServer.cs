@@ -416,6 +416,7 @@ namespace Craft.Net.Server
                     for (int i = 0; i < Clients.Count; i++)
                     {
                         var client = Clients[i];
+                        bool disconnect = false;
                         while (client.SendQueue.Count != 0)
                         {
                             IPacket packet;
@@ -423,7 +424,18 @@ namespace Craft.Net.Server
                             {
                                 packet.WritePacket(client.Stream);
                                 client.Stream.Flush();
+                                if (packet is DisconnectPacket)
+                                {
+                                    disconnect = true;
+                                    break;
+                                }
                             }
+                        }
+                        if (disconnect)
+                        {
+                            Clients.Remove(client);
+                            i--;
+                            continue;
                         }
                         // Each client has a maximum of 10 milliseconds per iteration for reads
                         DateTime readTimeout = DateTime.Now.AddMilliseconds(10);
@@ -433,6 +445,12 @@ namespace Craft.Net.Server
                             {
                                 var packet = PacketReader.ReadPacket(client.Stream);
                                 HandlePacket(client, packet);
+                                if (packet is DisconnectPacket)
+                                {
+                                    Clients.Remove(client);
+                                    i--;
+                                    continue;
+                                }
                             }
                             catch (InvalidOperationException e)
                             {
