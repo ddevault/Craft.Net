@@ -458,7 +458,6 @@ namespace Craft.Net.Server
                             {
                                 var packet = PacketReader.ReadPacket(client.Stream);
                                 Console.WriteLine("Reading " + packet.GetType().Name);
-                                packet.ReadPacket(client.Stream);
 #if DEBUG
                                 LogProvider.Log(packet, true);
 #endif
