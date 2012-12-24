@@ -293,9 +293,9 @@ namespace Craft.Net.Server
 
             var args = new PlayerLogInEventArgs(client);
             OnPlayerLoggedIn(args);
-            LogProvider.Log(client.Username + " logged in.");
+            LogProvider.Log(client.Username + " joined the game.");
             if (!args.Handled)
-                SendChat(client.Username + " logged in.");
+                SendChat(ChatColors.Yellow + client.Username + " joined the game.");
 
             client.StartWorkers();
         }
