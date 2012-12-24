@@ -83,16 +83,17 @@ namespace Craft.Net.Data
 
         public Vector3[] GetCorners()
         {
-            return new Vector3[] {
-                new Vector3(this.Min.X, this.Max.Y, this.Max.Z),
-                new Vector3(this.Max.X, this.Max.Y, this.Max.Z),
-                new Vector3(this.Max.X, this.Min.Y, this.Max.Z),
-                new Vector3(this.Min.X, this.Min.Y, this.Max.Z),
-                new Vector3(this.Min.X, this.Max.Y, this.Min.Z),
-                new Vector3(this.Max.X, this.Max.Y, this.Min.Z),
-                new Vector3(this.Max.X, this.Min.Y, this.Min.Z),
-                new Vector3(this.Min.X, this.Min.Y, this.Min.Z)
-            };
+            return new Vector3[]
+                       {
+                           new Vector3(this.Min.X, this.Max.Y, this.Max.Z),
+                           new Vector3(this.Max.X, this.Max.Y, this.Max.Z),
+                           new Vector3(this.Max.X, this.Min.Y, this.Max.Z),
+                           new Vector3(this.Min.X, this.Min.Y, this.Max.Z),
+                           new Vector3(this.Min.X, this.Max.Y, this.Min.Z),
+                           new Vector3(this.Max.X, this.Max.Y, this.Min.Z),
+                           new Vector3(this.Max.X, this.Min.Y, this.Min.Z),
+                           new Vector3(this.Min.X, this.Min.Y, this.Min.Z)
+                       };
         }
 
         public bool Equals(BoundingBox other)
@@ -150,5 +151,20 @@ namespace Craft.Net.Data
         }
 
         #endregion
+
+        public double Height
+        {
+            get { return Max.Y - Min.Y; }
+        }
+
+        public double Width
+        {
+            get { return Max.X - Min.X; }
+        }
+
+        public double Depth
+        {
+            get { return Max.Z - Min.Z; }
+        }
     }
 }

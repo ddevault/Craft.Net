@@ -239,14 +239,14 @@ namespace Craft.Net.Data.Entities
                     new Vector3(BoundingBox.Min.X, BoundingBox.Min.Y + Velocity.Y, BoundingBox.Min.Z) - (Size / 2),
                     new Vector3(BoundingBox.Max.X, BoundingBox.Max.Y, BoundingBox.Max.Z) - (Size / 2));
 
-                maxY = (int)(TempBoundingBox.Min.Y);
+                maxY = (int)(TempBoundingBox.Max.Y);
                 minY = (int)(TempBoundingBox.Min.Y + Velocity.Y);
             }
             else
             {
                 TempBoundingBox = new BoundingBox(BoundingBox.Min - (Size / 2), new Vector3(
                     BoundingBox.Max.X, BoundingBox.Max.Y + Velocity.Y, BoundingBox.Max.Z) - (Size / 2));
-                minY = (int)(BoundingBox.Max.Y);
+                minY = (int)(BoundingBox.Min.Y);
                 maxY = (int)(BoundingBox.Max.Y + Velocity.Y);
             }
 

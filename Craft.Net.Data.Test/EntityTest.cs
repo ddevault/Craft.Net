@@ -20,23 +20,17 @@ namespace Craft.Net.Data.Test
             Level level = new Level();
             level.World.EntityUpdateTimer.Change(Timeout.Infinite, Timeout.Infinite); // Manual updates only
 
-            for (double x = 3; x >= -3; x -= 0.5)
+            for (int y = 10; y < 100; y += 10)
             {
-                for (double z = 3; z >= -3; z -= 0.5)
-                {
-                    for (int y = 10; y < 100; y += 10)
-                    {
-                        var entity = new ItemEntity(new Vector3(x, y, z), new Slot(1, 1));
-                        level.World.Entities.Add(entity);
+                var entity = new ItemEntity(new Vector3(3, y, 3), new Slot(1, 1));
+                level.World.Entities.Add(entity);
 
-                        for (int i = 0; i < 1000; i++)
-                            entity.PhysicsUpdate(level.World);
+                for (int i = 0; i < 1000; i++)
+                    entity.PhysicsUpdate(level.World);
 
-                        Assert.AreEqual(4, (int)entity.Position.Y);
+                Assert.AreEqual(4, (int)(entity.Position.Y));
 
-                        level.World.Entities.Remove(entity);
-                    }
-                }
+                level.World.Entities.Remove(entity);
             }
         }
 
