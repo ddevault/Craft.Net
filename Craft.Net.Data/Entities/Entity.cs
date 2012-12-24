@@ -230,6 +230,8 @@ namespace Craft.Net.Data.Entities
                             Direction = collisionDirection
                         });
                 }
+                if (collisionDirection != Vector3.Zero)
+                    Velocity *= new Vector3(0.02); // TODO: Better friction
             }
 
             EnableVelocityUpdates = oldVelocityEnabled;

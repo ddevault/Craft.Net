@@ -209,17 +209,20 @@ namespace Craft.Net.Server
                                           ((int)Entity.Position.Z >> 4) + z));
                     }
                 // Unload extraneous columns
-                var currentChunks = new List<Vector3>(LoadedChunks);
-                foreach (Vector3 chunk in currentChunks)
+                lock (LoadedChunks)
                 {
-                    if (!newChunks.Contains(chunk))
-                        UnloadChunk(chunk);
-                }
-                // Load new columns
-                foreach (Vector3 chunk in newChunks)
-                {
-                    if (!LoadedChunks.Contains(chunk))
-                        LoadChunk(chunk);
+                    var currentChunks = new List<Vector3>(LoadedChunks);
+                    foreach (Vector3 chunk in currentChunks)
+                    {
+                        if (!newChunks.Contains(chunk))
+                            UnloadChunk(chunk);
+                    }
+                    // Load new columns
+                    foreach (Vector3 chunk in newChunks)
+                    {
+                        if (!LoadedChunks.Contains(chunk))
+                            LoadChunk(chunk);
+                    }
                 }
             }
         }
