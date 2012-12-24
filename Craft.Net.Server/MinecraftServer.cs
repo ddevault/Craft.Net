@@ -283,7 +283,8 @@ namespace Craft.Net.Server
             // Send initial chunks
             client.UpdateChunks(true);
             client.SendPacket(new PlayerPositionAndLookPacket(client.Entity.Position.X, client.Entity.Position.Y,
-                client.Entity.Position.Z, client.Entity.Position.Y + 1.5, client.Entity.Yaw, client.Entity.Pitch, true));
+                client.Entity.Position.Z, client.Entity.Position.Y - 1.62, client.Entity.Yaw, client.Entity.Pitch, true));
+            // TODO: Move 1.62 somewhere else
 
             // Send entities
             EntityManager.SendClientEntities(client);
