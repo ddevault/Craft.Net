@@ -34,6 +34,7 @@ namespace Craft.Net.Server.Handlers
             MinecraftServer.RegisterPacketHandler(PlayerDiggingPacket.PacketId, InteractionHandlers.PlayerDigging);
             MinecraftServer.RegisterPacketHandler(RightClickPacket.PacketId, InteractionHandlers.RightClick);
             MinecraftServer.RegisterPacketHandler(UseEntityPacket.PacketId, InteractionHandlers.UseEntity);
+            MinecraftServer.RegisterPacketHandler(UpdateSignPacket.PacketId, InteractionHandlers.UpdateSign);
 
             MinecraftServer.RegisterPacketHandler(ServerListPingPacket.PacketId, ServerListPing);
             MinecraftServer.RegisterPacketHandler(PluginMessagePacket.PacketId, PluginMessage);

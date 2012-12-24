@@ -7,6 +7,15 @@ namespace Craft.Net.Data.Blocks
 {
     public class SignPostBlock : SignBlock
     {
+        public SignPostBlock()
+        {
+        }
+
+        public SignPostBlock(byte metadata)
+        {
+            Metadata = metadata;
+        }
+
         public override short Id
         {
             get { return 63; }

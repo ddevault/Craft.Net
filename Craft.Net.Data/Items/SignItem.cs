@@ -22,6 +22,8 @@ namespace Craft.Net.Data.Items
             if (clickedSide == Vector3.Up)
             {
                 // Floor sign
+                byte metadata = (byte)((usedBy.Yaw % 360 / 360 * 16) + 8 % 16);
+                world.SetBlock(clickedBlock + clickedSide, new SignPostBlock(metadata));
             }
             else if (clickedSide != Vector3.Down)
             {

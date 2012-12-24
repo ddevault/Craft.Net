@@ -153,6 +153,27 @@ namespace Craft.Net.Server.Handlers
             }
         }
 
+        public static void UpdateSign(MinecraftClient client, MinecraftServer server, IPacket _packet)
+        {
+            var packet = (UpdateSignPacket)_packet;
+            var position = new Vector3(packet.X, packet.Y, packet.Z);
+            if (position.DistanceTo(client.Entity.Position) < client.Reach)
+            {
+                var block = client.World.GetBlock(position);
+                if (block is SignBlock)
+                {
+                    var sign = block as SignBlock;
+                    var tile = sign.TileEntity as SignTileEntity;
+                    tile.Text1 = packet.Text1;
+                    tile.Text2 = packet.Text2;
+                    tile.Text3 = packet.Text3;
+                    tile.Text4 = packet.Text4;
+                    sign.TileEntity = tile;
+                    client.World.SetBlock(position, sign);
+                }
+            }
+        }
+
         private static Vector3 AdjustByDirection(byte direction)
         {
             switch (direction)
