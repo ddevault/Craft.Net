@@ -38,9 +38,9 @@ namespace Craft.Net.Data.Blocks
             }
         }
 
-        public override bool GetDrop(ToolItem tool, out Slot[] drop)
+        public override bool GetDrop(ToolItem tool, out ItemStack[] drop)
         {
-            drop = new[] { new Slot(new RedstoneTorchActiveBlock(), 1) };
+            drop = new[] { new ItemStack(new RedstoneTorchActiveBlock(), 1) };
             return true;
         }
 

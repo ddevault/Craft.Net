@@ -23,12 +23,12 @@ namespace Craft.Net.Data.Blocks
             get { return null; }
         }
 
-        public override bool GetDrop(ToolItem tool, out Slot[] drop)
+        public override bool GetDrop(ToolItem tool, out ItemStack[] drop)
         {
             if ((Metadata & 0xC) <= 4)
-                drop = new[] { new Slot(new CocoaBeanItem(), 1) };
+                drop = new[] { new ItemStack(new CocoaBeanItem(), 1) };
             else
-                drop = new[] { new Slot(new CocoaBeanItem(), 3) };
+                drop = new[] { new ItemStack(new CocoaBeanItem(), 3) };
             return true;
         }
 

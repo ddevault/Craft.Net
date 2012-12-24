@@ -155,7 +155,7 @@ namespace Craft.Net.Data
                 world.SetBlock(destroyedBlock, new AirBlock());
                 if (CanHarvest(slot.AsItem() as ToolItem) && player.GameMode != GameMode.Creative)
                 {
-                    Slot[] drops;
+                    ItemStack[] drops;
                     bool spawnEntity = GetDrop(slot.AsItem() as ToolItem, out drops);
                     if (spawnEntity)
                     {
@@ -180,7 +180,7 @@ namespace Craft.Net.Data
                 if (block is AirBlock)
                 {
                     world.SetBlock(updatedBlock, new AirBlock());
-                    Slot[] drops;
+                    ItemStack[] drops;
                     bool spawnEntity = GetDrop(null, out drops);
                     if (spawnEntity)
                     {
@@ -191,9 +191,9 @@ namespace Craft.Net.Data
             }
         }
 
-        public virtual bool GetDrop(ToolItem tool, out Slot[] drop)
+        public virtual bool GetDrop(ToolItem tool, out ItemStack[] drop)
         {
-            drop = new[] { new Slot(this.Id, 1, this.Metadata) };
+            drop = new[] { new ItemStack(this.Id, 1, this.Metadata) };
             return CanHarvest(tool);
         }
 

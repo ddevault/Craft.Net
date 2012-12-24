@@ -28,16 +28,16 @@ namespace Craft.Net.Data.Blocks
             get { return Vector3.Down; }
         }
 
-        public override bool GetDrop(ToolItem tool, out Slot[] drop)
+        public override bool GetDrop(ToolItem tool, out ItemStack[] drop)
         {
             if (MathHelper.Random.Next(100) == 0)
             {
-                drop = new[] { new Slot(new PotatoItem(), (sbyte)MathHelper.Random.Next(1, 4)),
-                    new Slot(new PoisonousPotatoItem(), 1) };
+                drop = new[] { new ItemStack(new PotatoItem(), (sbyte)MathHelper.Random.Next(1, 4)),
+                    new ItemStack(new PoisonousPotatoItem(), 1) };
             }
             else
             {
-                drop = new[] { new Slot(new PotatoItem(), (sbyte)MathHelper.Random.Next(1, 4)) };
+                drop = new[] { new ItemStack(new PotatoItem(), (sbyte)MathHelper.Random.Next(1, 4)) };
             }
             return true;
         }

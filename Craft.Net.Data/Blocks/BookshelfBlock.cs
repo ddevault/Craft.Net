@@ -18,9 +18,9 @@ namespace Craft.Net.Data.Blocks
             get { return 1.5; }
         }
 
-        public override bool GetDrop(ToolItem tool, out Slot[] drops)
+        public override bool GetDrop(ToolItem tool, out ItemStack[] drops)
         {
-            drops = new[] { new Slot(new BookItem(), 3) };
+            drops = new[] { new ItemStack(new BookItem(), 3) };
             return true;
         }
     }

@@ -12,7 +12,7 @@ namespace Craft.Net.Data.Entities
         {
             Inventory = new InventoryWindow();
             for (int i = 0; i < Inventory.Length; i++)
-                Inventory[i] = Slot.EmptySlot;
+                Inventory[i] = ItemStack.EmptyStack;
             SelectedSlot = InventoryWindow.HotbarIndex;
             bedUseTimer = new Timer(state =>
             {
@@ -23,7 +23,7 @@ namespace Craft.Net.Data.Entities
             Health = 20;
             Food = 20;
             Abilities = new PlayerAbilities(this);
-            ItemInMouse = Slot.EmptySlot;
+            ItemInMouse = ItemStack.EmptyStack;
             Difficulty = difficulty;
             TerrainCollision += OnTerrainCollision;
             FoodTickTimer = new Timer(discarded =>
@@ -226,7 +226,7 @@ namespace Craft.Net.Data.Entities
             }
         }
 
-        public Slot SelectedItem
+        public ItemStack SelectedItem
         {
             get { return Inventory[SelectedSlot]; }
         }
@@ -287,7 +287,7 @@ namespace Craft.Net.Data.Entities
         /// When moving items around in a survival inventory,
         /// this represents the item the player is holding.
         /// </summary>
-        public Slot ItemInMouse { get; set; }
+        public ItemStack ItemInMouse { get; set; }
 
         public override bool Invulnerable
         {
@@ -364,7 +364,7 @@ namespace Craft.Net.Data.Entities
 
         #endregion
 
-        public void SetSlot(short index, Slot slot)
+        public void SetSlot(short index, ItemStack slot)
         {
             if (InventoryChanged != null)
                 InventoryChanged(this, new InventoryChangedEventArgs()
@@ -395,7 +395,7 @@ namespace Craft.Net.Data.Entities
         {
             deathTimer.Change(3000, Timeout.Infinite);
             for (int i = 0; i < Inventory.Length; i++)
-                Inventory[i] = Slot.EmptySlot;
+                Inventory[i] = ItemStack.EmptyStack;
         }
 
         protected internal virtual void OnStartEating()

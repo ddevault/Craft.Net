@@ -58,7 +58,7 @@ namespace Craft.Net.Data.Windows
 
         #endregion
 
-        protected override WindowArea GetLinkedArea(int index, Slot slot)
+        protected override WindowArea GetLinkedArea(int index, ItemStack slot)
         {
             if (!slot.Empty && slot.AsItem() is IArmorItem && (index == 2 || index == 3))
                 return Armor;
@@ -67,7 +67,7 @@ namespace Craft.Net.Data.Windows
             return Hotbar;
         }
 
-        public bool PickUpStack(Slot slot)
+        public bool PickUpStack(ItemStack slot)
         {
             var area = MainInventory;
             foreach (var item in Hotbar.Items)

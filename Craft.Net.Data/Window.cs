@@ -36,7 +36,7 @@ namespace Craft.Net.Data
         /// <param name="index">The index of the area the item is coming from</param>
         /// <param name="slot">The item being moved</param>
         /// <returns>The area to place the item into</returns>
-        protected abstract WindowArea GetLinkedArea(int index, Slot slot);
+        protected abstract WindowArea GetLinkedArea(int index, ItemStack slot);
 
         /// <summary>
         /// Gets the window area to handle this index and adjust index accordingly
@@ -76,16 +76,16 @@ namespace Craft.Net.Data
             }
         }
 
-        public Slot[] GetSlots()
+        public ItemStack[] GetSlots()
         {
             int length = WindowAreas.Sum(area => area.Length);
-            var slots = new Slot[length];
+            var slots = new ItemStack[length];
             foreach (var windowArea in WindowAreas)
                 Array.Copy(windowArea.Items, 0, slots, windowArea.StartIndex, windowArea.Length);
             return slots;
         }
 
-        public virtual Slot this[int index]
+        public virtual ItemStack this[int index]
         {
             get
             {

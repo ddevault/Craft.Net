@@ -187,7 +187,7 @@ namespace Craft.Net
             Footwear = 4
         }
 
-        public EntityEquipmentPacket(int entityId, EntityEquipmentSlot slotIndex, Slot slot)
+        public EntityEquipmentPacket(int entityId, EntityEquipmentSlot slotIndex, ItemStack slot)
         {
             EntityId = entityId;
             SlotIndex = slotIndex;
@@ -196,7 +196,7 @@ namespace Craft.Net
 
         public int EntityId;
         public EntityEquipmentSlot SlotIndex;
-        public Slot Slot;
+        public ItemStack Slot;
 
         public const byte PacketId = 0x05;
         public byte Id { get { return 0x05; } }
@@ -205,7 +205,7 @@ namespace Craft.Net
         {
             EntityId = stream.ReadInt32();
             SlotIndex = (EntityEquipmentSlot)stream.ReadInt16();
-            Slot = Slot.FromStream(stream);
+            Slot = ItemStack.FromStream(stream);
         }
 
         public void WritePacket(MinecraftStream stream)
@@ -540,7 +540,7 @@ namespace Craft.Net
     public struct RightClickPacket : IPacket
     {
         public RightClickPacket(int x, byte y, int z,
-            byte direction, Slot heldItem, byte cursorX,
+            byte direction, ItemStack heldItem, byte cursorX,
             byte cursorY, byte cursorZ)
         {
             X = x;
@@ -557,7 +557,7 @@ namespace Craft.Net
         public byte Y;
         public int Z;
         public byte Direction;
-        public Slot HeldItem;
+        public ItemStack HeldItem;
         public byte CursorX;
         public byte CursorY;
         public byte CursorZ;
@@ -571,7 +571,7 @@ namespace Craft.Net
             Y = stream.ReadUInt8();
             Z = stream.ReadInt32();
             Direction = stream.ReadUInt8();
-            HeldItem = Slot.FromStream(stream);
+            HeldItem = ItemStack.FromStream(stream);
             CursorX = stream.ReadUInt8();
             CursorY = stream.ReadUInt8();
             CursorZ = stream.ReadUInt8();
@@ -2042,7 +2042,7 @@ namespace Craft.Net
     public struct ClickWindowPacket : IPacket
     {
         public ClickWindowPacket(byte windowId, short slotIndex, byte mouseButton,
-            short actionNumber, bool shift, Slot clickedItem)
+            short actionNumber, bool shift, ItemStack clickedItem)
         {
             WindowId = windowId;
             SlotIndex = slotIndex;
@@ -2057,7 +2057,7 @@ namespace Craft.Net
         public byte MouseButton;
         public short ActionNumber;
         public bool Shift;
-        public Slot ClickedItem;
+        public ItemStack ClickedItem;
 
         public const byte PacketId = 0x66;
         public byte Id { get { return 0x66; } }
@@ -2069,7 +2069,7 @@ namespace Craft.Net
             MouseButton = stream.ReadUInt8();
             ActionNumber = stream.ReadInt16();
             Shift = stream.ReadBoolean();
-            ClickedItem = Slot.FromStream(stream);
+            ClickedItem = ItemStack.FromStream(stream);
         }
 
         public void WritePacket(MinecraftStream stream)
@@ -2086,7 +2086,7 @@ namespace Craft.Net
 
     public struct SetSlotPacket : IPacket
     {
-        public SetSlotPacket(byte windowId, short slotIndex, Slot item)
+        public SetSlotPacket(byte windowId, short slotIndex, ItemStack item)
         {
             WindowId = windowId;
             SlotIndex = slotIndex;
@@ -2095,7 +2095,7 @@ namespace Craft.Net
 
         public byte WindowId;
         public short SlotIndex;
-        public Slot Item;
+        public ItemStack Item;
 
         public const byte PacketId = 0x67;
         public byte Id { get { return 0x67; } }
@@ -2104,7 +2104,7 @@ namespace Craft.Net
         {
             WindowId = stream.ReadUInt8();
             SlotIndex = stream.ReadInt16();
-            Item = Slot.FromStream(stream);
+            Item = ItemStack.FromStream(stream);
         }
 
         public void WritePacket(MinecraftStream stream)
@@ -2118,14 +2118,14 @@ namespace Craft.Net
 
     public struct SetWindowItemsPacket : IPacket
     {
-        public SetWindowItemsPacket(byte windowId, Slot[] items)
+        public SetWindowItemsPacket(byte windowId, ItemStack[] items)
         {
             WindowId = windowId;
             Items = items;
         }
         
         public byte WindowId;
-        public Slot[] Items;
+        public ItemStack[] Items;
 
         public const byte PacketId = 0x68;
         public byte Id { get { return 0x68; } }
@@ -2134,9 +2134,9 @@ namespace Craft.Net
         {
             WindowId = stream.ReadUInt8();
             short count = stream.ReadInt16();
-            Items = new Slot[count];
+            Items = new ItemStack[count];
             for (int i = 0; i < count; i++)
-                Items[i] = Slot.FromStream(stream);
+                Items[i] = ItemStack.FromStream(stream);
         }
 
         public void WritePacket(MinecraftStream stream)
@@ -2215,14 +2215,14 @@ namespace Craft.Net
 
     public struct CreativeInventoryActionPacket : IPacket
     {
-        public CreativeInventoryActionPacket(short slotIndex, Slot item)
+        public CreativeInventoryActionPacket(short slotIndex, ItemStack item)
         {
             SlotIndex = slotIndex;
             Item = item;
         }
 
         public short SlotIndex;
-        public Slot Item;
+        public ItemStack Item;
 
         public const byte PacketId = 0x6B;
         public byte Id { get { return 0x6B; } }
@@ -2230,7 +2230,7 @@ namespace Craft.Net
         public void ReadPacket(MinecraftStream stream)
         {
             SlotIndex = stream.ReadInt16();
-            Item = Slot.FromStream(stream);
+            Item = ItemStack.FromStream(stream);
         }
 
         public void WritePacket(MinecraftStream stream)

@@ -11,11 +11,11 @@ namespace Craft.Net.Data.Entities
         public BlockEntity(Vector3 position, Block block)
         {
             Position = position + new Vector3(0.5, 0, 0.5);
-            Item = new Slot(block.Id, 1, block.Metadata);
+            Item = new ItemStack(block.Id, 1, block.Metadata);
             TerrainCollision += BlockEntity_TerrainCollision;
         }
 
-        public Slot Item { get; set; }
+        public ItemStack Item { get; set; }
 
         public override Size Size
         {

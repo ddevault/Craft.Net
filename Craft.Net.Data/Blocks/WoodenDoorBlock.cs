@@ -34,9 +34,9 @@ namespace Craft.Net.Data.Blocks
             return false;
         }
 
-        public override bool GetDrop(ToolItem tool, out Slot[] drop)
+        public override bool GetDrop(ToolItem tool, out ItemStack[] drop)
         {
-            drop = new[] { new Slot(new WoodenDoorItem(), 1) };
+            drop = new[] { new ItemStack(new WoodenDoorItem(), 1) };
             return UpperHalf;
         }
 

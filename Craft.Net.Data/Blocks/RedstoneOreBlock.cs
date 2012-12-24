@@ -32,9 +32,9 @@ namespace Craft.Net.Data.Blocks
                 tool.ToolMaterial == ToolMaterial.Diamond);
         }
 
-        public override bool GetDrop(ToolItem tool, out Slot[] drop)
+        public override bool GetDrop(ToolItem tool, out ItemStack[] drop)
         {
-            drop = new[] { new Slot(new RedstoneItem(), (sbyte)MathHelper.Random.Next(4, 5)) };
+            drop = new[] { new ItemStack(new RedstoneItem(), (sbyte)MathHelper.Random.Next(4, 5)) };
             return tool is PickaxeItem &&
                 (tool.ToolMaterial == ToolMaterial.Iron ||
                 tool.ToolMaterial == ToolMaterial.Gold ||

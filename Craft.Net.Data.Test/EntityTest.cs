@@ -22,7 +22,7 @@ namespace Craft.Net.Data.Test
 
             for (int y = 10; y < 100; y += 10)
             {
-                var entity = new ItemEntity(new Vector3(3, y, 3), new Slot(1, 1));
+                var entity = new ItemEntity(new Vector3(3, y, 3), new ItemStack(1, 1));
                 level.World.Entities.Add(entity);
 
                 for (int i = 0; i < 1000; i++)
@@ -45,7 +45,7 @@ namespace Craft.Net.Data.Test
                 for (int y = 0; y < 23; y++)
                     level.World.SetBlock(new Vector3(3, y, z), new StoneBlock());
 
-            var entity = new ItemEntity(new Vector3(0, 10, 0), new Slot(1, 1));
+            var entity = new ItemEntity(new Vector3(0, 10, 0), new ItemStack(1, 1));
             entity.Velocity = new Vector3(3, 0, 0); // Throw item
             level.World.Entities.Add(entity);
 
@@ -68,7 +68,7 @@ namespace Craft.Net.Data.Test
                 for (int y = 0; y < 23; y++)
                     level.World.SetBlock(new Vector3(x, y, 3), new StoneBlock());
 
-            var entity = new ItemEntity(new Vector3(0, 10, 0), new Slot(1, 1));
+            var entity = new ItemEntity(new Vector3(0, 10, 0), new ItemStack(1, 1));
             entity.Velocity = new Vector3(0, 0, 3); // Throw item
             level.World.Entities.Add(entity);
 

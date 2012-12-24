@@ -16,7 +16,7 @@ namespace Craft.Net.Data.Windows
         {
         }
 
-        protected override bool IsValid(Slot slot, int index)
+        protected override bool IsValid(ItemStack slot, int index)
         {
             if (slot.Empty)
                 return true;
@@ -34,7 +34,7 @@ namespace Craft.Net.Data.Windows
             return base.IsValid(slot, index);
         }
 
-        protected internal override int MoveOrMergeItem(int index, Slot slot, WindowArea from)
+        protected internal override int MoveOrMergeItem(int index, ItemStack slot, WindowArea from)
         {
             for (int i = 0; i < Length; i++)
             {
@@ -43,7 +43,7 @@ namespace Craft.Net.Data.Windows
                     if (this[i].Empty)
                     {
                         this[i] = slot;
-                        from[index] = Slot.EmptySlot;
+                        from[index] = ItemStack.EmptyStack;
                         return i;
                     }
                 }

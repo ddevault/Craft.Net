@@ -9,20 +9,20 @@ namespace Craft.Net.Metadata
         public override byte Identifier { get { return 5; } }
         public override string FriendlyName { get { return "slot"; } }
 
-        public Slot Value;
+        public ItemStack Value;
 
         public MetadataSlot(byte index) : base(index)
         {
         }
 
-        public MetadataSlot(byte index, Slot value) : base(index)
+        public MetadataSlot(byte index, ItemStack value) : base(index)
         {
             Value = value;
         }
 
         public override void FromStream(MinecraftStream stream)
         {
-            Value = Slot.FromStream(stream);
+            Value = ItemStack.FromStream(stream);
         }
 
         public override void WriteTo(MinecraftStream stream)

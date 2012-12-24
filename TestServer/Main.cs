@@ -135,7 +135,7 @@ namespace TestServer
                         {
                             var type = ((Block)int.Parse(parameters[0])).GetType();
                             var item = (Item)Activator.CreateInstance(type);
-                            e.Origin.Entity.SetSlot(InventoryWindow.HotbarIndex, new Slot(item.Id, 1));
+                            e.Origin.Entity.SetSlot(InventoryWindow.HotbarIndex, new ItemStack(item.Id, 1));
                         } catch { }
                         break;
                 }

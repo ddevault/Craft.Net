@@ -12,17 +12,17 @@ namespace Craft.Net.Data
         {
             StartIndex = startIndex;
             Length = length;
-            Items = new Slot[Length];
+            Items = new ItemStack[Length];
             for (int i = 0; i < Items.Length; i++)
-                Items[i] = Slot.EmptySlot;
+                Items[i] = ItemStack.EmptyStack;
         }
 
         public int StartIndex { get; set; }
         public int Length { get; set; }
-        public Slot[] Items { get; set; }
+        public ItemStack[] Items { get; set; }
         public event EventHandler<WindowChangeEventArgs> WindowChange;
 
-        public virtual Slot this[int index]
+        public virtual ItemStack this[int index]
         {
             get { return Items[index]; }
             set
@@ -33,7 +33,7 @@ namespace Craft.Net.Data
             }
         }
 
-        protected internal virtual int MoveOrMergeItem(int index, Slot slot, WindowArea from)
+        protected internal virtual int MoveOrMergeItem(int index, ItemStack slot, WindowArea from)
         {
             int emptyIndex = -1;
             for (int i = 0; i < Length; i++)
@@ -47,22 +47,22 @@ namespace Craft.Net.Data
                     // Merging takes precedence over empty slots
                     emptyIndex = -1;
                     if (from != null)
-                        from[index] = Slot.EmptySlot;
+                        from[index] = ItemStack.EmptyStack;
                     if (this[i].Count + slot.Count > slot.AsItem().MaximumStack)
                     {
-                        slot = new Slot(slot.Id, (sbyte)(slot.Count - (slot.AsItem().MaximumStack - this[i].Count)),
+                        slot = new ItemStack(slot.Id, (sbyte)(slot.Count - (slot.AsItem().MaximumStack - this[i].Count)),
                             slot.Metadata, slot.Nbt);
-                        this[i] = new Slot(slot.Id, (sbyte)slot.AsItem().MaximumStack, slot.Metadata, slot.Nbt);
+                        this[i] = new ItemStack(slot.Id, (sbyte)slot.AsItem().MaximumStack, slot.Metadata, slot.Nbt);
                         continue;
                     }
-                    this[i] = new Slot(slot.Id, (sbyte)(this[i].Count + slot.Count));
+                    this[i] = new ItemStack(slot.Id, (sbyte)(this[i].Count + slot.Count));
                     return i;
                 }
             }
             if (emptyIndex != -1)
             {
                 if (from != null)
-                    from[index] = Slot.EmptySlot;
+                    from[index] = ItemStack.EmptyStack;
                 this[emptyIndex] = slot;
             }
             return emptyIndex;
@@ -72,7 +72,7 @@ namespace Craft.Net.Data
         /// Returns true if the specified slot is valid to
         /// be placed in this index.
         /// </summary>
-        protected virtual bool IsValid(Slot slot, int index)
+        protected virtual bool IsValid(ItemStack slot, int index)
         {
             return true;
         }

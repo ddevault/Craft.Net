@@ -53,7 +53,7 @@ namespace Craft.Net.Data
             {
                 var slot = player.Inventory[player.SelectedSlot];
                 player.Inventory[player.SelectedSlot] = 
-                    new Slot(slot.Id, (sbyte)(slot.Count - 1), slot.Metadata, slot.Nbt);
+                    new ItemStack(slot.Id, (sbyte)(slot.Count - 1), slot.Metadata, slot.Nbt);
             }
         }
 

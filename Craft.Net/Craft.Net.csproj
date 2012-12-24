@@ -62,7 +62,7 @@
     <Compile Include="PacketReader.cs" />
     <Compile Include="Packets.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Slot.cs" />
+    <Compile Include="ItemStack.cs" />
     <Compile Include="SoundEffect.cs" />
   </ItemGroup>
   <ItemGroup>

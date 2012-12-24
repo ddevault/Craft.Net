@@ -11,7 +11,7 @@ namespace Craft.Net.Data.Entities
     {
         private DateTime SpawnTime { get; set; }
 
-        public ItemEntity(Vector3 position, Slot item)
+        public ItemEntity(Vector3 position, ItemStack item)
         {
             Position = position;
             Item = item;
@@ -23,7 +23,7 @@ namespace Craft.Net.Data.Entities
             get { return new Size(0.25, 0.25, 0.25); }
         }
 
-        public Slot Item { get; set; }
+        public ItemStack Item { get; set; }
 
         public override float AccelerationDueToGravity
         {

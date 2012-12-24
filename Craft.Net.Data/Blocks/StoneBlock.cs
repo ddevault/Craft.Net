@@ -23,9 +23,9 @@ namespace Craft.Net.Data.Blocks
             return tool is PickaxeItem;
         }
 
-        public override bool GetDrop(ToolItem tool, out Slot[] drop)
+        public override bool GetDrop(ToolItem tool, out ItemStack[] drop)
         {
-            drop = new[] { new Slot(new CobblestoneBlock(), 1) };
+            drop = new[] { new ItemStack(new CobblestoneBlock(), 1) };
             return CanHarvest(tool);
         }
     }

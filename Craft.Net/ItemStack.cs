@@ -8,9 +8,9 @@ using System.IO.Compression;
 
 namespace Craft.Net
 {
-    public struct Slot : ICloneable
+    public struct ItemStack : ICloneable
     {
-        public Slot(short id)
+        public ItemStack(short id)
         {
             Id = id;
             Count = 1;
@@ -19,24 +19,24 @@ namespace Craft.Net
             Index = 0;
         }
 
-        public Slot(short id, sbyte count) : this(id)
+        public ItemStack(short id, sbyte count) : this(id)
         {
             Count = count;
         }
 
-        public Slot(short id, sbyte count, short metadata) : this(id, count)
+        public ItemStack(short id, sbyte count, short metadata) : this(id, count)
         {
             Metadata = metadata;
         }
 
-        public Slot(short id, sbyte count, short metadata, NbtFile nbt) : this(id, count, metadata)
+        public ItemStack(short id, sbyte count, short metadata, NbtFile nbt) : this(id, count, metadata)
         {
             Nbt = nbt;
         }
 
-        public static Slot FromStream(MinecraftStream stream)
+        public static ItemStack FromStream(MinecraftStream stream)
         {
-            var slot = Slot.EmptySlot;
+            var slot = ItemStack.EmptyStack;
             slot.Id = stream.ReadInt16();
             if (slot.Empty)
                 return slot;
@@ -70,9 +70,9 @@ namespace Craft.Net
             stream.WriteUInt8Array(buffer);
         }
 
-        public static Slot FromNbt(NbtCompound compound)
+        public static ItemStack FromNbt(NbtCompound compound)
         {
-            var s = Slot.EmptySlot;
+            var s = ItemStack.EmptyStack;
             s.Id = compound.Get<NbtShort>("id").Value;
             s.Metadata = compound.Get<NbtShort>("Damage").Value;
             s.Count = (sbyte)compound.Get<NbtByte>("Count").Value;
@@ -124,14 +124,14 @@ namespace Craft.Net
 
         public object Clone()
         {
-            return new Slot(Id, Count, Metadata, Nbt);
+            return new ItemStack(Id, Count, Metadata, Nbt);
         }
 
-        public static Slot EmptySlot
+        public static ItemStack EmptyStack
         {
             get
             {
-                return new Slot(-1);
+                return new ItemStack(-1);
             }
         }
     }

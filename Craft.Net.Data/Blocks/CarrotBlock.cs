@@ -23,9 +23,9 @@ namespace Craft.Net.Data.Blocks
             get { return Vector3.Down; }
         }
 
-        public override bool GetDrop(ToolItem tool, out Slot[] drops)
+        public override bool GetDrop(ToolItem tool, out ItemStack[] drops)
         {
-            drops = new[] { new Slot(new CarrotItem(), (sbyte)MathHelper.Random.Next(1, 4)) };
+            drops = new[] { new ItemStack(new CarrotItem(), (sbyte)MathHelper.Random.Next(1, 4)) };
             return true;
         }
     }

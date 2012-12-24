@@ -7,7 +7,7 @@ namespace Craft.Net.Data.Events
 {
     public class InventoryChangedEventArgs : EventArgs
     {
-        public Slot NewValue, OldValue;
+        public ItemStack NewValue, OldValue;
         public short Index;
     }
 }

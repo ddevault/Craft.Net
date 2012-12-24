@@ -34,9 +34,9 @@ namespace Craft.Net.Data.Blocks
             set { SignData = (SignTileEntity)value; }
         }
 
-        public override bool GetDrop(ToolItem tool, out Slot[] drop)
+        public override bool GetDrop(ToolItem tool, out ItemStack[] drop)
         {
-            drop = new[] { new Slot(new SignItem(), 1) };
+            drop = new[] { new ItemStack(new SignItem(), 1) };
             return true;
         }
     }

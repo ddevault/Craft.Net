@@ -249,7 +249,7 @@ namespace Craft.Net.Data
 
             foreach (var item in inventory)
             {
-                var slot = Slot.FromNbt((NbtCompound)item);
+                var slot = ItemStack.FromNbt((NbtCompound)item);
                 slot.Index = DataSlotToNetworkSlot(slot.Index);
                 entity.Inventory[slot.Index] = slot;
             }

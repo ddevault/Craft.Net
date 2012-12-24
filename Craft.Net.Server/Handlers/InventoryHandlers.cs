@@ -80,14 +80,14 @@ namespace Craft.Net.Server.Handlers
                 {
                     var heldCount = (sbyte)(clickedItem.Count / 2 + (clickedItem.Count % 2));
                     var leftCount = (sbyte)(clickedItem.Count / 2);
-                    client.Entity.ItemInMouse = new Slot(clickedItem.Id, heldCount, clickedItem.Metadata);
+                    client.Entity.ItemInMouse = new ItemStack(clickedItem.Id, heldCount, clickedItem.Metadata);
                     var old = client.Entity.Inventory[packet.SlotIndex];
-                    client.Entity.Inventory[packet.SlotIndex] = new Slot(old.Id, leftCount, old.Metadata, old.Nbt);
+                    client.Entity.Inventory[packet.SlotIndex] = new ItemStack(old.Id, leftCount, old.Metadata, old.Nbt);
                 }
                 else
                 {
                     client.Entity.ItemInMouse = clickedItem;
-                    client.Entity.Inventory[packet.SlotIndex] = Slot.EmptySlot;
+                    client.Entity.Inventory[packet.SlotIndex] = ItemStack.EmptyStack;
                 }
             }
             else
@@ -97,20 +97,20 @@ namespace Craft.Net.Server.Handlers
                 {
                     if (!clickedItem.Empty && clickedItem.Count < clickedItem.AsItem().MaximumStack)
                     {
-                        client.Entity.Inventory[packet.SlotIndex] = new Slot(heldItem.Id,
+                        client.Entity.Inventory[packet.SlotIndex] = new ItemStack(heldItem.Id,
                             (sbyte)(clickedItem.Count + (clickedItem.Empty ? 0 : 1)), heldItem.Metadata);
-                        client.Entity.ItemInMouse = new Slot(client.Entity.ItemInMouse.Id, (sbyte)(client.Entity.ItemInMouse.Count - 1),
+                        client.Entity.ItemInMouse = new ItemStack(client.Entity.ItemInMouse.Id, (sbyte)(client.Entity.ItemInMouse.Count - 1),
                             client.Entity.ItemInMouse.Metadata, client.Entity.ItemInMouse.Nbt);
                     }
                     else
-                        client.Entity.Inventory[packet.SlotIndex] = new Slot(heldItem.Id, 1, heldItem.Metadata);
+                        client.Entity.Inventory[packet.SlotIndex] = new ItemStack(heldItem.Id, 1, heldItem.Metadata);
                 }
                 else
                 {
                     if (clickedItem.Empty)
                     {
                         client.Entity.Inventory[packet.SlotIndex] = heldItem;
-                        client.Entity.ItemInMouse = Slot.EmptySlot;
+                        client.Entity.ItemInMouse = ItemStack.EmptyStack;
                     }
                     else
                     {

@@ -13,7 +13,7 @@ namespace Craft.Net.Data.Windows
         {
         }
 
-        protected override bool IsValid(Slot slot, int index)
+        protected override bool IsValid(ItemStack slot, int index)
         {
             if (index == CraftingOutput && !slot.Empty)
                 return false;

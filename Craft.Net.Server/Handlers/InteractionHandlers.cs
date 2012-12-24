@@ -53,7 +53,7 @@ namespace Craft.Net.Server.Handlers
                                     bool destroy = tool.Damage(damage);
                                     slot.Metadata = tool.Data;
                                     if (destroy)
-                                        client.Entity.SetSlot(client.Entity.SelectedSlot, Slot.EmptySlot);
+                                        client.Entity.SetSlot(client.Entity.SelectedSlot, ItemStack.EmptyStack);
                                     else
                                         client.Entity.SetSlot(client.Entity.SelectedSlot, slot);
                                 }
@@ -66,12 +66,12 @@ namespace Craft.Net.Server.Handlers
                         var SlotItem = client.Entity.Inventory[client.Entity.SelectedSlot];
                         if (!SlotItem.Empty)
                         {
-                            var ItemCopy = (Slot)SlotItem.Clone();
+                            var ItemCopy = (ItemStack)SlotItem.Clone();
                             ItemCopy.Count = 1;
 
                             SlotItem.Count--; // Decrease the player's item by 1
                             if (SlotItem.Count == 0)
-                                client.Entity.SetSlot(client.Entity.SelectedSlot, Slot.EmptySlot);
+                                client.Entity.SetSlot(client.Entity.SelectedSlot, ItemStack.EmptyStack);
                             else
                                 client.Entity.SetSlot(client.Entity.SelectedSlot, SlotItem);
                             var entity = new ItemEntity(client.Entity.GivenPosition + 

@@ -34,11 +34,11 @@ namespace Craft.Net.Data.Blocks
             get { return Vector3.Down; }
         }
 
-        public override bool GetDrop(ToolItem tool, out Slot[] drop)
+        public override bool GetDrop(ToolItem tool, out ItemStack[] drop)
         {
-            drop = new Slot[0];
+            drop = new ItemStack[0];
             if (tool is ShovelItem)
-                drop = new[] { new Slot(new SnowballItem(), 1) };
+                drop = new[] { new ItemStack(new SnowballItem(), 1) };
             return tool is ShovelItem;
         }
     }
