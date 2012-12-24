@@ -35,6 +35,52 @@ namespace Craft.Net.Data.Test
         }
 
         [Test]
+        public void TestXBlockCollision()
+        {
+            Level level = new Level();
+            level.World.EntityUpdateTimer.Change(Timeout.Infinite, Timeout.Infinite); // Manual updates only
+
+            // Build a wall to throw the item at
+            for (int z = -10; z < 10; z++)
+                for (int y = 0; y < 23; y++)
+                    level.World.SetBlock(new Vector3(3, y, z), new StoneBlock());
+
+            var entity = new ItemEntity(new Vector3(0, 10, 0), new Slot(1, 1));
+            entity.Velocity = new Vector3(3, 0, 0); // Throw item
+            level.World.Entities.Add(entity);
+
+            for (int i = 0; i < 1000; i++)
+                entity.PhysicsUpdate(level.World);
+
+            Assert.AreEqual(2, (int)(entity.Position.X));
+
+            level.World.Entities.Remove(entity);
+        }
+
+        [Test]
+        public void TestZBlockCollision()
+        {
+            Level level = new Level();
+            level.World.EntityUpdateTimer.Change(Timeout.Infinite, Timeout.Infinite); // Manual updates only
+
+            // Build a wall to throw the item at
+            for (int x = -10; x < 10; x++)
+                for (int y = 0; y < 23; y++)
+                    level.World.SetBlock(new Vector3(x, y, 3), new StoneBlock());
+
+            var entity = new ItemEntity(new Vector3(0, 10, 0), new Slot(1, 1));
+            entity.Velocity = new Vector3(0, 0, 3); // Throw item
+            level.World.Entities.Add(entity);
+
+            for (int i = 0; i < 1000; i++)
+                entity.PhysicsUpdate(level.World);
+
+            Assert.AreEqual(2, (int)(entity.Position.Z));
+
+            level.World.Entities.Remove(entity);
+        }
+
+        [Test]
         public void TestSandDrop()
         {
             Level level = new Level();

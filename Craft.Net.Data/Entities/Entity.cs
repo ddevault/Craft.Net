@@ -197,6 +197,17 @@ namespace Craft.Net.Data.Entities
             if (Position.Y + Velocity.Y >= 0 && Position.Y + Velocity.Y <= 255) // Don't do checks outside the map
             {
                 // Do terrain collisions
+                if (AdjustVelocityX(world, out collisionPoint, out collisionDirection))
+                {
+                    if (TerrainCollision != null && fireEvent)
+                        TerrainCollision(this, new EntityTerrainCollisionEventArgs
+                        {
+                            Entity = this,
+                            Block = collisionPoint,
+                            World = world,
+                            Direction = collisionDirection
+                        });
+                }
                 if (AdjustVelocityY(world, out collisionPoint, out collisionDirection))
                 {
                     if (TerrainCollision != null && fireEvent)
@@ -207,6 +218,17 @@ namespace Craft.Net.Data.Entities
                                 World = world,
                                 Direction = collisionDirection
                             });
+                }
+                if (AdjustVelocityZ(world, out collisionPoint, out collisionDirection))
+                {
+                    if (TerrainCollision != null && fireEvent)
+                        TerrainCollision(this, new EntityTerrainCollisionEventArgs
+                        {
+                            Entity = this,
+                            Block = collisionPoint,
+                            World = world,
+                            Direction = collisionDirection
+                        });
                 }
             }
 
@@ -219,9 +241,107 @@ namespace Craft.Net.Data.Entities
 
         #region Per-axis Physics
 
+        // TODO: There's a lot of code replication here, perhaps it can be consolidated
+        /// <summary>
+        /// Performs terrain collision tests and adjusts the X-axis velocity accordingly
+        /// </summary>
+        /// <returns>True if the entity collides with the terrain</returns>
+        protected bool AdjustVelocityX(World world, out Vector3 collision, out Vector3 collisionDirection)
+        {
+            collision = Vector3.Zero;
+            collisionDirection = Vector3.Zero;
+            if (Velocity.X == 0)
+                return false;
+            // Do some enviornment guessing to improve speed
+            int minY = (int)Position.Y - (Position.Y < 0 ? 1 : 0);
+            int maxY = (int)(Position.Y + Size.Width) - (Position.Y < 0 ? 1 : 0);
+            int minZ = (int)Position.Z - (Position.Z < 0 ? 1 : 0);
+            int maxZ = (int)(Position.Z + Size.Depth) - (Position.Z < 0 ? 1 : 0);
+            int minX, maxX;
+
+            // Expand bounding box to include area to be tested
+            if (Velocity.X < 0)
+            {
+                TempBoundingBox = new BoundingBox(
+                    new Vector3(BoundingBox.Min.X + Velocity.X, BoundingBox.Min.Y, BoundingBox.Min.Z) - (Size / 2),
+                    new Vector3(BoundingBox.Max.X, BoundingBox.Max.Y, BoundingBox.Max.Z) - (Size / 2));
+
+                maxX = (int)(TempBoundingBox.Max.X);
+                minX = (int)(TempBoundingBox.Min.X + Velocity.X);
+            }
+            else
+            {
+                TempBoundingBox = new BoundingBox(BoundingBox.Min - (Size / 2), new Vector3(
+                    BoundingBox.Max.X + Velocity.X, BoundingBox.Max.Y, BoundingBox.Max.Z) - (Size / 2));
+                minX = (int)(BoundingBox.Min.X);
+                maxX = (int)(BoundingBox.Max.X + Velocity.X);
+            }
+
+            // Do terrain checks
+            double? collisionPoint = null;
+            BoundingBox blockBox;
+            for (int x = minX; x <= maxX; x++)
+            {
+                for (int y = minY; y <= maxY; y++)
+                {
+                    for (int z = minZ; z <= maxZ; z++)
+                    {
+                        var position = new Vector3(x, y, z);
+                        var block = world.GetBlock(position);
+                        if (block.BoundingBox == null)
+                            continue;
+                        blockBox = new BoundingBox(block.BoundingBox.Value.Min + position,
+                            block.BoundingBox.Value.Max + position);
+                        if (TempBoundingBox.Intersects(blockBox))
+                        {
+                            if (Velocity.X < 0)
+                            {
+                                if (!collisionPoint.HasValue)
+                                    collisionPoint = blockBox.Max.X;
+                                else if (collisionPoint.Value < blockBox.Max.X)
+                                    collisionPoint = blockBox.Max.X;
+                            }
+                            else
+                            {
+                                if (!collisionPoint.HasValue)
+                                    collisionPoint = blockBox.Min.X;
+                                else if (collisionPoint.Value > blockBox.Min.X)
+                                    collisionPoint = blockBox.Min.X;
+                            }
+                            collision = position;
+                        }
+                    }
+                }
+            }
+
+            if (collisionPoint != null)
+            {
+                if (Velocity.X < 0)
+                {
+                    Velocity = new Vector3(
+                        Velocity.X - (TempBoundingBox.Min.X - collisionPoint.Value),
+                        Velocity.Y,
+                        Velocity.Z);
+                    collisionDirection = Vector3.Left;
+                }
+                else if (Velocity.X > 0)
+                {
+                    Velocity = new Vector3(
+                        Velocity.X - (TempBoundingBox.Max.X - collisionPoint.Value),
+                        Velocity.Y,
+                        Velocity.Z);
+                    collisionDirection = Vector3.Right;
+                }
+                return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Performs terrain collision tests and adjusts the Y-axis velocity accordingly
         /// </summary>
+        /// <returns>True if the entity collides with the terrain</returns>
         protected bool AdjustVelocityY(World world, out Vector3 collision, out Vector3 collisionDirection)
         {
             collision = Vector3.Zero;
@@ -306,9 +426,105 @@ namespace Craft.Net.Data.Entities
                 else if (Velocity.Y > 0)
                 {
                     Velocity = new Vector3(Velocity.X,
-                        Velocity.Y - (TempBoundingBox.Min.Y - collisionPoint.Value),
+                        Velocity.Y - (TempBoundingBox.Max.Y - collisionPoint.Value),
                         Velocity.Z);
                     collisionDirection = Vector3.Up;
+                }
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Performs terrain collision tests and adjusts the Z-axis velocity accordingly
+        /// </summary>
+        /// <returns>True if the entity collides with the terrain</returns>
+        protected bool AdjustVelocityZ(World world, out Vector3 collision, out Vector3 collisionDirection)
+        {
+            collision = Vector3.Zero;
+            collisionDirection = Vector3.Zero;
+            if (Velocity.Z == 0)
+                return false;
+            // Do some enviornment guessing to improve speed
+            int minX = (int)Position.X - (Position.X < 0 ? 1 : 0);
+            int maxX = (int)(Position.X + Size.Depth) - (Position.X < 0 ? 1 : 0);
+            int minY = (int)Position.Y - (Position.Y < 0 ? 1 : 0);
+            int maxY = (int)(Position.Y + Size.Width) - (Position.Y < 0 ? 1 : 0);
+            int minZ, maxZ;
+
+            // Expand bounding box to include area to be tested
+            if (Velocity.Z < 0)
+            {
+                TempBoundingBox = new BoundingBox(
+                    new Vector3(BoundingBox.Min.X, BoundingBox.Min.Y, BoundingBox.Min.Z + Velocity.Z) - (Size / 2),
+                    new Vector3(BoundingBox.Max.X, BoundingBox.Max.Y, BoundingBox.Max.Z) - (Size / 2));
+
+                maxZ = (int)(TempBoundingBox.Max.Z);
+                minZ = (int)(TempBoundingBox.Min.Z + Velocity.Z);
+            }
+            else
+            {
+                TempBoundingBox = new BoundingBox(BoundingBox.Min - (Size / 2), new Vector3(
+                    BoundingBox.Max.X, BoundingBox.Max.Y, BoundingBox.Max.Z + Velocity.Z) - (Size / 2));
+                minZ = (int)(BoundingBox.Min.Z);
+                maxZ = (int)(BoundingBox.Max.Z + Velocity.Z);
+            }
+
+            // Do terrain checks
+            double? collisionPoint = null;
+            BoundingBox blockBox;
+            for (int x = minX; x <= maxX; x++)
+            {
+                for (int y = minY; y <= maxY; y++)
+                {
+                    for (int z = minZ; z <= maxZ; z++)
+                    {
+                        var position = new Vector3(x, y, z);
+                        var block = world.GetBlock(position);
+                        if (block.BoundingBox == null)
+                            continue;
+                        blockBox = new BoundingBox(block.BoundingBox.Value.Min + position,
+                            block.BoundingBox.Value.Max + position);
+                        if (TempBoundingBox.Intersects(blockBox))
+                        {
+                            if (Velocity.Z < 0)
+                            {
+                                if (!collisionPoint.HasValue)
+                                    collisionPoint = blockBox.Max.Z;
+                                else if (collisionPoint.Value < blockBox.Max.Z)
+                                    collisionPoint = blockBox.Max.Z;
+                            }
+                            else
+                            {
+                                if (!collisionPoint.HasValue)
+                                    collisionPoint = blockBox.Min.Z;
+                                else if (collisionPoint.Value > blockBox.Min.Z)
+                                    collisionPoint = blockBox.Min.Z;
+                            }
+                            collision = position;
+                        }
+                    }
+                }
+            }
+
+            if (collisionPoint != null)
+            {
+                if (Velocity.Z < 0)
+                {
+                    Velocity = new Vector3(
+                        Velocity.X,
+                        Velocity.Y,
+                        Velocity.Z - (TempBoundingBox.Min.Z - collisionPoint.Value));
+                    collisionDirection = Vector3.Backwards;
+                }
+                else if (Velocity.Z > 0)
+                {
+                    Velocity = new Vector3(
+                        Velocity.X,
+                        Velocity.Y,
+                        Velocity.Z - (TempBoundingBox.Max.Z - collisionPoint.Value));
+                    collisionDirection = Vector3.Forwards;
                 }
                 return true;
             }
