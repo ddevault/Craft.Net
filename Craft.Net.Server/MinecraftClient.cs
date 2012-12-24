@@ -230,7 +230,7 @@ namespace Craft.Net.Server
         {
             World world = Server.EntityManager.GetEntityWorld(Entity);
             Chunk chunk = world.GetChunk(position);
-            SendPacket(ChunkHelper.CreatePacket(chunk));
+            SendPacket(ChunkHelper.CreatePacket(chunk, position));
             if (chunk.TileEntities.Count != 0)
             {
                 foreach (var tileEntity in chunk.TileEntities)

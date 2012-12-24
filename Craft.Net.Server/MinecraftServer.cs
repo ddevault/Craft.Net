@@ -424,6 +424,9 @@ namespace Craft.Net.Server
                             if (client.SendQueue.TryDequeue(out packet))
                             {
                                 packet.WritePacket(client.Stream);
+#if DEBUG
+                                LogProvider.Log(packet, false);
+#endif
                                 client.Stream.Flush();
                                 if (packet is DisconnectPacket)
                                 {
@@ -453,6 +456,9 @@ namespace Craft.Net.Server
                             try
                             {
                                 var packet = PacketReader.ReadPacket(client.Stream);
+#if DEBUG
+                                LogProvider.Log(packet, true);
+#endif
                                 if (packet is DisconnectPacket) // TODO: Should we have a disconnect packet handler?
                                 {
                                     Clients.Remove(client);
