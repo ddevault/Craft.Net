@@ -112,16 +112,8 @@ namespace Craft.Net.Server
 
         #endregion
 
-        /// <summary>
-        /// Creates a new MinecraftClient with the specified socket to be
-        /// managed by the given <see cref="MinecraftServer"/>.
-        /// </summary>
-        public MinecraftClient(TcpClient client, MinecraftServer server)
+        protected MinecraftClient()
         {
-            TcpClient = client;
-            NetworkStream = client.GetStream();
-            client.ReceiveBufferSize = 32768;
-            Stream = new MinecraftStream(new BufferedStream(client.GetStream()));
             SendQueue = new ConcurrentQueue<IPacket>();
             IsLoggedIn = false;
             EncryptionEnabled = false;
@@ -129,7 +121,6 @@ namespace Craft.Net.Server
             MaxViewDistance = 10;
             ViewDistance = 3;
             LoadedChunks = new List<Vector3>();
-            Server = server;
             WalkingSpeed = 12;
             FlyingSpeed = 25;
             LastKeepAlive = DateTime.MaxValue.AddSeconds(-10);
@@ -137,6 +128,19 @@ namespace Craft.Net.Server
             PluginChannels = new List<string>();
             Tags = new Dictionary<string, object>();
             DisconnectPending = false;
+        }
+
+        /// <summary>
+        /// Creates a new MinecraftClient with the specified socket to be
+        /// managed by the given <see cref="MinecraftServer"/>.
+        /// </summary>
+        public MinecraftClient(TcpClient client, MinecraftServer server) : this()
+        {
+            TcpClient = client;
+            NetworkStream = client.GetStream();
+            client.ReceiveBufferSize = 32768;
+            Stream = new MinecraftStream(new BufferedStream(client.GetStream()));
+            Server = server;
         }
 
         /// <summary>
