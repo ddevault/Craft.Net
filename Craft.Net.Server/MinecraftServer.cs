@@ -333,6 +333,8 @@ namespace Craft.Net.Server
         {
             if (PlayerLoggedOut != null)
                 PlayerLoggedOut(this, e);
+            if (!e.Handled)
+                SendChat(ChatColors.Yellow + e.Client.Username + " left the game.");
         }
 
         protected internal virtual void OnPacketSent(PacketEventArgs e)
