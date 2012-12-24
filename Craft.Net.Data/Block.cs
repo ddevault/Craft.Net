@@ -48,6 +48,13 @@ namespace Craft.Net.Data
                                                Vector3 cursorPosition, Entity usedBy)
         {
             var clicked = world.GetBlock(clickedBlock);
+            var player = usedBy as PlayerEntity;
+            if (player.GameMode != GameMode.Creative)
+            {
+                var item = player.Inventory[player.SelectedSlot];
+                player.Inventory[player.SelectedSlot] = new ItemStack(item.Id,
+                    (sbyte)(item.Count - 1), item.Metadata, item.Nbt);
+            }
             if (clicked.OnBlockRightClicked(clickedBlock, clickedSide, cursorPosition, world, usedBy))
             {
                 if (OnBlockPlaced(world, clickedBlock + clickedSide, clickedBlock, clickedSide, cursorPosition, usedBy))
@@ -157,8 +164,6 @@ namespace Craft.Net.Data
             if (Hardness != -1)
             {
                 var slot = player.Inventory[player.SelectedSlot];
-                player.Inventory[player.SelectedSlot] = new ItemStack(
-                    slot.Id, (sbyte)(slot.Count - 1), slot.Metadata, slot.Nbt);
                 world.SetBlock(destroyedBlock, new AirBlock());
                 if (CanHarvest(slot.AsItem() as ToolItem) && player.GameMode != GameMode.Creative)
                 {

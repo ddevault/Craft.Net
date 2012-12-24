@@ -29,7 +29,6 @@ namespace Craft.Net.Server.Handlers
                             block.OnBlockMined(client.World, position, client.Entity);
                         else
                         {
-                            // TODO: Investigate exploitability with respect to ping time
                             client.ExpectedMiningEnd = DateTime.Now.AddMilliseconds(
                                 block.GetHarvestTime(client.Entity.SelectedItem.AsItem(),
                                 client.World, client.Entity, out damage) - (client.Ping + 100));
@@ -37,7 +36,6 @@ namespace Craft.Net.Server.Handlers
                         }
                         break;
                     case PlayerDiggingPacket.PlayerAction.FinishedDigging:
-                        // TODO: Check that they're finishing the same block as before
                         if (client.ExpectedMiningEnd > DateTime.Now || client.ExpectedBlockToMine != position)
                             return;
                         block.GetHarvestTime(client.Entity.SelectedItem.AsItem(),
