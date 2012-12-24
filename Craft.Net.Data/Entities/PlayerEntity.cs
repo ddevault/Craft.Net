@@ -12,7 +12,7 @@ namespace Craft.Net.Data.Entities
         {
             Inventory = new InventoryWindow();
             for (int i = 0; i < Inventory.Length; i++)
-                Inventory[i] = new Slot(-1);
+                Inventory[i] = Slot.EmptySlot;
             SelectedSlot = InventoryWindow.HotbarIndex;
             bedUseTimer = new Timer(state =>
             {
@@ -23,6 +23,7 @@ namespace Craft.Net.Data.Entities
             Health = 20;
             Food = 20;
             Abilities = new PlayerAbilities(this);
+            ItemInMouse = Slot.EmptySlot;
             Difficulty = difficulty;
             TerrainCollision += OnTerrainCollision;
             FoodTickTimer = new Timer(discarded =>
@@ -394,7 +395,7 @@ namespace Craft.Net.Data.Entities
         {
             deathTimer.Change(3000, Timeout.Infinite);
             for (int i = 0; i < Inventory.Length; i++)
-                Inventory[i] = new Slot(-1);
+                Inventory[i] = Slot.EmptySlot;
         }
 
         protected internal virtual void OnStartEating()

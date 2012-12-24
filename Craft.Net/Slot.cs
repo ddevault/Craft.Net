@@ -36,7 +36,7 @@ namespace Craft.Net
 
         public static Slot FromStream(MinecraftStream stream)
         {
-            var slot = new Slot();
+            var slot = Slot.EmptySlot;
             slot.Id = stream.ReadInt16();
             if (slot.Empty)
                 return slot;
@@ -72,7 +72,7 @@ namespace Craft.Net
 
         public static Slot FromNbt(NbtCompound compound)
         {
-            var s = new Slot();
+            var s = Slot.EmptySlot;
             s.Id = compound.Get<NbtShort>("id").Value;
             s.Metadata = compound.Get<NbtShort>("Damage").Value;
             s.Count = (sbyte)compound.Get<NbtByte>("Count").Value;

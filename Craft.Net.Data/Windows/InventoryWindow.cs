@@ -72,7 +72,7 @@ namespace Craft.Net.Data.Windows
             var area = MainInventory;
             foreach (var item in Hotbar.Items)
             {
-                if (item.Empty || (slot.Id == item.Id && item.Count + slot.Count < item.AsItem().MaximumStack))
+                if (item.Empty || (slot.Id == item.Id &&  slot.Metadata == item.Metadata && item.Count + slot.Count < item.AsItem().MaximumStack))
                 {
                     area = Hotbar;
                     break;

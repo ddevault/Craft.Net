@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Craft.Net.Data;
 using Craft.Net.Data.Windows;
+using Craft.Net.Data.Entities;
 
 namespace Craft.Net.Server.Handlers
 {
@@ -55,13 +56,22 @@ namespace Craft.Net.Server.Handlers
                 window.MoveToAlternateArea(packet.SlotIndex);
                 return;
             }
+
+            var heldItem = client.Entity.ItemInMouse;
+
             if (packet.SlotIndex == -999)
             {
-                // TODO: Throw items out of windows
+                if (heldItem.Empty)
+                    return;
+                var entity = new ItemEntity(client.Entity.GivenPosition +
+                                new Vector3(0, client.Entity.Size.Height, 0), heldItem);
+                entity.Velocity = MathHelper.FowardVector(client.Entity) * new Vector3(0.25);
+                server.EntityManager.SpawnEntity(client.World, entity);
                 return;
             }
+
             var clickedItem = client.Entity.Inventory[packet.SlotIndex];
-            var heldItem = client.Entity.ItemInMouse;
+
             if (heldItem.Empty)
             {
                 if (clickedItem.Empty)
@@ -77,7 +87,7 @@ namespace Craft.Net.Server.Handlers
                 else
                 {
                     client.Entity.ItemInMouse = clickedItem;
-                    client.Entity.Inventory[packet.SlotIndex] = new Slot();
+                    client.Entity.Inventory[packet.SlotIndex] = Slot.EmptySlot;
                 }
             }
             else
@@ -100,7 +110,7 @@ namespace Craft.Net.Server.Handlers
                     if (clickedItem.Empty)
                     {
                         client.Entity.Inventory[packet.SlotIndex] = heldItem;
-                        client.Entity.ItemInMouse = new Slot();
+                        client.Entity.ItemInMouse = Slot.EmptySlot;
                     }
                     else
                     {
