@@ -59,6 +59,8 @@ namespace Craft.Net.Server
             // Log fields
             foreach (var field in fields)
             {
+                if (field.IsStatic)
+                    continue;
                 var name = field.Name;
                 name = AddSpaces(name);
                 var fValue = field.GetValue(packet);
