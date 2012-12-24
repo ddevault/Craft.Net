@@ -25,5 +25,29 @@ namespace Craft.Net.Data.Blocks
         {
             get { return null; }
         }
+
+        public override bool RequiresSupport
+        {
+            get { return true; }
+        }
+
+        public override Vector3 SupportDirection
+        {
+            get
+            {
+                switch (Metadata)
+                {
+                    case 0x02:
+                        return Vector3.South;
+                    case 0x03:
+                        return Vector3.North;
+                    case 0x04:
+                        return Vector3.East;
+                    case 0x05:
+                        return Vector3.West;
+                }
+                return base.SupportDirection;
+            }
+        }
     }
 }
