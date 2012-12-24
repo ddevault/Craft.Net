@@ -24,6 +24,7 @@ namespace Craft.Net
 
         public int KeepAlive;
 
+        public const byte PacketId = 0x00;
         public byte Id { get { return 0x00; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -60,6 +61,7 @@ namespace Craft.Net
         public byte Discarded;
         public byte MaxPlayers;
 
+        public const byte PacketId = 0x01;
         public byte Id { get { return 0x01; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -102,6 +104,7 @@ namespace Craft.Net
         public string ServerHostname;
         public int ServerPort;
 
+        public const byte PacketId = 0x02;
         public byte Id { get { return 0x02; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -131,6 +134,7 @@ namespace Craft.Net
 
         public string Message;
 
+        public const byte PacketId = 0x03;
         public byte Id { get { return 0x03; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -155,6 +159,7 @@ namespace Craft.Net
 
         public long WorldAge, TimeOfDay;
 
+        public const byte PacketId = 0x04;
         public byte Id { get { return 0x04; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -184,6 +189,7 @@ namespace Craft.Net
         public short SlotIndex;
         public Slot Slot;
 
+        public const byte PacketId = 0x05;
         public byte Id { get { return 0x05; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -213,6 +219,7 @@ namespace Craft.Net
 
         public int X, Y, Z;
 
+        public const byte PacketId = 0x06;
         public byte Id { get { return 0x06; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -243,6 +250,7 @@ namespace Craft.Net
         public int User, Target;
         public bool MouseButton;
 
+        public const byte PacketId = 0x07;
         public byte Id { get { return 0x07; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -273,6 +281,7 @@ namespace Craft.Net
         public short Health, Food;
         public float FoodSaturation;
 
+        public const byte PacketId = 0x08;
         public byte Id { get { return 0x08; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -309,6 +318,7 @@ namespace Craft.Net
         public short WorldHeight;
         public string LevelType;
 
+        public const byte PacketId = 0x09;
         public byte Id { get { return 0x09; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -340,6 +350,7 @@ namespace Craft.Net
 
         public bool OnGround;
 
+        public const byte PacketId = 0x0A;
         public byte Id { get { return 0x0A; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -368,6 +379,7 @@ namespace Craft.Net
         public double X, Y, Stance, Z;
         public bool OnGround;
 
+        public const byte PacketId = 0x0B;
         public byte Id { get { return 0x0B; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -402,6 +414,7 @@ namespace Craft.Net
         public float Yaw, Pitch;
         public bool OnGround;
 
+        public const byte PacketId = 0x0C;
         public byte Id { get { return 0x0C; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -438,6 +451,7 @@ namespace Craft.Net
         public float Yaw, Pitch;
         public bool OnGround;
 
+        public const byte PacketId = 0x0D;
         public byte Id { get { return 0x0D; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -483,6 +497,7 @@ namespace Craft.Net
         public int Z;
         public byte Face;
 
+        public const byte PacketId = 0x0E;
         public byte Id { get { return 0x0E; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -530,6 +545,7 @@ namespace Craft.Net
         public byte CursorY;
         public byte CursorZ;
 
+        public const byte PacketId = 0x0F;
         public byte Id { get { return 0x0F; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -567,6 +583,7 @@ namespace Craft.Net
 
         public short SlotIndex;
 
+        public const byte PacketId = 0x10;
         public byte Id { get { return 0x10; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -598,6 +615,7 @@ namespace Craft.Net
         public byte Y;
         public int Z;
 
+        public const byte PacketId = 0x11;
         public byte Id { get { return 0x11; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -622,28 +640,40 @@ namespace Craft.Net
 
     public struct AnimationPacket : IPacket
     {
-        public AnimationPacket(int entityId, byte animation)
+        public enum AnimationType
+        {
+            NoAnimation = 0,
+            SwingArm = 1,
+            Damage = 2,
+            LeaveBed = 3,
+            EatFood = 4,
+            Crouch = 104,
+            Uncrouch = 105
+        }
+
+        public AnimationPacket(int entityId, AnimationType animation)
         {
             EntityId = entityId;
             Animation = animation;
         }
 
         public int EntityId;
-        public byte Animation;
+        public AnimationType Animation;
 
+        public const byte PacketId = 0x12;
         public byte Id { get { return 0x12; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
             EntityId = stream.ReadInt32();
-            Animation = stream.ReadUInt8();
+            Animation = (AnimationType)stream.ReadUInt8();
         }
 
         public void WritePacket(MinecraftStream stream)
         {
             stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
-            stream.WriteUInt8(Animation);
+            stream.WriteUInt8((byte)Animation);
         }
     }
 
@@ -658,6 +688,7 @@ namespace Craft.Net
         public int EntityId;
         public byte ActionId;
 
+        public const byte PacketId = 0x13;
         public byte Id { get { return 0x13; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -698,6 +729,7 @@ namespace Craft.Net
         public short HeldItem;
         public MetadataDictionary Metadata;
 
+        public const byte PacketId = 0x14;
         public byte Id { get { return 0x14; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -739,6 +771,7 @@ namespace Craft.Net
         public int ItemId;
         public int PlayerId;
 
+        public const byte PacketId = 0x16;
         public byte Id { get { return 0x16; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -793,8 +826,9 @@ namespace Craft.Net
         public int X, Y, Z;
         public int Data;
         public short? SpeedX, SpeedY, SpeedZ;
-        public byte Yaw, Pitch; // TODO: Packed bytes
+        public byte Yaw, Pitch;
 
+        public const byte PacketId = 0x17;
         public byte Id { get { return 0x17; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -864,6 +898,7 @@ namespace Craft.Net
         public short VelocityX, VelocityY, VelocityZ;
         public MetadataDictionary Metadata;
 
+        public const byte PacketId = 0x18;
         public byte Id { get { return 0x18; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -918,6 +953,7 @@ namespace Craft.Net
         public int X, Y, Z;
         public int Direction;
 
+        public const byte PacketId = 0x19;
         public byte Id { get { return 0x19; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -958,6 +994,7 @@ namespace Craft.Net
         public int X, Y, Z;
         public short Count;
 
+        public const byte PacketId = 0x1A;
         public byte Id { get { return 0x1A; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -994,6 +1031,7 @@ namespace Craft.Net
         public int EntityId;
         public short VelocityX, VelocityY, VelocityZ;
 
+        public const byte PacketId = 0x1C;
         public byte Id { get { return 0x1C; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -1014,15 +1052,16 @@ namespace Craft.Net
         }
     }
 
-    public struct DestroyEntity : IPacket
+    public struct DestroyEntityPacket : IPacket
     {
-        public DestroyEntity(int[] entityIds)
+        public DestroyEntityPacket(int[] entityIds)
         {
             EntityIds = entityIds;
         }
 
         public int[] EntityIds;
 
+        public const byte PacketId = 0x1D;
         public byte Id { get { return 0x1D; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -1048,6 +1087,7 @@ namespace Craft.Net
 
         public int EntityId;
 
+        public const byte PacketId = 0x1E;
         public byte Id { get { return 0x1E; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -1076,6 +1116,7 @@ namespace Craft.Net
         public int EntityId;
         public sbyte DeltaX, DeltaY, DeltaZ;
 
+        public const byte PacketId = 0x1F;
         public byte Id { get { return 0x1F; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -1108,6 +1149,7 @@ namespace Craft.Net
         public int EntityId;
         public byte Yaw, Pitch;
 
+        public const byte PacketId = 0x20;
         public byte Id { get { return 0x20; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -1143,6 +1185,7 @@ namespace Craft.Net
         public sbyte DeltaX, DeltaY, DeltaZ;
         public byte Yaw, Pitch;
 
+        public const byte PacketId = 0x21;
         public byte Id { get { return 0x21; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -1184,6 +1227,7 @@ namespace Craft.Net
         public int X, Y, Z;
         public byte Yaw, Pitch;
 
+        public const byte PacketId = 0x22;
         public byte Id { get { return 0x22; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -1208,9 +1252,9 @@ namespace Craft.Net
         }
     }
 
-    public struct EntityHeadLook : IPacket
+    public struct EntityHeadLookPacket : IPacket
     {
-        public EntityHeadLook(int entityId, byte headYaw)
+        public EntityHeadLookPacket(int entityId, byte headYaw)
         {
             EntityId = entityId;
             HeadYaw = headYaw;
@@ -1219,6 +1263,7 @@ namespace Craft.Net
         public int EntityId;
         public byte HeadYaw;
 
+        public const byte PacketId = 0x23;
         public byte Id { get { return 0x23; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -1237,28 +1282,46 @@ namespace Craft.Net
 
     public struct EntityStatusPacket : IPacket
     {
-        public EntityStatusPacket(int entityId, byte status)
+        public enum EntityStatus
+        {
+            Hurt = 2,
+            Dead = 3,
+            WolfTaming = 6,
+            WolfTamed = 7,
+            /// <summary>
+            /// Shaking water off the wolf's body
+            /// </summary>
+            WolfShaking = 8,
+            EatingAccepted = 9,
+            /// <summary>
+            /// Sheep eating grass
+            /// </summary>
+            SheepEating = 10
+        }
+
+        public EntityStatusPacket(int entityId, EntityStatus status)
         {
             EntityId = entityId;
             Status = status;
         }
 
         public int EntityId;
-        public byte Status;
+        public EntityStatus Status;
 
+        public const byte PacketId = 0x26;
         public byte Id { get { return 0x26; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
             EntityId = stream.ReadInt32();
-            Status = stream.ReadUInt8();
+            Status = (EntityStatus)stream.ReadUInt8();
         }
 
         public void WritePacket(MinecraftStream stream)
         {
             stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
-            stream.WriteUInt8(Status);
+            stream.WriteUInt8((byte)Status);
         }
     }
 
@@ -1272,6 +1335,7 @@ namespace Craft.Net
 
         public int EntityId, VehicleId;
 
+        public const byte PacketId = 0x27;
         public byte Id { get { return 0x27; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -1299,6 +1363,7 @@ namespace Craft.Net
         public int EntityId;
         public MetadataDictionary Metadata;
 
+        public const byte PacketId = 0x28;
         public byte Id { get { return 0x28; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -1331,6 +1396,7 @@ namespace Craft.Net
         public byte Amplifier;
         public short Duration;
 
+        public const byte PacketId = 0x29;
         public byte Id { get { return 0x29; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -1351,9 +1417,9 @@ namespace Craft.Net
         }
     }
 
-    public struct RemoveEntityEffect : IPacket
+    public struct RemoveEntityEffectPacket : IPacket
     {
-        public RemoveEntityEffect(int entityId, byte effectId)
+        public RemoveEntityEffectPacket(int entityId, byte effectId)
         {
             EntityId = entityId;
             EffectId = effectId;
@@ -1362,6 +1428,7 @@ namespace Craft.Net
         public int EntityId;
         public byte EffectId;
 
+        public const byte PacketId = 0x2A;
         public byte Id { get { return 0x2A; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -1391,6 +1458,7 @@ namespace Craft.Net
         public short Level;
         public short TotalExperience;
 
+        public const byte PacketId = 0x2B;
         public byte Id { get { return 0x2B; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -1428,6 +1496,7 @@ namespace Craft.Net
         public ushort AddBitMap;
         public byte[] Data;
 
+        public const byte PacketId = 0x33;
         public byte Id { get { return 0x33; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -1469,6 +1538,7 @@ namespace Craft.Net
         public short RecordCount;
         public int[] Data;
 
+        public const byte PacketId = 0x34;
         public byte Id { get { return 0x34; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -1509,6 +1579,7 @@ namespace Craft.Net
         public short BlockType;
         public byte BlockMetadata;
 
+        public const byte PacketId = 0x35;
         public byte Id { get { return 0x35; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -1551,6 +1622,7 @@ namespace Craft.Net
         public byte Data2;
         public short BlockId;
 
+        public const byte PacketId = 0x36;
         public byte Id { get { return 0x36; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -1592,6 +1664,7 @@ namespace Craft.Net
         public int X, Y, Z;
         public byte DestroyStage;
 
+        public const byte PacketId = 0x37;
         public byte Id { get { return 0x37; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -1631,6 +1704,7 @@ namespace Craft.Net
         public byte[] ChunkData;
         public byte[] ChunkMetadata;
 
+        public const byte PacketId = 0x38;
         public byte Id { get { return 0x38; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -1677,6 +1751,7 @@ namespace Craft.Net
         public byte[] Records;
         public float PlayerVelocityX, PlayerVelocityY, PlayerVelocityZ;
 
+        public const byte PacketId = 0x3C;
         public byte Id { get { return 0x3C; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -1727,6 +1802,7 @@ namespace Craft.Net
         public int Data;
         public bool DisableRelativeVolume;
 
+        public const byte PacketId = 0x3D;
         public byte Id { get { return 0x3D; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -1769,6 +1845,7 @@ namespace Craft.Net
         public float Volume;
         public byte Pitch;
 
+        public const byte PacketId = 0x3E;
         public byte Id { get { return 0x3E; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -1819,6 +1896,7 @@ namespace Craft.Net
         public GameState State;
         public GameMode GameMode;
 
+        public const byte PacketId = 0x46;
         public byte Id { get { return 0x46; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -1851,6 +1929,7 @@ namespace Craft.Net
         public byte Type;
         public int X, Y, Z;
 
+        public const byte PacketId = 0x47;
         public byte Id { get { return 0x47; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -1889,6 +1968,7 @@ namespace Craft.Net
         public string WindowTitle;
         public byte SlotCount;
 
+        public const byte PacketId = 0x64;
         public byte Id { get { return 0x64; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -1918,6 +1998,7 @@ namespace Craft.Net
 
         public byte WindowId;
 
+        public const byte PacketId = 0x65;
         public byte Id { get { return 0x65; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -1952,6 +2033,7 @@ namespace Craft.Net
         public bool Shift;
         public Slot ClickedItem;
 
+        public const byte PacketId = 0x66;
         public byte Id { get { return 0x66; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -1989,6 +2071,7 @@ namespace Craft.Net
         public short SlotIndex;
         public Slot Item;
 
+        public const byte PacketId = 0x67;
         public byte Id { get { return 0x67; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -2020,6 +2103,7 @@ namespace Craft.Net
         public short Count;
         public Slot[] Items;
 
+        public const byte PacketId = 0x68;
         public byte Id { get { return 0x68; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -2054,6 +2138,7 @@ namespace Craft.Net
         public short PropertyId;
         public short Value;
 
+        public const byte PacketId = 0x69;
         public byte Id { get { return 0x69; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -2085,6 +2170,7 @@ namespace Craft.Net
         public short ActionNumber;
         public bool Accepted;
 
+        public const byte PacketId = 0x6A;
         public byte Id { get { return 0x6A; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -2114,6 +2200,7 @@ namespace Craft.Net
         public short SlotIndex;
         public Slot Item;
 
+        public const byte PacketId = 0x6B;
         public byte Id { get { return 0x6B; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -2141,6 +2228,7 @@ namespace Craft.Net
         public byte WindowId;
         public byte Enchantment;
 
+        public const byte PacketId = 0x6C;
         public byte Id { get { return 0x6C; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -2176,6 +2264,7 @@ namespace Craft.Net
         public int Z;
         public string Text1, Text2, Text3, Text4;
 
+        public const byte PacketId = 0x82;
         public byte Id { get { return 0x82; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -2214,6 +2303,7 @@ namespace Craft.Net
         public short ItemType, ItemId;
         public string Text;
 
+        public const byte PacketId = 0x83;
         public byte Id { get { return 0x83; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -2252,6 +2342,7 @@ namespace Craft.Net
         public byte Action;
         public NbtFile Nbt;
 
+        public const byte PacketId = 0x84;
         public byte Id { get { return 0x84; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -2292,6 +2383,7 @@ namespace Craft.Net
         public int StatisticId;
         public byte Amount;
 
+        public const byte PacketId = 0xC8;
         public byte Id { get { return 0xC8; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -2321,6 +2413,7 @@ namespace Craft.Net
         public bool Online;
         public short Ping;
 
+        public const byte PacketId = 0xC9;
         public byte Id { get { return 0xC9; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -2351,6 +2444,7 @@ namespace Craft.Net
         public byte Flags;
         public byte FlyingSpeed, WalkingSpeed;
 
+        public const byte PacketId = 0xCA;
         public byte Id { get { return 0xCA; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -2378,6 +2472,7 @@ namespace Craft.Net
 
         public string Text;
 
+        public const byte PacketId = 0xCB;
         public byte Id { get { return 0xCB; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -2392,9 +2487,16 @@ namespace Craft.Net
         }
     }
 
+    public enum ChatMode // TODO: Move this?
+    {
+        Hidden = 2,
+        CommandsOnly = 1,
+        Enabled = 0
+    }
+
     public struct ClientSettingsPacket : IPacket
     {
-        public ClientSettingsPacket(string locale, byte viewDistance, byte chatFlags,
+        public ClientSettingsPacket(string locale, byte viewDistance, ChatMode chatFlags,
             Difficulty difficulty, bool showCape)
         {
             Locale = locale;
@@ -2406,17 +2508,18 @@ namespace Craft.Net
 
         public string Locale;
         public byte ViewDistance;
-        public byte ChatFlags;
+        public ChatMode ChatFlags;
         public Difficulty Difficulty;
         public bool ShowCape;
 
+        public const byte PacketId = 0xCC;
         public byte Id { get { return 0xCC; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
             Locale = stream.ReadString();
             ViewDistance = stream.ReadUInt8();
-            ChatFlags = stream.ReadUInt8();
+            ChatFlags = (ChatMode)(stream.ReadUInt8() & 0x3);
             Difficulty = (Difficulty)stream.ReadUInt8();
             ShowCape = stream.ReadBoolean();
         }
@@ -2426,7 +2529,7 @@ namespace Craft.Net
             stream.WriteUInt8(Id);
             stream.WriteString(Locale);
             stream.WriteUInt8(ViewDistance);
-            stream.WriteUInt8(ChatFlags);
+            stream.WriteUInt8((byte)ChatFlags);
             stream.WriteUInt8((byte)Difficulty);
             stream.WriteBoolean(ShowCape);
         }
@@ -2441,6 +2544,7 @@ namespace Craft.Net
 
         public byte Payload;
 
+        public const byte PacketId = 0xCD;
         public byte Id { get { return 0xCD; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -2455,9 +2559,9 @@ namespace Craft.Net
         }
     }
 
-    public struct PluginMessage : IPacket
+    public struct PluginMessagePacket : IPacket
     {
-        public PluginMessage(string channel, byte[] data)
+        public PluginMessagePacket(string channel, byte[] data)
         {
             Channel = channel;
             Data = data;
@@ -2466,6 +2570,7 @@ namespace Craft.Net
         public string Channel;
         public byte[] Data;
 
+        public const byte PacketId = 0xFA;
         public byte Id { get { return 0xFA; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -2495,6 +2600,7 @@ namespace Craft.Net
         public byte[] SharedSecret;
         public byte[] VerificationToken;
 
+        public const byte PacketId = 0xFC;
         public byte Id { get { return 0xFC; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -2528,6 +2634,7 @@ namespace Craft.Net
         public byte[] PublicKey;
         public byte[] VerificationToken;
 
+        public const byte PacketId = 0xFD;
         public byte Id { get { return 0xFD; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -2559,6 +2666,7 @@ namespace Craft.Net
 
         public byte Magic;
 
+        public const byte PacketId = 0xFE;
         public byte Id { get { return 0xFE; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -2582,6 +2690,7 @@ namespace Craft.Net
 
         public string Reason;
 
+        public const byte PacketId = 0xFF;
         public byte Id { get { return 0xFF; } }
 
         public void ReadPacket(MinecraftStream stream)
