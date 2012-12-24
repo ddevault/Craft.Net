@@ -14,7 +14,7 @@ namespace Craft.Net.Data
             Length = length;
             Items = new Slot[Length];
             for (int i = 0; i < Items.Length; i++)
-                Items[i] = new Slot();
+                Items[i] = Slot.EmptySlot;
         }
 
         public int StartIndex { get; set; }
@@ -47,7 +47,7 @@ namespace Craft.Net.Data
                     // Merging takes precedence over empty slots
                     emptyIndex = -1;
                     if (from != null)
-                        from[index] = new Slot();
+                        from[index] = Slot.EmptySlot;
                     if (this[i].Count + slot.Count > slot.AsItem().MaximumStack)
                     {
                         slot = new Slot(slot.Id, (sbyte)(slot.Count - (slot.AsItem().MaximumStack - this[i].Count)),
@@ -62,7 +62,7 @@ namespace Craft.Net.Data
             if (emptyIndex != -1)
             {
                 if (from != null)
-                    from[index] = new Slot();
+                    from[index] = Slot.EmptySlot;
                 this[emptyIndex] = slot;
             }
             return emptyIndex;

@@ -43,7 +43,7 @@ namespace Craft.Net.Data.Windows
                     if (this[i].Empty)
                     {
                         this[i] = slot;
-                        from[index] = new Slot();
+                        from[index] = Slot.EmptySlot;
                         return i;
                     }
                 }

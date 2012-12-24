@@ -53,7 +53,7 @@ namespace Craft.Net.Server.Handlers
                                     bool destroy = tool.Damage(damage);
                                     slot.Metadata = tool.Data;
                                     if (destroy)
-                                        client.Entity.SetSlot(client.Entity.SelectedSlot, new Slot());
+                                        client.Entity.SetSlot(client.Entity.SelectedSlot, Slot.EmptySlot);
                                     else
                                         client.Entity.SetSlot(client.Entity.SelectedSlot, slot);
                                 }
