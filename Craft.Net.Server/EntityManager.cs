@@ -58,7 +58,7 @@ namespace Craft.Net.Server
                         c.SendPacket(new SpawnPlayerPacket(client.Entity.Id,
                             client.Username, MathHelper.CreateAbsoluteInt(client.Entity.Position.X), MathHelper.CreateAbsoluteInt(client.Entity.Position.Y),
                             MathHelper.CreateAbsoluteInt(client.Entity.Position.Z), MathHelper.CreateRotationByte(client.Entity.Yaw),
-                            MathHelper.CreateRotationByte(client.Entity.Pitch), client.Entity.SelectedItem.Id,
+                            MathHelper.CreateRotationByte(client.Entity.Pitch), client.Entity.SelectedItem.Empty ? (short)0 : client.Entity.SelectedItem.Id,
                             client.Entity.Metadata));
                         c.SendPacket(new EntityHeadLookPacket(client.Entity.Id, MathHelper.CreateRotationByte(client.Entity.Yaw)));
                         for (int i = 0; i < 4; i++)

@@ -448,6 +448,7 @@ namespace Craft.Net.Server
                         {
                             Clients.Remove(client);
                             i--;
+                            EntityManager.DespawnEntity(client.Entity);
                             if (client.IsLoggedIn)
                                 OnPlayerLoggedOut(new PlayerLogInEventArgs(client));
                             continue;
@@ -466,6 +467,7 @@ namespace Craft.Net.Server
                                 {
                                     Clients.Remove(client);
                                     i--;
+                                    EntityManager.DespawnEntity(client.Entity);
                                     if (client.IsLoggedIn)
                                         OnPlayerLoggedOut(new PlayerLogInEventArgs(client));
                                     continue;
@@ -480,6 +482,7 @@ namespace Craft.Net.Server
                                 client.Stream.Flush();
                                 Clients.Remove(client);
                                 i--;
+                                EntityManager.DespawnEntity(client.Entity);
                                 if (client.IsLoggedIn)
                                     OnPlayerLoggedOut(new PlayerLogInEventArgs(client));
                             }
@@ -487,6 +490,7 @@ namespace Craft.Net.Server
                             {
                                 Clients.Remove(client);
                                 i--;
+                                EntityManager.DespawnEntity(client.Entity);
                                 if (client.IsLoggedIn)
                                     OnPlayerLoggedOut(new PlayerLogInEventArgs(client));
                             }
@@ -496,6 +500,7 @@ namespace Craft.Net.Server
                                 client.Stream.Flush();
                                 Clients.Remove(client);
                                 i--;
+                                EntityManager.DespawnEntity(client.Entity);
                                 if (client.IsLoggedIn)
                                     OnPlayerLoggedOut(new PlayerLogInEventArgs(client));
                             }
