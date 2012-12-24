@@ -197,7 +197,7 @@ namespace Craft.Net.Data
             return CanHarvest(tool);
         }
 
-        public virtual int GetHarvestTime(Item item, World world, PlayerEntity entity, out int damage)
+        public virtual int GetHarvestTime(Item item, World world, PlayerEntity entity, out short damage)
         {
             int time = GetHarvestTime(item, out damage);
             var tool = item as ToolItem;
@@ -218,7 +218,7 @@ namespace Craft.Net.Data
         /// Gets the amount of time (in milliseconds) it takes to harvest this
         /// block with the given tool.
         /// </summary>
-        public virtual int GetHarvestTime(Item item, out int damage)
+        public virtual int GetHarvestTime(Item item, out short damage)
         {
             // time is in seconds until returned
             if (Hardness == -1)
@@ -258,10 +258,10 @@ namespace Craft.Net.Data
                 // Do tool damage
                 damage = 1;
                 if (tool.ToolType == ToolType.Pick || tool.ToolType == ToolType.Axe || tool.ToolType == ToolType.Shovel)
-                    damage = Hardness != 0 ? 1 : 0;
+                    damage = (short)(Hardness != 0 ? 1 : 0);
                 else if (tool.ToolType == ToolType.Sword)
                 {
-                    damage = Hardness != 0 ? 2 : 0;
+                    damage = (short)(Hardness != 0 ? 2 : 0);
                     time /= 1.5;
                     if (this is CobwebBlock)
                         time /= 15;

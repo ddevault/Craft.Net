@@ -253,11 +253,11 @@ namespace Craft.Net
         {
             User = user;
             Target = target;
-            MouseButton = mouseButton;
+            LeftClick = mouseButton;
         }
 
         public int User, Target;
-        public bool MouseButton;
+        public bool LeftClick;
 
         public const byte PacketId = 0x07;
         public byte Id { get { return 0x07; } }
@@ -266,7 +266,7 @@ namespace Craft.Net
         {
             User = stream.ReadInt32();
             Target = stream.ReadInt32();
-            MouseButton = stream.ReadBoolean();
+            LeftClick = stream.ReadBoolean();
         }
 
         public void WritePacket(MinecraftStream stream)
@@ -274,7 +274,7 @@ namespace Craft.Net
             stream.WriteUInt8(Id);
             stream.WriteInt32(User);
             stream.WriteInt32(Target);
-            stream.WriteBoolean(MouseButton);
+            stream.WriteBoolean(LeftClick);
         }
     }
 
@@ -490,17 +490,25 @@ namespace Craft.Net
 
     public struct PlayerDiggingPacket : IPacket
     {
-        public PlayerDiggingPacket(byte status, int x, byte y,
+        public enum PlayerAction
+        {
+            StartedDigging = 0,
+            FinishedDigging = 2,
+            DropItem = 4,
+            ShootArrow = 5
+        }
+
+        public PlayerDiggingPacket(PlayerAction action, int x, byte y,
             int z, byte face)
         {
-            Status = status;
+            Action = action;
             X = x;
             Y = y;
             Z = z;
             Face = face;
         }
 
-        public byte Status;
+        public PlayerAction Action;
         public int X;
         public byte Y;
         public int Z;
@@ -511,7 +519,7 @@ namespace Craft.Net
 
         public void ReadPacket(MinecraftStream stream)
         {
-            Status = stream.ReadUInt8();
+            Action = (PlayerAction)stream.ReadUInt8();
             X = stream.ReadInt32();
             Y = stream.ReadUInt8();
             Z = stream.ReadInt32();
@@ -521,7 +529,7 @@ namespace Craft.Net
         public void WritePacket(MinecraftStream stream)
         {
             stream.WriteUInt8(Id);
-            stream.WriteUInt8(Status);
+            stream.WriteUInt8((byte)Action);
             stream.WriteInt32(X);
             stream.WriteUInt8(Y);
             stream.WriteInt32(Z);
@@ -529,9 +537,9 @@ namespace Craft.Net
         }
     }
 
-    public struct PlayerBlockPlacementPacket : IPacket
+    public struct RightClickPacket : IPacket
     {
-        public PlayerBlockPlacementPacket(int x, byte y, int z,
+        public RightClickPacket(int x, byte y, int z,
             byte direction, Slot heldItem, byte cursorX,
             byte cursorY, byte cursorZ)
         {

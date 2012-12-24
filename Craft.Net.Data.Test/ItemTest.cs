@@ -137,7 +137,7 @@ namespace Craft.Net.Data.Test
             var block = new ObsidianBlock();
             Assert.IsFalse(block.CanHarvest(new StonePickaxeItem()));
             Assert.IsTrue(block.CanHarvest(new DiamondPickaxeItem()));
-            int damage;
+            short damage;
             int time = block.GetHarvestTime(new DiamondPickaxeItem(), out damage);
             Assert.AreEqual(9375, time);
             time = block.GetHarvestTime(new IronShovelItem(), out damage);

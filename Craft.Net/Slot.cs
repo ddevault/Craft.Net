@@ -8,7 +8,7 @@ using System.IO.Compression;
 
 namespace Craft.Net
 {
-    public struct Slot
+    public struct Slot : ICloneable
     {
         public Slot(short id)
         {
@@ -120,6 +120,11 @@ namespace Craft.Net
             if (Metadata != 0) result += "; Metadata: " + Metadata;
             if (Nbt != null) result += Environment.NewLine + Nbt.ToString();
             return "(" + result + ")";
+        }
+
+        public object Clone()
+        {
+            return new Slot(Id, Count, Metadata, Nbt);
         }
     }
 }

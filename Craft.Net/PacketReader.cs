@@ -27,7 +27,7 @@ namespace Craft.Net
             typeof(PlayerLookPacket), // 0x0C
             typeof(PlayerPositionAndLookPacket), // 0x0D
             typeof(PlayerDiggingPacket), // 0x0E
-            typeof(PlayerBlockPlacementPacket), // 0x0F
+            typeof(RightClickPacket), // 0x0F
             typeof(HeldItemChangePacket), // 0x10
             typeof(UseBedPacket), // 0x11
             typeof(AnimationPacket), // 0x12

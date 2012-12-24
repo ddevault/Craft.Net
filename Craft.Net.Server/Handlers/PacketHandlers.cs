@@ -29,6 +29,10 @@ namespace Craft.Net.Server.Handlers
             MinecraftServer.RegisterPacketHandler(CloseWindowPacket.PacketId, InventoryHandlers.CloseWindow);
             MinecraftServer.RegisterPacketHandler(HeldItemChangePacket.PacketId, InventoryHandlers.HeldItemChange);
 
+            MinecraftServer.RegisterPacketHandler(PlayerDiggingPacket.PacketId, InteractionHandlers.PlayerDigging);
+            MinecraftServer.RegisterPacketHandler(RightClickPacket.PacketId, InteractionHandlers.RightClick);
+            MinecraftServer.RegisterPacketHandler(UseEntityPacket.PacketId, InteractionHandlers.UseEntity);
+
             MinecraftServer.RegisterPacketHandler(ServerListPingPacket.PacketId, ServerListPing);
             MinecraftServer.RegisterPacketHandler(PluginMessagePacket.PacketId, PluginMessage);
             MinecraftServer.RegisterPacketHandler(ChatMessagePacket.PacketId, ChatMessage);
