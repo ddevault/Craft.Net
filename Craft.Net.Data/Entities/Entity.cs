@@ -178,6 +178,11 @@ namespace Craft.Net.Data.Entities
         private BoundingBox TempBoundingBox;
         public virtual void PhysicsUpdate(World world)
         {
+            // How this works:
+            // The bounding box of each entity is extended by the velocity on each axis.
+            // If there are any collisions, the velocity is adjusted.
+            // Move the entity.
+            
             // I don't know much about game physics, this code is open for pull requests.
             bool oldVelocityEnabled = EnableVelocityUpdates;
             EnableVelocityUpdates = false;
@@ -294,7 +299,13 @@ namespace Craft.Net.Data.Entities
                         Velocity.Z);
                     collisionDirection = Vector3.Down;
                 }
-                // TODO: Collisions for entities moving up
+                else if (Velocity.Y > 0)
+                {
+                    Velocity = new Vector3(Velocity.X,
+                        Velocity.Y - (TempBoundingBox.Min.Y - collisionPoint.Value),
+                        Velocity.Z);
+                    collisionDirection = Vector3.Up;
+                }
                 return true;
             }
 

@@ -26,7 +26,7 @@ namespace Craft.Net.Data.Test
             MetadataDictionary dictionary = MetadataDictionary.FromStream(new MinecraftStream(new MemoryStream(data)));
             var stream = new MemoryStream();
             dictionary.WriteTo(new MinecraftStream(stream));
-            Assert.AreEqual(data, stream.GetBuffer());
+            Assert.AreEqual(data, stream.GetBuffer().Take(data.Length).ToArray());
         }
     }
 }

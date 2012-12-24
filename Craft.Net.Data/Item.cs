@@ -351,6 +351,7 @@ namespace Craft.Net.Data
             new GlowstoneDustItem(),
             new RawFishItem(),
             new CookedFishItem(),
+            new CocoaBeanItem(),
             new BoneItem(),
             new SugarItem(),
             new CakeItem(),
@@ -399,6 +400,9 @@ namespace Craft.Net.Data
             new CarrotOnStickItem(),
             new NetherStarItem(),
             new PumpkinPieItem(),
+            new FireworkRocketItem(),
+            new FireworkStarItem(),
+            new EnchantedBookItem(),
             new MusicDiscItem()
         });
 
