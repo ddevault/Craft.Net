@@ -22,6 +22,11 @@ namespace Craft.Net.Data
             return (byte)(((value % 360) / 360) * 256);
         }
 
+        public static int CreateAbsoluteInt(double value)
+        {
+            return (int)(value * 32);
+        }
+
         /// <summary>
         /// Gets a byte representing block direction based on the rotation
         /// of the entity that placed it, on a flat plane.

@@ -56,8 +56,8 @@ namespace Craft.Net.Server
                     clients = clients.Where(c => c.Entity != entity);
                     clients.ToList().ForEach(c => {
                         c.SendPacket(new SpawnPlayerPacket(client.Entity.Id,
-                            client.Username, (int)client.Entity.Position.X, (int)client.Entity.Position.Y,
-                            (int)client.Entity.Position.Z, MathHelper.CreateRotationByte(client.Entity.Yaw),
+                            client.Username, MathHelper.CreateAbsoluteInt(client.Entity.Position.X), MathHelper.CreateAbsoluteInt(client.Entity.Position.Y),
+                            MathHelper.CreateAbsoluteInt(client.Entity.Position.Z), MathHelper.CreateRotationByte(client.Entity.Yaw),
                             MathHelper.CreateRotationByte(client.Entity.Pitch), client.Entity.SelectedItem.Id,
                             client.Entity.Metadata));
                         c.SendPacket(new EntityHeadLookPacket(client.Entity.Id, MathHelper.CreateRotationByte(client.Entity.Yaw)));
@@ -75,10 +75,10 @@ namespace Craft.Net.Server
                     var objectEntity = entity as ObjectEntity;
                     clients.ToList().ForEach(c =>
                     {
-                        c.SendPacket(new SpawnObjectPacket(objectEntity.Id, objectEntity.EntityType, (int)objectEntity.Position.X,
-                            (int)objectEntity.Position.Y, (int)objectEntity.Position.Z, MathHelper.CreateRotationByte(objectEntity.Yaw),
-                            MathHelper.CreateRotationByte(objectEntity.Pitch), objectEntity.Data, (short)objectEntity.Velocity.X,
-                            (short)objectEntity.Velocity.Y, (short)objectEntity.Velocity.Z));
+                        c.SendPacket(new SpawnObjectPacket(objectEntity.Id, objectEntity.EntityType, MathHelper.CreateAbsoluteInt(objectEntity.Position.X),
+                            MathHelper.CreateAbsoluteInt(objectEntity.Position.Y), MathHelper.CreateAbsoluteInt(objectEntity.Position.Z),
+                            MathHelper.CreateRotationByte(objectEntity.Yaw), MathHelper.CreateRotationByte(objectEntity.Pitch),
+                            objectEntity.Data, (short)objectEntity.Velocity.X, (short)objectEntity.Velocity.Y, (short)objectEntity.Velocity.Z));
                         if (entity.IncludeMetadataOnClient)
                             c.SendPacket(new EntityMetadataPacket(entity.Id, entity.Metadata));
                         c.KnownEntities.Add(entity.Id);
@@ -409,9 +409,9 @@ namespace Craft.Net.Server
                 }
             }
             foreach (var client in clients)
-                client.SendPacket(new EntityTeleportPacket(entity.Id, (int)entity.Position.X,
-                    (int)entity.Position.Y, (int)entity.Position.Z, MathHelper.CreateRotationByte(entity.Yaw),
-                    MathHelper.CreateRotationByte(entity.Pitch)));
+                client.SendPacket(new EntityTeleportPacket(entity.Id, MathHelper.CreateAbsoluteInt(entity.Position.X),
+                    MathHelper.CreateAbsoluteInt(entity.Position.Y), MathHelper.CreateAbsoluteInt(entity.Position.Z),
+                    MathHelper.CreateRotationByte(entity.Yaw), MathHelper.CreateRotationByte(entity.Pitch)));
         }
 
         private void UpdateEntityLook(Entity entity)
