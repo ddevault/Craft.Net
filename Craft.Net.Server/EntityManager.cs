@@ -309,6 +309,9 @@ namespace Craft.Net.Server
             if (pickUp)
             {
                 client.SendPacket(new CollectItemPacket(item.Id, player.Id));
+                client.SendPacket(new NamedSoundEffectPacket(SoundEffect.RandomPop,
+                            (int)player.Position.X, (int)player.Position.Y, 
+                            (int)player.Position.Z, 0.2f, 98));
                 DespawnEntity(item);
             }
         }

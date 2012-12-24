@@ -23,5 +23,10 @@ namespace Craft.Net.Data.Blocks
             drop = new[] { new ItemStack(new DirtBlock(), 1) };
             return true;
         }
+
+        public override string PlacementSoundEffect
+        {
+            get { return SoundEffect.DigGrass; }
+        }
     }
 }

@@ -400,14 +400,18 @@ namespace Craft.Net.Server
 
         private void AcceptConnectionAsync(IAsyncResult result)
         {
-            if (Listener == null || result == null) return; // This happens sometimes on shut down, it's weird
-            var tcpClient = Listener.EndAcceptTcpClient(result);
-            var client = new MinecraftClient(tcpClient, this);
-            lock (NetworkLock)
+            try
             {
-                Clients.Add(client);
+                if (Listener == null || result == null) return; // This happens sometimes on shut down, it's weird
+                var tcpClient = Listener.EndAcceptTcpClient(result);
+                var client = new MinecraftClient(tcpClient, this);
+                lock (NetworkLock)
+                {
+                    Clients.Add(client);
+                }
+                Listener.BeginAcceptTcpClient(AcceptConnectionAsync, null);
             }
-            Listener.BeginAcceptTcpClient(AcceptConnectionAsync, null);
+            catch { } // TODO: Investigate this more deeply
         }
 
         private void NetworkWorker()

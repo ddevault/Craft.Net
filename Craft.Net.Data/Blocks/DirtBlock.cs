@@ -16,5 +16,10 @@ namespace Craft.Net.Data.Blocks
         {
             get { return 0.5; }
         }
+
+        public override string PlacementSoundEffect
+        {
+            get { return SoundEffect.DigGrass; }
+        }
     }
 }

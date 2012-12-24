@@ -105,7 +105,15 @@ namespace Craft.Net.Server.Handlers
             {
                 item.OnItemUsed(client.World, client.Entity);
                 if (block != null)
-                    item.OnItemUsedOnBlock(client.World, position, AdjustByDirection(packet.Direction), cursorPosition, client.Entity);
+                {
+                    item.OnItemUsedOnBlock(client.World, position, AdjustByDirection(packet.Direction),
+                        cursorPosition, client.Entity);
+                    if (item is Block)
+                    {
+                        client.SendPacket(new NamedSoundEffectPacket((item as Block).PlacementSoundEffect,
+                            (int)position.X, (int)position.Y, (int)position.Z, 1, 50));
+                    }
+                }
             }
         }
 

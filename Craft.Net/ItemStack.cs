@@ -22,16 +22,34 @@ namespace Craft.Net
         public ItemStack(short id, sbyte count) : this(id)
         {
             Count = count;
+            if (Count == 0)
+            {
+                Id = -1;
+                Metadata = 0;
+                Nbt = null;
+            }
         }
 
         public ItemStack(short id, sbyte count, short metadata) : this(id, count)
         {
             Metadata = metadata;
+            if (Count == 0)
+            {
+                Id = -1;
+                Metadata = 0;
+                Nbt = null;
+            }
         }
 
         public ItemStack(short id, sbyte count, short metadata, NbtFile nbt) : this(id, count, metadata)
         {
             Nbt = nbt;
+            if (Count == 0)
+            {
+                Id = -1;
+                Metadata = 0;
+                Nbt = null;
+            }
         }
 
         public static ItemStack FromStream(MinecraftStream stream)

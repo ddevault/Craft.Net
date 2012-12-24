@@ -113,6 +113,11 @@ namespace Craft.Net.Data
             get { return new BoundingBox(Vector3.Zero, Vector3.Zero + Size); }
         }
 
+        public virtual string PlacementSoundEffect
+        {
+            get { return SoundEffect.DigStone; }
+        }
+
         /// <summary>
         /// When the block is placed, this will be called. Return
         /// false to cancel block placement. The default behavoir
@@ -152,6 +157,8 @@ namespace Craft.Net.Data
             if (Hardness != -1)
             {
                 var slot = player.Inventory[player.SelectedSlot];
+                player.Inventory[player.SelectedSlot] = new ItemStack(
+                    slot.Id, (sbyte)(slot.Count - 1), slot.Metadata, slot.Nbt);
                 world.SetBlock(destroyedBlock, new AirBlock());
                 if (CanHarvest(slot.AsItem() as ToolItem) && player.GameMode != GameMode.Creative)
                 {
