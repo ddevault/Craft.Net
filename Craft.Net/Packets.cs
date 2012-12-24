@@ -2535,25 +2535,31 @@ namespace Craft.Net
 
     public struct ClientStatusPacket : IPacket
     {
-        public ClientStatusPacket(byte payload)
+        public enum ClientStatus
         {
-            Payload = payload;
+            InitialSpawn = 0,
+            Respawn = 1
         }
 
-        public byte Payload;
+        public ClientStatusPacket(ClientStatus status)
+        {
+            Status = status;
+        }
+
+        public ClientStatus Status;
 
         public const byte PacketId = 0xCD;
         public byte Id { get { return 0xCD; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
-            Payload = stream.ReadUInt8();
+            Status = (ClientStatus)stream.ReadUInt8();
         }
 
         public void WritePacket(MinecraftStream stream)
         {
             stream.WriteUInt8(Id);
-            stream.WriteUInt8(Payload);
+            stream.WriteUInt8((byte)Status);
         }
     }
 
