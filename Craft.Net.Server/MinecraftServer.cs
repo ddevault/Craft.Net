@@ -278,7 +278,7 @@ namespace Craft.Net.Server
             client.SendPacket(new SpawnPositionPacket((int)client.Entity.SpawnPoint.X, (int)client.Entity.SpawnPoint.Y, (int)client.Entity.SpawnPoint.Z));
             client.SendPacket(new TimeUpdatePacket(DefaultLevel.Time, DefaultLevel.Time));
             UpdatePlayerList(null);
-            //client.SendPacket(new SetWindowItemsPacket(0, client.Entity.Inventory.GetSlots()));
+            client.SendPacket(new SetWindowItemsPacket(0, client.Entity.Inventory.GetSlots()));
 
             // Send initial chunks
             client.UpdateChunks(true);

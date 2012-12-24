@@ -126,5 +126,13 @@ namespace Craft.Net
         {
             return new Slot(Id, Count, Metadata, Nbt);
         }
+
+        public static Slot EmptySlot
+        {
+            get
+            {
+                return new Slot(-1);
+            }
+        }
     }
 }

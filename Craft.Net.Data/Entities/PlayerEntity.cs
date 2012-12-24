@@ -11,6 +11,8 @@ namespace Craft.Net.Data.Entities
         public PlayerEntity(Difficulty difficulty)
         {
             Inventory = new InventoryWindow();
+            for (int i = 0; i < Inventory.Length; i++)
+                Inventory[i] = new Slot(-1);
             SelectedSlot = InventoryWindow.HotbarIndex;
             bedUseTimer = new Timer(state =>
             {
@@ -392,7 +394,7 @@ namespace Craft.Net.Data.Entities
         {
             deathTimer.Change(3000, Timeout.Infinite);
             for (int i = 0; i < Inventory.Length; i++)
-                Inventory[i] = new Slot();
+                Inventory[i] = new Slot(-1);
         }
 
         protected internal virtual void OnStartEating()

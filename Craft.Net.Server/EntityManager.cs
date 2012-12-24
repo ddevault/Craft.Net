@@ -326,7 +326,8 @@ namespace Craft.Net.Server
         private void PlayerInventoryChange(object sender, WindowChangeEventArgs windowChangeEventArgs)
         {
             var window = (Window)sender;
-            var source = server.Clients.First(c => c.Entity.Inventory == window);
+            var source = server.Clients.FirstOrDefault(c => c.Entity.Inventory == window);
+            if (source == null) return; // This should never happen, but somehow does.
             if (windowChangeEventArgs.SlotIndex >= InventoryWindow.ArmorIndex &&
                 windowChangeEventArgs.SlotIndex < InventoryWindow.ArmorIndex + 4)
             {
