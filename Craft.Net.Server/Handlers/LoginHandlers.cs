@@ -111,7 +111,8 @@ namespace Craft.Net.Server.Handlers
             var verifyToken = new byte[4];
             var csp = new RNGCryptoServiceProvider();
             csp.GetBytes(verifyToken);
-            verifyToken = server.CryptoServiceProvider.Encrypt(verifyToken, false);
+            // verifyToken = server.CryptoServiceProvider.Encrypt(verifyToken, false);
+            // TODO: I think I'm encrypting that wrong
             // TODO: Confirm verify token validity
 
             var encodedKey = AsnKeyBuilder.PublicKeyToX509(server.ServerKey);

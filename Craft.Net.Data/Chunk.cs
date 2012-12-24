@@ -200,7 +200,7 @@ namespace Craft.Net.Data
             }
             level.Add(sectionList);
 
-            var rootCompound = new NbtCompound();
+            var rootCompound = new NbtCompound("");
             rootCompound.Add(level);
             file.RootTag = rootCompound;
 
