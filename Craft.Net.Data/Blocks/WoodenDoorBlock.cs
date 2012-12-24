@@ -37,7 +37,7 @@ namespace Craft.Net.Data.Blocks
         public override bool GetDrop(ToolItem tool, out ItemStack[] drop)
         {
             drop = new[] { new ItemStack(new WoodenDoorItem(), 1) };
-            return UpperHalf;
+            return true;
         }
 
         public WoodenDoorBlock()

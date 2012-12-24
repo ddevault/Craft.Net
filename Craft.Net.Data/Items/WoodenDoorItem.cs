@@ -27,10 +27,13 @@ namespace Craft.Net.Data.Items
             if (near is AirBlock && far is AirBlock)
             {
                 // Place door
+                var updates = world.EnableBlockUpdates;
+                world.EnableBlockUpdates = false;
                 world.SetBlock(clickedBlock + clickedSide,
                     new WoodenDoorBlock(DoorBlock.Vector3ToDoorDirection(away), false));
                 world.SetBlock(clickedBlock + clickedSide + Vector3.Up, 
                     new WoodenDoorBlock(DoorBlock.Vector3ToDoorDirection(away), true));
+                world.EnableBlockUpdates = updates;
             }
         }
     }

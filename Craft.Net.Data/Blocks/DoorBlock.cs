@@ -69,9 +69,26 @@ namespace Craft.Net.Data.Blocks
             return DoorDirection.West;
         }
 
+        public override void BlockUpdate(World world, Vector3 updatedBlock, Vector3 modifiedBlock)
+        {
+            if (UpperHalf)
+            {
+                var block = world.GetBlock(updatedBlock + Vector3.Down);
+                if (!(block is DoorBlock))
+                    world.SetBlock(updatedBlock, new AirBlock());
+            }
+            else
+            {
+                var block = world.GetBlock(updatedBlock + Vector3.Up);
+                if (!(block is DoorBlock))
+                    world.SetBlock(updatedBlock, new AirBlock());
+            }
+            base.BlockUpdate(world, updatedBlock, modifiedBlock);
+        }
+
         public override bool RequiresSupport
         {
-            get { return true; }
+            get { return !UpperHalf; }
         }
 
         public override Vector3 SupportDirection
