@@ -158,7 +158,7 @@ namespace Craft.Net.Data
             NbtCompound level = new NbtCompound("Level");
             
             // Entities // TODO
-            level.Add(new NbtList("Entities"));
+            level.Add(new NbtList("Entities", NbtTagType.Compound));
 
             // Biomes
             level.Add(new NbtByteArray("Biomes", Biomes));
@@ -171,7 +171,7 @@ namespace Craft.Net.Data
             level.Add(new NbtInt("zPos", (int)AbsolutePosition.Z));
 
             // Tile Entities
-            var tileEntityList = new NbtList("TileEntities");
+            var tileEntityList = new NbtList("TileEntities", NbtTagType.Compound);
             foreach (var tileEntity in TileEntities)
             {
                 // Get properties
@@ -184,7 +184,7 @@ namespace Craft.Net.Data
 
             // Sections and height
             level.Add(new NbtIntArray("HeightMap", HeightMap));
-            NbtList sectionList = new NbtList("Sections");
+            NbtList sectionList = new NbtList("Sections", NbtTagType.Compound);
             foreach (var section in Sections)
             {
                 if (!section.IsAir)
