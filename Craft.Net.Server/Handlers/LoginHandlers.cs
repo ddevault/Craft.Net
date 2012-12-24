@@ -42,6 +42,13 @@ namespace Craft.Net.Server.Handlers
                 server.LogInPlayer(client);
         }
 
+        public static void EncryptionKeyResponse(MinecraftClient client, MinecraftServer server, IPacket packet)
+        {
+            var response = (EncryptionKeyResponsePacket)packet;
+            client.SharedKey = server.CryptoServiceProvider.Decrypt(response.SharedSecret, false);
+            client.SendPacket(new EncryptionKeyResponsePacket(new byte[0], new byte[0]));
+        }
+
         private static EncryptionKeyRequestPacket CreateEncryptionRequest(MinecraftClient client, MinecraftServer server)
         {
             var verifyToken = new byte[4];

@@ -13,6 +13,7 @@ namespace Craft.Net.Server.Handlers
         public static void RegisterHandlers()
         {
             MinecraftServer.RegisterPacketHandler(HandshakePacket.PacketId, LoginHandlers.Handshake);
+            MinecraftServer.RegisterPacketHandler(EncryptionKeyResponsePacket.PacketId, LoginHandlers.EncryptionKeyResponse);
 
             MinecraftServer.RegisterPacketHandler(ServerListPingPacket.PacketId, ServerListPing);
         }

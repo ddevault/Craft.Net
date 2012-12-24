@@ -429,6 +429,12 @@ namespace Craft.Net.Server
                                     disconnect = true;
                                     break;
                                 }
+                                if (packet is EncryptionKeyResponsePacket)
+                                {
+                                    // Set up crypto stream
+                                    client.Stream = new MinecraftStream(new BufferedStream(new AesStream(client.NetworkStream, client.SharedKey)));
+                                    client.EncryptionEnabled = true;
+                                }
                             }
                         }
                         if (disconnect)
