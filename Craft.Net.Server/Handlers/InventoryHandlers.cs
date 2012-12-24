@@ -9,29 +9,29 @@ namespace Craft.Net.Server.Handlers
 {
     internal class InventoryHandlers
     {
-        public static void CreativeInventoryAction(MinecraftClient client, MinecraftServer server, IPacket packet)
+        public static void CreativeInventoryAction(MinecraftClient client, MinecraftServer server, IPacket _packet)
         {
-            var action = (CreativeInventoryActionPacket)packet;
-            if (action.SlotIndex < client.Entity.Inventory.Length && action.SlotIndex > 0)
+            var packet = (CreativeInventoryActionPacket)_packet;
+            if (packet.SlotIndex < client.Entity.Inventory.Length && packet.SlotIndex > 0)
             {
-                client.Entity.Inventory[action.SlotIndex] = action.Item;
-                if (action.SlotIndex == client.Entity.SelectedSlot)
+                client.Entity.Inventory[packet.SlotIndex] = packet.Item;
+                if (packet.SlotIndex == client.Entity.SelectedSlot)
                 {
                     var clients = server.EntityManager.GetKnownClients(client.Entity);
                     foreach (var _client in clients)
                         _client.SendPacket(new EntityEquipmentPacket(client.Entity.Id, EntityEquipmentPacket.EntityEquipmentSlot.HeldItem, 
-                            client.Entity.Inventory[action.SlotIndex]));
+                            client.Entity.Inventory[packet.SlotIndex]));
                 }
             }
         }
 
-        public static void HeldItemChange(MinecraftClient client, MinecraftServer server, IPacket packet)
+        public static void HeldItemChange(MinecraftClient client, MinecraftServer server, IPacket _packet)
         {
-            var change = (HeldItemChangePacket)packet;
-            if (change.SlotIndex < 10 && change.SlotIndex >= 0)
+            var packet = (HeldItemChangePacket)_packet;
+            if (packet.SlotIndex < 10 && packet.SlotIndex >= 0)
             {
                 // TODO: Move the equipment update packet to an OnPropertyChanged event handler
-                client.Entity.SelectedSlot = (short)(InventoryWindow.HotbarIndex + change.SlotIndex);
+                client.Entity.SelectedSlot = (short)(InventoryWindow.HotbarIndex + packet.SlotIndex);
                 var clients = server.EntityManager.GetKnownClients(client.Entity);
                 foreach (var _client in clients)
                     _client.SendPacket(new EntityEquipmentPacket(client.Entity.Id, EntityEquipmentPacket.EntityEquipmentSlot.HeldItem,
@@ -111,7 +111,7 @@ namespace Craft.Net.Server.Handlers
             }
         }
 
-        public static void CloseWindow(MinecraftClient client, MinecraftServer server, IPacket packet)
+        public static void CloseWindow(MinecraftClient client, MinecraftServer server, IPacket _packet)
         {
             // Do nothing
             // TODO: Do something?

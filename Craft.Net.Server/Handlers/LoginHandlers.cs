@@ -17,26 +17,26 @@ namespace Craft.Net.Server.Handlers
     {
         private const string sessionCheckUri = "http://session.minecraft.net/game/checkserver.jsp?user={0}&serverId={1}";
 
-        public static void Handshake(MinecraftClient client, MinecraftServer server, IPacket packet)
+        public static void Handshake(MinecraftClient client, MinecraftServer server, IPacket _packet)
         {
-            var handshake = (HandshakePacket)packet;
-            if (handshake.ProtocolVersion < PacketReader.ProtocolVersion)
+            var packet = (HandshakePacket)_packet;
+            if (packet.ProtocolVersion < PacketReader.ProtocolVersion)
             {
                 client.SendPacket(new DisconnectPacket("Outdated client!"));
                 return;
             }
-            if (handshake.ProtocolVersion > PacketReader.ProtocolVersion)
+            if (packet.ProtocolVersion > PacketReader.ProtocolVersion)
             {
                 client.SendPacket(new DisconnectPacket("Outdated server!"));
                 return;
             }
-            if (server.Clients.Any(c => c.Username == handshake.Username))
+            if (server.Clients.Any(c => c.Username == packet.Username))
             {
                 client.SendPacket(new DisconnectPacket(""));
                 return;
             }
-            client.Username = handshake.Username;
-            client.Hostname = handshake.ServerHostname + ":" + handshake.ServerPort;
+            client.Username = packet.Username;
+            client.Hostname = packet.ServerHostname + ":" + packet.ServerPort;
             if (server.Settings.OnlineMode)
                 client.AuthenticationHash = CreateHash();
             else
@@ -47,17 +47,17 @@ namespace Craft.Net.Server.Handlers
                 server.LogInPlayer(client);
         }
 
-        public static void EncryptionKeyResponse(MinecraftClient client, MinecraftServer server, IPacket packet)
+        public static void EncryptionKeyResponse(MinecraftClient client, MinecraftServer server, IPacket _packet)
         {
-            var response = (EncryptionKeyResponsePacket)packet;
-            client.SharedKey = server.CryptoServiceProvider.Decrypt(response.SharedSecret, false);
+            var packet = (EncryptionKeyResponsePacket)_packet;
+            client.SharedKey = server.CryptoServiceProvider.Decrypt(packet.SharedSecret, false);
             client.SendPacket(new EncryptionKeyResponsePacket(new byte[0], new byte[0]));
         }
 
-        public static void ClientStatus(MinecraftClient client, MinecraftServer server, IPacket packet)
+        public static void ClientStatus(MinecraftClient client, MinecraftServer server, IPacket _packet)
         {
-            var status = (ClientStatusPacket)packet;
-            if (status.Status == ClientStatusPacket.ClientStatus.InitialSpawn)
+            var packet = (ClientStatusPacket)_packet;
+            if (packet.Status == ClientStatusPacket.ClientStatus.InitialSpawn)
             {
                 // Create a hash for session verification
                 SHA1 sha1 = SHA1.Create();
@@ -84,21 +84,21 @@ namespace Craft.Net.Server.Handlers
 
                 server.LogInPlayer(client);
             }
-            else if (status.Status == ClientStatusPacket.ClientStatus.Respawn)
+            else if (packet.Status == ClientStatusPacket.ClientStatus.Respawn)
             {
                 // TODO
             }
         }
 
-        public static void ClientSettings(MinecraftClient client, MinecraftServer server, IPacket packet)
+        public static void ClientSettings(MinecraftClient client, MinecraftServer server, IPacket _packet)
         {
-            var settings = (ClientSettingsPacket)packet;
-            client.MaxViewDistance = (8 << settings.ViewDistance) + 2;
+            var packet = (ClientSettingsPacket)_packet;
+            client.MaxViewDistance = (8 << packet.ViewDistance) + 2;
             // TODO: Colors enabled
-            client.Entity.ShowCape = settings.ShowCape;
+            client.Entity.ShowCape = packet.ShowCape;
             try
             {
-                client.Locale = CultureInfo.GetCultureInfo(settings.Locale.Replace("_", "-"));
+                client.Locale = CultureInfo.GetCultureInfo(packet.Locale.Replace("_", "-"));
             }
             catch
             {

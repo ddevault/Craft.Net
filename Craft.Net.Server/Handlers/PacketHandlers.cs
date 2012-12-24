@@ -32,28 +32,37 @@ namespace Craft.Net.Server.Handlers
             MinecraftServer.RegisterPacketHandler(ServerListPingPacket.PacketId, ServerListPing);
             MinecraftServer.RegisterPacketHandler(PluginMessagePacket.PacketId, PluginMessage);
             MinecraftServer.RegisterPacketHandler(ChatMessagePacket.PacketId, ChatMessage);
+            MinecraftServer.RegisterPacketHandler(KeepAlivePacket.PacketId, KeepAlive);
         }
 
-        public static void ServerListPing(MinecraftClient client, MinecraftServer server, IPacket packet)
+        public static void ServerListPing(MinecraftClient client, MinecraftServer server, IPacket _packet)
         {
             client.SendPacket(new DisconnectPacket(GetPingValue(server)));
         }
 
-        public static void PluginMessage(MinecraftClient client, MinecraftServer server, IPacket packet)
+        public static void PluginMessage(MinecraftClient client, MinecraftServer server, IPacket _packet)
         {
-            var message = (PluginMessagePacket)packet;
-            if (server.PluginChannels.ContainsKey(message.Channel))
-                server.PluginChannels[message.Channel].MessageRecieved(client, message.Data);
+            var packet = (PluginMessagePacket)_packet;
+            if (server.PluginChannels.ContainsKey(packet.Channel))
+                server.PluginChannels[packet.Channel].MessageRecieved(client, packet.Data);
         }
 
-        public static void ChatMessage(MinecraftClient client, MinecraftServer server, IPacket packet)
+        public static void ChatMessage(MinecraftClient client, MinecraftServer server, IPacket _packet)
         {
-            var message = (ChatMessagePacket)packet;
-            LogProvider.Log("<" + client.Username + "> " + message.Message, LogImportance.Medium);
-            var args = new ChatMessageEventArgs(client, message.Message);
+            var packet = (ChatMessagePacket)_packet;
+            LogProvider.Log("<" + client.Username + "> " + packet.Message, LogImportance.Medium);
+            var args = new ChatMessageEventArgs(client, packet.Message);
             server.OnChatMessage(args);
             if (!args.Handled)
-                server.SendChat("<" + client.Username + "> " + message.Message);
+                server.SendChat("<" + client.Username + "> " + packet.Message);
+        }
+
+        public static void KeepAlive(MinecraftClient client, MinecraftServer server, IPacket _packet)
+        {
+            var packet = (KeepAlivePacket)_packet;
+            // TODO: Confirm value validity
+            client.LastKeepAlive = DateTime.Now;
+            client.Ping = (short)(client.LastKeepAlive - client.LastKeepAliveSent).TotalMilliseconds;
         }
 
         private static string GetPingValue(MinecraftServer server)

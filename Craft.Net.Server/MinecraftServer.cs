@@ -453,10 +453,7 @@ namespace Craft.Net.Server
                             try
                             {
                                 var packet = PacketReader.ReadPacket(client.Stream);
-                                HandlePacket(client, packet);
-                                if (client.DisconnectPending)
-                                    break;
-                                if (packet is DisconnectPacket)
+                                if (packet is DisconnectPacket) // TODO: Should we have a disconnect packet handler?
                                 {
                                     Clients.Remove(client);
                                     i--;
@@ -464,6 +461,9 @@ namespace Craft.Net.Server
                                         OnPlayerLoggedOut(new PlayerLogInEventArgs(client));
                                     continue;
                                 }
+                                HandlePacket(client, packet);
+                                if (client.DisconnectPending)
+                                    break;
                             }
                             catch (InvalidOperationException e)
                             {
