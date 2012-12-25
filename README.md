@@ -5,7 +5,8 @@ Minecraft-related tasks. Included in Craft.Net are:
 
 * Craft.Net: A library for handling the 1.4.6 Minecraft protocol.
 * Craft.Net.Data: A library to work with various kinds of Minecraft-related data.
-* Craft.Net.Server: A Minecraft multiplayer server.
+* Craft.Net.Server: A Minecraft multiplayer server library.
+* Craft.Net.Client: A Minecraft multiplayer client library.
 
 Craft.Net runs well on Microsoft.Net or [Mono](https://github.com/mono/mono).
 
@@ -20,7 +21,7 @@ If there are any additional features you would like, or any problems you encount
 using Craft.Net, please do not hesitate to
 [create an issue](https://github.com/SirCmpwn/Craft.Net/issues).
 
-Some cool technical things about Craft.Net that are already implemented:
+Some cool technical things about Craft.Net.Server that are already implemented:
 
 * **Asynchronous I/O:** *Minimizes CPU load and increases speed*
 * **Threaded Chunk Management:** *Offloads chunk compression and sending to short-lived threads*
@@ -28,6 +29,8 @@ Some cool technical things about Craft.Net that are already implemented:
 * **Survival Mode:** *Survival mode is mostly supported, with PvP, mining, and more*
 
 ## Usage
+
+### Server
 
 Craft.Net is a library, and will not work as a standalone server. However, the basic usage
 is simple. To get started, the following code will create a Minecraft 1.4.6 server:
@@ -45,6 +48,24 @@ creating a new one.
 The MinecraftServer class is the core server class, and runs networking, chunk management,
 block updates, and more. Each server must have at least one world to start, and an
 InvalidOperationException will be thrown if an attempt is made to start the server without.
+
+### Client
+
+*Craft.Net.Client is the newest addition to the Craft.Net family, and it is the least stable
+and the least complete.*
+
+Using a client is simple. This code will connect to an offline-mode server at 127.0.0.1:
+
+    var endPoint = new IPEndPoint(IPAddress.Loopback, 25565));
+    var session = new Session("ExampleUser");
+    var client = new MinecraftClient(session);
+    client.Connect(endPoint);
+
+You can also use Session("username", "password") to log into Minecraft.net for online-mode servers.
+LastLogin.GetLastLogin() may also be helpful in getting credentials. If you want to ping a server,
+use ServerPing.DoPing(IPEndPoint).
+
+### Logging
 
 You should also consider adding an ILogProvider to the server with LogProvider.RegisterProvider.
 Included in Craft.Net is ConsoleLogWriter, and FileLogWriter, which output logs to the command
