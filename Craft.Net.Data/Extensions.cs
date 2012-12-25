@@ -9,7 +9,10 @@ namespace Craft.Net.Data
     {
         public static Item AsItem(this ItemStack slot)
         {
-            return (Item)slot.Id;
+            var item = (Item)slot.Id;
+            if (item != null)
+                item.Data = slot.Metadata;
+            return item;
         }
     }
 }
