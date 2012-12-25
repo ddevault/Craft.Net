@@ -41,6 +41,8 @@ namespace Craft.Net.Data
         /// </summary>
         public virtual void OnItemUsedOnBlock(World world, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entity usedBy)
         {
+            // Run the default handler unless overriden
+            OnItemUsed(world, usedBy);
         }
 
         /// <summary>

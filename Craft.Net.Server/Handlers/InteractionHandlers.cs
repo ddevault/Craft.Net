@@ -101,7 +101,6 @@ namespace Craft.Net.Server.Handlers
             var item = slot.AsItem();
             if (use && item != null)
             {
-                item.OnItemUsed(client.World, client.Entity);
                 if (block != null)
                 {
                     item.OnItemUsedOnBlock(client.World, position, AdjustByDirection(packet.Direction),
@@ -112,6 +111,8 @@ namespace Craft.Net.Server.Handlers
                             (int)position.X, (int)position.Y, (int)position.Z, 1, 50));
                     }
                 }
+                else
+                    item.OnItemUsed(client.World, client.Entity);
             }
         }
 
