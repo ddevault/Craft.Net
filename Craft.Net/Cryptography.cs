@@ -1634,7 +1634,7 @@ namespace Craft.Net
             return true;
         }
 
-        internal RSAParameters ParseRSAPublicKey()
+        public RSAParameters ParseRSAPublicKey()
         {
             RSAParameters parameters = new RSAParameters();
 
