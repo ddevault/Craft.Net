@@ -57,16 +57,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="$(SolutionDir)Craft.Net.Data\Craft.Net.Data.csproj">
+    <ProjectReference Include="..\Craft.Net.Data\Craft.Net.Data.csproj">
       <Project>{30c3f936-8d95-4113-ba48-8b798b056309}</Project>
       <Name>Craft.Net.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="$(SolutionDir)Craft.Net\Craft.Net.csproj">
+    <ProjectReference Include="..\Craft.Net\Craft.Net.csproj">
       <Project>{c3bbab7e-606f-420e-9461-c8cfaec2476b}</Project>
       <Name>Craft.Net</Name>
     </ProjectReference>
-    <ProjectReference Include="$(SolutionDir)externals\libnbt2012\LibNbt\LibNbt.csproj">
-      <Project>{b843bf2d-8ced-4a61-a5c7-3f4d2ab459bf}</Project>
+    <ProjectReference Include="..\externals\libnbt2012\LibNbt\LibNbt.csproj">
+      <Project>{4488498D-976D-4DA3-BF72-109531AF0488}</Project>
       <Name>LibNbt</Name>
     </ProjectReference>
   </ItemGroup>

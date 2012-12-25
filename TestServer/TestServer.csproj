@@ -38,15 +38,15 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="$(SolutionDir)Craft.Net.Data\Craft.Net.Data.csproj">
+    <ProjectReference Include="..\Craft.Net.Data\Craft.Net.Data.csproj">
       <Project>{30C3F936-8D95-4113-BA48-8B798B056309}</Project>
       <Name>Craft.Net.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="$(SolutionDir)Craft.Net.Server\Craft.Net.Server.csproj">
+    <ProjectReference Include="..\Craft.Net.Server\Craft.Net.Server.csproj">
       <Project>{E00C6FF6-BCD8-44E0-BCD8-5F1BDF201617}</Project>
       <Name>Craft.Net.Server</Name>
     </ProjectReference>
-    <ProjectReference Include="$(SolutionDir)Craft.Net\Craft.Net.csproj">
+    <ProjectReference Include="..\Craft.Net\Craft.Net.csproj">
       <Project>{c3bbab7e-606f-420e-9461-c8cfaec2476b}</Project>
       <Name>Craft.Net</Name>
     </ProjectReference>
