@@ -69,15 +69,15 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\Craft.Net.Data\Craft.Net.Data.csproj">
+    <ProjectReference Include="$(SolutionDir)\Craft.Net.Data\Craft.Net.Data.csproj">
       <Project>{30C3F936-8D95-4113-BA48-8B798B056309}</Project>
       <Name>Craft.Net.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Craft.Net\Craft.Net.csproj">
+    <ProjectReference Include="$(SolutionDir)\Craft.Net\Craft.Net.csproj">
       <Project>{c3bbab7e-606f-420e-9461-c8cfaec2476b}</Project>
       <Name>Craft.Net</Name>
     </ProjectReference>
-    <ProjectReference Include="..\externals\libnbt2012\LibNbt\LibNbt.csproj">
+    <ProjectReference Include="$(SolutionDir)\externals\libnbt2012\LibNbt\LibNbt.csproj">
       <Project>{b843bf2d-8ced-4a61-a5c7-3f4d2ab459bf}</Project>
       <Name>LibNbt</Name>
     </ProjectReference>

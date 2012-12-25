@@ -401,11 +401,11 @@
     <Compile Include="World.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Craft.Net\Craft.Net.csproj">
+    <ProjectReference Include="$(SolutionDir)\Craft.Net\Craft.Net.csproj">
       <Project>{c3bbab7e-606f-420e-9461-c8cfaec2476b}</Project>
       <Name>Craft.Net</Name>
     </ProjectReference>
-    <ProjectReference Include="..\externals\libnbt2012\LibNbt\LibNbt.csproj">
+    <ProjectReference Include="$(SolutionDir)\externals\libnbt2012\LibNbt\LibNbt.csproj">
       <Project>{b843bf2d-8ced-4a61-a5c7-3f4d2ab459bf}</Project>
       <Name>LibNbt</Name>
     </ProjectReference>

@@ -54,15 +54,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Craft.Net.Data\Craft.Net.Data.csproj">
+    <ProjectReference Include="$(SolutionDir)\Craft.Net.Data\Craft.Net.Data.csproj">
       <Project>{30c3f936-8d95-4113-ba48-8b798b056309}</Project>
       <Name>Craft.Net.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Craft.Net.Server\Craft.Net.Server.csproj">
+    <ProjectReference Include="$(SolutionDir)\Craft.Net.Server\Craft.Net.Server.csproj">
       <Project>{e00c6ff6-bcd8-44e0-bcd8-5f1bdf201617}</Project>
       <Name>Craft.Net.Server</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Craft.Net\Craft.Net.csproj">
+    <ProjectReference Include="$(SolutionDir)\Craft.Net\Craft.Net.csproj">
       <Project>{c3bbab7e-606f-420e-9461-c8cfaec2476b}</Project>
       <Name>Craft.Net</Name>
     </ProjectReference>
