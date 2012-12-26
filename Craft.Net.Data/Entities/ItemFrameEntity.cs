@@ -26,7 +26,7 @@ namespace Craft.Net.Data.Entities
             Item = item;
             Position = position;
             Direction = direction;
-            Yaw = GetRotation(Direction);
+            Yaw = GetRotation(Direction); // This should be Pitch, but it doesn't work. Not sure why.
         }
 
         private static float GetRotation(ItemFrameDirection direction)

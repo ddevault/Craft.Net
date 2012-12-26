@@ -172,13 +172,14 @@ namespace Craft.Net.Server
                             (int)_client.Entity.Position.Z, MathHelper.CreateRotationByte(_client.Entity.Yaw),
                             MathHelper.CreateRotationByte(_client.Entity.Pitch), _client.Entity.SelectedItem.Id,
                             _client.Entity.Metadata));
-                client.SendPacket(new EntityEquipmentPacket(_client.Entity.Id, 0, // TODO: Bring back EntityEquipmentSlot enum
+                client.SendPacket(new EntityEquipmentPacket(_client.Entity.Id, 0,
                     _client.Entity.Inventory[_client.Entity.SelectedSlot]));
                 for (int i = 0; i < 4; i ++)
                 {
                     var item = _client.Entity.Inventory[InventoryWindow.ArmorIndex + i];
                     if (!item.Empty)
-                        client.SendPacket(new EntityEquipmentPacket(_client.Entity.Id, (EntityEquipmentPacket.EntityEquipmentSlot)(4 - i), item)); // TODO: Does this still work?
+                        client.SendPacket(new EntityEquipmentPacket(_client.Entity.Id, 
+                            (EntityEquipmentPacket.EntityEquipmentSlot)(4 - i), item));
                 }
             }
             foreach (var entity in entities)
@@ -351,11 +352,11 @@ namespace Craft.Net.Server
             var window = (Window)sender;
             var source = server.Clients.FirstOrDefault(c => c.Entity.Inventory == window);
             if (source == null) return; // This should never happen, but somehow does.
+            var clients = GetKnownClients(source.Entity);
             if (windowChangeEventArgs.SlotIndex >= InventoryWindow.ArmorIndex &&
                 windowChangeEventArgs.SlotIndex < InventoryWindow.ArmorIndex + 4)
             {
                 // TODO: Prevent non-armor items from being used here
-                var clients = GetKnownClients(source.Entity);
                 foreach (var client in clients)
                 {
                     int index = windowChangeEventArgs.SlotIndex - InventoryWindow.ArmorIndex;
@@ -363,6 +364,14 @@ namespace Craft.Net.Server
                 }
             }
             source.SendPacket(new SetSlotPacket(0, (short)windowChangeEventArgs.SlotIndex, windowChangeEventArgs.Value));
+            if (source.Entity.SelectedSlot == windowChangeEventArgs.SlotIndex)
+            {
+                foreach (var client in clients)
+                {
+                    client.SendPacket(new EntityEquipmentPacket(source.Entity.Id,
+                        EntityEquipmentPacket.EntityEquipmentSlot.HeldItem, client.Entity.SelectedItem));
+                }
+            }
         }
 
         private void PlayerStartEating(object sender, EventArgs eventArgs)
