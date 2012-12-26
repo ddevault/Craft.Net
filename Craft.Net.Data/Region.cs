@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using Craft.Net.Data.Blocks;
 using Craft.Net.Data.Generation;
+using fNbt;
 using Ionic.Zlib;
-using LibNbt;
 
 namespace Craft.Net.Data
 {

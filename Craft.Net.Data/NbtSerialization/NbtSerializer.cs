@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using LibNbt;
+using fNbt;
 
 namespace Craft.Net.Data.NbtSerialization
 {

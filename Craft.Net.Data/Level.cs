@@ -7,8 +7,8 @@ using System.Text;
 using System.Threading;
 using Craft.Net.Data.Entities;
 using Craft.Net.Data.Generation;
-using LibNbt;
 using Craft.Net.Data.NbtSerialization;
+using fNbt;
 
 namespace Craft.Net.Data
 {

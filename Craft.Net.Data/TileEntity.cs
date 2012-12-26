@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
 using Craft.Net.Data.NbtSerialization;
-using LibNbt;
+using fNbt;
 
 namespace Craft.Net.Data
 {

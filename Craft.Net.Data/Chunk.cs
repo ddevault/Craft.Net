@@ -1,10 +1,10 @@
 using System;
 using System.Linq;
 using System.Runtime.Serialization;
-using LibNbt;
 using System.Collections.Generic;
 using Craft.Net.Data.NbtSerialization;
 using System.Reflection;
+using fNbt;
 
 namespace Craft.Net.Data
 {

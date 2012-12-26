@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Craft.Net.Metadata;
-using LibNbt;
+using fNbt;
 
 namespace Craft.Net
 {
