@@ -40,7 +40,7 @@ namespace Craft.Net.Server
             if (entity is LivingEntity)
                 (entity as LivingEntity).EntityDamaged += EntityDamaged;
 
-            if (clients.Count() != 0)
+            if (clients.Any())
             {
                 // Spawn entity on relevant clients
                 if (entity is PlayerEntity)
@@ -82,6 +82,16 @@ namespace Craft.Net.Server
                         if (entity.IncludeMetadataOnClient)
                             c.SendPacket(new EntityMetadataPacket(entity.Id, entity.Metadata));
                         c.KnownEntities.Add(entity.Id);
+                    });
+                }
+                else if (entity is PaintingEntity)
+                {
+                    var painting = entity as PaintingEntity;
+                    clients.ToList().ForEach(c =>
+                    {
+                        c.SendPacket(new SpawnPaintingPacket(painting.Id, painting.Painting.Name,
+                            (int)painting.Center.X, (int)painting.Center.Y, (int)painting.Center.Z, (int)painting.Direction));
+                        c.KnownEntities.Add(painting.Id);
                     });
                 }
             }
@@ -183,6 +193,13 @@ namespace Craft.Net.Server
                             (short)objectEntity.Velocity.Y, (short)objectEntity.Velocity.Z));
                     if (entity.IncludeMetadataOnClient)
                         client.SendPacket(new EntityMetadataPacket(entity.Id, entity.Metadata));
+                }
+                else if (entity is PaintingEntity)
+                {
+                    var painting = entity as PaintingEntity;
+                    client.SendPacket(new SpawnPaintingPacket(painting.Id, painting.Painting.Name,
+                        (int)painting.Center.X, (int)painting.Center.Y, (int)painting.Center.Z, (int)painting.Direction));
+                    client.KnownEntities.Add(painting.Id);
                 }
             }
         }
