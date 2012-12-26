@@ -157,6 +157,13 @@ namespace Craft.Net.Server.Handlers
                     // TODO: Physics
                 }
             }
+            else if (target is PaintingEntity)
+            {
+                if (packet.LeftClick)
+                {
+                    server.EntityManager.DespawnEntity(target);
+                }
+            }
         }
 
         public static void UpdateSign(MinecraftClient client, MinecraftServer server, IPacket _packet)
