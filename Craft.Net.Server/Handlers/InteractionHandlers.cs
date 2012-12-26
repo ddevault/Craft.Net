@@ -17,14 +17,14 @@ namespace Craft.Net.Server.Handlers
         {
             var packet = (PlayerDiggingPacket)_packet;
             var position = new Vector3(packet.X, packet.Y, packet.Z);
-            if (client.Entity.Position.DistanceTo(position) <= MaxDigDistance)
+            // TODO: Enforce line-of-sight
+            var block = client.World.GetBlock(position);
+            short damage;
+            switch (packet.Action)
             {
-                // TODO: Enforce line-of-sight
-                var block = client.World.GetBlock(position);
-                short damage;
-                switch (packet.Action)
-                {
-                    case PlayerDiggingPacket.PlayerAction.StartedDigging:
+                case PlayerDiggingPacket.PlayerAction.StartedDigging:
+                    if (client.Entity.Position.DistanceTo(position) <= MaxDigDistance)
+                    {
                         if (client.Entity.Abilities.InstantMine || block.Hardness == 0)
                             block.OnBlockMined(client.World, position, client.Entity);
                         else
@@ -34,8 +34,11 @@ namespace Craft.Net.Server.Handlers
                                 client.World, client.Entity, out damage) - (client.Ping + 100));
                             client.ExpectedBlockToMine = position;
                         }
-                        break;
-                    case PlayerDiggingPacket.PlayerAction.FinishedDigging:
+                    }
+                    break;
+                case PlayerDiggingPacket.PlayerAction.FinishedDigging:
+                    if (client.Entity.Position.DistanceTo(position) <= MaxDigDistance)
+                    {
                         if (client.ExpectedMiningEnd > DateTime.Now || client.ExpectedBlockToMine != position)
                             return;
                         block.GetHarvestTime(client.Entity.SelectedItem.AsItem(),
@@ -59,26 +62,30 @@ namespace Craft.Net.Server.Handlers
                         }
                         block.OnBlockMined(client.World, position, client.Entity);
                         client.Entity.FoodExhaustion += 0.025f;
-                        break;
-                    case PlayerDiggingPacket.PlayerAction.DropItem:
-                        var SlotItem = client.Entity.Inventory[client.Entity.SelectedSlot];
-                        if (!SlotItem.Empty)
+                    }
+                    break;
+                case PlayerDiggingPacket.PlayerAction.DropItem:
+                    var SlotItem = client.Entity.Inventory[client.Entity.SelectedSlot];
+                    if (!SlotItem.Empty)
+                    {
+                        var ItemCopy = (ItemStack)SlotItem.Clone();
+                        if (client.Entity.IsCrouching)
+                            client.Entity.SetSlot(client.Entity.SelectedSlot, ItemStack.EmptyStack);
+                        else
                         {
-                            var ItemCopy = (ItemStack)SlotItem.Clone();
                             ItemCopy.Count = 1;
-
                             SlotItem.Count--; // Decrease the player's item by 1
                             if (SlotItem.Count == 0)
                                 client.Entity.SetSlot(client.Entity.SelectedSlot, ItemStack.EmptyStack);
                             else
                                 client.Entity.SetSlot(client.Entity.SelectedSlot, SlotItem);
-                            var entity = new ItemEntity(client.Entity.GivenPosition + 
-                                new Vector3(0, client.Entity.Size.Height, 0), ItemCopy);
-                            entity.Velocity = MathHelper.FowardVector(client.Entity) * new Vector3(0.25);
-                            server.EntityManager.SpawnEntity(client.World, entity);
                         }
-                        break;
-                }
+                        var entity = new ItemEntity(client.Entity.GivenPosition + 
+                            new Vector3(0, client.Entity.Size.Height, 0), ItemCopy);
+                        entity.Velocity = MathHelper.FowardVector(client.Entity) * new Vector3(0.25);
+                        server.EntityManager.SpawnEntity(client.World, entity);
+                    }
+                    break;
             }
         }
 
