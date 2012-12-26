@@ -38,7 +38,7 @@ namespace Craft.Net.Data.Entities
         public override void PhysicsUpdate(World world)
         {
             base.PhysicsUpdate(world);
-            if ((DateTime.Now - SpawnTime).TotalSeconds > 0.5 && world.Level.Time % 10 == 0)
+            if ((DateTime.Now - SpawnTime).TotalSeconds > 0.5 && world.Level.Time % 5 == 0)
             {
                 var player = (PlayerEntity)world.Entities.FirstOrDefault(e => e is PlayerEntity &&
                     e.Position.DistanceTo(Position) <= 1);
