@@ -50,6 +50,22 @@ namespace Craft.Net.Client
             }
         }
 
+        public static void SetLastLogin(LastLogin login)
+        {
+            byte[] decrypted = BitConverter.GetBytes(IPAddress.NetworkToHostOrder((short)login.Username.Length))
+                .Concat(System.Text.Encoding.UTF8.GetBytes(login.Username))
+                .Concat(BitConverter.GetBytes(IPAddress.NetworkToHostOrder((short)login.Password.Length)))
+                .Concat(System.Text.Encoding.UTF8.GetBytes(login.Password)).ToArray();
+
+            PKCSKeyGenerator crypto = new PKCSKeyGenerator(LastLoginPassword, LastLoginSalt, 5, 1);
+            ICryptoTransform cryptoTransform = crypto.Encryptor;
+            byte[] encrypted = cryptoTransform.TransformFinalBlock(decrypted, 0, decrypted.Length);
+            if (File.Exists(LastLoginFile))
+                File.Delete(LastLoginFile);
+            using (Stream stream = File.Create(LastLoginFile))
+                stream.Write(encrypted, 0, encrypted.Length);
+        }
+
         public string Username { get; set; }
         public string Password { get; set; }
     }
