@@ -33,29 +33,29 @@ namespace Craft.Net.Data
             }
         }
 
-        protected internal virtual int MoveOrMergeItem(int index, ItemStack slot, WindowArea from)
+        protected internal virtual int MoveOrMergeItem(int index, ItemStack item, WindowArea from)
         {
             int emptyIndex = -1;
             for (int i = 0; i < Length; i++)
             {
                 if (this[i].Empty && emptyIndex == -1)
                     emptyIndex = i;
-                else if (this[i].Id == slot.Id &&
-                         this[i].Metadata == slot.Metadata &&
-                         this[i].Count < slot.AsItem().MaximumStack)
+                else if (this[i].Id == item.Id &&
+                    this[i].Metadata == item.Metadata &&
+                    this[i].Count < item.AsItem().MaximumStack)
                 {
                     // Merging takes precedence over empty slots
                     emptyIndex = -1;
                     if (from != null)
                         from[index] = ItemStack.EmptyStack;
-                    if (this[i].Count + slot.Count > slot.AsItem().MaximumStack)
+                    if (this[i].Count + item.Count > item.AsItem().MaximumStack)
                     {
-                        slot = new ItemStack(slot.Id, (sbyte)(slot.Count - (slot.AsItem().MaximumStack - this[i].Count)),
-                            slot.Metadata, slot.Nbt);
-                        this[i] = new ItemStack(slot.Id, (sbyte)slot.AsItem().MaximumStack, slot.Metadata, slot.Nbt);
+                        item = new ItemStack(item.Id, (sbyte)(item.Count - (item.AsItem().MaximumStack - this[i].Count)),
+                            item.Metadata, item.Nbt);
+                        this[i] = new ItemStack(item.Id, (sbyte)item.AsItem().MaximumStack, item.Metadata, item.Nbt);
                         continue;
                     }
-                    this[i] = new ItemStack(slot.Id, (sbyte)(this[i].Count + slot.Count));
+                    this[i] = new ItemStack(item.Id, (sbyte)(this[i].Count + item.Count), item.Metadata);
                     return i;
                 }
             }
@@ -63,7 +63,7 @@ namespace Craft.Net.Data
             {
                 if (from != null)
                     from[index] = ItemStack.EmptyStack;
-                this[emptyIndex] = slot;
+                this[emptyIndex] = item;
             }
             return emptyIndex;
         }

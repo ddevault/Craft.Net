@@ -12,8 +12,8 @@ namespace Craft.Net
     {
         public ItemStack(short id)
         {
-            Id = id;
-            Count = 1;
+            _Id = id;
+            _Count = 1;
             Metadata = 0;
             Nbt = null;
             Index = 0;
@@ -22,23 +22,11 @@ namespace Craft.Net
         public ItemStack(short id, sbyte count) : this(id)
         {
             Count = count;
-            if (Count == 0)
-            {
-                Id = -1;
-                Metadata = 0;
-                Nbt = null;
-            }
         }
 
         public ItemStack(short id, sbyte count, short metadata) : this(id, count)
         {
             Metadata = metadata;
-            if (Count == 0)
-            {
-                Id = -1;
-                Metadata = 0;
-                Nbt = null;
-            }
         }
 
         public ItemStack(short id, sbyte count, short metadata, NbtFile nbt) : this(id, count, metadata)
@@ -123,8 +111,38 @@ namespace Craft.Net
             get { return Id == -1; }
         }
 
-        public short Id;
-        public sbyte Count;
+        public short Id
+        {
+            get { return _Id; }
+            set
+            {
+                _Id = value;
+                if (_Id == -1)
+                {
+                    _Count = 0;
+                    Metadata = 0;
+                    Nbt = null;
+                }
+            }
+        }
+
+        public sbyte Count
+        {
+            get { return _Count; }
+            set
+            {
+                _Count = value;
+                if (_Count == 0)
+                {
+                    _Id = -1;
+                    Metadata = 0;
+                    Nbt = null;
+                }
+            }
+        }
+
+        public short _Id;
+        public sbyte _Count;
         public short Metadata;
         public NbtFile Nbt;
         public int Index;
