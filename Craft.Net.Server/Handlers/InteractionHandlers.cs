@@ -65,11 +65,12 @@ namespace Craft.Net.Server.Handlers
                     }
                     break;
                 case PlayerDiggingPacket.PlayerAction.DropItem:
+                case PlayerDiggingPacket.PlayerAction.DropStack:
                     var SlotItem = client.Entity.Inventory[client.Entity.SelectedSlot];
                     if (!SlotItem.Empty)
                     {
                         var ItemCopy = (ItemStack)SlotItem.Clone();
-                        if (client.Entity.IsCrouching)
+                        if (packet.Action == PlayerDiggingPacket.PlayerAction.DropStack)
                             client.Entity.SetSlot(client.Entity.SelectedSlot, ItemStack.EmptyStack);
                         else
                         {

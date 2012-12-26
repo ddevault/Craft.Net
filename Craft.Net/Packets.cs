@@ -494,6 +494,7 @@ namespace Craft.Net
         {
             StartedDigging = 0,
             FinishedDigging = 2,
+            DropStack = 3,
             DropItem = 4,
             ShootArrow = 5
         }
