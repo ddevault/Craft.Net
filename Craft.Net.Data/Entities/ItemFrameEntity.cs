@@ -26,8 +26,7 @@ namespace Craft.Net.Data.Entities
             Item = item;
             Position = position;
             Direction = direction;
-            Pitch = GetRotation(Direction);
-            Orientation = 2;
+            Yaw = GetRotation(Direction);
         }
 
         private static float GetRotation(ItemFrameDirection direction)
@@ -35,9 +34,9 @@ namespace Craft.Net.Data.Entities
             switch (direction)
             {
                 case ItemFrameDirection.North:
-                    return 180;
-                case ItemFrameDirection.South:
                     return 0;
+                case ItemFrameDirection.South:
+                    return 180;
                 case ItemFrameDirection.West:
                     return 90;
                 default:
