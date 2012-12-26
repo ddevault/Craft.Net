@@ -31,7 +31,7 @@ namespace Craft.Net.Client
             {
                 _position = value;
                 SendPacket(new PlayerPositionPacket(
-                    Position.X, Position.Y, Position.Z, Position.Y - 1.62, false));
+                    Position.X, Position.Y - 1.62, Position.Z, Position.Y, false));
             }
         }
 
