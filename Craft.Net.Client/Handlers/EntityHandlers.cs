@@ -17,6 +17,7 @@ namespace Craft.Net.Client.Handlers
             {
                 client.InitialPositionRecieved = true;
                 client.OnInitialSpawn(new EntitySpawnEventArgs(client.Position, client.EntityId));
+                client.SendPacket(packet);
             }
         }
 
