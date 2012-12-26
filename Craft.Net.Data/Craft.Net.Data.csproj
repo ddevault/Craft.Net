@@ -208,6 +208,7 @@
     <Compile Include="Entities\ItemEntity.cs" />
     <Compile Include="Entities\LivingEntity.cs" />
     <Compile Include="Entities\ObjectEntity.cs" />
+    <Compile Include="Entities\PaintingEntity.cs" />
     <Compile Include="Entities\PlayerEntity.cs" />
     <Compile Include="Events\EntityDamageEventArgs.cs" />
     <Compile Include="Events\EntityTerrainCollisionEventArgs.cs" />
