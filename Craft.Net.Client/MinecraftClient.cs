@@ -70,6 +70,11 @@ namespace Craft.Net.Client
             }
         }
 
+        public void SendChat(string message)
+        {
+            SendPacket(new ChatMessagePacket(message));
+        }
+
         public void SendPacket(IPacket packet)
         {
             SendQueue.Enqueue(packet);
@@ -83,7 +88,7 @@ namespace Craft.Net.Client
                 if (Spawned && nextPlayerUpdate < DateTime.Now)
                 {
                     nextPlayerUpdate = DateTime.Now.AddMilliseconds(500);
-                    SendPacket(new PlayerPacket(true)); // TODO: Store OnGround properly
+                    SendPacket(new PlayerPacket(false)); // TODO: Store OnGround properly
                 }
                 // Send queued packets
                 while (SendQueue.Count != 0)

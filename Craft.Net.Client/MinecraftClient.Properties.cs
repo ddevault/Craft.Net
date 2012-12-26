@@ -31,7 +31,7 @@ namespace Craft.Net.Client
             {
                 _position = value;
                 SendPacket(new PlayerPositionPacket(
-                    Position.X, Position.Y, Position.Z, Position.Y + 1.62, true));
+                    Position.X, Position.Y, Position.Z, Position.Y - 1.62, false));
             }
         }
 
@@ -42,7 +42,7 @@ namespace Craft.Net.Client
             set
             {
                 _pitch = value;
-                SendPacket(new PlayerLookPacket(Yaw, Pitch, true));
+                SendPacket(new PlayerLookPacket(Yaw, Pitch, false));
             }
         }
 
@@ -53,7 +53,7 @@ namespace Craft.Net.Client
             set
             {
                 _yaw = value;
-                SendPacket(new PlayerLookPacket(Yaw, Pitch, true));
+                SendPacket(new PlayerLookPacket(Yaw, Pitch, false));
             }
         }
 

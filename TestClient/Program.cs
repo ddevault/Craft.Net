@@ -47,6 +47,17 @@ namespace TestClient
                         position.Z += amount;
                     client.Position = position;
                 }
+                else if (input.StartsWith("look "))
+                {
+                    var parts = input.Split(' ');
+                    var amount = float.Parse(parts[2]);
+                    if (parts[1] == "yaw")
+                        client.Yaw = amount;
+                    else
+                        client.Pitch = amount;
+                }
+                else if (input.StartsWith("say "))
+                    client.SendChat(input.Substring(4));
             }
 
             client.Disconnect("Quitting");
