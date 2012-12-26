@@ -550,6 +550,10 @@ namespace Craft.Net.Data.Entities
             }
         }
 
+        public virtual void UsedByEntity(World world, bool leftClick, LivingEntity usedBy)
+        {
+        }
+
         public bool IsUnderwater(World world)
         {
             var position = new Vector3(Position.X,

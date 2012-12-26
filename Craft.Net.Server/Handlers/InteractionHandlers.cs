@@ -132,10 +132,11 @@ namespace Craft.Net.Server.Handlers
                 server.EntityManager.GetEntityWorld(target) != server.EntityManager.GetEntityWorld(client.Entity) ||
                 target.Position.DistanceTo(client.Entity.Position) > client.Reach)
                 return;
-
+            target.UsedByEntity(client.World, packet.LeftClick, client.Entity);
             if (target is LivingEntity)
             {
                 // Do damage
+                // TODO: Move to Craft.Net.Data?
                 if (packet.LeftClick)
                 {
                     var livingEntity = target as LivingEntity;
@@ -156,13 +157,6 @@ namespace Craft.Net.Server.Handlers
                         (livingEntity as PlayerEntity).LastAttackingEntity = client.Entity;
                     }
                     // TODO: Physics
-                }
-            }
-            else if (target is PaintingEntity)
-            {
-                if (packet.LeftClick)
-                {
-                    server.EntityManager.DespawnEntity(target);
                 }
             }
         }

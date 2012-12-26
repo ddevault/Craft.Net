@@ -141,6 +141,12 @@ namespace Craft.Net.Data.Entities
             // Paintings don't recieve physics updates
         }
 
+        public override void UsedByEntity(World world, bool leftClick, LivingEntity usedBy)
+        {
+            if (leftClick)
+                world.OnDestroyEntity(this);
+        }
+
         public enum PaintingDirection
         {
             North = 2,
