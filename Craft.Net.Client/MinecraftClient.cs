@@ -55,15 +55,36 @@ namespace Craft.Net.Client
             SendPacket(handshake);
         }
 
+        public void Disconnect(string reason)
+        {
+            NetworkWorkerThread.Abort();
+            if (Client.Connected)
+            {
+                try
+                {
+                    new DisconnectPacket(reason).WritePacket(Stream);
+                    Stream.Flush();
+                    Client.Close();
+                }
+                catch { }
+            }
+        }
+
         public void SendPacket(IPacket packet)
         {
             SendQueue.Enqueue(packet);
         }
 
+        private DateTime nextPlayerUpdate = DateTime.MinValue;
         private void NetworkWorker()
         {
             while (true)
             {
+                if (Spawned && nextPlayerUpdate < DateTime.Now)
+                {
+                    nextPlayerUpdate = DateTime.Now.AddMilliseconds(500);
+                    SendPacket(new PlayerPacket(true)); // TODO: Store OnGround properly
+                }
                 // Send queued packets
                 while (SendQueue.Count != 0)
                 {

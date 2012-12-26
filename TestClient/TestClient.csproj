@@ -53,6 +53,14 @@
       <Project>{d48822db-4a67-48dd-a858-a629f92233fb}</Project>
       <Name>Craft.Net.Client</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Craft.Net.Data\Craft.Net.Data.csproj">
+      <Project>{30C3F936-8D95-4113-BA48-8B798B056309}</Project>
+      <Name>Craft.Net.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Craft.Net\Craft.Net.csproj">
+      <Project>{C3BBAB7E-606F-420E-9461-C8CFAEC2476B}</Project>
+      <Name>Craft.Net</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

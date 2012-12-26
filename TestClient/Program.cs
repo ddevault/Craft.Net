@@ -29,7 +29,27 @@ namespace TestClient
             // Connect to server
             var client = new MinecraftClient(session);
             client.Connect(endPoint);
-            Console.ReadKey(true);
+
+            string input = "";
+            while (input != "quit")
+            {
+                input = Console.ReadLine();
+                if (input.StartsWith("move "))
+                {
+                    var parts = input.Split(' ');
+                    var amount = double.Parse(parts[2]);
+                    var position = client.Position;
+                    if (parts[1] == "x")
+                        position.X += amount;
+                    else if (parts[1] == "y")
+                        position.Y += amount;
+                    else
+                        position.Z += amount;
+                    client.Position = position;
+                }
+            }
+
+            client.Disconnect("Quitting");
         }
 
         private static IPEndPoint ParseEndPoint(string arg)

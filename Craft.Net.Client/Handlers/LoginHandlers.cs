@@ -5,6 +5,7 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Craft.Net.Client.Events;
 
 namespace Craft.Net.Client.Handlers
 {
@@ -51,6 +52,23 @@ namespace Craft.Net.Client.Handlers
             client.Stream = new MinecraftStream(new AesStream(new BufferedStream(client.NetworkStream), client.SharedSecret));
             client.SendPacket(new ClientStatusPacket(ClientStatusPacket.ClientStatus.InitialSpawn));
             LogProvider.Log("Logged in.");
+        }
+
+        public static void LoginRequest(MinecraftClient client, IPacket _packet)
+        {
+            var packet = (LoginRequestPacket)_packet;
+            // TODO: Create world
+            client.EntityId = packet.EntityId;
+            client.Spawned = true;
+            client.OnLoggedIn();
+        }
+
+        public static void Disconnect(MinecraftClient client, IPacket _packet)
+        {
+            var packet = (DisconnectPacket)_packet;
+            LogProvider.Log("Disconnected: " + packet.Reason);
+            client.Disconnect(packet.Reason);
+            client.OnDisconnected(new DisconnectEventArgs(packet.Reason));
         }
     }
 }

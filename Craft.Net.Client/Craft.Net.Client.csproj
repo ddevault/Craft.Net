@@ -41,13 +41,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsoleLogWriter.cs" />
+    <Compile Include="Events\ChatMessageEventArgs.cs" />
+    <Compile Include="Events\DisconnectEventArgs.cs" />
+    <Compile Include="Events\EntitySpawnEventArgs.cs" />
     <Compile Include="FileLogWriter.cs" />
+    <Compile Include="Handlers\EntityHandlers.cs" />
     <Compile Include="Handlers\LoginHandlers.cs" />
     <Compile Include="Handlers\PacketHandlers.cs" />
     <Compile Include="ILogProvider.cs" />
     <Compile Include="LastLogin.cs" />
     <Compile Include="LogProvider.cs" />
     <Compile Include="MinecraftClient.cs" />
+    <Compile Include="MinecraftClient.Events.cs" />
     <Compile Include="MinecraftClient.Properties.cs" />
     <Compile Include="PKCSKeyGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
