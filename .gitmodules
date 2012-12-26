@@ -1,1 +1,4 @@
 
+[submodule "externals/fNbt"]
+	path = externals/fNbt
+	url = git://github.com/fragmer/fNbt.git
