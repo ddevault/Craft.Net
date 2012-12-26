@@ -174,18 +174,12 @@ namespace Craft.Net.Data
                         foreach (var drop in drops)
                         {
                             var entity = new ItemEntity(destroyedBlock + new Vector3(0.5), drop);
-                            entity.Velocity = new Vector3(RandomVelocityDouble(),
-                                Math.Abs(RandomVelocityDouble()), RandomVelocityDouble());
+                            entity.ApplyRandomVelocity();
                             world.OnSpawnEntity(entity);
                         }
                     }
                 }
             }
-        }
-
-        private static double RandomVelocityDouble()
-        {
-            return (MathHelper.Random.NextDouble() - 0.5) * 0.2;
         }
 
         /// <summary>

@@ -35,6 +35,17 @@ namespace Craft.Net.Data.Entities
             get { return 0.98f; }
         }
 
+        public void ApplyRandomVelocity()
+        {
+            Velocity = new Vector3(RandomVelocityDouble(),
+                Math.Abs(RandomVelocityDouble()), RandomVelocityDouble());
+        }
+
+        private static double RandomVelocityDouble()
+        {
+            return (MathHelper.Random.NextDouble() - 0.5) * 0.05;
+        }
+
         public override void PhysicsUpdate(World world)
         {
             base.PhysicsUpdate(world);

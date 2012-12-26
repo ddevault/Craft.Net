@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Craft.Net.Data.Blocks;
+using Craft.Net.Data.Items;
 
 namespace Craft.Net.Data.Entities
 {
@@ -145,6 +146,19 @@ namespace Craft.Net.Data.Entities
         {
             if (leftClick)
                 world.OnDestroyEntity(this);
+            var player = usedBy as PlayerEntity;
+            bool drop = true;
+            if (player != null)
+            {
+                if (player.GameMode == GameMode.Creative)
+                    drop = false;
+            }
+            if (drop)
+            {
+                var item = new ItemEntity(Center, new ItemStack(new PaintingItem()));
+                item.ApplyRandomVelocity();
+                world.OnSpawnEntity(item);
+            }
         }
 
         public enum PaintingDirection
