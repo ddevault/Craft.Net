@@ -27,6 +27,25 @@ namespace Craft.Net.Data.Entities
             }
         }
 
+        public Vector3 Center
+        {
+            get
+            {
+                switch (Direction)
+                {
+                    case PaintingDirection.North:
+                    case PaintingDirection.South:
+                        return Position + new Vector3(
+                            Math.Max(0, Painting.Width / 2 -1), Painting.Height / 2, 0);
+                    case PaintingDirection.West:
+                    case PaintingDirection.East:
+                    default:
+                        return Position + new Vector3(0, Painting.Height / 2,
+                            Math.Max(0, Painting.Width / 2 -1));
+                }
+            }
+        }
+
         public override void PhysicsUpdate(World world)
         {
             // Paintings don't recieve physics updates
