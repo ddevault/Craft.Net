@@ -206,6 +206,7 @@
     <Compile Include="Entities\IBreedableEntity.cs" />
     <Compile Include="Entities\ITamableEntity.cs" />
     <Compile Include="Entities\ItemEntity.cs" />
+    <Compile Include="Entities\ItemFrameEntity.cs" />
     <Compile Include="Entities\LivingEntity.cs" />
     <Compile Include="Entities\ObjectEntity.cs" />
     <Compile Include="Entities\PaintingEntity.cs" />

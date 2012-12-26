@@ -187,9 +187,12 @@ namespace Craft.Net.Server
                 if (entity is ObjectEntity)
                 {
                     var objectEntity = entity as ObjectEntity;
-                    client.SendPacket(new SpawnObjectPacket(objectEntity.Id, objectEntity.EntityType, (int)objectEntity.Position.X,
-                            (int)objectEntity.Position.Y, (int)objectEntity.Position.Z, MathHelper.CreateRotationByte(objectEntity.Yaw),
-                            MathHelper.CreateRotationByte(objectEntity.Pitch), objectEntity.Data, (short)objectEntity.Velocity.X,
+                    client.SendPacket(new SpawnObjectPacket(objectEntity.Id, objectEntity.EntityType,
+                        MathHelper.CreateAbsoluteInt(objectEntity.Position.X),
+                            MathHelper.CreateAbsoluteInt(objectEntity.Position.Y),
+                            MathHelper.CreateAbsoluteInt(objectEntity.Position.Z),
+                            MathHelper.CreateRotationByte(objectEntity.Yaw), MathHelper.CreateRotationByte(objectEntity.Pitch), 
+                            objectEntity.Data, (short)objectEntity.Velocity.X,
                             (short)objectEntity.Velocity.Y, (short)objectEntity.Velocity.Z));
                     if (entity.IncludeMetadataOnClient)
                         client.SendPacket(new EntityMetadataPacket(entity.Id, entity.Metadata));
