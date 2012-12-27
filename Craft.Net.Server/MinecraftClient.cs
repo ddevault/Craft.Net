@@ -103,7 +103,6 @@ namespace Craft.Net.Server
 
         internal List<int> KnownEntities;
         internal string AuthenticationHash;
-        internal Timer KeepAliveTimer, UpdateLoadedChunksTimer;
         internal DateTime LastKeepAlive, LastKeepAliveSent;
         internal bool EncryptionEnabled;
         internal byte[] SharedKey;
@@ -208,9 +207,9 @@ namespace Craft.Net.Server
                     for (int z = -ViewDistance; z < ViewDistance; z++)
                     {
                         newChunks.Add(new Vector3(
-                                          ((int)Entity.Position.X >> 4) + x,
-                                          0,
-                                          ((int)Entity.Position.Z >> 4) + z));
+                            ((int)Entity.Position.X >> 4) + x,
+                            0,
+                            ((int)Entity.Position.Z >> 4) + z));
                     }
                 // Unload extraneous columns
                 lock (LoadedChunks)
@@ -252,7 +251,7 @@ namespace Craft.Net.Server
                     }
                 }
             }
-            this.LoadedChunks.Add(position);
+            LoadedChunks.Add(position);
         }
 
         /// <summary>
@@ -268,7 +267,7 @@ namespace Craft.Net.Server
             dataPacket.Z = (int)position.Z;
             dataPacket.Data = ChunkHelper.ChunkRemovalSequence;
             SendPacket(dataPacket);
-            this.LoadedChunks.Remove(position);
+            LoadedChunks.Remove(position);
         }
 
         /// <summary>
@@ -281,33 +280,7 @@ namespace Craft.Net.Server
 
         public void DelaySendPacket(IPacket packet, int milliseconds)
         {
-            new Timer((discarded) => SendPacket(packet), null, milliseconds, Timeout.Infinite);
-        }
-
-        internal void StartWorkers()
-        {
-            KeepAliveTimer = new Timer(KeepAlive, null, 1000, 5000);
-            UpdateLoadedChunksTimer = new Timer(UpdateLoadedChunks, null, 1000, 1000);
-        }
-
-        protected internal virtual void KeepAlive(object discarded)
-        {
-            if (LastKeepAlive.AddSeconds(10) < DateTime.Now && false) // TODO
-                LogProvider.Log("Client timed out");
-            else
-            {
-                SendPacket(new KeepAlivePacket(MathHelper.Random.Next()));
-                LastKeepAliveSent = DateTime.Now;
-            }
-        }
-
-        internal void UpdateLoadedChunks(object discarded)
-        {
-            if (ViewDistance < MaxViewDistance)
-            {
-                ViewDistance++;
-                ForceUpdateChunksAsync(); // TODO: Move this to its own timer
-            }
+            new Timer(discarded => SendPacket(packet), null, milliseconds, Timeout.Infinite);
         }
     }
 }

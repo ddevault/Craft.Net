@@ -296,8 +296,6 @@ namespace Craft.Net.Server
             LogProvider.Log(client.Username + " joined the game.");
             if (!args.Handled)
                 SendChat(ChatColors.Yellow + client.Username + " joined the game.");
-
-            client.StartWorkers();
         }
 
         protected internal void UpdatePlayerList(object discarded)
@@ -426,6 +424,8 @@ namespace Craft.Net.Server
                     for (int i = 0; i < Clients.Count; i++)
                     {
                         var client = Clients[i];
+                        if (client.IsLoggedIn)
+                            DoClientUpdates(client);
                         bool disconnect = false;
                         while (client.SendQueue.Count != 0)
                         {
@@ -526,6 +526,26 @@ namespace Craft.Net.Server
                     }
                 }
                 Thread.Sleep(1);
+            }
+        }
+
+        private void DoClientUpdates(MinecraftClient client)
+        {
+            // Update keep alive, chunks, etc
+            if (client.LastKeepAliveSent.AddSeconds(30) < DateTime.Now)
+            {
+                client.SendPacket(new KeepAlivePacket(MathHelper.Random.Next()));
+                client.LastKeepAliveSent = DateTime.Now;
+                // TODO: Confirm keep alive
+            }
+            if (client.World.Level.Time % 20 == 0) // Once per second
+            {
+                // Update chunks
+                if (client.ViewDistance < client.MaxViewDistance)
+                {
+                    client.ViewDistance++;
+                    client.ForceUpdateChunksAsync();
+                }
             }
         }
 
