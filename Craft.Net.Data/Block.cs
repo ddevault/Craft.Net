@@ -207,6 +207,15 @@ namespace Craft.Net.Data
             }
         }
 
+        /// <summary>
+        /// Use base.ScheduleUpdate to schedule this method to be
+        /// called some time in the future.
+        /// </summary>
+        public virtual void OnScheduledUpdate(World world, Vector3 position)
+        {
+            
+        }
+
         public virtual bool GetDrop(ToolItem tool, out ItemStack[] drop)
         {
             drop = new[] { new ItemStack(this.Id, 1, this.Metadata) };
@@ -307,6 +316,15 @@ namespace Craft.Net.Data
             if (Hardness == -1)
                 return false;
             return true;
+        }
+
+        #endregion
+
+        #region Protected Members
+
+        protected void ScheduleUpdate(World world, Vector3 position, DateTime time)
+        {
+            world.ScheduleBlockUpdate(time, position);
         }
 
         #endregion

@@ -525,6 +525,11 @@ namespace Craft.Net.Server
                         }
                     }
                 }
+                if (DefaultLevel.Time % 5 == 0)
+                {
+                    foreach (var level in Levels)
+                        level.World.DoScheduledUpdates();
+                }
                 Thread.Sleep(1);
             }
         }

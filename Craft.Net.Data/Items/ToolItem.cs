@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Craft.Net.Data.Entities;
 
 namespace Craft.Net.Data.Items
 {
@@ -78,6 +79,17 @@ namespace Craft.Net.Data.Items
         public virtual bool IsEfficient(Block block)
         {
             return false;
+        }
+
+        public override void OnItemUsed(World world, Entities.Entity usedBy)
+        {
+            // Override default behavior to remove item from inventory
+            var player = usedBy as PlayerEntity;
+            if (player.GameMode != GameMode.Creative)
+            {
+                Damage(1);
+                player.SetSlot(player.SelectedSlot, new ItemStack(Id, 1, Data));
+            }
         }
     }
 }

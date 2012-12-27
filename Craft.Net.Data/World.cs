@@ -45,6 +45,9 @@ namespace Craft.Net.Data
 
         public Timer EntityUpdateTimer { get; set; }
 
+        protected List<TimedBlockUpdate> PendingBlockUpdates { get; set; }
+        protected object PendingBlockUpdatesLock = new object();
+
         /// <summary>
         /// Creates a new world for client-side use.
         /// </summary>
@@ -56,6 +59,7 @@ namespace Craft.Net.Data
             Regions = new Dictionary<Vector3, Region>();
             EnableBlockUpdates = true;
             EntityUpdateTimer = new Timer(DoEntityUpdates, null, Level.TickLength, Level.TickLength);
+            PendingBlockUpdates = new List<TimedBlockUpdate>();
         }
 
         /// <summary>
@@ -187,6 +191,33 @@ namespace Craft.Net.Data
             {
                 foreach (var region in Regions)
                     region.Value.Save();
+            }
+        }
+
+        public void ScheduleBlockUpdate(DateTime time, Vector3 position)
+        {
+            if (time > DateTime.Now)
+            {
+                lock (PendingBlockUpdatesLock)
+                    PendingBlockUpdates.Add(new TimedBlockUpdate(time, position));
+            }
+            // TODO: Schedule updates upon loading chunks
+        }
+
+        public void DoScheduledUpdates()
+        {
+            var time = DateTime.Now;
+            lock (PendingBlockUpdatesLock)
+            {
+                for (int i = 0; i < PendingBlockUpdates.Count; i++)
+                {
+                    if (PendingBlockUpdates[i].Time <= time)
+                    {
+                        var block = GetBlock(PendingBlockUpdates[i].Position);
+                        block.OnScheduledUpdate(this, PendingBlockUpdates[i].Position);
+                        PendingBlockUpdates.RemoveAt(i--);
+                    }
+                }
             }
         }
 

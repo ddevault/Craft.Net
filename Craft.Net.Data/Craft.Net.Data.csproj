@@ -393,6 +393,7 @@
     <Compile Include="Size.cs" />
     <Compile Include="SoundEffect.cs" />
     <Compile Include="TileEntity.cs" />
+    <Compile Include="TimedBlockUpdate.cs" />
     <Compile Include="Transparency.cs" />
     <Compile Include="Vector3.cs" />
     <Compile Include="Window.cs" />
