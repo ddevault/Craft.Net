@@ -83,6 +83,7 @@ namespace Craft.Net.Data.Entities
 
         public override void UsedByEntity(World world, bool leftClick, LivingEntity usedBy)
         {
+            var player = usedBy as PlayerEntity;
             if (!leftClick)
             {
                 if (!Item.Empty)
@@ -92,7 +93,6 @@ namespace Craft.Net.Data.Entities
                 }
                 else
                 {
-                    var player = usedBy as PlayerEntity;
                     if (!player.SelectedItem.Empty)
                     {
                         var slot = player.SelectedItem;
@@ -107,21 +107,24 @@ namespace Craft.Net.Data.Entities
             }
             else
             {
-                var spawnPosition = Position + new Vector3(0.5);
-                switch (Direction)
-                {
-                    case ItemFrameDirection.North: spawnPosition += Vector3.North; break;
-                    case ItemFrameDirection.South: spawnPosition += Vector3.South; break;
-                    case ItemFrameDirection.East:  spawnPosition += Vector3.East;  break;
-                    case ItemFrameDirection.West:  spawnPosition += Vector3.West;  break;
-                }
-                var frame = new ItemEntity(spawnPosition, new ItemStack(new ItemFrameItem()));
-                var item = new ItemEntity(spawnPosition, Item);
-                frame.ApplyRandomVelocity();
-                item.ApplyRandomVelocity();
                 world.OnDestroyEntity(this);
-                world.OnSpawnEntity(frame);
-                world.OnSpawnEntity(item);
+                if (player.GameMode != GameMode.Creative)
+                {
+                    var spawnPosition = Position + new Vector3(0.5);
+                    switch (Direction)
+                    {
+                        case ItemFrameDirection.North: spawnPosition += Vector3.North; break;
+                        case ItemFrameDirection.South: spawnPosition += Vector3.South; break;
+                        case ItemFrameDirection.East:  spawnPosition += Vector3.East;  break;
+                        case ItemFrameDirection.West:  spawnPosition += Vector3.West;  break;
+                    }
+                    var frame = new ItemEntity(spawnPosition, new ItemStack(new ItemFrameItem()));
+                    var item = new ItemEntity(spawnPosition, Item);
+                    frame.ApplyRandomVelocity();
+                    item.ApplyRandomVelocity();
+                    world.OnSpawnEntity(frame);
+                    world.OnSpawnEntity(item);
+                }
             }
             base.UsedByEntity(world, leftClick, usedBy);
         }
