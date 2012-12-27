@@ -9,6 +9,8 @@ namespace Craft.Net.Data.Blocks
 {
     public class VineBlock : Block
     {
+        public static int MinimumGrowthSeconds = 30, MaximumGrowthSeconds = 120;
+
         public enum VineDirection
         {
             North = 1,
@@ -61,7 +63,8 @@ namespace Craft.Net.Data.Blocks
                 Direction = VineDirection.East;
             else
                 return false;
-            ScheduleUpdate(world, position, DateTime.Now.AddSeconds(MathHelper.Random.Next(30, 120)));
+            ScheduleUpdate(world, position, 
+                DateTime.Now.AddSeconds(MathHelper.Random.Next(MinimumGrowthSeconds, MaximumGrowthSeconds)));
             return true;
         }
 
@@ -72,7 +75,8 @@ namespace Craft.Net.Data.Blocks
             if (block is AirBlock)
             {
                 world.SetBlock(position + Vector3.Down, new VineBlock(Direction));
-                ScheduleUpdate(world, position + Vector3.Down, DateTime.Now.AddSeconds(MathHelper.Random.Next(30, 120)));
+                ScheduleUpdate(world, position + Vector3.Down, 
+                    DateTime.Now.AddSeconds(MathHelper.Random.Next(MinimumGrowthSeconds, MaximumGrowthSeconds)));
             }
             base.OnScheduledUpdate(world, position);
         }

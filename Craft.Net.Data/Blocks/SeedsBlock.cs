@@ -9,6 +9,8 @@ namespace Craft.Net.Data.Blocks
 {
     public class SeedsBlock : Block
     {
+        public static int MinimumGrowthSeconds = 30, MaximumGrowthSeconds = 120;
+
         public override short Id
         {
             get { return 59; }
@@ -41,7 +43,8 @@ namespace Craft.Net.Data.Blocks
         public override bool OnBlockPlaced(World world, Vector3 position, Vector3 clickedBlock,
             Vector3 clickedSide, Vector3 cursorPosition, Entity usedBy)
         {
-            ScheduleUpdate(world, position, DateTime.Now.AddSeconds(MathHelper.Random.Next(30, 120)));
+            ScheduleUpdate(world, position,
+                DateTime.Now.AddSeconds(MathHelper.Random.Next(MinimumGrowthSeconds, MaximumGrowthSeconds)));
             return true;
         }
 
@@ -49,7 +52,8 @@ namespace Craft.Net.Data.Blocks
         {
             Metadata++;
             if (Metadata != 7)
-                ScheduleUpdate(world, position, DateTime.Now.AddSeconds(MathHelper.Random.Next(30, 120)));
+                ScheduleUpdate(world, position, 
+                    DateTime.Now.AddSeconds(MathHelper.Random.Next(MinimumGrowthSeconds, MaximumGrowthSeconds)));
             world.SetBlock(position, this);
             base.OnScheduledUpdate(world, position);
         }
