@@ -206,7 +206,7 @@ namespace Craft.Net.Data
                         {
                             var data = chunk.ToNbt();
                             MemoryStream stream = new MemoryStream();
-                            data.SaveToStream(stream, NbtCompression.GZip);
+                            data.SaveToStream(stream, NbtCompression.ZLib);
                             byte[] raw = new byte[stream.Length];
                             Array.Copy(stream.GetBuffer(), raw, raw.Length);
                             raw = ZlibStream.CompressBuffer(raw);
