@@ -268,6 +268,13 @@ namespace Craft.Net.Server
                         knownClient.SendPacket(new EntityVelocityPacket(entity.Id, (short)entity.Velocity.X,
                             (short)entity.Velocity.Y, (short)entity.Velocity.Z));
                     break;
+                case "Metadata":
+                    if (entity.IncludeMetadataOnClient)
+                    {
+                        foreach (var knownClient in clients)
+                            knownClient.SendPacket(new EntityMetadataPacket(entity.Id, entity.Metadata));
+                    }
+                    break;
             }
         }
 

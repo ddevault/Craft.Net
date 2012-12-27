@@ -26,7 +26,7 @@ namespace Craft.Net.Data.Entities
             Item = item;
             Position = position;
             Direction = direction;
-            Yaw = GetRotation(Direction); // This should be Pitch, but it doesn't work. Not sure why.
+            Pitch = GetRotation(Direction); // This should be Pitch, but it doesn't work. Not sure why.
         }
 
         private static float GetRotation(ItemFrameDirection direction)
@@ -73,6 +73,11 @@ namespace Craft.Net.Data.Entities
         public override bool IncludeMetadataOnClient
         {
             get { return true; }
+        }
+
+        public override void PhysicsUpdate(World world)
+        {
+            // No physics for this entity
         }
 
         public static ItemFrameDirection? Vector3ToDirection(Vector3 direction)

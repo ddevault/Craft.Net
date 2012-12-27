@@ -67,6 +67,12 @@ namespace Craft.Net.Data
             Difficulty = Difficulty.Normal;
         }
 
+        public Level(IWorldGenerator generator) : this()
+        {
+            WorldGenerator = generator;
+            generator.Initialize(this);
+        }
+
         // TODO: Refactor constructors
         public Level(string directory)
         {
