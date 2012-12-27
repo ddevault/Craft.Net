@@ -37,6 +37,7 @@ namespace TestServer
 #endif
             IWorldGenerator generator = new FlatlandGenerator();
             minecraftServer.AddLevel(new Level(generator, Path.Combine(Directory.GetCurrentDirectory(), "world")));
+            minecraftServer.DefaultLevel.GameMode = GameMode.Creative;
             // Register the chat handler
             minecraftServer.ChatMessage += HandleOnChatMessage;
             // Start the server

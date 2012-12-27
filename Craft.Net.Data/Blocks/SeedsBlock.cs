@@ -41,7 +41,7 @@ namespace Craft.Net.Data.Blocks
         public override bool OnBlockPlaced(World world, Vector3 position, Vector3 clickedBlock,
             Vector3 clickedSide, Vector3 cursorPosition, Entity usedBy)
         {
-            ScheduleUpdate(world, position, DateTime.Now.AddSeconds(MathHelper.Random.Next(30, 60)));
+            ScheduleUpdate(world, position, DateTime.Now.AddSeconds(MathHelper.Random.Next(30, 120)));
             return true;
         }
 
@@ -49,7 +49,7 @@ namespace Craft.Net.Data.Blocks
         {
             Metadata++;
             if (Metadata != 7)
-                ScheduleUpdate(world, position, DateTime.Now.AddSeconds(1));
+                ScheduleUpdate(world, position, DateTime.Now.AddSeconds(MathHelper.Random.Next(30, 120)));
             world.SetBlock(position, this);
             base.OnScheduledUpdate(world, position);
         }
