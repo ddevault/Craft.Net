@@ -63,10 +63,12 @@ encouraged to [visit the wiki](https://github.com/SirCmpwn/Craft.Net/wiki) or th
 
 Use this code to read the next Minecraft packet from a given stream, and write it to another:
 
-    var packet = PacketReader.ReadPacket(stream);
-    // ...
-    var output = new MinecraftStream(otherStream);
-    packet.WriteTo(output);
+```csharp
+var packet = PacketReader.ReadPacket(stream);
+// ...
+var output = new MinecraftStream(otherStream);
+packet.WriteTo(output);
+```
 
 There are also various crypto utilities for encrypting a stream with AES/CFB, or creating Minecraft-
 style SHA-1 hex digests, or decoding/encoding ASN.1 x509 certificates.
@@ -75,12 +77,14 @@ style SHA-1 hex digests, or decoding/encoding ASN.1 x509 certificates.
 
 To run a Minecraft server, simply use the following code:
 
-    var server = new MinecraftServer(new IPEndPoint(IPAddress.Any, 25565));
-    var generator = new FlatlandGenerator();
-    // Creates a level in the "world" directory, using the flatland generator
-    // You may omit "world" to create a level in memory.
-    minecraftServer.AddLevel(new Level(generator, "world"));
-    minecraftServer.Start();
+```csharp
+var server = new MinecraftServer(new IPEndPoint(IPAddress.Any, 25565));
+var generator = new FlatlandGenerator();
+// Creates a level in the "world" directory, using the flatland generator
+// You may omit "world" to create a level in memory.
+minecraftServer.AddLevel(new Level(generator, "world"));
+minecraftServer.Start();
+```
 
 You need to create a server on a certain endpoint, then provide it a level to spawn players in, and
 then start the server.
@@ -89,13 +93,15 @@ then start the server.
 
 To connect to a Minecraft server, use this code:
 
-    var session = new Session("PlayerName");
-    // Uncomment this code to use the user's saved lastlogin
-    //var lastLogin = LastLogin.GetLastLogin();
-    //var session = Session.DoLogin(lastLogin.Username, lastLogin.Password);
-    var client = new MinecraftClient(session);
-    // Connect to the server at 127.0.0.1:25565
-    client.Connect(new IPEndPoint(IPAddress.Loopback, 25565));
+```csharp
+var session = new Session("PlayerName");
+// Uncomment this code to use the user's saved lastlogin
+//var lastLogin = LastLogin.GetLastLogin();
+//var session = Session.DoLogin(lastLogin.Username, lastLogin.Password);
+var client = new MinecraftClient(session);
+// Connect to the server at 127.0.0.1:25565
+client.Connect(new IPEndPoint(IPAddress.Loopback, 25565));
+```
 
 Create a client with a given session (either offline mode with just a username, or online mode with
 a username and password via `Session.DoLogin`. Then specify your endpoint and connect.
@@ -108,29 +114,35 @@ a username and password via `Session.DoLogin`. Then specify your endpoint and co
 Want to mess with Minecraft data but don't need networking? Use Craft.Net.Data. Here's an example of
 loading up a world and changing a block.
 
-    // Loads the level in the world directory
-    var level = new Level("world");
-    level.World.SetBlock(new Vector3(5, 10, 15), new DiamondBlock());
-    level.Save();
+```csharp
+// Loads the level in the world directory
+var level = new Level("world");
+level.World.SetBlock(new Vector3(5, 10, 15), new DiamondBlock());
+level.Save();
+```
 
 And another example for calculating the time to harvest a block with a given tool:
 
-    var block = new GoldBlock();
-    short damage; // The damage the item will sustain from mining this block
-    int milliseconds = block.GetHarvestTime(new DiamondPickaxe(), out damage);
-    // Use this code if you want to see how long a specific entity will take,
-    // with regard to things like being underwater:
-    milliseconds = block.GetHarvestTime(new DiamondPickaxe(), world, playerEntity, out damage);
+```csharp
+var block = new GoldBlock();
+short damage; // The damage the item will sustain from mining this block
+int milliseconds = block.GetHarvestTime(new DiamondPickaxe(), out damage);
+// Use this code if you want to see how long a specific entity will take,
+// with regard to things like being underwater:
+milliseconds = block.GetHarvestTime(new DiamondPickaxe(), world, playerEntity, out damage);
+```
 
 Or maybe you want to spawn a random painting based on the available space in the world (i.e. how
 vanilla Minecraft does it):
 
-    // CreateEntity(world, on which block, in which direction);
-    var entity = PaintingEntity.CreateEntity(world, new Vector3(1, 2, 3), Vector3.North);
-    // Creates a painting entity based on the amount of space available in the specified
-    // location, choosing a random one from the list of available paintings that are the
-    // required size.
-    world.OnSpawnEntity(entity);
+```csharp
+// CreateEntity(world, on which block, in which direction);
+var entity = PaintingEntity.CreateEntity(world, new Vector3(1, 2, 3), Vector3.North);
+// Creates a painting entity based on the amount of space available in the specified
+// location, choosing a random one from the list of available paintings that are the
+// required size.
+world.OnSpawnEntity(entity);
+```
 
 As you can likely tell, Craft.Net.Data does a lot. You might want to just browse around and see if
 it does what you're looking for.
