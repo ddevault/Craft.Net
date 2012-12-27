@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Craft.Net.Data.Items;
 using Craft.Net.Metadata;
 
 namespace Craft.Net.Data.Entities
@@ -56,7 +57,7 @@ namespace Craft.Net.Data.Entities
 
         public override Size Size
         {
-            get { return new Size(1, 1, 0.1); } // TODO: Oreintation
+            get { return new Size(1, 1, 0.1); } // TODO: Orientation
         }
 
         public override MetadataDictionary Metadata
@@ -78,6 +79,51 @@ namespace Craft.Net.Data.Entities
         public override void PhysicsUpdate(World world)
         {
             // No physics for this entity
+        }
+
+        public override void UsedByEntity(World world, bool leftClick, LivingEntity usedBy)
+        {
+            if (!leftClick)
+            {
+                if (!Item.Empty)
+                {
+                    Orientation++;
+                    OnPropertyChanged("Metadata");
+                }
+                else
+                {
+                    var player = usedBy as PlayerEntity;
+                    if (!player.SelectedItem.Empty)
+                    {
+                        var slot = player.SelectedItem;
+                        Item = new ItemStack(slot.Id, 1, slot.Metadata, slot.Nbt);
+                        if (player.GameMode != GameMode.Creative)
+                        {
+                            slot.Count--;
+                            player.Inventory[player.SelectedSlot] = slot;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                var spawnPosition = Position + new Vector3(0.5);
+                switch (Direction)
+                {
+                    case ItemFrameDirection.North: spawnPosition += Vector3.North; break;
+                    case ItemFrameDirection.South: spawnPosition += Vector3.South; break;
+                    case ItemFrameDirection.East:  spawnPosition += Vector3.East;  break;
+                    case ItemFrameDirection.West:  spawnPosition += Vector3.West;  break;
+                }
+                var frame = new ItemEntity(spawnPosition, new ItemStack(new ItemFrameItem()));
+                var item = new ItemEntity(spawnPosition, Item);
+                frame.ApplyRandomVelocity();
+                item.ApplyRandomVelocity();
+                world.OnDestroyEntity(this);
+                world.OnSpawnEntity(frame);
+                world.OnSpawnEntity(item);
+            }
+            base.UsedByEntity(world, leftClick, usedBy);
         }
 
         public static ItemFrameDirection? Vector3ToDirection(Vector3 direction)

@@ -19,8 +19,7 @@ namespace Craft.Net.Data.Items
             var direction = ItemFrameEntity.Vector3ToDirection(clickedSide);
             if (direction.HasValue)
             {
-                var entity = new ItemFrameEntity(new ItemStack(new DiamondPickaxeItem().Id),
-                    direction.Value, clickedBlock);
+                var entity = new ItemFrameEntity(ItemStack.EmptyStack, direction.Value, clickedBlock);
                 world.OnSpawnEntity(entity);
             }
             base.OnItemUsedOnBlock(world, clickedBlock, clickedSide, cursorPosition, usedBy);

@@ -159,8 +159,6 @@ namespace Craft.Net.Server.Handlers
                     // TODO: Physics
                 }
             }
-            if (target is ItemFrameEntity)
-                client.SendChat("Clicked " + target.Id);
         }
 
         public static void UpdateSign(MinecraftClient client, MinecraftServer server, IPacket _packet)
