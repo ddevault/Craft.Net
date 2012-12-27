@@ -353,7 +353,7 @@ namespace Craft.Net.Data
             new GlowstoneDustItem(),
             new RawFishItem(),
             new CookedFishItem(),
-            new CocoaBeanItem(),
+            new DyeItem(),
             new BoneItem(),
             new SugarItem(),
             new CakeItem(),

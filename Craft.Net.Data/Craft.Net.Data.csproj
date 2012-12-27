@@ -251,7 +251,7 @@
     <Compile Include="Items\ClayItem.cs" />
     <Compile Include="Items\ClockItem.cs" />
     <Compile Include="Items\CoalItem.cs" />
-    <Compile Include="Items\CocoaBeanItem.cs" />
+    <Compile Include="Items\DyeItem.cs" />
     <Compile Include="Items\CompassItem.cs" />
     <Compile Include="Items\CookedChickenItem.cs" />
     <Compile Include="Items\CookedFishItem.cs" />
