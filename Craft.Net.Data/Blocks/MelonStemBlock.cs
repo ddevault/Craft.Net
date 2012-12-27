@@ -2,11 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Craft.Net.Data.Entities;
 
 namespace Craft.Net.Data.Blocks
 {
     public class MelonStemBlock : Block
     {
+        public static int MinimumGrowthSeconds = 30, MaximumGrowthSeconds = 120;
+
         public override short Id
         {
             get { return 105; }
@@ -20,6 +23,68 @@ namespace Craft.Net.Data.Blocks
         public override Vector3 SupportDirection
         {
             get { return Vector3.Down; }
+        }
+
+        public override bool OnBlockPlaced(World world, Vector3 position, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entity usedBy)
+        {
+            var below = world.GetBlock(position + Vector3.Down);
+            if (!(below is FarmlandBlock))
+                return false;
+            ScheduleUpdate(world, position, DateTime.Now.AddSeconds(MathHelper.Random.Next(MinimumGrowthSeconds, MaximumGrowthSeconds)));
+            return base.OnBlockPlaced(world, position, clickedBlock, clickedSide, cursorPosition, usedBy);
+        }
+
+        public override void BlockUpdate(World world, Vector3 updatedBlock, Vector3 modifiedBlock)
+        {
+            if (!world.UpdatePending(updatedBlock))
+            {
+                var possibleLocations = new List<Vector3>(new[]
+                {
+                    updatedBlock + Vector3.Left, updatedBlock + Vector3.Right,
+                    updatedBlock + Vector3.Forwards, updatedBlock + Vector3.Backwards
+                });
+                bool found = false;
+                for (int i = 0; i < possibleLocations.Count; i++)
+                {
+                    if (world.GetBlock(possibleLocations[i]) is MelonBlock)
+                        found = true;
+                }
+                if (!found)
+                    ScheduleUpdate(world, updatedBlock, DateTime.Now.AddSeconds(MathHelper.Random.Next(MinimumGrowthSeconds, MaximumGrowthSeconds)));
+            }
+            base.BlockUpdate(world, updatedBlock, modifiedBlock);
+        }
+
+        public override void OnScheduledUpdate(World world, Vector3 position)
+        {
+            if (Metadata < 0x7)
+            {
+                Metadata++;
+                ScheduleUpdate(world, position, DateTime.Now.AddSeconds(MathHelper.Random.Next(MinimumGrowthSeconds, MaximumGrowthSeconds)));
+            }
+            else if (Metadata == 0x7)
+            {
+                // Spawn melon
+                // TODO: Is this the best way to do this?
+                var possibleLocations = new List<Vector3>(new[]
+                {
+                    position + Vector3.Left, position + Vector3.Right,
+                    position + Vector3.Forwards, position + Vector3.Backwards
+                });
+                for (int i = 0; i < possibleLocations.Count; i++)
+                {
+                    var below = world.GetBlock(possibleLocations[i] + Vector3.Down);
+                    if (!(world.GetBlock(possibleLocations[i]) is AirBlock) &&
+                        (below is DirtBlock || below is GrassBlock))
+                        possibleLocations.RemoveAt(i--);
+                }
+                if (possibleLocations.Count == 0)
+                    ScheduleUpdate(world, position, DateTime.Now.AddSeconds(MathHelper.Random.Next(MinimumGrowthSeconds, MaximumGrowthSeconds)));
+                else
+                    world.SetBlock(possibleLocations[MathHelper.Random.Next(possibleLocations.Count)], new MelonBlock());
+            }
+            world.SetBlock(position, this);
+            base.OnScheduledUpdate(world, position);
         }
     }
 }

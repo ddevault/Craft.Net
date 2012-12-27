@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Craft.Net.Data.Blocks;
 using Craft.Net.Data.Generation;
 using Craft.Net.Data.Entities;
@@ -202,6 +203,12 @@ namespace Craft.Net.Data
                     PendingBlockUpdates.Add(new TimedBlockUpdate(time, position));
             }
             // TODO: Schedule updates upon loading chunks
+        }
+
+        public bool UpdatePending(Vector3 position)
+        {
+            lock (PendingBlockUpdatesLock)
+                return PendingBlockUpdates.Any(update => update.Position == position);
         }
 
         public void DoScheduledUpdates()
