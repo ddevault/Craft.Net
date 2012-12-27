@@ -205,11 +205,7 @@ namespace Craft.Net.Data
                         if (chunk.IsModified)
                         {
                             var data = chunk.ToNbt();
-                            MemoryStream stream = new MemoryStream();
-                            data.SaveToStream(stream, NbtCompression.ZLib);
-                            byte[] raw = new byte[stream.Length];
-                            Array.Copy(stream.GetBuffer(), raw, raw.Length);
-                            raw = ZlibStream.CompressBuffer(raw);
+                            byte[] raw = data.SaveToBuffer(NbtCompression.ZLib);
 
                             var header = GetChunkFromTable(kvp.Key);
                             if (header == null || header.Item2 > raw.Length)
