@@ -50,15 +50,20 @@ namespace Craft.Net.Data.Items
         {
             if (Type == DyeType.BoneMeal)
             {
-                // TODO
+                var block = world.GetBlock(clickedBlock) as IGrowableBlock;
+                if (block != null)
+                {
+                    if (block.Grow(world, clickedBlock, true))
+                        base.OnItemUsedOnBlock(world, clickedBlock, clickedSide, cursorPosition, usedBy);
+                }
             }
             else if (Type == DyeType.CocoaBeans)
             {
                 var block = new CocoaPlantBlock();
                 if (block.OnBlockPlaced(world, clickedBlock + clickedSide, clickedBlock, clickedSide, cursorPosition, usedBy))
                     world.SetBlock(clickedBlock + clickedSide, block);
+                base.OnItemUsedOnBlock(world, clickedBlock, clickedSide, cursorPosition, usedBy);
             }
-            base.OnItemUsedOnBlock(world, clickedBlock, clickedSide, cursorPosition, usedBy);
         }
     }
 }

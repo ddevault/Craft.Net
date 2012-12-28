@@ -60,7 +60,7 @@ namespace Craft.Net.Data.Blocks
 
         public override void OnScheduledUpdate(World world, Vector3 position)
         {
-            Grow(world, position);
+            Grow(world, position, false);
             base.OnScheduledUpdate(world, position);
         }
 
@@ -82,25 +82,29 @@ namespace Craft.Net.Data.Blocks
             base.BlockUpdate(world, updatedBlock, modifiedBlock);
         }
 
-        public void Grow(World world, Vector3 position)
+        public bool Grow(World world, Vector3 position, bool instant)
         {
             // Get stack height
-            if (world.GetBlock(position + Vector3.Up) is AirBlock)
+            if (!instant)
             {
-                int reeds = 1;
-                for (int y = 1; y < 3; y++)
+                if (world.GetBlock(position + Vector3.Up) is AirBlock)
                 {
-                    if (world.GetBlock(position - new Vector3(0, y, 0)) is SugarCaneBlock)
-                        reeds++;
-                    else
-                        break;
-                }
-                if (reeds < 3)
-                {
-                    world.SetBlock(position + Vector3.Up, new SugarCaneBlock());
-                    ScheduleGrowth(world, position + Vector3.Up);
+                    int reeds = 1;
+                    for (int y = 1; y < 3; y++)
+                    {
+                        if (world.GetBlock(position - new Vector3(0, y, 0)) is SugarCaneBlock)
+                            reeds++;
+                        else
+                            break;
+                    }
+                    if (reeds < 3)
+                    {
+                        world.SetBlock(position + Vector3.Up, new SugarCaneBlock());
+                        ScheduleGrowth(world, position + Vector3.Up);
+                    }
                 }
             }
+            return !instant;
         }
     }
 }

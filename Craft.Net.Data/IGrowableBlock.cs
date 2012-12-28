@@ -7,6 +7,9 @@ namespace Craft.Net.Data
 {
     public interface IGrowableBlock
     {
-        void Grow(World world, Vector3 position);
+        /// <summary>
+        /// Causes the specified block to grow. Return true if growth occured.
+        /// </summary>
+        bool Grow(World world, Vector3 position, bool instant);
     }
 }

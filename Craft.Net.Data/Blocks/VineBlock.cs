@@ -74,7 +74,7 @@ namespace Craft.Net.Data.Blocks
 
         public override void OnScheduledUpdate(World world, Vector3 position)
         {
-            Grow(world, position);
+            Grow(world, position, false);
             base.OnScheduledUpdate(world, position);
         }
 
@@ -99,15 +99,19 @@ namespace Craft.Net.Data.Blocks
             base.BlockUpdate(world, updatedBlock, modifiedBlock);
         }
 
-        public void Grow(World world, Vector3 position)
+        public bool Grow(World world, Vector3 position, bool instant)
         {
             // Grow downwards
-            var block = world.GetBlock(position + Vector3.Down);
-            if (block is AirBlock)
+            if (!instant)
             {
-                world.SetBlock(position + Vector3.Down, new VineBlock(Direction));
-                ScheduleGrowth(world, position + Vector3.Down);
+                var block = world.GetBlock(position + Vector3.Down);
+                if (block is AirBlock)
+                {
+                    world.SetBlock(position + Vector3.Down, new VineBlock(Direction));
+                    ScheduleGrowth(world, position + Vector3.Down);
+                }
             }
+            return !instant;
         }
     }
 }

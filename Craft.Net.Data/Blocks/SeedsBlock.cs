@@ -54,16 +54,27 @@ namespace Craft.Net.Data.Blocks
 
         public override void OnScheduledUpdate(World world, Vector3 position)
         {
-            Grow(world, position);
+            Grow(world, position, false);
             base.OnScheduledUpdate(world, position);
         }
 
-        public void Grow(World world, Vector3 position)
+        public bool Grow(World world, Vector3 position, bool instant)
         {
-            Metadata++;
-            if (Metadata != 7)
-                ScheduleGrowth(world, position);
+            bool growth = false;
+            if (instant)
+            {
+                growth = Metadata != 0x7;
+                Metadata = 0x7;
+            }
+            else
+            {
+                Metadata++;
+                growth = true;
+                if (Metadata != 7)
+                    ScheduleGrowth(world, position);
+            }
             world.SetBlock(position, this);
+            return growth;
         }
     }
 }

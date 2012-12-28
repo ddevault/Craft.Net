@@ -69,7 +69,7 @@ namespace Craft.Net.Data.Blocks
 
         public override void OnScheduledUpdate(World world, Vector3 position)
         {
-            Grow(world, position);
+            Grow(world, position, false);
             base.OnScheduledUpdate(world, position);
         }
 
@@ -78,35 +78,46 @@ namespace Craft.Net.Data.Blocks
             ScheduleUpdate(world, position, DateTime.Now.AddSeconds(MathHelper.Random.Next(MinimumGrowthSeconds, MaximumGrowthSeconds)));
         }
 
-        public void Grow(World world, Vector3 position)
+        public bool Grow(World world, Vector3 position, bool instant)
         {
-            if (Metadata < 0x7)
+            bool growth = false;
+            if (instant)
             {
-                Metadata++;
-                ScheduleUpdate(world, position, DateTime.Now.AddSeconds(MathHelper.Random.Next(MinimumGrowthSeconds, MaximumGrowthSeconds)));
+                growth = Metadata != 0x7;
+                Metadata = 0x7;
             }
-            else if (Metadata == 0x7)
+            else
             {
-                // Spawn melon
-                // TODO: Is this the best way to do this?
-                var possibleLocations = new List<Vector3>(new[]
+                if (Metadata < 0x7)
+                {
+                    growth = true;
+                    Metadata++;
+                    ScheduleUpdate(world, position, DateTime.Now.AddSeconds(MathHelper.Random.Next(MinimumGrowthSeconds, MaximumGrowthSeconds)));
+                }
+                else if (Metadata == 0x7)
+                {
+                    // Spawn melon
+                    // TODO: Is this the best way to do this?
+                    var possibleLocations = new List<Vector3>(new[]
                 {
                     position + Vector3.Left, position + Vector3.Right,
                     position + Vector3.Forwards, position + Vector3.Backwards
                 });
-                for (int i = 0; i < possibleLocations.Count; i++)
-                {
-                    var below = world.GetBlock(possibleLocations[i] + Vector3.Down);
-                    if (!(world.GetBlock(possibleLocations[i]) is AirBlock) &&
-                        (below is DirtBlock || below is GrassBlock))
-                        possibleLocations.RemoveAt(i--);
+                    for (int i = 0; i < possibleLocations.Count; i++)
+                    {
+                        var below = world.GetBlock(possibleLocations[i] + Vector3.Down);
+                        if (!(world.GetBlock(possibleLocations[i]) is AirBlock) &&
+                            (below is DirtBlock || below is GrassBlock))
+                            possibleLocations.RemoveAt(i--);
+                    }
+                    if (possibleLocations.Count == 0)
+                        ScheduleGrowth(world, position);
+                    else
+                        world.SetBlock(possibleLocations[MathHelper.Random.Next(possibleLocations.Count)], new PumpkinBlock());
                 }
-                if (possibleLocations.Count == 0)
-                    ScheduleGrowth(world, position);
-                else
-                    world.SetBlock(possibleLocations[MathHelper.Random.Next(possibleLocations.Count)], new PumpkinBlock());
             }
             world.SetBlock(position, this);
+            return growth;
         }
     }
 }

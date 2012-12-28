@@ -74,7 +74,7 @@ namespace Craft.Net.Data.Blocks
 
         public override void OnScheduledUpdate(World world, Vector3 position)
         {
-            Grow(world, position);
+            Grow(world, position, false);
             base.OnScheduledUpdate(world, position);
         }
 
@@ -111,13 +111,25 @@ namespace Craft.Net.Data.Blocks
             }
         }
 
-        public void Grow(World world, Vector3 position)
+        public bool Grow(World world, Vector3 position, bool instant)
         {
-            if (Size == CocoaPlantSize.Small) Size = CocoaPlantSize.Medium;
-            else if (Size == CocoaPlantSize.Medium) Size = CocoaPlantSize.Large;
+            bool growth;
+            if (instant)
+            {
+                growth = Size != CocoaPlantSize.Large;
+                Size = CocoaPlantSize.Large;
+            }
+            else
+            {
+                growth = true;
+                if (Size == CocoaPlantSize.Small) Size = CocoaPlantSize.Medium;
+                else if (Size == CocoaPlantSize.Medium) Size = CocoaPlantSize.Large;
+                else growth = false;
+            }
             world.SetBlock(position, this);
             if (Size != CocoaPlantSize.Large)
                 ScheduleGrowth(world, position);
+            return growth;
         }
     }
 }

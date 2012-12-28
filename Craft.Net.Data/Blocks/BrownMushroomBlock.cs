@@ -12,9 +12,10 @@ namespace Craft.Net.Data.Blocks
             get { return 39; }
         }
 
-        public void Grow(World world, Vector3 position)
+        public bool Grow(World world, Vector3 position, bool instant)
         {
             // TODO
+            return false;
         }
     }
 }
