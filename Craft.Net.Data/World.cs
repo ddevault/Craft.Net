@@ -146,6 +146,20 @@ namespace Craft.Net.Data
         }
 
         /// <summary>
+        /// Returns air for blocks outside the world without throwing an exception.
+        /// </summary>
+        public Block SafeGetBlock(Vector3 position)
+        {
+            if (position.Y < 0 || position.Y >= World.Height)
+                return new AirBlock();
+
+            Chunk chunk;
+            Vector3 blockPosition = FindBlockPosition(position, out chunk);
+
+            return chunk.GetBlock(blockPosition);
+        }
+
+        /// <summary>
         /// Sets the block at the specified position.
         /// </summary>
         public void SetBlock(Vector3 position, Block value)

@@ -74,6 +74,11 @@ namespace Craft.Net.Data
             get { return 0; }
         }
 
+        public virtual int LightReduction
+        {
+            get { return 15; }
+        }
+
         /// <summary>
         /// The transparency of this block.
         /// </summary>
