@@ -331,6 +331,7 @@ namespace Craft.Net.Server
         {
             if (PlayerLoggedOut != null)
                 PlayerLoggedOut(this, e);
+            e.Client.World.Level.SavePlayer(e.Client.Entity);
             if (!e.Handled)
             {
                 LogProvider.Log(e.Client.Username + " left the game.", LogImportance.High);

@@ -149,7 +149,7 @@ namespace Craft.Net.Data
                 Time = Time,
                 GameMode = (int)GameMode,
                 MapFeatures = MapFeatures,
-                GeneratorName =WorldGenerator.GeneratorName,
+                GeneratorName = WorldGenerator.GeneratorName,
                 Initialized = true,
                 Seed = Seed,
                 SpawnPoint = SpawnPoint,
@@ -227,14 +227,14 @@ namespace Craft.Net.Data
                 return entity;
             }
             
-            NbtFile file = new NbtFile();
+            var file = new NbtFile();
             using (Stream stream = File.Open(Path.Combine(LevelDirectory, "players", name + ".dat"), FileMode.Open))
                 file.LoadFromStream(stream, NbtCompression.GZip, null);
             var data = file.RootTag;
             entity.OnGround = data.Get<NbtByte>("OnGround").Value == 1;
             entity.Air = data.Get<NbtShort>("Air").Value;
             entity.Health = data.Get<NbtShort>("Health").Value;
-            Dimension dimension = (Dimension)data.Get<NbtInt>("Dimension").Value; // TODO
+            var dimension = (Dimension)data.Get<NbtInt>("Dimension").Value; // TODO
             entity.Food = (short)data.Get<NbtInt>("foodLevel").Value;
             entity.XpLevel = data.Get<NbtInt>("XpLevel").Value;
             entity.XpTotal = data.Get<NbtInt>("XpTotal").Value;
@@ -290,7 +290,7 @@ namespace Craft.Net.Data
         {
             // TODO: Generalize to all mobs
             NbtFile file = new NbtFile();
-            var data = new NbtCompound();
+            var data = new NbtCompound("");
             data.Add(new NbtByte("OnGround", (byte)(entity.OnGround ? 1 : 0)));
             data.Add(new NbtShort("Air", entity.Air));
             data.Add(new NbtShort("Health", entity.Health));
@@ -301,8 +301,8 @@ namespace Craft.Net.Data
             data.Add(new NbtFloat("foodExhaustionLevel", entity.FoodExhaustion));
             data.Add(new NbtFloat("foodSaturationLevel", entity.FoodSaturation));
             data.Add(new NbtFloat("XpP", entity.XpProgress));
-            data.Add(new NbtList("Equipment"));
-            var inventory = new NbtList("Inventory");
+            data.Add(new NbtList("Equipment", NbtTagType.Compound));
+            var inventory = new NbtList("Inventory", NbtTagType.Compound);
             for (int index = 0; index < entity.Inventory.Length; index++)
             {
                 var slot = entity.Inventory[index];
@@ -312,19 +312,19 @@ namespace Craft.Net.Data
                 inventory.Add(slot.ToNbt());
             }
             data.Add(inventory);
-            var motion = new NbtList("Motion");
+            var motion = new NbtList("Motion", NbtTagType.Double);
             motion.Add(new NbtDouble(entity.Velocity.X));
             motion.Add(new NbtDouble(entity.Velocity.Y));
             motion.Add(new NbtDouble(entity.Velocity.Z));
             data.Add(motion);
 
-            var pos = new NbtList("Pos");
+            var pos = new NbtList("Pos", NbtTagType.Double);
             pos.Add(new NbtDouble(entity.Position.X));
-            pos.Add(new NbtDouble(entity.Position.Y));
+            pos.Add(new NbtDouble(entity.Position.Y + entity.Size.Height)); // TODO: Why do we need to add this
             pos.Add(new NbtDouble(entity.Position.Z));
             data.Add(pos);
 
-            var rotation = new NbtList("Rotation");
+            var rotation = new NbtList("Rotation", NbtTagType.Float);
             rotation.Add(new NbtFloat(entity.Yaw));
             rotation.Add(new NbtFloat(entity.Pitch));
             data.Add(rotation);
