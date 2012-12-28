@@ -122,7 +122,7 @@ namespace Craft.Net.Server
             LoadedChunks = new List<Vector3>();
             WalkingSpeed = 12;
             FlyingSpeed = 25;
-            LastKeepAlive = DateTime.MaxValue.AddSeconds(-10);
+            LastKeepAlive = DateTime.MinValue;
             KnownEntities = new List<int>();
             PluginChannels = new List<string>();
             Tags = new Dictionary<string, object>();

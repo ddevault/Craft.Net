@@ -538,8 +538,9 @@ namespace Craft.Net.Server
         private void DoClientUpdates(MinecraftClient client)
         {
             // Update keep alive, chunks, etc
-            if (client.LastKeepAliveSent.AddSeconds(30) < DateTime.Now)
+            if (client.LastKeepAliveSent.AddSeconds(20) < DateTime.Now)
             {
+                Console.WriteLine("Sending keep alive");
                 client.SendPacket(new KeepAlivePacket(MathHelper.Random.Next()));
                 client.LastKeepAliveSent = DateTime.Now;
                 // TODO: Confirm keep alive
