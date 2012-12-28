@@ -74,7 +74,7 @@ namespace Craft.Net.Data
             get { return 0; }
         }
 
-        public virtual int LightReduction
+        public virtual byte LightReduction
         {
             get { return 15; }
         }

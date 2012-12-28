@@ -91,7 +91,7 @@ namespace Craft.Net.Data
                             {
                                 if (WorldGenerator == null)
                                     throw new ArgumentException("The requested chunk is not loaded.", "position");
-                                Chunks.Add(position, WorldGenerator.GenerateChunk(position, this));
+                                GenerateChunk(position);
                                 return Chunks[position];
                             }
                             regionFile.Seek(chunkData.Item1, SeekOrigin.Begin);
@@ -120,6 +120,13 @@ namespace Craft.Net.Data
                 }
                 return Chunks[position];
             }
+        }
+
+        private void GenerateChunk(Vector3 position)
+        {
+            var chunk = WorldGenerator.GenerateChunk(position, this);
+            chunk.Light();
+            Chunks.Add(position, chunk);
         }
 
         /// <summary>

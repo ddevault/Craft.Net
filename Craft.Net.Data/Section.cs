@@ -41,8 +41,6 @@ namespace Craft.Net.Data
             Metadata = new NibbleArray(Width*Height*Depth);
             BlockLight = new NibbleArray(Width*Height*Depth);
             SkyLight = new NibbleArray(Width*Height*Depth);
-            for (int i = 0; i < SkyLight.Data.Length; i++)
-                SkyLight.Data[i] = BlockLight.Data[i] = 0xFF;
             nonAirCount = 0;
         }
 
@@ -87,6 +85,36 @@ namespace Craft.Net.Data
             block.SkyLight = SkyLight[index];
             block.BlockLight = BlockLight[index];
             return block;
+        }
+
+        public short GetBlockId(int x, int y, int z)
+        {
+            int index = x + (z * Width) + (y * Height * Width);
+            return Blocks[index];
+        }
+
+        public short GetSkyLight(int x, int y, int z)
+        {
+            int index = x + (z * Width) + (y * Height * Width);
+            return SkyLight[index];
+        }
+
+        public short GetBlockLight(int x, int y, int z)
+        {
+            int index = x + (z * Width) + (y * Height * Width);
+            return BlockLight[index];
+        }
+
+        public void SetSkyLight(int x, int y, int z, byte value)
+        {
+            int index = x + (z * Width) + (y * Height * Width);
+            SkyLight[index] = value;
+        }
+
+        public void SetBlockLight(int x, int y, int z, byte value)
+        {
+            int index = x + (z * Width) + (y * Height * Width);
+            BlockLight[index] = value;
         }
 
         /// <summary>

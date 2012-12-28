@@ -17,7 +17,7 @@ namespace Craft.Net.Data.Blocks
             get { return 0.3; }
         }
 
-        public override int LightReduction
+        public override byte LightReduction
         {
             get { return 0; }
         }

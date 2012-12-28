@@ -200,6 +200,7 @@
     <Compile Include="BoundingBox.cs" />
     <Compile Include="ChatColors.cs" />
     <Compile Include="Chunk.cs" />
+    <Compile Include="Chunk.Lighting.cs" />
     <Compile Include="DamageType.cs" />
     <Compile Include="Entities\BlockEntity.cs" />
     <Compile Include="Entities\Entity.cs" />

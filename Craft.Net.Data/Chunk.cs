@@ -12,7 +12,7 @@ namespace Craft.Net.Data
     /// Used to represent a 16x256x16 chunk of blocks in
     /// a <see cref="Craft.Net.Data.World"/>.
     /// </summary>
-    public class Chunk
+    public partial class Chunk
     {
         public const int Width = 16, Height = 256, Depth = 16;
         internal bool IsModified;
@@ -111,9 +111,44 @@ namespace Craft.Net.Data
             return block;
         }
 
+        public short GetBlockId(int x, int y, int z)
+        {
+            int section = GetSectionNumber(y);
+            y = GetPositionInSection(y);
+            return Sections[section].GetBlockId(x, y, z);
+        }
+
+        public short GetSkyLight(int x, int y, int z)
+        {
+            int section = GetSectionNumber(y);
+            y = GetPositionInSection(y);
+            return Sections[section].GetSkyLight(x, y, z);
+        }
+
+        public short GetBlockLight(int x, int y, int z)
+        {
+            int section = GetSectionNumber(y);
+            y = GetPositionInSection(y);
+            return Sections[section].GetBlockLight(x, y, z);
+        }
+
+        public void SetSkyLight(int x, int y, int z, byte value)
+        {
+            int section = GetSectionNumber(y);
+            y = GetPositionInSection(y);
+            Sections[section].SetSkyLight(x, y, z, value);
+        }
+
+        public void SetBlockLight(int x, int y, int z, byte value)
+        {
+            int section = GetSectionNumber(y);
+            y = GetPositionInSection(y);
+            Sections[section].SetBlockLight(x, y, z, value);
+        }
+
         /// <summary>
-    /// Gets section number from the position.
-    /// </summary>
+        /// Gets section number from the position.
+        /// </summary>
         private static int GetSectionNumber(double yPos)
         {
              return ((int)yPos) >> 4; //divide by 16 ;)

@@ -29,7 +29,7 @@ namespace Craft.Net.Data.Blocks
             get { return Transparency.Transparent; } // TODO: More transparency options
         }
 
-        public override int LightReduction
+        public override byte LightReduction
         {
             get { return 0; }
         }
