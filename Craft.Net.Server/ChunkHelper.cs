@@ -39,7 +39,6 @@ namespace Craft.Net.Server
                     nonAir = false;
                 if (nonAir)
                     totalSections++;
-                mask <<= 1;
             }
 
             mask = 1;
