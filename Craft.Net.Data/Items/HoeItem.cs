@@ -12,7 +12,11 @@ namespace Craft.Net.Data.Items
         {
             var block = world.GetBlock(clickedBlock);
             if (block is DirtBlock || block is GrassBlock)
-                world.SetBlock(clickedBlock, new FarmlandBlock());
+            {
+                var farmland = new FarmlandBlock();
+                if (farmland.OnBlockPlaced(world, clickedBlock, clickedBlock, clickedSide, cursorPosition, usedBy))
+                    world.SetBlock(clickedBlock, farmland);
+            }
             base.OnItemUsedOnBlock(world, clickedBlock, clickedSide, cursorPosition, usedBy);
         }
     }

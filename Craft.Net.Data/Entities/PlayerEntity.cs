@@ -193,24 +193,6 @@ namespace Craft.Net.Data.Entities
         public bool IsSprinting { get; set; }
         public bool IsCrouching { get; set; }
 
-        private Vector3 position;
-        private bool EnablePositionUpdates = true;
-        public override Vector3 Position
-        {
-            get
-            {
-                return position;
-            }
-            set
-            {
-                position = value;
-                // The player entity is remotely controlled, so we
-                // don't send it updates when we do physics calculations.
-                if (EnablePositionUpdates)
-                    OnPropertyChanged("Position");
-            }
-        }
-
         public string Username { get; set; }
         /// <summary>
         /// The client's current inventory.
@@ -307,6 +289,9 @@ namespace Craft.Net.Data.Entities
                     FoodExhaustion += (IsSprinting ? 0.8f : 0.2f);
                     OnJumped();
                 }
+                EnableVelocityUpdates = false;
+                Velocity += givenPosition - GivenPosition; // TODO: This probably sucks
+                EnableVelocityUpdates = true;
                 givenPosition = value;
                 LastGivenPositionUpdate = DateTime.Now;
                 OnPropertyChanged("GivenPosition");
@@ -418,12 +403,22 @@ namespace Craft.Net.Data.Entities
 
         public override void PhysicsUpdate(World world)
         {
-            // This doesn't quite work properly, and it becomes a hassle for the user
-            return;
+            // This is a bit weird for player entities, because it becomes a hassle
+            // for the user to have their position reset, but we still need some
+            // physics-related calculations to happen.
+            var position = Position;
+            var velocity = Velocity;
+
             EnablePositionUpdates = false;
+            EnableVelocityUpdates = false;
+
             base.PhysicsUpdate(world);
+            Position = position;
+            Velocity = velocity;
+            Velocity *= 0.2; // Slow down because player updates don't signal velocity stopping
+
             EnablePositionUpdates = true;
-            Velocity *= 0.1f; // We don't get GivenPosition updates often enough to account for slowing down
+            EnableVelocityUpdates = true;
         }
 
         public virtual void OnPickUpItem(EntityEventArgs e)

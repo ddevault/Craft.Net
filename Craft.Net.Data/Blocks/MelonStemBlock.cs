@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Craft.Net.Data.Entities;
+using Craft.Net.Data.Items;
 
 namespace Craft.Net.Data.Blocks
 {
@@ -36,6 +37,14 @@ namespace Craft.Net.Data.Blocks
 
         public override void BlockUpdate(World world, Vector3 updatedBlock, Vector3 modifiedBlock)
         {
+            if (!(world.GetBlock(updatedBlock + Vector3.Down) is FarmlandBlock))
+            {
+                var entity = new ItemEntity(updatedBlock + new Vector3(0.5), new ItemStack(new MelonSeedsItem()));
+                entity.ApplyRandomVelocity();
+                world.SetBlock(updatedBlock, new AirBlock());
+                world.OnSpawnEntity(entity);
+                return;
+            }
             if (!world.UpdatePending(updatedBlock))
             {
                 var possibleLocations = new List<Vector3>(new[]

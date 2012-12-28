@@ -19,6 +19,7 @@ namespace Craft.Net.Data.Entities
         public int Id { get; set; }
         public Vector3 OldPosition { get; set; }
         public DateTime LastPositionUpdate { get; set; }
+        protected bool EnablePositionUpdates = true;
         public virtual Vector3 Position
         {
             get { return position; }
@@ -27,7 +28,8 @@ namespace Craft.Net.Data.Entities
                 OldPosition = position;
                 LastPositionUpdate = DateTime.Now;
                 position = value;
-                OnPropertyChanged("Position");
+                if (EnablePositionUpdates)
+                    OnPropertyChanged("Position");
             }
         }
 
@@ -421,6 +423,9 @@ namespace Craft.Net.Data.Entities
             {
                 if (Velocity.Y < 0)
                 {
+                    // Do block event
+                    var block = world.GetBlock(collision);
+                    block.OnBlockWalkedOn(world, collision, this);
                     Velocity = new Vector3(Velocity.X,
                         Velocity.Y + (collisionPoint.Value - TempBoundingBox.Min.Y),
                         Velocity.Z);

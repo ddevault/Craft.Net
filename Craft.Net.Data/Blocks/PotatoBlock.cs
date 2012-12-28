@@ -54,6 +54,18 @@ namespace Craft.Net.Data.Blocks
             return true;
         }
 
+        public override void BlockUpdate(World world, Vector3 updatedBlock, Vector3 modifiedBlock)
+        {
+            if (!(world.GetBlock(updatedBlock + Vector3.Down) is FarmlandBlock))
+            {
+                var entity = new ItemEntity(updatedBlock + new Vector3(0.5), new ItemStack(new PotatoItem()));
+                entity.ApplyRandomVelocity();
+                world.SetBlock(updatedBlock, new AirBlock());
+                world.OnSpawnEntity(entity);
+            }
+            base.BlockUpdate(world, updatedBlock, modifiedBlock);
+        }
+
         private void ScheduleGrowth(World world, Vector3 position)
         {
             ScheduleUpdate(world, position, DateTime.Now.AddSeconds(MathHelper.Random.Next(MinimumGrowthSeconds, MaximumGrowthSeconds)));
