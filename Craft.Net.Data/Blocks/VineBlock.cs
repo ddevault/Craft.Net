@@ -7,7 +7,7 @@ using Craft.Net.Data.Items;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class VineBlock : Block
+    public class VineBlock : Block, IGrowableBlock
     {
         public static int MinimumGrowthSeconds = 30, MaximumGrowthSeconds = 120;
 
@@ -63,21 +63,18 @@ namespace Craft.Net.Data.Blocks
                 Direction = VineDirection.East;
             else
                 return false;
-            ScheduleUpdate(world, position, 
-                DateTime.Now.AddSeconds(MathHelper.Random.Next(MinimumGrowthSeconds, MaximumGrowthSeconds)));
+            ScheduleGrowth(world, position);
             return true;
+        }
+
+        private void ScheduleGrowth(World world, Vector3 position)
+        {
+            ScheduleUpdate(world, position, DateTime.Now.AddSeconds(MathHelper.Random.Next(MinimumGrowthSeconds, MaximumGrowthSeconds)));
         }
 
         public override void OnScheduledUpdate(World world, Vector3 position)
         {
-            // Grow downwards
-            var block = world.GetBlock(position + Vector3.Down);
-            if (block is AirBlock)
-            {
-                world.SetBlock(position + Vector3.Down, new VineBlock(Direction));
-                ScheduleUpdate(world, position + Vector3.Down, 
-                    DateTime.Now.AddSeconds(MathHelper.Random.Next(MinimumGrowthSeconds, MaximumGrowthSeconds)));
-            }
+            Grow(world, position);
             base.OnScheduledUpdate(world, position);
         }
 
@@ -100,6 +97,17 @@ namespace Craft.Net.Data.Blocks
                     world.SetBlock(updatedBlock, new AirBlock());
             }
             base.BlockUpdate(world, updatedBlock, modifiedBlock);
+        }
+
+        public void Grow(World world, Vector3 position)
+        {
+            // Grow downwards
+            var block = world.GetBlock(position + Vector3.Down);
+            if (block is AirBlock)
+            {
+                world.SetBlock(position + Vector3.Down, new VineBlock(Direction));
+                ScheduleGrowth(world, position + Vector3.Down);
+            }
         }
     }
 }

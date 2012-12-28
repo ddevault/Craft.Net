@@ -6,7 +6,7 @@ using Craft.Net.Data.Entities;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class MelonStemBlock : Block
+    public class MelonStemBlock : Block, IGrowableBlock
     {
         public static int MinimumGrowthSeconds = 30, MaximumGrowthSeconds = 120;
 
@@ -30,7 +30,7 @@ namespace Craft.Net.Data.Blocks
             var below = world.GetBlock(position + Vector3.Down);
             if (!(below is FarmlandBlock))
                 return false;
-            ScheduleUpdate(world, position, DateTime.Now.AddSeconds(MathHelper.Random.Next(MinimumGrowthSeconds, MaximumGrowthSeconds)));
+            ScheduleGrowth(world, position);
             return base.OnBlockPlaced(world, position, clickedBlock, clickedSide, cursorPosition, usedBy);
         }
 
@@ -50,12 +50,23 @@ namespace Craft.Net.Data.Blocks
                         found = true;
                 }
                 if (!found)
-                    ScheduleUpdate(world, updatedBlock, DateTime.Now.AddSeconds(MathHelper.Random.Next(MinimumGrowthSeconds, MaximumGrowthSeconds)));
+                    ScheduleGrowth(world, updatedBlock);
             }
             base.BlockUpdate(world, updatedBlock, modifiedBlock);
         }
 
         public override void OnScheduledUpdate(World world, Vector3 position)
+        {
+            Grow(world, position);
+            base.OnScheduledUpdate(world, position);
+        }
+
+        private void ScheduleGrowth(World world, Vector3 position)
+        {
+            ScheduleUpdate(world, position, DateTime.Now.AddSeconds(MathHelper.Random.Next(MinimumGrowthSeconds, MaximumGrowthSeconds)));
+        }
+
+        public void Grow(World world, Vector3 position)
         {
             if (Metadata < 0x7)
             {
@@ -79,12 +90,11 @@ namespace Craft.Net.Data.Blocks
                         possibleLocations.RemoveAt(i--);
                 }
                 if (possibleLocations.Count == 0)
-                    ScheduleUpdate(world, position, DateTime.Now.AddSeconds(MathHelper.Random.Next(MinimumGrowthSeconds, MaximumGrowthSeconds)));
+                    ScheduleGrowth(world, position);
                 else
                     world.SetBlock(possibleLocations[MathHelper.Random.Next(possibleLocations.Count)], new MelonBlock());
             }
             world.SetBlock(position, this);
-            base.OnScheduledUpdate(world, position);
         }
     }
 }

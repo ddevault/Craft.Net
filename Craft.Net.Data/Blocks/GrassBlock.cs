@@ -6,7 +6,7 @@ using Craft.Net.Data.Items;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class GrassBlock : Block
+    public class GrassBlock : Block, IGrowableBlock
     {
         public override short Id
         {
@@ -27,6 +27,11 @@ namespace Craft.Net.Data.Blocks
         public override string PlacementSoundEffect
         {
             get { return SoundEffect.DigGrass; }
+        }
+
+        public void Grow(World world, Vector3 position)
+        {
+            // TODO
         }
     }
 }

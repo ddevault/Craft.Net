@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class NetherWartBlock : Block
+    public class NetherWartBlock : Block, IGrowableBlock
     {
         public override short Id
         {
@@ -15,6 +15,11 @@ namespace Craft.Net.Data.Blocks
         public override BoundingBox? BoundingBox
         {
             get { return null; }
+        }
+
+        public void Grow(World world, Vector3 position)
+        {
+            // TODO
         }
     }
 }

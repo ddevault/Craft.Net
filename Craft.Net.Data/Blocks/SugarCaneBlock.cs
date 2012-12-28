@@ -7,7 +7,7 @@ using Craft.Net.Data.Items;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class SugarCaneBlock : Block
+    public class SugarCaneBlock : Block, IGrowableBlock
     {
         public static int MinimumGrowthSeconds = 30, MaximumGrowthSeconds = 120;
 
@@ -52,14 +52,37 @@ namespace Craft.Net.Data.Blocks
                 }
             if (found)
             {
-                ScheduleUpdate(world, position,
-                    DateTime.Now.AddSeconds(MathHelper.Random.Next(MinimumGrowthSeconds, MaximumGrowthSeconds)));
+                ScheduleGrowth(world, position);
                 return true;
             }
             return false;
         }
 
         public override void OnScheduledUpdate(World world, Vector3 position)
+        {
+            Grow(world, position);
+            base.OnScheduledUpdate(world, position);
+        }
+
+        private void ScheduleGrowth(World world, Vector3 position)
+        {
+            ScheduleUpdate(world, position, DateTime.Now.AddSeconds(MathHelper.Random.Next(MinimumGrowthSeconds, MaximumGrowthSeconds)));
+        }
+
+        public override void BlockUpdate(World world, Vector3 updatedBlock, Vector3 modifiedBlock)
+        {
+            var block = world.GetBlock(updatedBlock + Vector3.Down);
+            if (!(block is SugarCaneBlock || block is DirtBlock || block is GrassBlock || block is SandBlock))
+            {
+                world.SetBlock(updatedBlock, new AirBlock());
+                var entity = new ItemEntity(updatedBlock + new Vector3(0.5), new ItemStack(new SugarCanesItem()));
+                entity.ApplyRandomVelocity();
+                world.OnSpawnEntity(entity);
+            }
+            base.BlockUpdate(world, updatedBlock, modifiedBlock);
+        }
+
+        public void Grow(World world, Vector3 position)
         {
             // Get stack height
             if (world.GetBlock(position + Vector3.Up) is AirBlock)
@@ -75,24 +98,9 @@ namespace Craft.Net.Data.Blocks
                 if (reeds < 3)
                 {
                     world.SetBlock(position + Vector3.Up, new SugarCaneBlock());
-                    ScheduleUpdate(world, position + Vector3.Up,
-                        DateTime.Now.AddSeconds(MathHelper.Random.Next(MinimumGrowthSeconds, MaximumGrowthSeconds)));
+                    ScheduleGrowth(world, position + Vector3.Up);
                 }
             }
-            base.OnScheduledUpdate(world, position);
-        }
-
-        public override void BlockUpdate(World world, Vector3 updatedBlock, Vector3 modifiedBlock)
-        {
-            var block = world.GetBlock(updatedBlock + Vector3.Down);
-            if (!(block is SugarCaneBlock || block is DirtBlock || block is GrassBlock || block is SandBlock))
-            {
-                world.SetBlock(updatedBlock, new AirBlock());
-                var entity = new ItemEntity(updatedBlock + new Vector3(0.5), new ItemStack(new SugarCanesItem()));
-                entity.ApplyRandomVelocity();
-                world.OnSpawnEntity(entity);
-            }
-            base.BlockUpdate(world, updatedBlock, modifiedBlock);
         }
     }
 }

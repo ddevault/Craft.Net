@@ -6,7 +6,7 @@ using Craft.Net.Data.Items;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class PotatoBlock : Block
+    public class PotatoBlock : Block, IGrowableBlock
     {
         public override short Id
         {
@@ -40,6 +40,11 @@ namespace Craft.Net.Data.Blocks
                 drop = new[] { new ItemStack(new PotatoItem(), (sbyte)MathHelper.Random.Next(1, 4)) };
             }
             return true;
+        }
+
+        public void Grow(World world, Vector3 position)
+        {
+            // TODO
         }
     }
 }

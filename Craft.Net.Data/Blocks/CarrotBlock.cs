@@ -6,7 +6,7 @@ using Craft.Net.Data.Items;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class CarrotBlock : Block
+    public class CarrotBlock : Block, IGrowableBlock
     {
         public override short Id
         {
@@ -27,6 +27,11 @@ namespace Craft.Net.Data.Blocks
         {
             drops = new[] { new ItemStack(new CarrotItem(), (sbyte)MathHelper.Random.Next(1, 4)) };
             return true;
+        }
+
+        public void Grow(World world, Vector3 position)
+        {
+            // TODO
         }
     }
 }

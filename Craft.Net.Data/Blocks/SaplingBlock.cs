@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class SaplingBlock : Block
+    public class SaplingBlock : Block, IGrowableBlock
     {
         public enum SaplingType
         {
@@ -36,6 +36,11 @@ namespace Craft.Net.Data.Blocks
         public override BoundingBox? BoundingBox
         {
             get { return null; }
+        }
+
+        public void Grow(World world, Vector3 position)
+        {
+            // TODO
         }
     }
 }

@@ -6,7 +6,7 @@ using Craft.Net.Data.Items;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class CocoaPlantBlock : Block
+    public class CocoaPlantBlock : Block, IGrowableBlock
     {
         public static int MinimumGrowthSeconds = 30, MaximumGrowthSeconds = 120;
 
@@ -68,18 +68,19 @@ namespace Craft.Net.Data.Blocks
                 return false;
             if (block.Type != WoodBlock.TreeType.Jungle)
                 return false;
-            ScheduleUpdate(world, position, DateTime.Now.AddSeconds(MathHelper.Random.Next(MinimumGrowthSeconds, MaximumGrowthSeconds)));
+            ScheduleGrowth(world, position);
             return true;
         }
 
         public override void OnScheduledUpdate(World world, Vector3 position)
         {
-            if (Size == CocoaPlantSize.Small) Size = CocoaPlantSize.Medium;
-            else if (Size == CocoaPlantSize.Medium) Size = CocoaPlantSize.Large;
-            world.SetBlock(position, this);
-            if (Size != CocoaPlantSize.Large)
-                ScheduleUpdate(world, position, DateTime.Now.AddSeconds(MathHelper.Random.Next(MinimumGrowthSeconds, MaximumGrowthSeconds)));
+            Grow(world, position);
             base.OnScheduledUpdate(world, position);
+        }
+
+        private void ScheduleGrowth(World world, Vector3 position)
+        {
+            ScheduleUpdate(world, position, DateTime.Now.AddSeconds(MathHelper.Random.Next(MinimumGrowthSeconds, MaximumGrowthSeconds)));
         }
 
         public override bool GetDrop(ToolItem tool, out ItemStack[] drop)
@@ -108,6 +109,15 @@ namespace Craft.Net.Data.Blocks
                     return Vector3.West;
                 return Vector3.East;
             }
+        }
+
+        public void Grow(World world, Vector3 position)
+        {
+            if (Size == CocoaPlantSize.Small) Size = CocoaPlantSize.Medium;
+            else if (Size == CocoaPlantSize.Medium) Size = CocoaPlantSize.Large;
+            world.SetBlock(position, this);
+            if (Size != CocoaPlantSize.Large)
+                ScheduleGrowth(world, position);
         }
     }
 }

@@ -221,6 +221,7 @@
     <Compile Include="Generation\FlatlandGenerator.cs" />
     <Compile Include="Generation\IWorldGenerator.cs" />
     <Compile Include="IArmorItem.cs" />
+    <Compile Include="IGrowableBlock.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="Items\AppleItem.cs" />
     <Compile Include="Items\ArrowItem.cs" />

@@ -7,7 +7,7 @@ using Craft.Net.Data.Entities;
 
 namespace Craft.Net.Data.Blocks
 {
-    public class SeedsBlock : Block
+    public class SeedsBlock : Block, IGrowableBlock
     {
         public static int MinimumGrowthSeconds = 30, MaximumGrowthSeconds = 120;
 
@@ -43,19 +43,27 @@ namespace Craft.Net.Data.Blocks
         public override bool OnBlockPlaced(World world, Vector3 position, Vector3 clickedBlock,
             Vector3 clickedSide, Vector3 cursorPosition, Entity usedBy)
         {
-            ScheduleUpdate(world, position,
-                DateTime.Now.AddSeconds(MathHelper.Random.Next(MinimumGrowthSeconds, MaximumGrowthSeconds)));
+            ScheduleGrowth(world, position);
             return true;
+        }
+
+        private void ScheduleGrowth(World world, Vector3 position)
+        {
+            ScheduleUpdate(world, position, DateTime.Now.AddSeconds(MathHelper.Random.Next(MinimumGrowthSeconds, MaximumGrowthSeconds)));
         }
 
         public override void OnScheduledUpdate(World world, Vector3 position)
         {
+            Grow(world, position);
+            base.OnScheduledUpdate(world, position);
+        }
+
+        public void Grow(World world, Vector3 position)
+        {
             Metadata++;
             if (Metadata != 7)
-                ScheduleUpdate(world, position, 
-                    DateTime.Now.AddSeconds(MathHelper.Random.Next(MinimumGrowthSeconds, MaximumGrowthSeconds)));
+                ScheduleGrowth(world, position);
             world.SetBlock(position, this);
-            base.OnScheduledUpdate(world, position);
         }
     }
 }
