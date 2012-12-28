@@ -15,8 +15,12 @@ namespace Craft.Net.Data.Items
 
         public override void OnItemUsedOnBlock(World world, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entities.Entity usedBy)
         {
-            if (world.GetBlock(clickedBlock + clickedSide) == 0)
-                world.SetBlock(clickedBlock + clickedSide, new PotatoBlock());
+            if (world.GetBlock(clickedBlock) is FarmlandBlock && world.GetBlock(clickedBlock + clickedSide) == 0)
+            {
+                var seeds = new PotatoBlock();
+                world.SetBlock(clickedBlock + clickedSide, seeds);
+                seeds.OnBlockPlaced(world, clickedBlock + clickedSide, clickedBlock, clickedSide, cursorPosition, usedBy);
+            }
         }
 
         public override int FoodPoints

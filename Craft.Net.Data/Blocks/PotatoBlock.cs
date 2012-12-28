@@ -2,12 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Craft.Net.Data.Entities;
 using Craft.Net.Data.Items;
 
 namespace Craft.Net.Data.Blocks
 {
     public class PotatoBlock : Block, IGrowableBlock
     {
+        public static int MinimumGrowthSeconds = 30, MaximumGrowthSeconds = 120;
+
         public override short Id
         {
             get { return 142; }
@@ -30,22 +33,55 @@ namespace Craft.Net.Data.Blocks
 
         public override bool GetDrop(ToolItem tool, out ItemStack[] drop)
         {
-            if (MathHelper.Random.Next(100) == 0)
+            if (Metadata == 7)
             {
-                drop = new[] { new ItemStack(new PotatoItem(), (sbyte)MathHelper.Random.Next(1, 4)),
+                if (MathHelper.Random.Next(100) == 0)
+                {
+                    drop = new[] { new ItemStack(new PotatoItem(), (sbyte)MathHelper.Random.Next(1, 4)),
                     new ItemStack(new PoisonousPotatoItem(), 1) };
+                }
+                else
+                    drop = new[] { new ItemStack(new PotatoItem(), (sbyte)MathHelper.Random.Next(1, 4)) };
             }
             else
-            {
-                drop = new[] { new ItemStack(new PotatoItem(), (sbyte)MathHelper.Random.Next(1, 4)) };
-            }
+                drop = new[] { new ItemStack(new PotatoItem()) };
             return true;
+        }
+
+        public override bool OnBlockPlaced(World world, Vector3 position, Vector3 clickedBlock, Vector3 clickedSide, Vector3 cursorPosition, Entity usedBy)
+        {
+            ScheduleGrowth(world, position);
+            return true;
+        }
+
+        private void ScheduleGrowth(World world, Vector3 position)
+        {
+            ScheduleUpdate(world, position, DateTime.Now.AddSeconds(MathHelper.Random.Next(MinimumGrowthSeconds, MaximumGrowthSeconds)));
+        }
+
+        public override void OnScheduledUpdate(World world, Vector3 position)
+        {
+            Grow(world, position, false);
+            base.OnScheduledUpdate(world, position);
         }
 
         public bool Grow(World world, Vector3 position, bool instant)
         {
-            // TODO
-            return false;
+            bool growth = false;
+            if (instant)
+            {
+                growth = Metadata != 0x7;
+                Metadata = 0x7;
+            }
+            else
+            {
+                Metadata++;
+                growth = true;
+                if (Metadata != 7)
+                    ScheduleGrowth(world, position);
+            }
+            world.SetBlock(position, this);
+            return growth;
         }
     }
 }
