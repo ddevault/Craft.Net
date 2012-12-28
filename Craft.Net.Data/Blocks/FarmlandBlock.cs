@@ -23,6 +23,13 @@ namespace Craft.Net.Data.Blocks
             return true;
         }
 
+        public override void BlockUpdate(World world, Vector3 updatedBlock, Vector3 modifiedBlock)
+        {
+            if (!(world.GetBlock(updatedBlock + Vector3.Up) is AirBlock))
+                world.SetBlock(updatedBlock, new DirtBlock());
+            base.BlockUpdate(world, updatedBlock, modifiedBlock);
+        }
+
         public override void OnBlockWalkedOn(World world, Vector3 position, Entities.Entity entity)
         {
             if (entity.Velocity.Y < -0.25)
