@@ -17,6 +17,7 @@ namespace Craft.Net.Client.Handlers
             MinecraftClient.RegisterPacketHandler(EncryptionKeyRequestPacket.PacketId, LoginHandlers.EncryptionKeyRequest);
             MinecraftClient.RegisterPacketHandler(EncryptionKeyResponsePacket.PacketId, LoginHandlers.EncryptionKeyResponse);
             MinecraftClient.RegisterPacketHandler(LoginRequestPacket.PacketId, LoginHandlers.LoginRequest);
+            MinecraftClient.RegisterPacketHandler(DisconnectPacket.PacketId, LoginHandlers.Disconnect);
 
             MinecraftClient.RegisterPacketHandler(PlayerPositionAndLookPacket.PacketId, EntityHandlers.PlayerPositionAndLook);
 
