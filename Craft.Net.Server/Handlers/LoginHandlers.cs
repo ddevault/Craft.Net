@@ -126,11 +126,7 @@ namespace Craft.Net.Server.Handlers
             byte[] hash = BitConverter.GetBytes(MathHelper.Random.Next());
             string response = "";
             foreach (byte b in hash)
-            {
-                if (b < 0x10)
-                    response += "0";
-                response += b.ToString("x");
-            }
+                response += b.ToString("x2");
             return response;
         }
     }
