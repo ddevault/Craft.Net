@@ -60,7 +60,7 @@ namespace Craft.Net.Data
         /// <summary>
         /// Calculates the square of a num.
         /// </summary>
-        public double Square(double num)
+        private double Square(double num)
         {
             return num * num;
         }
@@ -68,7 +68,7 @@ namespace Craft.Net.Data
         /// <summary>
         /// Finds the distance of this vector from Vector3.Zero
         /// </summary>
-        public double Distance
+        public double Distance 
         {
             get
             {
