@@ -404,6 +404,7 @@
     <Compile Include="Windows\CraftingWindowArea.cs" />
     <Compile Include="Windows\InventoryWindow.cs" />
     <Compile Include="World.cs" />
+    <Compile Include="World.Lighting.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Craft.Net\Craft.Net.csproj">

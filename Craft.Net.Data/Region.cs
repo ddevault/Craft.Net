@@ -32,33 +32,26 @@ namespace Craft.Net.Data
         /// </summary>
         public IWorldGenerator WorldGenerator { get; set; }
 
+        public World World { get; set; }
+
         private Stream regionFile { get; set; }
 
         /// <summary>
         /// Creates a new Region for server-side use at the given position using
         /// the provided terrain generator.
         /// </summary>
-        public Region(Vector3 position, IWorldGenerator worldGenerator)
+        public Region(Vector3 position, World world)
         {
             Chunks = new Dictionary<Vector3, Chunk>();
-            this.Position = position;
-            this.WorldGenerator = worldGenerator;
-        }
-
-        /// <summary>
-        /// Creates a new Region for client-side use at the given position.
-        /// </summary>
-        public Region(Vector3 position)
-        {
-            Chunks = new Dictionary<Vector3, Chunk>();
-            this.Position = position;
-            WorldGenerator = null;
+            Position = position;
+            World = world;
+            WorldGenerator = world.WorldGenerator;
         }
 
         /// <summary>
         /// Creates a region from the given region file.
         /// </summary>
-        public Region(Vector3 position, IWorldGenerator worldGenerator, string file) : this(position, worldGenerator)
+        public Region(Vector3 position, World world, string file) : this(position, world)
         {
             if (File.Exists(file))
                 regionFile = File.Open(file, FileMode.OpenOrCreate);
@@ -122,11 +115,59 @@ namespace Craft.Net.Data
             }
         }
 
+        /// <summary>
+        /// Retrieves the requested chunk from the region, without using the
+        /// world generator if it does not exist.
+        /// </summary>
+        /// <param name="position">The position of the requested local chunk coordinates.</param>
+        public Chunk GetChunkWithoutGeneration(Vector3 position)
+        {
+            // TODO: This could use some refactoring
+            lock (Chunks)
+            {
+                if (!Chunks.ContainsKey(position))
+                {
+                    if (regionFile != null)
+                    {
+                        // Search the stream for that region
+                        lock (regionFile)
+                        {
+                            var chunkData = GetChunkFromTable(position);
+                            if (chunkData == null)
+                                return null;
+                            regionFile.Seek(chunkData.Item1, SeekOrigin.Begin);
+                            int length = new MinecraftStream(regionFile).ReadInt32(); // TODO: Avoid making new objects here, and in the WriteInt32
+                            int compressionMode = regionFile.ReadByte();
+                            switch (compressionMode)
+                            {
+                                case 1: // gzip
+                                    break;
+                                case 2: // zlib
+                                    var nbt = new NbtFile();
+                                    nbt.LoadFromStream(regionFile, NbtCompression.ZLib, null);
+                                    var chunk = Chunk.FromNbt(position, nbt);
+                                    chunk.ParentRegion = this;
+                                    Chunks.Add(position, chunk);
+                                    break;
+                                default:
+                                    throw new InvalidDataException("Invalid compression scheme provided by region file.");
+                            }
+                        }
+                    }
+                    else if (WorldGenerator == null)
+                        throw new ArgumentException("The requested chunk is not loaded.", "position");
+                    else
+                        Chunks.Add(position, WorldGenerator.GenerateChunk(position, this));
+                }
+                return Chunks[position];
+            }
+        }
+
         private void GenerateChunk(Vector3 position)
         {
             var chunk = WorldGenerator.GenerateChunk(position, this);
-            chunk.Light();
             Chunks.Add(position, chunk);
+            World.LightChunk(chunk.AbsolutePosition);
         }
 
         /// <summary>

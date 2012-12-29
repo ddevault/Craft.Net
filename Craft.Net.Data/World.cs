@@ -13,7 +13,7 @@ namespace Craft.Net.Data
     /// <summary>
     /// Represents a horizontally infinite world of blocks with a fixed height of 256 blocks.
     /// </summary>
-    public class World
+    public partial class World
     {
         public const int Height = 256;
 
@@ -115,6 +115,26 @@ namespace Craft.Net.Data
 
             var region = CreateOrLoadRegion(new Vector3(regionX, 0, regionZ));
             return region.GetChunk(new Vector3(x - regionX * 32, 0, z - regionZ * 32));
+        }
+
+        /// <summary>
+        /// Returns the chunk at the specific position, but does not generate
+        /// a new chunk if it doesn't already exist.
+        /// </summary>
+        /// <param name="position">Position in chunk coordinates</param>
+        public Chunk GetChunkWithoutGeneration(Vector3 position)
+        {
+            //In chunks
+            var x = (int)position.X;
+            var z = (int)position.Z;
+
+            //In regions
+            int regionX = x / Region.Width - ((x < 0) ? 1 : 0);
+            int regionZ = z / Region.Depth - ((z < 0) ? 1 : 0);
+
+            var regionPosition = new Vector3(regionX, 0, regionZ);
+            if (!Regions.ContainsKey(regionPosition)) return null;
+            return Regions[regionPosition].GetChunkWithoutGeneration(new Vector3(x - regionX * 32, 0, z - regionZ * 32));
         }
 
         /// <summary>
@@ -265,10 +285,10 @@ namespace Craft.Net.Data
                 if (!Regions.ContainsKey(position))
                 {
                     if (Directory == null)
-                        Regions.Add(position, new Region(position, WorldGenerator));
+                        Regions.Add(position, new Region(position, this));
                     else
                         Regions.Add(position,
-                                new Region(position, WorldGenerator,
+                                new Region(position, this,
                                            Path.Combine(Directory, Region.GetRegionFileName(position))));
                 }
                 return Regions[position];
@@ -345,7 +365,7 @@ namespace Craft.Net.Data
                     {
                         foreach (var chunk in region.Value.Chunks)
                         {
-                            chunk.Value.Light();
+                            LightChunk(chunk.Key);
                         }
                     }
                 }

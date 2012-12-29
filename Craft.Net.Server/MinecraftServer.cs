@@ -145,7 +145,7 @@ namespace Craft.Net.Server
             // Bind socket
             Listener = new TcpListener(endPoint);
             NetworkLock = new object();
-            Chunk.RecreateLightIndex();
+            World.RecreateLightIndex();
         }
 
         #endregion
