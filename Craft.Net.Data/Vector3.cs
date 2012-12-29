@@ -52,9 +52,17 @@ namespace Craft.Net.Data
         /// </summary>
         public double DistanceTo(Vector3 other)
         {
-            return Math.Sqrt(Math.Pow(other.Z - Z, 2) +
-                             Math.Sqrt(Math.Pow(other.X - X, 2)) +
-                             Math.Pow(other.Y - Y, 2));
+            return Math.Sqrt(Square(other.X - X) +
+                             Square(other.Y - Y) +
+                             Square(other.Z - Z));
+        }
+
+        /// <summary>
+        /// Calculates the square of a num.
+        /// </summary>
+        public double Square(double num)
+        {
+            return num * num;
         }
 
         /// <summary>
