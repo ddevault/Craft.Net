@@ -139,6 +139,10 @@ namespace TestServer
                             e.Origin.Entity.SetSlot(InventoryWindow.HotbarIndex, new ItemStack(item.Id, 1));
                         } catch { }
                         break;
+                    case "relight":
+                        e.Origin.World.Relight();
+                        e.Origin.SendChat("World relit.");
+                        break;
                 }
             }
         }

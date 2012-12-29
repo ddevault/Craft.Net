@@ -330,5 +330,26 @@ namespace Craft.Net.Data
             if (DestroyEntity != null)
                 DestroyEntity(this, new EntityEventArgs(entity));
         }
+
+        /// <summary>
+        /// Relights all loaded chunks.
+        /// This method is time consuming and not reccomended for normal use.
+        /// </summary>
+        public void Relight()
+        {
+            lock (Regions)
+            {
+                foreach (var region in Regions)
+                {
+                    lock (region.Value.Chunks)
+                    {
+                        foreach (var chunk in region.Value.Chunks)
+                        {
+                            chunk.Value.Light();
+                        }
+                    }
+                }
+            }
+        }
     }
 }

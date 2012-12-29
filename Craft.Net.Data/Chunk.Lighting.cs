@@ -48,7 +48,10 @@ namespace Craft.Net.Data
             {
                 for (int z = 0; z < Depth; z++)
                 {
-                    
+                    if (x == 0 || z == 0 || x == Width - 1 || z == Depth - 1)
+                        AdjustSkyLightEdgeColumn(x, z);
+                    else
+                        AdjustSkyLightColumn(x, z);
                 }
             }
         }
@@ -64,6 +67,56 @@ namespace Craft.Net.Data
                 if (light == 0)
                     break;
                 SetSkyLight(x, y, z, light);
+            }
+        }
+
+        private void AdjustSkyLightEdgeColumn(int x, int z)
+        {
+            bool checkLeft = false, checkRight = false, checkForward = false,
+                checkBackward = false;
+            if (x == 0 && ParentRegion.Chunks.ContainsKey(RelativePosition + Vector3.Left))
+                checkLeft = true;
+            if (x == Width - 1 && ParentRegion.Chunks.ContainsKey(RelativePosition + Vector3.Right))
+                checkRight = true;
+            if (z == 0 && ParentRegion.Chunks.ContainsKey(RelativePosition + Vector3.Backwards))
+                checkBackward = true;
+            if (z == Depth - 1 && ParentRegion.Chunks.ContainsKey(RelativePosition + Vector3.Forwards))
+                checkForward = true;
+            for (int y = 0; y < Height; y++)
+            {
+                byte self = GetSkyLight(x, y, z);
+                if (self < 2)
+                    continue;
+                byte left = GetSkyLight(x - 1, y, z);
+                byte right = GetSkyLight(x + 1, y, z);
+                byte forward = GetSkyLight(x, y, z + 1);
+                byte backward = GetSkyLight(x, y, z - 1);
+                if (left == 15 && right == 15 && forward == 15 && backward == 15)
+                    break;
+                if (left < self) SetSkyLight(x - 1, y, z, (byte)(self - 1));
+                if (right < self) SetSkyLight(x + 1, y, z, (byte)(self - 1));
+                if (forward < self) SetSkyLight(x, y, z + 1, (byte)(self - 1));
+                if (backward < self) SetSkyLight(x, y, z - 1, (byte)(self - 1));
+            }
+        }
+
+        private void AdjustSkyLightColumn(int x, int z)
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                byte self = GetSkyLight(x, y, z);
+                if (self < 2)
+                    continue;
+                byte left = GetSkyLight(x - 1, y, z);
+                byte right = GetSkyLight(x + 1, y, z);
+                byte forward = GetSkyLight(x, y, z + 1);
+                byte backward = GetSkyLight(x, y, z - 1);
+                if (left == 15 && right == 15 && forward == 15 && backward == 15)
+                    break;
+                if (left < self)     SetSkyLight(x - 1, y, z, (byte)(self - 1));
+                if (right < self)    SetSkyLight(x + 1, y, z, (byte)(self - 1));
+                if (forward < self)  SetSkyLight(x, y, z + 1, (byte)(self - 1));
+                if (backward < self) SetSkyLight(x, y, z - 1, (byte)(self - 1));
             }
         }
     }

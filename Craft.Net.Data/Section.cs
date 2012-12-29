@@ -93,13 +93,13 @@ namespace Craft.Net.Data
             return Blocks[index];
         }
 
-        public short GetSkyLight(int x, int y, int z)
+        public byte GetSkyLight(int x, int y, int z)
         {
             int index = x + (z * Width) + (y * Height * Width);
             return SkyLight[index];
         }
 
-        public short GetBlockLight(int x, int y, int z)
+        public byte GetBlockLight(int x, int y, int z)
         {
             int index = x + (z * Width) + (y * Height * Width);
             return BlockLight[index];

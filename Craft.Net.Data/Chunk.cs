@@ -118,14 +118,14 @@ namespace Craft.Net.Data
             return Sections[section].GetBlockId(x, y, z);
         }
 
-        public short GetSkyLight(int x, int y, int z)
+        public byte GetSkyLight(int x, int y, int z)
         {
             int section = GetSectionNumber(y);
             y = GetPositionInSection(y);
             return Sections[section].GetSkyLight(x, y, z);
         }
 
-        public short GetBlockLight(int x, int y, int z)
+        public byte GetBlockLight(int x, int y, int z)
         {
             int section = GetSectionNumber(y);
             y = GetPositionInSection(y);
