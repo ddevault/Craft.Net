@@ -22,11 +22,8 @@ namespace Craft.Net.Data
             }
         }
 
-        public void LightChunk(Vector3 coordinates)
+        public void LightChunk(Chunk chunk)
         {
-            var chunk = GetChunkWithoutGeneration(coordinates);
-            if (chunk == null)
-                throw new InvalidOperationException("Ungenerated chunks may not be lit.");
             chunk.ClearLight();
             chunk.CalculateInitialSkylight();
             for (int y = 0; y < Chunk.Height; y++)
@@ -49,6 +46,15 @@ namespace Craft.Net.Data
             sbyte right = GetSkyLight(chunk, x + 1, y, z);
             sbyte forwards = GetSkyLight(chunk, x, y, z + 1);
             sbyte backwards = GetSkyLight(chunk, z, y, z - 1);
+            if (left > self)
+                self = (byte)(left - 1);
+            if (right > self)
+                self = (byte)(right - 1);
+            if (forwards > self)
+                self = (byte)(forwards - 1);
+            if (backwards > self)
+                self = (byte)(backwards - 1);
+            chunk.SetSkyLight(x, y, z, self);
         }
 
         private sbyte GetSkyLight(Chunk chunk, int x, int y, int z)

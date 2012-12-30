@@ -364,9 +364,7 @@ namespace Craft.Net.Data
                     lock (region.Value.Chunks)
                     {
                         foreach (var chunk in region.Value.Chunks)
-                        {
-                            LightChunk(chunk.Key);
-                        }
+                            LightChunk(chunk.Value);
                     }
                 }
             }

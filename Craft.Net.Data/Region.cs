@@ -167,7 +167,7 @@ namespace Craft.Net.Data
         {
             var chunk = WorldGenerator.GenerateChunk(position, this);
             Chunks.Add(position, chunk);
-            World.LightChunk(chunk.AbsolutePosition);
+            World.LightChunk(chunk);
         }
 
         /// <summary>
