@@ -7,6 +7,7 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using Craft.Net.Data;
+using Craft.Net.Data.Entities;
 
 namespace Craft.Net.Server.Handlers
 {
@@ -86,7 +87,19 @@ namespace Craft.Net.Server.Handlers
             }
             else if (packet.Status == ClientStatusPacket.ClientStatus.Respawn)
             {
-                // TODO
+                var world = client.World;
+                client.Entity.Position = new Vector3(
+                    client.Entity.SpawnPoint.X,
+                    client.Entity.SpawnPoint.Y + PlayerEntity.Height,
+                    client.Entity.SpawnPoint.Z);
+                client.Entity.Health = client.Entity.MaxHealth;
+                client.Entity.Food = 20;
+                client.Entity.FoodSaturation = 20;
+                server.EntityManager.SpawnEntity(world, client.Entity);
+                client.SendPacket(new UpdateHealthPacket(client.Entity.Health, client.Entity.Food, client.Entity.FoodSaturation));
+                client.SendPacket(new RespawnPacket(Dimension.Overworld, server.Settings.Difficulty, client.Entity.GameMode, World.Height, world.LevelType));
+                client.SendPacket(new PlayerPositionAndLookPacket(client.Entity.Position.X, client.Entity.Position.Y, client.Entity.Position.Z,
+                    client.Entity.Position.Y + PlayerEntity.Height, client.Entity.Yaw, client.Entity.Pitch, true));
             }
         }
 
