@@ -8,6 +8,16 @@ resource gathering, multiplayer PvP, entity physics, and more.
 
 Craft.Net currently supports Minecraft 1.4.7 on Windows, Linux and Mac.
 
+**A note on submodules**: Craft.Net includes external dependencies in the form of git submodules.
+
+Use this command to clone the project:
+
+    git clone --recursive git://github.com/SirCmpwn/Craft.Net.git
+
+If you've already cloned it, use this to fetch submodules:
+
+    git submodule update --init
+
 ## Features
 
 This is not an exhaustive list.
