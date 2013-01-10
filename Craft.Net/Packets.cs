@@ -1982,18 +1982,20 @@ namespace Craft.Net
     public struct OpenWindowPacket : IPacket
     {
         public OpenWindowPacket(byte windowId, byte inventoryType, string windowTitle,
-            byte slotCount) // TODO: InventoryTypes enum
+            byte slotCount, bool useProvidedTitle) // TODO: InventoryTypes enum
         {
             WindowId = windowId;
             InventoryType = inventoryType;
             WindowTitle = windowTitle;
             SlotCount = slotCount;
+            UseProvidedTitle = useProvidedTitle;
         }
         
         public byte WindowId;
         public byte InventoryType;
         public string WindowTitle;
         public byte SlotCount;
+        public bool UseProvidedTitle;
 
         public const byte PacketId = 0x64;
         public byte Id { get { return 0x64; } }
@@ -2004,6 +2006,7 @@ namespace Craft.Net
             InventoryType = stream.ReadUInt8();
             WindowTitle = stream.ReadString();
             SlotCount = stream.ReadUInt8();
+            UseProvidedTitle = stream.ReadBoolean();
         }
 
         public void WritePacket(MinecraftStream stream)
@@ -2013,6 +2016,7 @@ namespace Craft.Net
             stream.WriteUInt8(InventoryType);
             stream.WriteString(WindowTitle);
             stream.WriteUInt8(SlotCount);
+            stream.WriteBoolean(UseProvidedTitle);
         }
     }
 

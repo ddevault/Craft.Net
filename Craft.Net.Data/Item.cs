@@ -258,6 +258,18 @@ namespace Craft.Net.Data
             new WoodenButtonBlock(),
             new SkullBlock(),
             new AnvilBlock(),
+            new TrappedChestBlock(),
+            new LightWeightedPressurePlateBlock(),
+            new HeavyWeightedPressurePlateBlock(),
+            new RedstoneComparatorBlock(),
+            new RedstoneComparatorInactiveBlock(),
+            new DaylightSensorBlock(),
+            new RedstoneBlock(),
+            new NetherQuartzOreBlock(),
+            new HopperBlock(),
+            new QuartzBlock(),
+            new QuartzStairBlock(),
+            new ActivatorRailBlock(),
             new IronShovelItem(),
             new IronPickaxeItem(),
             new IronAxeItem(),
@@ -405,6 +417,9 @@ namespace Craft.Net.Data
             new FireworkRocketItem(),
             new FireworkStarItem(),
             new EnchantedBookItem(),
+            new ComparatorItem(),
+            new NetherBrickItem(),
+            new NetherQuartzItem(),
             new MusicDiscItem()
         });
 
