@@ -169,7 +169,11 @@ On Windows, add "C:\Windows\Microsoft.NET\Framework\v4.0.30319" to your path. Th
 Update the configuration as required. On Linux and Mac, install Mono 2.10 or better, and then use this
 command:
 
-    xbuild /property:Configuration=[RELEASE|DEBUG]
+    xbuild /property:Configuration=MONO
+
+**NOTE**: It is important that you build the project with the MONO configuration if you intend to use
+it on Mono. Craft.Net uses bouncy castle for encryption on Mono, because the Mono CryptoStream
+[does not work correctly](https://bugzilla.xamarin.com/show_bug.cgi?id=9247).
 
 ## Contributing
 
@@ -192,6 +196,7 @@ We try to keep these to a minimum, and refactor them away when possible. The cur
 
 * [DotNetZip](http://dotnetzip.codeplex.com/) for compression/decompression with zlib
 * [fNbt](https://github.com/fragmer/fNbt) for NBT data manipulation
+* [BouncyCastle](http://www.bouncycastle.org/csharp/) for encryption on Mono.
 
 ## Licensing
 
