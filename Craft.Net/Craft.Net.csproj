@@ -42,7 +42,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BouncyCastle.Crypto">
+    <Reference Include="BouncyCastle.Crypto" Condition= '$(Configuration)' == 'MONO'">
       <HintPath>..\lib\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
     <Reference Include="System" />

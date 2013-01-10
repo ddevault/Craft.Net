@@ -4,10 +4,12 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.IO;
+#if MONO
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Modes;
 using Org.BouncyCastle.Crypto.Parameters;
+#endif
 
 namespace Craft.Net
 {
