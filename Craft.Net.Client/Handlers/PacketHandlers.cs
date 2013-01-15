@@ -23,6 +23,9 @@ namespace Craft.Net.Client.Handlers
 
             MinecraftClient.RegisterPacketHandler(KeepAlivePacket.PacketId, KeepAlive);
             MinecraftClient.RegisterPacketHandler(ChatMessagePacket.PacketId, ChatMessage);
+
+            MinecraftClient.RegisterPacketHandler(UpdateHealthPacket.PacketId, StateHandlers.UpdateHealth);
+            MinecraftClient.RegisterPacketHandler(RespawnPacket.PacketId, StateHandlers.Respawn);
         }
 
         public static void KeepAlive(MinecraftClient client, IPacket _packet)

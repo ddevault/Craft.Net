@@ -82,12 +82,26 @@ namespace Craft.Net.Data
                 System.IO.Directory.CreateDirectory(directory);
         }
 
+        private string clientLevelType;
         /// <summary>
         /// Gets the level type this world's generator produces.
         /// </summary>
         public string LevelType
         {
-            get { return WorldGenerator.LevelType; }
+            get
+            {
+                if (WorldGenerator != null)
+                    return WorldGenerator.LevelType;
+                else
+                    return clientLevelType;
+            }
+            set
+            {
+                if (WorldGenerator == null)
+                    clientLevelType = value;
+                else
+                    throw new InvalidOperationException("For server-mode worlds, LevelType is read only.");
+            }
         }
 
         /// <summary>

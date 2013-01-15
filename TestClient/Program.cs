@@ -30,6 +30,8 @@ namespace TestClient
             var client = new MinecraftClient(session);
             client.Connect(endPoint);
 
+            client.PlayerDied += (s, e) => Console.WriteLine("Player died! Type 'respawn' to respawn.");
+
             string input = "";
             while (input != "quit")
             {
@@ -58,6 +60,8 @@ namespace TestClient
                 }
                 else if (input.StartsWith("say "))
                     client.SendChat(input.Substring(4));
+                else if (input == "respawn")
+                    client.Respawn();
             }
 
             client.Disconnect("Quitting");

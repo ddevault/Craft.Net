@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Craft.Net.Client.Events;
+using Craft.Net.Data;
 
 namespace Craft.Net.Client.Handlers
 {
@@ -57,10 +58,15 @@ namespace Craft.Net.Client.Handlers
         public static void LoginRequest(MinecraftClient client, IPacket _packet)
         {
             var packet = (LoginRequestPacket)_packet;
-            // TODO: Create world
             client.EntityId = packet.EntityId;
             client.Spawned = true;
             client.OnLoggedIn();
+            // Initialize world
+            client.Level = new Level();
+            client.Level.Difficulty = packet.Difficulty;
+            client.Level.GameMode = packet.GameMode;
+            client.Level.World.LevelType = packet.LevelType;
+            client.OnWorldInitialized();
         }
 
         public static void Disconnect(MinecraftClient client, IPacket _packet)

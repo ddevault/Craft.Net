@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Craft.Net.Client.Handlers;
+using Craft.Net.Data;
 
 namespace Craft.Net.Client
 {
@@ -75,6 +76,15 @@ namespace Craft.Net.Client
             SendPacket(new ChatMessagePacket(message));
         }
 
+        public void Respawn()
+        {
+            if (Health > 0)
+                throw new InvalidOperationException("Player is not dead!");
+            //SendPacket(new RespawnPacket(Dimension.Overworld, // TODO: Other dimensions
+            //    Level.Difficulty, Level.GameMode, World.Height, Level.World.LevelType));
+            SendPacket(new ClientStatusPacket(ClientStatusPacket.ClientStatus.Respawn));
+        }
+
         public void SendPacket(IPacket packet)
         {
             SendQueue.Enqueue(packet);
@@ -88,7 +98,7 @@ namespace Craft.Net.Client
                 if (Spawned && nextPlayerUpdate < DateTime.Now)
                 {
                     nextPlayerUpdate = DateTime.Now.AddMilliseconds(500);
-                    SendPacket(new PlayerPacket(false)); // TODO: Store OnGround properly
+                    SendPacket(new PlayerPacket(true)); // TODO: Store OnGround properly
                 }
                 // Send queued packets
                 while (SendQueue.Count != 0)

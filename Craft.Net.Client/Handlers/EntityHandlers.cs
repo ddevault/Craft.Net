@@ -13,9 +13,9 @@ namespace Craft.Net.Client.Handlers
         {
             var packet = (PlayerPositionAndLookPacket)_packet;
             client._position = new Vector3(packet.X, packet.Y, packet.Z);
-            if (!client.InitialPositionRecieved)
+            if (!client.PositionUpdateConfirmed)
             {
-                client.InitialPositionRecieved = true;
+                client.PositionUpdateConfirmed = true;
                 client.OnInitialSpawn(new EntitySpawnEventArgs(client.Position, client.EntityId));
                 client.SendPacket(new PlayerPositionPacket(
                     packet.X, packet.Stance, packet.Z, packet.Y, false));

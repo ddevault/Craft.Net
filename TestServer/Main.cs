@@ -76,7 +76,8 @@ namespace TestServer
                         e.Origin.SendChat("Pong");
                         break;
                     case "lightning":
-                        minecraftServer.WeatherManager.SpawnLightning(e.Origin.World, e.Origin.Entity.Position);
+                        minecraftServer.GetWeatherManagerForWorld(minecraftServer.DefaultWorld)
+                            .SpawnLightning(e.Origin.Entity.Position);
                         break;
                     case "velocity":
                         e.Origin.SendChat(e.Origin.Entity.Velocity.ToString());

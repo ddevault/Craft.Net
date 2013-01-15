@@ -54,7 +54,7 @@ namespace Craft.Net.Data
         /// </summary>
         public Level()
         {
-            World = new World(this, DefaultGenerator);
+            World = new World(this);
             Name = "world";
             GameMode = GameMode.Survival;
             MapFeatures = false;

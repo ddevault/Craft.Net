@@ -21,7 +21,7 @@ namespace Craft.Net.Client
         // TODO: Move to entity object
         #region Position and Look
 
-        internal bool InitialPositionRecieved { get; set; }
+        internal bool PositionUpdateConfirmed { get; set; }
 
         internal Vector3 _position;
         public Vector3 Position
@@ -58,6 +58,12 @@ namespace Craft.Net.Client
         }
 
         #endregion
+
+        public short Health { get; internal set; }
+        public short Food { get; internal set; }
+        public float FoodSaturation { get; internal set; }
+
+        public Level Level { get; internal set; }
 
         public bool Spawned { get; internal set; }
         public int EntityId { get; internal set; }

@@ -31,5 +31,23 @@ namespace Craft.Net.Client
         {
             if (Disconnected != null) Disconnected(this, e);
         }
+
+        public event EventHandler PlayerDied;
+        protected internal virtual void OnPlayerDied()
+        {
+            if (PlayerDied != null) PlayerDied(this, null);
+        }
+
+        public event EventHandler<HealthAndFoodEventArgs> HealthOrFoodChanged;
+        protected internal virtual void OnHealthOrFoodChanged(HealthAndFoodEventArgs e)
+        {
+            if (HealthOrFoodChanged != null) HealthOrFoodChanged(this, e);
+        }
+
+        public event EventHandler WorldInitialized;
+        protected internal virtual void OnWorldInitialized()
+        {
+            if (WorldInitialized != null) WorldInitialized(this, null);
+        }
     }
 }

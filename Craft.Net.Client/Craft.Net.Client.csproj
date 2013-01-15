@@ -52,10 +52,12 @@
     <Compile Include="Events\ChatMessageEventArgs.cs" />
     <Compile Include="Events\DisconnectEventArgs.cs" />
     <Compile Include="Events\EntitySpawnEventArgs.cs" />
+    <Compile Include="Events\HealthAndFoodEventArgs.cs" />
     <Compile Include="FileLogWriter.cs" />
     <Compile Include="Handlers\EntityHandlers.cs" />
     <Compile Include="Handlers\LoginHandlers.cs" />
     <Compile Include="Handlers\PacketHandlers.cs" />
+    <Compile Include="Handlers\StateHandlers.cs" />
     <Compile Include="ILogProvider.cs" />
     <Compile Include="LastLogin.cs" />
     <Compile Include="LogProvider.cs" />

@@ -45,13 +45,13 @@ namespace Craft.Net.Server
         /// </summary>
         public List<Level> Levels { get; set; }
         /// <summary>
+        /// Weather managers associated with each level.
+        /// </summary>
+        public List<WeatherManager> WeatherManagers { get; set; }
+        /// <summary>
         /// This server's entity manager.
         /// </summary>
         public EntityManager EntityManager { get; set; }
-        /// <summary>
-        /// This server's weather manager.
-        /// </summary>
-        public WeatherManager WeatherManager { get; set; }
         /// <summary>
         /// Settings that describe this server's function.
         /// </summary>
@@ -141,7 +141,7 @@ namespace Craft.Net.Server
             LogProviders = new List<ILogProvider>();
             PluginChannels = new Dictionary<string, PluginChannel>();
             EntityManager = new EntityManager(this);
-            WeatherManager = new WeatherManager(this);
+            WeatherManagers = new List<WeatherManager>();
             // Bind socket
             Listener = new TcpListener(endPoint);
             NetworkLock = new object();
@@ -209,7 +209,13 @@ namespace Craft.Net.Server
                 EntityManager.SpawnEntity(sender as World, args.Entity);
             level.World.DestroyEntity += (sender, args) =>
                 EntityManager.DespawnEntity(sender as World, args.Entity);
+            WeatherManagers.Add(new WeatherManager(level.World, this));
             Levels.Add(level);
+        }
+
+        public WeatherManager GetWeatherManagerForWorld(World world)
+        {
+            return WeatherManagers.FirstOrDefault(w => w.World == world);
         }
 
         /// <summary>
