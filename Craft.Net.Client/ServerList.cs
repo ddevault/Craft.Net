@@ -82,6 +82,11 @@ namespace Craft.Net.Client
             public string Ip { get; set; }
             public bool HideAddress { get; set; }
             public bool AcceptTextures { get; set; }
+
+            public override string ToString()
+            {
+                return Name;
+            }
         }
     }
 }
