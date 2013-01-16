@@ -22,7 +22,7 @@ namespace Craft.Net.Client
             string login = responseStream.ReadToEnd();
             responseStream.Close();
             if (login.Count(c => c == ':') != 4)
-                return new Session(login.Trim());
+                throw new UnauthorizedAccessException(login);
             string[] parts = login.Split(':');
             return new Session(parts[2], parts[3], parts[0]);
         }
