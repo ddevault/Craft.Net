@@ -114,6 +114,8 @@ namespace Craft.Net.Client
                             LogProvider.Log(packet, true);
 #endif
                             Stream.Flush();
+                            if (packet is DisconnectPacket)
+                                return;
                         }
                         catch { /* TODO */ }
                     }
@@ -129,6 +131,8 @@ namespace Craft.Net.Client
                         LogProvider.Log(packet, false);
 #endif
                         HandlePacket(packet);
+                        if (packet is DisconnectPacket)
+                            return;
                     }
                     catch { /* TODO */ }
                 }

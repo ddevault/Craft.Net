@@ -31,6 +31,7 @@ namespace TestClient
             client.Connect(endPoint);
 
             client.PlayerDied += (s, e) => Console.WriteLine("Player died! Type 'respawn' to respawn.");
+            client.Disconnected += (s, e) => Console.WriteLine("Disconnected: " + e.Reason);
 
             string input = "";
             while (input != "quit")

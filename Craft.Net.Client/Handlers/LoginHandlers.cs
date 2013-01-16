@@ -73,7 +73,6 @@ namespace Craft.Net.Client.Handlers
         {
             var packet = (DisconnectPacket)_packet;
             LogProvider.Log("Disconnected: " + packet.Reason);
-            client.Disconnect(packet.Reason);
             client.OnDisconnected(new DisconnectEventArgs(packet.Reason));
         }
     }
