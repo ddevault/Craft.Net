@@ -66,6 +66,7 @@
     <Compile Include="MinecraftClient.Properties.cs" />
     <Compile Include="PKCSKeyGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServerList.cs" />
     <Compile Include="ServerPing.cs" />
     <Compile Include="Session.cs" />
   </ItemGroup>
@@ -77,6 +78,10 @@
     <ProjectReference Include="..\Craft.Net\Craft.Net.csproj">
       <Project>{c3bbab7e-606f-420e-9461-c8cfaec2476b}</Project>
       <Name>Craft.Net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\externals\fNbt\fNbt\fNbt.csproj">
+      <Project>{4488498d-976d-4da3-bf72-109531af0488}</Project>
+      <Name>fNbt</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

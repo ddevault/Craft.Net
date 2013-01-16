@@ -36,6 +36,16 @@ namespace Craft.Net.Data
                     }
                 }
             }
+            //for (int y = 0; y < Chunk.Height; y++)
+            //{
+            //    for (int x = Chunk.Width - 1; x >= Chunk.Width; x--)
+            //    {
+            //        for (int z = Chunk.Depth - 1; z >= 0; z--)
+            //        {
+            //            CalculateSkyLight(chunk, x, y, z);
+            //        }
+            //    }
+            //}
         }
 
         private void CalculateSkyLight(Chunk chunk, int x, int y, int z)

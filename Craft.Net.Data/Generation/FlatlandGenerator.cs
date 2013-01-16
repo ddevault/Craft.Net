@@ -98,6 +98,15 @@ namespace Craft.Net.Data.Generation
             }
             for (int i = 0; i < chunk.Biomes.Length; i++)
                 chunk.Biomes[i] = (byte)Biome;
+            // TESTING
+            // Dig out a little to test sky light
+            for (y = 3; y > 0; y--)
+                chunk.SetBlock(new Vector3(8, y, 8), new AirBlock());
+            for (int x = -5; x < 5; x++)
+                for (int z = -5; z < 5; z++)
+                    for (y = 2; y > 0; y--)
+                        chunk.SetBlock(new Vector3(8 + x, y, 8 + z), new AirBlock());
+            // /TESTING
             return chunk;
         }
 
