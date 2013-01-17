@@ -92,6 +92,7 @@
     <Compile Include="Blocks\DoorBlock.cs" />
     <Compile Include="Blocks\DoubleSlabBlock.cs" />
     <Compile Include="Blocks\DragonEggBlock.cs" />
+    <Compile Include="Blocks\DropperBlock.cs" />
     <Compile Include="Blocks\EmeraldBlock.cs" />
     <Compile Include="Blocks\EmeraldOreBlock.cs" />
     <Compile Include="Blocks\EnchantmentTableBlock.cs" />
