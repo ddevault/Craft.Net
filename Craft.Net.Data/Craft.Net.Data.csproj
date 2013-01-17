@@ -57,6 +57,7 @@
     <Compile Include="Biome.cs" />
     <Compile Include="Block.cs" />
     <Compile Include="BlockChangedEventArgs.cs" />
+    <Compile Include="Blocks\ActivatorRailBlock.cs" />
     <Compile Include="Blocks\AirBlock.cs" />
     <Compile Include="Blocks\AnvilBlock.cs" />
     <Compile Include="Blocks\BeaconBlock.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Blocks\CocoaPlantBlock.cs" />
     <Compile Include="Blocks\CommandBlock.cs" />
     <Compile Include="Blocks\CraftingTableBlock.cs" />
+    <Compile Include="Blocks\DaylightSensorBlock.cs" />
     <Compile Include="Blocks\DeadBushBlock.cs" />
     <Compile Include="Blocks\DetectorRailBlock.cs" />
     <Compile Include="Blocks\DiamondBlock.cs" />
@@ -111,6 +113,8 @@
     <Compile Include="Blocks\GoldOreBlock.cs" />
     <Compile Include="Blocks\GrassBlock.cs" />
     <Compile Include="Blocks\GravelBlock.cs" />
+    <Compile Include="Blocks\HeavyWeightedPressurePlateBlock.cs" />
+    <Compile Include="Blocks\HopperBlock.cs" />
     <Compile Include="Blocks\HugeBrownMushroomBlock.cs" />
     <Compile Include="Blocks\HugeRedMushroomBlock.cs" />
     <Compile Include="Blocks\IceBlock.cs" />
@@ -128,6 +132,7 @@
     <Compile Include="Blocks\LavaStillBlock.cs" />
     <Compile Include="Blocks\LeavesBlock.cs" />
     <Compile Include="Blocks\LeverBlock.cs" />
+    <Compile Include="Blocks\LightWeightedPressurePlateBlock.cs" />
     <Compile Include="Blocks\LilyPadBlock.cs" />
     <Compile Include="Blocks\LockedChestBlock.cs" />
     <Compile Include="Blocks\MelonBlock.cs" />
@@ -139,6 +144,7 @@
     <Compile Include="Blocks\NetherBrickFenceBlock.cs" />
     <Compile Include="Blocks\NetherBrickStairBlock.cs" />
     <Compile Include="Blocks\NetherPortalBlock.cs" />
+    <Compile Include="Blocks\NetherQuartzOreBlock.cs" />
     <Compile Include="Blocks\NetherrackBlock.cs" />
     <Compile Include="Blocks\NetherWartBlock.cs" />
     <Compile Include="Blocks\NoteBlock.cs" />
@@ -151,9 +157,14 @@
     <Compile Include="Blocks\PoweredRailBlock.cs" />
     <Compile Include="Blocks\PumpkinBlock.cs" />
     <Compile Include="Blocks\PumpkinStemBlock.cs" />
+    <Compile Include="Blocks\QuartzBlock.cs" />
+    <Compile Include="Blocks\QuartzStairBlock.cs" />
     <Compile Include="Blocks\RailBlock.cs" />
     <Compile Include="Blocks\RedFlowerBlock.cs" />
     <Compile Include="Blocks\RedMushroomBlock.cs" />
+    <Compile Include="Blocks\RedstoneBlock.cs" />
+    <Compile Include="Blocks\RedstoneComparatorBlock.cs" />
+    <Compile Include="Blocks\RedstoneComparatorInactiveBlock.cs" />
     <Compile Include="Blocks\RedstoneLampActiveBlock.cs" />
     <Compile Include="Blocks\RedstoneLampBlock.cs" />
     <Compile Include="Blocks\RedstoneOreActiveBlock.cs" />
@@ -191,6 +202,7 @@
     <Compile Include="Blocks\TNTBlock.cs" />
     <Compile Include="Blocks\TorchBlock.cs" />
     <Compile Include="Blocks\TrapDoorBlock.cs" />
+    <Compile Include="Blocks\TrappedChestBlock.cs" />
     <Compile Include="Blocks\TripwireBlock.cs" />
     <Compile Include="Blocks\TripwireHookBlock.cs" />
     <Compile Include="Blocks\VineBlock.cs" />
@@ -262,6 +274,7 @@
     <Compile Include="Items\ClayItem.cs" />
     <Compile Include="Items\ClockItem.cs" />
     <Compile Include="Items\CoalItem.cs" />
+    <Compile Include="Items\ComparatorItem.cs" />
     <Compile Include="Items\DyeItem.cs" />
     <Compile Include="Items\CompassItem.cs" />
     <Compile Include="Items\CookedChickenItem.cs" />
@@ -338,8 +351,11 @@
     <Compile Include="Items\MinecartItem.cs" />
     <Compile Include="Items\MinecartWithChestItem.cs" />
     <Compile Include="Items\MinecartWithFurnaceItem.cs" />
+    <Compile Include="Items\MinecartWithTntItem.cs" />
     <Compile Include="Items\MushroomStewItem.cs" />
     <Compile Include="Items\MusicDiscItem.cs" />
+    <Compile Include="Items\NetherBrickItem.cs" />
+    <Compile Include="Items\NetherQuartzItem.cs" />
     <Compile Include="Items\NetherStarItem.cs" />
     <Compile Include="Items\NetherWartItem.cs" />
     <Compile Include="Items\PaintingItem.cs" />

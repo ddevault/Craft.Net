@@ -20,11 +20,7 @@ namespace Craft.Net.Server
             PacketHandlers.RegisterHandlers();
         }
 
-        /// <summary>
-        /// The protocol version supported by this server.
-        /// </summary>
-        public const int ProtocolVersion = 51;
-        public const string TargetClientVersion = "1.4.7";
+        public const string TargetClientVersion = "13w02a";
 
         public delegate void PacketHandler(MinecraftClient client, MinecraftServer server, IPacket packet);
 
