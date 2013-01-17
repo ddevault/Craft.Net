@@ -18,6 +18,16 @@ If you've already cloned it, use this to fetch submodules:
 
     git submodule update --init
 
+## Snapshot Support
+
+Craft.Net supports most Minecraft pre-releases shortly after they are released. If you want to have
+support for snapshots, run the following commands in your git repository:
+
+    git pull origin snapshot
+    git checkout snapshot
+
+You'll now be on the snapshot branch, with bleeding-edge support for the latest Minecraft snapshots.
+
 ## Features
 
 This is not an exhaustive list.
