@@ -352,6 +352,7 @@
     <Compile Include="Items\MinecartItem.cs" />
     <Compile Include="Items\MinecartWithChestItem.cs" />
     <Compile Include="Items\MinecartWithFurnaceItem.cs" />
+    <Compile Include="Items\MinecartWithHopperItem.cs" />
     <Compile Include="Items\MinecartWithTntItem.cs" />
     <Compile Include="Items\MushroomStewItem.cs" />
     <Compile Include="Items\MusicDiscItem.cs" />

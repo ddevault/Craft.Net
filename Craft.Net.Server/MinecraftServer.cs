@@ -275,7 +275,7 @@ namespace Craft.Net.Server
             client.Entity.InventoryChanged += EntityInventoryChanged;
             EntityManager.SpawnEntity(DefaultWorld, client.Entity);
             client.SendPacket(new LoginRequestPacket(client.Entity.Id,
-                                              DefaultWorld.LevelType, DefaultLevel.GameMode,
+                                              DefaultWorld.LevelType, client.Entity.GameMode,
                                               client.Entity.Dimension, Settings.Difficulty,
                                               Settings.MaxPlayers));
             client.SendPacket(new SpawnPositionPacket((int)client.Entity.SpawnPoint.X, (int)client.Entity.SpawnPoint.Y, (int)client.Entity.SpawnPoint.Z));

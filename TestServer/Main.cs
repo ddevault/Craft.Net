@@ -26,6 +26,8 @@ namespace TestServer
                 new IPEndPoint(IPAddress.Any, 25565));
             minecraftServer.Settings.OnlineMode = false;
             minecraftServer.Settings.EnableEncryption = true;
+            CustomLeatherItem.Server = minecraftServer;
+            Item.SetItemClass(new CustomLeatherItem());
             // Add a console logger
             LogProvider.RegisterProvider(new ConsoleLogWriter(LogImportance.Medium));
             LogProvider.RegisterProvider(new FileLogWriter("packetLog.txt", LogImportance.Low));
