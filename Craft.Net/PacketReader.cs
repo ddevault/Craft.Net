@@ -218,9 +218,9 @@ namespace Craft.Net
             typeof(TabCompletePacket), // 0xCB
             typeof(ClientSettingsPacket), // 0xCC
             typeof(ClientStatusPacket), // 0xCD
-            null, // 0xCE
-            null, // 0xCF
-            null, // 0xD0
+            typeof(CreateScoreboardPacket), // 0xCE
+            typeof(UpdateScorePacket), // 0xCF
+            typeof(DisplayScoreboardPacket), // 0xD0
             null, // 0xD1
             null, // 0xD2
             null, // 0xD3

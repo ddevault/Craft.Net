@@ -2594,84 +2594,90 @@ namespace Craft.Net
         }
     }
 
-    public struct Unknown0xCEPacket : IPacket
+    public struct CreateScoreboardPacket : IPacket
     {
-        public string Unknown1;
-        public string Unknown2;
-        public byte Unknown3;
+        public string Name;
+        public string DisplayName;
+        public bool RemoveBoard;
 
         public const byte PacketId = 0xCE;
         public byte Id { get { return 0xCE; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
-            Unknown1 = stream.ReadString();
-            Unknown2 = stream.ReadString();
-            Unknown3 = stream.ReadUInt8();
+            Name = stream.ReadString();
+            DisplayName = stream.ReadString();
+            RemoveBoard = stream.ReadBoolean();
         }
 
         public void WritePacket(MinecraftStream stream)
         {
             stream.WriteUInt8(Id);
-            stream.WriteString(Unknown1);
-            stream.WriteString(Unknown2);
-            stream.WriteUInt8(Unknown3);
+            stream.WriteString(Name);
+            stream.WriteString(DisplayName);
+            stream.WriteBoolean(RemoveBoard);
         }
     }
 
-    public struct Unknown0xCFPacket : IPacket
+    public struct UpdateScorePacket : IPacket
     {
-        public string Unknown1;
-        public byte Unknown2;
-        public string Unknown3;
-        public int? Unknown4;
+        public string ItemName;
+        public bool RemoveItem;
+        public string ScoreName;
+        public int? Value;
 
         public const byte PacketId = 0xCF;
         public byte Id { get { return 0xCF; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
-            Unknown1 = stream.ReadString();
-            Unknown2 = stream.ReadUInt8();
-            if (Unknown2 != 1)
+            ItemName = stream.ReadString();
+            RemoveItem = stream.ReadBoolean();
+            if (!RemoveItem)
             {
-                Unknown3 = stream.ReadString();
-                Unknown4 = stream.ReadInt32();
+                ScoreName = stream.ReadString();
+                Value = stream.ReadInt32();
             }
         }
 
         public void WritePacket(MinecraftStream stream)
         {
             stream.WriteUInt8(Id);
-            stream.WriteString(Unknown1);
-            stream.WriteUInt8(Unknown2);
-            if (Unknown2 != 1)
+            stream.WriteString(ItemName);
+            stream.WriteBoolean(RemoveItem);
+            if (!RemoveItem)
             {
-                stream.WriteString(Unknown3);
-                stream.WriteInt32(Unknown4.Value);
+                stream.WriteString(ScoreName);
+                stream.WriteInt32(Value.Value);
             }
         }
     }
 
-    public struct Unknown0xD0Packet : IPacket
+    public struct DisplayScoreboardPacket : IPacket
     {
-        public byte Unknown1;
-        public string Unknown2;
+        public enum ScoreboardPosition
+        {
+            PlayerList = 0,
+            Sidebar = 1
+        }
+
+        public ScoreboardPosition Position;
+        public string ScoreName;
 
         public const byte PacketId = 0xD0;
         public byte Id { get { return 0xD0; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
-            Unknown1 = stream.ReadUInt8();
-            Unknown2 = stream.ReadString();
+            Position = (ScoreboardPosition)stream.ReadUInt8();
+            ScoreName = stream.ReadString();
         }
 
         public void WritePacket(MinecraftStream stream)
         {
             stream.WriteUInt8(Id);
-            stream.WriteUInt8(Unknown1);
-            stream.WriteString(Unknown2);
+            stream.WriteUInt8((byte)Position);
+            stream.WriteString(ScoreName);
         }
     }
 
