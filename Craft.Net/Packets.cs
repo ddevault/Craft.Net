@@ -2594,6 +2594,88 @@ namespace Craft.Net
         }
     }
 
+    public struct Unknown0xCEPacket : IPacket
+    {
+        public string Unknown1;
+        public string Unknown2;
+        public byte Unknown3;
+
+        public const byte PacketId = 0xCE;
+        public byte Id { get { return 0xCE; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            Unknown1 = stream.ReadString();
+            Unknown2 = stream.ReadString();
+            Unknown3 = stream.ReadUInt8();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteUInt8(Id);
+            stream.WriteString(Unknown1);
+            stream.WriteString(Unknown2);
+            stream.WriteUInt8(Unknown3);
+        }
+    }
+
+    public struct Unknown0xCFPacket : IPacket
+    {
+        public string Unknown1;
+        public byte Unknown2;
+        public string Unknown3;
+        public int? Unknown4;
+
+        public const byte PacketId = 0xCF;
+        public byte Id { get { return 0xCF; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            Unknown1 = stream.ReadString();
+            Unknown2 = stream.ReadUInt8();
+            if (Unknown2 != 1)
+            {
+                Unknown3 = stream.ReadString();
+                Unknown4 = stream.ReadInt32();
+            }
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteUInt8(Id);
+            stream.WriteString(Unknown1);
+            stream.WriteUInt8(Unknown2);
+            if (Unknown2 != 1)
+            {
+                stream.WriteString(Unknown3);
+                stream.WriteInt32(Unknown4.Value);
+            }
+        }
+    }
+
+    public struct Unknown0xD0Packet : IPacket
+    {
+        public byte Unknown1;
+        public string Unknown2;
+
+        public const byte PacketId = 0xD0;
+        public byte Id { get { return 0xD0; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            Unknown1 = stream.ReadUInt8();
+            Unknown2 = stream.ReadString();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteUInt8(Id);
+            stream.WriteUInt8(Unknown1);
+            stream.WriteString(Unknown2);
+        }
+    }
+
+
     public struct PluginMessagePacket : IPacket
     {
         public PluginMessagePacket(string channel, byte[] data)
