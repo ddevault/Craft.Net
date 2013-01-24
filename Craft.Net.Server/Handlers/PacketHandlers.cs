@@ -74,7 +74,7 @@ namespace Craft.Net.Server.Handlers
 
         private static string GetPingValue(MinecraftServer server)
         {
-            return "§1\0" + MinecraftServer.ProtocolVersion + "\0" +
+            return "§1\0" + PacketReader.ProtocolVersion + "\0" +
                 MinecraftServer.TargetClientVersion + "\0" +
                 server.Settings.MotD + "\0" + server.Clients.Count(c => c.IsLoggedIn) +
                 "\0" + server.Settings.MaxPlayers;

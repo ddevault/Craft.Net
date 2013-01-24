@@ -20,11 +20,7 @@ namespace Craft.Net.Server
             PacketHandlers.RegisterHandlers();
         }
 
-        /// <summary>
-        /// The protocol version supported by this server.
-        /// </summary>
-        public const int ProtocolVersion = 51;
-        public const string TargetClientVersion = "1.4.7";
+        public const string TargetClientVersion = "13w03a";
 
         public delegate void PacketHandler(MinecraftClient client, MinecraftServer server, IPacket packet);
 
@@ -279,7 +275,7 @@ namespace Craft.Net.Server
             client.Entity.InventoryChanged += EntityInventoryChanged;
             EntityManager.SpawnEntity(DefaultWorld, client.Entity);
             client.SendPacket(new LoginRequestPacket(client.Entity.Id,
-                                              DefaultWorld.LevelType, DefaultLevel.GameMode,
+                                              DefaultWorld.LevelType, client.Entity.GameMode,
                                               client.Entity.Dimension, Settings.Difficulty,
                                               Settings.MaxPlayers));
             client.SendPacket(new SpawnPositionPacket((int)client.Entity.SpawnPoint.X, (int)client.Entity.SpawnPoint.Y, (int)client.Entity.SpawnPoint.Z));

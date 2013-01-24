@@ -7,7 +7,7 @@ namespace Craft.Net
 {
     public static class PacketReader
     {
-        public const int ProtocolVersion = 51;
+        public const int ProtocolVersion = 54;
 
         #region Packet Types
         private static Type[] Packets = new Type[]
