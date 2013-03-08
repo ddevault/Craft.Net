@@ -61,7 +61,15 @@ namespace Craft.Net.Server.Handlers
             var args = new ChatMessageEventArgs(client, packet.Message);
             server.OnChatMessage(args);
             if (!args.Handled)
-                server.SendChat("<" + client.Username + "> " + packet.Message);
+            {
+                var team = server.ScoreboardManager.GetPlayerTeam(client.Username);
+                string chat;
+                if (team != null)
+                    chat = string.Format("<{0}{1}{2}> {3}", team.PlayerPrefix, client.Username, team.PlayerSuffix, packet.Message);
+                else
+                    chat = string.Format("<{0}> {1}", client.Username, packet.Message);
+                server.SendChat(chat);
+            }
         }
 
         public static void KeepAlive(MinecraftClient client, MinecraftServer server, IPacket _packet)

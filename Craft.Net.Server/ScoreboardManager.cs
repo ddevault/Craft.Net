@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Linq;
 using System.Linq;
 using System.Management.Instrumentation;
 using System.Text;
@@ -11,11 +12,13 @@ namespace Craft.Net.Server
     {
         private MinecraftServer Server { get; set; }
         private List<Scoreboard> Scoreboards { get; set; }
+        internal List<Team> Teams { get; set; }
 
         internal ScoreboardManager(MinecraftServer server)
         {
             Server = server;
             Scoreboards = new List<Scoreboard>();
+            Teams = new List<Team>();
             Server.PlayerLoggedIn += ServerOnPlayerLoggedIn;
         }
 
@@ -64,9 +67,50 @@ namespace Craft.Net.Server
             return Scoreboards.ToArray();
         }
 
-        public Scoreboard this[string key]
+        public Scoreboard GetScoreboard(string name)
         {
-            get { return Scoreboards.First(s => s.Name == key); }
+            return Scoreboards.First(s => s.Name == name);
+        }
+
+        public Team GetTeam(string name)
+        {
+            return Teams.First(t => t.Name == name);
+        }
+
+        public Team CreateTeam(string name, string displayName, bool allowFriendlyFire, 
+            string playerPrefix, string playerSuffix)
+        {
+            if (Teams.Any(t => t.Name == name))
+                throw new DuplicateKeyException("The specified team already exists.");
+            var team = new Team(Server, this, name, displayName, allowFriendlyFire, playerPrefix, playerSuffix);
+            foreach (var client in Server.Clients.Where(c => c.IsLoggedIn))
+                client.SendPacket(SetTeamsPacket.CreateTeam(name, displayName, playerPrefix, playerSuffix, allowFriendlyFire, new string[0]));
+            Teams.Add(team);
+            return team;
+        }
+
+        public void RemoveTeam(string name)
+        {
+            RemoveTeam(GetTeam(name));
+        }
+
+        public void RemoveTeam(Team team)
+        {
+            if (!Teams.Contains(team))
+                throw new InstanceNotFoundException("This team is not known to the server.");
+            Teams.Remove(team);
+            foreach (var client in Server.Clients.Where(c => c.IsLoggedIn))
+                client.SendPacket(SetTeamsPacket.RemoveTeam(team.Name));
+        }
+
+        public Team GetPlayerTeam(string name)
+        {
+            return Teams.FirstOrDefault(t => t.Players.Contains(name));
+        }
+
+        public Scoreboard this[string name]
+        {
+            get { return GetScoreboard(name); }
         }
     }
 }

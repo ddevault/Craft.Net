@@ -2773,12 +2773,13 @@ namespace Craft.Net
 
     public struct SetTeamsPacket : IPacket
     {
-        public static SetTeamsPacket CreateTeam(string teamName, string teamPrefix,
+        public static SetTeamsPacket CreateTeam(string teamName, string displayName, string teamPrefix,
             string teamSuffix, bool enableFriendlyFire, string[] players)
         {
             var packet = new SetTeamsPacket();
             packet.PacketMode = TeamMode.CreateTeam;
             packet.TeamName = teamName;
+            packet.DisplayName = displayName;
             packet.TeamPrefix = teamPrefix;
             packet.TeamSuffix = teamSuffix;
             packet.EnableFriendlyFire = enableFriendlyFire;
@@ -2786,16 +2787,16 @@ namespace Craft.Net
             return packet;
         }
 
-        public static SetTeamsPacket UpdateTeam(string teamName, string teamPrefix,
-            string teamSuffix, bool enableFriendlyFire, string[] players)
+        public static SetTeamsPacket UpdateTeam(string teamName, string displayName, string teamPrefix,
+            string teamSuffix, bool enableFriendlyFire)
         {
             var packet = new SetTeamsPacket();
             packet.PacketMode = TeamMode.UpdateTeam;
             packet.TeamName = teamName;
+            packet.DisplayName = displayName;
             packet.TeamPrefix = teamPrefix;
             packet.TeamSuffix = teamSuffix;
             packet.EnableFriendlyFire = enableFriendlyFire;
-            packet.Players = players;
             return packet;
         }
 
@@ -2869,6 +2870,7 @@ namespace Craft.Net
         public void WritePacket(MinecraftStream stream)
         {
             stream.WriteUInt8(PacketId);
+            stream.WriteString(TeamName);
             stream.WriteUInt8((byte)PacketMode);
             if (PacketMode == TeamMode.CreateTeam || PacketMode == TeamMode.UpdateTeam)
             {

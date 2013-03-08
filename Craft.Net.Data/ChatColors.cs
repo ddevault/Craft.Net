@@ -7,6 +7,7 @@ namespace Craft.Net.Data
 {
     public static class ChatColors
     {
+        public const string Delimiter = "§";
         public const string Black = "§0";
         public const string DarkBlue = "§1";
         public const string DarkGreen = "§2";

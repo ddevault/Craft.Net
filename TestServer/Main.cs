@@ -157,6 +157,14 @@ namespace TestServer
                     case "removeboard":
                         minecraftServer.ScoreboardManager.RemoveScoreboard("test");
                         break;
+                    case "createteam":
+                        minecraftServer.ScoreboardManager.CreateTeam(parameters[0], parameters[1],
+                            true, ChatColors.Delimiter + parameters[2], ChatColors.Plain);
+                        break;
+                    case "setteam":
+                        var team = minecraftServer.ScoreboardManager.GetTeam(parameters[0]);
+                        team.AddPlayers(parameters.Skip(1).ToArray());
+                        break;
                 }
             }
         }

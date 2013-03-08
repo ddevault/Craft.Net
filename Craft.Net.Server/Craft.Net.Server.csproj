@@ -76,6 +76,7 @@
     <Compile Include="Scoreboard.cs" />
     <Compile Include="ScoreboardManager.cs" />
     <Compile Include="ServerSettings.cs" />
+    <Compile Include="Team.cs" />
     <Compile Include="WeatherManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
