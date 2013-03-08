@@ -1897,6 +1897,61 @@ namespace Craft.Net
         }
     }
 
+    public struct ParticleEffectPacket : IPacket
+    {
+        public ParticleEffectPacket(string effectName, float x, float y, float z,
+            float offsetX, float offsetY, float offsetZ, float particleSpeed,
+            int particleCount)
+        {
+            EffectName = effectName;
+            X = x;
+            Y = y;
+            Z = z;
+            OffsetX = offsetX;
+            OffsetY = offsetY;
+            OffsetZ = offsetZ;
+            ParticleSpeed = particleSpeed;
+            ParticleCount = particleCount;
+        }
+
+        public string EffectName;
+        public float X, Y, Z;
+        public float OffsetX, OffsetY, OffsetZ;
+        public float ParticleSpeed;
+        public int ParticleCount;
+
+        public const byte PacketId = 0x3F;
+
+        public byte Id { get { return 0x3F; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            EffectName = stream.ReadString();
+            X = stream.ReadSingle();
+            Y = stream.ReadSingle();
+            Z = stream.ReadSingle();
+            OffsetX = stream.ReadSingle();
+            OffsetY = stream.ReadSingle();
+            OffsetZ = stream.ReadSingle();
+            ParticleSpeed = stream.ReadSingle();
+            ParticleCount = stream.ReadInt32();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteUInt8(PacketId);
+            stream.WriteString(EffectName);
+            stream.WriteSingle(X);
+            stream.WriteSingle(Y);
+            stream.WriteSingle(Z);
+            stream.WriteSingle(OffsetX);
+            stream.WriteSingle(OffsetY);
+            stream.WriteSingle(OffsetZ);
+            stream.WriteSingle(ParticleSpeed);
+            stream.WriteInt32(ParticleCount);
+        }
+    }
+
     public struct ChangeGameStatePacket : IPacket
     {
         public enum GameState
@@ -2596,6 +2651,18 @@ namespace Craft.Net
 
     public struct CreateScoreboardPacket : IPacket
     {
+        public CreateScoreboardPacket(string name, string displayName)
+            : this(name, displayName, false)
+        {
+        }
+
+        public CreateScoreboardPacket(string name, string displayName, bool remove)
+        {
+            Name = name;
+            DisplayName = displayName;
+            RemoveBoard = remove;
+        }
+
         public string Name;
         public string DisplayName;
         public bool RemoveBoard;
@@ -2621,6 +2688,22 @@ namespace Craft.Net
 
     public struct UpdateScorePacket : IPacket
     {
+        public UpdateScorePacket(string itemName)
+        {
+            ItemName = itemName;
+            RemoveItem = true;
+            ScoreName = null;
+            Value = null;
+        }
+
+        public UpdateScorePacket(string itemName, string scoreName, int value)
+        {
+            ItemName = itemName;
+            RemoveItem = false;
+            ScoreName = scoreName;
+            Value = value;
+        }
+
         public string ItemName;
         public bool RemoveItem;
         public string ScoreName;
@@ -2655,10 +2738,17 @@ namespace Craft.Net
 
     public struct DisplayScoreboardPacket : IPacket
     {
+        public DisplayScoreboardPacket(ScoreboardPosition position, string scoreName)
+        {
+            Position = position;
+            ScoreName = scoreName;
+        }
+
         public enum ScoreboardPosition
         {
             PlayerList = 0,
-            Sidebar = 1
+            Sidebar = 1,
+            BelowPlayerName = 2
         }
 
         public ScoreboardPosition Position;
@@ -2681,6 +2771,121 @@ namespace Craft.Net
         }
     }
 
+    public struct SetTeamsPacket : IPacket
+    {
+        public static SetTeamsPacket CreateTeam(string teamName, string teamPrefix,
+            string teamSuffix, bool enableFriendlyFire, string[] players)
+        {
+            var packet = new SetTeamsPacket();
+            packet.PacketMode = TeamMode.CreateTeam;
+            packet.TeamName = teamName;
+            packet.TeamPrefix = teamPrefix;
+            packet.TeamSuffix = teamSuffix;
+            packet.EnableFriendlyFire = enableFriendlyFire;
+            packet.Players = players;
+            return packet;
+        }
+
+        public static SetTeamsPacket UpdateTeam(string teamName, string teamPrefix,
+            string teamSuffix, bool enableFriendlyFire, string[] players)
+        {
+            var packet = new SetTeamsPacket();
+            packet.PacketMode = TeamMode.UpdateTeam;
+            packet.TeamName = teamName;
+            packet.TeamPrefix = teamPrefix;
+            packet.TeamSuffix = teamSuffix;
+            packet.EnableFriendlyFire = enableFriendlyFire;
+            packet.Players = players;
+            return packet;
+        }
+
+        public static SetTeamsPacket RemoveTeam(string teamName)
+        {
+            var packet = new SetTeamsPacket();
+            packet.PacketMode = TeamMode.RemoveTeam;
+            packet.TeamName = teamName;
+            return packet;
+        }
+
+        public static SetTeamsPacket AddPlayers(string teamName, string[] players)
+        {
+            var packet = new SetTeamsPacket();
+            packet.PacketMode = TeamMode.AddPlayers;
+            packet.TeamName = teamName;
+            packet.Players = players;
+            return packet;
+        }
+
+        public static SetTeamsPacket RemovePlayers(string teamName, string[] players)
+        {
+            var packet = new SetTeamsPacket();
+            packet.PacketMode = TeamMode.RemovePlayers;
+            packet.TeamName = teamName;
+            packet.Players = players;
+            return packet;
+        }
+
+        public enum TeamMode
+        {
+            CreateTeam = 0,
+            RemoveTeam = 1,
+            UpdateTeam = 2,
+            AddPlayers = 3,
+            RemovePlayers = 4
+        }
+
+        public string TeamName;
+        public TeamMode PacketMode;
+        public string DisplayName;
+        public string TeamPrefix;
+        public string TeamSuffix;
+        public bool? EnableFriendlyFire;
+        public string[] Players;
+
+        public const byte PacketId = 0xD1;
+        public byte Id { get { return 0xD1; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            TeamName = stream.ReadString();
+            PacketMode = (TeamMode)stream.ReadUInt8();
+            if (PacketMode == TeamMode.CreateTeam || PacketMode == TeamMode.UpdateTeam)
+            {
+                DisplayName = stream.ReadString();
+                TeamPrefix = stream.ReadString();
+                TeamSuffix = stream.ReadString();
+                EnableFriendlyFire = stream.ReadBoolean();
+            }
+            if (PacketMode == TeamMode.CreateTeam || PacketMode == TeamMode.AddPlayers ||
+                PacketMode == TeamMode.RemovePlayers)
+            {
+                var playerCount = stream.ReadInt16();
+                Players = new string[playerCount];
+                for (int i = 0; i < playerCount; i++)
+                    Players[i] = stream.ReadString();
+            }
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteUInt8(PacketId);
+            stream.WriteUInt8((byte)PacketMode);
+            if (PacketMode == TeamMode.CreateTeam || PacketMode == TeamMode.UpdateTeam)
+            {
+                stream.WriteString(DisplayName);
+                stream.WriteString(TeamPrefix);
+                stream.WriteString(TeamSuffix);
+                stream.WriteBoolean(EnableFriendlyFire.Value);
+            }
+            if (PacketMode == TeamMode.CreateTeam || PacketMode == TeamMode.AddPlayers ||
+                PacketMode == TeamMode.RemovePlayers)
+            {
+                stream.WriteInt16((short)Players.Length);
+                for (int i = 0; i < Players.Length; i++)
+                    stream.WriteString(Players[i]);
+            }
+        }
+    }
 
     public struct PluginMessagePacket : IPacket
     {

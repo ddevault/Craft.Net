@@ -6,7 +6,7 @@ multiplayer networking and world editing, as well as a multiplayer client and se
 of Craft.Net is the fully functional Minecraft server, with support for everything from survival mode
 resource gathering, multiplayer PvP, entity physics, and more.
 
-Craft.Net currently supports Minecraft 13w04a on Windows, Linux and Mac.
+Craft.Net currently supports Minecraft 1.5 on Windows, Linux and Mac.
 
 **A note on submodules**: Craft.Net includes external dependencies in the form of git submodules.
 
@@ -34,14 +34,14 @@ This is not an exhaustive list.
 
 ### Craft.Net
 
-* Full support for the 13w04a (version 55) Minecraft protocol
+* Full support for the 1.5 (version 60) Minecraft protocol
 * Item stack and entity metadata manipulation
 * Cryptography support that provides full interoperability with Java clients and servers
 
 ### Craft.Net.Data
 
 * Anvil world manipulation
-* All 13w04a items and blocks
+* All 1.5 items and blocks
   * Includes support for most operations, such as planting seeds
 * Entity management and simulation
   * Includes physics for entity versus terrain physics simulation
@@ -55,7 +55,7 @@ This is not an exhaustive list.
 
 ### Craft.Net.Server
 
-* 1.4.7 multiplayer server
+* 1.5 multiplayer server
 * Provides a layer on top of Craft.Net.Data for multiplayer Minecraft
 * Fast networking - low CPU and memory usage
 * Modular and extensible
@@ -66,8 +66,8 @@ This is not an exhaustive list.
 
 *Craft.Net.Client is the newest addition to Craft.Net, and it is unstable and lacking in features.*
 
-* Connect to and play on 13w04a multiplayer servers
-  * Full support for the 13w04a protocol
+* Connect to and play on 1.5 multiplayer servers
+  * Full support for the 1.5 protocol
 * Encrypt/decrypt local lastlogin files (useful for launchers)
 * Liase with Minecraft.net for session authentication
 

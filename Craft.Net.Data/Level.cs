@@ -71,6 +71,7 @@ namespace Craft.Net.Data
         {
             WorldGenerator = generator;
             generator.Initialize(this);
+            World.WorldGenerator = WorldGenerator;
         }
 
         // TODO: Refactor constructors
