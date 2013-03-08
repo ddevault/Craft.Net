@@ -146,6 +146,17 @@ namespace TestServer
                         e.Origin.World.Relight();
                         e.Origin.SendChat("World relit.");
                         break;
+                    case "createboard":
+                        var board = minecraftServer.ScoreboardManager.CreateScoreboard("test", "Scoreboard");
+                        minecraftServer.ScoreboardManager.DisplayScoreboard(board, DisplayScoreboardPacket.ScoreboardPosition.Sidebar);
+                        board.AddScore("Test", 1234);
+                        break;
+                    case "updateboard":
+                        minecraftServer.ScoreboardManager["test"]["Test"]++;
+                        break;
+                    case "removeboard":
+                        minecraftServer.ScoreboardManager.RemoveScoreboard("test");
+                        break;
                 }
             }
         }

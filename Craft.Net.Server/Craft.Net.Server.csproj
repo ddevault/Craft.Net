@@ -73,6 +73,8 @@
     <Compile Include="ConsoleLogWriter.cs" />
     <Compile Include="FileLogWriter.cs" />
     <Compile Include="Events\ChatMessageEventArgs.cs" />
+    <Compile Include="Scoreboard.cs" />
+    <Compile Include="ScoreboardManager.cs" />
     <Compile Include="ServerSettings.cs" />
     <Compile Include="WeatherManager.cs" />
   </ItemGroup>

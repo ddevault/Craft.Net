@@ -56,6 +56,10 @@ namespace Craft.Net.Server
         /// The TCP listner this server users for incoming connections.
         /// </summary>
         public TcpListener Listener { get; set; }
+        /// <summary>
+        /// Manages scoreboards visible on the client.
+        /// </summary>
+        public ScoreboardManager ScoreboardManager { get; set; }
 
         protected internal Dictionary<string, PluginChannel> PluginChannels { get; set; }
 
@@ -142,6 +146,7 @@ namespace Craft.Net.Server
             Listener = new TcpListener(endPoint);
             NetworkLock = new object();
             World.RecreateLightIndex();
+            ScoreboardManager = new ScoreboardManager(this);
         }
 
         #endregion
