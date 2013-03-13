@@ -38,8 +38,13 @@ namespace Craft.Net.Data.Blocks
                     Metadata = (byte)StairDirections.East;
                     break;
             }
-            if (clickedBlock.Equals(position + Vector3.Up))
-                this.Metadata |= 4;
+            if (clickedSide == Vector3.Down)
+                Metadata |= 4;
+            else if (clickedSide != Vector3.Up)
+            {
+                if (cursorPosition.Y >= 8)
+                    Metadata |= 4;
+            }
             return true;
         }
     }
