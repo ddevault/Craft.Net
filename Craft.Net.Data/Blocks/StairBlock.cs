@@ -7,10 +7,10 @@ namespace Craft.Net.Data.Blocks
 {
     public enum StairDirections
     {
-        South = 0x0,
-        North = 0x1,
-        West = 0x2,
-        East = 0x3
+        East = 0x0,
+        West = 0x1,
+        South = 0x2,
+        North = 0x3
     }
 
     public abstract class StairBlock : Block
