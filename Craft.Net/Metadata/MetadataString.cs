@@ -15,7 +15,7 @@ namespace Craft.Net.Metadata
             return new MetadataString(value);
         }
 
-        internal MetadataString()
+        public MetadataString()
         {
         }
 

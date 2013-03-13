@@ -14,7 +14,7 @@ namespace Craft.Net.Metadata
             return new MetadataFloat(value);
         }
 
-        internal MetadataFloat()
+        public MetadataFloat()
         {
         }
 
