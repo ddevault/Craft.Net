@@ -14,7 +14,7 @@ namespace Craft.Net.Data.Test
         [Test]
         public void TestToString()
         {
-            MetadataByte mByte = new MetadataByte(10, 200);
+            var mByte = new MetadataByte(200);
             var text = mByte.ToString();
             Assert.Pass("This test must be manually verified."); // TODO
         }

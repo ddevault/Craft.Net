@@ -9,11 +9,12 @@ namespace Craft.Net.Metadata
 
         public short Value;
 
-        public MetadataShort(byte index) : base(index)
+        public static implicit operator MetadataShort(short value)
         {
+            return new MetadataShort(value);
         }
 
-        public MetadataShort(byte index, short value) : base(index)
+        public MetadataShort(short value)
         {
             Value = value;
         }
@@ -23,9 +24,9 @@ namespace Craft.Net.Metadata
             Value = stream.ReadInt16();
         }
 
-        public override void WriteTo(MinecraftStream stream)
+        public override void WriteTo(MinecraftStream stream, byte index)
         {
-            stream.WriteUInt8(GetKey());
+            stream.WriteUInt8(GetKey(index));
             stream.WriteInt16(Value);
         }
     }

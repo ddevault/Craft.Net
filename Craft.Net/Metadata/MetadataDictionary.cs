@@ -10,14 +10,14 @@ namespace Craft.Net.Metadata
     /// </summary>
     public class MetadataDictionary
     {
-        private Dictionary<int, MetadataEntry> entries;
+        private Dictionary<byte, MetadataEntry> entries;
 
         public MetadataDictionary()
         {
-            entries = new Dictionary<int, MetadataEntry>();
+            entries = new Dictionary<byte, MetadataEntry>();
         }
 
-        public MetadataEntry this[int index]
+        public MetadataEntry this[byte index]
         {
             get { return entries[index]; }
             set { entries[index] = value; }
@@ -36,6 +36,7 @@ namespace Craft.Net.Metadata
                 var entryType = EntryTypes[type];
                 value[index] = (MetadataEntry)Activator.CreateInstance(entryType, index);
                 value[index].FromStream(stream);
+                value[index].Index = index;
             }
             return value;
         }
@@ -43,7 +44,7 @@ namespace Craft.Net.Metadata
         public void WriteTo(MinecraftStream stream)
         {
             foreach (var entry in entries)
-                entry.Value.WriteTo(stream);
+                entry.Value.WriteTo(stream, entry.Key);
             stream.WriteUInt8(0x7F);
         }
 
@@ -61,7 +62,7 @@ namespace Craft.Net.Metadata
         {
             var value = "";
             foreach (var entry in entries)
-                value += entry.Value.ToString() + ", ";
+                value += entry.Value + ", ";
             return value.Remove(value.Length - 2);
         }
     }

@@ -65,8 +65,8 @@ namespace Craft.Net.Data.Entities
             get
             {
                 var meta = base.Metadata;
-                meta[2] = new MetadataSlot(2, Item);
-                meta[3] = new MetadataByte(3, Orientation);
+                meta[2] = Item;
+                meta[3] = Orientation;
                 return meta;
             }
         }

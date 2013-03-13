@@ -11,11 +11,12 @@ namespace Craft.Net.Metadata
 
         public ItemStack Value;
 
-        public MetadataSlot(byte index) : base(index)
+        public static implicit operator MetadataSlot(ItemStack value)
         {
+            return new MetadataSlot(value);
         }
 
-        public MetadataSlot(byte index, ItemStack value) : base(index)
+        public MetadataSlot(ItemStack value)
         {
             Value = value;
         }
@@ -25,9 +26,9 @@ namespace Craft.Net.Metadata
             Value = ItemStack.FromStream(stream);
         }
 
-        public override void WriteTo(MinecraftStream stream)
+        public override void WriteTo(MinecraftStream stream, byte index)
         {
-            stream.WriteUInt8(GetKey());
+            stream.WriteUInt8(GetKey(index));
             stream.WriteInt16(Value.Id);
             if (Value.Id != -1)
             {

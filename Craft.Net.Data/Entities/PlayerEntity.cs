@@ -305,7 +305,7 @@ namespace Craft.Net.Data.Entities
             get
             {
                 var metadata = base.Metadata;
-                metadata[16] = new Metadata.MetadataInt(16, ShowCape ? 1 : 0);
+                metadata[16] = ShowCape ? 1 : 0;
                 return metadata;
             }
         }

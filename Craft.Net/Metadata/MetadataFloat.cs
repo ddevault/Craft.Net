@@ -9,11 +9,12 @@ namespace Craft.Net.Metadata
 
         public float Value;
 
-        public MetadataFloat(byte index) : base(index)
+        public static implicit operator MetadataFloat(float value)
         {
+            return new MetadataFloat(value);
         }
 
-        public MetadataFloat(byte index, float value) : base(index)
+        public MetadataFloat(float value)
         {
             Value = value;
         }
@@ -23,9 +24,9 @@ namespace Craft.Net.Metadata
             Value = stream.ReadSingle();
         }
 
-        public override void WriteTo(MinecraftStream stream)
+        public override void WriteTo(MinecraftStream stream, byte index)
         {
-            stream.WriteUInt8(GetKey());
+            stream.WriteUInt8(GetKey(index));
             stream.WriteSingle(Value);
         }
     }

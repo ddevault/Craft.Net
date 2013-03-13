@@ -73,7 +73,8 @@ namespace Craft.Net.Data.Entities
             get
             {
                 var metadata = base.Metadata;
-                metadata[10] = new MetadataSlot(10, Item);
+                metadata[10] = Item;
+                metadata[5] = "Test";
                 return metadata;
             }
         }

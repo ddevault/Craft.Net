@@ -549,8 +549,8 @@ namespace Craft.Net.Data.Entities
             get
             {
                 var dictionary = new MetadataDictionary();
-                dictionary[0] = new MetadataByte(0, 0); // Flags
-                dictionary[1] = new MetadataShort(1, 300);
+                dictionary[0] = new MetadataByte(0); // Flags
+                dictionary[1] = new MetadataShort(300);
                 return dictionary;
             }
         }

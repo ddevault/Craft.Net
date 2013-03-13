@@ -10,11 +10,12 @@ namespace Craft.Net.Metadata
 
         public string Value;
 
-        public MetadataString(byte index) : base(index)
+        public static implicit operator MetadataString(string value)
         {
+            return new MetadataString(value);
         }
 
-        public MetadataString(byte index, string value) : base(index)
+        public MetadataString(string value)
         {
             if (value.Length > 16)
                 throw new ArgumentOutOfRangeException("value", "Maximum string length is 16 characters");
@@ -28,9 +29,9 @@ namespace Craft.Net.Metadata
             Value = stream.ReadString();
         }
 
-        public override void WriteTo(MinecraftStream stream)
+        public override void WriteTo(MinecraftStream stream, byte index)
         {
-            stream.WriteUInt8(GetKey());
+            stream.WriteUInt8(GetKey(index));
             stream.WriteUInt8Array(Encoding.ASCII.GetBytes(Value));
         }
     }

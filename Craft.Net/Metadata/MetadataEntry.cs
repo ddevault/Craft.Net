@@ -5,22 +5,48 @@ namespace Craft.Net.Metadata
 {
     public abstract class MetadataEntry
     {
-        public MetadataEntry(byte index)
-        {
-            Index = index;
-            Index &= 0x1F;
-        }
-
-        public byte Index { get; set; }
         public abstract byte Identifier { get; }
         public abstract string FriendlyName { get; }
 
         public abstract void FromStream(MinecraftStream stream);
-        public abstract void WriteTo(MinecraftStream stream);
+        public abstract void WriteTo(MinecraftStream stream, byte index);
 
-        protected byte GetKey()
+        internal byte Index { get; set; }
+
+        public static implicit operator MetadataEntry(byte value)
         {
-            return (byte)((Identifier << 5) | Index);
+            return new MetadataByte(value);
+        }
+
+        public static implicit operator MetadataEntry(short value)
+        {
+            return new MetadataShort(value);
+        }
+
+        public static implicit operator MetadataEntry(int value)
+        {
+            return new MetadataInt(value);
+        }
+
+        public static implicit operator MetadataEntry(float value)
+        {
+            return new MetadataFloat(value);
+        }
+
+        public static implicit operator MetadataEntry(string value)
+        {
+            return new MetadataString(value);
+        }
+
+        public static implicit operator MetadataEntry(ItemStack value)
+        {
+            return new MetadataSlot(value);
+        }
+
+        protected byte GetKey(byte index)
+        {
+            Index = index; // Cheat to get this for ToString
+            return (byte)((Identifier << 5) | (index & 0x1F));
         }
 
         public override string ToString()
