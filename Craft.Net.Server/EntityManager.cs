@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Craft.Net.Data;
 using Craft.Net.Data.Entities;
 using Craft.Net.Data.Events;
@@ -391,8 +392,11 @@ namespace Craft.Net.Server
             var known = GetKnownClients(player);
             foreach (var c in known)
                 c.SendPacket(new AnimationPacket(client.Entity.Id, AnimationPacket.AnimationType.EatFood)); // TODO: Why doesn't this work
-            var timer = new Timer(discarded =>
+            DateTime startTime = DateTime.Now;
+            Task.Factory.StartNew(() =>
                 {
+                    if ((DateTime.Now - startTime).TotalMilliseconds < 1500)
+                        Thread.Sleep(1500 - (int)(DateTime.Now - startTime).TotalMilliseconds);
                     if (player.SelectedSlot != slot.Index ||
                         player.SelectedItem.Empty || !(player.SelectedItem.AsItem() is FoodItem))
                         return;
@@ -401,13 +405,13 @@ namespace Craft.Net.Server
                     player.SetSlot(player.SelectedSlot, slot);
                     int food = player.Food;
                     food += item.FoodPoints;
-                    if (food > 20) food = 0;
+                    if (food > 20) food = 20;
                     player.Food = (short)food;
                     float saturation = player.FoodSaturation;
                     saturation += item.Saturation;
                     if (saturation > food) saturation = food;
                     player.FoodSaturation = saturation;
-                }, null, 1500, Timeout.Infinite);
+                });
         }
 
         private void UpdateGivenPosition(PlayerEntity entity)

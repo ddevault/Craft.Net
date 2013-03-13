@@ -12,6 +12,7 @@ using Craft.Net.Data.Blocks;
 using System.IO;
 using Craft.Net;
 using Craft.Net.Data.Windows;
+using Craft.Net.Data.Items;
 
 namespace TestServer
 {
@@ -39,9 +40,14 @@ namespace TestServer
 #endif
             IWorldGenerator generator = new FlatlandGenerator();
             minecraftServer.AddLevel(new Level(generator, Path.Combine(Directory.GetCurrentDirectory(), "world")));
-            minecraftServer.DefaultLevel.GameMode = GameMode.Creative;
+            minecraftServer.DefaultLevel.GameMode = GameMode.Survival;
             // Register the chat handler
             minecraftServer.ChatMessage += HandleOnChatMessage;
+            minecraftServer.PlayerLoggedIn += (s, e) =>
+                {
+                    e.Client.Entity.Inventory.Hotbar[0] = new ItemStack(new SteakItem(), 64);
+                    e.Client.Entity.Food = 10;
+                };
             // Start the server
             minecraftServer.Start();
             Console.WriteLine("Press 'q' key to exit.");
