@@ -69,13 +69,38 @@ namespace Craft.Net.Data.Blocks
             return DoorDirection.West;
         }
 
+        public static Vector3 DoorDirectionToVector3(DoorDirection direction)
+        {
+            if (direction == DoorDirection.East)
+                return Vector3.East;
+            if (direction == DoorDirection.North)
+                return Vector3.North;
+            if (direction == DoorDirection.West)
+                return Vector3.West;
+            return Vector3.East;
+        }
+
         public override void BlockUpdate(World world, Vector3 updatedBlock, Vector3 modifiedBlock)
         {
             if (UpperHalf)
             {
-                var block = world.GetBlock(updatedBlock + Vector3.Down);
-                if (!(block is DoorBlock))
+                var block = world.GetBlock(updatedBlock + Vector3.Down) as DoorBlock;
+                if (block == null)
                     world.SetBlock(updatedBlock, new AirBlock());
+                else
+                {
+                    var left = world.GetBlock(updatedBlock + DoorDirectionToVector3(block.Direction + 1 % 4) + Vector3.Down) as DoorBlock;
+                    if (left != null)
+                    {
+                        if (left.Direction == block.Direction)
+                        {
+                            world.EnableBlockUpdates = false;
+                            LeftHinge = true;
+                            world.SetBlock(updatedBlock, this);
+                            world.EnableBlockUpdates = true;
+                        }
+                    }
+                }
             }
             else
             {
