@@ -32,7 +32,7 @@ namespace Craft.Net.Metadata
         public override void WriteTo(MinecraftStream stream, byte index)
         {
             stream.WriteUInt8(GetKey(index));
-            stream.WriteUInt8Array(Encoding.ASCII.GetBytes(Value));
+            stream.WriteString(Value);
         }
     }
 }
