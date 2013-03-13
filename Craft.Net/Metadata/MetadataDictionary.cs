@@ -34,7 +34,7 @@ namespace Craft.Net.Metadata
                 byte type = (byte)((key & 0xE0) >> 5);
                 byte index = (byte)(key & 0x1F);
                 var entryType = EntryTypes[type];
-                value[index] = (MetadataEntry)Activator.CreateInstance(entryType, index);
+                value[index] = (MetadataEntry)Activator.CreateInstance(entryType);
                 value[index].FromStream(stream);
                 value[index].Index = index;
             }
