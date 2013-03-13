@@ -35,20 +35,20 @@ namespace Craft.Net.Data
         {
             byte direction = (byte)((int)Math.Floor((p.Yaw * 4F) / 360F + 0.5D) & 3);
             if (invert)
-                switch (direction) // TODO: Don't cast these
+                switch (direction)
                 {
-                    case 0: return (Direction)2;
-                    case 1: return (Direction)5;
-                    case 2: return (Direction)3;
-                    case 3: return (Direction)4;
+                    case 0: return Direction.North;
+                    case 1: return Direction.East;
+                    case 2: return Direction.South;
+                    case 3: return Direction.West;
                 }
             else
                 switch (direction)
                 {
-                    case 0: return (Direction)3;
-                    case 1: return (Direction)4;
-                    case 2: return (Direction)2;
-                    case 3: return (Direction)5;
+                    case 0: return Direction.South;
+                    case 1: return Direction.West;
+                    case 2: return Direction.North;
+                    case 3: return Direction.East;
                 }
             return 0;
         }
