@@ -14,6 +14,10 @@ namespace Craft.Net.Metadata
             return new MetadataShort(value);
         }
 
+        internal MetadataShort()
+        {
+        }
+
         public MetadataShort(short value)
         {
             Value = value;

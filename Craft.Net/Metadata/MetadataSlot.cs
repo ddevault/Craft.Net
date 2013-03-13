@@ -16,6 +16,10 @@ namespace Craft.Net.Metadata
             return new MetadataSlot(value);
         }
 
+        internal MetadataSlot()
+        {
+        }
+
         public MetadataSlot(ItemStack value)
         {
             Value = value;

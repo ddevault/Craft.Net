@@ -12,6 +12,10 @@ namespace Craft.Net.Metadata
             return new MetadataByte(value);
         }
 
+        internal MetadataByte()
+        {
+        }
+
         public MetadataByte(byte value)
         {
             Value = value;
