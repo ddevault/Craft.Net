@@ -5,6 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Craft.Net.Client;
+using Craft.Net.Data;
 
 namespace TestClient
 {
@@ -63,6 +64,10 @@ namespace TestClient
                     client.SendChat(input.Substring(4));
                 else if (input == "respawn")
                     client.Respawn();
+                else if (input == "save")
+                    client.World.Save("testWorld", true);
+                else if (input == "under")
+                    Console.WriteLine(client.World.GetBlock(client.Position + Vector3.Down).GetType().Name);
             }
 
             client.Disconnect("Quitting");

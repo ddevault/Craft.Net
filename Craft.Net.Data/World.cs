@@ -165,6 +165,8 @@ namespace Craft.Net.Data
             int regionZ = z/Region.Depth - ((z < 0) ? 1 : 0);
 
             var region = CreateOrLoadRegion(new Vector3(regionX, 0, regionZ));
+            chunk.IsModified = true;
+            chunk.ParentRegion = region;
             region.SetChunk(new Vector3(x - regionX * 32, 0, z - regionZ * 32), chunk);
         }
 
@@ -378,6 +380,22 @@ namespace Craft.Net.Data
             int chunkZ = z / (Chunk.Depth) - ((z < 0) ? 1 : 0);
 
             return new Vector3(x - chunkX * Chunk.Width, y, z - chunkZ * Chunk.Depth);
+        }
+
+        /// <summary>
+        /// Returns the position of the specified chunk relative to its parent region.
+        /// </summary>
+        public static Vector3 GetRelativeChunkPosition(Vector3 position)
+        {
+            //In chunks
+            var x = (int)position.X;
+            var z = (int)position.Z;
+
+            //In regions
+            int regionX = x / Region.Width - ((x < 0) ? 1 : 0);
+            int regionZ = z / Region.Depth - ((z < 0) ? 1 : 0);
+
+            return new Vector3(x - regionX * 32, 0, z - regionZ * 32);
         }
 
         public static bool IsValidPosition(Vector3 position)

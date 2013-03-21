@@ -12,20 +12,24 @@ namespace Craft.Net.Client
         private bool UnloadChunks { get; set; }
 
         internal World World { get; set; }
+        internal Level Level { get; set; }
 
         internal ReadOnlyWorld()
         {
             World = new World(null);
+            Level = new Level(World);
+            World.EnableBlockUpdates = false;
             UnloadChunks = true;
         }
 
         /// <summary>
         /// Saves the world to a directory and enables saving from then on.
         /// </summary>
-        public void Save(string path, bool disableChunkUnloading)
+        public World Save(string path, bool disableChunkUnloading)
         {
-            World.Save(path);
+            Level.Save(path);
             UnloadChunks = !disableChunkUnloading;
+            return World;
         }
 
         public Block GetBlock(Vector3 position)
