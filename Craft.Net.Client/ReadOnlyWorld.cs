@@ -9,11 +9,23 @@ namespace Craft.Net.Client
 {
     public class ReadOnlyWorld
     {
+        private bool UnloadChunks { get; set; }
+
         internal World World { get; set; }
 
         internal ReadOnlyWorld()
         {
             World = new World(null);
+            UnloadChunks = true;
+        }
+
+        /// <summary>
+        /// Saves the world to a directory and enables saving from then on.
+        /// </summary>
+        public void Save(string path, bool disableChunkUnloading)
+        {
+            World.Save(path);
+            UnloadChunks = !disableChunkUnloading;
         }
 
         public Block GetBlock(Vector3 position)
@@ -29,6 +41,12 @@ namespace Craft.Net.Client
         internal void SetChunk(Vector3 position, Chunk chunk)
         {
             World.SetChunk(position, chunk);
+        }
+
+        internal void RemoveChunk(int x, int z)
+        {
+            if (UnloadChunks)
+                World.UnloadChunk(x, z);
         }
     }
 
