@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Craft.Net.Client.Events;
 using Ionic.Zlib;
 using Craft.Net.Data;
 using System.IO;
@@ -60,6 +61,7 @@ namespace Craft.Net.Client.Handlers
                 }
                 Array.Copy(data, offset + chunkLength - chunk.Biomes.Length, chunk.Biomes, 0, chunk.Biomes.Length);
                 client.World.SetChunk(new Vector3(x, 0, z), chunk);
+                client.OnChunkRecieved(new ChunkRecievedEventArgs(new Vector3(x, 0, z), new ReadOnlyChunk(chunk)));
             }
         }
 
@@ -99,6 +101,7 @@ namespace Craft.Net.Client.Handlers
             if (packet.GroundUpContinuous)
                 Array.Copy(data, data.Length - chunk.Biomes.Length, chunk.Biomes, 0, chunk.Biomes.Length);
             client.World.SetChunk(new Vector3(packet.X, 0, packet.Z), chunk);
+            client.OnChunkRecieved(new ChunkRecievedEventArgs(new Vector3(packet.X, 0, packet.Z), new ReadOnlyChunk(chunk)));
         }
     }
 }

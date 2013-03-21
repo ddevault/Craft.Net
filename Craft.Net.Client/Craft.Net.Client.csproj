@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="ConsoleLogWriter.cs" />
     <Compile Include="Events\ChatMessageEventArgs.cs" />
+    <Compile Include="Events\ChunkRecievedEventArgs.cs" />
     <Compile Include="Events\DisconnectEventArgs.cs" />
     <Compile Include="Events\EntitySpawnEventArgs.cs" />
     <Compile Include="Events\GameModeChangeEventArgs.cs" />
