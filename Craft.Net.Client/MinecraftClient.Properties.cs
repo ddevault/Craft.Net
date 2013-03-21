@@ -63,7 +63,8 @@ namespace Craft.Net.Client
         public short Food { get; internal set; }
         public float FoodSaturation { get; internal set; }
 
-        public Level Level { get; internal set; }
+        public LevelInformation LevelInformation { get; internal set; }
+        public ReadOnlyWorld World { get; internal set; }
 
         public bool Spawned { get; internal set; }
         public int EntityId { get; internal set; }

@@ -154,7 +154,7 @@ namespace Craft.Net.Data
         /// <summary>
         /// Sets the chunk at the given position to the chunk provided.
         /// </summary>
-        public void SetChunk(Vector3 position, Chunk chunk)
+        public virtual void SetChunk(Vector3 position, Chunk chunk)
         {
             //In chunks
             var x = (int)position.X;
@@ -171,7 +171,7 @@ namespace Craft.Net.Data
         /// <summary>
         /// Gets the block at the specified position.
         /// </summary>
-        public Block GetBlock(Vector3 position)
+        public virtual Block GetBlock(Vector3 position)
         {
             Chunk chunk;
             Vector3 blockPosition = FindBlockPosition(position, out chunk);
