@@ -51,8 +51,11 @@ namespace Craft.Net.Client.Handlers
                             chunk.Sections[y].Metadata.Data, 0, NibbleDataLength);
                         Array.Copy(data, offset + (y * BlockDataLength + (BlockDataLength * sectionCount + NibbleDataLength)),
                             chunk.Sections[y].BlockLight.Data, 0, NibbleDataLength);
-                        Array.Copy(data, offset + (y * BlockDataLength + (BlockDataLength * sectionCount + (NibbleDataLength * 2))),
-                            chunk.Sections[y].SkyLight.Data, 0, NibbleDataLength);
+                        if (packet.LightIncluded)
+                        {
+                            Array.Copy(data, offset + (y * BlockDataLength + (BlockDataLength * sectionCount + (NibbleDataLength * 2))),
+                                chunk.Sections[y].SkyLight.Data, 0, NibbleDataLength);
+                        }
                     }
                 }
                 Array.Copy(data, offset + chunkLength - chunk.Biomes.Length, chunk.Biomes, 0, chunk.Biomes.Length);
