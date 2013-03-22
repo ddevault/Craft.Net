@@ -68,6 +68,8 @@ This is not an exhaustive list.
 
 * Connect to and play on 1.5 multiplayer servers
   * Full support for the 1.5 protocol
+* Handles loaded and unloaded chunks from the remote world
+  * Can also save server world to disk
 * Encrypt/decrypt local lastlogin files (useful for launchers)
 * Liase with Minecraft.net for session authentication
 
@@ -76,8 +78,7 @@ In short, Craft.Net is the ideal solution for any Minecraft-related activities o
 ## Usage
 
 Craft.Net is a very large, expansive project. A basic overview will be given here, but you are
-encouraged to [visit the wiki](https://github.com/SirCmpwn/Craft.Net/wiki) or the
-[website](http://sircmpwn.github.com/Craft.Net) to learn more.
+encouraged to [visit the wiki](https://github.com/SirCmpwn/Craft.Net/wiki) to learn more.
 
 ### General networking
 
