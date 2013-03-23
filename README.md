@@ -28,6 +28,13 @@ support for snapshots, run the following commands in your git repository:
 
 You'll now be on the snapshot branch, with bleeding-edge support for the latest Minecraft snapshots.
 
+## HTTPS Certificates on Mono
+
+Mono does not trust any certificates whatsoever after install, and you need to tell it which ones to
+trust. This means that `Craft.Net.Client` will fail to log into minecraft.net when connecting to
+online-mode servers. The easiest way to fix this is to just trust all the Mozilla root certificates
+by running `mozroots --import --sync`.
+
 ## Features
 
 This is not an exhaustive list.
