@@ -17,7 +17,7 @@ namespace Craft.Net.Client
         {
             get
             {
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ".minecraft/servers.dat");
+                return Path.Combine(DotMinecraft.GetDotMinecraftPath(), "servers.dat");
             }
         }
 

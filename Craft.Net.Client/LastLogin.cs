@@ -18,7 +18,7 @@ namespace Craft.Net.Client
         {
             get
             {
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ".minecraft/lastlogin");
+                return Path.Combine(DotMinecraft.GetDotMinecraftPath(), "lastlogin");
             }
         }
 
@@ -37,7 +37,6 @@ namespace Craft.Net.Client
                 byte[] decrypted = cryptoTransform.TransformFinalBlock(encryptedLogin, 0, encryptedLogin.Length);
                 short userLength = IPAddress.HostToNetworkOrder(BitConverter.ToInt16(decrypted, 0));
                 byte[] user = decrypted.Skip(2).Take(userLength).ToArray();
-                short passLength = IPAddress.HostToNetworkOrder(BitConverter.ToInt16(decrypted, userLength + 2));
                 byte[] password = decrypted.Skip(4 + userLength).ToArray();
                 LastLogin result = new LastLogin();
                 result.Username = System.Text.Encoding.UTF8.GetString(user);
