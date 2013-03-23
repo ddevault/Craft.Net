@@ -41,6 +41,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ionic.Zip.Reduced">
+      <HintPath>..\lib\Ionic.Zip.Reduced.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -52,22 +55,27 @@
   <ItemGroup>
     <Compile Include="ConsoleLogWriter.cs" />
     <Compile Include="Events\ChatMessageEventArgs.cs" />
+    <Compile Include="Events\ChunkRecievedEventArgs.cs" />
     <Compile Include="Events\DisconnectEventArgs.cs" />
     <Compile Include="Events\EntitySpawnEventArgs.cs" />
+    <Compile Include="Events\GameModeChangeEventArgs.cs" />
     <Compile Include="Events\HealthAndFoodEventArgs.cs" />
     <Compile Include="FileLogWriter.cs" />
     <Compile Include="Handlers\EntityHandlers.cs" />
     <Compile Include="Handlers\LoginHandlers.cs" />
     <Compile Include="Handlers\PacketHandlers.cs" />
     <Compile Include="Handlers\StateHandlers.cs" />
+    <Compile Include="Handlers\WorldHandlers.cs" />
     <Compile Include="ILogProvider.cs" />
     <Compile Include="LastLogin.cs" />
+    <Compile Include="LevelInformation.cs" />
     <Compile Include="LogProvider.cs" />
     <Compile Include="MinecraftClient.cs" />
     <Compile Include="MinecraftClient.Events.cs" />
     <Compile Include="MinecraftClient.Properties.cs" />
     <Compile Include="PKCSKeyGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadOnlyWorld.cs" />
     <Compile Include="ServerList.cs" />
     <Compile Include="ServerPing.cs" />
     <Compile Include="Session.cs" />

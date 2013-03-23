@@ -165,7 +165,29 @@ namespace Craft.Net.Data
             int regionZ = z/Region.Depth - ((z < 0) ? 1 : 0);
 
             var region = CreateOrLoadRegion(new Vector3(regionX, 0, regionZ));
+            chunk.IsModified = true;
+            chunk.ParentRegion = region;
             region.SetChunk(new Vector3(x - regionX * 32, 0, z - regionZ * 32), chunk);
+        }
+
+        public void UnloadChunk(int x, int z, bool save)
+        {
+            //In regions
+            int regionX = x / Region.Width - ((x < 0) ? 1 : 0);
+            int regionZ = z / Region.Depth - ((z < 0) ? 1 : 0);
+
+            var position = new Vector3(regionX, 0, regionZ);
+            if (!Regions.ContainsKey(position))
+                return;
+            var region = Regions[position];
+            if (save)
+                region.Save();
+            region.UnloadChunk(new Vector3(x - regionX * 32, 0, z - regionZ * 32));
+        }
+
+        public void UnloadChunk(int x, int z)
+        {
+            UnloadChunk(x, z, false);
         }
 
         /// <summary>
@@ -240,6 +262,18 @@ namespace Craft.Net.Data
             {
                 foreach (var region in Regions)
                     region.Value.Save();
+            }
+        }
+
+        public void Save(string path)
+        {
+            if (!System.IO.Directory.Exists(path))
+                System.IO.Directory.CreateDirectory(path);
+            Directory = path;
+            lock (Regions)
+            {
+                foreach (var region in Regions)
+                    region.Value.Save(Path.Combine(Directory, Region.GetRegionFileName(region.Key)));
             }
         }
 
@@ -346,6 +380,22 @@ namespace Craft.Net.Data
             int chunkZ = z / (Chunk.Depth) - ((z < 0) ? 1 : 0);
 
             return new Vector3(x - chunkX * Chunk.Width, y, z - chunkZ * Chunk.Depth);
+        }
+
+        /// <summary>
+        /// Returns the position of the specified chunk relative to its parent region.
+        /// </summary>
+        public static Vector3 GetRelativeChunkPosition(Vector3 position)
+        {
+            //In chunks
+            var x = (int)position.X;
+            var z = (int)position.Z;
+
+            //In regions
+            int regionX = x / Region.Width - ((x < 0) ? 1 : 0);
+            int regionZ = z / Region.Depth - ((z < 0) ? 1 : 0);
+
+            return new Vector3(x - regionX * 32, 0, z - regionZ * 32);
         }
 
         public static bool IsValidPosition(Vector3 position)

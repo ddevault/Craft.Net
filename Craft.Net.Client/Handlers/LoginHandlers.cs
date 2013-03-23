@@ -62,10 +62,8 @@ namespace Craft.Net.Client.Handlers
             client.Spawned = true;
             client.OnLoggedIn();
             // Initialize world
-            client.Level = new Level();
-            client.Level.Difficulty = packet.Difficulty;
-            client.Level.GameMode = packet.GameMode;
-            client.Level.World.LevelType = packet.LevelType;
+            client.World = new ReadOnlyWorld();
+            client.LevelInformation = new LevelInformation(packet);
             client.OnWorldInitialized();
         }
 

@@ -327,6 +327,11 @@ namespace Craft.Net.Data
             return "r." + x + "." + z + ".mca";
         }
 
+        public void UnloadChunk(Vector3 position)
+        {
+            Chunks.Remove(position);
+        }
+
         public void Dispose()
         {
             lock (regionFile)

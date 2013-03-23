@@ -67,6 +67,15 @@ namespace Craft.Net.Data
             Difficulty = Difficulty.Normal;
         }
 
+        public Level(World world)
+        {
+            World = world;
+            Name = "world";
+            GameMode = GameMode.Survival;
+            MapFeatures = false;
+            Difficulty = Difficulty.Normal;
+        }
+
         public Level(IWorldGenerator generator) : this()
         {
             WorldGenerator = generator;
@@ -138,6 +147,16 @@ namespace Craft.Net.Data
             saveTimer = new Timer(Save, null, (int)SaveInterval.TotalMilliseconds, Timeout.Infinite);
         }
 
+        public void Save(string directory)
+        {
+            LevelDirectory = directory;
+            if (!Directory.Exists(LevelDirectory))
+                Directory.CreateDirectory(LevelDirectory);
+            if (WorldGenerator == null)
+                WorldGenerator = DefaultGenerator;
+            Save();
+        }
+
         public void Save()
         {
             NbtFile file = new NbtFile();
@@ -164,10 +183,12 @@ namespace Craft.Net.Data
             });
             file.RootTag = new NbtCompound("");
             file.RootTag.Add(data);
-            using (var stream = File.Open(Path.Combine(LevelDirectory, "level.dat"), FileMode.Create))
+            using (var stream = File.Create(Path.Combine(LevelDirectory, "level.dat")))
                 file.SaveToStream(stream, NbtCompression.GZip);
-
-            World.Save();
+            if (World.Directory == null)
+                World.Save(Path.Combine(LevelDirectory, "region"));
+            else
+                World.Save();
         }
 
         public static IWorldGenerator GetGenerator(string generatorName)

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.ObjectModel;
+
 namespace Craft.Net.Data
 {
     /// <summary>
@@ -39,6 +42,26 @@ namespace Craft.Net.Data
                 Data[index/2] &= (byte)(0xF << ((index + 1) % 2 * 4));
                 Data[index/2] |= (byte)(value << (index % 2 * 4));
             }
+        }
+    }
+
+    public class ReadOnlyNibbleArray
+    {
+        private NibbleArray NibbleArray { get; set; }
+
+        public ReadOnlyNibbleArray(NibbleArray array)
+        {
+            NibbleArray = array;
+        }
+
+        public byte this[int index]
+        {
+            get { return NibbleArray[index]; }
+        }
+
+        public ReadOnlyCollection<byte> Data
+        {
+            get { return Array.AsReadOnly(NibbleArray.Data); }
         }
     }
 }

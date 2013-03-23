@@ -49,5 +49,11 @@ namespace Craft.Net.Client
         {
             if (WorldInitialized != null) WorldInitialized(this, null);
         }
+
+        public event EventHandler<ChunkRecievedEventArgs> ChunkRecieved;
+        protected internal virtual void OnChunkRecieved(ChunkRecievedEventArgs e)
+        {
+            if (ChunkRecieved != null) ChunkRecieved(this, e);
+        }
     }
 }

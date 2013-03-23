@@ -26,6 +26,9 @@ namespace Craft.Net.Client.Handlers
 
             MinecraftClient.RegisterPacketHandler(UpdateHealthPacket.PacketId, StateHandlers.UpdateHealth);
             MinecraftClient.RegisterPacketHandler(RespawnPacket.PacketId, StateHandlers.Respawn);
+
+            MinecraftClient.RegisterPacketHandler(MapChunkBulkPacket.PacketId, WorldHandlers.MapChunkBulk);
+            MinecraftClient.RegisterPacketHandler(ChunkDataPacket.PacketId, WorldHandlers.ChunkData);
         }
 
         public static void KeepAlive(MinecraftClient client, IPacket _packet)
