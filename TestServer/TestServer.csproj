@@ -9,7 +9,6 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>TestServer</RootNamespace>
     <AssemblyName>TestServer</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -38,6 +37,8 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <WarningLevel>4</WarningLevel>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -58,7 +59,7 @@
       <Name>Craft.Net.Server</Name>
     </ProjectReference>
     <ProjectReference Include="..\Craft.Net\Craft.Net.csproj">
-      <Project>{c3bbab7e-606f-420e-9461-c8cfaec2476b}</Project>
+      <Project>{C3BBAB7E-606F-420E-9461-C8CFAEC2476B}</Project>
       <Name>Craft.Net</Name>
     </ProjectReference>
   </ItemGroup>
