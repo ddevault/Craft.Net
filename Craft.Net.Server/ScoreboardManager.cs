@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.Linq;
 using System.Linq;
-using System.Management.Instrumentation;
 using System.Text;
 using Craft.Net.Server.Events;
 
@@ -56,7 +55,7 @@ namespace Craft.Net.Server
         public void RemoveScoreboard(Scoreboard scoreboard)
         {
             if (!Scoreboards.Contains(scoreboard))
-                throw new InstanceNotFoundException("This scoreboard is not known to the server.");
+                throw new KeyNotFoundException("This scoreboard is not known to the server.");
             foreach (var client in Server.Clients.Where(c => c.IsLoggedIn))
                 client.SendPacket(new CreateScoreboardPacket(scoreboard.Name, scoreboard.DisplayName, true));
             Scoreboards.Remove(scoreboard);
@@ -97,7 +96,7 @@ namespace Craft.Net.Server
         public void RemoveTeam(Team team)
         {
             if (!Teams.Contains(team))
-                throw new InstanceNotFoundException("This team is not known to the server.");
+                throw new KeyNotFoundException("This team is not known to the server.");
             Teams.Remove(team);
             foreach (var client in Server.Clients.Where(c => c.IsLoggedIn))
                 client.SendPacket(SetTeamsPacket.RemoveTeam(team.Name));

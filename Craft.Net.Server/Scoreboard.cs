@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.Linq;
 using System.Linq;
-using System.Management.Instrumentation;
 using System.Text;
 
 namespace Craft.Net.Server
@@ -36,7 +35,7 @@ namespace Craft.Net.Server
         public void RemoveScore(string name)
         {
             if (!Scores.ContainsKey(name))
-                throw new InstanceNotFoundException("The specified score does not exist.");
+                throw new KeyNotFoundException("The specified score does not exist.");
             foreach (var client in Server.Clients.Where(c => c.IsLoggedIn))
                 client.SendPacket(new UpdateScorePacket(name));
             Scores.Remove(name);
