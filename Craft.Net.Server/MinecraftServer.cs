@@ -399,16 +399,9 @@ namespace Craft.Net.Server
 
         #endregion
 
-        #region Private Methods
+        #region Protected Methods
 
-        private void HandleOnBlockChanged(object sender, BlockChangedEventArgs e)
-        {
-            foreach (MinecraftClient client in EntityManager.GetClientsInWorld(e.World))
-                client.SendPacket(new BlockChangePacket((int)e.Position.X, (byte)e.Position.Y, (int)e.Position.Z,
-                    e.Value.Id, e.Value.Metadata));
-        }
-
-        private void AcceptConnectionAsync(IAsyncResult result)
+        protected void AcceptConnectionAsync(IAsyncResult result)
         {
             try
             {
@@ -422,6 +415,17 @@ namespace Craft.Net.Server
                 Listener.BeginAcceptTcpClient(AcceptConnectionAsync, null);
             }
             catch { } // TODO: Investigate this more deeply
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private void HandleOnBlockChanged(object sender, BlockChangedEventArgs e)
+        {
+            foreach (MinecraftClient client in EntityManager.GetClientsInWorld(e.World))
+                client.SendPacket(new BlockChangePacket((int)e.Position.X, (byte)e.Position.Y, (int)e.Position.Z,
+                    e.Value.Id, e.Value.Metadata));
         }
 
         private void NetworkWorker()
