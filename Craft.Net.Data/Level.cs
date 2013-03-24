@@ -48,6 +48,11 @@ namespace Craft.Net.Data
         public int RainTime { get; set; }
         public int ThunderTime { get; set; }
         public Difficulty Difficulty { get; set; }
+        /// <summary>
+        /// If set, PlayerName's player.dat file will be copied into level.dat
+        /// under the Player compound, which allows for use in singleplayer.
+        /// </summary>
+        public string PlayerName { get; set; }
 
         /// <summary>
         /// Default constructor for a level that only exists in memory.
@@ -162,7 +167,7 @@ namespace Craft.Net.Data
             NbtFile file = new NbtFile();
 
             var serializer = new NbtSerializer(typeof(SavedLevel));
-            var data = serializer.Serialize(new SavedLevel
+            var level = new SavedLevel
             {
                 IsRaining = Raining,
                 GeneratorVersion = 0,
@@ -180,7 +185,19 @@ namespace Craft.Net.Data
                 Thundering = Thundering,
                 LevelName = Name,
                 LastPlayed = DateTime.UtcNow.Ticks
-            });
+            };
+            if (!string.IsNullOrEmpty(PlayerName))
+            {
+                if (File.Exists(Path.Combine(LevelDirectory, "players", PlayerName + ".dat")))
+                {
+                    var player = new NbtFile();
+                    using (Stream stream = File.Open(Path.Combine(LevelDirectory, "players", PlayerName + ".dat"), FileMode.Open))
+                        player.LoadFromStream(stream, NbtCompression.GZip, null);
+                    level.Player = player.RootTag;
+                    level.Player.Name = "Player";
+                }
+            }
+            var data = serializer.Serialize(level);
             file.RootTag = new NbtCompound("");
             file.RootTag.Add(data);
             using (var stream = File.Create(Path.Combine(LevelDirectory, "level.dat")))

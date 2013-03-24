@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using fNbt;
 
 namespace Craft.Net.Data
 {
@@ -105,5 +106,8 @@ namespace Craft.Net.Data
 
         [IgnoreOnNull]
         public string GeneratorOptions { get; set; }
+
+        [IgnoreOnNull]
+        public NbtCompound Player { get; set; }
     }
 }

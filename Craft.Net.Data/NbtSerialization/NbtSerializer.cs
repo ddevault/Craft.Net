@@ -26,6 +26,8 @@ namespace Craft.Net.Data.NbtSerialization
 
         public NbtTag Serialize(object value, string tagName)
         {
+            if (value is NbtTag)
+                return (NbtTag)value;
             if (value is byte)
                 return new NbtByte(tagName, (byte)value);
             if (value is bool)
