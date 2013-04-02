@@ -20,7 +20,7 @@ namespace Craft.Net.Server
             PacketHandlers.RegisterHandlers();
         }
 
-        public const string TargetClientVersion = "13w04a";
+        public const string TargetClientVersion = "2.0 Blue";
 
         public delegate void PacketHandler(MinecraftClient client, MinecraftServer server, IPacket packet);
 
