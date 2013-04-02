@@ -63,6 +63,12 @@
     <Compile Include="Difficulty.cs" />
     <Compile Include="Dimension.cs" />
     <Compile Include="GameMode.cs" />
+    <Compile Include="Utilities\BoundingBox.cs" />
+    <Compile Include="Utilities\MathHelper.cs" />
+    <Compile Include="Utilities\NibbleArray.cs" />
+    <Compile Include="Utilities\Ray.cs" />
+    <Compile Include="Utilities\Size.cs" />
+    <Compile Include="Utilities\Vector3.cs" />
     <Compile Include="Metadata\MetadataByte.cs" />
     <Compile Include="Metadata\MetadataDictionary.cs" />
     <Compile Include="Metadata\MetadataEntry.cs" />
