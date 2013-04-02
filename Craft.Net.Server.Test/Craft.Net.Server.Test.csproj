@@ -62,10 +62,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Craft.Net.Data\Craft.Net.Data.csproj">
-      <Project>{30C3F936-8D95-4113-BA48-8B798B056309}</Project>
-      <Name>Craft.Net.Data</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Craft.Net.Server\Craft.Net.Server.csproj">
       <Project>{E00C6FF6-BCD8-44E0-BCD8-5F1BDF201617}</Project>
       <Name>Craft.Net.Server</Name>
