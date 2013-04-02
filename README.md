@@ -1,12 +1,15 @@
 # Craft.Net
 
+**This is an unmaintained branch that adds support for the Minecraft 2.0 protocol introduced for April
+Fool's Day 2013.**
+
 Craft.Net is the collective name for several Minecraft-related .NET libraries. You can pick and choose
 different libraries to accomplish different tasks. Libraries are included for things such as Minecraft
 multiplayer networking and world editing, as well as a multiplayer client and server. The crown jewel
 of Craft.Net is the fully functional Minecraft server, with support for everything from survival mode
 resource gathering, multiplayer PvP, entity physics, and more.
 
-Craft.Net currently supports Minecraft 1.5.1 on Windows, Linux and Mac.
+Craft.Net currently supports Minecraft 2.0 on Windows, Linux and Mac.
 
 **A note on submodules**: Craft.Net includes external dependencies in the form of git submodules.
 
@@ -41,14 +44,14 @@ This is not an exhaustive list.
 
 ### Craft.Net
 
-* Full support for the 1.5.1 (version 60) Minecraft protocol
+* Full support for the 2.0 (version 90) Minecraft protocol
 * Item stack and entity metadata manipulation
 * Cryptography support that provides full interoperability with Java clients and servers
 
 ### Craft.Net.Data
 
 * Anvil world manipulation
-* All 1.5.1 items and blocks
+* All 2.0 items and blocks
   * Includes support for most operations, such as planting seeds
 * Entity management and simulation
   * Includes physics for entity versus terrain physics simulation
@@ -62,7 +65,7 @@ This is not an exhaustive list.
 
 ### Craft.Net.Server
 
-* 1.5.1 multiplayer server
+* 2.0 multiplayer server
 * Provides a layer on top of Craft.Net.Data for multiplayer Minecraft
 * Fast networking - low CPU and memory usage
 * Modular and extensible
@@ -73,7 +76,7 @@ This is not an exhaustive list.
 
 *Craft.Net.Client is the newest addition to Craft.Net, and it is unstable and lacking in features.*
 
-* Connect to and play on 1.5.1 multiplayer servers
+* Connect to and play on 2.0 multiplayer servers
 * Handles loaded and unloaded chunks from the remote world
   * Can also save server world to disk
 * Encrypt/decrypt local lastlogin files (useful for launchers)

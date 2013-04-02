@@ -20,12 +20,6 @@ namespace Craft.Net.Client
             PacketHandlers.RegisterHandlers();
         }
 
-        /// <summary>
-        /// The protocol version supported by this client.
-        /// </summary>
-        public const int ProtocolVersion = 51;
-        public const string FriendlyVersion = "1.4.6";
-
         public delegate void PacketHandler(MinecraftClient client, IPacket packet);
         private static PacketHandler[] PacketHandlerDelegates { get; set; }
 

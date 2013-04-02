@@ -270,6 +270,11 @@ namespace Craft.Net.Data
             new QuartzBlock(),
             new QuartzStairBlock(),
             new ActivatorRailBlock(),
+            new DropperBlock(),
+            new EthoSlabBlock(),
+            new BurntOutTorchBlock(),
+            new CoalBlock(),
+            new TintedGlassBlock(),
             new IronShovelItem(),
             new IronPickaxeItem(),
             new IronAxeItem(),
@@ -420,6 +425,8 @@ namespace Craft.Net.Data
             new ComparatorItem(),
             new NetherBrickItem(),
             new NetherQuartzItem(),
+            new MinecartWithTntItem(),
+            new MinecartWithHopperItem(),
             new MusicDiscItem()
         });
 

@@ -70,12 +70,14 @@
     <Compile Include="Blocks\BrickBlock.cs" />
     <Compile Include="Blocks\BrickStairBlock.cs" />
     <Compile Include="Blocks\BrownMushroomBlock.cs" />
+    <Compile Include="Blocks\BurntOutTorchBlock.cs" />
     <Compile Include="Blocks\CactusBlock.cs" />
     <Compile Include="Blocks\CakeBlock.cs" />
     <Compile Include="Blocks\CarrotBlock.cs" />
     <Compile Include="Blocks\CauldronBlock.cs" />
     <Compile Include="Blocks\ChestBlock.cs" />
     <Compile Include="Blocks\ClayBlock.cs" />
+    <Compile Include="Blocks\CoalBlock.cs" />
     <Compile Include="Blocks\CoalOreBlock.cs" />
     <Compile Include="Blocks\CobblestoneBlock.cs" />
     <Compile Include="Blocks\CobblestoneStairBlock.cs" />
@@ -101,6 +103,7 @@
     <Compile Include="Blocks\EndPortalBlock.cs" />
     <Compile Include="Blocks\EndPortalFrameBlock.cs" />
     <Compile Include="Blocks\EndStoneBlock.cs" />
+    <Compile Include="Blocks\EthoSlabBlock.cs" />
     <Compile Include="Blocks\FarmlandBlock.cs" />
     <Compile Include="Blocks\FenceBlock.cs" />
     <Compile Include="Blocks\FenceGateBlock.cs" />
@@ -201,6 +204,7 @@
     <Compile Include="Blocks\StonePressurePlateBlock.cs" />
     <Compile Include="Blocks\SugarCaneBlock.cs" />
     <Compile Include="Blocks\TallGrassBlock.cs" />
+    <Compile Include="Blocks\TintedGlassBlock.cs" />
     <Compile Include="Blocks\TNTBlock.cs" />
     <Compile Include="Blocks\TorchBlock.cs" />
     <Compile Include="Blocks\TrapDoorBlock.cs" />

@@ -58,7 +58,13 @@ namespace Craft.Net.Data.Blocks
                 this.Metadata = 0x5;
             else
                 return false;
+            ScheduleUpdate(world, position, DateTime.Now.AddSeconds(MathHelper.Random.Next(10, 30)));
             return true;
+        }
+
+        public override void OnScheduledUpdate(World world, Vector3 position)
+        {
+            world.SetBlock(position, new BurntOutTorchBlock(Metadata));
         }
     }
 }
