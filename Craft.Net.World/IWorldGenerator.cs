@@ -14,9 +14,9 @@ namespace Craft.Net.World
         /// <summary>
         /// Generates one chunk at the given position.
         /// </summary>
-        Chunk GenerateChunk(Vector3 position, Region parentRegion);
+        //Chunk GenerateChunk(Vector3 position, Region parentRegion);
 
-        Chunk GenerateChunk(Vector3 position);
+        //Chunk GenerateChunk(Vector3 position);
 
         /// <summary>
         /// Called after the world generator is created and

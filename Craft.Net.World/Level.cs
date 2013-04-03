@@ -16,7 +16,12 @@ namespace Craft.Net.World
     /// </summary>
     public class Level
     {
-        public static IWorldGenerator DefaultGenerator { get; set; }
+        [NbtIgnore]
+        private IWorldGenerator WorldGenerator { get; set; }
+        [NbtIgnore]
+        private string DatFile { get; set; }
+
+        #region NBT Fields
 
         /// <summary>
         /// Always set to 19133.
@@ -137,6 +142,8 @@ namespace Craft.Net.World
         /// </summary>
         public GameRules GameRules { get; set; }
 
+        #endregion
+
         /// <summary>
         /// An in-memory level, with all defaults set as such.
         /// </summary>
@@ -145,11 +152,10 @@ namespace Craft.Net.World
             Version = 19133;
             Initialized = true;
             LevelName = "Level";
-            GeneratorName = DefaultGenerator.GeneratorName;
             GeneratorVersion = 1;
             GeneratorOptions = string.Empty;
             double seed = MathHelper.Random.NextDouble();
-            unsafe { RandomSeed = (long)(*&seed); }
+            unsafe { RandomSeed = *((long*)&seed); }
             MapFeatures = true;
             LastPlayed = DateTime.UtcNow.Ticks;
             AllowCommands = true;
@@ -162,6 +168,56 @@ namespace Craft.Net.World
             RainTime = MathHelper.Random.Next(0, 100000);
             Thundering = false;
             ThunderTime = MathHelper.Random.Next(0, 100000);
+        }
+
+        public Level(IWorldGenerator generator) : this()
+        {
+            GeneratorName = generator.GeneratorName;
+            generator.Initialize(this);
+            WorldGenerator = generator;
+        }
+
+        public Level(string generatorName) : this()
+        {
+            Type generatorType;
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            foreach (var assembly in assemblies)
+            {
+                var types = assembly.GetTypes().Where(t =>
+                    !t.IsAbstract && t.IsClass && typeof(IWorldGenerator).IsAssignableFrom(t) &&
+                    t.GetConstructors(BindingFlags.Public).Any(c => !c.GetParameters().Any()));
+                generatorType = types.FirstOrDefault(t =>
+                    (WorldGenerator = (IWorldGenerator)Activator.CreateInstance(t)).GeneratorName == generatorName);
+                if (generatorType != null)
+                    break;
+            }
+            GeneratorName = WorldGenerator.GeneratorName;
+            WorldGenerator.Initialize(this);
+        }
+
+        public void Save(string file)
+        {
+            DatFile = file;
+            Save();
+        }
+
+        public void Save()
+        {
+            if (DatFile == null)
+                throw new InvalidOperationException("This level exists only in memory. Use Save(string).");
+            var serializer = new NbtSerializer(typeof(Level));
+            var tag = serializer.Serialize(this, "Data") as NbtCompound;
+            var file = new NbtFile(tag);
+            file.SaveToFile(DatFile, NbtCompression.GZip);
+        }
+
+        public static Level LoadFrom(string file)
+        {
+            var serializer = new NbtSerializer(typeof(Level));
+            var nbtFile = new NbtFile(file);
+            var level = (Level)serializer.Deserialize(nbtFile.RootTag);
+            level.DatFile = file;
+            return level;
         }
 
         // Thanks to some idiot at Mojang
