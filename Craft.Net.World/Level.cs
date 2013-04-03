@@ -20,6 +20,8 @@ namespace Craft.Net.World
         private IWorldGenerator WorldGenerator { get; set; }
         [NbtIgnore]
         private string DatFile { get; set; }
+        [NbtIgnore]
+        private List<World> Worlds { get; set; }
 
         #region NBT Fields
 
@@ -195,6 +197,13 @@ namespace Craft.Net.World
             WorldGenerator.Initialize(this);
         }
 
+        public void AddWorld(World world)
+        {
+            if (Worlds.Any(w => w.Name.ToUpper() == world.Name.ToUpper()))
+                throw new InvalidOperationException("A world with the same name already exists in this level.");
+            Worlds.Add(world);
+        }
+
         public void Save(string file)
         {
             DatFile = file;
@@ -209,6 +218,11 @@ namespace Craft.Net.World
             var tag = serializer.Serialize(this, "Data") as NbtCompound;
             var file = new NbtFile(tag);
             file.SaveToFile(DatFile, NbtCompression.GZip);
+            // Save worlds
+            foreach (var world in Worlds)
+            {
+                // TODO
+            }
         }
 
         public static Level LoadFrom(string file)
@@ -217,6 +231,11 @@ namespace Craft.Net.World
             var nbtFile = new NbtFile(file);
             var level = (Level)serializer.Deserialize(nbtFile.RootTag);
             level.DatFile = file;
+            // All directories that don't have special meaning are worlds
+            var worlds = Directory.GetDirectories(Path.GetDirectoryName(file)).Where(
+                d => !new[] { "DATA", "PLAYERS" }.Contains(d.ToUpper()));
+            foreach (var world in worlds)
+                level.AddWorld(World.LoadWorld(world));
             return level;
         }
 
