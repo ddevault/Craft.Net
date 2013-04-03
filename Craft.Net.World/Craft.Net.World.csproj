@@ -49,6 +49,7 @@
     <Compile Include="Chunk.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IDiskEntity.cs" />
     <Compile Include="IWorldGenerator.cs">
       <SubType>Code</SubType>
     </Compile>

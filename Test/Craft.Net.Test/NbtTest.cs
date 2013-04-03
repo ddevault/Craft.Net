@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using Craft.Net.Nbt;
+using fNbt;
 
 namespace Craft.Net.Test
 {
@@ -15,7 +16,7 @@ namespace Craft.Net.Test
         // Populates everything with random values when constructing.
         private class TestType
         {
-            private static Random Random;
+            public static Random Random;
 
             public TestType()
             {
@@ -36,6 +37,7 @@ namespace Craft.Net.Test
                 for (int i = 0; i < 16; i++)
                     Thing10[i] = GenerateRandomString();
                 Thing11 = new ItemStack(1, 2, 3);
+                Custom = new CustomSerializable();
             }
 
             private string GenerateRandomString()
@@ -76,6 +78,27 @@ namespace Craft.Net.Test
             public string Thing9 { get; set; }
             public string[] Thing10 { get; set; }
             public ItemStack Thing11 { get; set; }
+            public CustomSerializable Custom { get; set; }
+        }
+
+        private class CustomSerializable : INbtSerializable
+        {
+            public int Test { get; set; }
+
+            public CustomSerializable()
+            {
+                Test = TestType.Random.Next();
+            }
+
+            public NbtCompound Serialize()
+            {
+                return new NbtCompound("", new[] { new NbtString("Example", Test.ToString()) });
+            }
+
+            public void Deserialize(NbtCompound value)
+            {
+                Test = int.Parse(value["Example"].StringValue);
+            }
         }
 
         [Test]

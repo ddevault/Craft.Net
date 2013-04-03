@@ -26,7 +26,13 @@ namespace Craft.Net.Nbt
 
         public NbtTag Serialize(object value, string tagName)
         {
-            if (value is NbtTag)
+            if (value is INbtSerializable)
+            {
+                var compound = ((INbtSerializable)value).Serialize();
+                compound.Name = tagName;
+                return compound;
+            }
+            else if (value is NbtTag)
                 return (NbtTag)value;
             else if (value is byte)
                 return new NbtByte(tagName, (byte)value);
@@ -61,25 +67,25 @@ namespace Craft.Net.Nbt
                 var elementType = value.GetType().GetElementType();
                 var array = value as Array;
                 var listType = NbtTagType.Compound;
-                if (elementType == typeof(byte) || elementType == typeof(sbyte))
+                if (elementType == typeof (byte) || elementType == typeof (sbyte))
                     listType = NbtTagType.Byte;
-                else if (elementType == typeof(bool))
+                else if (elementType == typeof (bool))
                     listType = NbtTagType.Byte;
-                else if (elementType == typeof(byte[]))
+                else if (elementType == typeof (byte[]))
                     listType = NbtTagType.ByteArray;
-                else if (elementType == typeof(double))
+                else if (elementType == typeof (double))
                     listType = NbtTagType.Double;
-                else if (elementType == typeof(float))
+                else if (elementType == typeof (float))
                     listType = NbtTagType.Float;
-                else if (elementType == typeof(int) || elementType == typeof(uint))
+                else if (elementType == typeof (int) || elementType == typeof (uint))
                     listType = NbtTagType.Int;
-                else if (elementType == typeof(int[]))
+                else if (elementType == typeof (int[]))
                     listType = NbtTagType.IntArray;
-                else if (elementType == typeof(long) || elementType == typeof(ulong))
+                else if (elementType == typeof (long) || elementType == typeof (ulong))
                     listType = NbtTagType.Long;
-                else if (elementType == typeof(short) || elementType == typeof(ushort))
+                else if (elementType == typeof (short) || elementType == typeof (ushort))
                     listType = NbtTagType.Short;
-                else if (elementType == typeof(string))
+                else if (elementType == typeof (string))
                     listType = NbtTagType.String;
                 var list = new NbtList(tagName, listType);
                 var innerSerializer = new NbtSerializer(elementType);
@@ -94,13 +100,15 @@ namespace Craft.Net.Nbt
                 var compound = new NbtCompound(tagName);
 
                 if (value == null) return compound;
-                var nameAttributes = Attribute.GetCustomAttributes(value.GetType(), typeof(TagNameAttribute));
+                var nameAttributes = Attribute.GetCustomAttributes(value.GetType(), typeof (TagNameAttribute));
 
                 if (nameAttributes.Length > 0)
                     compound = new NbtCompound(((TagNameAttribute)nameAttributes[0]).Name);
 
                 var properties = Type.GetProperties().Where(p =>
-                    !Attribute.GetCustomAttributes(p, typeof(NbtIgnoreAttribute)).Any());
+                                                            !Attribute.GetCustomAttributes(p,
+                                                                                           typeof (NbtIgnoreAttribute))
+                                                                      .Any());
 
                 foreach (var property in properties)
                 {
@@ -110,8 +118,8 @@ namespace Craft.Net.Nbt
                     NbtTag tag = null;
 
                     string name = property.Name;
-                    nameAttributes = Attribute.GetCustomAttributes(property, typeof(TagNameAttribute));
-                    var ignoreOnNullAttribute = Attribute.GetCustomAttribute(property, typeof(IgnoreOnNullAttribute));
+                    nameAttributes = Attribute.GetCustomAttributes(property, typeof (TagNameAttribute));
+                    var ignoreOnNullAttribute = Attribute.GetCustomAttribute(property, typeof (IgnoreOnNullAttribute));
                     if (nameAttributes.Length != 0)
                         name = ((TagNameAttribute)nameAttributes[0]).Name;
 
@@ -125,7 +133,7 @@ namespace Craft.Net.Nbt
                         {
                             propValue = Activator.CreateInstance(property.PropertyType);
                         }
-                        else if (property.PropertyType == typeof(string))
+                        else if (property.PropertyType == typeof (string))
                             propValue = "";
                     }
 
@@ -206,7 +214,14 @@ namespace Craft.Net.Nbt
                         name = ((TagNameAttribute)nameAttributes[0]).Name;
                     var node = compound.Tags.SingleOrDefault(a => a.Name == name);
                     if (node == null) continue;
-                    var data = new NbtSerializer(property.PropertyType).Deserialize(node);
+                    object data;
+                    if (typeof(INbtSerializable).IsAssignableFrom(property.PropertyType))
+                    {
+                        data = Activator.CreateInstance(property.PropertyType);
+                        ((INbtSerializable)data).Deserialize(node as NbtCompound);
+                    }
+                    else
+                        data = new NbtSerializer(property.PropertyType).Deserialize(node);
 
                     // Some manual casting for edge cases
                     if (property.PropertyType == typeof(bool)
