@@ -5,6 +5,6 @@ using System.Text;
 
 namespace Craft.Net.Nbt
 {
-    [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, Inherited = false, AllowMultiple = false)]
     public sealed class IgnoreOnNullAttribute : Attribute { }
 }

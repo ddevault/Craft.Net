@@ -5,12 +5,36 @@ using System.Text;
 using System.IO;
 using System.IO.Compression;
 using fNbt;
+using Craft.Net.Nbt;
 
 namespace Craft.Net
 {
-    public struct ItemStack : ICloneable
+    public struct ItemStack : ICloneable, IEquatable<ItemStack>
     {
-        public ItemStack(short id)
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hashCode = _Id.GetHashCode();
+                hashCode = (hashCode * 397) ^ _Count.GetHashCode();
+                hashCode = (hashCode * 397) ^ _Metadata.GetHashCode();
+                hashCode = (hashCode * 397) ^ Index;
+                hashCode = (hashCode * 397) ^ (Nbt != null ? Nbt.GetHashCode() : 0);
+                return hashCode;
+            }
+        }
+
+        public static bool operator ==(ItemStack left, ItemStack right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(ItemStack left, ItemStack right)
+        {
+            return !left.Equals(right);
+        }
+
+        public ItemStack(short id) : this()
         {
             _Id = id;
             _Count = 1;
@@ -29,7 +53,7 @@ namespace Craft.Net
             Metadata = metadata;
         }
 
-        public ItemStack(short id, sbyte count, short metadata, NbtFile nbt) : this(id, count, metadata)
+        public ItemStack(short id, sbyte count, short metadata, NbtCompound nbt) : this(id, count, metadata)
         {
             Nbt = nbt;
             if (Count == 0)
@@ -51,9 +75,11 @@ namespace Craft.Net
             var length = stream.ReadInt16();
             if (length == -1)
                 return slot;
-            slot.Nbt = new NbtFile();
+            slot.Nbt = new NbtCompound();
             var buffer = stream.ReadUInt8Array(length);
-            slot.Nbt.LoadFromBuffer(buffer, 0, length, NbtCompression.GZip, null);
+            var nbt = new NbtFile();
+            nbt.LoadFromBuffer(buffer, 0, length, NbtCompression.GZip, null);
+            slot.Nbt = nbt.RootTag;
             return slot;
         }
 
@@ -70,7 +96,8 @@ namespace Craft.Net
                 return;
             }
             var mStream = new MemoryStream();
-            Nbt.SaveToStream(mStream, NbtCompression.GZip);
+            var file = new NbtFile(Nbt);
+            file.SaveToStream(mStream, NbtCompression.GZip);
             var buffer = mStream.GetBuffer();
             stream.WriteInt16((short)buffer.Length);
             stream.WriteUInt8Array(buffer);
@@ -84,10 +111,7 @@ namespace Craft.Net
             s.Count = (sbyte)compound.Get<NbtByte>("Count").Value;
             s.Index = compound.Get<NbtByte>("Slot").Value;
             if (compound.Get<NbtCompound>("tag") != null)
-            {
-                s.Nbt = new NbtFile();
-                s.Nbt.RootTag = compound.Get<NbtCompound>("tag");
-            }
+                s.Nbt = compound.Get<NbtCompound>("tag");
             return s;
         }
 
@@ -98,14 +122,12 @@ namespace Craft.Net
             c.Add(new NbtShort("Damage", Metadata));
             c.Add(new NbtByte("Count", (byte)Count));
             c.Add(new NbtByte("Slot", (byte)Index));
-            if (Nbt != null && Nbt.RootTag != null)
-            {
-                Nbt.RootTag = new NbtCompound("tag");
-                c.Add(Nbt.RootTag);
-            }
+            if (Nbt != null)
+                c.Add(new NbtCompound("tag"));
             return c;
         }
 
+        [NbtIgnore]
         public bool Empty
         {
             get { return Id == -1; }
@@ -141,10 +163,18 @@ namespace Craft.Net
             }
         }
 
-        public short _Id;
-        public sbyte _Count;
-        public short Metadata;
-        public NbtFile Nbt;
+        public short Metadata
+        {
+            get { return _Metadata; }
+            set { _Metadata = value; }
+        }
+
+        private short _Id;
+        private sbyte _Count;
+        private short _Metadata;
+        [IgnoreOnNull]
+        public NbtCompound Nbt { get; set; }
+        [NbtIgnore]
         public int Index;
 
         public override string ToString()
@@ -163,12 +193,24 @@ namespace Craft.Net
             return new ItemStack(Id, Count, Metadata, Nbt);
         }
 
+        [NbtIgnore]
         public static ItemStack EmptyStack
         {
             get
             {
                 return new ItemStack(-1);
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            return obj is ItemStack && Equals((ItemStack)obj);
+        }
+
+        public bool Equals(ItemStack other)
+        {
+            return _Id == other._Id && _Count == other._Count && _Metadata == other._Metadata && Index == other.Index && Equals(Nbt, other.Nbt);
         }
     }
 }

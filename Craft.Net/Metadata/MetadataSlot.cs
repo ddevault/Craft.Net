@@ -40,7 +40,8 @@ namespace Craft.Net.Metadata
                 stream.WriteInt16(Value.Metadata);
                 if (Value.Nbt != null)
                 {
-                    var data = Value.Nbt.SaveToBuffer(NbtCompression.GZip);
+                    var file = new NbtFile(Value.Nbt);
+                    var data = file.SaveToBuffer(NbtCompression.GZip);
                     stream.WriteInt16((short)data.Length);
                     stream.WriteUInt8Array(data);
                 }

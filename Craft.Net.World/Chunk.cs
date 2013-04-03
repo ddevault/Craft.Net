@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Craft.Net.Utilities;
 using fNbt;
+using Craft.Net.Nbt;
 
 namespace Craft.Net.World
 {

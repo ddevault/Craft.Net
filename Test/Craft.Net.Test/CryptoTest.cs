@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace Craft.Net.Test
 {
     [TestFixture]
-    public class TestCrypto
+    public class CryptoTest
     {
         [Test]
         public void TestAesStream()
