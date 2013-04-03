@@ -13,9 +13,13 @@ namespace Craft.Net.World
 
         public string Name { get; set; }
         public string BaseDirectory { get; internal set; }
+        public Dictionary<Vector3, Region> Regions { get; set; }
+        public IWorldGenerator WorldGenerator { get; set; }
 
-        public World()
+        public World(string name)
         {
+            Name = name;
+            Regions = new Dictionary<Vector3, Region>();
         }
 
         /// <summary>
@@ -27,8 +31,7 @@ namespace Craft.Net.World
         {
             if (!Directory.Exists(baseDirectory))
                 throw new DirectoryNotFoundException();
-            var world = new World();
-            world.Name = Path.GetFileName(baseDirectory);
+            var world = new World(Path.GetFileName(baseDirectory));
             world.BaseDirectory = baseDirectory;
             return world;
         }

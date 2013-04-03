@@ -179,46 +179,46 @@ namespace Craft.Net.World
             Chunks[position] = chunk;
         }
 
-        /// <summary>
-        /// Gets the block at the given local position.
-        /// </summary>
-        public Block GetBlock(Vector3 position)
-        {
-            position = position.Floor();
-            Vector3 relativePosition = position;
-            position.X = (int)(position.X) / Chunk.Width;
-            position.Y = 0;
-            position.Z = (int)(position.Z) / Chunk.Depth;
+        ///// <summary>
+        ///// Gets the block at the given local position.
+        ///// </summary>
+        //public Block GetBlock(Vector3 position)
+        //{
+        //    position = position.Floor();
+        //    Vector3 relativePosition = position;
+        //    position.X = (int)(position.X) / Chunk.Width;
+        //    position.Y = 0;
+        //    position.Z = (int)(position.Z) / Chunk.Depth;
 
-            relativePosition.X = (int)(relativePosition.X) % Chunk.Width;
-            relativePosition.Y = 0;
-            relativePosition.Z = (int)(relativePosition.Z) % Chunk.Depth;
+        //    relativePosition.X = (int)(relativePosition.X) % Chunk.Width;
+        //    relativePosition.Y = 0;
+        //    relativePosition.Z = (int)(relativePosition.Z) % Chunk.Depth;
 
-            if (!Chunks.ContainsKey(position))
-                Chunks.Add(position, WorldGenerator.GenerateChunk(position, this));
+        //    if (!Chunks.ContainsKey(position))
+        //        Chunks.Add(position, WorldGenerator.GenerateChunk(position, this));
 
-            return Chunks[position].GetBlock(relativePosition);
-        }
+        //    return Chunks[position].GetBlock(relativePosition);
+        //}
 
-        /// <summary>
-        /// Sets the block at the given local position.
-        /// </summary>
-        public void SetBlock(Vector3 position, Block value)
-        {
-            position = position.Floor();
-            Vector3 relativePosition = position;
-            position.X = (int)(position.X) / Chunk.Width;
-            position.Y = 0;
-            position.Z = (int)(position.Z) / Chunk.Depth;
+        ///// <summary>
+        ///// Sets the block at the given local position.
+        ///// </summary>
+        //public void SetBlock(Vector3 position, Block value)
+        //{
+        //    position = position.Floor();
+        //    Vector3 relativePosition = position;
+        //    position.X = (int)(position.X) / Chunk.Width;
+        //    position.Y = 0;
+        //    position.Z = (int)(position.Z) / Chunk.Depth;
 
-            relativePosition.X = (int)(relativePosition.X) % Chunk.Width;
-            relativePosition.Z = (int)(relativePosition.Z) % Chunk.Depth;
+        //    relativePosition.X = (int)(relativePosition.X) % Chunk.Width;
+        //    relativePosition.Z = (int)(relativePosition.Z) % Chunk.Depth;
 
-            if (!Chunks.ContainsKey(position))
-                Chunks.Add(position, WorldGenerator.GenerateChunk(position, this));
+        //    if (!Chunks.ContainsKey(position))
+        //        Chunks.Add(position, WorldGenerator.GenerateChunk(position, this));
 
-            Chunks[position].SetBlock(relativePosition, value);
-        }
+        //    Chunks[position].SetBlock(relativePosition, value);
+        //}
 
         /// <summary>
         /// Saves this region to the specified file.

@@ -201,6 +201,7 @@ namespace Craft.Net.World
         {
             if (Worlds.Any(w => w.Name.ToUpper() == world.Name.ToUpper()))
                 throw new InvalidOperationException("A world with the same name already exists in this level.");
+            world.WorldGenerator = WorldGenerator;
             Worlds.Add(world);
         }
 
