@@ -21,6 +21,21 @@ namespace Craft.Net.World
 
         public Section[] Sections { get; set; }
 
+        [TagName("xPos")]
+        public int X { get; set; }
+
+        [TagName("yPos")]
+        public int Y { get; set; }
+
+        public long LastUpdate { get; set; }
+
+        private bool TerrainPopulated { get; set; }
+
+        public Chunk()
+        {
+            TerrainPopulated = true;
+        }
+
         public short GetBlockId(int x, int y, int z)
         {
             int section = GetSectionNumber(y);
