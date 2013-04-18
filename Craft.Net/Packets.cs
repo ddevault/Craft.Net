@@ -1363,9 +1363,10 @@ namespace Craft.Net
         {
             EntityId = entityId;
             VehicleId = vehicleId;
+            Unknown = 0; // Prediction: Related to jumping horses
         }
 
-        public int EntityId, VehicleId;
+        public int EntityId, VehicleId, Unknown;
 
         public const byte PacketId = 0x27;
         public byte Id { get { return 0x27; } }
@@ -1374,6 +1375,7 @@ namespace Craft.Net
         {
             EntityId = stream.ReadInt32();
             VehicleId = stream.ReadInt32();
+            Unknown = stream.ReadInt32();
         }
 
         public void WritePacket(MinecraftStream stream)
@@ -1381,6 +1383,7 @@ namespace Craft.Net
             stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteInt32(VehicleId);
+            stream.WriteInt32(Unknown);
         }
     }
 
