@@ -20,7 +20,7 @@ namespace Craft.Net.Data.Entities
         }
 
         private short air;
-        private short health;
+        private float health;
 
         public short Air
         {
@@ -32,7 +32,7 @@ namespace Craft.Net.Data.Entities
             }
         }
 
-        public short Health
+        public float Health
         {
             get { return health; }
             set

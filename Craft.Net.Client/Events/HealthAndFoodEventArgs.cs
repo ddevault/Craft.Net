@@ -7,10 +7,10 @@ namespace Craft.Net.Client.Events
 {
     public class HealthAndFoodEventArgs : EventArgs
     {
-        public short OldHealth { get; set; }
+        public float OldHealth { get; set; }
         public short OldFood { get; set; }
         public float OldFoodSaturation { get; set; }
-        public short Health { get; set; }
+        public float Health { get; set; }
         public short Food { get; set; }
         public float FoodSaturation { get; set; }
 
@@ -21,7 +21,7 @@ namespace Craft.Net.Client.Events
                 OldFoodSaturation != FoodSaturation;
         }
 
-        public HealthAndFoodEventArgs(short oldHealth, short oldFood, float oldFoodSaturation)
+        public HealthAndFoodEventArgs(float oldHealth, short oldFood, float oldFoodSaturation)
         {
             OldHealth = oldHealth;
             OldFood = oldFood;

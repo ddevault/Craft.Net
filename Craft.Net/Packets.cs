@@ -280,14 +280,15 @@ namespace Craft.Net
 
     public struct UpdateHealthPacket : IPacket
     {
-        public UpdateHealthPacket(short health, short food, float saturation)
+        public UpdateHealthPacket(float health, short food, float saturation)
         {
             Health = health;
             Food = food;
             FoodSaturation = saturation;
         }
 
-        public short Health, Food;
+        public float Health;
+        public short Food;
         public float FoodSaturation;
 
         public const byte PacketId = 0x08;
@@ -295,7 +296,7 @@ namespace Craft.Net
 
         public void ReadPacket(MinecraftStream stream)
         {
-            Health = stream.ReadInt16();
+            Health = stream.ReadSingle();
             Food = stream.ReadInt16();
             FoodSaturation = stream.ReadSingle();
         }
@@ -303,7 +304,7 @@ namespace Craft.Net
         public void WritePacket(MinecraftStream stream)
         {
             stream.WriteUInt8(Id);
-            stream.WriteInt16(Health);
+            stream.WriteSingle(Health);
             stream.WriteInt16(Food);
             stream.WriteSingle(FoodSaturation);
         }
@@ -710,10 +711,12 @@ namespace Craft.Net
         {
             EntityId = entityId;
             Action = action;
+            Unknown = new byte[] { 0, 0, 0, 0 };
         }
 
         public int EntityId;
         public EntityAction Action;
+        public byte[] Unknown;
 
         public const byte PacketId = 0x13;
         public byte Id { get { return 0x13; } }
@@ -722,6 +725,7 @@ namespace Craft.Net
         {
             EntityId = stream.ReadInt32();
             Action = (EntityAction)stream.ReadUInt8();
+            Unknown = stream.ReadUInt8Array(4);
         }
 
         public void WritePacket(MinecraftStream stream)
@@ -729,6 +733,7 @@ namespace Craft.Net
             stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteUInt8((byte)Action);
+            stream.WriteUInt8Array(Unknown);
         }
     }
 
@@ -2523,10 +2528,12 @@ namespace Craft.Net
             Flags = flags;
             FlyingSpeed = flyingSpeed;
             WalkingSpeed = walkingSpeed;
+            Unknown = new byte[] { 0xCC, 0xCD, 0x3D, 0xCC, 0xCC, 0xCD, 0x10, 0x00, 0x00 }; // Taken from a packet log, values unknown
         }
 
         public byte Flags;
         public byte FlyingSpeed, WalkingSpeed;
+        public byte[] Unknown;
 
         public const byte PacketId = 0xCA;
         public byte Id { get { return 0xCA; } }
@@ -2536,6 +2543,7 @@ namespace Craft.Net
             Flags = stream.ReadUInt8();
             FlyingSpeed = stream.ReadUInt8();
             WalkingSpeed = stream.ReadUInt8();
+            Unknown = stream.ReadUInt8Array(9);
         }
 
         public void WritePacket(MinecraftStream stream)
@@ -2544,6 +2552,7 @@ namespace Craft.Net
             stream.WriteUInt8(Flags);
             stream.WriteUInt8(FlyingSpeed);
             stream.WriteUInt8(WalkingSpeed);
+            stream.WriteUInt8Array(Unknown);
         }
     }
 

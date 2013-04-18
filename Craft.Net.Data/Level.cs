@@ -272,7 +272,7 @@ namespace Craft.Net.Data
             var data = file.RootTag;
             entity.OnGround = data.Get<NbtByte>("OnGround").Value == 1;
             entity.Air = data.Get<NbtShort>("Air").Value;
-            entity.Health = data.Get<NbtShort>("Health").Value;
+            entity.Health = data.Get<NbtFloat>("HealF").Value;
             var dimension = (Dimension)data.Get<NbtInt>("Dimension").Value; // TODO
             entity.Food = (short)data.Get<NbtInt>("foodLevel").Value;
             entity.XpLevel = data.Get<NbtInt>("XpLevel").Value;
@@ -332,7 +332,8 @@ namespace Craft.Net.Data
             var data = new NbtCompound("");
             data.Add(new NbtByte("OnGround", (byte)(entity.OnGround ? 1 : 0)));
             data.Add(new NbtShort("Air", entity.Air));
-            data.Add(new NbtShort("Health", entity.Health));
+            data.Add(new NbtShort("Health", (short)entity.Health));
+            data.Add(new NbtFloat("HealF", entity.Health));
             data.Add(new NbtInt("Dimension", 0)); // TODO
             data.Add(new NbtInt("foodLevel", entity.Food));
             data.Add(new NbtInt("XpLevel", entity.XpLevel));

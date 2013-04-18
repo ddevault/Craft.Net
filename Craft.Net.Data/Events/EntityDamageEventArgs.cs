@@ -8,9 +8,9 @@ namespace Craft.Net.Data.Events
     public class EntityDamageEventArgs : EventArgs
     {
         public int Damage { get; set; }
-        public int Health { get; set; }
+        public float Health { get; set; }
 
-        public EntityDamageEventArgs(int damage, int health)
+        public EntityDamageEventArgs(int damage, float health)
         {
             Damage = damage;
             Health = health;
