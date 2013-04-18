@@ -72,6 +72,7 @@
     <Compile Include="Blocks\BrownMushroomBlock.cs" />
     <Compile Include="Blocks\CactusBlock.cs" />
     <Compile Include="Blocks\CakeBlock.cs" />
+    <Compile Include="Blocks\CarpetBlock.cs" />
     <Compile Include="Blocks\CarrotBlock.cs" />
     <Compile Include="Blocks\CauldronBlock.cs" />
     <Compile Include="Blocks\ChestBlock.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="Blocks\GoldOreBlock.cs" />
     <Compile Include="Blocks\GrassBlock.cs" />
     <Compile Include="Blocks\GravelBlock.cs" />
+    <Compile Include="Blocks\HayBaleBlock.cs" />
     <Compile Include="Blocks\HeavyWeightedPressurePlateBlock.cs" />
     <Compile Include="Blocks\HopperBlock.cs" />
     <Compile Include="Blocks\HugeBrownMushroomBlock.cs" />
@@ -277,6 +279,7 @@
     <Compile Include="Items\ClockItem.cs" />
     <Compile Include="Items\CoalItem.cs" />
     <Compile Include="Items\ComparatorItem.cs" />
+    <Compile Include="Items\DiamondHorseArmorItem.cs" />
     <Compile Include="Items\DyeItem.cs" />
     <Compile Include="Items\CompassItem.cs" />
     <Compile Include="Items\CookedChickenItem.cs" />
@@ -323,16 +326,19 @@
     <Compile Include="Items\GoldenPickaxeItem.cs" />
     <Compile Include="Items\GoldenShovelItem.cs" />
     <Compile Include="Items\GoldenSwordItem.cs" />
+    <Compile Include="Items\GoldHorseArmorItem.cs" />
     <Compile Include="Items\GoldIngotItem.cs" />
     <Compile Include="Items\GoldNuggetItem.cs" />
     <Compile Include="Items\GunpowderItem.cs" />
     <Compile Include="Items\HoeItem.cs" />
+    <Compile Include="Items\HorseSaddleItem.cs" />
     <Compile Include="Items\IronAxeItem.cs" />
     <Compile Include="Items\IronBootsItem.cs" />
     <Compile Include="Items\IronChestplateItem.cs" />
     <Compile Include="Items\IronDoorItem.cs" />
     <Compile Include="Items\IronHelmetItem.cs" />
     <Compile Include="Items\IronHoeItem.cs" />
+    <Compile Include="Items\IronHorseArmorItem.cs" />
     <Compile Include="Items\IronIngotItem.cs" />
     <Compile Include="Items\IronLeggingsItem.cs" />
     <Compile Include="Items\IronPickaxeItem.cs" />
@@ -340,6 +346,7 @@
     <Compile Include="Items\IronSwordItem.cs" />
     <Compile Include="Items\ItemFrameItem.cs" />
     <Compile Include="Items\LavaBucketItem.cs" />
+    <Compile Include="Items\LeashItem.cs" />
     <Compile Include="Items\LeatherBootsItem.cs" />
     <Compile Include="Items\LeatherHelmetItem.cs" />
     <Compile Include="Items\LeatherItem.cs" />
