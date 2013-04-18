@@ -466,6 +466,8 @@ namespace Craft.Net
         public void ReadPacket(MinecraftStream stream)
         {
             // TODO: Investigate if Y/Stance are indeed swapped
+            // Yes they are if the packet is sent from the server to the client:
+            // http://mc.kev009.com/Protocol#Player_Position_and_Look_.280x0D.29
             X = stream.ReadDouble();
             Y = stream.ReadDouble();
             Stance = stream.ReadDouble();
@@ -1716,10 +1718,16 @@ namespace Craft.Net
 
     public struct MapChunkBulkPacket : IPacket
     {
-        public MapChunkBulkPacket(short chunkCount, bool lightIncluded, byte[] chunkData,
-            byte[] chunkMetadata)
+        public struct Metadata
         {
-            // TODO: Improve this packet
+            public int ChunkX;
+            public int ChunkZ;
+            public ushort PrimaryBitMap;
+            public ushort AddBitMap;
+        }
+
+        public MapChunkBulkPacket(short chunkCount, bool lightIncluded, byte[] chunkData, Metadata[] chunkMetadata)
+        {
             ChunkCount = chunkCount;
             LightIncluded = lightIncluded;
             ChunkData = chunkData;
@@ -1729,7 +1737,7 @@ namespace Craft.Net
         public short ChunkCount;
         public bool LightIncluded;
         public byte[] ChunkData;
-        public byte[] ChunkMetadata;
+        public Metadata[] ChunkMetadata;
 
         public const byte PacketId = 0x38;
         public byte Id { get { return 0x38; } }
@@ -1740,7 +1748,17 @@ namespace Craft.Net
             var length = stream.ReadInt32();
             LightIncluded = stream.ReadBoolean();
             ChunkData = stream.ReadUInt8Array(length);
-            ChunkMetadata = stream.ReadUInt8Array(ChunkCount * 12);
+            
+            ChunkMetadata = new Metadata[ChunkCount];
+            for (int i = 0; i < ChunkCount; i++)
+            {
+                var metadata = new Metadata();
+                metadata.ChunkX = stream.ReadInt32();
+                metadata.ChunkZ = stream.ReadInt32();
+                metadata.PrimaryBitMap = stream.ReadUInt16();
+                metadata.AddBitMap = stream.ReadUInt16();
+                ChunkMetadata[i] = metadata;
+            }
         }
 
         public void WritePacket(MinecraftStream stream)
@@ -1750,7 +1768,14 @@ namespace Craft.Net
             stream.WriteInt32(ChunkData.Length);
             stream.WriteBoolean(LightIncluded);
             stream.WriteUInt8Array(ChunkData);
-            stream.WriteUInt8Array(ChunkMetadata);
+
+            for (int i = 0; i < ChunkCount; i++)
+            {
+                stream.WriteInt32(ChunkMetadata[i].ChunkX);
+                stream.WriteInt32(ChunkMetadata[i].ChunkZ);
+                stream.WriteUInt16(ChunkMetadata[i].PrimaryBitMap);
+                stream.WriteUInt16(ChunkMetadata[i].AddBitMap);
+            }
         }
     }
 

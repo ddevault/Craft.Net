@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net.Sockets;
+using System.Threading;
+
 using Craft.Net.Client;
 using Craft.Net.Data;
 
@@ -38,18 +38,15 @@ namespace TestClient
             while (input != "quit")
             {
                 input = Console.ReadLine();
+                if (input == null) continue;
+
                 if (input.StartsWith("move "))
                 {
                     var parts = input.Split(' ');
-                    var amount = double.Parse(parts[2]);
-                    var position = client.Position;
-                    if (parts[1] == "x")
-                        position.X += amount;
-                    else if (parts[1] == "y")
-                        position.Y += amount;
-                    else
-                        position.Z += amount;
-                    client.Position = position;
+                    var amountX = int.Parse(parts[1]);
+                    var amountZ = int.Parse(parts[2]);
+
+                    client.Move(amountX, amountZ);
                 }
                 else if (input.StartsWith("look "))
                 {
@@ -59,6 +56,17 @@ namespace TestClient
                         client.Yaw = amount;
                     else
                         client.Pitch = amount;
+                }
+                else if (input.StartsWith("lookat "))
+                {
+                    var parts = input.Split(' ');
+                    var pos = new Vector3 {
+                                              X = double.Parse(parts[1]),
+                                              Y = double.Parse(parts[2]),
+                                              Z = double.Parse(parts[3])
+                                          };
+
+                    client.LookAt(pos);
                 }
                 else if (input.StartsWith("say "))
                     client.SendChat(input.Substring(4));
@@ -94,7 +102,7 @@ namespace TestClient
 
         private static IPAddress Resolve(string arg)
         {
-            return Dns.GetHostEntry(arg).AddressList.FirstOrDefault();
+            return Dns.GetHostEntry(arg).AddressList.FirstOrDefault(item => item.AddressFamily == AddressFamily.InterNetwork);
         }
     }
 }

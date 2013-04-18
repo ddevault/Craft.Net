@@ -12,21 +12,24 @@ namespace Craft.Net.Client.Handlers
         public static void PlayerPositionAndLook(MinecraftClient client, IPacket _packet)
         {
             var packet = (PlayerPositionAndLookPacket)_packet;
-            client._position = new Vector3(packet.X, packet.Y, packet.Z);
-            if (!client.PositionUpdateConfirmed)
+            client._position = new Vector3(packet.X, packet.Stance, packet.Z);
+            if (!client.Spawned)
             {
-                client.PositionUpdateConfirmed = true;
+                client.Spawned = true;
                 client.OnInitialSpawn(new EntitySpawnEventArgs(client.Position, client.EntityId));
-                client.SendPacket(new PlayerPositionPacket(
-                    packet.X, packet.Stance, packet.Z, packet.Y, false));
             }
+            
+            client.SendPacket(new PlayerPositionPacket(packet.X, packet.Stance, packet.Z, packet.Y, true));
         }
 
         public static void EntityTeleport(MinecraftClient client, IPacket _packet)
         {
             var packet = (EntityTeleportPacket)_packet;
-            if (packet.EntityId == client.EntityId)
-                client._position = new Vector3(packet.X, packet.Y, packet.Z);
+            if (packet.EntityId != client.EntityId) return;
+            
+            client._position = new Vector3(packet.X, packet.Y, packet.Z);
+            client._yaw = packet.Yaw;
+            client._pitch = packet.Pitch;
         }
     }
 }

@@ -60,7 +60,9 @@
     <Compile Include="Events\EntitySpawnEventArgs.cs" />
     <Compile Include="Events\GameModeChangeEventArgs.cs" />
     <Compile Include="Events\HealthAndFoodEventArgs.cs" />
+    <Compile Include="Events\SignUpdateReceivedEventArgs.cs" />
     <Compile Include="FileLogWriter.cs" />
+    <Compile Include="Handlers\ChatHandler.cs" />
     <Compile Include="Handlers\EntityHandlers.cs" />
     <Compile Include="Handlers\LoginHandlers.cs" />
     <Compile Include="Handlers\PacketHandlers.cs" />
@@ -95,6 +97,9 @@
       <Project>{30C3F936-8D95-4113-BA48-8B798B056309}</Project>
       <Name>Craft.Net.Data</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MinecraftClient.Actions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
