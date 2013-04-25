@@ -59,7 +59,6 @@ namespace Craft.Net.Client.Handlers
         {
             var packet = (LoginRequestPacket)_packet;
             client.EntityId = packet.EntityId;
-            //client.Spawned = true;
             client.OnLoggedIn();
 
             // Initialize world

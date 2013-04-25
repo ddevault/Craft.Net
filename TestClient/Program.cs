@@ -60,11 +60,12 @@ namespace TestClient
                 else if (input.StartsWith("lookat "))
                 {
                     var parts = input.Split(' ');
-                    var pos = new Vector3 {
-                                              X = double.Parse(parts[1]),
-                                              Y = double.Parse(parts[2]),
-                                              Z = double.Parse(parts[3])
-                                          };
+                    var pos = new Vector3
+                    {
+                        X = double.Parse(parts[1]),
+                        Y = double.Parse(parts[2]),
+                        Z = double.Parse(parts[3])
+                    };
 
                     client.LookAt(pos);
                 }

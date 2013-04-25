@@ -25,11 +25,8 @@ namespace Craft.Net.Client.Handlers
         public static void EntityTeleport(MinecraftClient client, IPacket _packet)
         {
             var packet = (EntityTeleportPacket)_packet;
-            if (packet.EntityId != client.EntityId) return;
-            
-            client._position = new Vector3(packet.X, packet.Y, packet.Z);
-            client._yaw = packet.Yaw;
-            client._pitch = packet.Pitch;
+            if (packet.EntityId == client.EntityId)
+                client._position = new Vector3(packet.X, packet.Y, packet.Z);
         }
     }
 }

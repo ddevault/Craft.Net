@@ -20,12 +20,6 @@ namespace Craft.Net.Client
             PacketHandlers.RegisterHandlers();
         }
 
-        /// <summary>
-        /// The protocol version supported by this client.
-        /// </summary>
-        public const int ProtocolVersion = 51;
-        public const string FriendlyVersion = "1.5.1";
-
         public delegate void PacketHandler(MinecraftClient client, IPacket packet);
         private static PacketHandler[] PacketHandlerDelegates { get; set; }
 
@@ -143,13 +137,9 @@ namespace Craft.Net.Client
         private void HandlePacket(IPacket packet)
         {
             if (PacketHandlerDelegates[packet.Id] != null)
-            {
                 PacketHandlerDelegates[packet.Id](this, packet);
-            }
             else
-            {
                 LogProvider.Log("Warning: No packet handlers for 0x" + packet.Id.ToString("X2"), LogImportance.Low);
-            }
         }
     }
 }

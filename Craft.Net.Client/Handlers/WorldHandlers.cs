@@ -52,18 +52,14 @@ namespace Craft.Net.Client.Handlers
 
                     // Sky light
                     if (lightIncluded)
-                    {
                         Array.Copy(data, ((BlockDataLength + NibbleDataLength + NibbleDataLength) * sectionCount) + (y * NibbleDataLength),
                             chunk.Sections[y].SkyLight.Data, 0, NibbleDataLength);
-                    }
                 }
             }
 
             // biomes
             if (groundUp)
-            {
                 Array.Copy(data, data.Length - chunk.Biomes.Length, chunk.Biomes, 0, chunk.Biomes.Length);
-            }
 
             client.World.SetChunk(position, chunk);
             client.OnChunkRecieved(new ChunkRecievedEventArgs(position, new ReadOnlyChunk(chunk)));
@@ -108,12 +104,13 @@ namespace Craft.Net.Client.Handlers
             var packet = (UpdateSignPacket)_packet;
             var position = new Vector3(packet.X, packet.Y, packet.Z);
             
-            var signTileEntity = new SignTileEntity {
-                                                        Text1 = packet.Text1,
-                                                        Text2 = packet.Text2,
-                                                        Text3 = packet.Text3,
-                                                        Text4 = packet.Text4
-                                                    };
+            var signTileEntity = new SignTileEntity
+            {
+                Text1 = packet.Text1,
+                Text2 = packet.Text2,
+                Text3 = packet.Text3,
+                Text4 = packet.Text4
+            };
 
             client.OnSignUpdateReceived(new SignUpdateReceivedEventArgs(position, signTileEntity));
 

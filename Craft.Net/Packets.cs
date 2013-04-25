@@ -465,9 +465,6 @@ namespace Craft.Net
 
         public void ReadPacket(MinecraftStream stream)
         {
-            // TODO: Investigate if Y/Stance are indeed swapped
-            // Yes they are if the packet is sent from the server to the client:
-            // http://mc.kev009.com/Protocol#Player_Position_and_Look_.280x0D.29
             X = stream.ReadDouble();
             Y = stream.ReadDouble();
             Stance = stream.ReadDouble();
