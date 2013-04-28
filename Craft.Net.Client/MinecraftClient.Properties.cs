@@ -64,7 +64,8 @@ namespace Craft.Net.Client
         public LevelInformation LevelInformation { get; internal set; }
         public ReadOnlyWorld World { get; internal set; }
 
-        public bool Spawned { get; internal set; }
+        public bool IsSpawned { get; internal set; }
+        public bool IsLoggedIn { get; internal set; }
         public int EntityId { get; internal set; }
 
         protected internal MinecraftStream Stream { get; set; }

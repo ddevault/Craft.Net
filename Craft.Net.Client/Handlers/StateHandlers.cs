@@ -29,7 +29,7 @@ namespace Craft.Net.Client.Handlers
         {
             var packet = (RespawnPacket)_packet;
             // TODO: Dimension change
-            client.Spawned = false;
+            client.IsSpawned = false;
         }
     }
 }

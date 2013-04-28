@@ -89,7 +89,7 @@ namespace Craft.Net.Client
         {
             while (true)
             {
-                if (Spawned && nextPlayerUpdate < DateTime.Now)
+                if (IsSpawned && nextPlayerUpdate < DateTime.Now)
                 {
                     nextPlayerUpdate = DateTime.Now.AddMilliseconds(500);
                     SendPacket(new PlayerPacket(true)); // TODO: Store OnGround properly
