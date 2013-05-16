@@ -43,11 +43,6 @@ namespace TestServer
             minecraftServer.DefaultLevel.GameMode = GameMode.Survival;
             // Register the chat handler
             minecraftServer.ChatMessage += HandleOnChatMessage;
-            minecraftServer.PlayerLoggedIn += (s, e) =>
-                {
-                    e.Client.Entity.Inventory.Hotbar[0] = new ItemStack(new SteakItem(), 64);
-                    e.Client.Entity.Food = 10;
-                };
             // Start the server
             minecraftServer.Start();
             Console.WriteLine("Press 'q' key to exit.");
