@@ -36,8 +36,11 @@
 
         public Task<Vector3> Move(int distanceX, int distanceZ)
         {
-            if (!CurrentMoveTask.IsCompleted)
-                TaskCancellationToken.Cancel();
+            if (CurrentMoveTask != null)
+            {
+                if (!CurrentMoveTask.IsCompleted)
+                    TaskCancellationToken.Cancel();
+            }
             TaskCancellationToken = new CancellationTokenSource();
             CurrentMoveTask = Task.Factory.StartNew(() =>
                 {
@@ -69,6 +72,9 @@
                         this.LookAt(pos + new Vector3(0, 1.62, 0));
 
                         Thread.Sleep(100);
+
+                        if (TaskCancellationToken.IsCancellationRequested)
+                            return pos;
                     }
 
                     return pos;
