@@ -31,9 +31,15 @@
             return Move((int)diff.X, (int)diff.Z);
         }
 
+        private Task<Vector3> CurrentMoveTask { get; set; }
+        private CancellationTokenSource TaskCancellationToken { get; set; }
+
         public Task<Vector3> Move(int distanceX, int distanceZ)
         {
-            return Task.Factory.StartNew(() =>
+            if (!CurrentMoveTask.IsCompleted)
+                TaskCancellationToken.Cancel();
+            TaskCancellationToken = new CancellationTokenSource();
+            CurrentMoveTask = Task.Factory.StartNew(() =>
                 {
                     var pos = this.Position + new Vector3(distanceX, 0, distanceZ);
 
@@ -66,7 +72,8 @@
                     }
 
                     return pos;
-                });
+                }, TaskCancellationToken.Token);
+            return CurrentMoveTask;
         }
 
         #endregion
