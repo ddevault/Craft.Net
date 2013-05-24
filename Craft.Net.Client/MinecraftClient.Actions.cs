@@ -25,6 +25,12 @@
             SendPacket(new PlayerLookPacket(this.Yaw, this.Pitch, false));
         }
 
+        public Task<Vector3> MoveTo(Vector3 position)
+        {
+            var diff = position - Position;
+            return Move((int)diff.X, (int)diff.Z);
+        }
+
         public Task<Vector3> Move(int distanceX, int distanceZ)
         {
             return Task.Factory.StartNew(() =>
