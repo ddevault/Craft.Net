@@ -317,9 +317,7 @@ namespace Craft.Net.Data
                     data.Get<NbtInt>("SpawnZ").Value);
             }
             else
-            {
                 entity.SpawnPoint = SpawnPoint + new Vector3(0, PlayerEntity.Height, 0);
-            }
 
             entity.Yaw = ((NbtFloat)rotation[0]).Value;
             entity.Pitch = ((NbtFloat)rotation[1]).Value;
