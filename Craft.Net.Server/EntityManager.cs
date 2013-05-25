@@ -47,13 +47,22 @@ namespace Craft.Net.Server
                 if (entity is PlayerEntity)
                 {
                     // Isolate the client being spawned
-                    (entity as PlayerEntity).Abilities.PropertyChanged += PlayerAbilitiesChanged; 
-                    (entity as PlayerEntity).Inventory.WindowChange += PlayerInventoryChange; 
+                    (entity as PlayerEntity).Abilities.PropertyChanged -= PlayerAbilitiesChanged;
+                    (entity as PlayerEntity).Abilities.PropertyChanged += PlayerAbilitiesChanged;
+                    (entity as PlayerEntity).Inventory.WindowChange -= PlayerInventoryChange;
+                    (entity as PlayerEntity).Inventory.WindowChange += PlayerInventoryChange;
+
                     var client = clients.First(c => c.Entity == entity);
+                    client.Entity.BedStateChanged -= EntityOnUpdateBedState;
+                    client.Entity.BedTimerExpired -= EntityOnBedTimerExpired;
+                    client.Entity.StartEating -= PlayerStartEating;
+                    client.Entity.PickUpItem -= Entity_PickUpItem;
+
                     client.Entity.BedStateChanged += EntityOnUpdateBedState;
                     client.Entity.BedTimerExpired += EntityOnBedTimerExpired;
                     client.Entity.StartEating += PlayerStartEating;
                     client.Entity.PickUpItem += Entity_PickUpItem;
+
                     clients = clients.Where(c => c.Entity != entity);
                     clients.ToList().ForEach(c => {
                         c.SendPacket(new SpawnPlayerPacket(client.Entity.Id,
@@ -223,6 +232,8 @@ namespace Craft.Net.Server
         {
             // Handles changes in entity properties
             var entity = sender as Entity;
+            if (entity == null)
+                return; // TODO: Determine why this happens
             var clients = GetKnownClients(entity);
             if (entity is PlayerEntity)
             {
