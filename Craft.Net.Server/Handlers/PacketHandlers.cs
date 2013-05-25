@@ -40,6 +40,7 @@ namespace Craft.Net.Server.Handlers
             MinecraftServer.RegisterPacketHandler(PluginMessagePacket.PacketId, PluginMessage);
             MinecraftServer.RegisterPacketHandler(ChatMessagePacket.PacketId, ChatMessage);
             MinecraftServer.RegisterPacketHandler(KeepAlivePacket.PacketId, KeepAlive);
+            MinecraftServer.RegisterPacketHandler(TabCompletePacket.PacketId, TabComplete);
         }
 
         public static void ServerListPing(MinecraftClient client, MinecraftServer server, IPacket _packet)
@@ -78,6 +79,15 @@ namespace Craft.Net.Server.Handlers
             // TODO: Confirm value validity
             client.LastKeepAlive = DateTime.Now;
             client.Ping = (short)(client.LastKeepAlive - client.LastKeepAliveSent).TotalMilliseconds;
+        }
+
+        public static void TabComplete(MinecraftClient client, MinecraftServer server, IPacket _packet)
+        {
+            var packet = (TabCompletePacket)_packet;
+            var eventArgs = new TabCompleteEventArgs(packet.Text);
+            server.OnTabComplete(eventArgs);
+            packet.Text = eventArgs.Text;
+            client.SendPacket(packet);
         }
 
         private static string GetPingValue(MinecraftServer server)

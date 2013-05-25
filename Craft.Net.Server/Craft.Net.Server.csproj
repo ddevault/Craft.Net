@@ -59,6 +59,7 @@
     <Compile Include="Events\PacketEventArgs.cs" />
     <Compile Include="Events\PlayerDeathEventArgs.cs" />
     <Compile Include="Events\PlayerLogInEventArgs.cs" />
+    <Compile Include="Events\TabCompleteEventArgs.cs" />
     <Compile Include="Handlers\InteractionHandlers.cs" />
     <Compile Include="Handlers\InventoryHandlers.cs" />
     <Compile Include="Handlers\PlayerMovementHandlers.cs" />
