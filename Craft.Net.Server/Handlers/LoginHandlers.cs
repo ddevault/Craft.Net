@@ -90,7 +90,7 @@ namespace Craft.Net.Server.Handlers
                 var world = client.World;
                 client.Entity.Position = new Vector3(
                     client.Entity.SpawnPoint.X,
-		    // FIXME: This seems to drop the player camera from half the height of a login spawn
+                    // FIXME: This seems to drop the player camera from half the height of a login spawn
                     client.Entity.SpawnPoint.Y,
                     client.Entity.SpawnPoint.Z);
                 client.Entity.Health = client.Entity.MaxHealth;
