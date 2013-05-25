@@ -239,30 +239,35 @@ namespace Craft.Net.Server
             {
                 var player = entity as PlayerEntity;
                 var client = GetClient(player);
-                switch (propertyChangedEventArgs.PropertyName)
+                if (client == null)
+                    DespawnEntity(player);
+                else
                 {
-                    case "Health":
-                    case "Food":
-                    case "FoodSaturation":
-                        client.SendPacket(new UpdateHealthPacket(player.Health, player.Food, player.FoodSaturation));
-                        if (player.Health <= 0)
-                            KillEntity(player);
-                        break;
-                    case "SpawnPoint":
-                        client.SendPacket(new SpawnPositionPacket((int)player.SpawnPoint.X, (int)player.SpawnPoint.Y, (int)player.SpawnPoint.Z));
-                        break;
-                    case "GameMode":
-                        client.SendPacket(new ChangeGameStatePacket(client.Entity.GameMode));
-                        client.SendPacket(new PlayerAbilitiesPacket(player.Abilities.AsFlags(), 
-                            player.Abilities.FlyingSpeed, player.Abilities.FlyingSpeed));
-                        break;
-                    case "Velocity":
-                        client.SendPacket(new EntityVelocityPacket(player.Id, (short)player.Velocity.X,
-                            (short)player.Velocity.Y, (short)player.Velocity.Z));
-                        break;
-                    case "GivenPosition":
-                        UpdateGivenPosition(player);
-                        break;
+                    switch (propertyChangedEventArgs.PropertyName)
+                    {
+                        case "Health":
+                        case "Food":
+                        case "FoodSaturation":
+                            client.SendPacket(new UpdateHealthPacket(player.Health, player.Food, player.FoodSaturation));
+                            if (player.Health <= 0)
+                                KillEntity(player);
+                            break;
+                        case "SpawnPoint":
+                            client.SendPacket(new SpawnPositionPacket((int)player.SpawnPoint.X, (int)player.SpawnPoint.Y, (int)player.SpawnPoint.Z));
+                            break;
+                        case "GameMode":
+                            client.SendPacket(new ChangeGameStatePacket(client.Entity.GameMode));
+                            client.SendPacket(new PlayerAbilitiesPacket(player.Abilities.AsFlags(),
+                                player.Abilities.FlyingSpeed, player.Abilities.FlyingSpeed));
+                            break;
+                        case "Velocity":
+                            client.SendPacket(new EntityVelocityPacket(player.Id, (short)player.Velocity.X,
+                                (short)player.Velocity.Y, (short)player.Velocity.Z));
+                            break;
+                        case "GivenPosition":
+                            UpdateGivenPosition(player);
+                            break;
+                    }
                 }
             }
             switch (propertyChangedEventArgs.PropertyName)
