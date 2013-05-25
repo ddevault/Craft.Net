@@ -86,8 +86,11 @@ namespace Craft.Net.Server.Handlers
             var packet = (TabCompletePacket)_packet;
             var eventArgs = new TabCompleteEventArgs(packet.Text);
             server.OnTabComplete(eventArgs);
-            packet.Text = eventArgs.Text;
-            client.SendPacket(packet);
+            if (eventArgs.Handled)
+            {
+                packet.Text = eventArgs.Text;
+                client.SendPacket(packet);
+            }
         }
 
         private static string GetPingValue(MinecraftServer server)

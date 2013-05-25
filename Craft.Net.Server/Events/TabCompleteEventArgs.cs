@@ -10,8 +10,10 @@ namespace Craft.Net.Server.Events
         public TabCompleteEventArgs(string text)
         {
             Text = text;
+            Handled = false;
         }
 
         public string Text { get; set; }
+        public bool Handled { get; set; }
     }
 }
