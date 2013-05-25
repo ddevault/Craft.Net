@@ -155,11 +155,28 @@ namespace Craft.Net.Server
             if (entity is PlayerEntity)
             {
                 var player = entity as PlayerEntity;
+                SpawnInventoryEntities(player);
                 server.OnPlayerDeath(new PlayerDeathEventArgs(player.LastDamageType, player, player.LastAttackingEntity));
             }
             entity.Kill();
             foreach (var client in GetKnownClients(entity))
                 client.SendPacket(new EntityStatusPacket(entity.Id, EntityStatusPacket.EntityStatus.Dead));
+        }
+
+        private void SpawnInventoryEntities(PlayerEntity player)
+        {
+            var world = GetEntityWorld(player);
+            foreach (var slot in player.Inventory.GetSlots())
+            {
+                if (!slot.Empty)
+                {
+                    var entity = new ItemEntity(player.Position + new Vector3(
+                        MathHelper.Random.NextDouble() * 0.5 - 0.25,
+                        MathHelper.Random.NextDouble() * 0.5 - 0.25,
+                        MathHelper.Random.NextDouble() * 0.5 - 0.25), slot);
+                    SpawnEntity(world, entity);
+                }
+            }
         }
 
         /// <summary>
@@ -232,8 +249,6 @@ namespace Craft.Net.Server
         {
             // Handles changes in entity properties
             var entity = sender as Entity;
-            if (entity == null)
-                return; // TODO: Determine why this happens
             var clients = GetKnownClients(entity);
             if (entity is PlayerEntity)
             {
