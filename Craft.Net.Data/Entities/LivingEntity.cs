@@ -98,10 +98,16 @@ namespace Craft.Net.Data.Entities
                 EntityDamaged(this, new EntityDamageEventArgs(damage, Health));
         }
 
+        private DateTime LastVoidTick = DateTime.MinValue;
+
         public override void PhysicsUpdate(World world)
         {
-            if (Position.Y < -32 && Health > 0)
-                Health -= 4;
+            if ((DateTime.Now - LastVoidTick).TotalSeconds >= 1)
+            {
+                if (Position.Y < -32 && Health > 0)
+                    Health -= 4;
+                LastVoidTick = DateTime.Now;
+            }
             base.PhysicsUpdate(world);
         }
 
