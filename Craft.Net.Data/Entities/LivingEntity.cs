@@ -100,7 +100,7 @@ namespace Craft.Net.Data.Entities
 
         public override void PhysicsUpdate(World world)
         {
-            if (Position.Y < -32)
+            if (Position.Y < -32 && Health > 0)
                 Health -= 4;
             base.PhysicsUpdate(world);
         }
