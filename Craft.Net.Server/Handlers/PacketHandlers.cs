@@ -84,7 +84,7 @@ namespace Craft.Net.Server.Handlers
         public static void TabComplete(MinecraftClient client, MinecraftServer server, IPacket _packet)
         {
             var packet = (TabCompletePacket)_packet;
-            var eventArgs = new TabCompleteEventArgs(packet.Text);
+            var eventArgs = new TabCompleteEventArgs(packet.Text, client);
             server.OnTabComplete(eventArgs);
             if (eventArgs.Handled)
             {
