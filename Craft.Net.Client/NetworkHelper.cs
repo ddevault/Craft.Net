@@ -29,14 +29,12 @@ namespace Craft.Net.Client
             IPAddress adr;
             if (!IPAddress.TryParse(splitResult.Groups["ip"].Value, out adr))
                 adr =
-                    (from x in Dns.GetHostEntry(splitResult.Groups["ip"].Value).AddressList
-                     where x.AddressFamily == AddressFamily.InterNetwork
-                     select x).FirstOrDefault();
+                    (Dns.GetHostEntry(splitResult.Groups["ip"].Value)
+                        .AddressList.Where(x => x.AddressFamily == AddressFamily.InterNetwork)).FirstOrDefault();
             if (adr == null)
                 return false;
             int port;
-            if (
-                !int.TryParse(splitResult.Groups["port"].Value, NumberStyles.None, NumberFormatInfo.CurrentInfo,
+            if (!int.TryParse(splitResult.Groups["port"].Value, NumberStyles.None, NumberFormatInfo.CurrentInfo,
                               out port))
                 return false;
 
