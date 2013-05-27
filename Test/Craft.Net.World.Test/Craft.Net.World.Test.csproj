@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="LevelTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WorldTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Craft.Net.World\Craft.Net.World.csproj">

@@ -10,7 +10,7 @@ namespace Craft.Net.World
         long Seed { get; set; }
         Vector3 SpawnPoint { get; }
 
-        Chunk GenerateChunk(Coordinates position);
+        Chunk GenerateChunk(Coordinates2D position);
 
         /// <summary>
         /// Called after the world generator is created and

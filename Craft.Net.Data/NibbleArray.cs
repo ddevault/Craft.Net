@@ -1,3 +1,5 @@
+using fNbt;
+using fNbt.Serialization;
 using System;
 using System.Collections.ObjectModel;
 
@@ -6,7 +8,7 @@ namespace Craft.Net.Data
     /// <summary>
     /// Represents an array of 4-bit values.
     /// </summary>
-    public class NibbleArray
+    public class NibbleArray : INbtSerializable
     {
         /// <summary>
         /// The data in the nibble array. Each byte contains
@@ -42,6 +44,16 @@ namespace Craft.Net.Data
                 Data[index/2] &= (byte)(0xF << ((index + 1) % 2 * 4));
                 Data[index/2] |= (byte)(value << (index % 2 * 4));
             }
+        }
+
+        public NbtTag Serialize()
+        {
+            return new NbtByteArray(Data);
+        }
+
+        public void Deserialize(NbtTag value)
+        {
+            Data = value.ByteArrayValue;
         }
     }
 

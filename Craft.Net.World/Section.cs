@@ -35,33 +35,59 @@ namespace Craft.Net.World
             get { return nonAirCount == 0; }
         }
 
-        public short GetBlockId(int x, int y, int z)
+        public short GetBlockId(Coordinates3D coordinates)
         {
-            int index = x + (z * Width) + (y * Height * Width);
-            return Blocks[index];
+            int index = coordinates.X + (coordinates.Z * Width) + (coordinates.Y * Height * Width);
+            short value = Blocks[index];
+            if (Add != null)
+                value |= (short)(Add[index] << 8);
+            return value;
         }
 
-        public byte GetSkyLight(int x, int y, int z)
+        public byte GetMetadata(Coordinates3D coordinates)
         {
-            int index = x + (z * Width) + (y * Height * Width);
+            int index = coordinates.X + (coordinates.Z * Width) + (coordinates.Y * Height * Width);
+            return Metadata[index];
+        }
+
+        public byte GetSkyLight(Coordinates3D coordinates)
+        {
+            int index = coordinates.X + (coordinates.Z * Width) + (coordinates.Y * Height * Width);
             return SkyLight[index];
         }
 
-        public byte GetBlockLight(int x, int y, int z)
+        public byte GetBlockLight(Coordinates3D coordinates)
         {
-            int index = x + (z * Width) + (y * Height * Width);
+            int index = coordinates.X + (coordinates.Z * Width) + (coordinates.Y * Height * Width);
             return BlockLight[index];
         }
 
-        public void SetSkyLight(int x, int y, int z, byte value)
+        public void SetBlockId(Coordinates3D coordinates, short value)
         {
-            int index = x + (z * Width) + (y * Height * Width);
+            int index = coordinates.X + (coordinates.Z * Width) + (coordinates.Y * Height * Width);
+            Blocks[index] = (byte)value;
+            if ((value & 0xFF) != 0)
+            {
+                if (Add == null) Add = new NibbleArray(Width * Height * Depth);
+                Add[index] = (byte)((ushort)value >> 8);
+            }
+        }
+
+        public void SetMetadata(Coordinates3D coordinates, byte value)
+        {
+            int index = coordinates.X + (coordinates.Z * Width) + (coordinates.Y * Height * Width);
+            Metadata[index] = value;
+        }
+
+        public void SetSkyLight(Coordinates3D coordinates, byte value)
+        {
+            int index = coordinates.X + (coordinates.Z * Width) + (coordinates.Y * Height * Width);
             SkyLight[index] = value;
         }
 
-        public void SetBlockLight(int x, int y, int z, byte value)
+        public void SetBlockLight(Coordinates3D coordinates, byte value)
         {
-            int index = x + (z * Width) + (y * Height * Width);
+            int index = coordinates.X + (coordinates.Z * Width) + (coordinates.Y * Height * Width);
             BlockLight[index] = value;
         }
 

@@ -21,11 +21,11 @@ namespace Craft.Net.World
         /// <summary>
         /// The currently loaded chunk list.
         /// </summary>
-        public Dictionary<Coordinates, Chunk> Chunks { get; set; }
+        public Dictionary<Coordinates2D, Chunk> Chunks { get; set; }
         /// <summary>
         /// The location of this region in the overworld.
         /// </summary>
-        public Coordinates Position { get; set; }
+        public Coordinates2D Position { get; set; }
         /// <summary>
         /// The <see cref="IWorldGenerator"/> used to generate this world.
         /// </summary>
@@ -39,9 +39,9 @@ namespace Craft.Net.World
         /// Creates a new Region for server-side use at the given position using
         /// the provided terrain generator.
         /// </summary>
-        public Region(Coordinates position, World world)
+        public Region(Coordinates2D position, World world)
         {
-            Chunks = new Dictionary<Coordinates, Chunk>();
+            Chunks = new Dictionary<Coordinates2D, Chunk>();
             Position = position;
             World = world;
             WorldGenerator = world.WorldGenerator;
@@ -50,7 +50,7 @@ namespace Craft.Net.World
         /// <summary>
         /// Creates a region from the given region file.
         /// </summary>
-        public Region(Coordinates position, World world, string file) : this(position, world)
+        public Region(Coordinates2D position, World world, string file) : this(position, world)
         {
             if (File.Exists(file))
                 regionFile = File.Open(file, FileMode.OpenOrCreate);
@@ -66,7 +66,7 @@ namespace Craft.Net.World
         /// generates it if a world generator is provided.
         /// </summary>
         /// <param name="position">The position of the requested local chunk coordinates.</param>
-        public Chunk GetChunk(Coordinates position)
+        public Chunk GetChunk(Coordinates2D position)
         {
             // TODO: This could use some refactoring
             lock (Chunks)
@@ -118,7 +118,7 @@ namespace Craft.Net.World
         /// world generator if it does not exist.
         /// </summary>
         /// <param name="position">The position of the requested local chunk coordinates.</param>
-        public Chunk GetChunkWithoutGeneration(Coordinates position)
+        public Chunk GetChunkWithoutGeneration(Coordinates2D position)
         {
             // TODO: This could use some refactoring
             lock (Chunks)
@@ -160,7 +160,7 @@ namespace Craft.Net.World
             }
         }
 
-        private void GenerateChunk(Coordinates position)
+        private void GenerateChunk(Coordinates2D position)
         {
             var chunk = WorldGenerator.GenerateChunk(position);
             Chunks.Add(position, chunk);
@@ -169,7 +169,7 @@ namespace Craft.Net.World
         /// <summary>
         /// Sets the chunk at the specified local position to the given value.
         /// </summary>
-        public void SetChunk(Coordinates position, Chunk chunk)
+        public void SetChunk(Coordinates2D position, Chunk chunk)
         {
             if (!Chunks.ContainsKey(position))
                 Chunks.Add(position, chunk);
@@ -269,7 +269,7 @@ namespace Craft.Net.World
         #region Stream Helpers
 
         private const int ChunkSizeMultiplier = 4096;
-        private Tuple<int, int> GetChunkFromTable(Coordinates position) // <offset, length>
+        private Tuple<int, int> GetChunkFromTable(Coordinates2D position) // <offset, length>
         {
             int tableOffset = ((position.X % Width) + (position.Z % Depth) * Width) * 4;
             regionFile.Seek(tableOffset, SeekOrigin.Begin);
@@ -290,7 +290,7 @@ namespace Craft.Net.World
             regionFile.Flush();
         }
 
-        private Tuple<int, int> AllocateNewChunks(Coordinates position, int length)
+        private Tuple<int, int> AllocateNewChunks(Coordinates2D position, int length)
         {
             // Expand region file
             regionFile.Seek(0, SeekOrigin.End);
@@ -314,12 +314,12 @@ namespace Craft.Net.World
 
         #endregion
 
-        public static string GetRegionFileName(Coordinates position)
+        public static string GetRegionFileName(Coordinates2D position)
         {
             return string.Format("r.{0}.{1}.mca", position.X, position.Z);
         }
 
-        public void UnloadChunk(Coordinates position)
+        public void UnloadChunk(Coordinates2D position)
         {
             Chunks.Remove(position);
         }

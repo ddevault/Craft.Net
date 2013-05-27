@@ -23,6 +23,8 @@ namespace Craft.Net.World
 
         public TileEntity TileEntities { get; set; }
 
+        public IDiskEntity[] Entities { get; set; }
+
         [TagName("xPos")]
         public int X { get; set; }
 
