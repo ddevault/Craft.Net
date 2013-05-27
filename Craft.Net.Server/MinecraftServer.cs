@@ -115,6 +115,10 @@ namespace Craft.Net.Server
         /// Fired when a player dies.
         /// </summary>
         public event EventHandler<PlayerDeathEventArgs> PlayerDeath;
+        /// <summary>
+        /// Fired when a player presses "tab" while tying in the chat.
+        /// </summary>
+        public event EventHandler<TabCompleteEventArgs> TabComplete;
 
         #endregion
 
@@ -382,6 +386,11 @@ namespace Craft.Net.Server
                         break;
                 }
             }
+        }
+
+        protected internal void OnTabComplete(TabCompleteEventArgs e)
+        {
+            if (TabComplete != null) TabComplete(this, e);
         }
 
         #region Handlers

@@ -20,12 +20,6 @@ namespace Craft.Net.Client
             PacketHandlers.RegisterHandlers();
         }
 
-        /// <summary>
-        /// The protocol version supported by this client.
-        /// </summary>
-        public const int ProtocolVersion = 51;
-        public const string FriendlyVersion = "1.4.6";
-
         public delegate void PacketHandler(MinecraftClient client, IPacket packet);
         private static PacketHandler[] PacketHandlerDelegates { get; set; }
 
@@ -38,6 +32,35 @@ namespace Craft.Net.Client
         {
             Session = session;
             SendQueue = new ConcurrentQueue<IPacket>();
+        }
+
+        public void Connect(string address)
+        {
+            Connect(ParseEndPoint(address));
+        }
+
+        public static IPEndPoint ParseEndPoint(string endpoint)
+        {
+            IPAddress address;
+            int port;
+            if (endpoint.Contains(':'))
+            {
+                // Both IP and port are specified
+                var parts = endpoint.Split(':');
+                if (!IPAddress.TryParse(parts[0], out address))
+                    address = Resolve(parts[0]);
+                return new IPEndPoint(address, int.Parse(parts[1]));
+            }
+            if (IPAddress.TryParse(endpoint, out address))
+                return new IPEndPoint(address, 25565);
+            if (int.TryParse(endpoint, out port))
+                return new IPEndPoint(IPAddress.Loopback, port);
+            return new IPEndPoint(Resolve(endpoint), 25565);
+        }
+
+        private static IPAddress Resolve(string arg)
+        {
+            return Dns.GetHostEntry(arg).AddressList.FirstOrDefault();
         }
 
         public void Connect(IPEndPoint endPoint)
@@ -95,7 +118,7 @@ namespace Craft.Net.Client
         {
             while (true)
             {
-                if (Spawned && nextPlayerUpdate < DateTime.Now)
+                if (IsSpawned && nextPlayerUpdate < DateTime.Now)
                 {
                     nextPlayerUpdate = DateTime.Now.AddMilliseconds(500);
                     SendPacket(new PlayerPacket(true)); // TODO: Store OnGround properly
@@ -144,7 +167,8 @@ namespace Craft.Net.Client
         {
             if (PacketHandlerDelegates[packet.Id] != null)
                 PacketHandlerDelegates[packet.Id](this, packet);
-            LogProvider.Log("Warning: No packet handlers for 0x" + packet.Id.ToString("X2"), LogImportance.Low);
+            else
+                LogProvider.Log("Warning: No packet handlers for 0x" + packet.Id.ToString("X2"), LogImportance.Low);
         }
     }
 }
