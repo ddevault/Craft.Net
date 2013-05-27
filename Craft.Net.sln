@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestServer", "TestServer\Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Server.Test", "Test\Craft.Net.Server.Test\Craft.Net.Server.Test.csproj", "{3E19A5B0-B775-45D7-8B6C-0D0244D70880}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net", "Craft.Net\Craft.Net.csproj", "{C3BBAB7E-606F-420E-9461-C8CFAEC2476B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Networking", "Craft.Net.Networking\Craft.Net.Networking.csproj", "{C3BBAB7E-606F-420E-9461-C8CFAEC2476B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Client", "Craft.Net.Client\Craft.Net.Client.csproj", "{D48822DB-4A67-48DD-A858-A629F92233FB}"
 EndProject
@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestClient", "TestClient\Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fNbt", "externals\fNbt\fNbt\fNbt.csproj", "{4488498D-976D-4DA3-BF72-109531AF0488}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Test", "Test\Craft.Net.Test\Craft.Net.Test.csproj", "{FE82A68D-44BD-485F-88CF-FFA77720AEF6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Networking.Test", "Test\Craft.Net.Networking.Test\Craft.Net.Networking.Test.csproj", "{FE82A68D-44BD-485F-88CF-FFA77720AEF6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.World", "Craft.Net.World\Craft.Net.World.csproj", "{02031C5C-5007-48D5-A253-F7C8BDF0C0B2}"
 EndProject

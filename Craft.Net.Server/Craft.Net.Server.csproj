@@ -82,9 +82,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\Craft.Net\Craft.Net.csproj">
+    <ProjectReference Include="..\Craft.Net.Networking\Craft.Net.Networking.csproj">
       <Project>{C3BBAB7E-606F-420E-9461-C8CFAEC2476B}</Project>
-      <Name>Craft.Net</Name>
+      <Name>Craft.Net.Networking</Name>
     </ProjectReference>
     <ProjectReference Include="..\externals\fNbt\fNbt\fNbt.csproj">
       <Project>{4488498D-976D-4DA3-BF72-109531AF0488}</Project>

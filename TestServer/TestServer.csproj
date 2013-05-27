@@ -54,9 +54,9 @@
       <Project>{E00C6FF6-BCD8-44E0-BCD8-5F1BDF201617}</Project>
       <Name>Craft.Net.Server</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Craft.Net\Craft.Net.csproj">
+    <ProjectReference Include="..\Craft.Net.Networking\Craft.Net.Networking.csproj">
       <Project>{C3BBAB7E-606F-420E-9461-C8CFAEC2476B}</Project>
-      <Name>Craft.Net</Name>
+      <Name>Craft.Net.Networking</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
