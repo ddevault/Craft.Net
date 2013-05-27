@@ -15,7 +15,10 @@ namespace Craft.Net.Server.Handlers
             var packet = (CreativeInventoryActionPacket)_packet;
             if (packet.SlotIndex == -1)
             {
-
+                var entity = new ItemEntity(client.Entity.GivenPosition +
+                                new Vector3(0, client.Entity.Size.Height, 0), packet.Item);
+                entity.Velocity = MathHelper.FowardVector(client.Entity) * new Vector3(0.25);
+                server.EntityManager.SpawnEntity(client.World, entity);
             }
             else if (packet.SlotIndex < client.Entity.Inventory.Length && packet.SlotIndex > 0)
             {
