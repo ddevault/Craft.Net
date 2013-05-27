@@ -187,6 +187,14 @@ namespace Craft.Net.Data
             return HeightMap[(byte)(z * Depth) + x];
         }
 
+        /// <summary>
+        /// Gets the block at the top of the specified column.
+        /// </summary>
+        public Block GetTopBlock(byte x, byte z)
+        {
+            return GetBlock(new Vector3(x, GetHeight(x, z), z));
+        }
+
         public NbtFile ToNbt() // TODO: Entities
         {
             NbtFile file = new NbtFile();

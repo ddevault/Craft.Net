@@ -301,6 +301,10 @@ namespace Craft.Net.Server
             // Send entities
             EntityManager.SendClientEntities(client);
 
+            //Send Weather
+            GetWeatherManagerForWorld(client.World).SendCurrentWeatherToClient(client);
+
+
             client.SendPacket(new UpdateHealthPacket(client.Entity.Health, client.Entity.Food, client.Entity.FoodSaturation));
 
             var args = new PlayerLogInEventArgs(client);
@@ -550,7 +554,11 @@ namespace Craft.Net.Server
                 if (DefaultLevel.Time % 5 == 0)
                 {
                     foreach (var level in Levels)
+                    {
                         level.World.DoScheduledUpdates();
+                        // TODO: This should be moved to a better place.
+                        GetWeatherManagerForWorld(level.World).DoWeatherUpdate();
+                    }
                 }
                 Thread.Sleep(1);
             }
