@@ -1,6 +1,6 @@
 using System;
 
-namespace Craft.Net.Metadata
+namespace Craft.Net.Data
 {
     public class MetadataShort : MetadataEntry
     {

@@ -57,31 +57,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AesStream.cs" />
-    <Compile Include="BigInteger.cs" />
     <Compile Include="BufferedStream.cs" />
-    <Compile Include="Cryptography.cs" />
-    <Compile Include="Difficulty.cs" />
-    <Compile Include="Dimension.cs" />
-    <Compile Include="GameMode.cs" />
-    <Compile Include="GameRules.cs" />
-    <Compile Include="Metadata\MetadataByte.cs" />
-    <Compile Include="Metadata\MetadataDictionary.cs" />
-    <Compile Include="Metadata\MetadataEntry.cs" />
-    <Compile Include="Metadata\MetadataFloat.cs" />
-    <Compile Include="Metadata\MetadataInt.cs" />
-    <Compile Include="Metadata\MetadataShort.cs" />
-    <Compile Include="Metadata\MetadataSlot.cs" />
-    <Compile Include="Metadata\MetadataString.cs" />
-    <Compile Include="MinecraftStream.cs" />
-    <Compile Include="MinecraftStream.Stream.cs" />
     <Compile Include="PacketReader.cs" />
     <Compile Include="Packets.cs" />
-    <Compile Include="ParticleEffect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ItemStack.cs" />
-    <Compile Include="SoundEffect.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Craft.Net.Data\Craft.Net.Data.csproj">
+      <Project>{50462849-2223-4e39-b5d9-a928a9a58a33}</Project>
+      <Name>Craft.Net.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\externals\fNbt\fNbt\fNbt.csproj">
       <Project>{4488498D-976D-4DA3-BF72-109531AF0488}</Project>
       <Name>fNbt</Name>

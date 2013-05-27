@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using fNbt;
 using Ionic.Zlib;
+using Craft.Net.Data;
 
 namespace Craft.Net.World
 {
@@ -20,7 +21,7 @@ namespace Craft.Net.World
         /// <summary>
         /// The currently loaded chunk list.
         /// </summary>
-        public Dictionary<Vector3, Chunk> Chunks { get; set; }
+        public Dictionary<Coordinates, Chunk> Chunks { get; set; }
         /// <summary>
         /// The location of this region in the overworld.
         /// </summary>
@@ -38,9 +39,9 @@ namespace Craft.Net.World
         /// Creates a new Region for server-side use at the given position using
         /// the provided terrain generator.
         /// </summary>
-        public Region(Vector3 position, World world)
+        public Region(Coordinates position, World world)
         {
-            Chunks = new Dictionary<Vector3, Chunk>();
+            Chunks = new Dictionary<Coordinates, Chunk>();
             Position = position;
             World = world;
             WorldGenerator = world.WorldGenerator;
@@ -49,7 +50,7 @@ namespace Craft.Net.World
         /// <summary>
         /// Creates a region from the given region file.
         /// </summary>
-        public Region(Vector3 position, World world, string file) : this(position, world)
+        public Region(Coordinates position, World world, string file) : this(position, world)
         {
             if (File.Exists(file))
                 regionFile = File.Open(file, FileMode.OpenOrCreate);
@@ -65,7 +66,7 @@ namespace Craft.Net.World
         /// generates it if a world generator is provided.
         /// </summary>
         /// <param name="position">The position of the requested local chunk coordinates.</param>
-        public Chunk GetChunk(Vector3 position)
+        public Chunk GetChunk(Coordinates position)
         {
             // TODO: This could use some refactoring
             lock (Chunks)
@@ -95,8 +96,7 @@ namespace Craft.Net.World
                                 case 2: // zlib
                                     var nbt = new NbtFile();
                                     nbt.LoadFromStream(regionFile, NbtCompression.ZLib, null);
-                                    var chunk = Chunk.FromNbt(position, nbt);
-                                    chunk.ParentRegion = this;
+                                    var chunk = Chunk.FromNbt(nbt);
                                     Chunks.Add(position, chunk);
                                     break;
                                 default:
@@ -107,7 +107,7 @@ namespace Craft.Net.World
                     else if (WorldGenerator == null)
                         throw new ArgumentException("The requested chunk is not loaded.", "position");
                     else
-                        Chunks.Add(position, WorldGenerator.GenerateChunk(position, this));
+                        Chunks.Add(position, WorldGenerator.GenerateChunk(position));
                 }
                 return Chunks[position];
             }
@@ -118,7 +118,7 @@ namespace Craft.Net.World
         /// world generator if it does not exist.
         /// </summary>
         /// <param name="position">The position of the requested local chunk coordinates.</param>
-        public Chunk GetChunkWithoutGeneration(Vector3 position)
+        public Chunk GetChunkWithoutGeneration(Coordinates position)
         {
             // TODO: This could use some refactoring
             lock (Chunks)
@@ -143,8 +143,7 @@ namespace Craft.Net.World
                                 case 2: // zlib
                                     var nbt = new NbtFile();
                                     nbt.LoadFromStream(regionFile, NbtCompression.ZLib, null);
-                                    var chunk = Chunk.FromNbt(position, nbt);
-                                    chunk.ParentRegion = this;
+                                    var chunk = Chunk.FromNbt(nbt);
                                     Chunks.Add(position, chunk);
                                     break;
                                 default:
@@ -155,22 +154,22 @@ namespace Craft.Net.World
                     else if (WorldGenerator == null)
                         throw new ArgumentException("The requested chunk is not loaded.", "position");
                     else
-                        Chunks.Add(position, WorldGenerator.GenerateChunk(position, this));
+                        Chunks.Add(position, WorldGenerator.GenerateChunk(position));
                 }
                 return Chunks[position];
             }
         }
 
-        private void GenerateChunk(Vector3 position)
+        private void GenerateChunk(Coordinates position)
         {
-            var chunk = WorldGenerator.GenerateChunk(position, this);
+            var chunk = WorldGenerator.GenerateChunk(position);
             Chunks.Add(position, chunk);
         }
 
         /// <summary>
         /// Sets the chunk at the specified local position to the given value.
         /// </summary>
-        public void SetChunk(Vector3 position, Chunk chunk)
+        public void SetChunk(Coordinates position, Chunk chunk)
         {
             if (!Chunks.ContainsKey(position))
                 Chunks.Add(position, chunk);
@@ -270,10 +269,9 @@ namespace Craft.Net.World
         #region Stream Helpers
 
         private const int ChunkSizeMultiplier = 4096;
-        private Tuple<int, int> GetChunkFromTable(Vector3 position) // <offset, length>
+        private Tuple<int, int> GetChunkFromTable(Coordinates position) // <offset, length>
         {
-            int tableOffset = (((int)(position.X) % Width) +
-                               ((int)(position.Z) % Depth) * Width) * 4;
+            int tableOffset = ((position.X % Width) + (position.Z % Depth) * Width) * 4;
             regionFile.Seek(tableOffset, SeekOrigin.Begin);
             byte[] offsetBuffer = new byte[4];
             regionFile.Read(offsetBuffer, 0, 3);
@@ -292,7 +290,7 @@ namespace Craft.Net.World
             regionFile.Flush();
         }
 
-        private Tuple<int, int> AllocateNewChunks(Vector3 position, int length)
+        private Tuple<int, int> AllocateNewChunks(Coordinates position, int length)
         {
             // Expand region file
             regionFile.Seek(0, SeekOrigin.End);
@@ -303,8 +301,7 @@ namespace Craft.Net.World
             regionFile.Write(new byte[length * ChunkSizeMultiplier], 0, length * ChunkSizeMultiplier);
 
             // Write table entry
-            int tableOffset = (((int)(position.X) % Width) +
-                               ((int)(position.Z) % Depth) * Width) * 4;
+            int tableOffset = ((position.X % Width) + (position.Z % Depth) * Width) * 4;
             regionFile.Seek(tableOffset, SeekOrigin.Begin);
 
             byte[] entry = BitConverter.GetBytes(dataOffset >> 4);
@@ -317,14 +314,12 @@ namespace Craft.Net.World
 
         #endregion
 
-        public static string GetRegionFileName(Vector3 position)
+        public static string GetRegionFileName(Coordinates position)
         {
-            var x = (int)position.X;
-            var z = (int)position.Z;
-            return "r." + x + "." + z + ".mca";
+            return string.Format("r.{0}.{1}.mca", position.X, position.Z);
         }
 
-        public void UnloadChunk(Vector3 position)
+        public void UnloadChunk(Coordinates position)
         {
             Chunks.Remove(position);
         }

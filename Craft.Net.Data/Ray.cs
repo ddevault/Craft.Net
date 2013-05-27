@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Craft.Net
+namespace Craft.Net.Data
 {
     // Mostly taken from the MonoXna project, which is licensed under the MIT license
     public struct Ray : IEquatable<Ray>

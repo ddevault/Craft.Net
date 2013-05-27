@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-namespace Craft.Net.Metadata
+namespace Craft.Net.Data
 {
     public abstract class MetadataEntry
     {

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using fNbt;
 using fNbt.Serialization;
+using Craft.Net.Data;
 
 namespace Craft.Net.World
 {

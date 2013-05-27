@@ -7,7 +7,7 @@ using System.IO.Compression;
 using fNbt;
 using fNbt.Serialization;
 
-namespace Craft.Net
+namespace Craft.Net.Data
 {
     public struct ItemStack : ICloneable, IEquatable<ItemStack>
     {

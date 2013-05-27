@@ -1,4 +1,4 @@
-using Craft.Net.World;
+using Craft.Net.Data;
 
 namespace Craft.Net.World
 {
@@ -10,12 +10,7 @@ namespace Craft.Net.World
         long Seed { get; set; }
         Vector3 SpawnPoint { get; }
 
-        /// <summary>
-        /// Generates one chunk at the given position.
-        /// </summary>
-        //Chunk GenerateChunk(Vector3 position, Region parentRegion);
-
-        //Chunk GenerateChunk(Vector3 position);
+        Chunk GenerateChunk(Coordinates position);
 
         /// <summary>
         /// Called after the world generator is created and

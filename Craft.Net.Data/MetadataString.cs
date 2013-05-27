@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-namespace Craft.Net.Metadata
+namespace Craft.Net.Data
 {
     public class MetadataString : MetadataEntry
     {

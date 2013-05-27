@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Craft.Net
+namespace Craft.Net.Data
 {
     public class ParticleEffect
     {

@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Craft.Net
+namespace Craft.Net.Data
 {
     /// <summary>
     /// A big-endian stream for reading/writing Minecraft data types.

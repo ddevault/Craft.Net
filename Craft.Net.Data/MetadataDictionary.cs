@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 
-namespace Craft.Net.Metadata
+namespace Craft.Net.Data
 {
     /// <summary>
     /// Used to send metadata with entities

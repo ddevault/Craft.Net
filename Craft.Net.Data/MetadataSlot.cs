@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using fNbt;
 
-namespace Craft.Net.Metadata
+namespace Craft.Net.Data
 {
     public class MetadataSlot : MetadataEntry
     {

@@ -1,4 +1,4 @@
-namespace Craft.Net.Metadata
+namespace Craft.Net.Data
 {
     public class MetadataByte : MetadataEntry
     {

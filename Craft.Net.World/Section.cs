@@ -1,3 +1,4 @@
+using Craft.Net.Data;
 using fNbt.Serialization;
 
 namespace Craft.Net.World

@@ -1,4 +1,4 @@
-namespace Craft.Net
+namespace Craft.Net.Data
 {
     /// <summary>
     /// Specifies all dimensions a player can exist in.

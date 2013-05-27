@@ -1,4 +1,4 @@
-namespace Craft.Net
+namespace Craft.Net.Data
 {
     /// <summary>
     /// Specifies the game mode and describes default

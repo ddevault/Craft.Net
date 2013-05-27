@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using fNbt.Serialization;
 
-namespace Craft.Net
+namespace Craft.Net.Data
 {
     public class GameRules
     {

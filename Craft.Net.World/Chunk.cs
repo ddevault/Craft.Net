@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using fNbt;
 using fNbt.Serialization;
+using Craft.Net.Data;
 
 namespace Craft.Net.World
 {
@@ -19,6 +20,8 @@ namespace Craft.Net.World
         public int[] HeightMap { get; set; }
 
         public Section[] Sections { get; set; }
+
+        public TileEntity TileEntities { get; set; }
 
         [TagName("xPos")]
         public int X { get; set; }
@@ -103,6 +106,20 @@ namespace Craft.Net.World
         public int GetHeight(byte x, byte z)
         {
             return HeightMap[(byte)(z * Depth) + x];
+        }
+
+        public NbtFile ToNbt()
+        {
+            var serializer = new NbtSerializer(typeof(Chunk));
+            var compound = serializer.Serialize(this, "Level") as NbtCompound;
+            return new NbtFile(compound);
+        }
+
+        public static Chunk FromNbt(NbtFile nbt)
+        {
+            var serializer = new NbtSerializer(typeof(Chunk));
+            var chunk = (Chunk)serializer.Deserialize(nbt.RootTag);
+            return chunk;
         }
     }
 }

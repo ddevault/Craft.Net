@@ -7,32 +7,32 @@ namespace Craft.Net.World
 {
     public struct Coordinates
     {
-        public int X, Y;
+        public int X, Z;
 
-        public Coordinates(int x, int y)
+        public Coordinates(int x, int z)
         {
             X = x;
-            Y = y;
+            Z = z;
         }
 
         public static Coordinates operator +(Coordinates a, Coordinates b)
         {
-            return new Coordinates(a.X + b.X, a.Y + b.Y);
+            return new Coordinates(a.X + b.X, a.Z + b.Z);
         }
 
         public static Coordinates operator -(Coordinates a, Coordinates b)
         {
-            return new Coordinates(a.X - b.X, a.Y - b.Y);
+            return new Coordinates(a.X - b.X, a.Z - b.Z);
         }
 
         public static Coordinates operator *(Coordinates a, Coordinates b)
         {
-            return new Coordinates(a.X * b.X, a.Y * b.Y);
+            return new Coordinates(a.X * b.X, a.Z * b.Z);
         }
 
         public static Coordinates operator /(Coordinates a, Coordinates b)
         {
-            return new Coordinates(a.X / b.X, a.Y / b.Y);
+            return new Coordinates(a.X / b.X, a.Z / b.Z);
         }
     }
 }

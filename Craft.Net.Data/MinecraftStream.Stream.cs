@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace Craft.Net
+namespace Craft.Net.Data
 {
     // This file only has members of Stream
     public partial class MinecraftStream : Stream

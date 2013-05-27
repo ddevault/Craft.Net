@@ -7,8 +7,9 @@ using System.Runtime.Serialization;
 using System.Security.Cryptography;
 using System.Security.Permissions;
 using System.Text;
+using Craft.Net.Data;
 
-namespace Craft.Net
+namespace Craft.Net.Data
 {
     public static class Cryptography
     {
