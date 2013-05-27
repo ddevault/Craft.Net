@@ -19,7 +19,7 @@ namespace Craft.Net.Client.Handlers
             client.SharedSecret = new byte[16];
             random.GetBytes(client.SharedSecret); // Generate a secure AES key
 
-            if (packet.ServerId != "-") // Online mode
+            if (packet.ServerId != "-" && client.Session.SessionId != null) // Online mode
             {
                 // Authenticate with minecraft.net
                 var data = Encoding.ASCII.GetBytes(packet.ServerId)
