@@ -3,7 +3,6 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Collections.Generic;
 using System.Reflection;
-using Craft.Net.Utilities;
 using fNbt;
 using Craft.Net.Nbt;
 

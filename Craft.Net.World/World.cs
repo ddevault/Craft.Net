@@ -13,13 +13,13 @@ namespace Craft.Net.World
 
         public string Name { get; set; }
         public string BaseDirectory { get; internal set; }
-        public Dictionary<Vector3, Region> Regions { get; set; }
+        public Dictionary<Coordinates, Region> Regions { get; set; }
         public IWorldGenerator WorldGenerator { get; set; }
 
         public World(string name)
         {
             Name = name;
-            Regions = new Dictionary<Vector3, Region>();
+            Regions = new Dictionary<Coordinates, Region>();
         }
 
         /// <summary>

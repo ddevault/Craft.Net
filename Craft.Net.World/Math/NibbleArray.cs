@@ -1,7 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 
-namespace Craft.Net.Utilities
+namespace Craft.Net
 {
     /// <summary>
     /// Represents an array of 4-bit values.

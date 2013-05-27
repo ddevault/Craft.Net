@@ -25,7 +25,7 @@ namespace Craft.Net.World
         /// <summary>
         /// The location of this region in the overworld.
         /// </summary>
-        public Vector3 Position { get; set; }
+        public Coordinates Position { get; set; }
         /// <summary>
         /// The <see cref="IWorldGenerator"/> used to generate this world.
         /// </summary>

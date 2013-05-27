@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace Craft.Net.Utilities
+namespace Craft.Net
 {
     /// <summary>
     /// Represents the location of an object in 3D space.

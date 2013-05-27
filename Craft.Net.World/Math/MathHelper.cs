@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Craft.Net.Utilities
+namespace Craft.Net
 {
     public class MathHelper
     {

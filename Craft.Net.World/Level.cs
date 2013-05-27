@@ -24,7 +24,6 @@ namespace Craft.Net.World
         private List<World> Worlds { get; set; }
 
         #region NBT Fields
-
         /// <summary>
         /// Always set to 19133.
         /// </summary>
@@ -143,7 +142,6 @@ namespace Craft.Net.World
         /// The rules for this level.
         /// </summary>
         public GameRules GameRules { get; set; }
-
         #endregion
 
         /// <summary>
@@ -215,6 +213,7 @@ namespace Craft.Net.World
         {
             if (DatFile == null)
                 throw new InvalidOperationException("This level exists only in memory. Use Save(string).");
+            LastPlayed = DateTime.UtcNow.Ticks;
             var serializer = new NbtSerializer(typeof(Level));
             var tag = serializer.Serialize(this, "Data") as NbtCompound;
             var file = new NbtFile(tag);
@@ -234,14 +233,16 @@ namespace Craft.Net.World
             level.DatFile = file;
             // All directories that don't have special meaning are worlds
             var worlds = Directory.GetDirectories(Path.GetDirectoryName(file)).Where(
-                d => !new[] { "DATA", "PLAYERS" }.Contains(d.ToUpper()));
+                d => !Directory.GetFiles(d).Any(f => !f.EndsWith(".mca") && !f.EndsWith(".mcr")));
             foreach (var world in worlds)
                 level.AddWorld(World.LoadWorld(world));
             return level;
         }
 
-        // Thanks to some idiot at Mojang
-        private static int DataSlotToNetworkSlot(int index)
+        // Internally, we use network slots everywhere, but on disk, we need to use data slots
+        // Maybe someday we can use the Window classes to remap these around or something
+        // Or better yet, Mojang can stop making terrible design decisions
+        internal static int DataSlotToNetworkSlot(int index)
         {
             if (index <= 8)
                 index += 36;
@@ -258,7 +259,7 @@ namespace Craft.Net.World
             return index;
         }
 
-        private static int NetworkSlotToDataSlot(int index)
+        internal static int NetworkSlotToDataSlot(int index)
         {
             if (index >= 36 && index <= 44)
                 index -= 36;

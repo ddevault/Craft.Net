@@ -1,4 +1,4 @@
-namespace Craft.Net.Utilities
+namespace Craft.Net
 {
     /// <summary>
     /// Represents the size of an object in 3D space.
