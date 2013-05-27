@@ -166,6 +166,32 @@ namespace TestServer
                         var team = minecraftServer.ScoreboardManager.GetTeam(parameters[0]);
                         team.AddPlayers(parameters.Skip(1).ToArray());
                         break;
+                    case "toggledownfall":
+                        var weatherManager = minecraftServer.GetWeatherManagerForWorld(e.Origin.World);
+                        weatherManager.IsRainActive = !weatherManager.IsRainActive;
+                        break;
+                    case "setchunkbiomesnow":
+                        var chunk = e.Origin.World.GetChunk(e.Origin.Entity.Position / 16);
+                        for (byte x = 0; x < 16; x++)
+                        {
+                            for (byte z = 0; z < 16; z++)
+                            {
+                                chunk.SetBiome(x, z, Biome.IcePlains);
+                            }
+                        }
+                        foreach (var client in minecraftServer.EntityManager.GetClientsInWorld(e.Origin.World).ToArray())
+                        {
+                            if (client.LoadedChunks.Contains(chunk.AbsolutePosition / 16))
+                            {
+                                client.UnloadChunk(chunk.AbsolutePosition / 16);
+                                client.LoadChunk(chunk.AbsolutePosition / 16);
+                            }
+                        }
+                        break;
+                    case "biome":
+                        chunk = e.Origin.World.GetChunk(e.Origin.Entity.Position);
+                        e.Origin.SendChat(chunk.GetBiome(0, 0).ToString());
+                        break;
                 }
             }
         }
