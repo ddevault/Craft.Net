@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using System.IO.Compression;
 using fNbt;
-using Craft.Net.Nbt;
+using fNbt.Serialization;
 
 namespace Craft.Net
 {

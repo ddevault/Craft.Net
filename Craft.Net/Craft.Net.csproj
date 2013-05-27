@@ -64,11 +64,6 @@
     <Compile Include="Dimension.cs" />
     <Compile Include="GameMode.cs" />
     <Compile Include="GameRules.cs" />
-    <Compile Include="Nbt\IgnoreOnNullAttribute.cs" />
-    <Compile Include="Nbt\INbtSerializable.cs" />
-    <Compile Include="Nbt\NbtIgnoreAttribute.cs" />
-    <Compile Include="Nbt\NbtSerializer.cs" />
-    <Compile Include="Nbt\TagNameAttribute.cs" />
     <Compile Include="Metadata\MetadataByte.cs" />
     <Compile Include="Metadata\MetadataDictionary.cs" />
     <Compile Include="Metadata\MetadataEntry.cs" />

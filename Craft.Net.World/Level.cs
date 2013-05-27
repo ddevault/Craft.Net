@@ -5,9 +5,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
-using Craft.Net.Utilities;
 using fNbt;
-using Craft.Net.Nbt;
+using fNbt.Serialization;
 
 namespace Craft.Net.World
 {

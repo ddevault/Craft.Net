@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 using System.Collections.Generic;
 using System.Reflection;
 using fNbt;
-using Craft.Net.Nbt;
+using fNbt.Serialization;
 
 namespace Craft.Net.World
 {
