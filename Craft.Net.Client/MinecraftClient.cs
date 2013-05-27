@@ -41,16 +41,13 @@ namespace Craft.Net.Client
 
         public static IPEndPoint ParseEndPoint(string endpoint)
         {
+            IPEndPoint ipEndPoint;
+
+            if (NetworkHelper.TryParseEndPoint(endpoint, out ipEndPoint))
+                return ipEndPoint;
+
             IPAddress address;
             int port;
-            if (endpoint.Contains(':'))
-            {
-                // Both IP and port are specified
-                var parts = endpoint.Split(':');
-                if (!IPAddress.TryParse(parts[0], out address))
-                    address = Resolve(parts[0]);
-                return new IPEndPoint(address, int.Parse(parts[1]));
-            }
             if (IPAddress.TryParse(endpoint, out address))
                 return new IPEndPoint(address, 25565);
             if (int.TryParse(endpoint, out port))

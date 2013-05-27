@@ -75,6 +75,7 @@
     <Compile Include="MinecraftClient.cs" />
     <Compile Include="MinecraftClient.Events.cs" />
     <Compile Include="MinecraftClient.Properties.cs" />
+    <Compile Include="NetworkHelper.cs" />
     <Compile Include="PKCSKeyGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadOnlyWorld.cs" />
