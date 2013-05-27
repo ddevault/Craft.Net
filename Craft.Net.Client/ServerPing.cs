@@ -10,6 +10,11 @@ namespace Craft.Net.Client
 {
     public class ServerPing
     {
+        public static ServerPing DoPing(string address)
+        {
+            return DoPing(MinecraftClient.ParseEndPoint(address));
+        }
+
         public static ServerPing DoPing(IPEndPoint endPoint)
         {
             var client = new TcpClient();

@@ -13,7 +13,11 @@ namespace Craft.Net.Server.Handlers
         public static void CreativeInventoryAction(MinecraftClient client, MinecraftServer server, IPacket _packet)
         {
             var packet = (CreativeInventoryActionPacket)_packet;
-            if (packet.SlotIndex < client.Entity.Inventory.Length && packet.SlotIndex > 0)
+            if (packet.SlotIndex == -1)
+            {
+
+            }
+            else if (packet.SlotIndex < client.Entity.Inventory.Length && packet.SlotIndex > 0)
             {
                 client.Entity.Inventory[packet.SlotIndex] = packet.Item;
                 if (packet.SlotIndex == client.Entity.SelectedSlot)

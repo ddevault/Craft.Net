@@ -34,6 +34,35 @@ namespace Craft.Net.Client
             SendQueue = new ConcurrentQueue<IPacket>();
         }
 
+        public void Connect(string address)
+        {
+            Connect(ParseEndPoint(address));
+        }
+
+        public static IPEndPoint ParseEndPoint(string endpoint)
+        {
+            IPAddress address;
+            int port;
+            if (endpoint.Contains(':'))
+            {
+                // Both IP and port are specified
+                var parts = endpoint.Split(':');
+                if (!IPAddress.TryParse(parts[0], out address))
+                    address = Resolve(parts[0]);
+                return new IPEndPoint(address, int.Parse(parts[1]));
+            }
+            if (IPAddress.TryParse(endpoint, out address))
+                return new IPEndPoint(address, 25565);
+            if (int.TryParse(endpoint, out port))
+                return new IPEndPoint(IPAddress.Loopback, port);
+            return new IPEndPoint(Resolve(endpoint), 25565);
+        }
+
+        private static IPAddress Resolve(string arg)
+        {
+            return Dns.GetHostEntry(arg).AddressList.FirstOrDefault();
+        }
+
         public void Connect(IPEndPoint endPoint)
         {
             if (Client != null && Client.Connected)
