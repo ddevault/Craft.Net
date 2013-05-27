@@ -26,11 +26,6 @@ namespace Craft.Net.World
             WorldGenerator = worldGenerator;
         }
 
-        /// <summary>
-        /// Loads a world from region files on disk.
-        /// </summary>
-        /// <param name="baseDirectory">The path to the base directory, with region files corresponding to the regions
-        /// of the world to load.</param>
         public static World LoadWorld(string baseDirectory)
         {
             if (!Directory.Exists(baseDirectory))
@@ -40,37 +35,97 @@ namespace Craft.Net.World
             return world;
         }
 
-        /// <summary>
-        /// Gets the region at the given region coordinates.
-        /// </summary>
-        /// <param name="coordinates">The region to retrieve, in region coordinates</param>
-        public Region GetRegion(Coordinates2D coordinates)
+        public Chunk GetChunk(Coordinates2D coordinates)
         {
-            if (Regions.ContainsKey(coordinates))
-                return Regions[coordinates];
-            if (WorldGenerator != null)
-                return LoadOrGenerateRegion(coordinates);
-            throw new KeyNotFoundException("The requested region is not present in this world.");
+            int regionX = coordinates.X / Region.Width - ((coordinates.X < 0) ? 1 : 0);
+            int regionZ = coordinates.Z / Region.Depth - ((coordinates.Z < 0) ? 1 : 0);
+
+            var region = LoadOrGenerateRegion(new Coordinates2D(regionX, regionZ));
+            return region.GetChunk(new Coordinates2D(coordinates.X - regionX * 32, coordinates.Z - regionZ * 32));
+        }
+
+        public Chunk GetChunkWithoutGeneration(Coordinates2D coordinates)
+        {
+            int regionX = coordinates.X / Region.Width - ((coordinates.X < 0) ? 1 : 0);
+            int regionZ = coordinates.Z / Region.Depth - ((coordinates.Z < 0) ? 1 : 0);
+
+            var regionPosition = new Coordinates2D(regionX, regionZ);
+            if (!Regions.ContainsKey(regionPosition)) return null;
+            return Regions[regionPosition].GetChunkWithoutGeneration(
+                new Coordinates2D(coordinates.X - regionX * 32, coordinates.Z - regionZ * 32));
+        }
+
+        public void SetChunk(Coordinates2D coordinates, Chunk chunk)
+        {
+            int regionX = coordinates.X / Region.Width - ((coordinates.X < 0) ? 1 : 0);
+            int regionZ = coordinates.Z / Region.Depth - ((coordinates.Z < 0) ? 1 : 0);
+
+            var region = LoadOrGenerateRegion(new Coordinates2D(regionX, regionZ));
+            lock (region)
+            {
+                chunk.IsModified = true;
+                region.SetChunk(new Coordinates2D(coordinates.X - regionX * 32, coordinates.Z - regionZ * 32), chunk);
+            }
+        }
+
+        public void UnloadRegion(Coordinates2D coordinates)
+        {
+            lock (Regions)
+            {
+                Regions[coordinates].Save();
+                Regions.Remove(coordinates);
+            }
+        }
+
+        public void Save()
+        {
+            lock (Regions)
+            {
+                foreach (var region in Regions)
+                    region.Value.Save();
+            }
+        }
+
+        public void Save(string path)
+        {
+            if (!System.IO.Directory.Exists(path))
+                System.IO.Directory.CreateDirectory(path);
+            BaseDirectory = path;
+            lock (Regions)
+            {
+                foreach (var region in Regions)
+                    region.Value.Save(Path.Combine(BaseDirectory, Region.GetRegionFileName(region.Key)));
+            }
         }
 
         private Region LoadOrGenerateRegion(Coordinates2D coordinates)
         {
+            if (Regions.ContainsKey(coordinates))
+                return Regions[coordinates];
             var file = Path.Combine(BaseDirectory, Region.GetRegionFileName(coordinates));
             Region region;
             if (File.Exists(file))
                 region = new Region(coordinates, this, file);
             else
                 region = new Region(coordinates, this);
-            Regions[coordinates] = region;
+            lock (Regions)
+                Regions[coordinates] = region;
             return region;
         }
-
-        public short GetBlockId(
-
-        #region Coordinate Conversion
-
         
+        private Coordinates3D FindBlockPosition(Coordinates3D coordinates, out Chunk chunk)
+        {
+            if (coordinates.Y < 0 || coordinates.Y >= Chunk.Height)
+                throw new ArgumentOutOfRangeException("coordinates", "Coordinates are out of range");
 
-        #endregion
+            var chunkX = coordinates.X / Chunk.Width;
+            var chunkZ = coordinates.Z / Chunk.Depth;
+
+            chunk = GetChunk(new Coordinates2D(chunkX, chunkZ));
+            return new Coordinates3D(
+                (coordinates.X - chunkX * Chunk.Width) % Chunk.Width,
+                coordinates.Y,
+                (coordinates.Z - chunkZ * Chunk.Depth) % Chunk.Depth);
+        }
     }
 }

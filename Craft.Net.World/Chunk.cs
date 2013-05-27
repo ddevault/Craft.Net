@@ -9,8 +9,28 @@ using Craft.Net.Data;
 
 namespace Craft.Net.World
 {
-    public class Chunk
+    public class Chunk : INbtSerializable
     {
+        #region Entity Stuff
+
+        private static NbtSerializer Serializer { get; set; }
+        private static Dictionary<string, Type> EntityTypes { get; set; }
+
+        public static void RegisterEntityType(string id, Type type)
+        {
+            if (typeof(IDiskEntity).IsAssignableFrom(type))
+                throw new ArgumentException("Specified type does not implement IDiskEntity", "type");
+            EntityTypes[id.ToUpper()] = type;
+        }
+
+        static Chunk()
+        {
+            EntityTypes = new Dictionary<string, Type>();
+            Serializer = new NbtSerializer(typeof(Chunk));
+        }
+
+        #endregion
+
         public const int Width = 16, Height = 256, Depth = 16;
 
         internal bool IsModified { get; set; }
@@ -21,15 +41,29 @@ namespace Craft.Net.World
 
         public Section[] Sections { get; set; }
 
-        public TileEntity TileEntities { get; set; }
+        [TagName("TileEntities")]
+        private TileEntity[] _TileEntities
+        {
+            get { return TileEntities.ToArray(); }
+            set { TileEntities = new List<TileEntity>(value); }
+        }
+        [NbtIgnore]
+        public List<TileEntity> TileEntities { get; set; }
 
-        public IDiskEntity[] Entities { get; set; }
+        [TagName("Entities")]
+        private IDiskEntity[] _Entities
+        {
+            get { return Entities.ToArray(); }
+            set { Entities = new List<IDiskEntity>(value); }
+        }
+        [NbtIgnore]
+        public List<IDiskEntity> Entities { get; set; }
 
         [TagName("xPos")]
         public int X { get; set; }
 
-        [TagName("yPos")]
-        public int Y { get; set; }
+        [TagName("zPos")]
+        public int Z { get; set; }
 
         public long LastUpdate { get; set; }
 
@@ -40,39 +74,81 @@ namespace Craft.Net.World
             TerrainPopulated = true;
         }
 
-        public short GetBlockId(int x, int y, int z)
+        public short GetBlockId(Coordinates3D coordinates)
         {
-            int section = GetSectionNumber(y);
-            y = GetPositionInSection(y);
-            return Sections[section].GetBlockId(x, y, z);
+            int section = GetSectionNumber(coordinates.Y);
+            coordinates.Y = GetPositionInSection(coordinates.Y);
+            return Sections[section].GetBlockId(coordinates);
         }
 
-        public byte GetSkyLight(int x, int y, int z)
+        public byte GetMetadata(Coordinates3D coordinates)
         {
-            int section = GetSectionNumber(y);
-            y = GetPositionInSection(y);
-            return Sections[section].GetSkyLight(x, y, z);
+            int section = GetSectionNumber(coordinates.Y);
+            coordinates.Y = GetPositionInSection(coordinates.Y);
+            return Sections[section].GetMetadata(coordinates);
         }
 
-        public byte GetBlockLight(int x, int y, int z)
+        public byte GetSkyLight(Coordinates3D coordinates)
         {
-            int section = GetSectionNumber(y);
-            y = GetPositionInSection(y);
-            return Sections[section].GetBlockLight(x, y, z);
+            int section = GetSectionNumber(coordinates.Y);
+            coordinates.Y = GetPositionInSection(coordinates.Y);
+            return Sections[section].GetSkyLight(coordinates);
         }
 
-        public void SetSkyLight(int x, int y, int z, byte value)
+        public byte GetBlockLight(Coordinates3D coordinates)
         {
-            int section = GetSectionNumber(y);
-            y = GetPositionInSection(y);
-            Sections[section].SetSkyLight(x, y, z, value);
+            int section = GetSectionNumber(coordinates.Y);
+            coordinates.Y = GetPositionInSection(coordinates.Y);
+            return Sections[section].GetBlockLight(coordinates);
         }
 
-        public void SetBlockLight(int x, int y, int z, byte value)
+        public void SetBlockId(Coordinates3D coordinates, short value)
         {
-            int section = GetSectionNumber(y);
-            y = GetPositionInSection(y);
-            Sections[section].SetBlockLight(x, y, z, value);
+            int section = GetSectionNumber(coordinates.Y);
+            coordinates.Y = GetPositionInSection(coordinates.Y);
+            Sections[section].SetBlockId(coordinates, value);
+        }
+
+        public void SetMetadata(Coordinates3D coordinates, byte value)
+        {
+            int section = GetSectionNumber(coordinates.Y);
+            coordinates.Y = GetPositionInSection(coordinates.Y);
+            Sections[section].SetMetadata(coordinates, value);
+        }
+
+        public void SetSkyLight(Coordinates3D coordinates, byte value)
+        {
+            int section = GetSectionNumber(coordinates.Y);
+            coordinates.Y = GetPositionInSection(coordinates.Y);
+            Sections[section].SetSkyLight(coordinates, value);
+        }
+
+        public void SetBlockLight(Coordinates3D coordinates, byte value)
+        {
+            int section = GetSectionNumber(coordinates.Y);
+            coordinates.Y = GetPositionInSection(coordinates.Y);
+            Sections[section].SetBlockLight(coordinates, value);
+        }
+
+        public TileEntity GetTileEntity(Coordinates3D coordinates)
+        {
+            for (int i = 0; i < TileEntities.Count; i++)
+                if (TileEntities[i].Coordinates == coordinates)
+                    return TileEntities[i];
+            return null;
+        }
+
+        public void SetTileEntity(Coordinates3D coordinates, TileEntity value)
+        {
+            for (int i = 0; i < TileEntities.Count; i++)
+            {
+                if (TileEntities[i].Coordinates == coordinates)
+                {
+                    TileEntities[i] = value;
+                    return;
+                }
+            }
+            TileEntities.Add(value);
         }
 
         private static int GetSectionNumber(double yPos)
@@ -122,6 +198,46 @@ namespace Craft.Net.World
             var serializer = new NbtSerializer(typeof(Chunk));
             var chunk = (Chunk)serializer.Deserialize(nbt.RootTag);
             return chunk;
+        }
+
+        public NbtTag Serialize()
+        {
+            var chunk = (NbtCompound)Serializer.Serialize(this);
+            var entities = new NbtList("Entities", NbtTagType.Compound);
+            for (int i = 0; i < Entities.Count; i++)
+                entities.Add(Entities[i].Serialize());
+            chunk.Add(entities);
+            return chunk;
+        }
+
+        public void Deserialize(NbtTag value)
+        {
+            var compound = value as NbtCompound;
+            var chunk = (Chunk)Serializer.Deserialize(value);
+
+            this._TileEntities = chunk._TileEntities;
+            this.Biomes = chunk.Biomes;
+            this.HeightMap = chunk.HeightMap;
+            this.LastUpdate = chunk.LastUpdate;
+            this.Sections = chunk.Sections;
+            this.TerrainPopulated = chunk.TerrainPopulated;
+            this.X = chunk.X;
+            this.Z = chunk.Z;
+
+            // Entities
+            var entities = compound["Entities"] as NbtList;
+            Entities = new List<IDiskEntity>();
+            for (int i = 0; i < entities.Count; i++)
+            {
+                var id = entities[i]["id"].StringValue;
+                IDiskEntity entity;
+                if (EntityTypes.ContainsKey(id.ToUpper()))
+                    entity = (IDiskEntity)Activator.CreateInstance(EntityTypes[id]);
+                else
+                    entity = new UnrecognizedEntity(id);
+                entity.Deserialize(entities[i]);
+                Entities.Add(entity);
+            }
         }
     }
 }

@@ -10,11 +10,11 @@ namespace Craft.Net.World
     public abstract class TileEntity
     {
         [NbtIgnore]
-        public Vector3 Position
+        public Coordinates3D Coordinates
         {
             get
             {
-                return new Vector3(X, Y, Z);
+                return new Coordinates3D(X, Y, Z);
             }
         }
 

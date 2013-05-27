@@ -9,5 +9,6 @@ namespace Craft.Net.World
 {
     public interface IDiskEntity : INbtSerializable
     {
+        string Id { get; }
     }
 }

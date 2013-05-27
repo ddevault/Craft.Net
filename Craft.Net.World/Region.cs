@@ -26,10 +26,6 @@ namespace Craft.Net.World
         /// The location of this region in the overworld.
         /// </summary>
         public Coordinates2D Position { get; set; }
-        /// <summary>
-        /// The <see cref="IWorldGenerator"/> used to generate this world.
-        /// </summary>
-        public IWorldGenerator WorldGenerator { get; set; }
 
         public World World { get; set; }
 
@@ -44,7 +40,6 @@ namespace Craft.Net.World
             Chunks = new Dictionary<Coordinates2D, Chunk>();
             Position = position;
             World = world;
-            WorldGenerator = world.WorldGenerator;
         }
 
         /// <summary>
@@ -81,7 +76,7 @@ namespace Craft.Net.World
                             var chunkData = GetChunkFromTable(position);
                             if (chunkData == null)
                             {
-                                if (WorldGenerator == null)
+                                if (World.WorldGenerator == null)
                                     throw new ArgumentException("The requested chunk is not loaded.", "position");
                                 GenerateChunk(position);
                                 return Chunks[position];
@@ -104,10 +99,10 @@ namespace Craft.Net.World
                             }
                         }
                     }
-                    else if (WorldGenerator == null)
+                    else if (World.WorldGenerator == null)
                         throw new ArgumentException("The requested chunk is not loaded.", "position");
                     else
-                        Chunks.Add(position, WorldGenerator.GenerateChunk(position));
+                        Chunks.Add(position, World.WorldGenerator.GenerateChunk(position));
                 }
                 return Chunks[position];
             }
@@ -151,10 +146,10 @@ namespace Craft.Net.World
                             }
                         }
                     }
-                    else if (WorldGenerator == null)
+                    else if (World.WorldGenerator == null)
                         throw new ArgumentException("The requested chunk is not loaded.", "position");
                     else
-                        Chunks.Add(position, WorldGenerator.GenerateChunk(position));
+                        Chunks.Add(position, World.WorldGenerator.GenerateChunk(position));
                 }
                 return Chunks[position];
             }
@@ -162,7 +157,7 @@ namespace Craft.Net.World
 
         private void GenerateChunk(Coordinates2D position)
         {
-            var chunk = WorldGenerator.GenerateChunk(position);
+            var chunk = World.WorldGenerator.GenerateChunk(position);
             Chunks.Add(position, chunk);
         }
 
@@ -175,47 +170,6 @@ namespace Craft.Net.World
                 Chunks.Add(position, chunk);
             Chunks[position] = chunk;
         }
-
-        ///// <summary>
-        ///// Gets the block at the given local position.
-        ///// </summary>
-        //public Block GetBlock(Vector3 position)
-        //{
-        //    position = position.Floor();
-        //    Vector3 relativePosition = position;
-        //    position.X = (int)(position.X) / Chunk.Width;
-        //    position.Y = 0;
-        //    position.Z = (int)(position.Z) / Chunk.Depth;
-
-        //    relativePosition.X = (int)(relativePosition.X) % Chunk.Width;
-        //    relativePosition.Y = 0;
-        //    relativePosition.Z = (int)(relativePosition.Z) % Chunk.Depth;
-
-        //    if (!Chunks.ContainsKey(position))
-        //        Chunks.Add(position, WorldGenerator.GenerateChunk(position, this));
-
-        //    return Chunks[position].GetBlock(relativePosition);
-        //}
-
-        ///// <summary>
-        ///// Sets the block at the given local position.
-        ///// </summary>
-        //public void SetBlock(Vector3 position, Block value)
-        //{
-        //    position = position.Floor();
-        //    Vector3 relativePosition = position;
-        //    position.X = (int)(position.X) / Chunk.Width;
-        //    position.Y = 0;
-        //    position.Z = (int)(position.Z) / Chunk.Depth;
-
-        //    relativePosition.X = (int)(relativePosition.X) % Chunk.Width;
-        //    relativePosition.Z = (int)(relativePosition.Z) % Chunk.Depth;
-
-        //    if (!Chunks.ContainsKey(position))
-        //        Chunks.Add(position, WorldGenerator.GenerateChunk(position, this));
-
-        //    Chunks[position].SetBlock(relativePosition, value);
-        //}
 
         /// <summary>
         /// Saves this region to the specified file.
