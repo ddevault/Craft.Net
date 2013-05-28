@@ -69,6 +69,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Coordinates.cs" />
+    <Compile Include="RuntimeInfo.cs" />
     <Compile Include="Section.cs">
       <SubType>Code</SubType>
     </Compile>

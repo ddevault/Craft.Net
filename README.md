@@ -1,108 +1,69 @@
 # Craft.Net
 
-Craft.Net is the collective name for several Minecraft-related .NET libraries. You can pick and choose
-different libraries to accomplish different tasks. Libraries are included for things such as Minecraft
-multiplayer networking and world editing, as well as a multiplayer client and server. The crown jewel
-of Craft.Net is the fully functional Minecraft server, with support for everything from survival mode
-resource gathering, multiplayer PvP, entity physics, and more.
+Craft.Net is a collection of several Minecraft-related .NET libraries. You can pick and choose different
+libraries from Craft.Net to accomplish different tasks. The following libraries are included:
 
-Craft.Net currently supports Minecraft 1.5.2 on Windows, Linux and Mac.
+* **Craft.Net.Client**: A Minecraft multiplayer client library
+  * Multiplayer client for connecting to servers
+  * Utilities like LastLogin decryption, vanilla server list parsing/modification, etc
+* **Craft.Net.Data**: Minecraft data types
+  * Defines values for biomes, difficulty, game modes, etc
+  * Includes structs for working with item stacks, metadata dictionaries, etc
+  * Cryptography support for interop with Minecraft's Java-based crypto
+* **Craft.Net.Networking**: Generic Minecraft networking support
+  * Includes all 1.5.2 packet definitions
+  * Includes AES/CFB stream crypto utilities
+* **Craft.Net.Server**: A Minecraft multiplayer server library
+  * Includes entity management, physics
+  * Many block interactions (such as growth, sand logic, etc) implemented
+  * Survival mode, creative mode, adventure mode support
+  * PvP combat
+* **Craft.Net.TerrainGeneration**: Various terrain generators
+  * Vanilla flatland support
+  * *Planned*: Implementation of vanilla default generation
+  * *Planned*: Custom terrain generator
+* **Craft.Net.World**: Support for editing Minecraft worlds
+  * Supports Minecraft's Anvil format
+  * Works with in-memory worlds or on-disk worlds
+  * Can save worlds from Craft.Net.Client to disk
 
-**A note on submodules**: Craft.Net includes external dependencies in the form of git submodules.
+More libraries are planned for the future, including Craft.Net.AI, Craft.Net.Logic, and more. All libraries in
+Craft.Net support Windows, Linux, and Mac. The long-term goal is to recreate the entire Minecraft ecosystem in
+C#, and to offer interopability with vanilla Minecraft.
 
-Use this command to clone the project:
-
-    git clone --recursive git://github.com/SirCmpwn/Craft.Net.git
-
-If you've already cloned it, use this to fetch submodules:
-
-    git submodule update --init
+**A note on submodules**: Craft.Net includes external dependencies in the form of git submodules. When cloning
+Craft.Net, please use `git clone --recursive git://github.com/SirCmpwn/Craft.Net.git`. If you've already cloned
+it, you can fetch submodules manually with `git submodule update --init`.
 
 ## Snapshot Support
 
-Craft.Net supports most Minecraft pre-releases shortly after they are released. If you want to have
-support for snapshots, run the following commands in your git repository:
+Craft.Net often supports Minecraft pre-release snapshots. If you want to try it out, look at the snapshot
+branch. Run the following command to get snapshot support: `git pull origin snapshot && git checkout snapshot`
 
-    git pull origin snapshot
-    git checkout snapshot
-
-You'll now be on the snapshot branch, with bleeding-edge support for the latest Minecraft snapshots.
+This branch has bleeding-edge support for the upcoming version of Minecraft.
 
 ## HTTPS Certificates on Mono
 
-Mono does not trust any certificates whatsoever after install, and you need to tell it which ones to
-trust. This means that `Craft.Net.Client` will fail to log into minecraft.net when connecting to
-online-mode servers. The easiest way to fix this is to just trust all the Mozilla root certificates
-by running `mozroots --import --sync`.
-
-## Features
-
-This is not an exhaustive list.
-
-### Craft.Net
-
-* Full support for the 1.5.2 (version 61) Minecraft protocol
-* Item stack and entity metadata manipulation
-* Cryptography support that provides full interoperability with Java clients and servers
-
-### Craft.Net.Data
-
-* Anvil world manipulation
-* All 1.5.2 items and blocks
-  * Includes support for most operations, such as planting seeds
-* Entity management and simulation
-  * Includes physics for entity versus terrain physics simulation
-  * Paintings, item frames, players, item stacks, etc
-* Custom terrain generation
-  * Includes flatland generator, allows custom generators
-* Inventory and window management
-  * Allows for manipulation of player inventories and windows (crafting tables, etc)
-* Math helpers for common Minecraft and 3D operations
-  * AABB, ray, vectors and vector rotation, etc
-
-### Craft.Net.Server
-
-* 1.5.2 multiplayer server
-* Provides a layer on top of Craft.Net.Data for multiplayer Minecraft
-* Fast networking - low CPU and memory usage
-* Modular and extensible
-  * Use all or part of it, and customize it to your needs
-* In-game weather management
-
-### Craft.Net.Client
-
-*Craft.Net.Client is the newest addition to Craft.Net, and it is unstable and lacking in features.*
-
-* Connect to and play on 1.5.2 multiplayer servers
-* Handles loaded and unloaded chunks from the remote world
-  * Can also save server world to disk
-* Encrypt/decrypt local lastlogin files (useful for launchers)
-* Liase with Minecraft.net for session authentication
-
-In short, Craft.Net is the ideal solution for any Minecraft-related activities on the .NET Framework.
+Mono does not trust any certificates whatsoever after install, and you need to tell it which ones to trust.
+This means that Craft.Net.Client will fail to log into minecraft.net when connecting to online-mode servers.
+The easiest way to fix this is to just trust all the Mozilla root certificates by running
+`mozroots --import --sync`.
 
 ## Usage
 
-Craft.Net is a very large, expansive project. A basic overview will be given here, but you are
-encouraged to [visit the wiki](https://github.com/SirCmpwn/Craft.Net/wiki) to learn more.
+Craft.Net is a very large, expansive project. A basic overview will be given here, but you are encouraged to
+[visit the wiki](https://github.com/SirCmpwn/Craft.Net/wiki) to learn more about specific sub-projects.
 
-### General networking
+### Generic Networking
 
-Use this code to read the next Minecraft packet from a given stream, and write it to another:
-
-```csharp
-var packet = PacketReader.ReadPacket(stream);
-// ...
-var output = new MinecraftStream(otherStream);
-packet.WriteTo(output);
-```
-
-There are also various crypto utilities for encrypting a stream with AES/CFB, or creating Minecraft-
-style SHA-1 hex digests, or decoding/encoding ASN.1 x509 certificates.
+You can use Craft.Net.Networking to work with the Minecraft network protocol. Craft.Net.Networking depends on
+Craft.Net.Data to describe Minecraft data types. To use it, create a MinecraftStream around a NetworkStream,
+and then you can use the `PacketReader` class to read packets from the stream. Craft.Net.Networking also
+includes an AES/CFB stream that you can wrap your NetworkStream in to encrypt it.
 
 ### Servers
 
-To run a Minecraft server, simply use the following code:
+Here's an example of using Craft.Net.Server to run a Minecraft server:
 
 ```csharp
 var server = new MinecraftServer(new IPEndPoint(IPAddress.Any, 25565));
@@ -113,84 +74,57 @@ minecraftServer.AddLevel(new Level(generator, "world"));
 minecraftServer.Start();
 ```
 
-You need to create a server on a certain endpoint, then provide it a level to spawn players in, and
-then start the server.
-
 ### Clients
 
-To connect to a Minecraft server, use this code:
+Here's an example of connecting to a Minecraft server with Craft.Net.Client:
 
 ```csharp
 var session = new Session("PlayerName");
-// Uncomment this code to use the user's saved lastlogin
+// Uncomment this code to use the user's saved lastlogin instead
 //var lastLogin = LastLogin.GetLastLogin();
 //var session = Session.DoLogin(lastLogin.Username, lastLogin.Password);
 var client = new MinecraftClient(session);
 // Connect to the server at 127.0.0.1:25565
 client.Connect(new IPEndPoint(IPAddress.Loopback, 25565));
+// Alternative:
+//client.Connect("server.address.here:25565");
 ```
 
-Create a client with a given session (either offline mode with just a username, or online mode with
-a username and password via `Session.DoLogin`. Then specify your endpoint and connect.
+Session.DoLogin can be used to authenticate with minecraft.net for online-mode servers. This code also
+includes a (commented out) example of decrypting the user's LastLogin file.
 
-[Click here](https://gist.github.com/8377075da938b128bef7) if you want to use something like
-"c.nerd.nu:25565" and don't know how.
+### World Editing
 
-### Data Manipulation
-
-Want to mess with Minecraft data but don't need networking? Use Craft.Net.Data. Here's an example of
-loading up a world and changing a block.
+You can use Craft.Net.World do manipulate Minecraft save data. You can also add a reference to Craft.Net.Logic
+to get some nice extension methods that let you work with blocks by name
+(ex. `world.SetBlock(Coordinates3D.Zero, new BedrockBlock())`). Here's an example of loading a world:
 
 ```csharp
-// Loads the level in the world directory
-var level = new Level("world");
-level.World.SetBlock(new Vector3(5, 10, 15), new DiamondBlock());
+var level = Level.LoadFrom("world");
+level.DefaultWorld.SetBlockId(Coordinates3D.Zero, 22); // Set to lapis block
 level.Save();
 ```
 
-And another example for calculating the time to harvest a block with a given tool:
-
-```csharp
-var block = new GoldBlock();
-short damage; // The damage the item will sustain from mining this block
-int milliseconds = block.GetHarvestTime(new DiamondPickaxe(), out damage);
-// Use this code if you want to see how long a specific entity will take,
-// with regard to things like being underwater:
-milliseconds = block.GetHarvestTime(new DiamondPickaxe(), world, playerEntity, out damage);
-```
-
-Or maybe you want to spawn a random painting based on the available space in the world (i.e. how
-vanilla Minecraft does it):
-
-```csharp
-// CreateEntity(world, on which block, in which direction);
-var entity = PaintingEntity.CreateEntity(world, new Vector3(1, 2, 3), Vector3.North);
-// Creates a painting entity based on the amount of space available in the specified
-// location, choosing a random one from the list of available paintings that are the
-// required size.
-world.OnSpawnEntity(entity);
-```
-
-As you can likely tell, Craft.Net.Data does a lot. You might want to just browse around and see if
-it does what you're looking for.
+If Craft.Net supports the terrain generator the level.dat file specifies, it will automatically generate
+chunks when attempting to work with blocks in an ungenerated area. You can also explicitly set the terrain
+generator from the constructor. You may add support for your own generators by implementing IWorldGenerator.
 
 ## Building from source
 
-There are two different configurations for building Craft.Net. You should use the DEBUG configuration
-when building for testing purposes, and RELEASE when building for production purposes.
+On Windows, add "C:\Windows\Microsoft.NET\Framework\v4.0.30319" to your path. Then, run this from the root
+of the repository:
 
-On Windows, add "C:\Windows\Microsoft.NET\Framework\v4.0.30319" to your path. Then, use
+    msbuild
 
-    msbuild.exe /p:Configuration=[RELEASE|DEBUG]
-
-Update the configuration as required. On Linux and Mac, install Mono 2.10 or better, and then use this
-command:
+On Linux and Mac, install Mono 2.10 or better, and then use this command:
 
     xbuild /property:Configuration=MONO
 
 **NOTE**: It is important that you build the project with the MONO configuration if you intend to use
 it on Mono. Craft.Net uses bouncy castle for encryption on Mono, because the Mono CryptoStream
 [does not work correctly](https://bugzilla.xamarin.com/show_bug.cgi?id=9247).
+
+You can also build Craft.Net with Visual Studio 2010 or newer, and any version of MonoDevelop or SharpDevelop.
 
 ## Contributing
 

@@ -184,6 +184,9 @@ namespace Craft.Net.World
             Worlds = new List<World>();
         }
 
+        /// <summary>
+        /// Creates an in-memory world with a given world generator.
+        /// </summary>
         public Level(IWorldGenerator generator) : this()
         {
             GeneratorName = generator.GeneratorName;
@@ -191,16 +194,25 @@ namespace Craft.Net.World
             WorldGenerator = generator;
         }
 
+        /// <summary>
+        /// Creates a named in-memory world.
+        /// </summary>
         public Level(string levelName) : this()
         {
             LevelName = levelName;
         }
 
+        /// <summary>
+        /// Creates a named in-memory world with a given world generator.
+        /// </summary>
         public Level(IWorldGenerator generator, string levelName) : this(generator)
         {
             LevelName = levelName;
         }
 
+        /// <summary>
+        /// Adds a world to this level.
+        /// </summary>
         public void AddWorld(World world)
         {
             if (Worlds.Any(w => w.Name.ToUpper() == world.Name.ToUpper()))
@@ -208,6 +220,9 @@ namespace Craft.Net.World
             Worlds.Add(world);
         }
 
+        /// <summary>
+        /// Creates and adds a world to this level, with the given name.
+        /// </summary>
         public void AddWorld(string name)
         {
             if (Worlds.Any(w => w.Name.ToUpper() == name.ToUpper()))
@@ -217,6 +232,9 @@ namespace Craft.Net.World
             Worlds.Add(world);
         }
 
+        /// <summary>
+        /// Saves this level to a directory.
+        /// </summary>
         public void SaveTo(string directory)
         {
             if (!Directory.Exists(directory))
@@ -224,6 +242,9 @@ namespace Craft.Net.World
             Save(Path.Combine(directory, "level.dat"));
         }
 
+        /// <summary>
+        /// Saves this level to a file, and the worlds to the same directory.
+        /// </summary>
         public void Save(string file)
         {
             DatFile = file;
@@ -233,6 +254,9 @@ namespace Craft.Net.World
             Save();
         }
 
+        /// <summary>
+        /// Saves this level. This will not work with an in-memory world.
+        /// </summary>
         public void Save()
         {
             if (DatFile == null)
@@ -253,11 +277,34 @@ namespace Craft.Net.World
             }
         }
 
+        /// <summary>
+        /// Loads a level by directory name from the .minecraft saves folder.
+        /// </summary>
+        public static Level LoadSavedLevel(string world)
+        {
+            return LoadFrom(Path.Combine(GetDotMinecraftPath(), "saves", world));
+        }
+
+        private static string GetDotMinecraftPath()
+        {
+            if (RuntimeInfo.IsLinux)
+                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), ".minecraft");
+            if (RuntimeInfo.IsMacOSX)
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Library", "Application Support", ".minecraft");
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ".minecraft");
+        }
+
+        /// <summary>
+        /// Loads a level from the given directory.
+        /// </summary>
         public static Level LoadFrom(string directory)
         {
             return Load(Path.Combine(directory, "level.dat"));
         }
 
+        /// <summary>
+        /// Loads a level from the given level.dat file.
+        /// </summary>
         public static Level Load(string file)
         {
             if (!Path.IsPathRooted(file))
@@ -274,6 +321,9 @@ namespace Craft.Net.World
             return level;
         }
 
+        /// <summary>
+        /// Gets a world generator for the given world generator name.
+        /// </summary>
         public static IWorldGenerator GetGenerator(string generatorName)
         {
             IWorldGenerator worldGenerator = null;
