@@ -16,7 +16,7 @@ namespace Craft.Net.World.Test
             var level = new Level();
             level.LevelName = "Example";
             level.Save("test.dat");
-            var loaded = Level.LoadFrom("test.dat");
+            var loaded = Level.Load("test.dat");
             Assert.AreEqual(level.LevelName, loaded.LevelName);
         }
     }

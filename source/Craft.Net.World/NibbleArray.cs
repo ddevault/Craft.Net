@@ -52,9 +52,9 @@ namespace Craft.Net.World
             }
         }
 
-        public NbtTag Serialize()
+        public NbtTag Serialize(string tagName)
         {
-            return new NbtByteArray(Data);
+            return new NbtByteArray(tagName, Data);
         }
 
         public void Deserialize(NbtTag value)

@@ -191,22 +191,14 @@ namespace Craft.Net.World
             WorldGenerator = generator;
         }
 
-        public Level(string generatorName) : this()
+        public Level(string levelName) : this()
         {
-            Type generatorType;
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            foreach (var assembly in assemblies)
-            {
-                var types = assembly.GetTypes().Where(t =>
-                    !t.IsAbstract && t.IsClass && typeof(IWorldGenerator).IsAssignableFrom(t) &&
-                    t.GetConstructors(BindingFlags.Public).Any(c => !c.GetParameters().Any()));
-                generatorType = types.FirstOrDefault(t =>
-                    (WorldGenerator = (IWorldGenerator)Activator.CreateInstance(t)).GeneratorName == generatorName);
-                if (generatorType != null)
-                    break;
-            }
-            GeneratorName = WorldGenerator.GeneratorName;
-            WorldGenerator.Initialize(this);
+            LevelName = levelName;
+        }
+
+        public Level(IWorldGenerator generator, string levelName) : this(generator)
+        {
+            LevelName = levelName;
         }
 
         public void AddWorld(World world)
@@ -225,9 +217,19 @@ namespace Craft.Net.World
             Worlds.Add(world);
         }
 
+        public void SaveTo(string directory)
+        {
+            if (!Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
+            Save(Path.Combine(directory, "level.dat"));
+        }
+
         public void Save(string file)
         {
             DatFile = file;
+            if (!Path.IsPathRooted(file))
+                file = Path.Combine(Directory.GetCurrentDirectory(), file);
+            BaseDirectory = Path.GetDirectoryName(file);
             Save();
         }
 
@@ -238,7 +240,8 @@ namespace Craft.Net.World
             LastPlayed = DateTime.UtcNow.Ticks;
             var serializer = new NbtSerializer(typeof(Level));
             var tag = serializer.Serialize(this, "Data") as NbtCompound;
-            var file = new NbtFile(tag);
+            var file = new NbtFile();
+            file.RootTag.Add(tag);
             file.SaveToFile(DatFile, NbtCompression.GZip);
             // Save worlds
             foreach (var world in Worlds)
@@ -250,7 +253,12 @@ namespace Craft.Net.World
             }
         }
 
-        public static Level LoadFrom(string file)
+        public static Level LoadFrom(string directory)
+        {
+            return Load(Path.Combine(directory, "level.dat"));
+        }
+
+        public static Level Load(string file)
         {
             if (!Path.IsPathRooted(file))
                 file = Path.Combine(Directory.GetCurrentDirectory(), file);
@@ -264,6 +272,24 @@ namespace Craft.Net.World
             foreach (var world in worlds)
                 level.AddWorld(World.LoadWorld(world));
             return level;
+        }
+
+        public static IWorldGenerator GetGenerator(string generatorName)
+        {
+            IWorldGenerator worldGenerator = null;
+            Type generatorType;
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            foreach (var assembly in assemblies)
+            {
+                var types = assembly.GetTypes().Where(t =>
+                    !t.IsAbstract && t.IsClass && typeof(IWorldGenerator).IsAssignableFrom(t) &&
+                    t.GetConstructors(BindingFlags.Public).Any(c => !c.GetParameters().Any()));
+                generatorType = types.FirstOrDefault(t =>
+                    (worldGenerator = (IWorldGenerator)Activator.CreateInstance(t)).GeneratorName == generatorName);
+                if (generatorType != null)
+                    break;
+            }
+            return worldGenerator;
         }
 
         // Internally, we use network slots everywhere, but on disk, we need to use data slots

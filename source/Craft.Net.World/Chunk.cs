@@ -39,6 +39,7 @@ namespace Craft.Net.World
 
         public int[] HeightMap { get; set; }
 
+        [NbtIgnore]
         public Section[] Sections { get; set; }
 
         [TagName("TileEntities")]
@@ -67,7 +68,7 @@ namespace Craft.Net.World
 
         public long LastUpdate { get; set; }
 
-        private bool TerrainPopulated { get; set; }
+        public bool TerrainPopulated { get; set; }
 
         public Chunk()
         {
@@ -215,13 +216,21 @@ namespace Craft.Net.World
             return chunk;
         }
 
-        public NbtTag Serialize()
+        public NbtTag Serialize(string tagName)
         {
-            var chunk = (NbtCompound)Serializer.Serialize(this);
+            var chunk = (NbtCompound)Serializer.Serialize(this, tagName, true);
             var entities = new NbtList("Entities", NbtTagType.Compound);
             for (int i = 0; i < Entities.Count; i++)
-                entities.Add(Entities[i].Serialize());
+                entities.Add(Entities[i].Serialize(string.Empty));
             chunk.Add(entities);
+            var sections = new NbtList("Sections", NbtTagType.Compound);
+            var serializer = new NbtSerializer(typeof(Section));
+            for (int i = 0; i < Sections.Length; i++)
+            {
+                if (!Sections[i].IsAir)
+                    sections.Add(serializer.Serialize(Sections[i]));
+            }
+            chunk.Add(sections);
             return chunk;
         }
 
@@ -252,6 +261,13 @@ namespace Craft.Net.World
                     entity = new UnrecognizedEntity(id);
                 entity.Deserialize(entities[i]);
                 Entities.Add(entity);
+            }
+            var serializer = new NbtSerializer(typeof(Section));
+            foreach (var section in compound["Sections"] as NbtList)
+            {
+                int index = section["Y"].IntValue;
+                Sections[index] = (Section)serializer.Deserialize(section);
+                Sections[index].ProcessSection();
             }
         }
     }

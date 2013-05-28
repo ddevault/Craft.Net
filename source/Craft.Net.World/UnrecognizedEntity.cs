@@ -21,7 +21,7 @@ namespace Craft.Net.World
 
         private NbtTag NbtValue { get; set; }
 
-        public NbtTag Serialize()
+        public NbtTag Serialize(string tagName)
         {
             return NbtValue;
         }

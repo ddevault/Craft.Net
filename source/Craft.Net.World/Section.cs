@@ -34,6 +34,7 @@ namespace Craft.Net.World
             nonAirCount = 0;
         }
 
+        [NbtIgnore]
         public bool IsAir
         {
             get { return nonAirCount == 0; }
@@ -69,8 +70,18 @@ namespace Craft.Net.World
         public void SetBlockId(Coordinates3D coordinates, short value)
         {
             int index = coordinates.X + (coordinates.Z * Width) + (coordinates.Y * Height * Width);
+            if (value == 0)
+            {
+                if (Blocks[index] != 0)
+                    nonAirCount--;
+            }
+            else
+            {
+                if (Blocks[index] == 0)
+                    nonAirCount++;
+            }
             Blocks[index] = (byte)value;
-            if ((value & 0xFF) != 0)
+            if ((value & ~0xFF) != 0)
             {
                 if (Add == null) Add = new NibbleArray(Width * Height * Depth);
                 Add[index] = (byte)((ushort)value >> 8);

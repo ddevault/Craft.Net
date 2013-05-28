@@ -102,7 +102,7 @@ namespace Craft.Net.World
                     else if (World.WorldGenerator == null)
                         throw new ArgumentException("The requested chunk is not loaded.", "position");
                     else
-                        Chunks.Add(position, World.WorldGenerator.GenerateChunk(position));
+                        GenerateChunk(position);
                 }
                 return Chunks[position];
             }
@@ -149,7 +149,7 @@ namespace Craft.Net.World
                     else if (World.WorldGenerator == null)
                         throw new ArgumentException("The requested chunk is not loaded.", "position");
                     else
-                        Chunks.Add(position, World.WorldGenerator.GenerateChunk(position));
+                        GenerateChunk(position);
                 }
                 return Chunks[position];
             }
@@ -157,8 +157,11 @@ namespace Craft.Net.World
 
         public void GenerateChunk(Coordinates2D position)
         {
-            var chunk = World.WorldGenerator.GenerateChunk(position);
+            var globalPosition = (Position * new Coordinates2D(Width, Depth)) + position;
+            var chunk = World.WorldGenerator.GenerateChunk(globalPosition);
             chunk.IsModified = true;
+            chunk.X = globalPosition.X;
+            chunk.Z = globalPosition.Z;
             Chunks.Add(position, chunk);
         }
 
@@ -169,6 +172,7 @@ namespace Craft.Net.World
         {
             if (!Chunks.ContainsKey(position))
                 Chunks.Add(position, chunk);
+            chunk.IsModified = true;
             Chunks[position] = chunk;
         }
 
