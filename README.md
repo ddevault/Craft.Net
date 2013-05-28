@@ -35,6 +35,17 @@ C#, and to offer interopability with vanilla Minecraft.
 Craft.Net, please use `git clone --recursive git://github.com/SirCmpwn/Craft.Net.git`. If you've already cloned
 it, you can fetch submodules manually with `git submodule update --init`.
 
+## Community and Related Projects
+
+There's an active Craft.Net development, discussion, and support community on IRC. Join us to chat at
+[#craft.net on irc.freenode.net](http://webchat.freenode.net/?channels=craft.net&uio=d4). This is the best place
+to ask questions. You can also let us know if you are doing anything cool with Craft.Net, like these related
+projects:
+
+* [PartyCraft](https://github.com/SirCmpwn/PartyCraft): Custom Minecraft server with plugin support
+* [SMProxy](https://github.com/SirCmpwn/SMProxy): Proxy for Minecraft network protocol debugging and reverse engineering
+
+
 ## Snapshot Support
 
 Craft.Net often supports Minecraft pre-release snapshots. If you want to try it out, look at the snapshot
