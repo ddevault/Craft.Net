@@ -264,7 +264,7 @@ namespace Craft.Net.World
                 file = Path.Combine(Directory.GetCurrentDirectory(), file);
             var serializer = new NbtSerializer(typeof(Level));
             var nbtFile = new NbtFile(file);
-            var level = (Level)serializer.Deserialize(nbtFile.RootTag);
+            var level = (Level)serializer.Deserialize(nbtFile.RootTag["Data"]);
             level.DatFile = file;
             level.BaseDirectory = Path.GetDirectoryName(file);
             var worlds = Directory.GetDirectories(level.BaseDirectory).Where(
