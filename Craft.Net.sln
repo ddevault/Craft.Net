@@ -1,31 +1,31 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Server", "Craft.Net.Server\Craft.Net.Server.csproj", "{E00C6FF6-BCD8-44E0-BCD8-5F1BDF201617}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Server", "source\Craft.Net.Server\Craft.Net.Server.csproj", "{E00C6FF6-BCD8-44E0-BCD8-5F1BDF201617}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestServer", "TestServer\TestServer.csproj", "{A5B680AB-71B4-4EC3-B640-A5869526BAAF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestServer", "source\TestServer\TestServer.csproj", "{A5B680AB-71B4-4EC3-B640-A5869526BAAF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Server.Test", "Test\Craft.Net.Server.Test\Craft.Net.Server.Test.csproj", "{3E19A5B0-B775-45D7-8B6C-0D0244D70880}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Server.Test", "source\Test\Craft.Net.Server.Test\Craft.Net.Server.Test.csproj", "{3E19A5B0-B775-45D7-8B6C-0D0244D70880}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Networking", "Craft.Net.Networking\Craft.Net.Networking.csproj", "{C3BBAB7E-606F-420E-9461-C8CFAEC2476B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Networking", "source\Craft.Net.Networking\Craft.Net.Networking.csproj", "{C3BBAB7E-606F-420E-9461-C8CFAEC2476B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Client", "Craft.Net.Client\Craft.Net.Client.csproj", "{D48822DB-4A67-48DD-A858-A629F92233FB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Client", "source\Craft.Net.Client\Craft.Net.Client.csproj", "{D48822DB-4A67-48DD-A858-A629F92233FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestClient", "TestClient\TestClient.csproj", "{88A08D7A-87D4-4361-8760-E4C8F72B20AF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestClient", "source\TestClient\TestClient.csproj", "{88A08D7A-87D4-4361-8760-E4C8F72B20AF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fNbt", "externals\fNbt\fNbt\fNbt.csproj", "{4488498D-976D-4DA3-BF72-109531AF0488}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Networking.Test", "Test\Craft.Net.Networking.Test\Craft.Net.Networking.Test.csproj", "{FE82A68D-44BD-485F-88CF-FFA77720AEF6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Networking.Test", "source\Test\Craft.Net.Networking.Test\Craft.Net.Networking.Test.csproj", "{FE82A68D-44BD-485F-88CF-FFA77720AEF6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.World", "Craft.Net.World\Craft.Net.World.csproj", "{02031C5C-5007-48D5-A253-F7C8BDF0C0B2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.World", "source\Craft.Net.World\Craft.Net.World.csproj", "{02031C5C-5007-48D5-A253-F7C8BDF0C0B2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{848E76C6-A56D-4DC7-A627-9A6A92C07991}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "source\Test", "{848E76C6-A56D-4DC7-A627-9A6A92C07991}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.World.Test", "Test\Craft.Net.World.Test\Craft.Net.World.Test.csproj", "{5E258098-CB4F-4C62-B1F2-A2ACD5F51CDC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.World.Test", "source\Test\Craft.Net.World.Test\Craft.Net.World.Test.csproj", "{5E258098-CB4F-4C62-B1F2-A2ACD5F51CDC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Data", "Craft.Net.Data\Craft.Net.Data.csproj", "{50462849-2223-4E39-B5D9-A928A9A58A33}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Data", "source\Craft.Net.Data\Craft.Net.Data.csproj", "{50462849-2223-4E39-B5D9-A928A9A58A33}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.TerrainGeneration", "Craft.Net.TerrainGeneration\Craft.Net.TerrainGeneration.csproj", "{B415FC03-C6FB-4B20-A5A1-81F526ADFEF5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.TerrainGeneration", "source\Craft.Net.TerrainGeneration\Craft.Net.TerrainGeneration.csproj", "{B415FC03-C6FB-4B20-A5A1-81F526ADFEF5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
