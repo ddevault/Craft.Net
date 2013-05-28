@@ -14,14 +14,26 @@ namespace Craft.Net.World
     /// <summary>
     /// Represents a Minecraft level
     /// </summary>
-    public class Level
+    public class Level : IDisposable
     {
         [NbtIgnore]
         private IWorldGenerator WorldGenerator { get; set; }
         [NbtIgnore]
         private string DatFile { get; set; }
         [NbtIgnore]
+        private string BaseDirectory { get; set; }
+        [NbtIgnore]
         private List<World> Worlds { get; set; }
+        [NbtIgnore]
+        public World DefaultWorld
+        {
+            get
+            {
+                if (Worlds.Count == 0)
+                    throw new InvalidOperationException("This level is associated with no worlds.");
+                return Worlds[0];
+            }
+        }
 
         #region NBT Fields
         /// <summary>
@@ -168,6 +180,8 @@ namespace Craft.Net.World
             RainTime = MathHelper.Random.Next(0, 100000);
             Thundering = false;
             ThunderTime = MathHelper.Random.Next(0, 100000);
+            GameRules = new GameRules();
+            Worlds = new List<World>();
         }
 
         public Level(IWorldGenerator generator) : this()
@@ -199,6 +213,14 @@ namespace Craft.Net.World
         {
             if (Worlds.Any(w => w.Name.ToUpper() == world.Name.ToUpper()))
                 throw new InvalidOperationException("A world with the same name already exists in this level.");
+            Worlds.Add(world);
+        }
+
+        public void AddWorld(string name)
+        {
+            if (Worlds.Any(w => w.Name.ToUpper() == name.ToUpper()))
+                throw new InvalidOperationException("A world with the same name already exists in this level.");
+            var world = new World(name);
             world.WorldGenerator = WorldGenerator;
             Worlds.Add(world);
         }
@@ -221,18 +243,23 @@ namespace Craft.Net.World
             // Save worlds
             foreach (var world in Worlds)
             {
-                // TODO
+                if (world.BaseDirectory == null)
+                    world.Save(Path.Combine(BaseDirectory, world.Name));
+                else
+                    world.Save();
             }
         }
 
         public static Level LoadFrom(string file)
         {
+            if (!Path.IsPathRooted(file))
+                file = Path.Combine(Directory.GetCurrentDirectory(), file);
             var serializer = new NbtSerializer(typeof(Level));
             var nbtFile = new NbtFile(file);
             var level = (Level)serializer.Deserialize(nbtFile.RootTag);
             level.DatFile = file;
-            // All directories that don't have special meaning are worlds
-            var worlds = Directory.GetDirectories(Path.GetDirectoryName(file)).Where(
+            level.BaseDirectory = Path.GetDirectoryName(file);
+            var worlds = Directory.GetDirectories(level.BaseDirectory).Where(
                 d => !Directory.GetFiles(d).Any(f => !f.EndsWith(".mca") && !f.EndsWith(".mcr")));
             foreach (var world in worlds)
                 level.AddWorld(World.LoadWorld(world));
@@ -274,6 +301,12 @@ namespace Craft.Net.World
             else if (index >= 1 && index <= 4)
                 index += 79;
             return index;
+        }
+
+        public void Dispose()
+        {
+            foreach (var world in Worlds)
+                world.Dispose();
         }
     }
 }

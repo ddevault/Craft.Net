@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.World.Test", "Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Data", "Craft.Net.Data\Craft.Net.Data.csproj", "{50462849-2223-4E39-B5D9-A928A9A58A33}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.TerrainGeneration", "Craft.Net.TerrainGeneration\Craft.Net.TerrainGeneration.csproj", "{B415FC03-C6FB-4B20-A5A1-81F526ADFEF5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -116,6 +118,14 @@ Global
 		{50462849-2223-4E39-B5D9-A928A9A58A33}.MONO|Any CPU.Build.0 = Release|Any CPU
 		{50462849-2223-4E39-B5D9-A928A9A58A33}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{50462849-2223-4E39-B5D9-A928A9A58A33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B415FC03-C6FB-4B20-A5A1-81F526ADFEF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B415FC03-C6FB-4B20-A5A1-81F526ADFEF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B415FC03-C6FB-4B20-A5A1-81F526ADFEF5}.DEVELOPMENT|Any CPU.ActiveCfg = Debug|Any CPU
+		{B415FC03-C6FB-4B20-A5A1-81F526ADFEF5}.DEVELOPMENT|Any CPU.Build.0 = Debug|Any CPU
+		{B415FC03-C6FB-4B20-A5A1-81F526ADFEF5}.MONO|Any CPU.ActiveCfg = Release|Any CPU
+		{B415FC03-C6FB-4B20-A5A1-81F526ADFEF5}.MONO|Any CPU.Build.0 = Release|Any CPU
+		{B415FC03-C6FB-4B20-A5A1-81F526ADFEF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B415FC03-C6FB-4B20-A5A1-81F526ADFEF5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

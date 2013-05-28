@@ -18,6 +18,10 @@ namespace Craft.Net.World
 
         private int nonAirCount;
 
+        public Section()
+        {
+        }
+
         public Section(byte y)
         {
             const int size = Width * Height * Depth;

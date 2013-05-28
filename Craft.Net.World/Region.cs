@@ -155,9 +155,10 @@ namespace Craft.Net.World
             }
         }
 
-        private void GenerateChunk(Coordinates2D position)
+        public void GenerateChunk(Coordinates2D position)
         {
             var chunk = World.WorldGenerator.GenerateChunk(position);
+            chunk.IsModified = true;
             Chunks.Add(position, chunk);
         }
 
@@ -280,6 +281,8 @@ namespace Craft.Net.World
 
         public void Dispose()
         {
+            if (regionFile == null)
+                return;
             lock (regionFile)
             {
                 regionFile.Flush();

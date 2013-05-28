@@ -3,7 +3,7 @@ using fNbt.Serialization;
 using System;
 using System.Collections.ObjectModel;
 
-namespace Craft.Net.Data
+namespace Craft.Net.World
 {
     /// <summary>
     /// Represents an array of 4-bit values.
@@ -16,6 +16,10 @@ namespace Craft.Net.Data
         /// </summary>
         public byte[] Data { get; set; }
 
+        public NibbleArray()
+        {
+        }
+
         /// <summary>
         /// Creates a new nibble array with the given number of nibbles.
         /// </summary>
@@ -27,6 +31,7 @@ namespace Craft.Net.Data
         /// <summary>
         /// Gets the current number of nibbles in this array.
         /// </summary>
+        [NbtIgnore]
         public int Length
         {
             get { return Data.Length * 2; }
@@ -35,6 +40,7 @@ namespace Craft.Net.Data
         /// <summary>
         /// Gets or sets a nibble at the given index.
         /// </summary>
+        [NbtIgnore]
         public byte this[int index]
         {
             get { return (byte)(Data[index / 2] >> ((index) % 2 * 4) & 0xF); }

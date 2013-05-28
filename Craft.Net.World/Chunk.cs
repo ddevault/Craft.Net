@@ -72,6 +72,19 @@ namespace Craft.Net.World
         public Chunk()
         {
             TerrainPopulated = true;
+            TileEntities = new List<TileEntity>();
+            Entities = new List<IDiskEntity>();
+            Sections = new Section[16];
+            for (int i = 0; i < Sections.Length; i++)
+                Sections[i] = new Section((byte)i);
+            Biomes = new byte[Width * Depth];
+            HeightMap = new int[Width * Depth];
+        }
+
+        public Chunk(Coordinates2D coordinates) : this()
+        {
+            X = coordinates.X;
+            Z = coordinates.Z;
         }
 
         public short GetBlockId(Coordinates3D coordinates)
@@ -190,13 +203,15 @@ namespace Craft.Net.World
         {
             var serializer = new NbtSerializer(typeof(Chunk));
             var compound = serializer.Serialize(this, "Level") as NbtCompound;
-            return new NbtFile(compound);
+            var file = new NbtFile();
+            file.RootTag.Add(compound);
+            return file;
         }
 
         public static Chunk FromNbt(NbtFile nbt)
         {
             var serializer = new NbtSerializer(typeof(Chunk));
-            var chunk = (Chunk)serializer.Deserialize(nbt.RootTag);
+            var chunk = (Chunk)serializer.Deserialize(nbt.RootTag["Level"]);
             return chunk;
         }
 
@@ -213,7 +228,7 @@ namespace Craft.Net.World
         public void Deserialize(NbtTag value)
         {
             var compound = value as NbtCompound;
-            var chunk = (Chunk)Serializer.Deserialize(value);
+            var chunk = (Chunk)Serializer.Deserialize(value, true);
 
             this._TileEntities = chunk._TileEntities;
             this.Biomes = chunk.Biomes;

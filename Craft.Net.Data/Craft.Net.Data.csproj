@@ -72,7 +72,6 @@
     <Compile Include="MetadataString.cs" />
     <Compile Include="MinecraftStream.cs" />
     <Compile Include="MinecraftStream.Stream.cs" />
-    <Compile Include="NibbleArray.cs" />
     <Compile Include="ParticleEffect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ray.cs" />

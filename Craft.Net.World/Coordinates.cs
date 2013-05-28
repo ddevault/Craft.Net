@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Craft.Net.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -81,6 +82,13 @@ namespace Craft.Net.World
                 return result;
             }
         }
+
+        public static readonly Coordinates2D Zero = new Coordinates2D(0, 0);
+        public static readonly Coordinates2D One = new Coordinates2D(1, 1);
+        public static readonly Coordinates2D Forward = new Coordinates2D(0, 1);
+        public static readonly Coordinates2D Backward = new Coordinates2D(0, -1);
+        public static readonly Coordinates2D Left = new Coordinates2D(-1, 0);
+        public static readonly Coordinates2D Right = new Coordinates2D(1, 0);
     }
 
     public struct Coordinates3D
@@ -134,6 +142,16 @@ namespace Craft.Net.World
             return new Coordinates3D(a.X, 0, a.Z);
         }
 
+        public static implicit operator Coordinates3D(Vector3 a)
+        {
+            return new Coordinates3D((int)a.X, (int)a.Y, (int)a.Z);
+        }
+
+        public static implicit operator Vector3(Coordinates3D a)
+        {
+            return new Vector3(a.X, a.Y, a.Z);
+        }
+
         public override string ToString()
         {
             return string.Format("<{0},{1},{2}>", X, Y, Z);
@@ -161,5 +179,20 @@ namespace Craft.Net.World
                 return result;
             }
         }
+
+        public static readonly Coordinates3D Zero = new Coordinates3D(0, 0, 0);
+        public static readonly Coordinates3D One = new Coordinates3D(1, 1, 1);
+
+        public static readonly Coordinates3D Up = new Coordinates3D(0, 1, 0);
+        public static readonly Coordinates3D Down = new Coordinates3D(0, -1, 0);
+        public static readonly Coordinates3D Left = new Coordinates3D(-1, 0, 0);
+        public static readonly Coordinates3D Right = new Coordinates3D(1, 0, 0);
+        public static readonly Coordinates3D Backwards = new Coordinates3D(0, 0, -1);
+        public static readonly Coordinates3D Forwards = new Coordinates3D(0, 0, 1);
+
+        public static readonly Coordinates3D East = new Coordinates3D(1, 0, 0);
+        public static readonly Coordinates3D West = new Coordinates3D(-1, 0, 0);
+        public static readonly Coordinates3D North = new Coordinates3D(0, 0, -1);
+        public static readonly Coordinates3D South = new Coordinates3D(0, 0, 1);
     }
 }
