@@ -9,6 +9,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Craft.Net.Client.Handlers;
 using Craft.Net.Data;
+using DnDns.Enums;
+using DnDns.Query;
+using DnDns.Records;
+using DnDns.Security;
 
 namespace Craft.Net.Client
 {
@@ -43,6 +47,17 @@ namespace Craft.Net.Client
         {
             IPAddress address;
             int port;
+            // Attempt to resolve an SRV record first.
+            // Some sites usually have an external site as the A record.
+            string tmp = endpoint;
+            if (tmp.Contains (":"))
+                tmp = tmp.Split (':') [0];
+            DnsQueryResponse response = new DnsQueryRequest ().Resolve ("_minecraft._tcp." + tmp, NsType.SRV, NsClass.INET, ProtocolType.Udp);
+            if (response.Answers.Length > 0 && (response.Answers [0] is SrvRecord)) {
+                // Take the first record.
+                SrvRecord r = (response.Answers [0] as SrvRecord);
+                endpoint = r.HostName.Substring (0, r.HostName.Length - 1) + ":" + r.Port;
+            }
             if (endpoint.Contains(':'))
             {
                 // Both IP and port are specified
