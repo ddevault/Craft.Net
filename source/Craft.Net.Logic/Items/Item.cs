@@ -65,7 +65,7 @@ namespace Craft.Net.Logic.Items
                 return;
             ItemLogicDescriptors = new Dictionary<short, ItemLogicDescriptor>();
             // Loads all item classes in Craft.Net.Logic
-            var types = typeof(Item).Assembly.GetTypes().Where(t => t.GetCustomAttributes<ItemAttribute>().Any()).ToArray();
+            var types = typeof(Item).Assembly.GetTypes().Where(t => t.GetCustomAttributes(typeof(ItemAttribute), false).Any()).ToArray();
             LoadTypes(types);
         }
 
@@ -73,7 +73,7 @@ namespace Craft.Net.Logic.Items
         {
             foreach (var type in types)
             {
-                var attribute = type.GetCustomAttributes<ItemAttribute>().First();
+                var attribute = (ItemAttribute)type.GetCustomAttributes(typeof(ItemAttribute), false).First();
                 var initializerType = type;
                 if (attribute.InitializerType != null)
                     initializerType = attribute.InitializerType;

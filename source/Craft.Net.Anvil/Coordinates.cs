@@ -51,6 +51,31 @@ namespace Craft.Net.Anvil
             return a.Equals(b);
         }
 
+        public static Coordinates2D operator +(Coordinates2D a, int b)
+        {
+            return new Coordinates2D(a.X + b, a.Z + b);
+        }
+
+        public static Coordinates2D operator -(Coordinates2D a, int b)
+        {
+            return new Coordinates2D(a.X - b, a.Z - b);
+        }
+
+        public static Coordinates2D operator *(Coordinates2D a, int b)
+        {
+            return new Coordinates2D(a.X * b, a.Z * b);
+        }
+
+        public static Coordinates2D operator /(Coordinates2D a, int b)
+        {
+            return new Coordinates2D(a.X / b, a.Z / b);
+        }
+
+        public static Coordinates2D operator %(Coordinates2D a, int b)
+        {
+            return new Coordinates2D(a.X % b, a.Z % b);
+        }
+
         public static explicit operator Coordinates2D(Coordinates3D a)
         {
             return new Coordinates2D(a.X, a.Z);
@@ -135,6 +160,31 @@ namespace Craft.Net.Anvil
         public static bool operator ==(Coordinates3D a, Coordinates3D b)
         {
             return a.Equals(b);
+        }
+
+        public static Coordinates3D operator +(Coordinates3D a, int b)
+        {
+            return new Coordinates3D(a.X + b, a.Y + b, a.Z + b);
+        }
+
+        public static Coordinates3D operator -(Coordinates3D a, int b)
+        {
+            return new Coordinates3D(a.X - b, a.Y - b, a.Z - b);
+        }
+
+        public static Coordinates3D operator *(Coordinates3D a, int b)
+        {
+            return new Coordinates3D(a.X * b, a.Y * b, a.Z * b);
+        }
+
+        public static Coordinates3D operator /(Coordinates3D a, int b)
+        {
+            return new Coordinates3D(a.X / b, a.Y / b, a.Z / b);
+        }
+
+        public static Coordinates3D operator %(Coordinates3D a, int b)
+        {
+            return new Coordinates3D(a.X % b, a.Y % b, a.Z % b);
         }
 
         public static explicit operator Coordinates3D(Coordinates2D a)

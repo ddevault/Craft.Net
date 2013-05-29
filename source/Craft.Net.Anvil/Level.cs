@@ -16,6 +16,7 @@ namespace Craft.Net.Anvil
     /// </summary>
     public class Level : IDisposable
     {
+        public const int TickLength = 1000 / 20;
         [NbtIgnore]
         private IWorldGenerator WorldGenerator { get; set; }
         [NbtIgnore]

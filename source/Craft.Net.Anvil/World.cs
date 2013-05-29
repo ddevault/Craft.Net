@@ -178,6 +178,11 @@ namespace Craft.Net.Anvil
                 (coordinates.Z - chunkZ * Chunk.Depth) % Chunk.Depth);
         }
 
+        public static bool IsValidPosition(Coordinates3D position)
+        {
+            return position.Y >= 0 && position.Y <= 255;
+        }
+
         private Region LoadOrGenerateRegion(Coordinates2D coordinates)
         {
             if (Regions.ContainsKey(coordinates))

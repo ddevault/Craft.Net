@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Logic", "source\C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Logic.Test", "source\Test\Craft.Net.Logic.Test\Craft.Net.Logic.Test.csproj", "{078F8195-CB54-49FB-AC3B-0C00E2E1DA6C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Entities", "Craft.Net.Entities\Craft.Net.Entities.csproj", "{451B4EE5-D815-47BF-9CE6-08328B4A2BA7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -146,6 +148,14 @@ Global
 		{078F8195-CB54-49FB-AC3B-0C00E2E1DA6C}.MONO|Any CPU.Build.0 = Release|Any CPU
 		{078F8195-CB54-49FB-AC3B-0C00E2E1DA6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{078F8195-CB54-49FB-AC3B-0C00E2E1DA6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{451B4EE5-D815-47BF-9CE6-08328B4A2BA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{451B4EE5-D815-47BF-9CE6-08328B4A2BA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{451B4EE5-D815-47BF-9CE6-08328B4A2BA7}.DEVELOPMENT|Any CPU.ActiveCfg = Debug|Any CPU
+		{451B4EE5-D815-47BF-9CE6-08328B4A2BA7}.DEVELOPMENT|Any CPU.Build.0 = Debug|Any CPU
+		{451B4EE5-D815-47BF-9CE6-08328B4A2BA7}.MONO|Any CPU.ActiveCfg = Release|Any CPU
+		{451B4EE5-D815-47BF-9CE6-08328B4A2BA7}.MONO|Any CPU.Build.0 = Release|Any CPU
+		{451B4EE5-D815-47BF-9CE6-08328B4A2BA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{451B4EE5-D815-47BF-9CE6-08328B4A2BA7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

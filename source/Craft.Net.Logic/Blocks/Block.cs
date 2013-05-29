@@ -83,7 +83,7 @@ namespace Craft.Net.Logic.Blocks
                 return;
             BlockLogicDescriptors = new Dictionary<short, BlockLogicDescriptor>();
             // Loads all block classes in Craft.Net.Logic
-            var types = typeof(Block).Assembly.GetTypes().Where(t => t.GetCustomAttributes<BlockAttribute>().Any()).ToArray();
+            var types = typeof(Block).Assembly.GetTypes().Where(t => t.GetCustomAttributes(typeof(BlockAttribute), true).Any()).ToArray();
             LoadTypes(types);
         }
 
@@ -91,7 +91,7 @@ namespace Craft.Net.Logic.Blocks
         {
             foreach (var type in types)
             {
-                var attribute = type.GetCustomAttributes<BlockAttribute>().First();
+                var attribute = (BlockAttribute)type.GetCustomAttributes(typeof(BlockAttribute), false).First();
                 var method = type.GetMethods().FirstOrDefault(m => m.Name == attribute.Initializer
                     && m.GetParameters().Length == 1 && m.GetParameters()[0].ParameterType == typeof(BlockLogicDescriptor) && !m.IsGenericMethod);
                 var descriptor = new BlockLogicDescriptor(type);
