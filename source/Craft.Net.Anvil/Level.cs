@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using fNbt;
 using fNbt.Serialization;
-using Craft.Net.Data;
+using Craft.Net.Common;
 
 namespace Craft.Net.Anvil
 {

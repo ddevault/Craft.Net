@@ -1,4 +1,4 @@
-using Craft.Net.Data;
+using Craft.Net.Common;
 using fNbt.Serialization;
 
 namespace Craft.Net.Anvil

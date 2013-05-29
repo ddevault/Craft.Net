@@ -81,9 +81,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Craft.Net.Data\Craft.Net.Data.csproj">
+    <ProjectReference Include="..\Craft.Net.Common\Craft.Net.Common.csproj">
       <Project>{50462849-2223-4e39-b5d9-a928a9a58a33}</Project>
-      <Name>Craft.Net.Data</Name>
+      <Name>Craft.Net.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\externals\fNbt\fNbt\fNbt.csproj">
       <Project>{4488498D-976D-4DA3-BF72-109531AF0488}</Project>

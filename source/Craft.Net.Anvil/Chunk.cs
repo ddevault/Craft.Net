@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using fNbt;
 using fNbt.Serialization;
-using Craft.Net.Data;
+using Craft.Net.Common;
 
 namespace Craft.Net.Anvil
 {

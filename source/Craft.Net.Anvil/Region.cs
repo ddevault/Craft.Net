@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using fNbt;
 using Ionic.Zlib;
-using Craft.Net.Data;
+using Craft.Net.Common;
 
 namespace Craft.Net.Anvil
 {

@@ -44,9 +44,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Craft.Net.Data\Craft.Net.Data.csproj">
+    <ProjectReference Include="..\Craft.Net.Common\Craft.Net.Common.csproj">
       <Project>{50462849-2223-4e39-b5d9-a928a9a58a33}</Project>
-      <Name>Craft.Net.Data</Name>
+      <Name>Craft.Net.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Craft.Net.Anvil\Craft.Net.Anvil.csproj">
       <Project>{02031c5c-5007-48d5-a253-f7c8bdf0c0b2}</Project>

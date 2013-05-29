@@ -4,13 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{078F8195-CB54-49FB-AC3B-0C00E2E1DA6C}</ProjectGuid>
+    <ProjectGuid>{50462849-2223-4E39-B5D9-A928A9A58A33}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Craft.Net.Logic.Test</RootNamespace>
-    <AssemblyName>Craft.Net.Logic.Test</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>Craft.Net.Common</RootNamespace>
+    <AssemblyName>Craft.Net.Common</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -29,13 +31,16 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DEVELOPMENT|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\DEVELOPMENT\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework">
-      <HintPath>..\..\..\lib\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.mocks">
-      <HintPath>..\..\..\lib\nunit.mocks.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -45,26 +50,38 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BlockTest.cs" />
-    <Compile Include="ItemTest.cs" />
+    <Compile Include="BigInteger.cs" />
+    <Compile Include="Biome.cs" />
+    <Compile Include="BoundingBox.cs" />
+    <Compile Include="ChatColors.cs" />
+    <Compile Include="Cryptography.cs" />
+    <Compile Include="Difficulty.cs" />
+    <Compile Include="Dimension.cs" />
+    <Compile Include="GameMode.cs" />
+    <Compile Include="GameRules.cs" />
+    <Compile Include="ItemStack.cs" />
+    <Compile Include="MathHelper.cs" />
+    <Compile Include="MetadataByte.cs" />
+    <Compile Include="MetadataDictionary.cs" />
+    <Compile Include="MetadataEntry.cs" />
+    <Compile Include="MetadataFloat.cs" />
+    <Compile Include="MetadataInt.cs" />
+    <Compile Include="MetadataShort.cs" />
+    <Compile Include="MetadataSlot.cs" />
+    <Compile Include="MetadataString.cs" />
+    <Compile Include="MinecraftStream.cs" />
+    <Compile Include="MinecraftStream.Stream.cs" />
+    <Compile Include="ParticleEffect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Ray.cs" />
+    <Compile Include="Size.cs" />
+    <Compile Include="SoundEffect.cs" />
+    <Compile Include="Vector3.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Craft.Net.Anvil\Craft.Net.Anvil.csproj">
-      <Project>{02031c5c-5007-48d5-a253-f7c8bdf0c0b2}</Project>
-      <Name>Craft.Net.Anvil</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Craft.Net.Common\Craft.Net.Common.csproj">
-      <Project>{50462849-2223-4e39-b5d9-a928a9a58a33}</Project>
-      <Name>Craft.Net.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Craft.Net.Logic\Craft.Net.Logic.csproj">
-      <Project>{e001ada1-6bcb-420e-b187-07ff361d60b8}</Project>
-      <Name>Craft.Net.Logic</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Craft.Net.TerrainGeneration\Craft.Net.TerrainGeneration.csproj">
-      <Project>{b415fc03-c6fb-4b20-a5a1-81f526adfef5}</Project>
-      <Name>Craft.Net.TerrainGeneration</Name>
+    <ProjectReference Include="..\..\externals\fNbt\fNbt\fNbt.csproj">
+      <Project>{4488498d-976d-4da3-bf72-109531af0488}</Project>
+      <Name>fNbt</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
