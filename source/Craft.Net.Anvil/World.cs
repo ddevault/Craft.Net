@@ -163,6 +163,21 @@ namespace Craft.Net.Anvil
             }
         }
 
+        public Coordinates3D FindBlockPosition(Coordinates3D coordinates, out Chunk chunk)
+        {
+            if (coordinates.Y < 0 || coordinates.Y >= Chunk.Height)
+                throw new ArgumentOutOfRangeException("coordinates", "Coordinates are out of range");
+
+            var chunkX = (int)Math.Floor((double)coordinates.X / Chunk.Width);
+            var chunkZ = (int)Math.Floor((double)coordinates.Z / Chunk.Depth);
+
+            chunk = GetChunk(new Coordinates2D(chunkX, chunkZ));
+            return new Coordinates3D(
+                (coordinates.X - chunkX * Chunk.Width) % Chunk.Width,
+                coordinates.Y,
+                (coordinates.Z - chunkZ * Chunk.Depth) % Chunk.Depth);
+        }
+
         private Region LoadOrGenerateRegion(Coordinates2D coordinates)
         {
             if (Regions.ContainsKey(coordinates))
@@ -181,21 +196,6 @@ namespace Craft.Net.Anvil
             lock (Regions)
                 Regions[coordinates] = region;
             return region;
-        }
-        
-        private Coordinates3D FindBlockPosition(Coordinates3D coordinates, out Chunk chunk)
-        {
-            if (coordinates.Y < 0 || coordinates.Y >= Chunk.Height)
-                throw new ArgumentOutOfRangeException("coordinates", "Coordinates are out of range");
-
-            var chunkX = (int)Math.Floor((double)coordinates.X / Chunk.Width);
-            var chunkZ = (int)Math.Floor((double)coordinates.Z / Chunk.Depth);
-
-            chunk = GetChunk(new Coordinates2D(chunkX, chunkZ));
-            return new Coordinates3D(
-                (coordinates.X - chunkX * Chunk.Width) % Chunk.Width,
-                coordinates.Y,
-                (coordinates.Z - chunkZ * Chunk.Depth) % Chunk.Depth);
         }
 
         public void Dispose()

@@ -339,6 +339,7 @@
     <Compile Include="BlockAttribute.cs" />
     <Compile Include="ItemAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WorldExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\externals\fNbt\fNbt\fNbt.csproj">

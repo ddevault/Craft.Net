@@ -165,14 +165,14 @@ namespace Craft.Net.Anvil
             TileEntities.Add(value);
         }
 
-        private static int GetSectionNumber(double yPos)
+        private static int GetSectionNumber(int yPos)
         {
-             return (int)(yPos / 16);
+             return yPos / 16;
         }
 
-        private static int GetPositionInSection (double yPos)
+        private static int GetPositionInSection(int yPos)
         {
-            return (int)yPos % 16;
+            return yPos % 16;
         }
 
         /// <summary>

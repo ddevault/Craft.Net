@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Craft.Net.Anvil;
 using System.Reflection;
+using Craft.Net.Logic.Blocks;
 
 namespace Craft.Net.Logic.Items
 {
@@ -27,15 +28,21 @@ namespace Craft.Net.Logic.Items
 
     public class ItemLogicDescriptor
     {
-        public ItemLogicDescriptor()
+        public ItemLogicDescriptor(Type itemType)
         {
             // Default handlers
-            ItemUsed = Item.DefaultItemUsed;
-            ItemUsedOnBlock = Item.DefaultItemUsedOnBlock;
+            ItemType = itemType;
+            ItemUsed = Item.DefaultItemUsedHandler;
+            ItemUsedOnBlock = Item.DefaultItemUsedOnBlockHandler;
+            MaximumStackSize = 64;
         }
+
+        public Type ItemType;
 
         public Item.ItemUsedDelegate ItemUsed;
         public Item.ItemUsedOnBlockDelegate ItemUsedOnBlock;
+
+        public int MaximumStackSize;
     }
 
     public static class Item
@@ -43,6 +50,7 @@ namespace Craft.Net.Logic.Items
         public delegate void ItemInitializerDelegate(ItemLogicDescriptor descriptor);
         public delegate void ItemUsedDelegate(ItemDescriptor item); // TODO: Entities
         public delegate void ItemUsedOnBlockDelegate(ItemDescriptor item, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates2D cursorPosition);
+        public delegate bool IsEfficientDelegate(ItemDescriptor item, BlockDescriptor block);
 
         private static Dictionary<short, ItemLogicDescriptor> ItemLogicDescriptors { get; set; }
 
@@ -71,7 +79,7 @@ namespace Craft.Net.Logic.Items
                     initializerType = attribute.InitializerType;
                 var method = initializerType.GetMethods().FirstOrDefault(m => m.Name == attribute.Initializer
                     && m.GetParameters().Length == 1 && m.GetParameters()[0].ParameterType == typeof(ItemLogicDescriptor) && !m.IsGenericMethod);
-                var descriptor = new ItemLogicDescriptor();
+                var descriptor = new ItemLogicDescriptor(type);
                 if (method != null)
                     method.Invoke(null, new object[] { descriptor });
                 ItemLogicDescriptors[attribute.ItemId] = descriptor;
@@ -80,25 +88,33 @@ namespace Craft.Net.Logic.Items
 
         public static void OnItemUsed(ItemDescriptor item)
         {
-            if (!ItemLogicDescriptors.ContainsKey(item.Id))
-                throw new KeyNotFoundException("The given item does not exist.");
-            ItemLogicDescriptors[item.Id].ItemUsed(item);
+            GetLogicDescriptor(item).ItemUsed(item);
         }
 
         public static void OnItemUsedOnBlock(ItemDescriptor item, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates2D cursorPosition)
         {
+            GetLogicDescriptor(item).ItemUsedOnBlock(item, world, clickedBlock, clickedSide, cursorPosition);
+        }
+
+        public static int GetMaximumStackSize(ItemDescriptor item)
+        {
+            return GetLogicDescriptor(item).MaximumStackSize;
+        }
+
+        public static ItemLogicDescriptor GetLogicDescriptor(ItemDescriptor item)
+        {
             if (!ItemLogicDescriptors.ContainsKey(item.Id))
                 throw new KeyNotFoundException("The given item does not exist.");
-            ItemLogicDescriptors[item.Id].ItemUsedOnBlock(item, world, clickedBlock, clickedSide, cursorPosition);
+            return ItemLogicDescriptors[item.Id];
         }
 
         #region Default handlers
 
-        internal static void DefaultItemUsed(ItemDescriptor item)
+        internal static void DefaultItemUsedHandler(ItemDescriptor item)
         {
         }
 
-        internal static void DefaultItemUsedOnBlock(ItemDescriptor item, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates2D cursorPosition)
+        internal static void DefaultItemUsedOnBlockHandler(ItemDescriptor item, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates2D cursorPosition)
         {
         }
 
