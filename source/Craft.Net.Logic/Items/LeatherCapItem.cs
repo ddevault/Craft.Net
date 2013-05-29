@@ -7,7 +7,7 @@ using Craft.Net.Anvil;
 
 namespace Craft.Net.Logic.Items
 {
-    [MinecraftItem(LeatherCapItem.ItemId, LeatherCapItem.DisplayName)]
+    [Item(LeatherCapItem.ItemId, LeatherCapItem.DisplayName)]
     public static class LeatherCapItem
     {
         public const short ItemId = 298;

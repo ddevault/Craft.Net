@@ -7,7 +7,7 @@ using Craft.Net.Anvil;
 
 namespace Craft.Net.Logic.Items
 {
-    [MinecraftItem(ChainHelmetItem.ItemId, ChainHelmetItem.DisplayName)]
+    [Item(ChainHelmetItem.ItemId, ChainHelmetItem.DisplayName)]
     public static class ChainHelmetItem
     {
         public const short ItemId = 302;

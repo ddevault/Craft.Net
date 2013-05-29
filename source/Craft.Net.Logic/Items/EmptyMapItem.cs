@@ -7,7 +7,7 @@ using Craft.Net.Anvil;
 
 namespace Craft.Net.Logic.Items
 {
-    [MinecraftItem(EmptyMapItem.ItemId, EmptyMapItem.DisplayName)]
+    [Item(EmptyMapItem.ItemId, EmptyMapItem.DisplayName)]
     public static class EmptyMapItem
     {
         public const short ItemId = 395;

@@ -7,7 +7,7 @@ using Craft.Net.Anvil;
 
 namespace Craft.Net.Logic.Items
 {
-    [MinecraftItem(GlowstoneDustItem.ItemId, GlowstoneDustItem.DisplayName)]
+    [Item(GlowstoneDustItem.ItemId, GlowstoneDustItem.DisplayName)]
     public static class GlowstoneDustItem
     {
         public const short ItemId = 348;

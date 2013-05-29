@@ -7,7 +7,7 @@ using Craft.Net.Anvil;
 
 namespace Craft.Net.Logic.Items
 {
-    [MinecraftItem(RedstoneComparatorItem.ItemId, RedstoneComparatorItem.DisplayName)]
+    [Item(RedstoneComparatorItem.ItemId, RedstoneComparatorItem.DisplayName)]
     public static class RedstoneComparatorItem
     {
         public const short ItemId = 404;

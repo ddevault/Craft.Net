@@ -7,10 +7,10 @@ using Craft.Net.Anvil;
 
 namespace Craft.Net.Logic.Items
 {
-    [Item(FeatherItem.ItemId, FeatherItem.DisplayName)]
-    public static class FeatherItem
+    [Item(SkullItem.ItemId, SkullItem.DisplayName)]
+    public static class SkullItem
     {
-        public const short ItemId = 288;
-        public const string DisplayName = "Feather";
+        public const short ItemId = 397;
+        public const string DisplayName = "Skull";
     }
 }

@@ -7,7 +7,7 @@ using Craft.Net.Anvil;
 
 namespace Craft.Net.Logic.Items
 {
-    [MinecraftItem(SteakItem.ItemId, SteakItem.DisplayName)]
+    [Item(SteakItem.ItemId, SteakItem.DisplayName)]
     public static class SteakItem
     {
         public const short ItemId = 364;

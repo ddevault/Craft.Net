@@ -8,7 +8,7 @@ using Craft.Net.Logic.Blocks;
 
 namespace Craft.Net.Logic.Items
 {
-    [MinecraftItem(CakeItem.ItemId, CakeItem.DisplayName, "Initialize")]
+    [Item(CakeItem.ItemId, CakeItem.DisplayName, "Initialize")]
     public static class CakeItem
     {
         public const short ItemId = 354;

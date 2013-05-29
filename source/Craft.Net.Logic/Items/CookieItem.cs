@@ -7,7 +7,7 @@ using Craft.Net.Anvil;
 
 namespace Craft.Net.Logic.Items
 {
-    [MinecraftItem(CookieItem.ItemId, CookieItem.DisplayName)]
+    [Item(CookieItem.ItemId, CookieItem.DisplayName)]
     public static class CookieItem
     {
         public const short ItemId = 357;

@@ -7,7 +7,7 @@ using Craft.Net.Anvil;
 
 namespace Craft.Net.Logic.Items
 {
-    [MinecraftItem(CompassItem.ItemId, CompassItem.DisplayName)]
+    [Item(CompassItem.ItemId, CompassItem.DisplayName)]
     public static class CompassItem
     {
         public const short ItemId = 345;

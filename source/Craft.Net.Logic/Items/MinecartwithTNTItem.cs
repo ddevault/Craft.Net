@@ -7,7 +7,7 @@ using Craft.Net.Anvil;
 
 namespace Craft.Net.Logic.Items
 {
-    [MinecraftItem(MinecartwithTNTItem.ItemId, MinecartwithTNTItem.DisplayName)]
+    [Item(MinecartwithTNTItem.ItemId, MinecartwithTNTItem.DisplayName)]
     public static class MinecartwithTNTItem
     {
         public const short ItemId = 407;

@@ -7,7 +7,7 @@ using Craft.Net.Anvil;
 
 namespace Craft.Net.Logic.Items
 {
-    [MinecraftItem(FireworkStarItem.ItemId, FireworkStarItem.DisplayName)]
+    [Item(FireworkStarItem.ItemId, FireworkStarItem.DisplayName)]
     public static class FireworkStarItem
     {
         public const short ItemId = 402;

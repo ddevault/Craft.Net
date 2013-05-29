@@ -7,7 +7,7 @@ using Craft.Net.Anvil;
 
 namespace Craft.Net.Logic.Items
 {
-    [MinecraftItem(ClockItem.ItemId, ClockItem.DisplayName)]
+    [Item(ClockItem.ItemId, ClockItem.DisplayName)]
     public static class ClockItem
     {
         public const short ItemId = 347;

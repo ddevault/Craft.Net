@@ -7,7 +7,7 @@ using Craft.Net.Anvil;
 
 namespace Craft.Net.Logic.Items
 {
-    [MinecraftItem(PotionItem.ItemId, PotionItem.DisplayName)]
+    [Item(PotionItem.ItemId, PotionItem.DisplayName)]
     public static class PotionItem
     {
         public const short ItemId = 373;

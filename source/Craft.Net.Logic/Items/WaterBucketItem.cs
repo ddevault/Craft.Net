@@ -7,7 +7,7 @@ using Craft.Net.Anvil;
 
 namespace Craft.Net.Logic.Items
 {
-    [MinecraftItem(WaterBucketItem.ItemId, WaterBucketItem.DisplayName)]
+    [Item(WaterBucketItem.ItemId, WaterBucketItem.DisplayName)]
     public static class WaterBucketItem
     {
         public const short ItemId = 326;

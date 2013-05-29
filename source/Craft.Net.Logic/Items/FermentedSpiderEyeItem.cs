@@ -7,7 +7,7 @@ using Craft.Net.Anvil;
 
 namespace Craft.Net.Logic.Items
 {
-    [MinecraftItem(FermentedSpiderEyeItem.ItemId, FermentedSpiderEyeItem.DisplayName)]
+    [Item(FermentedSpiderEyeItem.ItemId, FermentedSpiderEyeItem.DisplayName)]
     public static class FermentedSpiderEyeItem
     {
         public const short ItemId = 376;

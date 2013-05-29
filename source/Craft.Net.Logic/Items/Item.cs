@@ -46,13 +46,18 @@ namespace Craft.Net.Logic.Items
 
         private static Dictionary<short, ItemLogicDescriptor> ItemLogicDescriptors { get; set; }
 
-        public static void LoadItems()
+        static Item()
+        {
+            LoadItems();
+        }
+
+        private static void LoadItems()
         {
             if (ItemLogicDescriptors != null)
                 return;
             ItemLogicDescriptors = new Dictionary<short, ItemLogicDescriptor>();
             // Loads all item classes in Craft.Net.Logic
-            var types = typeof(Item).Assembly.GetTypes().Where(t => t.GetCustomAttributes<MinecraftItemAttribute>().Any()).ToArray();
+            var types = typeof(Item).Assembly.GetTypes().Where(t => t.GetCustomAttributes<ItemAttribute>().Any()).ToArray();
             LoadTypes(types);
         }
 
@@ -60,8 +65,11 @@ namespace Craft.Net.Logic.Items
         {
             foreach (var type in types)
             {
-                var attribute = type.GetCustomAttributes<MinecraftItemAttribute>().First();
-                var method = type.GetMethods().FirstOrDefault(m => m.Name == attribute.Initializer
+                var attribute = type.GetCustomAttributes<ItemAttribute>().First();
+                var initializerType = type;
+                if (attribute.InitializerType != null)
+                    initializerType = attribute.InitializerType;
+                var method = initializerType.GetMethods().FirstOrDefault(m => m.Name == attribute.Initializer
                     && m.GetParameters().Length == 1 && m.GetParameters()[0].ParameterType == typeof(ItemLogicDescriptor) && !m.IsGenericMethod);
                 var descriptor = new ItemLogicDescriptor();
                 if (method != null)

@@ -7,7 +7,7 @@ using Craft.Net.Anvil;
 
 namespace Craft.Net.Logic.Items
 {
-    [MinecraftItem(LavaBucketItem.ItemId, LavaBucketItem.DisplayName)]
+    [Item(LavaBucketItem.ItemId, LavaBucketItem.DisplayName)]
     public static class LavaBucketItem
     {
         public const short ItemId = 327;

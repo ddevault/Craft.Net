@@ -7,7 +7,7 @@ using Craft.Net.Anvil;
 
 namespace Craft.Net.Logic.Items
 {
-    [MinecraftItem(MusicDiscItem.ItemId, MusicDiscItem.DisplayName)]
+    [Item(MusicDiscItem.ItemId, MusicDiscItem.DisplayName)]
     public static class MusicDiscItem
     {
         public const short ItemId = 2267;

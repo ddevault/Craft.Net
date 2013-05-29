@@ -7,7 +7,7 @@ using Craft.Net.Anvil;
 
 namespace Craft.Net.Logic.Items
 {
-    [MinecraftItem(DiamondShovelItem.ItemId, DiamondShovelItem.DisplayName)]
+    [Item(DiamondShovelItem.ItemId, DiamondShovelItem.DisplayName)]
     public static class DiamondShovelItem
     {
         public const short ItemId = 277;

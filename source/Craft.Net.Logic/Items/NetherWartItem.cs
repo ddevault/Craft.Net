@@ -7,7 +7,7 @@ using Craft.Net.Anvil;
 
 namespace Craft.Net.Logic.Items
 {
-    [MinecraftItem(NetherWartItem.ItemId, NetherWartItem.DisplayName)]
+    [Item(NetherWartItem.ItemId, NetherWartItem.DisplayName)]
     public static class NetherWartItem
     {
         public const short ItemId = 372;
