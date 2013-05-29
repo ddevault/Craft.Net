@@ -61,6 +61,10 @@
       <Project>{e001ada1-6bcb-420e-b187-07ff361d60b8}</Project>
       <Name>Craft.Net.Logic</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Craft.Net.TerrainGeneration\Craft.Net.TerrainGeneration.csproj">
+      <Project>{b415fc03-c6fb-4b20-a5a1-81f526adfef5}</Project>
+      <Name>Craft.Net.TerrainGeneration</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

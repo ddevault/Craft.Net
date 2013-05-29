@@ -7,26 +7,44 @@ using System.Reflection;
 
 namespace Craft.Net.Logic.Items
 {
-    public static class Item
+    public struct ItemDescriptor
     {
-        public class ItemDescriptor
+        public ItemDescriptor(short id)
         {
-            public ItemDescriptor()
-            {
-                // Default handlers
-                ItemUsed = Item.DefaultItemUsed;
-                ItemUsedOnBlock = Item.DefaultItemUsedOnBlock;
-            }
-
-            public ItemUsedDelegate ItemUsed;
-            public ItemUsedOnBlockDelegate ItemUsedOnBlock;
+            Id = id;
+            Metadata = 0;
         }
 
-        public delegate void ItemInitializerDelegate(ItemDescriptor descriptor);
-        public delegate void ItemUsedDelegate(); // TODO: Entities
-        public delegate void ItemUsedOnBlockDelegate(World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates2D cursorPosition);
+        public ItemDescriptor(short id, short metadata)
+        {
+            Id = id;
+            Metadata = metadata;
+        }
 
-        private static Dictionary<short, ItemDescriptor> ItemDescriptors { get; set; }
+        public short Id;
+        public short Metadata;
+    }
+
+    public class ItemLogicDescriptor
+    {
+        public ItemLogicDescriptor()
+        {
+            // Default handlers
+            ItemUsed = Item.DefaultItemUsed;
+            ItemUsedOnBlock = Item.DefaultItemUsedOnBlock;
+        }
+
+        public Item.ItemUsedDelegate ItemUsed;
+        public Item.ItemUsedOnBlockDelegate ItemUsedOnBlock;
+    }
+
+    public static class Item
+    {
+        public delegate void ItemInitializerDelegate(ItemLogicDescriptor descriptor);
+        public delegate void ItemUsedDelegate(ItemDescriptor item); // TODO: Entities
+        public delegate void ItemUsedOnBlockDelegate(ItemDescriptor item, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates2D cursorPosition);
+
+        private static Dictionary<short, ItemLogicDescriptor> ItemLogicDescriptors { get; set; }
 
         static Item()
         {
@@ -35,43 +53,48 @@ namespace Craft.Net.Logic.Items
 
         public static void LoadItems()
         {
-            if (ItemDescriptors != null)
+            if (ItemLogicDescriptors != null)
                 return;
-            ItemDescriptors = new Dictionary<short, ItemDescriptor>();
+            ItemLogicDescriptors = new Dictionary<short, ItemLogicDescriptor>();
             // Loads all item classes in Craft.Net.Logic
-            var types = typeof(Item).Assembly.GetTypes().Where(t => t.GetCustomAttributes<MinecraftItemAttribute>().Any());
+            var types = typeof(Item).Assembly.GetTypes().Where(t => t.GetCustomAttributes<MinecraftItemAttribute>().Any()).ToArray();
+            LoadTypes(types);
+        }
+
+        public static void LoadTypes(Type[] types)
+        {
             foreach (var type in types)
             {
                 var attribute = type.GetCustomAttributes<MinecraftItemAttribute>().First();
-                var method = type.GetMethods().FirstOrDefault(m => m.Name == attribute.Initializer 
-                    && m.GetParameters().Length == 1 && m.GetParameters()[0].ParameterType == typeof(ItemDescriptor) && !m.IsGenericMethod);
-                var descriptor = new ItemDescriptor();
+                var method = type.GetMethods().FirstOrDefault(m => m.Name == attribute.Initializer
+                    && m.GetParameters().Length == 1 && m.GetParameters()[0].ParameterType == typeof(ItemLogicDescriptor) && !m.IsGenericMethod);
+                var descriptor = new ItemLogicDescriptor();
                 method.Invoke(null, new object[] { descriptor });
-                ItemDescriptors[attribute.ItemId] = descriptor;
+                ItemLogicDescriptors[attribute.ItemId] = descriptor;
             }
         }
 
-        public static void OnItemUsed(short itemId)
+        public static void OnItemUsed(ItemDescriptor item)
         {
-            if (!ItemDescriptors.ContainsKey(itemId))
+            if (!ItemLogicDescriptors.ContainsKey(item.Id))
                 throw new KeyNotFoundException("The given item does not exist.");
-            ItemDescriptors[itemId].ItemUsed();
+            ItemLogicDescriptors[item.Id].ItemUsed(item);
         }
 
-        public static void OnItemUsedOnBlock(short itemId, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates2D cursorPosition)
+        public static void OnItemUsedOnBlock(ItemDescriptor item, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates2D cursorPosition)
         {
-            if (!ItemDescriptors.ContainsKey(itemId))
+            if (!ItemLogicDescriptors.ContainsKey(item.Id))
                 throw new KeyNotFoundException("The given item does not exist.");
-            ItemDescriptors[itemId].ItemUsedOnBlock(world, clickedBlock, clickedSide, cursorPosition);
+            ItemLogicDescriptors[item.Id].ItemUsedOnBlock(item, world, clickedBlock, clickedSide, cursorPosition);
         }
 
         #region Default handlers
 
-        private static void DefaultItemUsed()
+        internal static void DefaultItemUsed(ItemDescriptor item)
         {
         }
 
-        private static void DefaultItemUsedOnBlock(World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates2D cursorPosition)
+        internal static void DefaultItemUsedOnBlock(ItemDescriptor item, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates2D cursorPosition)
         {
         }
 

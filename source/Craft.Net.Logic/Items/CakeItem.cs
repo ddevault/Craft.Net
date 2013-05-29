@@ -13,12 +13,12 @@ namespace Craft.Net.Logic.Items
     {
         public const short ItemId = 354;
 
-        public static void Initialize(Item.ItemDescriptor descriptor)
+        public static void Initialize(ItemLogicDescriptor descriptor)
         {
             descriptor.ItemUsedOnBlock = OnItemUsedOnBlock;
         }
 
-        public static void OnItemUsedOnBlock(World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates2D cursorPosition)
+        public static void OnItemUsedOnBlock(ItemDescriptor item, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates2D cursorPosition)
         {
             if (world.GetBlockId(clickedBlock + clickedSide) == 0)
                 world.SetBlockId(clickedBlock + clickedSide, CakeBlock.BlockId);
