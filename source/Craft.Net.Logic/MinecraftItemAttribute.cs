@@ -12,10 +12,12 @@ namespace Craft.Net.Logic
     {
         public short ItemId { get; set; }
         public string Initializer { get; set; }
+        public string DisplayName { get; set; }
 
-        public MinecraftItemAttribute(short itemId, string initializer)
+        public MinecraftItemAttribute(short itemId, string displayName = null, string initializer = null)
         {
             ItemId = itemId;
+            DisplayName = displayName;
             Initializer = initializer;
         }
     }

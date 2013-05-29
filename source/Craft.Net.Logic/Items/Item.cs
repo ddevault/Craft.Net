@@ -46,11 +46,6 @@ namespace Craft.Net.Logic.Items
 
         private static Dictionary<short, ItemLogicDescriptor> ItemLogicDescriptors { get; set; }
 
-        static Item()
-        {
-            LoadItems();
-        }
-
         public static void LoadItems()
         {
             if (ItemLogicDescriptors != null)
@@ -69,7 +64,8 @@ namespace Craft.Net.Logic.Items
                 var method = type.GetMethods().FirstOrDefault(m => m.Name == attribute.Initializer
                     && m.GetParameters().Length == 1 && m.GetParameters()[0].ParameterType == typeof(ItemLogicDescriptor) && !m.IsGenericMethod);
                 var descriptor = new ItemLogicDescriptor();
-                method.Invoke(null, new object[] { descriptor });
+                if (method != null)
+                    method.Invoke(null, new object[] { descriptor });
                 ItemLogicDescriptors[attribute.ItemId] = descriptor;
             }
         }
