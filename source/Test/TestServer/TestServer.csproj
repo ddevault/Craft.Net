@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5134C61A-020A-4931-9844-4706AADA62AA}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TestServer</RootNamespace>
+    <AssemblyName>TestServer</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\externals\fNbt\fNbt\fNbt.csproj">
+      <Project>{4488498d-976d-4da3-bf72-109531af0488}</Project>
+      <Name>fNbt</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Craft.Net.Anvil\Craft.Net.Anvil.csproj">
+      <Project>{02031c5c-5007-48d5-a253-f7c8bdf0c0b2}</Project>
+      <Name>Craft.Net.Anvil</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Craft.Net.Common\Craft.Net.Common.csproj">
+      <Project>{50462849-2223-4e39-b5d9-a928a9a58a33}</Project>
+      <Name>Craft.Net.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Craft.Net.Entities\Craft.Net.Entities.csproj">
+      <Project>{451b4ee5-d815-47bf-9ce6-08328b4a2ba7}</Project>
+      <Name>Craft.Net.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Craft.Net.Logic\Craft.Net.Logic.csproj">
+      <Project>{e001ada1-6bcb-420e-b187-07ff361d60b8}</Project>
+      <Name>Craft.Net.Logic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Craft.Net.Networking\Craft.Net.Networking.csproj">
+      <Project>{c3bbab7e-606f-420e-9461-c8cfaec2476b}</Project>
+      <Name>Craft.Net.Networking</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Craft.Net.Server\Craft.Net.Server.csproj">
+      <Project>{81467141-9c7d-41ee-bfb0-d40251e10f8c}</Project>
+      <Name>Craft.Net.Server</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Craft.Net.TerrainGeneration\Craft.Net.TerrainGeneration.csproj">
+      <Project>{b415fc03-c6fb-4b20-a5a1-81f526adfef5}</Project>
+      <Name>Craft.Net.TerrainGeneration</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
