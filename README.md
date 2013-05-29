@@ -3,6 +3,9 @@
 Craft.Net is a collection of several Minecraft-related .NET libraries. You can pick and choose different
 libraries from Craft.Net to accomplish different tasks. The following libraries are included:
 
+* **Craft.Net.Anvil**: Support for editing Minecraft Anvil worlds
+  * Works with in-memory worlds or on-disk worlds
+  * Can save worlds from Craft.Net.Client to disk
 * **Craft.Net.Client**: A Minecraft multiplayer client library
   * Multiplayer client for connecting to servers
   * Utilities like LastLogin decryption, vanilla server list parsing/modification, etc
@@ -10,6 +13,9 @@ libraries from Craft.Net to accomplish different tasks. The following libraries 
   * Defines values for biomes, difficulty, game modes, etc
   * Includes structs for working with item stacks, metadata dictionaries, etc
   * Cryptography support for interop with Minecraft's Java-based crypto
+* **Craft.Net.Logic**: Handles block and item interaction logic
+  * Includes classes for all Minecraft blocks and items
+  * Defines logic such as wheat growth, torch placement, etc
 * **Craft.Net.Networking**: Generic Minecraft networking support
   * Includes all 1.5.2 packet definitions
   * Includes AES/CFB stream crypto utilities
@@ -22,10 +28,6 @@ libraries from Craft.Net to accomplish different tasks. The following libraries 
   * Vanilla flatland support
   * *Planned*: Implementation of vanilla default generation
   * *Planned*: Custom terrain generator
-* **Craft.Net.World**: Support for editing Minecraft worlds
-  * Supports Minecraft's Anvil format
-  * Works with in-memory worlds or on-disk worlds
-  * Can save worlds from Craft.Net.Client to disk
 
 More libraries are planned for the future, including Craft.Net.AI, Craft.Net.Logic, and more. All libraries in
 Craft.Net support Windows, Linux, and Mac. The long-term goal is to recreate the entire Minecraft ecosystem in
