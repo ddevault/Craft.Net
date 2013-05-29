@@ -7,8 +7,8 @@
     <ProjectGuid>{5E258098-CB4F-4C62-B1F2-A2ACD5F51CDC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Craft.Net.World.Test</RootNamespace>
-    <AssemblyName>Craft.Net.World.Test</AssemblyName>
+    <RootNamespace>Craft.Net.Anvil.Test</RootNamespace>
+    <AssemblyName>Craft.Net.Anvil.Test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -67,9 +67,9 @@
       <Project>{b415fc03-c6fb-4b20-a5a1-81f526adfef5}</Project>
       <Name>Craft.Net.TerrainGeneration</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Craft.Net.World\Craft.Net.World.csproj">
+    <ProjectReference Include="..\..\Craft.Net.Anvil\Craft.Net.Anvil.csproj">
       <Project>{02031c5c-5007-48d5-a253-f7c8bdf0c0b2}</Project>
-      <Name>Craft.Net.World</Name>
+      <Name>Craft.Net.Anvil</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\externals\fNbt\fNbt\fNbt.csproj">
       <Project>{4488498d-976d-4da3-bf72-109531af0488}</Project>

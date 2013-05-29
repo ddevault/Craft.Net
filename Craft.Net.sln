@@ -17,15 +17,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fNbt", "externals\fNbt\fNbt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Networking.Test", "source\Test\Craft.Net.Networking.Test\Craft.Net.Networking.Test.csproj", "{FE82A68D-44BD-485F-88CF-FFA77720AEF6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.World", "source\Craft.Net.World\Craft.Net.World.csproj", "{02031C5C-5007-48D5-A253-F7C8BDF0C0B2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Anvil", "source\Craft.Net.Anvil\Craft.Net.Anvil.csproj", "{02031C5C-5007-48D5-A253-F7C8BDF0C0B2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "source\Test", "{848E76C6-A56D-4DC7-A627-9A6A92C07991}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{848E76C6-A56D-4DC7-A627-9A6A92C07991}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.World.Test", "source\Test\Craft.Net.World.Test\Craft.Net.World.Test.csproj", "{5E258098-CB4F-4C62-B1F2-A2ACD5F51CDC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Anvil.Test", "source\Test\Craft.Net.Anvil.Test\Craft.Net.Anvil.Test.csproj", "{5E258098-CB4F-4C62-B1F2-A2ACD5F51CDC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Data", "source\Craft.Net.Data\Craft.Net.Data.csproj", "{50462849-2223-4E39-B5D9-A928A9A58A33}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.TerrainGeneration", "source\Craft.Net.TerrainGeneration\Craft.Net.TerrainGeneration.csproj", "{B415FC03-C6FB-4B20-A5A1-81F526ADFEF5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Logic", "source\Craft.Net.Logic\Craft.Net.Logic.csproj", "{E001ADA1-6BCB-420E-B187-07FF361D60B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -126,6 +128,14 @@ Global
 		{B415FC03-C6FB-4B20-A5A1-81F526ADFEF5}.MONO|Any CPU.Build.0 = Release|Any CPU
 		{B415FC03-C6FB-4B20-A5A1-81F526ADFEF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B415FC03-C6FB-4B20-A5A1-81F526ADFEF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E001ADA1-6BCB-420E-B187-07FF361D60B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E001ADA1-6BCB-420E-B187-07FF361D60B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E001ADA1-6BCB-420E-B187-07FF361D60B8}.DEVELOPMENT|Any CPU.ActiveCfg = Debug|Any CPU
+		{E001ADA1-6BCB-420E-B187-07FF361D60B8}.DEVELOPMENT|Any CPU.Build.0 = Debug|Any CPU
+		{E001ADA1-6BCB-420E-B187-07FF361D60B8}.MONO|Any CPU.ActiveCfg = Release|Any CPU
+		{E001ADA1-6BCB-420E-B187-07FF361D60B8}.MONO|Any CPU.Build.0 = Release|Any CPU
+		{E001ADA1-6BCB-420E-B187-07FF361D60B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E001ADA1-6BCB-420E-B187-07FF361D60B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

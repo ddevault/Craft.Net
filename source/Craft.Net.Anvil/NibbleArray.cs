@@ -3,7 +3,7 @@ using fNbt.Serialization;
 using System;
 using System.Collections.ObjectModel;
 
-namespace Craft.Net.World
+namespace Craft.Net.Anvil
 {
     /// <summary>
     /// Represents an array of 4-bit values.

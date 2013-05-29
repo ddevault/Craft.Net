@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 
-namespace Craft.Net.World.Test
+namespace Craft.Net.Anvil.Test
 {
     [TestFixture]
     public class LevelTest

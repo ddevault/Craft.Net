@@ -8,8 +8,8 @@
     <ProjectGuid>{02031C5C-5007-48D5-A253-F7C8BDF0C0B2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Craft.Net.World</RootNamespace>
-    <AssemblyName>Craft.Net.World</AssemblyName>
+    <RootNamespace>Craft.Net.Anvil</RootNamespace>
+    <AssemblyName>Craft.Net.Anvil</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

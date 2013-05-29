@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B415FC03-C6FB-4B20-A5A1-81F526ADFEF5}</ProjectGuid>
+    <ProjectGuid>{E001ADA1-6BCB-420E-B187-07FF361D60B8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Craft.Net.TerrainGeneration</RootNamespace>
-    <AssemblyName>Craft.Net.TerrainGeneration</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <RootNamespace>Craft.Net.Logic</RootNamespace>
+    <AssemblyName>Craft.Net.Logic</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,7 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FlatlandGenerator.cs" />
+    <Compile Include="Blocks\Block.cs" />
+    <Compile Include="Items\Item.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -51,10 +51,6 @@
     <ProjectReference Include="..\Craft.Net.Anvil\Craft.Net.Anvil.csproj">
       <Project>{02031c5c-5007-48d5-a253-f7c8bdf0c0b2}</Project>
       <Name>Craft.Net.Anvil</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\externals\fNbt\fNbt\fNbt.csproj">
-      <Project>{4488498d-976d-4da3-bf72-109531af0488}</Project>
-      <Name>fNbt</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

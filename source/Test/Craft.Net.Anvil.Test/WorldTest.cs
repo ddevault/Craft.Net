@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Craft.Net.World.Test
+namespace Craft.Net.Anvil.Test
 {
     [TestFixture]
     public class WorldTest

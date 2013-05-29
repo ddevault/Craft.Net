@@ -7,7 +7,7 @@ using fNbt;
 using fNbt.Serialization;
 using Craft.Net.Data;
 
-namespace Craft.Net.World
+namespace Craft.Net.Anvil
 {
     public class Chunk : INbtSerializable
     {

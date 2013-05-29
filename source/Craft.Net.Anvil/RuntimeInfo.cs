@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Diagnostics;
 
-namespace Craft.Net.World
+namespace Craft.Net.Anvil
 {
     internal static class RuntimeInfo
     {

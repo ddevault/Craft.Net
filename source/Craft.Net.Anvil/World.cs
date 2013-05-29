@@ -4,7 +4,7 @@ using System.Linq;
 using System.IO;
 using System.Threading;
 
-namespace Craft.Net.World
+namespace Craft.Net.Anvil
 {
     public class World : IDisposable
     {

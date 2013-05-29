@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Craft.Net.World
+namespace Craft.Net.Anvil
 {
     /// <summary>
     /// Used to allow unrecognized entity types to remain in the world.

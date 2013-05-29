@@ -5,7 +5,7 @@ using System.Text;
 using fNbt;
 using fNbt.Serialization;
 
-namespace Craft.Net.World
+namespace Craft.Net.Anvil
 {
     public interface IDiskEntity : INbtSerializable
     {

@@ -1,7 +1,7 @@
 using Craft.Net.Data;
 using fNbt.Serialization;
 
-namespace Craft.Net.World
+namespace Craft.Net.Anvil
 {
     public class Section
     {

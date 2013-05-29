@@ -6,7 +6,7 @@ using fNbt;
 using Ionic.Zlib;
 using Craft.Net.Data;
 
-namespace Craft.Net.World
+namespace Craft.Net.Anvil
 {
     /// <summary>
     /// Represents a 32x32 area of <see cref="Chunk"/> objects.
