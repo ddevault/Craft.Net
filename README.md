@@ -214,6 +214,7 @@ We try to keep these to a minimum, and refactor them away when possible. The cur
 * [DotNetZip](http://dotnetzip.codeplex.com/) for compression/decompression with zlib
 * [fNbt](https://github.com/fragmer/fNbt) for NBT data manipulation
 * [BouncyCastle](http://www.bouncycastle.org/csharp/) for encryption on Mono.
+* [DnDns](https://dndns.codeplex.com/) for SRV record support.
 
 ## Licensing
 
