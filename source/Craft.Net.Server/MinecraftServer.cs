@@ -204,8 +204,8 @@ namespace Craft.Net.Server
                 Level.DefaultWorld.WorldGenerator.GeneratorName, client.GameMode,
                 Dimension.Overworld, Settings.Difficulty, Settings.MaxPlayers));
             client.SendPacket(new SpawnPositionPacket((int)client.Entity.SpawnPoint.X, (int)client.Entity.SpawnPoint.Y, (int)client.Entity.SpawnPoint.Z));
+            client.SendPacket(new PlayerAbilitiesPacket(client.Entity.Abilities.AsFlags(), client.Entity.Abilities.WalkingSpeed, client.Entity.Abilities.FlyingSpeed));
             client.SendPacket(new TimeUpdatePacket(Level.Time, Level.Time));
-            UpdatePlayerList();
             client.SendPacket(new SetWindowItemsPacket(0, client.Entity.Inventory.GetSlots()));
 
             // Send initial chunks
@@ -213,15 +213,15 @@ namespace Craft.Net.Server
             // Adding 0.1 here prevents the client from falling through the ground upon logging in
             // Presumably, Minecraft runs some physics stuff and if it spawns exactly at ground level, it falls a little and
             // clips through the ground. This fixes that.
-            client.SendPacket(new PlayerPositionAndLookPacket(client.Entity.Position.X, client.Entity.Position.Y + client.Entity.Size.Height + 0.1,
-                client.Entity.Position.Z, client.Entity.Position.Y - client.Entity.Size.Height, client.Entity.Yaw, client.Entity.Pitch, true));
+            client.SendPacket(new PlayerPositionAndLookPacket(client.Entity.Position.X, client.Entity.Position.Y + 0.1 + PlayerEntity.Height,
+                client.Entity.Position.Z, client.Entity.Position.Y + 0.1, client.Entity.Yaw, client.Entity.Pitch, false));
+            client.IsLoggedIn = true;
+            UpdatePlayerList();
 
             // Send entities
             EntityManager.SendClientEntities(client);
 
             client.SendPacket(new UpdateHealthPacket(client.Entity.Health, client.Entity.Food, client.Entity.FoodSaturation));
-
-            client.IsLoggedIn = true;
             //var args = new PlayerLogInEventArgs(client);
             //OnPlayerLoggedIn(args);
             //LogProvider.Log(client.Username + " joined the game.");

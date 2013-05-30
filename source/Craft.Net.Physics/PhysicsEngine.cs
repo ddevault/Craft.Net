@@ -37,7 +37,7 @@ namespace Craft.Net.Physics
         {
             if (!Entities.Contains(entity))
                 return;
-            Entities.Add(entity);
+            Entities.Remove(entity);
         }
 
         private BoundingBox TempBoundingBox;

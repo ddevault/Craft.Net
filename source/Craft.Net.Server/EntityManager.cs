@@ -95,7 +95,7 @@ namespace Craft.Net.Server
                     Entities.Remove(entity);
                     if (entity is IPhysicsEntity)
                     {
-                        // Add to physics engine
+                        // Remove from physics engine
                         var engine = Server.GetPhysicsForWorld(entity.World);
                         engine.RemoveEntity((IPhysicsEntity)entity);
                     }

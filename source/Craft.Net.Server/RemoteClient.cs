@@ -90,9 +90,11 @@ namespace Craft.Net.Server
                 if (entity is PlayerEntity)
                 {
                     var player = entity as PlayerEntity;
+                    var selectedItem = player.SelectedItem.Id;
+                    if (selectedItem == -1) selectedItem = 0;
                     SendPacket(new SpawnPlayerPacket(player.EntityId, player.Username, MathHelper.CreateAbsoluteInt(player.Position.X),
                         MathHelper.CreateAbsoluteInt(player.Position.Y), MathHelper.CreateAbsoluteInt(player.Position.Z),
-                        MathHelper.CreateRotationByte(player.Yaw), MathHelper.CreateRotationByte(player.Pitch), player.SelectedItem.Id, player.Metadata));
+                        MathHelper.CreateRotationByte(player.Yaw), MathHelper.CreateRotationByte(player.Pitch), selectedItem, player.Metadata));
                     if (!player.SelectedItem.Empty)
                         SendPacket(new EntityEquipmentPacket(entity.EntityId, EntityEquipmentPacket.EntityEquipmentSlot.HeldItem, player.SelectedItem));
                     // TODO: Send armor
