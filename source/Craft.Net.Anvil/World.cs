@@ -35,6 +35,16 @@ namespace Craft.Net.Anvil
             return world;
         }
 
+        /// <summary>
+        /// Finds a chunk that contains the specified block coordinates.
+        /// </summary>
+        public Chunk FindChunk(Coordinates3D coordinates)
+        {
+            Chunk chunk;
+            FindBlockPosition(coordinates, out chunk);
+            return chunk;
+        }
+
         public Chunk GetChunk(Coordinates2D coordinates)
         {
             int regionX = coordinates.X / Region.Width - ((coordinates.X < 0) ? 1 : 0);

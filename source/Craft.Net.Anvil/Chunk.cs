@@ -33,7 +33,7 @@ namespace Craft.Net.Anvil
 
         public const int Width = 16, Height = 256, Depth = 16;
 
-        internal bool IsModified { get; set; }
+        public bool IsModified { get; set; }
 
         public byte[] Biomes { get; set; }
 
@@ -69,6 +69,9 @@ namespace Craft.Net.Anvil
         public long LastUpdate { get; set; }
 
         public bool TerrainPopulated { get; set; }
+
+        [NbtIgnore]
+        public Region ParentRegion { get; set; }
 
         public Chunk()
         {

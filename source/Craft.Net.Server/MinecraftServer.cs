@@ -1,6 +1,8 @@
 ﻿using Craft.Net.Anvil;
 using Craft.Net.Common;
+using Craft.Net.Entities;
 using Craft.Net.Networking;
+using Craft.Net.Server.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +28,9 @@ namespace Craft.Net.Server
             NetworkThread = new Thread(NetworkWorker);
             Clients = new List<RemoteClient>();
             Settings = ServerSettings.DefaultSettings;
+            EntityManager = new EntityManager(this);
+            LastTimeUpdate = DateTime.MinValue;
+            NextChunkUpdate = DateTime.MinValue;
         }
 
         public MinecraftServer(Level level) : this()
@@ -52,16 +57,18 @@ namespace Craft.Net.Server
         public TcpListener Listener { get; set; }
         public DateTime StartTime { get; private set; }
         public ServerSettings Settings { get; set; }
+        public EntityManager EntityManager { get; set; }
 
         protected internal RSACryptoServiceProvider CryptoServiceProvider { get; set; }
         protected internal RSAParameters ServerKey { get; set; }
+        protected internal object NetworkLock { get; set; }
 
         protected Thread NetworkThread { get; set; }
         protected PacketHandler[] PacketHandlers { get; set; }
 
-        private object NetworkLock { get; set; }
-        private DateTime NextKeepAlive { get; set; }
         private DateTime NextPlayerUpdate { get; set; }
+        private DateTime NextChunkUpdate { get; set; }
+        private DateTime LastTimeUpdate { get; set; }
 
         #endregion
 
@@ -89,18 +96,105 @@ namespace Craft.Net.Server
             NetworkThread.Start();
         }
 
+        public void Stop()
+        {
+            lock (NetworkLock)
+            {
+                if (Listener != null)
+                {
+                    Listener.Stop();
+                    Listener = null;
+                }
+                if (NetworkThread != null)
+                {
+                    NetworkThread.Abort();
+                    NetworkThread = null;
+                }
+            }
+        }
+
+        public void SendChat(string text)
+        {
+            foreach (var client in Clients.Where(c => c.IsLoggedIn))
+                client.SendChat(text);
+        }
+
         #endregion
 
         #region Protected methods
 
-        protected internal void AcceptClientAsync(IAsyncResult result)
+        protected void AcceptClientAsync(IAsyncResult result)
         {
-            var client = new RemoteClient(Listener.EndAcceptTcpClient(result));
-            client.NetworkStream = new MinecraftStream(new BufferedStream(client.NetworkClient.GetStream()));
-            // TODO: Ban players
             lock (NetworkLock)
+            {
+                if (Listener == null)
+                    return; // Server shutting down
+                var client = new RemoteClient(Listener.EndAcceptTcpClient(result));
+                client.NetworkStream = new MinecraftStream(new BufferedStream(client.NetworkClient.GetStream()));
+                // TODO: Ban players
                 Clients.Add(client);
-            Listener.BeginAcceptTcpClient(AcceptClientAsync, null);
+                Listener.BeginAcceptTcpClient(AcceptClientAsync, null);
+            }
+        }
+
+        protected internal void UpdatePlayerList()
+        {
+            if (Clients.Count != 0)
+            {
+                for (int i = 0; i < Clients.Count; i++)
+                {
+                    foreach (RemoteClient client in Clients)
+                    {
+                        if (client.IsLoggedIn)
+                            Clients[i].SendPacket(new PlayerListItemPacket(client.Username, true, client.Ping));
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region Internal methods
+
+        internal void LogInPlayer(RemoteClient client)
+        {
+            // Spawn player
+            // TODO: Load player data
+            //client.Entity = Level.LoadPlayer(client.Username);
+            client.Entity = new PlayerEntity(client.Username);
+            // Temporary
+            client.Entity.Position = Level.Spawn;
+            client.Entity.SpawnPoint = Level.Spawn;
+            //client.Entity.InventoryChanged += EntityInventoryChanged;
+            EntityManager.SpawnEntity(Level.DefaultWorld, client.Entity);
+            client.SendPacket(new LoginRequestPacket(client.Entity.EntityId,
+                Level.DefaultWorld.WorldGenerator.GeneratorName, client.GameMode,
+                Dimension.Overworld, Settings.Difficulty, Settings.MaxPlayers));
+            client.SendPacket(new SpawnPositionPacket((int)client.Entity.SpawnPoint.X, (int)client.Entity.SpawnPoint.Y, (int)client.Entity.SpawnPoint.Z));
+            client.SendPacket(new TimeUpdatePacket(Level.Time, Level.Time));
+            UpdatePlayerList();
+            // TODO: Inventory
+            //client.SendPacket(new SetWindowItemsPacket(0, client.Entity.Inventory.GetSlots()));
+
+            // Send initial chunks
+            client.UpdateChunks(true);
+            // Adding 0.1 here prevents the client from falling through the ground upon logging in
+            // Presumably, Minecraft runs some physics stuff and if it spawns exactly at ground level, it falls a little and
+            // clips through the ground. This fixes that.
+            client.SendPacket(new PlayerPositionAndLookPacket(client.Entity.Position.X, client.Entity.Position.Y + client.Entity.Size.Height + 0.1,
+                client.Entity.Position.Z, client.Entity.Position.Y - client.Entity.Size.Height, client.Entity.Yaw, client.Entity.Pitch, true));
+
+            // Send entities
+            EntityManager.SendClientEntities(client);
+
+            client.SendPacket(new UpdateHealthPacket(client.Entity.Health, client.Entity.Food, client.Entity.FoodSaturation));
+
+            client.IsLoggedIn = true;
+            //var args = new PlayerLogInEventArgs(client);
+            //OnPlayerLoggedIn(args);
+            //LogProvider.Log(client.Username + " joined the game.");
+            //if (!args.Handled)
+            SendChat(ChatColors.Yellow + client.Username + " joined the game.");
         }
 
         #endregion
@@ -130,7 +224,7 @@ namespace Craft.Net.Server
                                 if (nextPacket is EncryptionKeyResponsePacket)
                                 {
                                     client.NetworkStream = new MinecraftStream(new BufferedStream(
-                                        new AesStream(client.NetworkStream, client.SharedKey)));
+                                        new AesStream(client.NetworkClient.GetStream(), client.SharedKey)));
                                     client.EncryptionEnabled = true;
                                 }
                             }
@@ -174,8 +268,20 @@ namespace Craft.Net.Server
                                 break;
                             }
                         }
+                        if (client.IsLoggedIn)
+                            DoClientUpdates(client);
                     }
                 }
+                if (LastTimeUpdate != DateTime.MinValue)
+                {
+                    if ((DateTime.Now - LastTimeUpdate).TotalMilliseconds >= 50)
+                    {
+                        Level.Time += (long)((DateTime.Now - LastTimeUpdate).TotalMilliseconds / 50);
+                        LastTimeUpdate = DateTime.Now;
+                    }
+                }
+                if (NextChunkUpdate < DateTime.Now)
+                    NextChunkUpdate = DateTime.Now.AddSeconds(1);
                 Thread.Sleep(10);
             }
         }
@@ -183,20 +289,48 @@ namespace Craft.Net.Server
         private void HandlePacket(RemoteClient client, IPacket packet)
         {
             if (PacketHandlers[packet.Id] == null)
-                throw new InvalidOperationException("No packet handler registered for 0x" + packet.Id.ToString("X2"));
+                return;
+                //throw new InvalidOperationException("No packet handler registered for 0x" + packet.Id.ToString("X2"));
             PacketHandlers[packet.Id](client, this, packet);
         }
 
         private void UpdateScheduledEvents()
         {
-            if (DateTime.Now > NextKeepAlive)
-            {
-                NextKeepAlive = DateTime.Now.AddSeconds(30);
-            }
             if (DateTime.Now > NextPlayerUpdate)
             {
+                UpdatePlayerList();
                 NextPlayerUpdate = DateTime.Now.AddMinutes(1);
             }
+        }
+
+        private void DoClientUpdates(RemoteClient client)
+        {
+            // Update keep alive, chunks, etc
+            if (client.LastKeepAliveSent.AddSeconds(20) < DateTime.Now)
+            {
+                client.SendPacket(new KeepAlivePacket(MathHelper.Random.Next()));
+                client.LastKeepAliveSent = DateTime.Now;
+                // TODO: Confirm keep alive
+            }
+            if (NextChunkUpdate < DateTime.Now) // Once per second
+            {
+                // Update chunks
+                if (client.Settings.ViewDistance < client.Settings.MaxViewDistance)
+                {
+                    client.Settings.ViewDistance++;
+                    client.ForceUpdateChunksAsync();
+                }
+            }
+        }
+
+        #endregion
+
+        #region Events
+
+        public event EventHandler<ChatMessageEventArgs> ChatMessage;
+        protected internal virtual void OnChatMessage(ChatMessageEventArgs e)
+        {
+            if (ChatMessage != null) ChatMessage(this, e);
         }
 
         #endregion

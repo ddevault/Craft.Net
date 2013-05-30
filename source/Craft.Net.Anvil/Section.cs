@@ -30,6 +30,8 @@ namespace Craft.Net.Anvil
             Metadata = new NibbleArray(size);
             BlockLight = new NibbleArray(size);
             SkyLight = new NibbleArray(size);
+            for (int i = 0; i < size; i++)
+                SkyLight[i] = 0xFF;
             Add = null; // Only used when needed
             nonAirCount = 0;
         }

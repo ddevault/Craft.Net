@@ -15,13 +15,16 @@ namespace TestServer
         static void Main(string[] args)
         {
             var level = new Level(new FlatlandGenerator(), "world");
+            level.AddWorld("region");
             level.SaveTo("world");
             var server = new MinecraftServer(level);
+            server.Settings.OnlineMode = false;
             server.Start(new IPEndPoint(IPAddress.Any, 25565));
             Console.WriteLine("Press 'q' to exit");
             ConsoleKeyInfo cki;
             do cki = Console.ReadKey(true);
             while (cki.KeyChar != 'q');
+            server.Stop();
         }
     }
 }

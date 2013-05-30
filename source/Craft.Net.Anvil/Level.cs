@@ -193,6 +193,7 @@ namespace Craft.Net.Anvil
             GeneratorName = generator.GeneratorName;
             generator.Initialize(this);
             WorldGenerator = generator;
+            Spawn = WorldGenerator.SpawnPoint;
         }
 
         /// <summary>
