@@ -1,4 +1,5 @@
 ﻿using Craft.Net.Common;
+using Craft.Net.Physics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,8 +7,10 @@ using System.Text;
 
 namespace Craft.Net.Entities
 {
-    public class ItemEntity : ObjectEntity
+    public class ItemEntity : ObjectEntity, IAABBEntity
     {
+        public static double PickupRange = 1.5;
+
         public ItemEntity(Vector3 position, ItemStack item)
         {
             Position = position;
@@ -44,12 +47,51 @@ namespace Craft.Net.Entities
             }
         }
 
-        public override bool IncludeMetadataOnClient
+        public override bool SendMetadataToClients
         {
             get
             {
                 return true;
             }
+        }
+
+        public BoundingBox BoundingBox
+        {
+            get { return new BoundingBox(Position, Position + Size); }
+        }
+
+        public void TerrainCollision(PhysicsEngine engine, Vector3 collisionPoint, Vector3 collisionDirection)
+        {
+        }
+
+        public float AccelerationDueToGravity
+        {
+            get { return 0.04f; }
+        }
+
+        public float Drag
+        {
+            get { return 0.98f; }
+        }
+
+        public bool BeginUpdate()
+        {
+            EnablePropertyChange = false;
+            return true;
+        }
+
+        public void EndUpdate(Vector3 newPosition)
+        {
+            EnablePropertyChange = true;
+            Position = newPosition;
+        }
+
+        public override void Update(Entity[] nearbyEntities)
+        {
+            var player = nearbyEntities.FirstOrDefault(e => e is PlayerEntity && (e as PlayerEntity).Health != 0
+                && e.Position.DistanceTo(Position) <= 1.5);
+            if (player != null)
+                (player as PlayerEntity).OnPickUpItem(this);
         }
     }
 }

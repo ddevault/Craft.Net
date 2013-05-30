@@ -15,6 +15,7 @@ namespace Craft.Net.Entities
             Food = 20;
             Inventory = new InventoryWindow();
             Abilities = new PlayerAbilities(this);
+            SelectedSlot = InventoryWindow.HotbarIndex;
         }
 
         public const double Width = 0.6;
@@ -98,6 +99,12 @@ namespace Craft.Net.Entities
                 _FoodExhaustion = value;
                 OnPropertyChanged("FoodExhaustion");
             }
+        }
+
+        public event EventHandler<EntityEventArgs> PickUpItem;
+        public void OnPickUpItem(ItemEntity item)
+        {
+            if (PickUpItem != null) PickUpItem(this, new EntityEventArgs(item));
         }
     }
 }

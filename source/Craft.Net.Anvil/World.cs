@@ -15,6 +15,7 @@ namespace Craft.Net.Anvil
         public Dictionary<Coordinates2D, Region> Regions { get; set; }
         public IWorldGenerator WorldGenerator { get; set; }
         public event EventHandler<BlockChangeEventArgs> BlockChange;
+        public event EventHandler<SpawnEntityEventArgs> SpawnEntityRequested;
 
         public World(string name)
         {
@@ -220,6 +221,11 @@ namespace Craft.Net.Anvil
         {
             foreach (var region in Regions)
                 region.Value.Dispose();
+        }
+
+        public void OnSpawnEntityRequested(object entity)
+        {
+            if (SpawnEntityRequested != null) SpawnEntityRequested(this, new SpawnEntityEventArgs(entity));
         }
 
         protected internal virtual void OnBlockChange(Coordinates3D coordinates)

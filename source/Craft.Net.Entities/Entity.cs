@@ -12,7 +12,7 @@ namespace Craft.Net.Entities
     {
         protected Entity()
         {
-
+            EnablePropertyChange = true;
         }
 
         public int EntityId { get; set; }
@@ -80,12 +80,8 @@ namespace Craft.Net.Entities
             }
         }
 
-        public virtual bool IncludeMetadataOnClient
+        public virtual void Update(Entity[] nearbyEntities)
         {
-            get
-            {
-                return false;
-            }
         }
 
         public event EventHandler Despawn;
@@ -95,9 +91,11 @@ namespace Craft.Net.Entities
             if (Despawn != null) Despawn(this, new EventArgs());
         }
 
+        protected bool EnablePropertyChange { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
         protected internal virtual void OnPropertyChanged(string property)
         {
+            if (!EnablePropertyChange) return;
             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(property));
         }
     }

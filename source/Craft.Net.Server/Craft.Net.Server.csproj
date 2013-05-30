@@ -54,7 +54,9 @@
     <Compile Include="Handlers\LoginHandlers.cs" />
     <Compile Include="Handlers\PacketHandlers.cs" />
     <Compile Include="Handlers\PlayerMovementHandlers.cs" />
+    <Compile Include="LogicHelpers.cs" />
     <Compile Include="MinecraftServer.cs" />
+    <Compile Include="PlayerManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoteClient.cs" />
     <Compile Include="ServerSettings.cs" />
@@ -83,6 +85,10 @@
     <ProjectReference Include="..\Craft.Net.Networking\Craft.Net.Networking.csproj">
       <Project>{c3bbab7e-606f-420e-9461-c8cfaec2476b}</Project>
       <Name>Craft.Net.Networking</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Craft.Net.Physics\Craft.Net.Physics.csproj">
+      <Project>{c04c72ef-5fd5-42da-b1dc-f232d3e86636}</Project>
+      <Name>Craft.Net.Physics</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

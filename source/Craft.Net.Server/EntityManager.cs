@@ -1,6 +1,7 @@
 ﻿using Craft.Net.Anvil;
 using Craft.Net.Common;
 using Craft.Net.Entities;
+using Craft.Net.Physics;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -21,14 +22,14 @@ namespace Craft.Net.Server
             NextEntityId = 1;
             Server = server;
             Entities = new List<Entity>();
-            EntitiesToUpdate = new List<int>();
+            MarkedForDespawn = new ConcurrentQueue<int>();
         }
 
         public MinecraftServer Server { get; set; }
         public int NextEntityId { get; private set; }
         public List<Entity> Entities { get; set; }
-        public List<int> EntitiesToUpdate { get; set; }
         public static int MaxClientDistance = 4;
+        public ConcurrentQueue<int> MarkedForDespawn { get; set; }
 
         public void SpawnEntity(World world, Entity entity)
         {
@@ -44,23 +45,24 @@ namespace Craft.Net.Server
             entity.PropertyChanged += EntityPropertyChanged;
             Entities.Add(entity);
             SpawnOnClients(entity);
-            entity.Despawn -= entity_Despawn;
-            entity.Despawn += entity_Despawn;
+            entity.Despawn -= EntityDespawn;
+            entity.Despawn += EntityDespawn;
+            if (entity is IPhysicsEntity)
+            {
+                // Add to physics engine
+                var engine = Server.GetPhysicsForWorld(world);
+                engine.AddEntity((IPhysicsEntity)entity);
+            }
         }
 
-        void entity_Despawn(object sender, EventArgs e)
+        void EntityDespawn(object sender, EventArgs e)
         {
             Despawn(sender as Entity);
         }
 
         public void Despawn(Entity entity)
         {
-            lock (Entities)
-            {
-                Entities.Remove(entity);
-                foreach (var client in GetKnownClients(entity))
-                    client.ForgetEntity(entity);
-            }
+            MarkedForDespawn.Enqueue(entity.EntityId);
         }
 
         public RemoteClient[] GetKnownClients(Entity entity)
@@ -70,7 +72,7 @@ namespace Craft.Net.Server
 
         public Entity[] GetEntitiesInRange(Entity entity, int maxChunks)
         {
-            return Entities.Where(e => e != entity && IsInRange(e.Position, entity.Position, MaxClientDistance)).ToArray();
+            return Entities.Where(e => e != entity && IsInRange(e.Position, entity.Position, maxChunks)).ToArray();
         }
 
         public void SendClientEntities(RemoteClient client)
@@ -81,7 +83,31 @@ namespace Craft.Net.Server
 
         public void Update()
         {
-            // TODO: Run physics update
+            lock (Entities)
+            {
+                foreach (var entity in Entities)
+                    entity.Update(GetEntitiesInRange(entity, 2));
+                while (MarkedForDespawn.Count != 0)
+                {
+                    int id;
+                    while (!MarkedForDespawn.TryDequeue(out id));
+                    var entity = GetEntityById(id);
+                    Entities.Remove(entity);
+                    if (entity is IPhysicsEntity)
+                    {
+                        // Add to physics engine
+                        var engine = Server.GetPhysicsForWorld(entity.World);
+                        engine.RemoveEntity((IPhysicsEntity)entity);
+                    }
+                    foreach (var client in GetKnownClients(entity))
+                        client.ForgetEntity(entity);
+                }
+            }
+        }
+
+        private Entity GetEntityById(int id)
+        {
+            return Entities.FirstOrDefault(e => e.EntityId == id);
         }
 
         private Chunk GetEntityChunk(World world, Vector3 position)

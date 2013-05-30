@@ -28,7 +28,7 @@ namespace Craft.Net.Server
 
         public TcpClient NetworkClient { get; set; }
         public MinecraftStream NetworkStream { get; set; }
-        public bool IsLoggedIn { get; set; }
+        public bool IsLoggedIn { get; internal set; }
         public ConcurrentQueue<IPacket> PacketQueue { get; set; }
         public ClientSettings Settings { get; set; }
         public bool EncryptionEnabled { get; protected internal set; }
@@ -36,14 +36,17 @@ namespace Craft.Net.Server
         public short Ping { get; set; }
         public string Username { get; set; }
         public PlayerEntity Entity { get; set; }
-        public List<Coordinates2D> LoadedChunks { get; set; }
-        public DateTime LastKeepAlive { get; set; }
-        public DateTime LastKeepAliveSent { get; set; }
-        public DateTime ExpectedMiningEnd { get; set; }
-        public Coordinates3D ExpectedBlockToMine { get; set; }
-        public int Reach { get { return GameMode == GameMode.Creative ? 6 : 5; } }
-        public int BlockBreakStageTime { get; set; }
-        public DateTime? BlockBreakStartTime { get; set; }
+        public int Reach { get { return GameMode == GameMode.Creative ? 6 : 5; } } // TODO: Allow customization
+
+        protected internal List<Coordinates2D> LoadedChunks { get; set; }
+        protected internal DateTime LastKeepAlive { get; set; }
+        protected internal DateTime LastKeepAliveSent { get; set; }
+        protected internal DateTime ExpectedMiningEnd { get; set; }
+        protected internal Coordinates3D ExpectedBlockToMine { get; set; }
+        protected internal int BlockBreakStageTime { get; set; }
+        protected internal DateTime? BlockBreakStartTime { get; set; }
+
+        internal PlayerManager PlayerManager { get; set; }
 
         public World World
         {
@@ -89,7 +92,19 @@ namespace Craft.Net.Server
                     var player = entity as PlayerEntity;
                     SendPacket(new SpawnPlayerPacket(player.EntityId, player.Username, MathHelper.CreateAbsoluteInt(player.Position.X),
                         MathHelper.CreateAbsoluteInt(player.Position.Y), MathHelper.CreateAbsoluteInt(player.Position.Z),
-                        MathHelper.CreateRotationByte(player.Yaw), MathHelper.CreateRotationByte(player.Pitch), 0, player.Metadata));
+                        MathHelper.CreateRotationByte(player.Yaw), MathHelper.CreateRotationByte(player.Pitch), player.SelectedItem.Id, player.Metadata));
+                    if (!player.SelectedItem.Empty)
+                        SendPacket(new EntityEquipmentPacket(entity.EntityId, EntityEquipmentPacket.EntityEquipmentSlot.HeldItem, player.SelectedItem));
+                    // TODO: Send armor
+                }
+                else if (entity is ObjectEntity)
+                {
+                    var objectEntity = entity as ObjectEntity;
+                    SendPacket(new SpawnObjectPacket(objectEntity.EntityId, objectEntity.EntityType, MathHelper.CreateAbsoluteInt(objectEntity.Position.X),
+                        MathHelper.CreateAbsoluteInt(objectEntity.Position.Y), MathHelper.CreateAbsoluteInt(objectEntity.Position.Z), MathHelper.CreateRotationByte(objectEntity.Yaw),
+                        MathHelper.CreateRotationByte(objectEntity.Pitch), objectEntity.Data, 0, 0, 0)); // TODO: Velocity stuff here
+                    if (objectEntity.SendMetadataToClients)
+                        SendPacket(new EntityMetadataPacket(objectEntity.EntityId, objectEntity.Metadata));
                 }
             }
         }

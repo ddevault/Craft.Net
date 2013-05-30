@@ -12,6 +12,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using Craft.Net.Logic;
+using Craft.Net.Physics;
 
 namespace Craft.Net.Server
 {
@@ -23,15 +24,16 @@ namespace Craft.Net.Server
 
         public MinecraftServer()
         {
+            LogicHelpers.Register();
             PacketHandlers = new PacketHandler[256];
             Handlers.PacketHandlers.RegisterHandlers(this);
             NetworkLock = new object();
-            NetworkThread = new Thread(NetworkWorker);
             Clients = new List<RemoteClient>();
             Settings = ServerSettings.DefaultSettings;
             EntityManager = new EntityManager(this);
             LastTimeUpdate = DateTime.MinValue;
             NextChunkUpdate = DateTime.MinValue;
+            PhysicsEngines = new List<PhysicsEngine>();
         }
 
         public MinecraftServer(Level level) : this()
@@ -63,8 +65,10 @@ namespace Craft.Net.Server
         protected internal RSACryptoServiceProvider CryptoServiceProvider { get; set; }
         protected internal RSAParameters ServerKey { get; set; }
         protected internal object NetworkLock { get; set; }
+        protected internal List<PhysicsEngine> PhysicsEngines { get; set; }
 
         protected Thread NetworkThread { get; set; }
+        protected Thread EntityThread { get; set; }
         protected PacketHandler[] PacketHandlers { get; set; }
 
         private DateTime NextPlayerUpdate { get; set; }
@@ -89,6 +93,9 @@ namespace Craft.Net.Server
             {
                 world.BlockChange -= WorldBlockChange;
                 world.BlockChange += WorldBlockChange;
+                world.SpawnEntityRequested -= WorldSpawnEntityRequested;
+                world.SpawnEntityRequested += WorldSpawnEntityRequested;
+                PhysicsEngines.Add(new PhysicsEngine(world));
             }
 
             CryptoServiceProvider = new RSACryptoServiceProvider(1024);
@@ -100,7 +107,10 @@ namespace Craft.Net.Server
             Listener.Start();
             Listener.BeginAcceptTcpClient(AcceptClientAsync, null);
 
+            NetworkThread = new Thread(NetworkWorker);
+            EntityThread = new Thread(PhysicsWorker);
             NetworkThread.Start();
+            EntityThread.Start();
         }
 
         public void Stop()
@@ -116,6 +126,11 @@ namespace Craft.Net.Server
                 {
                     NetworkThread.Abort();
                     NetworkThread = null;
+                }
+                if (EntityThread != null)
+                {
+                    EntityThread.Abort();
+                    EntityThread = null;
                 }
             }
         }
@@ -164,6 +179,11 @@ namespace Craft.Net.Server
             }
         }
 
+        protected internal PhysicsEngine GetPhysicsForWorld(World world)
+        {
+            return PhysicsEngines.FirstOrDefault(p => p.World == world);
+        }
+
         #endregion
 
         #region Internal methods
@@ -177,7 +197,8 @@ namespace Craft.Net.Server
             // Temporary
             client.Entity.Position = Level.Spawn;
             client.Entity.SpawnPoint = Level.Spawn;
-            //client.Entity.InventoryChanged += EntityInventoryChanged;
+            client.GameMode = Level.GameMode;
+            client.PlayerManager = new PlayerManager(client, this);
             EntityManager.SpawnEntity(Level.DefaultWorld, client.Entity);
             client.SendPacket(new LoginRequestPacket(client.Entity.EntityId,
                 Level.DefaultWorld.WorldGenerator.GeneratorName, client.GameMode,
@@ -211,6 +232,17 @@ namespace Craft.Net.Server
         #endregion
 
         #region Private methods
+
+        private void PhysicsWorker()
+        {
+            while (true)
+            {
+                foreach (var engine in PhysicsEngines)
+                    engine.Update();
+                EntityManager.Update();
+                Thread.Sleep(PhysicsEngine.MillisecondsBetweenUpdates);
+            }
+        }
 
         private void NetworkWorker()
         {
@@ -372,6 +404,13 @@ namespace Craft.Net.Server
                         block.Id, block.Metadata));
                 }
             }
+        }
+
+        // TODO: Find a better way
+        private void WorldSpawnEntityRequested(object sender, SpawnEntityEventArgs e)
+        {
+            if (e.Entity is Entity)
+                EntityManager.SpawnEntity(sender as World, e.Entity as Entity);
         }
 
         #endregion

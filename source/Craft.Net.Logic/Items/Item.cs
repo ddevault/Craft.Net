@@ -47,7 +47,7 @@ namespace Craft.Net.Logic.Items
 
     public static class Item
     {
-        public delegate void ItemInitializerDelegate(ItemLogicDescriptor descriptor);
+        public delegate ItemLogicDescriptor ItemInitializerDelegate(ItemLogicDescriptor descriptor);
         public delegate void ItemUsedDelegate(ItemDescriptor item); // TODO: Entities
         public delegate void ItemUsedOnBlockDelegate(ItemDescriptor item, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates3D cursorPosition);
         public delegate bool IsEfficientDelegate(ItemDescriptor item, BlockDescriptor block);
@@ -81,7 +81,7 @@ namespace Craft.Net.Logic.Items
                     && m.GetParameters().Length == 1 && m.GetParameters()[0].ParameterType == typeof(ItemLogicDescriptor) && !m.IsGenericMethod);
                 var descriptor = new ItemLogicDescriptor(type);
                 if (method != null)
-                    method.Invoke(null, new object[] { descriptor });
+                    descriptor = (ItemLogicDescriptor)method.Invoke(null, new object[] { descriptor });
                 ItemLogicDescriptors[attribute.ItemId] = descriptor;
             }
         }

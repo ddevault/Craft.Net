@@ -14,9 +14,10 @@ namespace Craft.Net.Logic.Items
         public const short ItemId = 354;
         public const string DisplayName = "Cake";
 
-        public static void Initialize(ItemLogicDescriptor descriptor)
+        public static ItemLogicDescriptor Initialize(ItemLogicDescriptor descriptor)
         {
             descriptor.ItemUsedOnBlock = OnItemUsedOnBlock;
+            return descriptor;
         }
 
         public static void OnItemUsedOnBlock(ItemDescriptor item, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates3D cursorPosition)

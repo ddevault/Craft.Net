@@ -68,10 +68,14 @@ namespace Craft.Net.Logic.Blocks
 
     public static class Block
     {
+        public delegate BlockLogicDescriptor BlockLogicInitializer(BlockLogicDescriptor descriptor);
+
         public delegate bool BlockRightClickedDelegate(BlockDescriptor block, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates3D cursorPosition);
         public delegate void BlockPlacedDelegate(BlockDescriptor block, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates3D cursorPosition);
         public delegate void BlockMinedDelegate(BlockDescriptor block, World world, Coordinates3D destroyedBlock, ItemDescriptor? tool);
         public delegate bool CanHarvestDelegate(ItemDescriptor item, BlockDescriptor block);
+
+        public static BlockMinedDelegate GlobalDefaultBlockMinedHandler { get; set; }
 
         private static Dictionary<short, BlockLogicDescriptor> BlockLogicDescriptors { get; set; }
 
@@ -95,20 +99,21 @@ namespace Craft.Net.Logic.Blocks
             foreach (var type in types)
             {
                 var attribute = (BlockAttribute)type.GetCustomAttributes(typeof(BlockAttribute), false).First();
-                var method = type.GetMethods().FirstOrDefault(m => m.Name == attribute.Initializer
+                var method = type.GetMethods().FirstOrDefault(m => m.Name == attribute.Initializer && m.ReturnType == typeof(BlockLogicDescriptor)
                     && m.GetParameters().Length == 1 && m.GetParameters()[0].ParameterType == typeof(BlockLogicDescriptor) && !m.IsGenericMethod);
                 var descriptor = new BlockLogicDescriptor(type);
                 descriptor.Hardness = attribute.Hardness;
                 descriptor.DisplayName = attribute.DisplayName;
                 if (method != null)
-                    method.Invoke(null, new object[] { descriptor });
+                    descriptor = (BlockLogicDescriptor)method.Invoke(null, new object[] { descriptor });
                 BlockLogicDescriptors[attribute.BlockId] = descriptor;
             }
         }
 
-        public static void Initialize(ItemLogicDescriptor descriptor)
+        public static ItemLogicDescriptor Initialize(ItemLogicDescriptor descriptor)
         {
             descriptor.ItemUsedOnBlock = OnItemUsedOnBlock;
+            return descriptor;
         }
 
         public static void OnItemUsedOnBlock(ItemDescriptor item, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates3D cursorPosition)
@@ -256,8 +261,13 @@ namespace Craft.Net.Logic.Blocks
 
         internal static void DefaultBlockMinedHandler(BlockDescriptor block, World world, Coordinates3D destroyedBlock, ItemDescriptor? tool)
         {
-            world.SetBlockId(destroyedBlock, 0);
-            world.SetMetadata(destroyedBlock, 0);
+            if (GlobalDefaultBlockMinedHandler == null)
+            {
+                world.SetBlockId(destroyedBlock, 0);
+                world.SetMetadata(destroyedBlock, 0);
+            }
+            else
+                GlobalDefaultBlockMinedHandler(block, world, destroyedBlock, tool);
         }
 
         internal static bool DefaultCanHarvestHandler(ItemDescriptor item, BlockDescriptor block)

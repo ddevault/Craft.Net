@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entity.cs" />
+    <Compile Include="EntityEventArgs.cs" />
     <Compile Include="ItemEntity.cs" />
     <Compile Include="LivingEntity.cs" />
     <Compile Include="ObjectEntity.cs" />
@@ -64,6 +65,10 @@
     <ProjectReference Include="..\Craft.Net.Logic\Craft.Net.Logic.csproj">
       <Project>{e001ada1-6bcb-420e-b187-07ff361d60b8}</Project>
       <Name>Craft.Net.Logic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Craft.Net.Physics\Craft.Net.Physics.csproj">
+      <Project>{c04c72ef-5fd5-42da-b1dc-f232d3e86636}</Project>
+      <Name>Craft.Net.Physics</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -10,16 +10,20 @@ namespace Craft.Net.Physics
 {
     public class PhysicsEngine
     {
+        public const int MillisecondsBetweenUpdates = 250;
+
         public PhysicsEngine(World world)
         {
             World = world;
             Entities = new List<IPhysicsEntity>();
             EntityLock = new object();
+            LastUpdate = DateTime.MinValue;
         }
 
         public World World { get; set; }
         public List<IPhysicsEntity> Entities { get; set; }
         private object EntityLock { get; set; }
+        private DateTime LastUpdate { get; set; }
 
         public void AddEntity(IPhysicsEntity entity)
         {
@@ -39,20 +43,24 @@ namespace Craft.Net.Physics
         private BoundingBox TempBoundingBox;
         public void Update()
         {
+            double multipler = (DateTime.Now - LastUpdate).TotalMilliseconds / 150;
+            if (LastUpdate == DateTime.MinValue)
+                multipler = 1;
             lock (EntityLock)
             {
                 foreach (var entity in Entities)
                 {
                     if (entity.BeginUpdate())
                     {
-                        entity.Velocity *= entity.Drag;
-                        entity.Velocity -= new Vector3(0, entity.AccelerationDueToGravity, 0);
+                        entity.Velocity *= entity.Drag * multipler;
+                        entity.Velocity -= new Vector3(0, entity.AccelerationDueToGravity * multipler, 0);
                         if (entity is IAABBEntity)
                             CheckWithTerrain((IAABBEntity)entity, World);
                         entity.EndUpdate(entity.Position + entity.Velocity);
                     }
                 }
             }
+            LastUpdate = DateTime.Now;
         }
 
         private void CheckWithTerrain(IAABBEntity entity, World world)
@@ -69,9 +77,6 @@ namespace Craft.Net.Physics
                 }
                 if (AdjustVelocityY(entity, world, out collisionPoint, out collisionDirection))
                 {
-                    // Adjust horizontal velocity for friction
-                    // TODO: Consider doing this in the X/Z direction
-                    entity.Velocity *= new Vector3(0.2, 0, 0.2);
                     if (fireEvent)
                         entity.TerrainCollision(this, collisionPoint, collisionDirection);
                 }

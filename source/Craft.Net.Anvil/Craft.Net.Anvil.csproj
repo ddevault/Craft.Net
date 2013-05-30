@@ -75,6 +75,7 @@
     <Compile Include="Section.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SpawnEntityEventArgs.cs" />
     <Compile Include="TileEntity.cs" />
     <Compile Include="UnrecognizedEntity.cs" />
     <Compile Include="World.cs">
