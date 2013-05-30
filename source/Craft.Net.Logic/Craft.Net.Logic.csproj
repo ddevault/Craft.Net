@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Blocks\ActivatorRailBlock.cs" />
+    <Compile Include="Blocks\AirBlock.cs" />
     <Compile Include="Blocks\AnvilBlock.cs" />
     <Compile Include="Blocks\BeaconBlock.cs" />
     <Compile Include="Blocks\BedBlock.cs" />

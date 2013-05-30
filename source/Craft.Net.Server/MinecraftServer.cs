@@ -333,6 +333,16 @@ namespace Craft.Net.Server
                 client.LastKeepAliveSent = DateTime.Now;
                 // TODO: Confirm keep alive
             }
+            if (client.BlockBreakStartTime != null)
+            {
+                byte progress = (byte)((DateTime.Now - client.BlockBreakStartTime.Value).TotalMilliseconds / client.BlockBreakStageTime);
+                var knownClients = EntityManager.GetKnownClients(client.Entity);
+                foreach (var c in knownClients)
+                {
+                    c.SendPacket(new BlockBreakAnimationPacket(client.Entity.EntityId,
+                        client.ExpectedBlockToMine.X, client.ExpectedBlockToMine.Y, client.ExpectedBlockToMine.Z, progress));
+                }
+            }
             if (NextChunkUpdate < DateTime.Now) // Once per second
             {
                 // Update chunks

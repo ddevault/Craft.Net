@@ -492,6 +492,7 @@ namespace Craft.Net.Networking
         public enum PlayerAction
         {
             StartedDigging = 0,
+            CancelDigging = 1,
             FinishedDigging = 2,
             DropStack = 3,
             DropItem = 4,

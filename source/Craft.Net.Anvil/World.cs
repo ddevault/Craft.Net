@@ -128,16 +128,16 @@ namespace Craft.Net.Anvil
         public void SetBlockId(Coordinates3D coordinates, short value)
         {
             Chunk chunk;
-            coordinates = FindBlockPosition(coordinates, out chunk);
-            chunk.SetBlockId(coordinates, value);
+            var adjustedCoordinates = FindBlockPosition(coordinates, out chunk);
+            chunk.SetBlockId(adjustedCoordinates, value);
             OnBlockChange(coordinates);
         }
 
         public void SetMetadata(Coordinates3D coordinates, byte value)
         {
             Chunk chunk;
-            coordinates = FindBlockPosition(coordinates, out chunk);
-            chunk.SetMetadata(coordinates, value);
+            var adjustedCoordinates = FindBlockPosition(coordinates, out chunk);
+            chunk.SetMetadata(adjustedCoordinates, value);
             OnBlockChange(coordinates);
         }
 

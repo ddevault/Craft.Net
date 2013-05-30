@@ -141,6 +141,9 @@ Global
 		{078F8195-CB54-49FB-AC3B-0C00E2E1DA6C} = {848E76C6-A56D-4DC7-A627-9A6A92C07991}
 		{5134C61A-020A-4931-9844-4706AADA62AA} = {848E76C6-A56D-4DC7-A627-9A6A92C07991}
 	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = TestServer\TestServer.csproj
 	EndGlobalSection

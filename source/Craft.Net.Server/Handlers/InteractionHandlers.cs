@@ -32,16 +32,32 @@ namespace Craft.Net.Server.Handlers
                             Block.OnBlockMined(block, client.World, position, null); // TODO: Tool
                         else
                         {
-                            client.ExpectedMiningEnd = DateTime.Now.AddMilliseconds(
-                                Block.GetHarvestTime(new ItemDescriptor(client.Entity.SelectedItem.Id), block, out damage)
-                                - (client.Ping + 100));
+                            int time = Block.GetHarvestTime(new ItemDescriptor(client.Entity.SelectedItem.Id), block, out damage);
+                            client.ExpectedMiningEnd = DateTime.Now.AddMilliseconds(time - (client.Ping + 100));
                             client.ExpectedBlockToMine = position;
+                            var knownClients = server.EntityManager.GetKnownClients(client.Entity);
+                            client.BlockBreakStageTime = time / 8;
+                            client.BlockBreakStartTime = DateTime.Now;
+                            foreach (var c in knownClients)
+                                c.SendPacket(new BlockBreakAnimationPacket(client.Entity.EntityId, position.X, position.Y, position.Z, 0));
                         }
+                    }
+                    break;
+                case PlayerDiggingPacket.PlayerAction.CancelDigging:
+                    {
+                        client.BlockBreakStartTime = null;
+                        var knownClients = server.EntityManager.GetKnownClients(client.Entity);
+                        foreach (var c in knownClients)
+                            c.SendPacket(new BlockBreakAnimationPacket(client.Entity.EntityId, position.X, position.Y, position.Z, 0xFF)); // reset
                     }
                     break;
                 case PlayerDiggingPacket.PlayerAction.FinishedDigging:
                     if (client.Entity.Position.DistanceTo(position) <= MaxDigDistance)
                     {
+                        client.BlockBreakStartTime = null;
+                        var knownClients = server.EntityManager.GetKnownClients(client.Entity);
+                        foreach (var c in knownClients)
+                            c.SendPacket(new BlockBreakAnimationPacket(client.Entity.EntityId, position.X, position.Y, position.Z, 0xFF)); // reset
                         if (client.ExpectedMiningEnd > DateTime.Now || client.ExpectedBlockToMine != position)
                             return;
                         Block.GetHarvestTime(new ItemDescriptor(client.Entity.SelectedItem.Id), block, out damage);

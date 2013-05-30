@@ -42,6 +42,8 @@ namespace Craft.Net.Server
         public DateTime ExpectedMiningEnd { get; set; }
         public Coordinates3D ExpectedBlockToMine { get; set; }
         public int Reach { get { return GameMode == GameMode.Creative ? 6 : 5; } }
+        public int BlockBreakStageTime { get; set; }
+        public DateTime? BlockBreakStartTime { get; set; }
 
         public World World
         {
