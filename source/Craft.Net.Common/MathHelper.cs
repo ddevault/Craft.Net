@@ -84,6 +84,13 @@ namespace Craft.Net.Common
             }
         }
 
+        public static Vector3 GetVectorTowards(Vector3 a, Vector3 b)
+        {
+            double angle = Math.Asin((a.X - b.X) / Math.Sqrt(Math.Pow(a.X - b.X, 2) + Math.Pow(a.Z - b.Z, 2)));
+            if (a.Z > b.Z) angle += Math.PI;
+            return RotateY(Vector3.Forwards, angle);
+        }
+
         public static Vector3 RotateX(Vector3 vector, double rotation) // TODO: Matrix
         {
             rotation = -rotation; // the algorithms I found were left-handed

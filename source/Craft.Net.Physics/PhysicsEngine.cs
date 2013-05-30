@@ -77,6 +77,7 @@ namespace Craft.Net.Physics
                 }
                 if (AdjustVelocityY(entity, world, out collisionPoint, out collisionDirection))
                 {
+                    entity.Velocity *= new Vector3(0.2, 1, 0.2); // TODO: More sophisticated friction
                     if (fireEvent)
                         entity.TerrainCollision(this, collisionPoint, collisionDirection);
                 }

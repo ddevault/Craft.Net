@@ -88,10 +88,27 @@ namespace Craft.Net.Entities
 
         public override void Update(Entity[] nearbyEntities)
         {
-            var player = nearbyEntities.FirstOrDefault(e => e is PlayerEntity && (e as PlayerEntity).Health != 0
-                && e.Position.DistanceTo(Position) <= 1.5);
-            if (player != null)
-                (player as PlayerEntity).OnPickUpItem(this);
+            if ((DateTime.Now - SpawnTime).TotalSeconds > 1)
+            {
+                // TODO: Combine queries
+                var player = nearbyEntities.FirstOrDefault(e => e is PlayerEntity && (e as PlayerEntity).Health != 0
+                    && e.Position.DistanceTo(Position) <= PickupRange);
+                if (player != null)
+                    (player as PlayerEntity).OnPickUpItem(this);
+                var item = nearbyEntities.FirstOrDefault(e => e is ItemEntity && (DateTime.Now - (e as ItemEntity).SpawnTime).TotalSeconds > 1
+                    && (e as ItemEntity).Item.Id == Item.Id && (e as ItemEntity).Item.Metadata == Item.Metadata
+                    && (e as ItemEntity).Item.Nbt == Item.Nbt
+                    && e.Position.DistanceTo(Position) < PickupRange);
+                if (item != null)
+                {
+                    // Merge
+                    item.OnDespawn();
+                    var newItem = Item;
+                    newItem.Count += (item as ItemEntity).Item.Count;
+                    Item = newItem;
+                    OnPropertyChanged("Metadata");
+                }
+            }
         }
     }
 }

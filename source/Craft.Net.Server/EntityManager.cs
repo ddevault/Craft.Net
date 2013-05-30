@@ -1,6 +1,7 @@
 ﻿using Craft.Net.Anvil;
 using Craft.Net.Common;
 using Craft.Net.Entities;
+using Craft.Net.Networking;
 using Craft.Net.Physics;
 using System;
 using System.Collections.Concurrent;
@@ -86,7 +87,10 @@ namespace Craft.Net.Server
             lock (Entities)
             {
                 foreach (var entity in Entities)
-                    entity.Update(GetEntitiesInRange(entity, 2));
+                {
+                    if (!MarkedForDespawn.Contains(entity.EntityId))
+                        entity.Update(GetEntitiesInRange(entity, 2));
+                }
                 while (MarkedForDespawn.Count != 0)
                 {
                     int id;
@@ -164,6 +168,11 @@ namespace Craft.Net.Server
                         client.UpdateEntity(entity);
                     }
                 }
+            }
+            if (e.PropertyName == "Metadata" && entity.SendMetadataToClients)
+            {
+                foreach (var client in Server.Clients.Where(c => c.KnownEntities.Contains(entity.EntityId)))
+                    client.SendPacket(new EntityMetadataPacket(entity.EntityId, entity.Metadata));
             }
         }
 
