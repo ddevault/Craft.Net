@@ -291,6 +291,7 @@ namespace Craft.Net.Server
                                     if (client.IsLoggedIn)
                                         EntityManager.Despawn(client.Entity);
                                     Clients.RemoveAt(i--);
+                                    client.Dispose();
                                     break;
                                 }
                                 HandlePacket(client, packet);
@@ -300,6 +301,7 @@ namespace Craft.Net.Server
                                 if (client.IsLoggedIn)
                                     EntityManager.Despawn(client.Entity);
                                 Clients.RemoveAt(i--);
+                                client.Dispose();
                                 break;
                             }
                             catch (InvalidOperationException e)
@@ -309,6 +311,7 @@ namespace Craft.Net.Server
                                 if (client.IsLoggedIn)
                                     EntityManager.Despawn(client.Entity);
                                 Clients.RemoveAt(i--);
+                                client.Dispose();
                                 break;
                             }
                             catch (Exception e)
@@ -318,6 +321,7 @@ namespace Craft.Net.Server
                                 if (client.IsLoggedIn)
                                     EntityManager.Despawn(client.Entity);
                                 Clients.RemoveAt(i--);
+                                client.Dispose();
                                 break;
                             }
                         }

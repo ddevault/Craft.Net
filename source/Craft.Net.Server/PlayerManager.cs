@@ -3,6 +3,7 @@ using Craft.Net.Logic.Windows;
 using Craft.Net.Networking;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
@@ -16,6 +17,7 @@ namespace Craft.Net.Server
             Server = server;
             client.Entity.PickUpItem += Entity_PickUpItem;
             client.Entity.Inventory.WindowChange += Inventory_WindowChange;
+            client.PropertyChanged += client_PropertyChanged;
         }
 
         public MinecraftServer Server { get; set; }
@@ -39,10 +41,21 @@ namespace Craft.Net.Server
             Client.SendPacket(new SetSlotPacket(0, (short)e.SlotIndex, e.Value));
         }
 
+        void client_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "GameMode":
+                    Client.SendPacket(new ChangeGameStatePacket(Client.GameMode));
+                    break;
+            }
+        }
+
         public void Dispose()
         {
             Client.Entity.PickUpItem -= Entity_PickUpItem;
             Client.Entity.Inventory.WindowChange -= Inventory_WindowChange;
+            Client.PropertyChanged -= client_PropertyChanged;
         }
     }
 }

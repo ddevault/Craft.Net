@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Craft.Net.Server
 {
-    public class RemoteClient : INotifyPropertyChanged
+    public class RemoteClient : INotifyPropertyChanged, IDisposable
     {
         public RemoteClient(TcpClient client)
         {
@@ -225,6 +225,12 @@ namespace Craft.Net.Server
         protected internal virtual void OnPropertyChanged(string property)
         {
             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(property));
+        }
+
+        public void Dispose()
+        {
+            if (PlayerManager != null)
+                PlayerManager.Dispose();
         }
     }
 }
