@@ -14,6 +14,7 @@ namespace Craft.Net.Anvil
         public string BaseDirectory { get; internal set; }
         public Dictionary<Coordinates2D, Region> Regions { get; set; }
         public IWorldGenerator WorldGenerator { get; set; }
+        public event EventHandler<BlockChangeEventArgs> BlockChange;
 
         public World(string name)
         {
@@ -129,6 +130,7 @@ namespace Craft.Net.Anvil
             Chunk chunk;
             coordinates = FindBlockPosition(coordinates, out chunk);
             chunk.SetBlockId(coordinates, value);
+            OnBlockChange(coordinates);
         }
 
         public void SetMetadata(Coordinates3D coordinates, byte value)
@@ -136,6 +138,7 @@ namespace Craft.Net.Anvil
             Chunk chunk;
             coordinates = FindBlockPosition(coordinates, out chunk);
             chunk.SetMetadata(coordinates, value);
+            OnBlockChange(coordinates);
         }
 
         public void SetSkyLight(Coordinates3D coordinates, byte value)
@@ -217,6 +220,11 @@ namespace Craft.Net.Anvil
         {
             foreach (var region in Regions)
                 region.Value.Dispose();
+        }
+
+        protected internal virtual void OnBlockChange(Coordinates3D coordinates)
+        {
+            if (BlockChange != null) BlockChange(this, new BlockChangeEventArgs(coordinates));
         }
     }
 }

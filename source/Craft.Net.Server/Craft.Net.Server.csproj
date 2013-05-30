@@ -49,6 +49,8 @@
     <Compile Include="Events\ChatMessageEventArgs.cs" />
     <Compile Include="Events\PlayerLogInEventArgs.cs" />
     <Compile Include="Events\TabCompleteEventArgs.cs" />
+    <Compile Include="Handlers\InteractionHandlers.cs" />
+    <Compile Include="Handlers\InventoryHandler.cs" />
     <Compile Include="Handlers\LoginHandlers.cs" />
     <Compile Include="Handlers\PacketHandlers.cs" />
     <Compile Include="Handlers\PlayerMovementHandlers.cs" />

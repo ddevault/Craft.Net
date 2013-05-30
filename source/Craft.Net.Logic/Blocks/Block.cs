@@ -65,8 +65,8 @@ namespace Craft.Net.Logic.Blocks
 
     public static class Block
     {
-        public delegate bool BlockRightClickedDelegate(BlockDescriptor block, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates2D cursorPosition);
-        public delegate void BlockPlacedDelegate(BlockDescriptor block, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates2D cursorPosition);
+        public delegate bool BlockRightClickedDelegate(BlockDescriptor block, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates3D cursorPosition);
+        public delegate void BlockPlacedDelegate(BlockDescriptor block, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates3D cursorPosition);
         public delegate void BlockMinedDelegate(BlockDescriptor block, World world, Coordinates3D destroyedBlock, ItemDescriptor? tool);
         public delegate bool CanHarvestDelegate(ItemDescriptor item, BlockDescriptor block);
 
@@ -108,7 +108,7 @@ namespace Craft.Net.Logic.Blocks
             descriptor.ItemUsedOnBlock = OnItemUsedOnBlock;
         }
 
-        public static void OnItemUsedOnBlock(ItemDescriptor item, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates2D cursorPosition)
+        public static void OnItemUsedOnBlock(ItemDescriptor item, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates3D cursorPosition)
         {
             var clicked = world.GetBlock(clickedBlock);
             if (OnBlockRightClicked(clicked, world, clickedBlock, clickedSide, cursorPosition))
@@ -118,18 +118,25 @@ namespace Craft.Net.Logic.Blocks
             }
         }
 
-        public static bool OnBlockRightClicked(BlockDescriptor block, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates2D cursorPosition)
+        public static bool OnBlockRightClicked(BlockDescriptor block, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates3D cursorPosition)
         {
             if (!BlockLogicDescriptors.ContainsKey(block.Id))
                 throw new KeyNotFoundException("The given block does not exist.");
             return BlockLogicDescriptors[block.Id].BlockRightClicked(block, world, clickedBlock, clickedSide, cursorPosition);
         }
 
-        public static void OnBlockPlaced(BlockDescriptor block, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates2D cursorPosition)
+        public static void OnBlockPlaced(BlockDescriptor block, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates3D cursorPosition)
         {
             if (!BlockLogicDescriptors.ContainsKey(block.Id))
                 throw new KeyNotFoundException("The given block does not exist.");
             BlockLogicDescriptors[block.Id].BlockPlaced(block, world, clickedBlock, clickedSide, cursorPosition);
+        }
+
+        public static void OnBlockMined(BlockDescriptor block, World world, Coordinates3D destroyedBlock, ItemDescriptor? tool)
+        {
+            if (!BlockLogicDescriptors.ContainsKey(block.Id))
+                throw new KeyNotFoundException("The given block does not exist.");
+            BlockLogicDescriptors[block.Id].BlockMined(block, world, destroyedBlock, tool);
         }
 
         public static bool CanHarvest(ItemDescriptor item, BlockDescriptor block)
@@ -209,7 +216,7 @@ namespace Craft.Net.Logic.Blocks
             return (int)(time * 1000);
         }
 
-        private static BlockLogicDescriptor GetLogicDescriptor(BlockDescriptor block)
+        public static BlockLogicDescriptor GetLogicDescriptor(BlockDescriptor block)
         {
             if (!BlockLogicDescriptors.ContainsKey(block.Id))
                 throw new KeyNotFoundException("The given block does not exist.");
@@ -218,12 +225,12 @@ namespace Craft.Net.Logic.Blocks
 
         #region Default Handlers
 
-        internal static bool DefaultBlockRightClickedHandler(BlockDescriptor block, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates2D cursorPosition)
+        internal static bool DefaultBlockRightClickedHandler(BlockDescriptor block, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates3D cursorPosition)
         {
             return true;
         }
 
-        internal static void DefaultBlockPlacedHandler(BlockDescriptor block, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates2D cursorPosition)
+        internal static void DefaultBlockPlacedHandler(BlockDescriptor block, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates3D cursorPosition)
         {
             if (world.GetBlockId(clickedBlock + clickedSide) == 0) // TODO: There are more situations than just air when a block can be overwritten
             {

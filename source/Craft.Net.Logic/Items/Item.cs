@@ -49,7 +49,7 @@ namespace Craft.Net.Logic.Items
     {
         public delegate void ItemInitializerDelegate(ItemLogicDescriptor descriptor);
         public delegate void ItemUsedDelegate(ItemDescriptor item); // TODO: Entities
-        public delegate void ItemUsedOnBlockDelegate(ItemDescriptor item, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates2D cursorPosition);
+        public delegate void ItemUsedOnBlockDelegate(ItemDescriptor item, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates3D cursorPosition);
         public delegate bool IsEfficientDelegate(ItemDescriptor item, BlockDescriptor block);
 
         private static Dictionary<short, ItemLogicDescriptor> ItemLogicDescriptors { get; set; }
@@ -91,7 +91,7 @@ namespace Craft.Net.Logic.Items
             GetLogicDescriptor(item).ItemUsed(item);
         }
 
-        public static void OnItemUsedOnBlock(ItemDescriptor item, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates2D cursorPosition)
+        public static void OnItemUsedOnBlock(ItemDescriptor item, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates3D cursorPosition)
         {
             GetLogicDescriptor(item).ItemUsedOnBlock(item, world, clickedBlock, clickedSide, cursorPosition);
         }
@@ -114,7 +114,7 @@ namespace Craft.Net.Logic.Items
         {
         }
 
-        internal static void DefaultItemUsedOnBlockHandler(ItemDescriptor item, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates2D cursorPosition)
+        internal static void DefaultItemUsedOnBlockHandler(ItemDescriptor item, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates3D cursorPosition)
         {
         }
 

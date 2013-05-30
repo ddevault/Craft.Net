@@ -19,7 +19,7 @@ namespace Craft.Net.Logic.Items
             descriptor.ItemUsedOnBlock = OnItemUsedOnBlock;
         }
 
-        public static void OnItemUsedOnBlock(ItemDescriptor item, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates2D cursorPosition)
+        public static void OnItemUsedOnBlock(ItemDescriptor item, World world, Coordinates3D clickedBlock, Coordinates3D clickedSide, Coordinates3D cursorPosition)
         {
             if (world.GetBlockId(clickedBlock + clickedSide) == 0)
                 world.SetBlockId(clickedBlock + clickedSide, CakeBlock.BlockId);

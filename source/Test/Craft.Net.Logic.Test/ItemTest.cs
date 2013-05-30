@@ -21,7 +21,7 @@ namespace Craft.Net.Logic.Test
             {
                 level.AddWorld("overworld");
                 Item.OnItemUsedOnBlock(new ItemDescriptor(CakeItem.ItemId), level.DefaultWorld, new Coordinates3D(0, 3, 0),
-                    Coordinates3D.Up, Coordinates2D.Zero);
+                    Coordinates3D.Up, Coordinates3D.Zero);
                 Assert.AreEqual(CakeBlock.BlockId, level.DefaultWorld.GetBlockId(new Coordinates3D(0, 4, 0)));
             }
         }

@@ -127,6 +127,11 @@ namespace Craft.Net.Anvil
             Z = z;
         }
 
+        public static Coordinates3D operator -(Coordinates3D a)
+        {
+            return new Coordinates3D(-a.X, -a.Y, -a.Z);
+        }
+
         public static Coordinates3D operator +(Coordinates3D a, Coordinates3D b)
         {
             return new Coordinates3D(a.X + b.X, a.Y + b.Y, a.Z + b.Z);
@@ -200,6 +205,18 @@ namespace Craft.Net.Anvil
         public static implicit operator Vector3(Coordinates3D a)
         {
             return new Vector3(a.X, a.Y, a.Z);
+        }
+
+        public double DistanceTo(Coordinates3D other)
+        {
+            return Math.Sqrt(Square((double)other.X - (double)X) +
+                             Square((double)other.Y - (double)Y) +
+                             Square((double)other.Z - (double)Z));
+        }
+
+        private double Square(double num)
+        {
+            return num * num;
         }
 
         public override string ToString()

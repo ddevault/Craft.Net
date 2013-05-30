@@ -24,6 +24,14 @@ namespace Craft.Net.Server.Handlers
             server.RegisterPacketHandler(EntityActionPacket.PacketId, PlayerMovementHandlers.EntityAction);
             server.RegisterPacketHandler(PlayerAbilitiesPacket.PacketId, PlayerMovementHandlers.PlayerAbilities);
 
+            server.RegisterPacketHandler(CreativeInventoryActionPacket.PacketId, InventoryHandlers.CreativeInventoryAction);
+            server.RegisterPacketHandler(ClickWindowPacket.PacketId, InventoryHandlers.ClickWindow);
+            server.RegisterPacketHandler(CloseWindowPacket.PacketId, InventoryHandlers.CloseWindow);
+            server.RegisterPacketHandler(HeldItemChangePacket.PacketId, InventoryHandlers.HeldItemChange);
+
+            server.RegisterPacketHandler(PlayerDiggingPacket.PacketId, InteractionHandlers.PlayerDigging);
+            server.RegisterPacketHandler(RightClickPacket.PacketId, InteractionHandlers.RightClick);
+
             server.RegisterPacketHandler(ServerListPingPacket.PacketId, ServerListPing);
             server.RegisterPacketHandler(ChatMessagePacket.PacketId, ChatMessage);
             server.RegisterPacketHandler(KeepAlivePacket.PacketId, KeepAlive);

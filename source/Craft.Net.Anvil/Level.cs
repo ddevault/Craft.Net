@@ -24,7 +24,7 @@ namespace Craft.Net.Anvil
         [NbtIgnore]
         private string BaseDirectory { get; set; }
         [NbtIgnore]
-        private List<World> Worlds { get; set; }
+        public List<World> Worlds { get; set; }
         [NbtIgnore]
         public World DefaultWorld
         {

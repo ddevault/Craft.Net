@@ -80,6 +80,14 @@ namespace Craft.Net.Entities
             }
         }
 
+        public virtual bool IncludeMetadataOnClient
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public event EventHandler Despawn;
 
         protected internal virtual void OnDespawn()

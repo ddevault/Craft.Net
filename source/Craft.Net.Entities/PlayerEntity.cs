@@ -1,4 +1,5 @@
 ﻿using Craft.Net.Common;
+using Craft.Net.Logic.Windows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,14 +9,12 @@ namespace Craft.Net.Entities
 {
     public class PlayerEntity : LivingEntity
     {
-        public PlayerEntity() : base()
-        {
-        }
-
         public PlayerEntity(string username) : base()
         {
             Username = username;
             Food = 20;
+            Inventory = new InventoryWindow();
+            Abilities = new PlayerAbilities(this);
         }
 
         public const double Width = 0.6;
@@ -33,7 +32,29 @@ namespace Craft.Net.Entities
         }
 
         public string Username { get; set; }
+        public bool IsSprinting { get; set; }
+        public bool IsCrouching { get; set; }
         public double PositiveDeltaY { get; set; }
+        public PlayerAbilities Abilities { get; set; }
+        public InventoryWindow Inventory { get; set; }
+
+        protected short _SelectedSlot;
+        public short SelectedSlot
+        {
+            get { return _SelectedSlot; }
+            set
+            {
+                _SelectedSlot = value;
+                OnPropertyChanged("SelectedSlot");
+            }
+        }
+
+        public ItemStack SelectedItem
+        {
+            get { return Inventory[SelectedSlot]; }
+        }
+
+        public ItemStack ItemInMouse { get; set; }
 
         protected Vector3 _SpawnPoint;
         public Vector3 SpawnPoint

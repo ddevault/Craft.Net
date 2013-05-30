@@ -11,6 +11,7 @@ using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
+using Craft.Net.Logic;
 
 namespace Craft.Net.Server
 {
@@ -84,6 +85,12 @@ namespace Craft.Net.Server
             if (Level == null)
                 throw new InvalidOperationException("Unable to start server without a level");
 
+            foreach (var world in Level.Worlds)
+            {
+                world.BlockChange -= WorldBlockChange;
+                world.BlockChange += WorldBlockChange;
+            }
+
             CryptoServiceProvider = new RSACryptoServiceProvider(1024);
             ServerKey = CryptoServiceProvider.ExportParameters(true);
 
@@ -117,6 +124,11 @@ namespace Craft.Net.Server
         {
             foreach (var client in Clients.Where(c => c.IsLoggedIn))
                 client.SendChat(text);
+        }
+
+        public RemoteClient[] GetClientsInWorld(World world)
+        {
+            return Clients.Where(c => c.IsLoggedIn == true && c.World == world).ToArray();
         }
 
         #endregion
@@ -173,8 +185,7 @@ namespace Craft.Net.Server
             client.SendPacket(new SpawnPositionPacket((int)client.Entity.SpawnPoint.X, (int)client.Entity.SpawnPoint.Y, (int)client.Entity.SpawnPoint.Z));
             client.SendPacket(new TimeUpdatePacket(Level.Time, Level.Time));
             UpdatePlayerList();
-            // TODO: Inventory
-            //client.SendPacket(new SetWindowItemsPacket(0, client.Entity.Inventory.GetSlots()));
+            client.SendPacket(new SetWindowItemsPacket(0, client.Entity.Inventory.GetSlots()));
 
             // Send initial chunks
             client.UpdateChunks(true);
@@ -231,6 +242,8 @@ namespace Craft.Net.Server
                         }
                         if (disconnect)
                         {
+                            if (client.IsLoggedIn)
+                                EntityManager.Despawn(client.Entity);
                             Clients.RemoveAt(i--);
                             continue;
                         }
@@ -243,6 +256,8 @@ namespace Craft.Net.Server
                                 var packet = PacketReader.ReadPacket(client.NetworkStream);
                                 if (packet is DisconnectPacket)
                                 {
+                                    if (client.IsLoggedIn)
+                                        EntityManager.Despawn(client.Entity);
                                     Clients.RemoveAt(i--);
                                     break;
                                 }
@@ -250,6 +265,8 @@ namespace Craft.Net.Server
                             }
                             catch (SocketException e)
                             {
+                                if (client.IsLoggedIn)
+                                    EntityManager.Despawn(client.Entity);
                                 Clients.RemoveAt(i--);
                                 break;
                             }
@@ -257,6 +274,8 @@ namespace Craft.Net.Server
                             {
                                 new DisconnectPacket(e.Message).WritePacket(client.NetworkStream);
                                 client.NetworkStream.Flush();
+                                if (client.IsLoggedIn)
+                                    EntityManager.Despawn(client.Entity);
                                 Clients.RemoveAt(i--);
                                 break;
                             }
@@ -264,6 +283,8 @@ namespace Craft.Net.Server
                             {
                                 new DisconnectPacket(e.Message).WritePacket(client.NetworkStream);
                                 client.NetworkStream.Flush();
+                                if (client.IsLoggedIn)
+                                    EntityManager.Despawn(client.Entity);
                                 Clients.RemoveAt(i--);
                                 break;
                             }
@@ -319,6 +340,26 @@ namespace Craft.Net.Server
                 {
                     client.Settings.ViewDistance++;
                     client.ForceUpdateChunksAsync();
+                }
+            }
+        }
+
+        #endregion
+
+        #region Event handlers
+
+        private void WorldBlockChange(object sender, BlockChangeEventArgs e)
+        {
+            var world = sender as World;
+            var chunk = world.FindChunk(e.Coordinates);
+            var chunkCoordinates = new Coordinates2D(chunk.X, chunk.Z);
+            var block = world.GetBlock(e.Coordinates);
+            foreach (var client in GetClientsInWorld(world))
+            {
+                if (client.LoadedChunks.Contains(chunkCoordinates))
+                {
+                    client.SendPacket(new BlockChangePacket(e.Coordinates.X, (byte)e.Coordinates.Y, e.Coordinates.Z,
+                        block.Id, block.Metadata));
                 }
             }
         }

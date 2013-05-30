@@ -39,6 +39,17 @@ namespace Craft.Net.Server
         public List<Coordinates2D> LoadedChunks { get; set; }
         public DateTime LastKeepAlive { get; set; }
         public DateTime LastKeepAliveSent { get; set; }
+        public DateTime ExpectedMiningEnd { get; set; }
+        public Coordinates3D ExpectedBlockToMine { get; set; }
+        public int Reach { get { return GameMode == GameMode.Creative ? 6 : 5; } }
+
+        public World World
+        {
+            get
+            {
+                return Entity.World;
+            }
+        }
 
         protected GameMode _GameMode;
         public GameMode GameMode
