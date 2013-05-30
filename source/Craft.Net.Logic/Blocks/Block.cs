@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Reflection;
+using Craft.Net.Common;
 
 namespace Craft.Net.Logic.Blocks
 {
@@ -50,6 +51,7 @@ namespace Craft.Net.Logic.Blocks
 
             Hardness = 0;
             DisplayName = null;
+            BoundingBox = new BoundingBox(Vector3.Zero, Vector3.One);
         }
 
         public Type BlockType;
@@ -61,6 +63,7 @@ namespace Craft.Net.Logic.Blocks
 
         public double Hardness;
         public string DisplayName;
+        public BoundingBox? BoundingBox;
     }
 
     public static class Block
@@ -144,6 +147,11 @@ namespace Craft.Net.Logic.Blocks
             return GetLogicDescriptor(block).CanHarvest(item, block);
         }
 
+        public static BoundingBox? GetBoundingBox(short blockId)
+        {
+            return GetLogicDescriptor(blockId).BoundingBox;
+        }
+
         /// <summary>
         /// Gets the amount of time (in milliseconds) it takes to harvest a block with the specified tool.
         /// </summary>
@@ -221,6 +229,13 @@ namespace Craft.Net.Logic.Blocks
             if (!BlockLogicDescriptors.ContainsKey(block.Id))
                 throw new KeyNotFoundException("The given block does not exist.");
             return BlockLogicDescriptors[block.Id];
+        }
+
+        public static BlockLogicDescriptor GetLogicDescriptor(short block)
+        {
+            if (!BlockLogicDescriptors.ContainsKey(block))
+                throw new KeyNotFoundException("The given block does not exist.");
+            return BlockLogicDescriptors[block];
         }
 
         #region Default Handlers

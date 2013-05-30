@@ -3,22 +3,27 @@
 Craft.Net is a collection of several Minecraft-related .NET libraries. You can pick and choose different
 libraries from Craft.Net to accomplish different tasks. The following libraries are included:
 
+* *Craft.Net.AI*: Artificial intelligence for driving mob behavior (planned)
 * **Craft.Net.Anvil**: Support for editing Minecraft Anvil worlds
   * Works with in-memory worlds or on-disk worlds
   * Can save worlds from Craft.Net.Client to disk
 * **Craft.Net.Client**: A Minecraft multiplayer client library
   * Multiplayer client for connecting to servers
   * Utilities like LastLogin decryption, vanilla server list parsing/modification, etc
-* **Craft.Net.Data**: Minecraft data types
+* **Craft.Net.Common**: Minecraft data types and common utilities
   * Defines values for biomes, difficulty, game modes, etc
   * Includes structs for working with item stacks, metadata dictionaries, etc
   * Cryptography support for interop with Minecraft's Java-based crypto
+* **Craft.Net.Entities**: Structure and behavior of Minecraft entities
+  * Includes players, items, blocks
 * **Craft.Net.Logic**: Handles block and item interaction logic
   * Includes classes for all Minecraft blocks and items
   * Defines logic such as wheat growth, torch placement, etc
 * **Craft.Net.Networking**: Generic Minecraft networking support
   * Includes all 1.5.2 packet definitions
   * Includes AES/CFB stream crypto utilities
+* **Craft.Net.Physics**: Simple physics engine that aims to recreate Minecraft phsyics
+  * Support for AABB entities interacting with each other and Anvil worlds
 * **Craft.Net.Server**: A Minecraft multiplayer server library
   * Includes entity management, physics
   * Many block interactions (such as growth, sand logic, etc) implemented
@@ -26,8 +31,6 @@ libraries from Craft.Net to accomplish different tasks. The following libraries 
   * PvP combat
 * **Craft.Net.TerrainGeneration**: Various terrain generators
   * Vanilla flatland support
-  * *Planned*: Implementation of vanilla default generation
-  * *Planned*: Custom terrain generator
 
 More libraries are planned for the future, including Craft.Net.AI, Craft.Net.Logic, and more. All libraries in
 Craft.Net support Windows, Linux, and Mac. The long-term goal is to recreate the entire Minecraft ecosystem in

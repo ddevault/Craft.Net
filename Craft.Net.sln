@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Server", "source\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestServer", "source\Test\TestServer\TestServer.csproj", "{5134C61A-020A-4931-9844-4706AADA62AA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Physics", "source\Craft.Net.Physics\Craft.Net.Physics.csproj", "{C04C72EF-5FD5-42DA-B1DC-F232D3E86636}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -131,6 +133,14 @@ Global
 		{5134C61A-020A-4931-9844-4706AADA62AA}.MONO|Any CPU.Build.0 = Release|Any CPU
 		{5134C61A-020A-4931-9844-4706AADA62AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5134C61A-020A-4931-9844-4706AADA62AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C04C72EF-5FD5-42DA-B1DC-F232D3E86636}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C04C72EF-5FD5-42DA-B1DC-F232D3E86636}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C04C72EF-5FD5-42DA-B1DC-F232D3E86636}.DEVELOPMENT|Any CPU.ActiveCfg = Debug|Any CPU
+		{C04C72EF-5FD5-42DA-B1DC-F232D3E86636}.DEVELOPMENT|Any CPU.Build.0 = Debug|Any CPU
+		{C04C72EF-5FD5-42DA-B1DC-F232D3E86636}.MONO|Any CPU.ActiveCfg = Release|Any CPU
+		{C04C72EF-5FD5-42DA-B1DC-F232D3E86636}.MONO|Any CPU.Build.0 = Release|Any CPU
+		{C04C72EF-5FD5-42DA-B1DC-F232D3E86636}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C04C72EF-5FD5-42DA-B1DC-F232D3E86636}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
