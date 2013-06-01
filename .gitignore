@@ -6,10 +6,7 @@ obj/
 *.pidb
 _ReSharper*/
 TestResults/
+test-results/
 *.mdf
-merged/
-Craft.Net.Server.dll
-Craft.Net.Server.pdb
 *.psess
 *.vsp
-externals/libnbt/
