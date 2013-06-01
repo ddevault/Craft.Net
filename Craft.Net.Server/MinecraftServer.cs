@@ -277,37 +277,49 @@ namespace Craft.Net.Server
 
         internal void LogInPlayer(MinecraftClient client)
         {
-            client.IsLoggedIn = true;
-            // Spawn player
-            client.Entity = DefaultLevel.LoadPlayer(client.Username);
-            client.Entity.Username = client.Username;
-            client.Entity.InventoryChanged += EntityInventoryChanged;
-            EntityManager.SpawnEntity(DefaultWorld, client.Entity);
-            client.SendPacket(new LoginRequestPacket(client.Entity.Id,
-                                              DefaultWorld.LevelType, client.Entity.GameMode,
-                                              client.Entity.Dimension, Settings.Difficulty,
-                                              Settings.MaxPlayers));
-            client.SendPacket(new SpawnPositionPacket((int)client.Entity.SpawnPoint.X, (int)client.Entity.SpawnPoint.Y, (int)client.Entity.SpawnPoint.Z));
-            client.SendPacket(new TimeUpdatePacket(DefaultLevel.Time, DefaultLevel.Time));
-            UpdatePlayerList(null);
-            client.SendPacket(new SetWindowItemsPacket(0, client.Entity.Inventory.GetSlots()));
 
-            // Send initial chunks
-            client.UpdateChunks(true);
-            client.SendPacket(new PlayerPositionAndLookPacket(client.Entity.Position.X, client.Entity.Position.Y + client.Entity.Size.Height,
-                client.Entity.Position.Z, client.Entity.Position.Y - client.Entity.Size.Height, client.Entity.Yaw, client.Entity.Pitch, true));
-            // TODO: Move 1.62 somewhere else
+            System.IO.StreamReader s = new System.IO.StreamReader("ban.txt");
+            if (!s.ReadToEnd().Contains(client.Username))
+            {
+                client.IsLoggedIn = true;
+                // Spawn player
+                client.Entity = DefaultLevel.LoadPlayer(client.Username);
+                client.Entity.Username = client.Username;
+                client.Entity.InventoryChanged += EntityInventoryChanged;
+                EntityManager.SpawnEntity(DefaultWorld, client.Entity);
+                client.SendPacket(new LoginRequestPacket(client.Entity.Id,
+                                                  DefaultWorld.LevelType, client.Entity.GameMode,
+                                                  client.Entity.Dimension, Settings.Difficulty,
+                                                  Settings.MaxPlayers));
+                client.SendPacket(new SpawnPositionPacket((int)client.Entity.SpawnPoint.X, (int)client.Entity.SpawnPoint.Y, (int)client.Entity.SpawnPoint.Z));
+                client.SendPacket(new TimeUpdatePacket(DefaultLevel.Time, DefaultLevel.Time));
+                UpdatePlayerList(null);
+                client.SendPacket(new SetWindowItemsPacket(0, client.Entity.Inventory.GetSlots()));
 
-            // Send entities
-            EntityManager.SendClientEntities(client);
+                // Send initial chunks
+                client.UpdateChunks(true);
+                client.SendPacket(new PlayerPositionAndLookPacket(client.Entity.Position.X, client.Entity.Position.Y + client.Entity.Size.Height,
+                    client.Entity.Position.Z, client.Entity.Position.Y - client.Entity.Size.Height, client.Entity.Yaw, client.Entity.Pitch, true));
+                // TODO: Move 1.62 somewhere else
 
-            client.SendPacket(new UpdateHealthPacket(client.Entity.Health, client.Entity.Food, client.Entity.FoodSaturation));
+                // Send entities
+                EntityManager.SendClientEntities(client);
 
-            var args = new PlayerLogInEventArgs(client);
-            OnPlayerLoggedIn(args);
-            LogProvider.Log(client.Username + " joined the game.");
-            if (!args.Handled)
-                SendChat(ChatColors.Yellow + client.Username + " joined the game.");
+                client.SendPacket(new UpdateHealthPacket(client.Entity.Health, client.Entity.Food, client.Entity.FoodSaturation));
+
+                var args = new PlayerLogInEventArgs(client);
+                OnPlayerLoggedIn(args);
+                LogProvider.Log(client.Username + " joined the game.");
+                if (!args.Handled)
+                    SendChat(ChatColors.Yellow + client.Username + " joined the game.");
+            }
+            else
+            {
+                LogProvider.Log(client.Username + " is banned and tried to join the game.");
+                SendChat(ChatColors.Yellow + client.Username + " is banned and tried to join the game.");
+            }
+            s.Close();
+
         }
 
         protected internal void UpdatePlayerList(object discarded)
@@ -343,7 +355,14 @@ namespace Craft.Net.Server
         {
             if (PlayerLoggedOut != null)
                 PlayerLoggedOut(this, e);
-            e.Client.World.Level.SavePlayer(e.Client.Entity);
+            try
+            {
+                e.Client.World.Level.SavePlayer(e.Client.Entity);
+            }
+            catch
+            {
+
+            }
             if (!e.Handled)
             {
                 LogProvider.Log(e.Client.Username + " left the game.", LogImportance.High);
