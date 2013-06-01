@@ -6,7 +6,10 @@ namespace Craft.Net.Data.Generation
 {
     /// <summary>
     /// Generates a world that mimics the Minecraft flatland generator
-    /// with structures turned off.
+    /// with structures turned on.
+    /// added a chance to generate villages.
+    /// villages are generated from a text file (village.txt),like this x,y,z,type:x,y,z,type:x,y,z,type etc..
+    /// test village is just two squares (one stone one wooden planks) on top of each other
     /// </summary>
     public class FlatlandGenerator : IWorldGenerator
     {
@@ -96,9 +99,53 @@ namespace Craft.Net.Data.Generation
                     y++;
                 }
             }
+            int r = new Random().Next(1, 5);
+            if (r < 2)
+            {
+                buildVillage(chunk);
+            }
             for (int i = 0; i < chunk.Biomes.Length; i++)
                 chunk.Biomes[i] = (byte)Biome;
             return chunk;
+        }
+
+        public void buildVillage(Chunk c)
+        {
+            int t = 0;
+            foreach (GeneratorLayer layer in Layers)
+            {
+                t += layer.Height;
+            }
+
+            System.IO.StreamReader s = new System.IO.StreamReader("village.txt");
+            String[] p = s.ReadToEnd().Split(":".ToCharArray());
+            s.Close();
+            foreach (string tr in p)
+            {
+                String[] plan = tr.Split(",".ToCharArray());
+                switch (plan[3])
+                {
+                    case "air":
+                        c.SetBlock(new Vector3(double.Parse(plan[0]),double.Parse(t.ToString()) + double.Parse(plan[1]),double.Parse(plan[2])), new AirBlock() );
+                        break;
+                    case "stone":
+                        c.SetBlock(new Vector3(double.Parse(plan[0]), double.Parse(t.ToString()) + double.Parse(plan[1]), double.Parse(plan[2])), new StoneBlock());
+                        break;
+                    case "wood":
+                        c.SetBlock(new Vector3(double.Parse(plan[0]), double.Parse(t.ToString()) + double.Parse(plan[1]), double.Parse(plan[2])), new WoodBlock());
+                        break;
+                    case "woodenplanks":
+                        c.SetBlock(new Vector3(double.Parse(plan[0]), double.Parse(t.ToString()) + double.Parse(plan[1]), double.Parse(plan[2])), new WoodenPlanksBlock());
+                        break;
+                    case "stonebrick":
+                        c.SetBlock(new Vector3(double.Parse(plan[0]), double.Parse(t.ToString()) + double.Parse(plan[1]), double.Parse(plan[2])), new StoneBrickBlock());
+                        break;
+                    case "glass":
+                        c.SetBlock(new Vector3(double.Parse(plan[0]), double.Parse(t.ToString()) + double.Parse(plan[1]), double.Parse(plan[2])), new GlassPaneBlock());
+                        break;
+                }
+            }
+
         }
 
         public string LevelType
