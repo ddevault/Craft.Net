@@ -130,7 +130,7 @@ namespace Craft.Net.Server.Handlers
                 use = Block.OnBlockRightClicked(block.Value, client.World, position, AdjustByDirection(packet.Direction), cursorPosition);
             if (!slot.Empty)
             {
-                var item = new ItemDescriptor(slot.Id);
+                var item = new ItemDescriptor(slot.Id, slot.Metadata);
                 if (use)
                 {
                     if (block != null)

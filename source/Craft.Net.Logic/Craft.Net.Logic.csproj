@@ -357,6 +357,7 @@
     <Compile Include="WorldExtensions.cs" />
     <Compile Include="Blocks\TallGrassBlock.cs" />
     <Compile Include="Blocks\GrassBlock.cs" />
+    <Compile Include="Blocks\WoolBlock.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\externals\fNbt\fNbt\fNbt.csproj">
