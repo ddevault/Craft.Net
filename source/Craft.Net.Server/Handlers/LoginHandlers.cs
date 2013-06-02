@@ -60,7 +60,6 @@ namespace Craft.Net.Server.Handlers
             if (packet.Status == ClientStatusPacket.ClientStatus.InitialSpawn)
             {
                 // Create a hash for session verification
-                SHA1 sha1 = SHA1.Create();
                 AsnKeyBuilder.AsnMessage encodedKey = AsnKeyBuilder.PublicKeyToX509(server.ServerKey);
                 byte[] shaData = Encoding.UTF8.GetBytes(client.AuthenticationHash)
                     .Concat(client.SharedKey)

@@ -30,6 +30,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'MONO_Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -102,8 +111,6 @@
     <Compile Include="Blocks\GlassPaneBlock.cs" />
     <Compile Include="Blocks\GlowstoneBlock.cs" />
     <Compile Include="Blocks\GoldOreBlock.cs" />
-    <Compile Include="Blocks\GrassBlock.cs" />
-    <Compile Include="Blocks\GrassBlockBlock.cs" />
     <Compile Include="Blocks\GravelBlock.cs" />
     <Compile Include="Blocks\HopperBlock.cs" />
     <Compile Include="Blocks\IceBlock.cs" />
@@ -348,6 +355,8 @@
     <Compile Include="Windows\WindowArea.cs" />
     <Compile Include="Windows\WindowChangeEventArgs.cs" />
     <Compile Include="WorldExtensions.cs" />
+    <Compile Include="Blocks\TallGrassBlock.cs" />
+    <Compile Include="Blocks\GrassBlock.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\externals\fNbt\fNbt\fNbt.csproj">

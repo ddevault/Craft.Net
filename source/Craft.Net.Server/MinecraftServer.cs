@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading;
 using Craft.Net.Logic;
 using Craft.Net.Physics;
+using Craft.Net.Logic.Blocks;
 
 namespace Craft.Net.Server
 {
@@ -296,7 +297,7 @@ namespace Craft.Net.Server
                                 }
                                 HandlePacket(client, packet);
                             }
-                            catch (SocketException e)
+                            catch (SocketException)
                             {
                                 if (client.IsLoggedIn)
                                     EntityManager.Despawn(client.Entity);
@@ -400,6 +401,7 @@ namespace Craft.Net.Server
             var chunk = world.FindChunk(e.Coordinates);
             var chunkCoordinates = new Coordinates2D(chunk.X, chunk.Z);
             var block = world.GetBlock(e.Coordinates);
+			Block.DoBlockUpdates(world, e.Coordinates);
             foreach (var client in GetClientsInWorld(world))
             {
                 if (client.LoadedChunks.Contains(chunkCoordinates))

@@ -97,8 +97,8 @@ namespace Craft.Net.Server.Handlers
         public static void PlayerAbilities(RemoteClient client, MinecraftServer server, IPacket _packet)
         {
             var packet = (PlayerAbilitiesPacket)_packet;
-            //if (client.Entity.GameMode == GameMode.Creative)
-            //    client.Entity.Abilities.IsFlying = (packet.Flags & 2) == 2; // TODO: Make this packet more friendly
+            if (client.GameMode == GameMode.Creative)
+                client.Entity.Abilities.IsFlying = (packet.Flags & 2) == 2; // TODO: Make this packet more friendly
         }
     }
 }

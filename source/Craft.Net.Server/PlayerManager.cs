@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using Craft.Net.Common;
 
 namespace Craft.Net.Server
 {
@@ -47,6 +48,16 @@ namespace Craft.Net.Server
             {
                 case "GameMode":
                     Client.SendPacket(new ChangeGameStatePacket(Client.GameMode));
+					if (Client.GameMode == GameMode.Creative)
+					{
+						Client.Entity.Abilities.InstantMine = true;
+						Client.Entity.Abilities.MayFly = true;
+					}
+					else
+					{
+						Client.Entity.Abilities.InstantMine = false;
+						Client.Entity.Abilities.MayFly = false;
+					}
                     break;
             }
         }

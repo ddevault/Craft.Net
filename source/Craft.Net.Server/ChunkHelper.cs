@@ -17,8 +17,6 @@ namespace Craft.Net.Server
 
         public static ChunkDataPacket CreatePacket(Chunk chunk)
         {
-            var packet = new ChunkDataPacket();
-
             var X = chunk.X;
             var Z = chunk.Z;
 

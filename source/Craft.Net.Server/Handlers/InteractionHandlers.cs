@@ -28,7 +28,7 @@ namespace Craft.Net.Server.Handlers
                 case PlayerDiggingPacket.PlayerAction.StartedDigging:
                     if (client.Entity.Position.DistanceTo(position) <= MaxDigDistance)
                     {
-                        if (client.Entity.Abilities.InstantMine || Block.GetLogicDescriptor(block).Hardness == 0)
+                        if (client.GameMode == GameMode.Creative || client.Entity.Abilities.InstantMine || Block.GetLogicDescriptor(block).Hardness == 0)
                             Block.OnBlockMined(block, client.World, position, null); // TODO: Tool
                         else
                         {

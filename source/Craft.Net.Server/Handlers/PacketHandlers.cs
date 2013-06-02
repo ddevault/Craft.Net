@@ -62,7 +62,6 @@ namespace Craft.Net.Server.Handlers
 
         public static void KeepAlive(RemoteClient client, MinecraftServer server, IPacket _packet)
         {
-            var packet = (KeepAlivePacket)_packet;
             // TODO: Confirm value validity
             client.LastKeepAlive = DateTime.Now;
             client.Ping = (short)(client.LastKeepAlive - client.LastKeepAliveSent).TotalMilliseconds;
