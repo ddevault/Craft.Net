@@ -29,7 +29,11 @@ namespace Craft.Net.Server.Handlers
                     if (client.Entity.Position.DistanceTo(position) <= MaxDigDistance)
                     {
                         if (client.GameMode == GameMode.Creative || client.Entity.Abilities.InstantMine || Block.GetLogicDescriptor(block).Hardness == 0)
-                            Block.OnBlockMined(block, client.World, position, null); // TODO: Tool
+						{
+                            //Block.OnBlockMined(block, client.World, position, null); // TODO: See if we really need to call this
+							client.World.SetBlockId(position, 0);
+							client.World.SetMetadata(position, 0);
+						}
                         else
                         {
                             int time = Block.GetHarvestTime(new ItemDescriptor(client.Entity.SelectedItem.Id), block, out damage);
