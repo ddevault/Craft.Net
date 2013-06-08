@@ -134,7 +134,17 @@ namespace Craft.Net.Server.Handlers
                 if (use)
                 {
                     if (block != null)
+					{
                         Item.OnItemUsedOnBlock(item, client.World, position, AdjustByDirection(packet.Direction), cursorPosition);
+						if (client.GameMode != GameMode.Creative)
+						{
+							slot.Count--; // TODO: This is probably a bad place to put this code
+							if (slot.Count == 0)
+        	                    client.Entity.Inventory[client.Entity.SelectedSlot] = ItemStack.EmptyStack;
+    	                    else
+	                            client.Entity.Inventory[client.Entity.SelectedSlot] = slot;
+						}
+					}
                     else
                         Item.OnItemUsed(item);
                 }
