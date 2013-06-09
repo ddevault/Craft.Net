@@ -1679,7 +1679,6 @@ namespace Craft.Net.Networking
         public BlockBreakAnimationPacket(int entityId, int x, int y,
             int z, byte destroyStage)
         {
-            // TODO: Use this packet when mining begins
             EntityId = entityId;
             X = x;
             Y = y;
@@ -2594,7 +2593,7 @@ namespace Craft.Net.Networking
         }
     }
 
-    public enum ChatMode // TODO: Move this?
+    public enum ChatMode
     {
         Hidden = 2,
         CommandsOnly = 1,

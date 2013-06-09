@@ -65,7 +65,6 @@ namespace Craft.Net.Common
             if (points == null)
                 throw new ArgumentNullException();
 
-            // TODO: Just check that Count > 0
             bool empty = true;
             Vector3 vector2 = new Vector3(float.MaxValue);
             Vector3 vector1 = new Vector3(float.MinValue);

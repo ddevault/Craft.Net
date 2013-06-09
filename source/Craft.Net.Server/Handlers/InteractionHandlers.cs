@@ -14,8 +14,6 @@ namespace Craft.Net.Server.Handlers
 {
     internal class InteractionHandlers
     {
-        public static double MaxDigDistance = 6; // TODO: Move somewhere else
-
         public static void PlayerDigging(RemoteClient client, MinecraftServer server, IPacket _packet)
         {
             var packet = (PlayerDiggingPacket)_packet;
@@ -26,7 +24,7 @@ namespace Craft.Net.Server.Handlers
             switch (packet.Action)
             {
                 case PlayerDiggingPacket.PlayerAction.StartedDigging:
-                    if (client.Entity.Position.DistanceTo(position) <= MaxDigDistance)
+                    if (client.Entity.Position.DistanceTo(position) <= client.MaxDigDistance)
                     {
                         if (client.GameMode == GameMode.Creative || client.Entity.Abilities.InstantMine || Block.GetLogicDescriptor(block).Hardness == 0)
 						{
@@ -56,7 +54,7 @@ namespace Craft.Net.Server.Handlers
                     }
                     break;
                 case PlayerDiggingPacket.PlayerAction.FinishedDigging:
-                    if (client.Entity.Position.DistanceTo(position) <= MaxDigDistance)
+                    if (client.Entity.Position.DistanceTo(position) <= client.MaxDigDistance)
                     {
                         client.BlockBreakStartTime = null;
                         var knownClients = server.EntityManager.GetKnownClients(client.Entity);

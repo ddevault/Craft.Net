@@ -90,7 +90,6 @@ namespace Craft.Net.Entities
         {
             if ((DateTime.Now - SpawnTime).TotalSeconds > 1)
             {
-                // TODO: Combine queries
                 var player = nearbyEntities.FirstOrDefault(e => e is PlayerEntity && (e as PlayerEntity).Health != 0
                     && e.Position.DistanceTo(Position) <= PickupRange);
                 if (player != null)

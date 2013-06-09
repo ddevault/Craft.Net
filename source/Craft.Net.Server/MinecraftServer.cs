@@ -158,9 +158,8 @@ namespace Craft.Net.Server
                 if (Listener == null)
                     return; // Server shutting down
                 var client = new RemoteClient(Listener.EndAcceptTcpClient(result));
-                client.NetworkStream = new MinecraftStream(new BufferedStream(client.NetworkClient.GetStream()));
-                // TODO: Ban players
-                Clients.Add(client);
+				client.NetworkStream = new MinecraftStream(new BufferedStream(client.NetworkClient.GetStream()));
+            	Clients.Add(client);
                 Listener.BeginAcceptTcpClient(AcceptClientAsync, null);
             }
         }
@@ -428,6 +427,12 @@ namespace Craft.Net.Server
         {
             if (ChatMessage != null) ChatMessage(this, e);
         }
+
+		public event EventHandler<ConnectionEstablishedEventArgs> ConnectionEstablished;
+		protected internal virtual void OnConnectionEstablished(ConnectionEstablishedEventArgs e)
+		{
+			if (ConnectionEstablished != null) ConnectionEstablished(this, e);
+		}
 
         #endregion
     }

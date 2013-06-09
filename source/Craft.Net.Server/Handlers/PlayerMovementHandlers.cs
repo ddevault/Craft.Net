@@ -70,24 +70,24 @@ namespace Craft.Net.Server.Handlers
         public static void EntityAction(RemoteClient client, MinecraftServer server, IPacket _packet)
         {
             var packet = (EntityActionPacket)_packet;
-            //switch (packet.Action)
-            //{
-            //    case EntityActionPacket.EntityAction.Crouch:
-            //        client.Entity.IsCrouching = true;
-            //        break;
-            //    case EntityActionPacket.EntityAction.Uncrouch:
-            //        client.Entity.IsCrouching = false;
-            //        break;
-            //    case EntityActionPacket.EntityAction.StartSprinting:
-            //        client.Entity.IsSprinting = true;
-            //        break;
-            //    case EntityActionPacket.EntityAction.StopSprinting:
-            //        client.Entity.IsSprinting = false;
-            //        break;
-            //    case EntityActionPacket.EntityAction.LeaveBed:
-            //        client.Entity.LeaveBed();
-            //        break;
-            //}
+            switch (packet.Action)
+            {
+                case EntityActionPacket.EntityAction.Crouch:
+                    client.Entity.IsCrouching = true;
+                    break;
+                case EntityActionPacket.EntityAction.Uncrouch:
+                    client.Entity.IsCrouching = false;
+                    break;
+                case EntityActionPacket.EntityAction.StartSprinting:
+                    client.Entity.IsSprinting = true;
+                    break;
+                case EntityActionPacket.EntityAction.StopSprinting:
+                    client.Entity.IsSprinting = false;
+                    break;
+//                case EntityActionPacket.EntityAction.LeaveBed:
+//                    client.Entity.LeaveBed();
+//                    break;
+            }
             if (packet.Action != EntityActionPacket.EntityAction.LeaveBed) // NOTE: Does this matter?
             {
                 // TODO ?

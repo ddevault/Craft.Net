@@ -134,7 +134,7 @@ namespace Craft.Net.Common
         /// </summary>
         public static unsafe CollisionPoint GetCollisionPoint(Vector3 velocity)
         {
-            // TODO: Does this really need to be so unsafe
+            // NOTE: Does this really need to be so unsafe?
             int index = 0;
             void* vPtr = &velocity;
             double* ptr = (double*)vPtr;

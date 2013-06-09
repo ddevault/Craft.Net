@@ -50,6 +50,15 @@ namespace Craft.Net.Server.Handlers
         public static void EncryptionKeyResponse(RemoteClient client, MinecraftServer server, IPacket _packet)
         {
             var packet = (EncryptionKeyResponsePacket)_packet;
+			var decryptedToken = server.CryptoServiceProvider.Decrypt(packet.VerificationToken, false);
+			for (int i = 0; i < decryptedToken.Length; i++)
+			{
+				if (decryptedToken[i] != client.VerificationToken[i])
+				{
+					client.Disconnect("Unable to authenticate.");
+					return;
+				}
+			}
             client.SharedKey = server.CryptoServiceProvider.Decrypt(packet.SharedSecret, false);
             client.SendPacket(new EncryptionKeyResponsePacket(new byte[0], new byte[0]));
         }
@@ -76,12 +85,17 @@ namespace Craft.Net.Server.Handlers
                     webReader.Close();
                     if (response != "YES")
                     {
-                        client.SendPacket(new DisconnectPacket("Failed to verify username!"));
+                        client.Disconnect("Failed to verify username!");
                         return;
                     }
                 }
 
-                server.LogInPlayer(client);
+				var eventArgs = new ConnectionEstablishedEventArgs(client);
+				server.OnConnectionEstablished(eventArgs);
+				if (eventArgs.PermitConnection)
+                	server.LogInPlayer(client);
+				else
+					client.Disconnect(eventArgs.DisconnectReason);
             }
             else if (packet.Status == ClientStatusPacket.ClientStatus.Respawn)
             {
@@ -123,9 +137,7 @@ namespace Craft.Net.Server.Handlers
             var verifyToken = new byte[4];
             var csp = new RNGCryptoServiceProvider();
             csp.GetBytes(verifyToken);
-            // verifyToken = server.CryptoServiceProvider.Encrypt(verifyToken, false);
-            // TODO: I think I'm encrypting that wrong
-            // TODO: Confirm verify token validity
+			client.VerificationToken = verifyToken;
 
             var encodedKey = AsnKeyBuilder.PublicKeyToX509(server.ServerKey);
             var request = new EncryptionKeyRequestPacket(client.AuthenticationHash,
