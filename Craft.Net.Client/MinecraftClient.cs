@@ -68,7 +68,7 @@ namespace Craft.Net.Client
             if (Client != null && Client.Connected)
                 throw new InvalidOperationException("Already connected to a server!");
             EndPoint = endPoint;
-            Client = new TcpClient();
+            Client = new TcpClient(EndPoint.AddressFamily);
             Client.Connect(EndPoint);
             NetworkStream = Client.GetStream();
             Stream = new MinecraftStream(new BufferedStream(NetworkStream));
