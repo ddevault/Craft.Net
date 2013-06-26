@@ -7,7 +7,7 @@ namespace Craft.Net
 {
     public static class PacketReader
     {
-        public const int ProtocolVersion = 62;
+        public const int ProtocolVersion = 72;
 
         #region Packet Types
         private static Type[] Packets = new[]
@@ -39,7 +39,7 @@ namespace Craft.Net
             typeof(SpawnMobPacket), // 0x18
             typeof(SpawnPaintingPacket), // 0x19
             typeof(SpawnExperienceOrbPacket), // 0x1A
-            null, // 0x1B
+            typeof(SteerVehiclePacket), // 0x1B
             typeof(EntityVelocityPacket), // 0x1C
             typeof(DestroyEntityPacket), // 0x1D
             typeof(EntityPacket), // 0x1E
@@ -56,7 +56,7 @@ namespace Craft.Net
             typeof(EntityEffectPacket), // 0x29
             typeof(RemoveEntityEffectPacket), // 0x2A
             typeof(SetExperiencePacket), // 0x2B
-            null, // 0x2C
+            typeof(EntityPropertiesPacket), // 0x2C
             null, // 0x2D
             null, // 0x2E
             null, // 0x2F

@@ -1049,6 +1049,41 @@ namespace Craft.Net
         }
     }
 
+	public struct SteerVehiclePacket : IPacket
+	{
+		public SteerVehiclePacket(float strafe, float forward, bool jump, bool unmount)
+		{
+			Strafe = strafe;
+			Forward = forward;
+			Jump = jump;
+			Unmount = unmount;
+		}
+
+		public float Strafe;
+		public float Forward;
+		public bool Jump;
+		public bool Unmount;
+
+		public const byte PacketId = 0x1B;
+		public byte Id { get { return 0x1B; } }
+
+		public void ReadPacket(MinecraftStream stream)
+		{
+			Strafe = stream.ReadSingle();
+			Forward = stream.ReadSingle();
+			Jump = stream.ReadBoolean();
+			Unmount = stream.ReadBoolean();
+		}
+
+		public void WritePacket(MinecraftStream stream)
+		{
+			stream.WriteSingle(Strafe);
+			stream.WriteSingle(Forward);
+			stream.WriteBoolean(Jump);
+			stream.WriteBoolean(Unmount);
+		}
+	}
+
     public struct EntityVelocityPacket : IPacket
     {
         public EntityVelocityPacket(int entityId, short velocityX, short velocityY,
@@ -1511,6 +1546,49 @@ namespace Craft.Net
             stream.WriteInt16(TotalExperience);
         }
     }
+
+	public struct EntityPropertiesPacket : IPacket
+	{
+		public EntityPropertiesPacket(int entityId, string[] keys, double[] values)
+		{
+			EntityId = entityId;
+			Keys = keys;
+			Values = values;
+		}
+
+		public int EntityId;
+		public string[] Keys;
+		public double[] Values;
+
+		public const byte PacketId = 0x2C;
+		public byte Id { get { return 0x2C; } }
+
+		public void ReadPacket(MinecraftStream stream)
+		{
+			EntityId = stream.ReadInt32();
+			var count = stream.ReadInt32();
+			if (count < 0)
+				throw new InvalidOperationException("Cannot specify less than zero properties.");
+			Keys = new string[count];
+			Values = new double[count];
+			for (int i = 0; i < count; i++)
+			{
+				Keys[i] = stream.ReadString();
+				Values[i] = stream.ReadDouble();
+			}
+		}
+
+		public void WritePacket(MinecraftStream stream)
+		{
+			stream.WriteInt32(EntityId);
+			stream.WriteInt32(Keys.Length);
+			for (int i = 0; i < Keys.Length; i++)
+			{
+				stream.WriteString(Keys[i]);
+				stream.WriteDouble(Values[i]);
+			}
+		}
+	}
 
     public struct ChunkDataPacket : IPacket
     {
