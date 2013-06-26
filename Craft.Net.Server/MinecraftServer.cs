@@ -20,8 +20,6 @@ namespace Craft.Net.Server
             PacketHandlers.RegisterHandlers();
         }
 
-        public const string TargetClientVersion = "13w04a";
-
         public delegate void PacketHandler(MinecraftClient client, MinecraftServer server, IPacket packet);
 
         #region Properties
@@ -244,6 +242,7 @@ namespace Craft.Net.Server
         /// </summary>
         public void SendChat(string message)
         {
+            message = string.Format("{{\"text\":\"{0}\"}}", message); // TODO: Implement this properly
             for (int i = 0; i < Clients.Count; i++)
             {
                 if (Clients[i].IsLoggedIn)

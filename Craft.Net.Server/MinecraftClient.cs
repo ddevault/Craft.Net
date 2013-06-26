@@ -275,6 +275,7 @@ namespace Craft.Net.Server
         /// </summary>
         public virtual void SendChat(string message)
         {
+            message = string.Format("{{\"text\":\"{0}\"}}", message); // TODO: Implement this properly
             SendPacket(new ChatMessagePacket(message));
         }
 

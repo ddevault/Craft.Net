@@ -710,12 +710,12 @@ namespace Craft.Net
         {
             EntityId = entityId;
             Action = action;
-            Unknown = new byte[] { 0, 0, 0, 0 };
+            Unknown = 0;
         }
 
         public int EntityId;
         public EntityAction Action;
-        public byte[] Unknown;
+        public int Unknown;
 
         public const byte PacketId = 0x13;
         public byte Id { get { return 0x13; } }
@@ -724,7 +724,7 @@ namespace Craft.Net
         {
             EntityId = stream.ReadInt32();
             Action = (EntityAction)stream.ReadUInt8();
-            Unknown = stream.ReadUInt8Array(4);
+			Unknown = stream.ReadInt32();
         }
 
         public void WritePacket(MinecraftStream stream)
@@ -732,7 +732,7 @@ namespace Craft.Net
             stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteUInt8((byte)Action);
-            stream.WriteUInt8Array(Unknown);
+            stream.WriteInt32(Unknown);
         }
     }
 
@@ -1076,6 +1076,7 @@ namespace Craft.Net
 
 		public void WritePacket(MinecraftStream stream)
 		{
+			stream.WriteUInt8(Id);
 			stream.WriteSingle(Strafe);
 			stream.WriteSingle(Forward);
 			stream.WriteBoolean(Jump);
@@ -1579,6 +1580,7 @@ namespace Craft.Net
 
 		public void WritePacket(MinecraftStream stream)
 		{
+			stream.WriteUInt8(Id);
 			stream.WriteInt32(EntityId);
 			stream.WriteInt32(Keys.Length);
 			for (int i = 0; i < Keys.Length; i++)
@@ -2152,6 +2154,8 @@ namespace Craft.Net
             WindowTitle = windowTitle;
             SlotCount = slotCount;
             UseProvidedTitle = useProvidedTitle;
+			if (InventoryType == 11)
+				Unknown = 0; // TODO: Find a better default value (and determine what it does)
         }
         
         public byte WindowId;
@@ -2159,6 +2163,7 @@ namespace Craft.Net
         public string WindowTitle;
         public byte SlotCount;
         public bool UseProvidedTitle;
+		public int? Unknown;
 
         public const byte PacketId = 0x64;
         public byte Id { get { return 0x64; } }
@@ -2170,6 +2175,8 @@ namespace Craft.Net
             WindowTitle = stream.ReadString();
             SlotCount = stream.ReadUInt8();
             UseProvidedTitle = stream.ReadBoolean();
+			if (InventoryType == 11)
+				Unknown = stream.ReadInt32();
         }
 
         public void WritePacket(MinecraftStream stream)
@@ -2180,6 +2187,8 @@ namespace Craft.Net
             stream.WriteString(WindowTitle);
             stream.WriteUInt8(SlotCount);
             stream.WriteBoolean(UseProvidedTitle);
+			if (InventoryType == 11)
+				stream.WriteInt32(Unknown.GetValueOrDefault());
         }
     }
 
@@ -2566,14 +2575,14 @@ namespace Craft.Net
 
     public struct IncrementStatisticPacket : IPacket
     {
-        public IncrementStatisticPacket(int statisticId, byte amount)
+        public IncrementStatisticPacket(int statisticId, int amount)
         {
             StatisticId = statisticId;
             Amount = amount;
         }
 
         public int StatisticId;
-        public byte Amount;
+        public int Amount;
 
         public const byte PacketId = 0xC8;
         public byte Id { get { return 0xC8; } }
@@ -2581,14 +2590,14 @@ namespace Craft.Net
         public void ReadPacket(MinecraftStream stream)
         {
             StatisticId = stream.ReadInt32();
-            Amount = stream.ReadUInt8();
+            Amount = stream.ReadInt32();
         }
 
         public void WritePacket(MinecraftStream stream)
         {
             stream.WriteUInt8(Id);
             stream.WriteInt32(StatisticId);
-            stream.WriteUInt8(Amount);
+            stream.WriteInt32(Amount);
         }
     }
 
@@ -2626,17 +2635,15 @@ namespace Craft.Net
 
     public struct PlayerAbilitiesPacket : IPacket
     {
-        public PlayerAbilitiesPacket(byte flags, byte flyingSpeed, byte walkingSpeed)
+        public PlayerAbilitiesPacket(byte flags, float flyingSpeed, float walkingSpeed)
         {
             Flags = flags;
             FlyingSpeed = flyingSpeed;
             WalkingSpeed = walkingSpeed;
-            Unknown = new byte[] { 0xCC, 0xCD, 0x3D, 0xCC, 0xCC, 0xCD, 0x10, 0x00, 0x00 }; // Taken from a packet log, values unknown
         }
 
         public byte Flags;
-        public byte FlyingSpeed, WalkingSpeed;
-        public byte[] Unknown;
+        public float FlyingSpeed, WalkingSpeed;
 
         public const byte PacketId = 0xCA;
         public byte Id { get { return 0xCA; } }
@@ -2644,18 +2651,16 @@ namespace Craft.Net
         public void ReadPacket(MinecraftStream stream)
         {
             Flags = stream.ReadUInt8();
-            FlyingSpeed = stream.ReadUInt8();
-            WalkingSpeed = stream.ReadUInt8();
-            Unknown = stream.ReadUInt8Array(9);
+            FlyingSpeed = stream.ReadSingle();
+            WalkingSpeed = stream.ReadSingle();
         }
 
         public void WritePacket(MinecraftStream stream)
         {
             stream.WriteUInt8(Id);
             stream.WriteUInt8(Flags);
-            stream.WriteUInt8(FlyingSpeed);
-            stream.WriteUInt8(WalkingSpeed);
-            stream.WriteUInt8Array(Unknown);
+            stream.WriteSingle(FlyingSpeed);
+            stream.WriteSingle(WalkingSpeed);
         }
     }
 
