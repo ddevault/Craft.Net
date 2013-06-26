@@ -287,14 +287,18 @@ namespace Craft.Net.Server
                                               client.Entity.Dimension, Settings.Difficulty,
                                               Settings.MaxPlayers));
             client.SendPacket(new SpawnPositionPacket((int)client.Entity.SpawnPoint.X, (int)client.Entity.SpawnPoint.Y, (int)client.Entity.SpawnPoint.Z));
+            client.SendPacket(new PlayerAbilitiesPacket(
+                client.Entity.Abilities.AsFlags(), client.Entity.Abilities.FlyingSpeed, client.Entity.Abilities.WalkingSpeed));
+            client.SendPacket(new EntityPropertiesPacket(client.Entity.Id,
+                new[] { "generic.movementSpeed" }, new[] { 0.1 }));
             client.SendPacket(new TimeUpdatePacket(DefaultLevel.Time, DefaultLevel.Time));
             UpdatePlayerList(null);
             client.SendPacket(new SetWindowItemsPacket(0, client.Entity.Inventory.GetSlots()));
 
             // Send initial chunks
-            client.UpdateChunks(true);
             client.SendPacket(new PlayerPositionAndLookPacket(client.Entity.Position.X, client.Entity.Position.Y + client.Entity.Size.Height,
-                client.Entity.Position.Z, client.Entity.Position.Y - client.Entity.Size.Height, client.Entity.Yaw, client.Entity.Pitch, true));
+                client.Entity.Position.Y, client.Entity.Position.Z, client.Entity.Yaw, client.Entity.Pitch, true));
+            client.UpdateChunks(true);
             // TODO: Move 1.62 somewhere else
 
             // Send entities

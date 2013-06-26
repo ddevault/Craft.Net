@@ -1394,14 +1394,15 @@ namespace Craft.Net
 
     public struct AttachEntityPacket : IPacket
     {
-        public AttachEntityPacket(int entityId, int vehicleId)
+        public AttachEntityPacket(int entityId, int vehicleId, bool leash)
         {
             EntityId = entityId;
             VehicleId = vehicleId;
-            Unknown = 0; // Prediction: Related to jumping horses
+            Leash = leash;
         }
 
-        public int EntityId, VehicleId, Unknown;
+        public int EntityId, VehicleId;
+		public bool Leash;
 
         public const byte PacketId = 0x27;
         public byte Id { get { return 0x27; } }
@@ -1410,7 +1411,7 @@ namespace Craft.Net
         {
             EntityId = stream.ReadInt32();
             VehicleId = stream.ReadInt32();
-            Unknown = stream.ReadInt32();
+            Leash = stream.ReadBoolean();
         }
 
         public void WritePacket(MinecraftStream stream)
@@ -1418,7 +1419,7 @@ namespace Craft.Net
             stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteInt32(VehicleId);
-            stream.WriteInt32(Unknown);
+            stream.WriteBoolean(Leash);
         }
     }
 
