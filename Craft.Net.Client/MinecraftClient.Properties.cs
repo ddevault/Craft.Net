@@ -21,8 +21,6 @@ namespace Craft.Net.Client
         // TODO: Move to entity object
         #region Position and Look
 
-        internal bool PositionUpdateConfirmed { get; set; }
-
         internal Vector3 _position;
         public Vector3 Position
         {
@@ -31,7 +29,7 @@ namespace Craft.Net.Client
             {
                 _position = value;
                 SendPacket(new PlayerPositionPacket(
-                    Position.X, Position.Y - 1.62, Position.Z, Position.Y, false));
+                    Position.X, Position.Y, Position.Z, Position.Y + 1.62, false));
             }
         }
 
@@ -66,7 +64,8 @@ namespace Craft.Net.Client
         public LevelInformation LevelInformation { get; internal set; }
         public ReadOnlyWorld World { get; internal set; }
 
-        public bool Spawned { get; internal set; }
+        public bool IsSpawned { get; internal set; }
+        public bool IsLoggedIn { get; internal set; }
         public int EntityId { get; internal set; }
 
         protected internal MinecraftStream Stream { get; set; }

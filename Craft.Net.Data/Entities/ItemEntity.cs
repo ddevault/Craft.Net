@@ -52,7 +52,7 @@ namespace Craft.Net.Data.Entities
             if ((DateTime.Now - SpawnTime).TotalSeconds > 0.5 && world.Level.Time % 5 == 0)
             {
                 var player = (PlayerEntity)world.Entities.FirstOrDefault(e => e is PlayerEntity &&
-                    e.Position.DistanceTo(Position) <= 1);
+                    e.Position.DistanceTo(Position) <= 1 && (e as LivingEntity).Health > 0);
                 if (player != null)
                     player.OnPickUpItem(new EntityEventArgs(this));
             }

@@ -47,13 +47,22 @@ namespace Craft.Net.Server
                 if (entity is PlayerEntity)
                 {
                     // Isolate the client being spawned
-                    (entity as PlayerEntity).Abilities.PropertyChanged += PlayerAbilitiesChanged; 
-                    (entity as PlayerEntity).Inventory.WindowChange += PlayerInventoryChange; 
+                    (entity as PlayerEntity).Abilities.PropertyChanged -= PlayerAbilitiesChanged;
+                    (entity as PlayerEntity).Abilities.PropertyChanged += PlayerAbilitiesChanged;
+                    (entity as PlayerEntity).Inventory.WindowChange -= PlayerInventoryChange;
+                    (entity as PlayerEntity).Inventory.WindowChange += PlayerInventoryChange;
+
                     var client = clients.First(c => c.Entity == entity);
+                    client.Entity.BedStateChanged -= EntityOnUpdateBedState;
+                    client.Entity.BedTimerExpired -= EntityOnBedTimerExpired;
+                    client.Entity.StartEating -= PlayerStartEating;
+                    client.Entity.PickUpItem -= Entity_PickUpItem;
+
                     client.Entity.BedStateChanged += EntityOnUpdateBedState;
                     client.Entity.BedTimerExpired += EntityOnBedTimerExpired;
                     client.Entity.StartEating += PlayerStartEating;
                     client.Entity.PickUpItem += Entity_PickUpItem;
+
                     clients = clients.Where(c => c.Entity != entity);
                     clients.ToList().ForEach(c => {
                         c.SendPacket(new SpawnPlayerPacket(client.Entity.Id,
@@ -146,11 +155,28 @@ namespace Craft.Net.Server
             if (entity is PlayerEntity)
             {
                 var player = entity as PlayerEntity;
+                SpawnInventoryEntities(player);
                 server.OnPlayerDeath(new PlayerDeathEventArgs(player.LastDamageType, player, player.LastAttackingEntity));
             }
             entity.Kill();
             foreach (var client in GetKnownClients(entity))
                 client.SendPacket(new EntityStatusPacket(entity.Id, EntityStatusPacket.EntityStatus.Dead));
+        }
+
+        private void SpawnInventoryEntities(PlayerEntity player)
+        {
+            var world = GetEntityWorld(player);
+            foreach (var slot in player.Inventory.GetSlots())
+            {
+                if (!slot.Empty)
+                {
+                    var entity = new ItemEntity(player.Position + new Vector3(
+                        MathHelper.Random.NextDouble() * 0.5 - 0.25,
+                        MathHelper.Random.NextDouble() * 0.5 - 0.25,
+                        MathHelper.Random.NextDouble() * 0.5 - 0.25), slot);
+                    SpawnEntity(world, entity);
+                }
+            }
         }
 
         /// <summary>
@@ -228,30 +254,35 @@ namespace Craft.Net.Server
             {
                 var player = entity as PlayerEntity;
                 var client = GetClient(player);
-                switch (propertyChangedEventArgs.PropertyName)
+                if (client == null)
+                    DespawnEntity(player);
+                else
                 {
-                    case "Health":
-                    case "Food":
-                    case "FoodSaturation":
-                        client.SendPacket(new UpdateHealthPacket(player.Health, player.Food, player.FoodSaturation));
-                        if (player.Health <= 0)
-                            KillEntity(player);
-                        break;
-                    case "SpawnPoint":
-                        client.SendPacket(new SpawnPositionPacket((int)player.SpawnPoint.X, (int)player.SpawnPoint.Y, (int)player.SpawnPoint.Z));
-                        break;
-                    case "GameMode":
-                        client.SendPacket(new ChangeGameStatePacket(client.Entity.GameMode));
-                        client.SendPacket(new PlayerAbilitiesPacket(player.Abilities.AsFlags(), 
-                            player.Abilities.FlyingSpeed, player.Abilities.FlyingSpeed));
-                        break;
-                    case "Velocity":
-                        client.SendPacket(new EntityVelocityPacket(player.Id, (short)player.Velocity.X,
-                            (short)player.Velocity.Y, (short)player.Velocity.Z));
-                        break;
-                    case "GivenPosition":
-                        UpdateGivenPosition(player);
-                        break;
+                    switch (propertyChangedEventArgs.PropertyName)
+                    {
+                        case "Health":
+                        case "Food":
+                        case "FoodSaturation":
+                            client.SendPacket(new UpdateHealthPacket(player.Health, player.Food, player.FoodSaturation));
+                            if (player.Health <= 0)
+                                KillEntity(player);
+                            break;
+                        case "SpawnPoint":
+                            client.SendPacket(new SpawnPositionPacket((int)player.SpawnPoint.X, (int)player.SpawnPoint.Y, (int)player.SpawnPoint.Z));
+                            break;
+                        case "GameMode":
+                            client.SendPacket(new ChangeGameStatePacket(client.Entity.GameMode));
+                            client.SendPacket(new PlayerAbilitiesPacket(player.Abilities.AsFlags(),
+                                player.Abilities.FlyingSpeed, player.Abilities.FlyingSpeed));
+                            break;
+                        case "Velocity":
+                            client.SendPacket(new EntityVelocityPacket(player.Id, (short)player.Velocity.X,
+                                (short)player.Velocity.Y, (short)player.Velocity.Z));
+                            break;
+                        case "GivenPosition":
+                            UpdateGivenPosition(player);
+                            break;
+                    }
                 }
             }
             switch (propertyChangedEventArgs.PropertyName)

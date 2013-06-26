@@ -260,7 +260,7 @@ namespace Craft.Net.Data
             {
                 // Return default player entity
                 entity.Position = SpawnPoint;
-                entity.SpawnPoint = SpawnPoint;
+                entity.SpawnPoint = SpawnPoint + new Vector3(0, PlayerEntity.Height, 0);
                 entity.Position += new Vector3(0, PlayerEntity.Height, 0);
                 entity.GameMode = GameMode;
                 return entity;
@@ -306,7 +306,7 @@ namespace Craft.Net.Data
 
             entity.Position = new Vector3(
                 ((NbtDouble)pos[0]).Value,
-                ((NbtDouble)pos[1]).Value,
+                ((NbtDouble)pos[1]).Value + PlayerEntity.Height,
                 ((NbtDouble)pos[2]).Value);
 
             if (data.Get<NbtInt>("SpawnX") != null)
@@ -316,6 +316,8 @@ namespace Craft.Net.Data
                     data.Get<NbtInt>("SpawnY").Value,
                     data.Get<NbtInt>("SpawnZ").Value);
             }
+            else
+                entity.SpawnPoint = SpawnPoint + new Vector3(0, PlayerEntity.Height, 0);
 
             entity.Yaw = ((NbtFloat)rotation[0]).Value;
             entity.Pitch = ((NbtFloat)rotation[1]).Value;
@@ -360,7 +362,7 @@ namespace Craft.Net.Data
 
             var pos = new NbtList("Pos", NbtTagType.Double);
             pos.Add(new NbtDouble(entity.Position.X));
-            pos.Add(new NbtDouble(entity.Position.Y + entity.Size.Height)); // TODO: Why do we need to add this
+            pos.Add(new NbtDouble(entity.Position.Y)); 
             pos.Add(new NbtDouble(entity.Position.Z));
             data.Add(pos);
 

@@ -55,5 +55,11 @@ namespace Craft.Net.Client
         {
             if (ChunkRecieved != null) ChunkRecieved(this, e);
         }
+
+        public event EventHandler<SignUpdateReceivedEventArgs> SignUpdateReceived;
+        protected internal virtual void OnSignUpdateReceived(SignUpdateReceivedEventArgs e)
+        {
+            if (SignUpdateReceived != null) SignUpdateReceived(this, e);
+        }
     }
 }

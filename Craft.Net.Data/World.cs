@@ -312,15 +312,15 @@ namespace Craft.Net.Data
 
         private Vector3 FindBlockPosition(Vector3 position, out Chunk chunk)
         {
-            var x = (int)position.X;
-            var y = (int)position.Y;
-            var z = (int)position.Z;
+            var x = Math.Floor(position.X);
+            var y = Math.Floor(position.Y);
+            var z = Math.Floor(position.Z);
 
             if (y < 0 || y >= Chunk.Height)
                 throw new ArgumentOutOfRangeException("position", "Position is out of range");
 
-            int chunkX = x / (Chunk.Width) - ((x < 0) ? 1 : 0);
-            int chunkZ = z / (Chunk.Depth) - ((z < 0) ? 1 : 0);
+            var chunkX = Math.Floor(x / (Chunk.Width));
+            var chunkZ = Math.Floor(z / (Chunk.Depth));
 
             chunk = GetChunk(new Vector3(chunkX, 0, chunkZ));
             return new Vector3((x - chunkX * Chunk.Width) % Chunk.Width, y, (z - chunkZ * Chunk.Depth) % Chunk.Depth);

@@ -130,6 +130,16 @@ namespace Craft.Net.Data
             return radians * (180 / Math.PI);
         }
 
+        public static double ToNotchianYaw(double yaw)
+        {
+            return RadiansToDegrees(Math.PI - yaw);
+        }
+
+        public static double ToNotchianPitch(double pitch)
+        {
+            return RadiansToDegrees(-pitch);
+        }
+
         /// <summary>
         /// Returns a value indicating the most extreme value of the
         /// provided Vector.

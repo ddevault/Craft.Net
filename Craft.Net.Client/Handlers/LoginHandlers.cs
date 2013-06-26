@@ -19,7 +19,7 @@ namespace Craft.Net.Client.Handlers
             client.SharedSecret = new byte[16];
             random.GetBytes(client.SharedSecret); // Generate a secure AES key
 
-            if (packet.ServerId != "-") // Online mode
+            if (packet.ServerId != "-" && client.Session.SessionId != null) // Online mode
             {
                 // Authenticate with minecraft.net
                 var data = Encoding.ASCII.GetBytes(packet.ServerId)
@@ -52,15 +52,16 @@ namespace Craft.Net.Client.Handlers
             // Enable encryption
             client.Stream = new MinecraftStream(new AesStream(new BufferedStream(client.NetworkStream), client.SharedSecret));
             client.SendPacket(new ClientStatusPacket(ClientStatusPacket.ClientStatus.InitialSpawn));
-            LogProvider.Log("Logged in.");
         }
 
         public static void LoginRequest(MinecraftClient client, IPacket _packet)
         {
             var packet = (LoginRequestPacket)_packet;
             client.EntityId = packet.EntityId;
-            client.Spawned = true;
+            client.IsLoggedIn = true;
             client.OnLoggedIn();
+            LogProvider.Log("Logged in.");
+
             // Initialize world
             client.World = new ReadOnlyWorld();
             client.LevelInformation = new LevelInformation(packet);
