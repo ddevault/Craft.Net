@@ -8,6 +8,18 @@ namespace Craft.Net.Client
 {
     public partial class MinecraftClient
     {
+        public event EventHandler<PacketEventArgs> PacketRecieved;
+        protected internal virtual void OnPacketRecieved(PacketEventArgs e)
+        {
+            if (PacketRecieved != null) PacketRecieved(this, e);
+        }
+
+        public event EventHandler<PacketEventArgs> PacketSent;
+        protected internal virtual void OnPacketSent(PacketEventArgs e)
+        {
+            if (PacketSent != null) PacketSent(this, e);
+        }
+
         public event EventHandler LoggedIn;
         protected internal virtual void OnLoggedIn()
         {

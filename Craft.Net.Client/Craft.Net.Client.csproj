@@ -83,6 +83,7 @@
     <Compile Include="Session.cs" />
     <Compile Include="DotMinecraft.cs" />
     <Compile Include="RuntimeInfo.cs" />
+    <Compile Include="Events\PacketEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Craft.Net\Craft.Net.csproj">

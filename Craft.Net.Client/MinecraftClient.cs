@@ -137,6 +137,10 @@ namespace Craft.Net.Client
                             LogProvider.Log(packet, true);
 #endif
                             Stream.Flush();
+                            // Redundant, because creating an object every time a packet is sent
+                            // would be expensive when it's not needed
+                            if (PacketSent != null)
+                                OnPacketSent(new PacketEventArgs(packet));
                             if (packet is DisconnectPacket)
                                 return;
                         }
@@ -153,6 +157,8 @@ namespace Craft.Net.Client
 #if DEBUG
                         LogProvider.Log(packet, false);
 #endif
+                        if (PacketRecieved != null)
+                            OnPacketRecieved(new PacketEventArgs(packet));
                         HandlePacket(packet);
                         if (packet is DisconnectPacket)
                             return;
