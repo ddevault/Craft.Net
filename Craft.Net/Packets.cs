@@ -3107,25 +3107,18 @@ namespace Craft.Net
 
     public struct ServerListPingPacket : IPacket
     {
-        public ServerListPingPacket(byte magic)
-        {
-            Magic = magic;
-        }
-
-        public byte Magic;
-
         public const byte PacketId = 0xFE;
         public byte Id { get { return 0xFE; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
-            Magic = stream.ReadUInt8();
+            stream.ReadUInt8();
         }
 
         public void WritePacket(MinecraftStream stream)
         {
             stream.WriteUInt8(Id);
-            stream.WriteUInt8(Magic);
+            stream.WriteUInt8(1);
         }
     }
 

@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Channels\ServerPingChannel.cs" />
     <Compile Include="Channels\TexturePackChannel.cs" />
     <Compile Include="ChunkHelper.cs" />
     <Compile Include="EntityManager.cs" />
