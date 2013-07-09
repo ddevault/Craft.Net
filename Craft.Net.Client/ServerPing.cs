@@ -20,7 +20,7 @@ namespace Craft.Net.Client
             var client = new TcpClient();
             client.Connect(endPoint);
             var stream = new MinecraftStream(client.GetStream());
-            var ping = new ServerListPingPacket(1);
+            var ping = new ServerListPingPacket();
             ping.WritePacket(stream);
             var response = PacketReader.ReadPacket(stream);
             client.Close();

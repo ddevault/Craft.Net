@@ -2155,8 +2155,7 @@ namespace Craft.Net
             WindowTitle = windowTitle;
             SlotCount = slotCount;
             UseProvidedTitle = useProvidedTitle;
-			if (InventoryType == 11)
-				Unknown = 0; // TODO: Find a better default value (and determine what it does)
+			Unknown = 0; // TODO: Find a better default value (and determine what it does)
         }
         
         public byte WindowId;
