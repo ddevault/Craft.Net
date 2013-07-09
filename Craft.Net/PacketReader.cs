@@ -8,7 +8,7 @@ namespace Craft.Net
     public static class PacketReader
     {
         public const int ProtocolVersion = 73;
-		public const string FriendlyVersion = "1.6.1";
+        public const string FriendlyVersion = "1.6.1";
 
         #region Packet Types
         private static Type[] Packets = new[]

@@ -724,7 +724,7 @@ namespace Craft.Net
         {
             EntityId = stream.ReadInt32();
             Action = (EntityAction)stream.ReadUInt8();
-			Unknown = stream.ReadInt32();
+            Unknown = stream.ReadInt32();
         }
 
         public void WritePacket(MinecraftStream stream)
@@ -1048,41 +1048,41 @@ namespace Craft.Net
         }
     }
 
-	public struct SteerVehiclePacket : IPacket
-	{
-		public SteerVehiclePacket(float strafe, float forward, bool jump, bool unmount)
-		{
-			Strafe = strafe;
-			Forward = forward;
-			Jump = jump;
-			Unmount = unmount;
-		}
+    public struct SteerVehiclePacket : IPacket
+    {
+        public SteerVehiclePacket(float strafe, float forward, bool jump, bool unmount)
+        {
+            Strafe = strafe;
+            Forward = forward;
+            Jump = jump;
+            Unmount = unmount;
+        }
 
-		public float Strafe;
-		public float Forward;
-		public bool Jump;
-		public bool Unmount;
+        public float Strafe;
+        public float Forward;
+        public bool Jump;
+        public bool Unmount;
 
-		public const byte PacketId = 0x1B;
-		public byte Id { get { return 0x1B; } }
+        public const byte PacketId = 0x1B;
+        public byte Id { get { return 0x1B; } }
 
-		public void ReadPacket(MinecraftStream stream)
-		{
-			Strafe = stream.ReadSingle();
-			Forward = stream.ReadSingle();
-			Jump = stream.ReadBoolean();
-			Unmount = stream.ReadBoolean();
-		}
+        public void ReadPacket(MinecraftStream stream)
+        {
+            Strafe = stream.ReadSingle();
+            Forward = stream.ReadSingle();
+            Jump = stream.ReadBoolean();
+            Unmount = stream.ReadBoolean();
+        }
 
-		public void WritePacket(MinecraftStream stream)
-		{
-			stream.WriteUInt8(Id);
-			stream.WriteSingle(Strafe);
-			stream.WriteSingle(Forward);
-			stream.WriteBoolean(Jump);
-			stream.WriteBoolean(Unmount);
-		}
-	}
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteUInt8(Id);
+            stream.WriteSingle(Strafe);
+            stream.WriteSingle(Forward);
+            stream.WriteBoolean(Jump);
+            stream.WriteBoolean(Unmount);
+        }
+    }
 
     public struct EntityVelocityPacket : IPacket
     {
@@ -1402,7 +1402,7 @@ namespace Craft.Net
         }
 
         public int EntityId, VehicleId;
-		public bool Leash;
+        public bool Leash;
 
         public const byte PacketId = 0x27;
         public byte Id { get { return 0x27; } }
@@ -1548,49 +1548,49 @@ namespace Craft.Net
         }
     }
 
-	public struct EntityPropertiesPacket : IPacket
-	{
-		public EntityPropertiesPacket(int entityId, string[] keys, double[] values)
-		{
-			EntityId = entityId;
-			Keys = keys;
-			Values = values;
-		}
+    public struct EntityPropertiesPacket : IPacket
+    {
+        public EntityPropertiesPacket(int entityId, string[] keys, double[] values)
+        {
+            EntityId = entityId;
+            Keys = keys;
+            Values = values;
+        }
 
-		public int EntityId;
-		public string[] Keys;
-		public double[] Values;
+        public int EntityId;
+        public string[] Keys;
+        public double[] Values;
 
-		public const byte PacketId = 0x2C;
-		public byte Id { get { return 0x2C; } }
+        public const byte PacketId = 0x2C;
+        public byte Id { get { return 0x2C; } }
 
-		public void ReadPacket(MinecraftStream stream)
-		{
-			EntityId = stream.ReadInt32();
-			var count = stream.ReadInt32();
-			if (count < 0)
-				throw new InvalidOperationException("Cannot specify less than zero properties.");
-			Keys = new string[count];
-			Values = new double[count];
-			for (int i = 0; i < count; i++)
-			{
-				Keys[i] = stream.ReadString();
-				Values[i] = stream.ReadDouble();
-			}
-		}
+        public void ReadPacket(MinecraftStream stream)
+        {
+            EntityId = stream.ReadInt32();
+            var count = stream.ReadInt32();
+            if (count < 0)
+                throw new InvalidOperationException("Cannot specify less than zero properties.");
+            Keys = new string[count];
+            Values = new double[count];
+            for (int i = 0; i < count; i++)
+            {
+                Keys[i] = stream.ReadString();
+                Values[i] = stream.ReadDouble();
+            }
+        }
 
-		public void WritePacket(MinecraftStream stream)
-		{
-			stream.WriteUInt8(Id);
-			stream.WriteInt32(EntityId);
-			stream.WriteInt32(Keys.Length);
-			for (int i = 0; i < Keys.Length; i++)
-			{
-				stream.WriteString(Keys[i]);
-				stream.WriteDouble(Values[i]);
-			}
-		}
-	}
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteUInt8(Id);
+            stream.WriteInt32(EntityId);
+            stream.WriteInt32(Keys.Length);
+            for (int i = 0; i < Keys.Length; i++)
+            {
+                stream.WriteString(Keys[i]);
+                stream.WriteDouble(Values[i]);
+            }
+        }
+    }
 
     public struct ChunkDataPacket : IPacket
     {
@@ -2155,7 +2155,9 @@ namespace Craft.Net
             WindowTitle = windowTitle;
             SlotCount = slotCount;
             UseProvidedTitle = useProvidedTitle;
-			Unknown = 0; // TODO: Find a better default value (and determine what it does)
+            Unknown = null;
+            if (InventoryType == 11)
+                Unknown = 0; // TODO: Find a better default value (and determine what it does)
         }
         
         public byte WindowId;
@@ -2163,7 +2165,7 @@ namespace Craft.Net
         public string WindowTitle;
         public byte SlotCount;
         public bool UseProvidedTitle;
-		public int? Unknown;
+        public int? Unknown;
 
         public const byte PacketId = 0x64;
         public byte Id { get { return 0x64; } }
@@ -2175,8 +2177,8 @@ namespace Craft.Net
             WindowTitle = stream.ReadString();
             SlotCount = stream.ReadUInt8();
             UseProvidedTitle = stream.ReadBoolean();
-			if (InventoryType == 11)
-				Unknown = stream.ReadInt32();
+            if (InventoryType == 11)
+                Unknown = stream.ReadInt32();
         }
 
         public void WritePacket(MinecraftStream stream)
@@ -2187,8 +2189,8 @@ namespace Craft.Net
             stream.WriteString(WindowTitle);
             stream.WriteUInt8(SlotCount);
             stream.WriteBoolean(UseProvidedTitle);
-			if (InventoryType == 11)
-				stream.WriteInt32(Unknown.GetValueOrDefault());
+            if (InventoryType == 11)
+                stream.WriteInt32(Unknown.GetValueOrDefault());
         }
     }
 
