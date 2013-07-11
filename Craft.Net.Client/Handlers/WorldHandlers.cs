@@ -51,7 +51,8 @@ namespace Craft.Net.Client.Handlers
                         chunk.Sections[y].BlockLight.Data, 0, NibbleDataLength);
 
                     // Sky light
-                    if (lightIncluded)
+                    // We don't rely on lightIncluded here because it's inconsistent between dimensions
+                    if (((BlockDataLength + NibbleDataLength + NibbleDataLength) * sectionCount) + (y * NibbleDataLength) + NibbleDataLength <= data.Length)
                         Array.Copy(data, ((BlockDataLength + NibbleDataLength + NibbleDataLength) * sectionCount) + (y * NibbleDataLength),
                             chunk.Sections[y].SkyLight.Data, 0, NibbleDataLength);
                 }

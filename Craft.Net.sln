@@ -90,7 +90,7 @@ Global
 		{FE82A68D-44BD-485F-88CF-FFA77720AEF6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = TestServer\TestServer.csproj
+		StartupItem = TestClient\TestClient.csproj
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
