@@ -290,7 +290,7 @@ namespace Craft.Net.Server
             client.SendPacket(new PlayerAbilitiesPacket(
                 client.Entity.Abilities.AsFlags(), client.Entity.Abilities.FlyingSpeed, client.Entity.Abilities.WalkingSpeed));
             client.SendPacket(new EntityPropertiesPacket(client.Entity.Id,
-                new[] { "generic.movementSpeed" }, new[] { 0.1 }));
+                new[] { new EntityProperty("generic.movementSpeed", 0.1) }));
             client.SendPacket(new TimeUpdatePacket(DefaultLevel.Time, DefaultLevel.Time));
             UpdatePlayerList(null);
             client.SendPacket(new SetWindowItemsPacket(0, client.Entity.Inventory.GetSlots()));

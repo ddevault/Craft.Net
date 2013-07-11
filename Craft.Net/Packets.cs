@@ -1550,16 +1550,14 @@ namespace Craft.Net
 
     public struct EntityPropertiesPacket : IPacket
     {
-        public EntityPropertiesPacket(int entityId, string[] keys, double[] values)
+        public EntityPropertiesPacket(int entityId, EntityProperty[] properties)
         {
             EntityId = entityId;
-            Keys = keys;
-            Values = values;
+            Properties = properties;
         }
 
         public int EntityId;
-        public string[] Keys;
-        public double[] Values;
+        public EntityProperty[] Properties;
 
         public const byte PacketId = 0x2C;
         public byte Id { get { return 0x2C; } }
@@ -1570,12 +1568,24 @@ namespace Craft.Net
             var count = stream.ReadInt32();
             if (count < 0)
                 throw new InvalidOperationException("Cannot specify less than zero properties.");
-            Keys = new string[count];
-            Values = new double[count];
+            Properties = new EntityProperty[count];
             for (int i = 0; i < count; i++)
             {
-                Keys[i] = stream.ReadString();
-                Values[i] = stream.ReadDouble();
+                var property = new EntityProperty();
+                property.Key = stream.ReadString();
+                property.Value = stream.ReadDouble();
+                var listLength = stream.ReadInt16();
+                property.UnknownList = new EntityPropertyListItem[listLength];
+                for (int j = 0; j < listLength; j++)
+                {
+                    var item = new EntityPropertyListItem();
+                    item.UnknownMSB = stream.ReadInt64();
+                    item.UnknownLSB = stream.ReadInt64();
+                    item.UnknownDouble = stream.ReadDouble();
+                    item.UnknownByte = stream.ReadUInt8();
+                    property.UnknownList[j] = item;
+                }
+                Properties[i] = property;
             }
         }
 
@@ -1583,13 +1593,42 @@ namespace Craft.Net
         {
             stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
-            stream.WriteInt32(Keys.Length);
-            for (int i = 0; i < Keys.Length; i++)
+            stream.WriteInt32(Properties.Length);
+            for (int i = 0; i < Properties.Length; i++)
             {
-                stream.WriteString(Keys[i]);
-                stream.WriteDouble(Values[i]);
+                stream.WriteString(Properties[i].Key);
+                stream.WriteDouble(Properties[i].Value);
+                stream.WriteInt16((short)Properties[i].UnknownList.Length);
+                for (int j = 0; j < Properties[i].UnknownList.Length; j++)
+                {
+                    stream.WriteInt64(Properties[i].UnknownList[j].UnknownMSB);
+                    stream.WriteInt64(Properties[i].UnknownList[j].UnknownLSB);
+                    stream.WriteDouble(Properties[i].UnknownList[j].UnknownDouble);
+                    stream.WriteUInt8(Properties[i].UnknownList[j].UnknownByte);
+                }
             }
         }
+    }
+
+    public struct EntityProperty
+    {
+        public EntityProperty(string key, double value)
+        {
+            Key = key;
+            Value = value;
+            UnknownList = new EntityPropertyListItem[0];
+        }
+
+        public string Key;
+        public double Value;
+        public EntityPropertyListItem[] UnknownList;
+    }
+
+    public struct EntityPropertyListItem
+    {
+        public long UnknownMSB, UnknownLSB;
+        public double UnknownDouble;
+        public byte UnknownByte;
     }
 
     public struct ChunkDataPacket : IPacket
@@ -2572,6 +2611,46 @@ namespace Craft.Net
             var buffer = tempStream.GetBuffer();
             stream.WriteInt16((short)buffer.Length);
             stream.WriteUInt8Array(buffer);
+        }
+    }
+
+    /// <summary>
+    /// Warning: The purpose of this packet is not entirely known. It seems to be sent by
+    /// clients upon placing signs.
+    /// </summary>
+    public struct UnknownPacket0x85 : IPacket
+    {
+        public UnknownPacket0x85(int x, int y, int z)
+        {
+            X = x;
+            Y = y;
+            Z = z;
+            Unknown = (byte)0;
+        }
+
+        /// <summary>
+        /// Never observed to be any value other than zero.
+        /// </summary>
+        public byte Unknown;
+        public int X, Y, Z;
+
+        public const byte PacketId = 0x84;
+        public byte Id { get { return 0x84; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            Unknown = stream.ReadUInt8();
+            X = stream.ReadInt32();
+            Y = stream.ReadInt32();
+            Z = stream.ReadInt32();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteUInt8(Unknown);
+            stream.WriteInt32(X);
+            stream.WriteInt32(Y);
+            stream.WriteInt32(Z);
         }
     }
 
