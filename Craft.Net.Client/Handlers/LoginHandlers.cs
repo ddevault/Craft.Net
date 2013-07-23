@@ -71,6 +71,9 @@ namespace Craft.Net.Client.Handlers
         public static void Disconnect(MinecraftClient client, IPacket _packet)
         {
             var packet = (DisconnectPacket)_packet;
+            client.EntityId = 0;
+            client.IsLoggedIn = false;
+            client.IsSpawned = false;
             LogProvider.Log("Disconnected: " + packet.Reason);
             client.OnDisconnected(new DisconnectEventArgs(packet.Reason));
         }
