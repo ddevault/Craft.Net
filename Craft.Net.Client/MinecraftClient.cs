@@ -81,6 +81,10 @@ namespace Craft.Net.Client
 
         public void Disconnect(string reason)
         {
+            EntityId = 0;
+            IsLoggedIn = false;
+            IsSpawned = false;
+
             NetworkWorkerThread.Abort();
             if (Client.Connected)
             {
