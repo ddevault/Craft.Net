@@ -16,11 +16,22 @@
 
         private static string RemoveChatCodes(string message)
         {
-            int index;
-            while ((index = message.IndexOf(ChatColors.Delimiter)) >= 0)
-                message = message.Remove(index, 2);
+            if (String.IsNullOrEmpty(message))
+                return String.Empty;
+ 
+            int idx = 0;
+            var data = new char[message.Length];
 
-            return message;
+            for (int i = 0; i < message.Length; ++i)
+                if (message[i] != ChatColors.Delimiter[0])
+                    data[idx++] = message[i];
+                else
+                    i++;
+
+            if (idx > 0)
+                return new string(data, 0, idx);
+
+            return String.Empty; 
         }
     }
 }
