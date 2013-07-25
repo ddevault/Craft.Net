@@ -41,7 +41,7 @@ This is not an exhaustive list.
 
 ### Craft.Net
 
-* Full support for the 1.6.2 (version 72) Minecraft protocol
+* Full support for the 1.6.2 (version 74) Minecraft protocol
 * Item stack and entity metadata manipulation
 * Cryptography support that provides full interoperability with Java clients and servers
 
