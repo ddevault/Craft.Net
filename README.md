@@ -135,11 +135,7 @@ of the repository:
 
 On Linux and Mac, install Mono 2.10 or better, and then use this command:
 
-    xbuild /property:Configuration=MONO
-
-**NOTE**: It is important that you build the project with the MONO configuration if you intend to use
-it on Mono. Craft.Net uses bouncy castle for encryption on Mono, because the Mono CryptoStream
-[does not work correctly](https://bugzilla.xamarin.com/show_bug.cgi?id=9247).
+    xbuild
 
 You can also build Craft.Net with Visual Studio 2010 or newer, and any version of MonoDevelop or SharpDevelop.
 
