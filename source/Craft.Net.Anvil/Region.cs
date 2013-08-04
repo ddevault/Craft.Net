@@ -82,7 +82,7 @@ namespace Craft.Net.Anvil
                                 return Chunks[position];
                             }
                             regionFile.Seek(chunkData.Item1, SeekOrigin.Begin);
-                            int length = new MinecraftStream(regionFile).ReadInt32(); // TODO: Avoid making new objects here, and in the WriteInt32
+                            /*int length = */new MinecraftStream(regionFile).ReadInt32(); // TODO: Avoid making new objects here, and in the WriteInt32
                             int compressionMode = regionFile.ReadByte();
                             switch (compressionMode)
                             {
@@ -129,7 +129,7 @@ namespace Craft.Net.Anvil
                             if (chunkData == null)
                                 return null;
                             regionFile.Seek(chunkData.Item1, SeekOrigin.Begin);
-                            int length = new MinecraftStream(regionFile).ReadInt32(); // TODO: Avoid making new objects here, and in the WriteInt32
+                            /*int length = */new MinecraftStream(regionFile).ReadInt32(); // TODO: Avoid making new objects here, and in the WriteInt32
                             int compressionMode = regionFile.ReadByte();
                             switch (compressionMode)
                             {
