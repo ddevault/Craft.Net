@@ -2289,7 +2289,7 @@ namespace Craft.Net.Common
 
             BigInteger t = p_sub1 >> s;
 
-            int bits = thisVal.bitCount();
+            /*int bits = */thisVal.bitCount();
             BigInteger a = 2;
 
             // b = a^t mod p

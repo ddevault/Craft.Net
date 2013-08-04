@@ -37,7 +37,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\Craft.Net.Classic.Common.csproj">
+    <ProjectReference Include="..\Craft.Net.Classic.Common\Craft.Net.Classic.Common.csproj">
       <Project>{B3B13B2E-FD75-43F7-A745-FF681A732E21}</Project>
       <Name>Craft.Net.Classic.Common</Name>
     </ProjectReference>

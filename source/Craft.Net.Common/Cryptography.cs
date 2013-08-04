@@ -2072,7 +2072,7 @@ namespace Craft.Net.Common
 
             try
             {
-                byte b = GetNextOctet();
+                /*byte b = */GetNextOctet();
 
                 int length = GetLength();
                 if (length > RemainingBytes())
