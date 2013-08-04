@@ -205,9 +205,9 @@ namespace Craft.Net.Server
                 Level.DefaultWorld.WorldGenerator.GeneratorName, client.GameMode,
                 Dimension.Overworld, Settings.Difficulty, Settings.MaxPlayers));
             client.SendPacket(new SpawnPositionPacket((int)client.Entity.SpawnPoint.X, (int)client.Entity.SpawnPoint.Y, (int)client.Entity.SpawnPoint.Z));
-            client.SendPacket(new PlayerAbilitiesPacket(client.Entity.Abilities.AsFlags(), client.Entity.Abilities.WalkingSpeed, client.Entity.Abilities.FlyingSpeed));
+            client.SendPacket(new PlayerAbilitiesPacket(client.Entity.Abilities.AsFlags(), client.Entity.Abilities.FlyingSpeed, client.Entity.Abilities.WalkingSpeed));
             client.SendPacket(new EntityPropertiesPacket(client.Entity.EntityId,
-                new[] { new EntityProperty("generic.movementSpeed", 0.1) }));
+                new[] { new EntityProperty("generic.movementSpeed", client.Entity.Abilities.WalkingSpeed) }));
             client.SendPacket(new TimeUpdatePacket(Level.Time, Level.Time));
             client.SendPacket(new SetWindowItemsPacket(0, client.Entity.Inventory.GetSlots()));
 

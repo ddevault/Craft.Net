@@ -16,8 +16,8 @@ namespace Craft.Net.Entities
             Invulnerable = false;
             InstantMine = false;
             FirePropertyChanged = true;
-            WalkingSpeed = 12;
-            FlyingSpeed = 24;
+            FlyingSpeed = 0.05f;
+            WalkingSpeed = 0.1f;
             PlayerEntity = entity;
         }
 
@@ -25,8 +25,8 @@ namespace Craft.Net.Entities
         private bool mayFly;
         private bool invulnerable;
         private bool instantMine;
-        private byte flyingSpeed;
-        private byte walkingSpeed;
+        private float flyingSpeed;
+        private float walkingSpeed;
 
         public bool IsFlying
         {
@@ -68,7 +68,7 @@ namespace Craft.Net.Entities
             }
         }
 
-        public byte FlyingSpeed
+        public float FlyingSpeed
         {
             get { return flyingSpeed; }
             set
@@ -78,7 +78,7 @@ namespace Craft.Net.Entities
             }
         }
 
-        public byte WalkingSpeed
+        public float WalkingSpeed
         {
             get { return walkingSpeed; }
             set
