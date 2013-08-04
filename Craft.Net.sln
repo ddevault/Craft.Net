@@ -29,6 +29,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Server", "source\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Physics", "source\Craft.Net.Physics\Craft.Net.Physics.csproj", "{C04C72EF-5FD5-42DA-B1DC-F232D3E86636}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Classic", "Classic", "{6E376C3C-C721-41C3-978D-F854044D77B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Classic.Common", "Craft.Net.Classic.Common\Craft.Net.Classic.Common.csproj", "{B3B13B2E-FD75-43F7-A745-FF681A732E21}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Classic.Networking", "Craft.Net.Classic.Common\Craft.Net.Classic.Networking\Craft.Net.Classic.Networking.csproj", "{C29820C5-559B-4D8F-A6AC-2B88702F9C5F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +73,10 @@ Global
 		{81467141-9C7D-41EE-BFB0-D40251E10F8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81467141-9C7D-41EE-BFB0-D40251E10F8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81467141-9C7D-41EE-BFB0-D40251E10F8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3B13B2E-FD75-43F7-A745-FF681A732E21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3B13B2E-FD75-43F7-A745-FF681A732E21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3B13B2E-FD75-43F7-A745-FF681A732E21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3B13B2E-FD75-43F7-A745-FF681A732E21}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B415FC03-C6FB-4B20-A5A1-81F526ADFEF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B415FC03-C6FB-4B20-A5A1-81F526ADFEF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B415FC03-C6FB-4B20-A5A1-81F526ADFEF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -75,6 +85,10 @@ Global
 		{C04C72EF-5FD5-42DA-B1DC-F232D3E86636}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C04C72EF-5FD5-42DA-B1DC-F232D3E86636}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C04C72EF-5FD5-42DA-B1DC-F232D3E86636}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C29820C5-559B-4D8F-A6AC-2B88702F9C5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C29820C5-559B-4D8F-A6AC-2B88702F9C5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C29820C5-559B-4D8F-A6AC-2B88702F9C5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C29820C5-559B-4D8F-A6AC-2B88702F9C5F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C3BBAB7E-606F-420E-9461-C8CFAEC2476B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C3BBAB7E-606F-420E-9461-C8CFAEC2476B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3BBAB7E-606F-420E-9461-C8CFAEC2476B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -93,6 +107,8 @@ Global
 		{5E258098-CB4F-4C62-B1F2-A2ACD5F51CDC} = {848E76C6-A56D-4DC7-A627-9A6A92C07991}
 		{078F8195-CB54-49FB-AC3B-0C00E2E1DA6C} = {848E76C6-A56D-4DC7-A627-9A6A92C07991}
 		{5134C61A-020A-4931-9844-4706AADA62AA} = {848E76C6-A56D-4DC7-A627-9A6A92C07991}
+		{B3B13B2E-FD75-43F7-A745-FF681A732E21} = {6E376C3C-C721-41C3-978D-F854044D77B7}
+		{C29820C5-559B-4D8F-A6AC-2B88702F9C5F} = {6E376C3C-C721-41C3-978D-F854044D77B7}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = source\Test\TestServer\TestServer.csproj

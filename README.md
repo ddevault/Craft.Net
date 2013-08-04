@@ -42,6 +42,17 @@ it, you can fetch submodules manually with `git submodule update --init`.
 
 The latest supported Minecraft version is **1.6.2**.
 
+## Classic Support
+
+There is work-in-progress support for Minecraft classic. The following libraries are available:
+
+* **Craft.Net.Classic.Common**: Common utilities and classes for working with Minecraft Classic
+* **Craft.Net.Classic.Networking**: Minecraft Classic networking support
+  * Full support for Minecraft Classic networking protocol
+
+Libraries like Craft.Net.Classic.Server, Craft.Net.Classic.Client, Craft.Net.Classic.Level, and more are also
+planned.
+
 ## Community and Related Projects
 
 There's an active Craft.Net development, discussion, and support community on IRC. Join us to chat at
