@@ -31,9 +31,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Physics", "source
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Classic", "Classic", "{6E376C3C-C721-41C3-978D-F854044D77B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Classic.Common", "Craft.Net.Classic.Common\Craft.Net.Classic.Common.csproj", "{B3B13B2E-FD75-43F7-A745-FF681A732E21}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Classic.Common", "source\Classic\Craft.Net.Classic.Common\Craft.Net.Classic.Common.csproj", "{B3B13B2E-FD75-43F7-A745-FF681A732E21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Classic.Networking", "Craft.Net.Classic.Common\Craft.Net.Classic.Networking\Craft.Net.Classic.Networking.csproj", "{C29820C5-559B-4D8F-A6AC-2B88702F9C5F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Classic.Networking", "source\Classic\Craft.Net.Classic.Networking\Craft.Net.Classic.Networking.csproj", "{C29820C5-559B-4D8F-A6AC-2B88702F9C5F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
