@@ -70,6 +70,9 @@
     <Compile Include="RemoteClient.cs" />
     <Compile Include="ServerSettings.cs" />
     <Compile Include="Events\ConnectionEstablishedEventArgs.cs" />
+    <Compile Include="Channels\ServerPingChannel.cs" />
+    <Compile Include="Channels\PluginChannel.cs" />
+    <Compile Include="Channels\TexturePackChannel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\externals\fNbt\fNbt\fNbt.csproj">
@@ -109,4 +112,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Folder Include="Channels\" />
+  </ItemGroup>
 </Project>

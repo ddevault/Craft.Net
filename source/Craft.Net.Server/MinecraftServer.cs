@@ -138,13 +138,14 @@ namespace Craft.Net.Server
 
         public void SendChat(string text)
         {
+            text = string.Format("{{\"text\":\"{0}\"}}", text); // TODO: Implement this properly
             foreach (var client in Clients.Where(c => c.IsLoggedIn))
                 client.SendChat(text);
         }
 
         public RemoteClient[] GetClientsInWorld(World world)
         {
-            return Clients.Where(c => c.IsLoggedIn == true && c.World == world).ToArray();
+            return Clients.Where(c => c.IsLoggedIn && c.World == world).ToArray();
         }
 
         #endregion
@@ -205,6 +206,8 @@ namespace Craft.Net.Server
                 Dimension.Overworld, Settings.Difficulty, Settings.MaxPlayers));
             client.SendPacket(new SpawnPositionPacket((int)client.Entity.SpawnPoint.X, (int)client.Entity.SpawnPoint.Y, (int)client.Entity.SpawnPoint.Z));
             client.SendPacket(new PlayerAbilitiesPacket(client.Entity.Abilities.AsFlags(), client.Entity.Abilities.WalkingSpeed, client.Entity.Abilities.FlyingSpeed));
+            client.SendPacket(new EntityPropertiesPacket(client.Entity.EntityId,
+                new[] { new EntityProperty("generic.movementSpeed", 0.1) }));
             client.SendPacket(new TimeUpdatePacket(Level.Time, Level.Time));
             client.SendPacket(new SetWindowItemsPacket(0, client.Entity.Inventory.GetSlots()));
 
@@ -222,11 +225,11 @@ namespace Craft.Net.Server
             EntityManager.SendClientEntities(client);
 
             client.SendPacket(new UpdateHealthPacket(client.Entity.Health, client.Entity.Food, client.Entity.FoodSaturation));
-            //var args = new PlayerLogInEventArgs(client);
-            //OnPlayerLoggedIn(args);
+            var args = new PlayerLogInEventArgs(client);
+            OnPlayerLoggedIn(args);
             //LogProvider.Log(client.Username + " joined the game.");
-            //if (!args.Handled)
-            SendChat(ChatColors.Yellow + client.Username + " joined the game.");
+            if (!args.Handled)
+                SendChat(ChatColors.Yellow + client.Username + " joined the game.");
         }
 
         #endregion
@@ -433,6 +436,12 @@ namespace Craft.Net.Server
 		{
 			if (ConnectionEstablished != null) ConnectionEstablished(this, e);
 		}
+
+        public event EventHandler<PlayerLogInEventArgs> PlayerLoggedIn;
+        protected internal virtual void OnPlayerLoggedIn(PlayerLogInEventArgs e)
+        {
+            if (PlayerLoggedIn != null) PlayerLoggedIn(this, e);
+        }
 
         #endregion
     }

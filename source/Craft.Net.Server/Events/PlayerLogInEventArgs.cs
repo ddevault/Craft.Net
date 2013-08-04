@@ -14,6 +14,7 @@ namespace Craft.Net.Server.Events
         {
             get { return Client.Username; }
         }
+
         public RemoteClient Client { get; set; }
 
         public bool Handled { get; set; }

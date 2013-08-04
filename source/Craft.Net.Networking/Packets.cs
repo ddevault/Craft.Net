@@ -42,7 +42,7 @@ namespace Craft.Net.Networking
     public struct LoginRequestPacket : IPacket
     {
         public LoginRequestPacket(int entityId, string levelType, GameMode gameMode,
-            Dimension dimension, Difficulty difficulty, byte maxPlayers)
+                                  Dimension dimension, Difficulty difficulty, byte maxPlayers)
         {
             EntityId = entityId;
             LevelType = levelType;
@@ -91,7 +91,7 @@ namespace Craft.Net.Networking
     public struct HandshakePacket : IPacket
     {
         public HandshakePacket(byte protocolVersion, string username, string hostname, 
-            int port)
+                               int port)
         {
             ProtocolVersion = protocolVersion;
             Username = username;
@@ -280,14 +280,15 @@ namespace Craft.Net.Networking
 
     public struct UpdateHealthPacket : IPacket
     {
-        public UpdateHealthPacket(short health, short food, float saturation)
+        public UpdateHealthPacket(float health, short food, float saturation)
         {
             Health = health;
             Food = food;
             FoodSaturation = saturation;
         }
 
-        public short Health, Food;
+        public float Health;
+        public short Food;
         public float FoodSaturation;
 
         public const byte PacketId = 0x08;
@@ -295,7 +296,7 @@ namespace Craft.Net.Networking
 
         public void ReadPacket(MinecraftStream stream)
         {
-            Health = stream.ReadInt16();
+            Health = stream.ReadSingle();
             Food = stream.ReadInt16();
             FoodSaturation = stream.ReadSingle();
         }
@@ -303,7 +304,7 @@ namespace Craft.Net.Networking
         public void WritePacket(MinecraftStream stream)
         {
             stream.WriteUInt8(Id);
-            stream.WriteInt16(Health);
+            stream.WriteSingle(Health);
             stream.WriteInt16(Food);
             stream.WriteSingle(FoodSaturation);
         }
@@ -312,7 +313,7 @@ namespace Craft.Net.Networking
     public struct RespawnPacket : IPacket
     {
         public RespawnPacket(Dimension dimension, Difficulty difficulty, GameMode gameMode,
-            short worldHeight, string levelType)
+                             short worldHeight, string levelType)
         {
             Dimension = dimension;
             Difficulty = difficulty;
@@ -445,7 +446,7 @@ namespace Craft.Net.Networking
     public struct PlayerPositionAndLookPacket : IPacket
     {
         public PlayerPositionAndLookPacket(double x, double y, double z, double stance,
-            float yaw, float pitch, bool onGround)
+                                           float yaw, float pitch, bool onGround)
         {
             X = x;
             Y = y;
@@ -500,7 +501,7 @@ namespace Craft.Net.Networking
         }
 
         public PlayerDiggingPacket(PlayerAction action, int x, byte y,
-            int z, byte face)
+                                   int z, byte face)
         {
             Action = action;
             X = x;
@@ -541,8 +542,8 @@ namespace Craft.Net.Networking
     public struct RightClickPacket : IPacket
     {
         public RightClickPacket(int x, byte y, int z,
-            byte direction, ItemStack heldItem, byte cursorX,
-            byte cursorY, byte cursorZ)
+                                byte direction, ItemStack heldItem, byte cursorX,
+                                byte cursorY, byte cursorZ)
         {
             X = x;
             Y = y;
@@ -710,10 +711,12 @@ namespace Craft.Net.Networking
         {
             EntityId = entityId;
             Action = action;
+            Unknown = 0;
         }
 
         public int EntityId;
         public EntityAction Action;
+        public int Unknown;
 
         public const byte PacketId = 0x13;
         public byte Id { get { return 0x13; } }
@@ -722,6 +725,7 @@ namespace Craft.Net.Networking
         {
             EntityId = stream.ReadInt32();
             Action = (EntityAction)stream.ReadUInt8();
+            Unknown = stream.ReadInt32();
         }
 
         public void WritePacket(MinecraftStream stream)
@@ -729,14 +733,15 @@ namespace Craft.Net.Networking
             stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteUInt8((byte)Action);
+            stream.WriteInt32(Unknown);
         }
     }
 
     public struct SpawnPlayerPacket : IPacket
     {
         public SpawnPlayerPacket(int entityId, string playerName, int x,
-            int y, int z, byte yaw,
-            byte pitch, short heldItem, MetadataDictionary metadata)
+                                 int y, int z, byte yaw,
+                                 byte pitch, short heldItem, MetadataDictionary metadata)
         {
             EntityId = entityId;
             PlayerName = playerName;
@@ -818,7 +823,7 @@ namespace Craft.Net.Networking
     public struct SpawnObjectPacket : IPacket
     {
         public SpawnObjectPacket(int entityId, byte type, int x,
-            int y, int z, byte yaw, byte pitch)
+                                 int y, int z, byte yaw, byte pitch)
         {
             EntityId = entityId;
             Type = type;
@@ -832,8 +837,8 @@ namespace Craft.Net.Networking
         }
 
         public SpawnObjectPacket(int entityId, byte type, int x,
-            int y, int z, byte yaw, byte pitch,
-            int data, short speedX, short speedY, short speedZ)
+                                 int y, int z, byte yaw, byte pitch,
+                                 int data, short speedX, short speedY, short speedZ)
         {
             EntityId = entityId;
             Type = type;
@@ -899,10 +904,10 @@ namespace Craft.Net.Networking
     public struct SpawnMobPacket : IPacket
     {
         public SpawnMobPacket(int entityId, byte type, int x,
-            int y, int z, byte yaw,
-            byte pitch, byte headYaw, short velocityX,
-            short velocityY, short velocityZ,
-            MetadataDictionary metadata)
+                              int y, int z, byte yaw,
+                              byte pitch, byte headYaw, short velocityX,
+                              short velocityY, short velocityZ,
+                              MetadataDictionary metadata)
         {
             EntityId = entityId;
             Type = type;
@@ -965,7 +970,7 @@ namespace Craft.Net.Networking
     public struct SpawnPaintingPacket : IPacket
     {
         public SpawnPaintingPacket(int entityId, string title, int x,
-            int y, int z, int direction)
+                                   int y, int z, int direction)
         {
             EntityId = entityId;
             Title = title;
@@ -1008,7 +1013,7 @@ namespace Craft.Net.Networking
     public struct SpawnExperienceOrbPacket : IPacket
     {
         public SpawnExperienceOrbPacket(int entityId, int x, int y,
-            int z, short count)
+                                        int z, short count)
         {
             EntityId = entityId;
             X = x;
@@ -1044,10 +1049,46 @@ namespace Craft.Net.Networking
         }
     }
 
+    public struct SteerVehiclePacket : IPacket
+    {
+        public SteerVehiclePacket(float strafe, float forward, bool jump, bool unmount)
+        {
+            Strafe = strafe;
+            Forward = forward;
+            Jump = jump;
+            Unmount = unmount;
+        }
+
+        public float Strafe;
+        public float Forward;
+        public bool Jump;
+        public bool Unmount;
+
+        public const byte PacketId = 0x1B;
+        public byte Id { get { return 0x1B; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            Strafe = stream.ReadSingle();
+            Forward = stream.ReadSingle();
+            Jump = stream.ReadBoolean();
+            Unmount = stream.ReadBoolean();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteUInt8(Id);
+            stream.WriteSingle(Strafe);
+            stream.WriteSingle(Forward);
+            stream.WriteBoolean(Jump);
+            stream.WriteBoolean(Unmount);
+        }
+    }
+
     public struct EntityVelocityPacket : IPacket
     {
         public EntityVelocityPacket(int entityId, short velocityX, short velocityY,
-            short velocityZ)
+                                    short velocityZ)
         {
             EntityId = entityId;
             VelocityX = velocityX;
@@ -1132,7 +1173,7 @@ namespace Craft.Net.Networking
     public struct EntityRelativeMovePacket : IPacket
     {
         public EntityRelativeMovePacket(int entityId, sbyte deltaX, sbyte deltaY,
-            sbyte deltaZ)
+                                        sbyte deltaZ)
         {
             EntityId = entityId;
             DeltaX = deltaX;
@@ -1198,7 +1239,7 @@ namespace Craft.Net.Networking
     public struct EntityLookAndRelativeMovePacket : IPacket
     {
         public EntityLookAndRelativeMovePacket(int entityId, sbyte deltaX, sbyte deltaY,
-            sbyte deltaZ, byte yaw, byte pitch)
+                                               sbyte deltaZ, byte yaw, byte pitch)
         {
             EntityId = entityId;
             DeltaX = deltaX;
@@ -1240,7 +1281,7 @@ namespace Craft.Net.Networking
     public struct EntityTeleportPacket : IPacket
     {
         public EntityTeleportPacket(int entityId, int x, int y,
-            int z, byte yaw, byte pitch)
+                                    int z, byte yaw, byte pitch)
         {
             EntityId = entityId;
             X = x;
@@ -1354,13 +1395,15 @@ namespace Craft.Net.Networking
 
     public struct AttachEntityPacket : IPacket
     {
-        public AttachEntityPacket(int entityId, int vehicleId)
+        public AttachEntityPacket(int entityId, int vehicleId, bool leash)
         {
             EntityId = entityId;
             VehicleId = vehicleId;
+            Leash = leash;
         }
 
         public int EntityId, VehicleId;
+        public bool Leash;
 
         public const byte PacketId = 0x27;
         public byte Id { get { return 0x27; } }
@@ -1369,6 +1412,7 @@ namespace Craft.Net.Networking
         {
             EntityId = stream.ReadInt32();
             VehicleId = stream.ReadInt32();
+            Leash = stream.ReadBoolean();
         }
 
         public void WritePacket(MinecraftStream stream)
@@ -1376,6 +1420,7 @@ namespace Craft.Net.Networking
             stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteInt32(VehicleId);
+            stream.WriteBoolean(Leash);
         }
     }
 
@@ -1410,7 +1455,7 @@ namespace Craft.Net.Networking
     public struct EntityEffectPacket : IPacket
     {
         public EntityEffectPacket(int entityId, byte effectId, byte amplifier,
-            short duration)
+                                  short duration)
         {
             EntityId = entityId;
             EffectId = effectId;
@@ -1504,10 +1549,93 @@ namespace Craft.Net.Networking
         }
     }
 
+    public struct EntityPropertiesPacket : IPacket
+    {
+        public EntityPropertiesPacket(int entityId, EntityProperty[] properties)
+        {
+            EntityId = entityId;
+            Properties = properties;
+        }
+
+        public int EntityId;
+        public EntityProperty[] Properties;
+
+        public const byte PacketId = 0x2C;
+        public byte Id { get { return 0x2C; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            EntityId = stream.ReadInt32();
+            var count = stream.ReadInt32();
+            if (count < 0)
+                throw new InvalidOperationException("Cannot specify less than zero properties.");
+            Properties = new EntityProperty[count];
+            for (int i = 0; i < count; i++)
+            {
+                var property = new EntityProperty();
+                property.Key = stream.ReadString();
+                property.Value = stream.ReadDouble();
+                var listLength = stream.ReadInt16();
+                property.UnknownList = new EntityPropertyListItem[listLength];
+                for (int j = 0; j < listLength; j++)
+                {
+                    var item = new EntityPropertyListItem();
+                    item.UnknownMSB = stream.ReadInt64();
+                    item.UnknownLSB = stream.ReadInt64();
+                    item.UnknownDouble = stream.ReadDouble();
+                    item.UnknownByte = stream.ReadUInt8();
+                    property.UnknownList[j] = item;
+                }
+                Properties[i] = property;
+            }
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteUInt8(Id);
+            stream.WriteInt32(EntityId);
+            stream.WriteInt32(Properties.Length);
+            for (int i = 0; i < Properties.Length; i++)
+            {
+                stream.WriteString(Properties[i].Key);
+                stream.WriteDouble(Properties[i].Value);
+                stream.WriteInt16((short)Properties[i].UnknownList.Length);
+                for (int j = 0; j < Properties[i].UnknownList.Length; j++)
+                {
+                    stream.WriteInt64(Properties[i].UnknownList[j].UnknownMSB);
+                    stream.WriteInt64(Properties[i].UnknownList[j].UnknownLSB);
+                    stream.WriteDouble(Properties[i].UnknownList[j].UnknownDouble);
+                    stream.WriteUInt8(Properties[i].UnknownList[j].UnknownByte);
+                }
+            }
+        }
+    }
+
+    public struct EntityProperty
+    {
+        public EntityProperty(string key, double value)
+        {
+            Key = key;
+            Value = value;
+            UnknownList = new EntityPropertyListItem[0];
+        }
+
+        public string Key;
+        public double Value;
+        public EntityPropertyListItem[] UnknownList;
+    }
+
+    public struct EntityPropertyListItem
+    {
+        public long UnknownMSB, UnknownLSB;
+        public double UnknownDouble;
+        public byte UnknownByte;
+    }
+
     public struct ChunkDataPacket : IPacket
     {
         public ChunkDataPacket(int x, int z, bool groundUpContinuous,
-            ushort primaryBitMap, ushort addBitMap, byte[] data)
+                               ushort primaryBitMap, ushort addBitMap, byte[] data)
         {
             X = x;
             Z = z;
@@ -1591,7 +1719,7 @@ namespace Craft.Net.Networking
     public struct BlockChangePacket : IPacket
     {
         public BlockChangePacket(int x, byte y, int z,
-            short blockType, byte blockMetadata)
+                                 short blockType, byte blockMetadata)
         {
             X = x;
             Y = y;
@@ -1632,7 +1760,7 @@ namespace Craft.Net.Networking
     public struct BlockActionPacket : IPacket
     {
         public BlockActionPacket(int x, short y, int z,
-            byte data1, byte data2, short blockId)
+                                 byte data1, byte data2, short blockId)
         {
             X = x;
             Y = y;
@@ -1677,8 +1805,9 @@ namespace Craft.Net.Networking
     public struct BlockBreakAnimationPacket : IPacket
     {
         public BlockBreakAnimationPacket(int entityId, int x, int y,
-            int z, byte destroyStage)
+                                         int z, byte destroyStage)
         {
+            // TODO: Use this packet when mining begins
             EntityId = entityId;
             X = x;
             Y = y;
@@ -1745,7 +1874,7 @@ namespace Craft.Net.Networking
             var length = stream.ReadInt32();
             LightIncluded = stream.ReadBoolean();
             ChunkData = stream.ReadUInt8Array(length);
-            
+
             ChunkMetadata = new Metadata[ChunkCount];
             for (int i = 0; i < ChunkCount; i++)
             {
@@ -1779,8 +1908,8 @@ namespace Craft.Net.Networking
     public struct ExplosionPacket : IPacket
     {
         public ExplosionPacket(double x, double y, double z,
-            float radius, int recordCount, byte[] records,
-            float playerVelocityX, float playerVelocityY, float playerVelocityZ)
+                               float radius, int recordCount, byte[] records,
+                               float playerVelocityX, float playerVelocityY, float playerVelocityZ)
         {
             // TODO: Improve this packet
             X = x;
@@ -1834,7 +1963,7 @@ namespace Craft.Net.Networking
     public struct SoundOrParticleEffectPacket : IPacket
     {
         public SoundOrParticleEffectPacket(int entityId, int x, byte y, int z,
-            int data, bool disableRelativeVolume)
+                                           int data, bool disableRelativeVolume)
         {
             EntityId = entityId;
             X = x;
@@ -1879,7 +2008,7 @@ namespace Craft.Net.Networking
     public struct NamedSoundEffectPacket : IPacket
     {
         public NamedSoundEffectPacket(string soundName, int x, int y,
-            int z, float volume, byte pitch)
+                                      int z, float volume, byte pitch)
         {
             SoundName = soundName;
             X = x;
@@ -1922,8 +2051,8 @@ namespace Craft.Net.Networking
     public struct ParticleEffectPacket : IPacket
     {
         public ParticleEffectPacket(string effectName, float x, float y, float z,
-            float offsetX, float offsetY, float offsetZ, float particleSpeed,
-            int particleCount)
+                                    float offsetX, float offsetY, float offsetZ, float particleSpeed,
+                                    int particleCount)
         {
             EffectName = effectName;
             X = x;
@@ -2020,7 +2149,7 @@ namespace Craft.Net.Networking
     public struct SpawnGlobalEntityPacket : IPacket
     {
         public SpawnGlobalEntityPacket(int entityId, byte type, int x,
-            int y, int z)
+                                       int y, int z)
         {
             EntityId = entityId;
             Type = type;
@@ -2059,20 +2188,24 @@ namespace Craft.Net.Networking
     public struct OpenWindowPacket : IPacket
     {
         public OpenWindowPacket(byte windowId, byte inventoryType, string windowTitle,
-            byte slotCount, bool useProvidedTitle) // TODO: InventoryTypes enum
+                                byte slotCount, bool useProvidedTitle) // TODO: InventoryTypes enum
         {
             WindowId = windowId;
             InventoryType = inventoryType;
             WindowTitle = windowTitle;
             SlotCount = slotCount;
             UseProvidedTitle = useProvidedTitle;
+            Unknown = null;
+            if (InventoryType == 11)
+                Unknown = 0; // TODO: Find a better default value (and determine what it does)
         }
-        
+
         public byte WindowId;
         public byte InventoryType;
         public string WindowTitle;
         public byte SlotCount;
         public bool UseProvidedTitle;
+        public int? Unknown;
 
         public const byte PacketId = 0x64;
         public byte Id { get { return 0x64; } }
@@ -2084,6 +2217,8 @@ namespace Craft.Net.Networking
             WindowTitle = stream.ReadString();
             SlotCount = stream.ReadUInt8();
             UseProvidedTitle = stream.ReadBoolean();
+            if (InventoryType == 11)
+                Unknown = stream.ReadInt32();
         }
 
         public void WritePacket(MinecraftStream stream)
@@ -2094,6 +2229,8 @@ namespace Craft.Net.Networking
             stream.WriteString(WindowTitle);
             stream.WriteUInt8(SlotCount);
             stream.WriteBoolean(UseProvidedTitle);
+            if (InventoryType == 11)
+                stream.WriteInt32(Unknown.GetValueOrDefault());
         }
     }
 
@@ -2124,7 +2261,7 @@ namespace Craft.Net.Networking
     public struct ClickWindowPacket : IPacket
     {
         public ClickWindowPacket(byte windowId, short slotIndex, byte mouseButton,
-            short actionNumber, bool shift, ItemStack clickedItem)
+                                 short actionNumber, bool shift, ItemStack clickedItem)
         {
             WindowId = windowId;
             SlotIndex = slotIndex;
@@ -2205,7 +2342,7 @@ namespace Craft.Net.Networking
             WindowId = windowId;
             Items = items;
         }
-        
+
         public byte WindowId;
         public ItemStack[] Items;
 
@@ -2354,7 +2491,7 @@ namespace Craft.Net.Networking
     public struct UpdateSignPacket : IPacket
     {
         public UpdateSignPacket(int x, short y, int z,
-            string text1, string text2, string text3, string text4)
+                                string text1, string text2, string text3, string text4)
         {
             X = x;
             Y = y;
@@ -2405,7 +2542,7 @@ namespace Craft.Net.Networking
             ItemId = itemId;
             Text = text;
         }
-        
+
         public short ItemType, ItemId;
         public string Text;
 
@@ -2433,7 +2570,7 @@ namespace Craft.Net.Networking
     public struct UpdateTileEntityPacket : IPacket
     {
         public UpdateTileEntityPacket(int x, short y, int z,
-            byte action, NbtFile nbt)
+                                      byte action, NbtFile nbt)
         {
             X = x;
             Y = y;
@@ -2478,16 +2615,56 @@ namespace Craft.Net.Networking
         }
     }
 
+    /// <summary>
+    /// Warning: The purpose of this packet is not entirely known. It seems to be sent by
+    /// clients upon placing signs.
+    /// </summary>
+    public struct UnknownPacket0x85 : IPacket
+    {
+        public UnknownPacket0x85(int x, int y, int z)
+        {
+            X = x;
+            Y = y;
+            Z = z;
+            Unknown = (byte)0;
+        }
+
+        /// <summary>
+        /// Never observed to be any value other than zero.
+        /// </summary>
+        public byte Unknown;
+        public int X, Y, Z;
+
+        public const byte PacketId = 0x84;
+        public byte Id { get { return 0x84; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            Unknown = stream.ReadUInt8();
+            X = stream.ReadInt32();
+            Y = stream.ReadInt32();
+            Z = stream.ReadInt32();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteUInt8(Unknown);
+            stream.WriteInt32(X);
+            stream.WriteInt32(Y);
+            stream.WriteInt32(Z);
+        }
+    }
+
     public struct IncrementStatisticPacket : IPacket
     {
-        public IncrementStatisticPacket(int statisticId, byte amount)
+        public IncrementStatisticPacket(int statisticId, int amount)
         {
             StatisticId = statisticId;
             Amount = amount;
         }
 
         public int StatisticId;
-        public byte Amount;
+        public int Amount;
 
         public const byte PacketId = 0xC8;
         public byte Id { get { return 0xC8; } }
@@ -2495,14 +2672,14 @@ namespace Craft.Net.Networking
         public void ReadPacket(MinecraftStream stream)
         {
             StatisticId = stream.ReadInt32();
-            Amount = stream.ReadUInt8();
+            Amount = stream.ReadInt32();
         }
 
         public void WritePacket(MinecraftStream stream)
         {
             stream.WriteUInt8(Id);
             stream.WriteInt32(StatisticId);
-            stream.WriteUInt8(Amount);
+            stream.WriteInt32(Amount);
         }
     }
 
@@ -2540,7 +2717,7 @@ namespace Craft.Net.Networking
 
     public struct PlayerAbilitiesPacket : IPacket
     {
-        public PlayerAbilitiesPacket(byte flags, byte flyingSpeed, byte walkingSpeed)
+        public PlayerAbilitiesPacket(byte flags, float flyingSpeed, float walkingSpeed)
         {
             Flags = flags;
             FlyingSpeed = flyingSpeed;
@@ -2548,7 +2725,7 @@ namespace Craft.Net.Networking
         }
 
         public byte Flags;
-        public byte FlyingSpeed, WalkingSpeed;
+        public float FlyingSpeed, WalkingSpeed;
 
         public const byte PacketId = 0xCA;
         public byte Id { get { return 0xCA; } }
@@ -2556,16 +2733,16 @@ namespace Craft.Net.Networking
         public void ReadPacket(MinecraftStream stream)
         {
             Flags = stream.ReadUInt8();
-            FlyingSpeed = stream.ReadUInt8();
-            WalkingSpeed = stream.ReadUInt8();
+            FlyingSpeed = stream.ReadSingle();
+            WalkingSpeed = stream.ReadSingle();
         }
 
         public void WritePacket(MinecraftStream stream)
         {
             stream.WriteUInt8(Id);
             stream.WriteUInt8(Flags);
-            stream.WriteUInt8(FlyingSpeed);
-            stream.WriteUInt8(WalkingSpeed);
+            stream.WriteSingle(FlyingSpeed);
+            stream.WriteSingle(WalkingSpeed);
         }
     }
 
@@ -2593,7 +2770,7 @@ namespace Craft.Net.Networking
         }
     }
 
-    public enum ChatMode
+    public enum ChatMode // TODO: Move this?
     {
         Hidden = 2,
         CommandsOnly = 1,
@@ -2603,7 +2780,7 @@ namespace Craft.Net.Networking
     public struct ClientSettingsPacket : IPacket
     {
         public ClientSettingsPacket(string locale, byte viewDistance, ChatMode chatFlags,
-            Difficulty difficulty, bool showCape)
+                                    Difficulty difficulty, bool showCape)
         {
             Locale = locale;
             ViewDistance = viewDistance;
@@ -2674,7 +2851,7 @@ namespace Craft.Net.Networking
     public struct CreateScoreboardPacket : IPacket
     {
         public CreateScoreboardPacket(string name, string displayName)
-            : this(name, displayName, false)
+        : this(name, displayName, false)
         {
         }
 
@@ -2796,7 +2973,7 @@ namespace Craft.Net.Networking
     public struct SetTeamsPacket : IPacket
     {
         public static SetTeamsPacket CreateTeam(string teamName, string displayName, string teamPrefix,
-            string teamSuffix, bool enableFriendlyFire, string[] players)
+                                                string teamSuffix, bool enableFriendlyFire, string[] players)
         {
             var packet = new SetTeamsPacket();
             packet.PacketMode = TeamMode.CreateTeam;
@@ -2810,7 +2987,7 @@ namespace Craft.Net.Networking
         }
 
         public static SetTeamsPacket UpdateTeam(string teamName, string displayName, string teamPrefix,
-            string teamSuffix, bool enableFriendlyFire)
+                                                string teamSuffix, bool enableFriendlyFire)
         {
             var packet = new SetTeamsPacket();
             packet.PacketMode = TeamMode.UpdateTeam;
@@ -3011,25 +3188,18 @@ namespace Craft.Net.Networking
 
     public struct ServerListPingPacket : IPacket
     {
-        public ServerListPingPacket(byte magic)
-        {
-            Magic = magic;
-        }
-
-        public byte Magic;
-
         public const byte PacketId = 0xFE;
         public byte Id { get { return 0xFE; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
-            Magic = stream.ReadUInt8();
+            stream.ReadUInt8();
         }
 
         public void WritePacket(MinecraftStream stream)
         {
             stream.WriteUInt8(Id);
-            stream.WriteUInt8(Magic);
+            stream.WriteUInt8(1);
         }
     }
 
