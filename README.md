@@ -32,13 +32,15 @@ libraries from Craft.Net to accomplish different tasks. The following libraries 
 * **Craft.Net.TerrainGeneration**: Various terrain generators
   * Vanilla flatland support
 
-More libraries are planned for the future, including Craft.Net.AI, Craft.Net.Logic, and more. All libraries in
-Craft.Net support Windows, Linux, and Mac. The long-term goal is to recreate the entire Minecraft ecosystem in
-C#, and to offer interopability with vanilla Minecraft.
+More libraries are planned for the future. All libraries in Craft.Net support Windows, Linux, and Mac. The
+long-term goal is to recreate the entire Minecraft ecosystem in C#, and to offer interopability with vanilla
+Minecraft.
 
 **A note on submodules**: Craft.Net includes external dependencies in the form of git submodules. When cloning
 Craft.Net, please use `git clone --recursive git://github.com/SirCmpwn/Craft.Net.git`. If you've already cloned
 it, you can fetch submodules manually with `git submodule update --init`.
+
+The latest supported Minecraft version is **1.6.2**.
 
 ## Community and Related Projects
 
@@ -49,7 +51,6 @@ projects:
 
 * [PartyCraft](https://github.com/SirCmpwn/PartyCraft): Custom Minecraft server with plugin support
 * [SMProxy](https://github.com/SirCmpwn/SMProxy): Proxy for Minecraft network protocol debugging and reverse engineering
-
 
 ## Snapshot Support
 
