@@ -82,9 +82,9 @@ namespace Craft.Net.Classic.Networking
         }
     }
 
-    public struct LevelChunkPacket : IPacket
+    public struct LevelDataPacket : IPacket
     {
-        public LevelChunkPacket(byte[] data, double complete)
+        public LevelDataPacket(byte[] data, double complete)
         {
             Data = data;
             Complete = complete;
