@@ -94,7 +94,7 @@ namespace Craft.Net.Classic.Common
         {
             if (value.Length > 64)
                 throw new ArgumentOutOfRangeException("value", "String must be less than or equal to 64 characters in length.");
-            value.PadRight(64, ' ');
+            value = value.PadRight(64, ' ');
             var raw = Encoding.ASCII.GetBytes(value);
             Write(raw, 0, raw.Length);
         }
