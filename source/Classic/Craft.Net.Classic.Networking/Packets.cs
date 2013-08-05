@@ -101,7 +101,7 @@ namespace Craft.Net.Classic.Networking
             var length = stream.ReadInt16();
             var data = stream.ReadArray();
             Data = new byte[length];
-            Array.Copy(data, data, length);
+            Array.Copy(data, Data, length);
             Complete = stream.ReadUInt8() / 100.0;
         }
 
