@@ -173,6 +173,8 @@ namespace Craft.Net.Anvil
             if (!Chunks.ContainsKey(position))
                 Chunks.Add(position, chunk);
             chunk.IsModified = true;
+            chunk.X = position.X;
+            chunk.Z = position.Z;
             Chunks[position] = chunk;
         }
 
