@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Craft.Net.Common;
 using Craft.Net.Classic.Common;
 
 namespace Craft.Net.Classic.Networking

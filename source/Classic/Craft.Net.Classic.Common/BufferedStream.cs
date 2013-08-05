@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace Craft.Net.Common
+namespace Craft.Net.Classic.Common
 {
     // This is not strictly needed, but I prefer to write my packets all at once, instead
     // of field by field.
