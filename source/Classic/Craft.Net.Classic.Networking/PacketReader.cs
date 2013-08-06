@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Craft.Net.Classic.Common;
 
 namespace Craft.Net.Classic.Networking
@@ -9,25 +7,27 @@ namespace Craft.Net.Classic.Networking
     {
         public const int ProtocolVersion = 7;
 
+        public delegate IPacket CreatePacketInstance();
+
         #region Packet Types
-        private static Type[] Packets = new[]
+        private static readonly CreatePacketInstance[] Packets = new CreatePacketInstance[]
         {
-            typeof(HandshakePacket), // 0x00
-            typeof(PingPacket), // 0x01
-            typeof(LevelInitializePacket), // 0x02
-            typeof(LevelDataPacket), // 0x03
-            typeof(LevelFinalizePacket), // 0x04
-            typeof(ClientSetBlockPacket), // 0x05
-            typeof(ServerSetBlockPacket), // 0x06
-            typeof(SpawnPlayerPacket), // 0x07
-            typeof(PositionAndOrientationPacket), // 0x08
-            typeof(RelativePositionAndOrientationPacket), // 0x09
-            typeof(RelativePositionPacket), // 0x0A
-            typeof(OrientationPacket), // 0x0B
-            typeof(DespawnPlayerPacket), // 0x0C
-            typeof(ChatMessagePacket), // 0x0D
-            typeof(DisconnectPlayerPacket), // 0x0E
-            typeof(ChangePlayerPermissionPacket), // 0x0F
+            () => new HandshakePacket(), // 0x00
+            () => new PingPacket(), // 0x01
+            () => new LevelInitializePacket(), // 0x02
+            () => new LevelDataPacket(), // 0x03
+            () => new LevelFinalizePacket(), // 0x04
+            () => new ClientSetBlockPacket(), // 0x05
+            () => new ServerSetBlockPacket(), // 0x06
+            () => new SpawnPlayerPacket(), // 0x07
+            () => new PositionAndOrientationPacket(), // 0x08
+            () => new RelativePositionAndOrientationPacket(), // 0x09
+            () => new RelativePositionPacket(), // 0x0A
+            () => new OrientationPacket(), // 0x0B
+            () => new DespawnPlayerPacket(), // 0x0C
+            () => new ChatMessagePacket(), // 0x0D
+            () => new DisconnectPlayerPacket(), // 0x0E
+            () => new ChangePlayerPermissionPacket(), // 0x0F
             null, // 0x10
             null, // 0x11
             null, // 0x12
@@ -274,10 +274,9 @@ namespace Craft.Net.Classic.Networking
         public static IPacket ReadPacket(MinecraftStream stream)
         {
             byte id = stream.ReadUInt8();
-            var type = Packets[id];
-            if (type == null)
+            if (Packets[id] == null)
                 throw new InvalidOperationException("Invalid packet ID: 0x" + id.ToString("X2"));
-            var packet = (IPacket)Activator.CreateInstance(type);
+            var packet = Packets[id]();
             packet.ReadPacket(stream);
             return packet;
         }
@@ -285,13 +284,15 @@ namespace Craft.Net.Classic.Networking
         /// <summary>
         /// Overrides the implementation for a certain packet.
         /// </summary>
-        /// <param name="packetType">A Type that inherits from Craft.Net.Classic.Networking.IPacket</param>
-        public static void OverridePacket(Type packetType)
+        /// <param name="factory">A method that returns a new instance of the packet for populating later.</param>
+        public static void OverridePacket(CreatePacketInstance factory)
         {
-            if (!typeof(IPacket).IsAssignableFrom(packetType))
-                throw new InvalidCastException("Type must inherit from IPacket.");
-            var instance = (IPacket)Activator.CreateInstance(packetType);
-            Packets[instance.Id] = packetType;
+            if (factory == null)
+                throw new ArgumentNullException("factory");
+            var packet = factory();
+            if (packet == null)
+                throw new NullReferenceException("Factory must not return null packet.")
+            Packets[packet.Id] = factory;
         }
     }
 }
