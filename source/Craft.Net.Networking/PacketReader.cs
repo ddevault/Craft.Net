@@ -8,10 +8,10 @@ namespace Craft.Net.Networking
         public const int ProtocolVersion = 74;
         public const string FriendlyVersion = "1.6.2";
 
-        public delegate IPacket CreatePacket();
+        public delegate IPacket CreatePacketInstance();
 
         #region Packet Types
-        private static readonly CreatePacket[] Packets = new CreatePacket[]
+        private static readonly CreatePacketInstance[] Packets = new CreatePacketInstance[]
         {
             () => new KeepAlivePacket(), // 0x00
             () => new LoginRequestPacket(), // 0x01
@@ -275,10 +275,9 @@ namespace Craft.Net.Networking
         public static IPacket ReadPacket(MinecraftStream stream)
         {
             byte id = stream.ReadUInt8();
-            var factory = Packets[id];
-            if (factory == null)
+            if (Packets[id] == null)
                 throw new InvalidOperationException("Invalid packet ID: 0x" + id.ToString("X2"));
-            var packet = factory();
+            var packet = Packets[id]();
             packet.ReadPacket(stream);
             return packet;
         }
@@ -286,8 +285,8 @@ namespace Craft.Net.Networking
         /// <summary>
         /// Overrides the implementation for a certain packet.
         /// </summary>
-        /// <param name="packetType">A Type that inherits from Craft.Net.IPacket</param>
-        public static void OverridePacket(CreatePacket factory)
+        /// <param name="factory">TODO</param>
+        public static void OverridePacket(CreatePacketInstance factory)
         {
             if (factory == null)
                 throw new ArgumentNullException("factory");
