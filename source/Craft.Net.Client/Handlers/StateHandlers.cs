@@ -28,7 +28,6 @@ namespace Craft.Net.Client.Handlers
 
         public static void Respawn(MinecraftClient client, IPacket _packet)
         {
-            var packet = (RespawnPacket)_packet;
             // TODO: Dimension change
             client.IsSpawned = false;
         }

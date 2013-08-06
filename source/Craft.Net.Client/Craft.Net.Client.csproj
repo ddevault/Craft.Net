@@ -68,10 +68,6 @@
       <Project>{50462849-2223-4E39-B5D9-A928A9A58A33}</Project>
       <Name>Craft.Net.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Craft.Net.Entities\Craft.Net.Entities.csproj">
-      <Project>{451B4EE5-D815-47BF-9CE6-08328B4A2BA7}</Project>
-      <Name>Craft.Net.Entities</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Craft.Net.Networking\Craft.Net.Networking.csproj">
       <Project>{C3BBAB7E-606F-420E-9461-C8CFAEC2476B}</Project>
       <Name>Craft.Net.Networking</Name>
