@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Logic.Test", "sou
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestServer", "source\Test\TestServer\TestServer.csproj", "{5134C61A-020A-4931-9844-4706AADA62AA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestClient", "source\Test\TestClient\TestClient.csproj", "{0F7386BF-D5E4-4578-A7CE-75E017224745}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Common", "source\Craft.Net.Common\Craft.Net.Common.csproj", "{50462849-2223-4E39-B5D9-A928A9A58A33}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.TerrainGeneration", "source\Craft.Net.TerrainGeneration\Craft.Net.TerrainGeneration.csproj", "{B415FC03-C6FB-4B20-A5A1-81F526ADFEF5}"
@@ -35,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Classic.Common", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Classic.Networking", "source\Classic\Craft.Net.Classic.Networking\Craft.Net.Classic.Networking.csproj", "{C29820C5-559B-4D8F-A6AC-2B88702F9C5F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Net.Client", "source\Craft.Net.Client\Craft.Net.Client.csproj", "{AA930BF3-2073-4C4D-8ADD-07103B29198B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +53,10 @@ Global
 		{078F8195-CB54-49FB-AC3B-0C00E2E1DA6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{078F8195-CB54-49FB-AC3B-0C00E2E1DA6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{078F8195-CB54-49FB-AC3B-0C00E2E1DA6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F7386BF-D5E4-4578-A7CE-75E017224745}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F7386BF-D5E4-4578-A7CE-75E017224745}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F7386BF-D5E4-4578-A7CE-75E017224745}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F7386BF-D5E4-4578-A7CE-75E017224745}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4488498D-976D-4DA3-BF72-109531AF0488}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4488498D-976D-4DA3-BF72-109531AF0488}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4488498D-976D-4DA3-BF72-109531AF0488}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -73,6 +81,10 @@ Global
 		{81467141-9C7D-41EE-BFB0-D40251E10F8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81467141-9C7D-41EE-BFB0-D40251E10F8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81467141-9C7D-41EE-BFB0-D40251E10F8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA930BF3-2073-4C4D-8ADD-07103B29198B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA930BF3-2073-4C4D-8ADD-07103B29198B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA930BF3-2073-4C4D-8ADD-07103B29198B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA930BF3-2073-4C4D-8ADD-07103B29198B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B3B13B2E-FD75-43F7-A745-FF681A732E21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B3B13B2E-FD75-43F7-A745-FF681A732E21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3B13B2E-FD75-43F7-A745-FF681A732E21}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -107,11 +119,12 @@ Global
 		{5E258098-CB4F-4C62-B1F2-A2ACD5F51CDC} = {848E76C6-A56D-4DC7-A627-9A6A92C07991}
 		{078F8195-CB54-49FB-AC3B-0C00E2E1DA6C} = {848E76C6-A56D-4DC7-A627-9A6A92C07991}
 		{5134C61A-020A-4931-9844-4706AADA62AA} = {848E76C6-A56D-4DC7-A627-9A6A92C07991}
+		{0F7386BF-D5E4-4578-A7CE-75E017224745} = {848E76C6-A56D-4DC7-A627-9A6A92C07991}
 		{B3B13B2E-FD75-43F7-A745-FF681A732E21} = {6E376C3C-C721-41C3-978D-F854044D77B7}
 		{C29820C5-559B-4D8F-A6AC-2B88702F9C5F} = {6E376C3C-C721-41C3-978D-F854044D77B7}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = source\Test\TestServer\TestServer.csproj
+		StartupItem = source\Test\TestClient\TestClient.csproj
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

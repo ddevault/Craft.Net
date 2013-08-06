@@ -98,6 +98,17 @@ namespace Craft.Net.Anvil
             }
         }
 
+        public void UnloadChunk(Coordinates2D coordinates)
+        {
+            int regionX = coordinates.X / Region.Width - ((coordinates.X < 0) ? 1 : 0);
+            int regionZ = coordinates.Z / Region.Depth - ((coordinates.Z < 0) ? 1 : 0);
+
+            var regionPosition = new Coordinates2D(regionX, regionZ);
+            if (!Regions.ContainsKey(regionPosition))
+                throw new ArgumentOutOfRangeException("coordinates");
+            Regions[regionPosition].UnloadChunk(new Coordinates2D(coordinates.X - regionX * 32, coordinates.Z - regionZ * 32));
+        }
+
         public short GetBlockId(Coordinates3D coordinates)
         {
             Chunk chunk;

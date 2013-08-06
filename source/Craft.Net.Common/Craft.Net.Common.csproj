@@ -68,6 +68,7 @@
     <Compile Include="Size.cs" />
     <Compile Include="SoundEffect.cs" />
     <Compile Include="Vector3.cs" />
+    <Compile Include="RuntimeInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\externals\fNbt\fNbt\fNbt.csproj">
