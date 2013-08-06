@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Craft.Net.Common;
 
 namespace Craft.Net.Networking
@@ -11,72 +8,74 @@ namespace Craft.Net.Networking
         public const int ProtocolVersion = 74;
         public const string FriendlyVersion = "1.6.2";
 
+        public delegate IPacket CreatePacket();
+
         #region Packet Types
-        private static Type[] Packets = new[]
+        private static readonly CreatePacket[] Packets = new CreatePacket[]
         {
-            typeof(KeepAlivePacket), // 0x00
-            typeof(LoginRequestPacket), // 0x01
-            typeof(HandshakePacket), // 0x02
-            typeof(ChatMessagePacket), // 0x03
-            typeof(TimeUpdatePacket), // 0x04
-            typeof(EntityEquipmentPacket), // 0x05
-            typeof(SpawnPositionPacket), // 0x06
-            typeof(UseEntityPacket), // 0x07
-            typeof(UpdateHealthPacket), // 0x08
-            typeof(RespawnPacket), // 0x09
-            typeof(PlayerPacket), // 0x0A
-            typeof(PlayerPositionPacket), // 0x0B
-            typeof(PlayerLookPacket), // 0x0C
-            typeof(PlayerPositionAndLookPacket), // 0x0D
-            typeof(PlayerDiggingPacket), // 0x0E
-            typeof(RightClickPacket), // 0x0F
-            typeof(HeldItemChangePacket), // 0x10
-            typeof(UseBedPacket), // 0x11
-            typeof(AnimationPacket), // 0x12
-            typeof(EntityActionPacket), // 0x13
-            typeof(SpawnPlayerPacket), // 0x14
+            () => new KeepAlivePacket(), // 0x00
+            () => new LoginRequestPacket(), // 0x01
+            () => new HandshakePacket(), // 0x02
+            () => new ChatMessagePacket(), // 0x03
+            () => new TimeUpdatePacket(), // 0x04
+            () => new EntityEquipmentPacket(), // 0x05
+            () => new SpawnPositionPacket(), // 0x06
+            () => new UseEntityPacket(), // 0x07
+            () => new UpdateHealthPacket(), // 0x08
+            () => new RespawnPacket(), // 0x09
+            () => new PlayerPacket(), // 0x0A
+            () => new PlayerPositionPacket(), // 0x0B
+            () => new PlayerLookPacket(), // 0x0C
+            () => new PlayerPositionAndLookPacket(), // 0x0D
+            () => new PlayerDiggingPacket(), // 0x0E
+            () => new RightClickPacket(), // 0x0F
+            () => new HeldItemChangePacket(), // 0x10
+            () => new UseBedPacket(), // 0x11
+            () => new AnimationPacket(), // 0x12
+            () => new EntityActionPacket(), // 0x13
+            () => new SpawnPlayerPacket(), // 0x14
             null, // 0x15
-            typeof(CollectItemPacket), // 0x16
-            typeof(SpawnObjectPacket), // 0x17
-            typeof(SpawnMobPacket), // 0x18
-            typeof(SpawnPaintingPacket), // 0x19
-            typeof(SpawnExperienceOrbPacket), // 0x1A
-            typeof(SteerVehiclePacket), // 0x1B
-            typeof(EntityVelocityPacket), // 0x1C
-            typeof(DestroyEntityPacket), // 0x1D
-            typeof(EntityPacket), // 0x1E
-            typeof(EntityRelativeMovePacket), // 0x1F
-            typeof(EntityLookPacket), // 0x20
-            typeof(EntityLookAndRelativeMovePacket), // 0x21
-            typeof(EntityTeleportPacket), // 0x22
-            typeof(EntityHeadLookPacket), // 0x23
+            () => new CollectItemPacket(), // 0x16
+            () => new SpawnObjectPacket(), // 0x17
+            () => new SpawnMobPacket(), // 0x18
+            () => new SpawnPaintingPacket(), // 0x19
+            () => new SpawnExperienceOrbPacket(), // 0x1A
+            () => new SteerVehiclePacket(), // 0x1B
+            () => new EntityVelocityPacket(), // 0x1C
+            () => new DestroyEntityPacket(), // 0x1D
+            () => new EntityPacket(), // 0x1E
+            () => new EntityRelativeMovePacket(), // 0x1F
+            () => new EntityLookPacket(), // 0x20
+            () => new EntityLookAndRelativeMovePacket(), // 0x21
+            () => new EntityTeleportPacket(), // 0x22
+            () => new EntityHeadLookPacket(), // 0x23
             null, // 0x24
             null, // 0x25
-            typeof(EntityStatusPacket), // 0x26
-            typeof(AttachEntityPacket), // 0x27
-            typeof(EntityMetadataPacket), // 0x28
-            typeof(EntityEffectPacket), // 0x29
-            typeof(RemoveEntityEffectPacket), // 0x2A
-            typeof(SetExperiencePacket), // 0x2B
-            typeof(EntityPropertiesPacket), // 0x2C
+            () => new EntityStatusPacket(), // 0x26
+            () => new AttachEntityPacket(), // 0x27
+            () => new EntityMetadataPacket(), // 0x28
+            () => new EntityEffectPacket(), // 0x29
+            () => new RemoveEntityEffectPacket(), // 0x2A
+            () => new SetExperiencePacket(), // 0x2B
+            () => new EntityPropertiesPacket(), // 0x2C
             null, // 0x2D
             null, // 0x2E
             null, // 0x2F
             null, // 0x30
             null, // 0x31
             null, // 0x32
-            typeof(ChunkDataPacket), // 0x33
-            typeof(MultipleBlockChangePacket), // 0x34
-            typeof(BlockChangePacket), // 0x35
-            typeof(BlockActionPacket), // 0x36
-            typeof(BlockBreakAnimationPacket), // 0x37
-            typeof(MapChunkBulkPacket), // 0x38
+            () => new ChunkDataPacket(), // 0x33
+            () => new MultipleBlockChangePacket(), // 0x34
+            () => new BlockChangePacket(), // 0x35
+            () => new BlockActionPacket(), // 0x36
+            () => new BlockBreakAnimationPacket(), // 0x37
+            () => new MapChunkBulkPacket(), // 0x38
             null, // 0x39
             null, // 0x3A
             null, // 0x3B
-            typeof(ExplosionPacket), // 0x3C
-            typeof(SoundOrParticleEffectPacket), // 0x3D
-            typeof(NamedSoundEffectPacket), // 0x3E
+            () => new ExplosionPacket(), // 0x3C
+            () => new SoundOrParticleEffectPacket(), // 0x3D
+            () => new NamedSoundEffectPacket(), // 0x3E
             null, // 0x3F
             null, // 0x40
             null, // 0x41
@@ -84,8 +83,8 @@ namespace Craft.Net.Networking
             null, // 0x43
             null, // 0x44
             null, // 0x45
-            typeof(ChangeGameStatePacket), // 0x46
-            typeof(SpawnGlobalEntityPacket), // 0x47
+            () => new ChangeGameStatePacket(), // 0x46
+            () => new SpawnGlobalEntityPacket(), // 0x47
             null, // 0x48
             null, // 0x49
             null, // 0x4A
@@ -114,15 +113,15 @@ namespace Craft.Net.Networking
             null, // 0x61
             null, // 0x62
             null, // 0x63
-            typeof(OpenWindowPacket), // 0x64
-            typeof(CloseWindowPacket), // 0x65
-            typeof(ClickWindowPacket), // 0x66
-            typeof(SetSlotPacket), // 0x67
-            typeof(SetWindowItemsPacket), // 0x68
-            typeof(UpdateWindowPropertyPacket), // 0x69
-            typeof(ConfirmTransactionPacket), // 0x6A
-            typeof(CreativeInventoryActionPacket), // 0x6B
-            typeof(EnchantItemPacket), // 0x6C
+            () => new OpenWindowPacket(), // 0x64
+            () => new CloseWindowPacket(), // 0x65
+            () => new ClickWindowPacket(), // 0x66
+            () => new SetSlotPacket(), // 0x67
+            () => new SetWindowItemsPacket(), // 0x68
+            () => new UpdateWindowPropertyPacket(), // 0x69
+            () => new ConfirmTransactionPacket(), // 0x6A
+            () => new CreativeInventoryActionPacket(), // 0x6B
+            () => new EnchantItemPacket(), // 0x6C
             null, // 0x6D
             null, // 0x6E
             null, // 0x6F
@@ -144,9 +143,9 @@ namespace Craft.Net.Networking
             null, // 0x7F
             null, // 0x80
             null, // 0x81
-            typeof(UpdateSignPacket), // 0x82
-            typeof(ItemDataPacket), // 0x83
-            typeof(UpdateTileEntityPacket), // 0x84
+            () => new UpdateSignPacket(), // 0x82
+            () => new ItemDataPacket(), // 0x83
+            () => new UpdateTileEntityPacket(), // 0x84
             null, // 0x85
             null, // 0x86
             null, // 0x87
@@ -214,15 +213,15 @@ namespace Craft.Net.Networking
             null, // 0xC5
             null, // 0xC6
             null, // 0xC7
-            typeof(IncrementStatisticPacket), // 0xC8
-            typeof(PlayerListItemPacket), // 0xC9
-            typeof(PlayerAbilitiesPacket), // 0xCA
-            typeof(TabCompletePacket), // 0xCB
-            typeof(ClientSettingsPacket), // 0xCC
-            typeof(ClientStatusPacket), // 0xCD
-            typeof(CreateScoreboardPacket), // 0xCE
-            typeof(UpdateScorePacket), // 0xCF
-            typeof(DisplayScoreboardPacket), // 0xD0
+            () => new IncrementStatisticPacket(), // 0xC8
+            () => new PlayerListItemPacket(), // 0xC9
+            () => new PlayerAbilitiesPacket(), // 0xCA
+            () => new TabCompletePacket(), // 0xCB
+            () => new ClientSettingsPacket(), // 0xCC
+            () => new ClientStatusPacket(), // 0xCD
+            () => new CreateScoreboardPacket(), // 0xCE
+            () => new UpdateScorePacket(), // 0xCF
+            () => new DisplayScoreboardPacket(), // 0xD0
             null, // 0xD1
             null, // 0xD2
             null, // 0xD3
@@ -264,22 +263,22 @@ namespace Craft.Net.Networking
             null, // 0xF7
             null, // 0xF8
             null, // 0xF9
-            typeof(PluginMessagePacket), // 0xFA
+            () => new PluginMessagePacket(), // 0xFA
             null, // 0xFB
-            typeof(EncryptionKeyResponsePacket), // 0xFC
-            typeof(EncryptionKeyRequestPacket), // 0xFD
-            typeof(ServerListPingPacket), // 0xFE
-            typeof(DisconnectPacket), // 0xFF
+            () => new EncryptionKeyResponsePacket(), // 0xFC
+            () => new EncryptionKeyRequestPacket(), // 0xFD
+            () => new ServerListPingPacket(), // 0xFE
+            () => new DisconnectPacket(), // 0xFF
         };
         #endregion
 
         public static IPacket ReadPacket(MinecraftStream stream)
         {
             byte id = stream.ReadUInt8();
-            var type = Packets[id];
-            if (type == null)
+            var factory = Packets[id];
+            if (factory == null)
                 throw new InvalidOperationException("Invalid packet ID: 0x" + id.ToString("X2"));
-            var packet = (IPacket)Activator.CreateInstance(type);
+            var packet = factory();
             packet.ReadPacket(stream);
             return packet;
         }
@@ -288,12 +287,12 @@ namespace Craft.Net.Networking
         /// Overrides the implementation for a certain packet.
         /// </summary>
         /// <param name="packetType">A Type that inherits from Craft.Net.IPacket</param>
-        public static void OverridePacket(Type packetType)
+        public static void OverridePacket(CreatePacket factory)
         {
-            if (!typeof(IPacket).IsAssignableFrom(packetType))
-                throw new InvalidCastException("Type must inherit from IPacket.");
-            var instance = (IPacket)Activator.CreateInstance(packetType);
-            Packets[instance.Id] = packetType;
+            if (factory == null)
+                throw new ArgumentNullException("factory");
+            var packet = factory();
+            Packets[packet.Id] = factory;
         }
     }
 }
