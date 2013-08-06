@@ -292,6 +292,8 @@ namespace Craft.Net.Networking
             if (factory == null)
                 throw new ArgumentNullException("factory");
             var packet = factory();
+            if (packet == null)
+                throw new InvalidOperationException("TODO");
             Packets[packet.Id] = factory;
         }
     }
