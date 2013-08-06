@@ -285,14 +285,14 @@ namespace Craft.Net.Networking
         /// <summary>
         /// Overrides the implementation for a certain packet.
         /// </summary>
-        /// <param name="factory">TODO</param>
+        /// <param name="factory">A method that returns a new instance of the packet for populating later.</param>
         public static void OverridePacket(CreatePacketInstance factory)
         {
             if (factory == null)
                 throw new ArgumentNullException("factory");
             var packet = factory();
             if (packet == null)
-                throw new InvalidOperationException("TODO");
+                throw new NullReferenceException("Factory must not return null packet.")
             Packets[packet.Id] = factory;
         }
     }
