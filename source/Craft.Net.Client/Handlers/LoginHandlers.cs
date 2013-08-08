@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Craft.Net.Client.Events;
 using Craft.Net.Networking;
 using Craft.Net.Common;
+using System.Security.Authentication;
 
 namespace Craft.Net.Client.Handlers
 {
@@ -23,13 +24,15 @@ namespace Craft.Net.Client.Handlers
             if (packet.ServerId != "-") // Online mode
             {
                 // Authenticate with minecraft.net
+                if (!client.Session.OnlineMode)
+                    throw new AuthenticationException("Server is in online mode, but client is in offline mode.");
                 var data = Encoding.ASCII.GetBytes(packet.ServerId)
                     .Concat(client.SharedSecret)
                     .Concat(packet.PublicKey).ToArray();
                 var hash = Cryptography.JavaHexDigest(data);
                 var webClient = new WebClient();
                 string result = webClient.DownloadString("http://session.minecraft.net/game/joinserver.jsp?user=" +
-                    Uri.EscapeUriString(client.Session.Username) +
+                    Uri.EscapeUriString(client.Session.SelectedProfile.Name) +
                     "&sessionId=" + Uri.EscapeUriString(client.Session.SessionId) +
                     "&serverId=" + Uri.EscapeUriString(hash));
                 if (result != "OK")

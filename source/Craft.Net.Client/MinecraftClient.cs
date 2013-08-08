@@ -55,7 +55,8 @@ namespace Craft.Net.Client
             Stream = new MinecraftStream(new BufferedStream(NetworkStream));
             NetworkWorkerThread = new Thread(NetworkWorker);
             NetworkWorkerThread.Start();
-            var handshake = new HandshakePacket(PacketReader.ProtocolVersion, Session.Username, EndPoint.Address.ToString(), EndPoint.Port);
+            var handshake = new HandshakePacket(PacketReader.ProtocolVersion, Session.SelectedProfile.Name,
+                EndPoint.Address.ToString(), EndPoint.Port);
             SendPacket(handshake);
         }
 

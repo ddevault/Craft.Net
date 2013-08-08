@@ -34,6 +34,9 @@
     <Reference Include="Ionic.Zip.Reduced">
       <HintPath>..\..\lib\Ionic.Zip.Reduced.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -42,7 +45,6 @@
     <Compile Include="LastLogin.cs" />
     <Compile Include="ServerList.cs" />
     <Compile Include="ServerPing.cs" />
-    <Compile Include="Session.cs" />
     <Compile Include="MinecraftClient.cs" />
     <Compile Include="Handlers\PacketHandlers.cs" />
     <Compile Include="Handlers\ChatHandler.cs" />
@@ -57,6 +59,7 @@
     <Compile Include="Handlers\StateHandlers.cs" />
     <Compile Include="Events\HealthAndFoodEventArgs.cs" />
     <Compile Include="MinecraftClient.Actions.cs" />
+    <Compile Include="Session.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
