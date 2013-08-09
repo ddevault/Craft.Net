@@ -66,6 +66,11 @@ namespace Craft.Net.Server
             MarkedForDespawn.Enqueue(entity.EntityId);
         }
 
+        public RemoteClient GetClient(PlayerEntity entity)
+        {
+            return Server.Clients.Single(c => c.Entity == entity);
+        }
+
         public RemoteClient[] GetKnownClients(Entity entity)
         {
             return Server.Clients.Where(c => c.KnownEntities.Contains(entity.EntityId)).ToArray();

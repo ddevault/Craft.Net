@@ -335,7 +335,7 @@ namespace Craft.Net.Anvil
             {
                 var types = assembly.GetTypes().Where(t =>
                     !t.IsAbstract && t.IsClass && typeof(IWorldGenerator).IsAssignableFrom(t) &&
-                    t.GetConstructors(BindingFlags.Public).Any(c => !c.GetParameters().Any()));
+                    t.GetConstructors(BindingFlags.Public).Any(c => !c.GetParameters().Any())).ToArray();
                 generatorType = types.FirstOrDefault(t =>
                     (worldGenerator = (IWorldGenerator)Activator.CreateInstance(t)).GeneratorName == generatorName);
                 if (generatorType != null)

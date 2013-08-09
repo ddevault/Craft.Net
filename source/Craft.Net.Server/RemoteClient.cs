@@ -25,6 +25,7 @@ namespace Craft.Net.Server
             LoadedChunks = new List<Coordinates2D>();
             Settings = new ClientSettings();
 			MaxDigDistance = 6;
+            Tags = new Dictionary<string, object>();
         }
 
         public TcpClient NetworkClient { get; set; }
@@ -39,6 +40,7 @@ namespace Craft.Net.Server
         public PlayerEntity Entity { get; set; }
         public int Reach { get { return GameMode == GameMode.Creative ? 6 : 5; } } // TODO: Allow customization
 		public int MaxDigDistance { get; set; }
+        public Dictionary<string, object> Tags { get; set; }
 
         protected internal List<Coordinates2D> LoadedChunks { get; set; }
         protected internal DateTime LastKeepAlive { get; set; }

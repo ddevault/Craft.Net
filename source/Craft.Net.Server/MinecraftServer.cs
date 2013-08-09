@@ -148,6 +148,47 @@ namespace Craft.Net.Server
             return Clients.Where(c => c.IsLoggedIn && c.World == world).ToArray();
         }
 
+        public RemoteClient GetClient(string name)
+        {
+            return Clients.SingleOrDefault(c => c.Username == name);
+        }
+
+        public void DisconnectPlayer(RemoteClient client, string reason = null)
+        {
+            if (!Clients.Contains(client))
+                throw new InvalidOperationException("The server is not aware of this client.");
+            lock (NetworkLock)
+            {
+                if (reason != null)
+                {
+                    try
+                    {
+                        if (client.NetworkClient != null && client.NetworkClient.Connected)
+                        {
+                            new DisconnectPacket(reason).WritePacket(client.NetworkStream);
+                            client.NetworkStream.Flush();
+                        }
+                    }
+                    catch { }
+                }
+                try
+                {
+                    if (client.NetworkClient != null && client.NetworkClient.Connected)
+                    {
+                        client.NetworkClient.Close();
+                    }
+                }
+                catch { }
+                if (client.IsLoggedIn)
+                    EntityManager.Despawn(client.Entity);
+                Clients.Remove(client);
+                var args = new PlayerLogInEventArgs(client);
+                OnPlayerLoggedOut(args);
+                if (!args.Handled)
+                    SendChat(string.Format(ChatColors.Yellow + "{0} left the game.", client.Username));
+            }
+        }
+
         #endregion
 
         #region Protected methods
@@ -277,9 +318,8 @@ namespace Craft.Net.Server
                         }
                         if (disconnect)
                         {
-                            if (client.IsLoggedIn)
-                                EntityManager.Despawn(client.Entity);
-                            Clients.RemoveAt(i--);
+                            DisconnectPlayer(client);
+                            i--;
                             continue;
                         }
                         // Read packets
@@ -291,40 +331,22 @@ namespace Craft.Net.Server
                                 var packet = PacketReader.ReadPacket(client.NetworkStream);
                                 if (packet is DisconnectPacket)
                                 {
-                                    if (client.IsLoggedIn)
-                                        EntityManager.Despawn(client.Entity);
-                                    Clients.RemoveAt(i--);
-                                    client.Dispose();
+                                    DisconnectPlayer(client);
+                                    i--;
                                     break;
                                 }
                                 HandlePacket(client, packet);
                             }
                             catch (SocketException)
                             {
-                                if (client.IsLoggedIn)
-                                    EntityManager.Despawn(client.Entity);
-                                Clients.RemoveAt(i--);
-                                client.Dispose();
-                                break;
-                            }
-                            catch (InvalidOperationException e)
-                            {
-                                new DisconnectPacket(e.Message).WritePacket(client.NetworkStream);
-                                client.NetworkStream.Flush();
-                                if (client.IsLoggedIn)
-                                    EntityManager.Despawn(client.Entity);
-                                Clients.RemoveAt(i--);
-                                client.Dispose();
+                                DisconnectPlayer(client);
+                                i--;
                                 break;
                             }
                             catch (Exception e)
                             {
-                                new DisconnectPacket(e.Message).WritePacket(client.NetworkStream);
-                                client.NetworkStream.Flush();
-                                if (client.IsLoggedIn)
-                                    EntityManager.Despawn(client.Entity);
-                                Clients.RemoveAt(i--);
-                                client.Dispose();
+                                DisconnectPlayer(client, e.Message);
+                                i--;
                                 break;
                             }
                         }
@@ -441,6 +463,12 @@ namespace Craft.Net.Server
         protected internal virtual void OnPlayerLoggedIn(PlayerLogInEventArgs e)
         {
             if (PlayerLoggedIn != null) PlayerLoggedIn(this, e);
+        }
+
+        public event EventHandler<PlayerLogInEventArgs> PlayerLoggedOut;
+        protected internal virtual void OnPlayerLoggedOut(PlayerLogInEventArgs e)
+        {
+            if (PlayerLoggedOut != null) PlayerLoggedOut(this, e);
         }
 
         #endregion
