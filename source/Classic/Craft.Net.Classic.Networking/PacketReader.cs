@@ -291,7 +291,7 @@ namespace Craft.Net.Classic.Networking
                 throw new ArgumentNullException("factory");
             var packet = factory();
             if (packet == null)
-                throw new NullReferenceException("Factory must not return null packet.")
+                throw new NullReferenceException("Factory must not return null packet.");
             Packets[packet.Id] = factory;
         }
     }
