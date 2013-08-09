@@ -38,7 +38,7 @@ namespace TestClient
         {
             IPAddress address;
             int port;
-            if (arg.Contains(':'))
+            if (arg.Contains(":"))
             {
                 // Both IP and port are specified
                 var parts = arg.Split(':');
