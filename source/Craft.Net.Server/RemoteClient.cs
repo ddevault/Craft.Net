@@ -226,9 +226,9 @@ namespace Craft.Net.Server
         /// <summary>
         /// Sends a <see cref="ChatMessagePacket"/> to the client.
         /// </summary>
-        public virtual void SendChat(string message)
+        public virtual void SendChat(string text)
         {
-            SendPacket(new ChatMessagePacket(message));
+            SendPacket(new ChatMessagePacket(string.Format("{{\"text\":\"{0}\"}}", text)));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

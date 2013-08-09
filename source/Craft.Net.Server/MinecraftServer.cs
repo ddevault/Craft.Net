@@ -138,7 +138,6 @@ namespace Craft.Net.Server
 
         public void SendChat(string text)
         {
-            text = string.Format("{{\"text\":\"{0}\"}}", text); // TODO: Implement this properly
             foreach (var client in Clients.Where(c => c.IsLoggedIn))
                 client.SendChat(text);
         }

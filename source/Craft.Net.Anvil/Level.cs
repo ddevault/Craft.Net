@@ -316,10 +316,16 @@ namespace Craft.Net.Anvil
             var level = (Level)serializer.Deserialize(nbtFile.RootTag["Data"]);
             level.DatFile = file;
             level.BaseDirectory = Path.GetDirectoryName(file);
+            level.WorldGenerator = GetGenerator(level.GeneratorName);
+            level.WorldGenerator.Initialize(level);
             var worlds = Directory.GetDirectories(level.BaseDirectory).Where(
                 d => !Directory.GetFiles(d).Any(f => !f.EndsWith(".mca") && !f.EndsWith(".mcr")));
             foreach (var world in worlds)
-                level.AddWorld(World.LoadWorld(world));
+            {
+                var w = World.LoadWorld(world);
+                w.WorldGenerator = level.WorldGenerator;
+                level.AddWorld(w);
+            }
             return level;
         }
 
@@ -335,7 +341,7 @@ namespace Craft.Net.Anvil
             {
                 var types = assembly.GetTypes().Where(t =>
                     !t.IsAbstract && t.IsClass && typeof(IWorldGenerator).IsAssignableFrom(t) &&
-                    t.GetConstructors(BindingFlags.Public).Any(c => !c.GetParameters().Any())).ToArray();
+                    t.GetConstructors().Any(c => c.IsPublic && !c.GetParameters().Any())).ToArray();
                 generatorType = types.FirstOrDefault(t =>
                     (worldGenerator = (IWorldGenerator)Activator.CreateInstance(t)).GeneratorName == generatorName);
                 if (generatorType != null)
