@@ -72,8 +72,8 @@ namespace Craft.Net.Networking
         public override int Read(byte[] buffer, int offset, int count)
         {
             int length = BaseStream.Read(buffer, offset, count);
-            var decrypted = decryptCipher.ProcessBytes(buffer, offset, count);
-            Array.Copy(decrypted, offset, buffer, offset, count);
+            var decrypted = decryptCipher.ProcessBytes(buffer, offset, length);
+            Array.Copy(decrypted, 0, buffer, offset, decrypted.Length);
             return length;
         }
 
