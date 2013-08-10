@@ -139,7 +139,13 @@ namespace Craft.Net.Common
         {
             var result = new byte[length];
             if (length == 0) return result;
-            Read(result, 0, length);
+            int n = length;
+            while (true) {
+                n -= Read(result, length - n, n);
+                if (n == 0)
+                    break;
+                System.Threading.Thread.Sleep(1);
+            }
             return result;
         }
 
