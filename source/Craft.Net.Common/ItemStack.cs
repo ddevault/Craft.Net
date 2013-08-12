@@ -98,9 +98,8 @@ namespace Craft.Net.Common
             var mStream = new MemoryStream();
             var file = new NbtFile(Nbt);
             file.SaveToStream(mStream, NbtCompression.GZip);
-            var buffer = mStream.GetBuffer();
-            stream.WriteInt16((short)buffer.Length);
-            stream.WriteUInt8Array(buffer);
+            stream.WriteInt16((short)mStream.Position);
+            stream.WriteUInt8Array(mStream.GetBuffer(), 0, (int)mStream.Position);
         }
 
         public static ItemStack FromNbt(NbtCompound compound)
