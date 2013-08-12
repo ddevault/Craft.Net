@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
 namespace Craft.Net.Networking
@@ -17,11 +14,11 @@ namespace Craft.Net.Networking
         public BufferedStream(Stream baseStream)
         {
             BaseStream = baseStream;
-            PendingWrites = new List<byte>();
+            PendingStream = new MemoryStream(512);
         }
 
         public Stream BaseStream { get; set; }
-        public List<byte> PendingWrites { get; set; }
+        public MemoryStream PendingStream { get; set; }
 
         public override bool CanRead { get { return BaseStream.CanRead; } }
 
@@ -31,8 +28,8 @@ namespace Craft.Net.Networking
 
         public override void Flush()
         {
-            BaseStream.Write(PendingWrites.ToArray(), 0, PendingWrites.Count);
-            PendingWrites.Clear();
+            BaseStream.Write(PendingStream.GetBuffer(), 0, (int)PendingStream.Position);
+            PendingStream.Position = 0;
         }
 
         public override long Length
@@ -63,14 +60,7 @@ namespace Craft.Net.Networking
 
         public override void Write(byte[] buffer, int offset, int count)
         {
-            if (offset != 0 || count != buffer.Length) // We check this to avoid allocating more memory for the copy
-            {
-                var value = new byte[count];
-                Array.Copy(buffer, offset, value, 0, count);
-                PendingWrites.AddRange(value);
-            }
-            else
-                PendingWrites.AddRange(buffer);
+            PendingStream.Write(buffer, offset, count);
         }
     }
 }
