@@ -271,7 +271,7 @@ namespace Craft.Net.Common
 
         public void WriteBoolean(bool value)
         {
-            WriteUInt8(value ? 1 : 0);
+            WriteUInt8(value ? (byte)1 : (byte)0);
         }
 
         public string ReadString()
