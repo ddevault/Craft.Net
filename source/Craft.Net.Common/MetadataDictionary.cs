@@ -24,9 +24,11 @@ namespace Craft.Net.Common
         public static MetadataDictionary FromStream(MinecraftStream stream)
         {
             var value = new MetadataDictionary();
-            while (true) {
+            while (true)
+            {
                 byte key = stream.ReadUInt8();
                 if (key == 127) break;
+
                 byte type = (byte)((key & 0xE0) >> 5);
                 byte index = (byte)(key & 0x1F);
 
