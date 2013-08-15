@@ -69,14 +69,14 @@ namespace Craft.Net.Common
         {
             System.Text.StringBuilder sb = null;
 
-            foreach (var entry in entries)
+            foreach (var entry in entries.Values)
             {
                 if (sb != null)
                     sb.Append(", ");
                 else
                     sb = new System.Text.StringBuilder();
 
-                sb.Append(entry.Value.ToString());
+                sb.Append(entry.ToString());
             }
 
             if (sb != null)
