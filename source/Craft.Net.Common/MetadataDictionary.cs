@@ -15,6 +15,11 @@ namespace Craft.Net.Common
             entries = new Dictionary<byte, MetadataEntry>();
         }
 
+        public int Count
+        {
+            get { return entries.Count; }
+        }
+
         public MetadataEntry this[byte index]
         {
             get { return entries[index]; }
@@ -64,16 +69,17 @@ namespace Craft.Net.Common
         {
             System.Text.StringBuilder sb = null;
 
-            foreach ( var entry in entries ) {
-                if ( sb != null )
+            foreach (var entry in entries)
+            {
+                if (sb != null)
                     sb.Append(", ");
                 else
                     sb = new System.Text.StringBuilder();
 
-                sb.Append(entry.Value);
+                sb.Append(entry.Value.ToString());
             }
 
-            if ( sb != null )
+            if (sb != null)
                 return sb.ToString();
 
             return string.Empty;
