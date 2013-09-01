@@ -20,7 +20,7 @@ libraries from Craft.Net to accomplish different tasks. The following libraries 
   * Includes classes for all Minecraft blocks and items
   * Defines logic such as wheat growth, torch placement, etc
 * **Craft.Net.Networking**: Generic Minecraft networking support
-  * Includes all 1.5.2 packet definitions
+  * Includes all 1.6.2 packet definitions
   * Includes AES/CFB stream crypto utilities
 * **Craft.Net.Physics**: Simple physics engine that aims to recreate Minecraft phsyics
   * Support for AABB entities interacting with each other and Anvil worlds
