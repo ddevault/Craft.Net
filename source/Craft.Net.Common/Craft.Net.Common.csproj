@@ -39,6 +39,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.Xna.Framework.Graphics">
+      <HintPath>..\..\..\..\..\..\..\..\..\Users\tuomas\Downloads\microsoft.xna.framework.graphics.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BigInteger.cs" />
@@ -69,6 +72,7 @@
     <Compile Include="SoundEffect.cs" />
     <Compile Include="Vector3.cs" />
     <Compile Include="RuntimeInfo.cs" />
+    <Compile Include="Vector2.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\externals\fNbt\fNbt\fNbt.csproj">
