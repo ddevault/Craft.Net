@@ -16,7 +16,7 @@ namespace TestServer
     {
         static void Main(string[] args)
         {
-            var level = new Level(new FlatlandGenerator(), "world");
+            var level = new Level(new StandardGenerator(), "world");
             level.AddWorld("region");
             level.SaveTo("world");
             var server = new MinecraftServer(level);

@@ -103,7 +103,5 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ItemGroup>
-    <Folder Include="Channels\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>
