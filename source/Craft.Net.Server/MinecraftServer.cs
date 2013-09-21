@@ -307,7 +307,15 @@ namespace Craft.Net.Server
                             if (client.PacketQueue.TryDequeue(out nextPacket))
                             {
                                 nextPacket.WritePacket(client.NetworkStream);
-                                client.NetworkStream.Flush();
+                                try
+                                {
+                                    client.NetworkStream.Flush();
+                                }
+                                catch (System.IO.IOException)
+                                {
+                                    disconnect = true;
+                                    continue;
+                                }
                                 if (nextPacket is DisconnectPacket)
                                     disconnect = true;
                                 if (nextPacket is EncryptionKeyResponsePacket)

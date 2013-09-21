@@ -20,7 +20,7 @@ libraries from Craft.Net to accomplish different tasks. The following libraries 
   * Includes classes for all Minecraft blocks and items
   * Defines logic such as wheat growth, torch placement, etc
 * **Craft.Net.Networking**: Generic Minecraft networking support
-  * Includes all 1.6.2 packet definitions
+  * Includes all 1.6.4 packet definitions
   * Includes AES/CFB stream crypto utilities
 * **Craft.Net.Physics**: Simple physics engine that aims to recreate Minecraft phsyics
   * Support for AABB entities interacting with each other and Anvil worlds
@@ -31,6 +31,7 @@ libraries from Craft.Net to accomplish different tasks. The following libraries 
   * PvP combat
 * **Craft.Net.TerrainGeneration**: Various terrain generators
   * Vanilla flatland support
+  * Custom perlin-based terrain generator
 
 More libraries are planned for the future. All libraries in Craft.Net support Windows, Linux, and Mac. The
 long-term goal is to recreate the entire Minecraft ecosystem in C#, and to offer interopability with vanilla
@@ -40,7 +41,7 @@ Minecraft.
 Craft.Net, please use `git clone --recursive git://github.com/SirCmpwn/Craft.Net.git`. If you've already cloned
 it, you can fetch submodules manually with `git submodule update --init`.
 
-The latest supported Minecraft version is **1.6.2**.
+The latest supported Minecraft version is **1.6.4**.
 
 ## Classic Support
 
