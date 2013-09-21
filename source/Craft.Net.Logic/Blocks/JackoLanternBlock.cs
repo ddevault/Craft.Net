@@ -13,6 +13,6 @@ namespace Craft.Net.Logic.Blocks
     {
         public const string DisplayName = "Jack 'o' Lantern";
         public const short BlockId = 91;
-		public const double Hardness = 1;
+        public const double Hardness = 1;
     }
 }

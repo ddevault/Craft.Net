@@ -15,11 +15,11 @@ namespace Craft.Net.Logic.Blocks
         public const string DisplayName = "Cake";
         public const short BlockId = 92;
 
-		public static BlockLogicDescriptor Initialize(BlockLogicDescriptor descriptor)
-		{
-			descriptor.GetSupportDirection = (b, w, c) => SupportDirection.Down;
-			descriptor.GetDrop = (b, w, c) => new[] { new ItemStack(CakeItem.ItemId) };
-			return descriptor;
-		}
+        public static BlockLogicDescriptor Initialize(BlockLogicDescriptor descriptor)
+        {
+            descriptor.GetSupportDirection = (b, w, c) => SupportDirection.Down;
+            descriptor.GetDrop = (b, w, c) => new[] { new ItemStack(CakeItem.ItemId) };
+            return descriptor;
+        }
     }
 }

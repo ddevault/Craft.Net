@@ -14,12 +14,12 @@ namespace Craft.Net.Logic.Blocks
     {
         public const string DisplayName = "Grass Block";
         public const short BlockId = 2;
-		public const double Hardness = 0.6;
+        public const double Hardness = 0.6;
 
-		public static BlockLogicDescriptor Initialize(BlockLogicDescriptor descriptor)
-		{
-			descriptor.GetDrop = (b, w, c) => new[] { new ItemStack(DirtBlock.BlockId) };
-			return descriptor;
-		}
+        public static BlockLogicDescriptor Initialize(BlockLogicDescriptor descriptor)
+        {
+            descriptor.GetDrop = (b, w, c) => new[] { new ItemStack(DirtBlock.BlockId) };
+            return descriptor;
+        }
     }
 }

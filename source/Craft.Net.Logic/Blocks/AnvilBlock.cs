@@ -13,6 +13,6 @@ namespace Craft.Net.Logic.Blocks
     {
         public const string DisplayName = "Anvil";
         public const short BlockId = 145;
-		public const double Hardness = 5;
+        public const double Hardness = 5;
     }
 }

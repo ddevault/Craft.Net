@@ -13,6 +13,6 @@ namespace Craft.Net.Logic.Blocks
     {
         public const string DisplayName = "Powered Rail";
         public const short BlockId = 27;
-		public const double Hardness = 0.7;
+        public const double Hardness = 0.7;
     }
 }

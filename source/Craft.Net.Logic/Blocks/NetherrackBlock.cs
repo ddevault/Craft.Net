@@ -13,6 +13,6 @@ namespace Craft.Net.Logic.Blocks
     {
         public const string DisplayName = "Netherrack";
         public const short BlockId = 87;
-		public const double Hardness = 0.4;
+        public const double Hardness = 0.4;
     }
 }

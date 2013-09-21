@@ -27,11 +27,11 @@ namespace Craft.Net.Server.Handlers
                     if (client.Entity.Position.DistanceTo(position) <= client.MaxDigDistance)
                     {
                         if (client.GameMode == GameMode.Creative || client.Entity.Abilities.InstantMine || Block.GetLogicDescriptor(block).Hardness == 0)
-						{
+                        {
                             //Block.OnBlockMined(block, client.World, position, null); // TODO: See if we really need to call this
-							client.World.SetBlockId(position, 0);
-							client.World.SetMetadata(position, 0);
-						}
+                            client.World.SetBlockId(position, 0);
+                            client.World.SetMetadata(position, 0);
+                        }
                         else
                         {
                             int time = Block.GetHarvestTime(new ItemDescriptor(client.Entity.SelectedItem.Id), block, out damage);
@@ -132,17 +132,17 @@ namespace Craft.Net.Server.Handlers
                 if (use)
                 {
                     if (block != null)
-					{
+                    {
                         Item.OnItemUsedOnBlock(item, client.World, position, AdjustByDirection(packet.Direction), cursorPosition);
-						if (client.GameMode != GameMode.Creative)
-						{
-							slot.Count--; // TODO: This is probably a bad place to put this code
-							if (slot.Count == 0)
-        	                    client.Entity.Inventory[client.Entity.SelectedSlot] = ItemStack.EmptyStack;
-    	                    else
-	                            client.Entity.Inventory[client.Entity.SelectedSlot] = slot;
-						}
-					}
+                        if (client.GameMode != GameMode.Creative)
+                        {
+                            slot.Count--; // TODO: This is probably a bad place to put this code
+                            if (slot.Count == 0)
+                                client.Entity.Inventory[client.Entity.SelectedSlot] = ItemStack.EmptyStack;
+                            else
+                                client.Entity.Inventory[client.Entity.SelectedSlot] = slot;
+                        }
+                    }
                     else
                         Item.OnItemUsed(item);
                 }

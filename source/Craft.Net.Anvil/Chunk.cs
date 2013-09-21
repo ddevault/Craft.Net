@@ -124,6 +124,25 @@ namespace Craft.Net.Anvil
             int section = GetSectionNumber(coordinates.Y);
             coordinates.Y = GetPositionInSection(coordinates.Y);
             Sections[section].SetBlockId(coordinates, value);
+            var oldHeight = GetHeight((byte)coordinates.X, (byte)coordinates.Z);
+            if (value == 0) // Air
+            {
+                if (oldHeight <= coordinates.Y)
+                {
+                    // Shift height downwards
+                    while (coordinates.Y >= 0)
+                    {
+                        coordinates.Y--;
+                        if (GetBlockId(coordinates) != 0)
+                            SetHeight((byte)coordinates.X, (byte)coordinates.Z, coordinates.Y);
+                    }
+                }
+            }
+            else
+            {
+                if (oldHeight < coordinates.Y)
+                    SetHeight((byte)coordinates.X, (byte)coordinates.Z, coordinates.Y);
+            }
         }
 
         public void SetMetadata(Coordinates3D coordinates, byte value)
@@ -201,6 +220,11 @@ namespace Craft.Net.Anvil
         public int GetHeight(byte x, byte z)
         {
             return HeightMap[(byte)(z * Depth) + x];
+        }
+
+        private void SetHeight(byte x, byte z, int value)
+        {
+            HeightMap[(byte)(z * Depth) + x] = value;
         }
 
         public NbtFile ToNbt()

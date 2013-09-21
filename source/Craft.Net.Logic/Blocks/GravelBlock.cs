@@ -13,6 +13,6 @@ namespace Craft.Net.Logic.Blocks
     {
         public const string DisplayName = "Gravel";
         public const short BlockId = 13;
-		public const double Hardness = 0.6;
+        public const double Hardness = 0.6;
     }
 }

@@ -181,10 +181,13 @@ namespace Craft.Net.Server
                 if (client.IsLoggedIn)
                     EntityManager.Despawn(client.Entity);
                 Clients.Remove(client);
-                var args = new PlayerLogInEventArgs(client);
-                OnPlayerLoggedOut(args);
-                if (!args.Handled)
-                    SendChat(string.Format(ChatColors.Yellow + "{0} left the game.", client.Username));
+                if (client.IsLoggedIn)
+                {
+                    var args = new PlayerLogInEventArgs(client);
+                    OnPlayerLoggedOut(args);
+                    if (!args.Handled)
+                        SendChat(string.Format(ChatColors.Yellow + "{0} left the game.", client.Username));
+                }
             }
         }
 
@@ -199,8 +202,8 @@ namespace Craft.Net.Server
                 if (Listener == null)
                     return; // Server shutting down
                 var client = new RemoteClient(Listener.EndAcceptTcpClient(result));
-				client.NetworkStream = new MinecraftStream(new BufferedStream(client.NetworkClient.GetStream()));
-            	Clients.Add(client);
+                client.NetworkStream = new MinecraftStream(new BufferedStream(client.NetworkClient.GetStream()));
+                Clients.Add(client);
                 Listener.BeginAcceptTcpClient(AcceptClientAsync, null);
             }
         }
@@ -424,7 +427,7 @@ namespace Craft.Net.Server
             var chunk = world.FindChunk(e.Coordinates);
             var chunkCoordinates = new Coordinates2D(chunk.X, chunk.Z);
             var block = world.GetBlock(e.Coordinates);
-			Block.DoBlockUpdates(world, e.Coordinates);
+            Block.DoBlockUpdates(world, e.Coordinates);
             foreach (var client in GetClientsInWorld(world))
             {
                 if (client.LoadedChunks.Contains(chunkCoordinates))
@@ -452,11 +455,11 @@ namespace Craft.Net.Server
             if (ChatMessage != null) ChatMessage(this, e);
         }
 
-		public event EventHandler<ConnectionEstablishedEventArgs> ConnectionEstablished;
-		protected internal virtual void OnConnectionEstablished(ConnectionEstablishedEventArgs e)
-		{
-			if (ConnectionEstablished != null) ConnectionEstablished(this, e);
-		}
+        public event EventHandler<ConnectionEstablishedEventArgs> ConnectionEstablished;
+        protected internal virtual void OnConnectionEstablished(ConnectionEstablishedEventArgs e)
+        {
+            if (ConnectionEstablished != null) ConnectionEstablished(this, e);
+        }
 
         public event EventHandler<PlayerLogInEventArgs> PlayerLoggedIn;
         protected internal virtual void OnPlayerLoggedIn(PlayerLogInEventArgs e)

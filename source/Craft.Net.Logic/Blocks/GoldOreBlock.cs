@@ -13,6 +13,6 @@ namespace Craft.Net.Logic.Blocks
     {
         public const string DisplayName = "Gold Ore";
         public const short BlockId = 14;
-		public const double Hardness = 3;
+        public const double Hardness = 3;
     }
 }

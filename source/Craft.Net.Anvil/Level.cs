@@ -191,6 +191,7 @@ namespace Craft.Net.Anvil
         public Level(IWorldGenerator generator) : this()
         {
             GeneratorName = generator.GeneratorName;
+            generator.Seed = RandomSeed;
             generator.Initialize(this);
             WorldGenerator = generator;
             Spawn = WorldGenerator.SpawnPoint;

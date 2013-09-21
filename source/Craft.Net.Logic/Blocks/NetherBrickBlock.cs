@@ -13,6 +13,6 @@ namespace Craft.Net.Logic.Blocks
     {
         public const string DisplayName = "Nether Brick";
         public const short BlockId = 112;
-		public const double Hardness = 2;
+        public const double Hardness = 2;
     }
 }

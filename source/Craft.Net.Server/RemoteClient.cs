@@ -24,7 +24,7 @@ namespace Craft.Net.Server
             KnownEntities = new List<int>();
             LoadedChunks = new List<Coordinates2D>();
             Settings = new ClientSettings();
-			MaxDigDistance = 6;
+            MaxDigDistance = 6;
             Tags = new Dictionary<string, object>();
         }
 
@@ -39,7 +39,7 @@ namespace Craft.Net.Server
         public string Username { get; set; }
         public PlayerEntity Entity { get; set; }
         public int Reach { get { return GameMode == GameMode.Creative ? 6 : 5; } } // TODO: Allow customization
-		public int MaxDigDistance { get; set; }
+        public int MaxDigDistance { get; set; }
         public Dictionary<string, object> Tags { get; set; }
 
         protected internal List<Coordinates2D> LoadedChunks { get; set; }
@@ -49,7 +49,7 @@ namespace Craft.Net.Server
         protected internal Coordinates3D ExpectedBlockToMine { get; set; }
         protected internal int BlockBreakStageTime { get; set; }
         protected internal DateTime? BlockBreakStartTime { get; set; }
-		protected internal byte[] VerificationToken { get; set; }
+        protected internal byte[] VerificationToken { get; set; }
 
         internal PlayerManager PlayerManager { get; set; }
 
@@ -196,14 +196,14 @@ namespace Craft.Net.Server
         /// Loads the given chunk on the client.
         /// </summary>
         public virtual void LoadChunk (Coordinates2D position)
-		{
-			var chunk = Entity.World.GetChunk(position);
-			SendPacket(ChunkHelper.CreatePacket(chunk));
-			// TODO: Tile entities
-			foreach (var entity in chunk.TileEntities)
-			{
-				// ...
-			}
+        {
+            var chunk = Entity.World.GetChunk(position);
+            SendPacket(ChunkHelper.CreatePacket(chunk));
+            // TODO: Tile entities
+            foreach (var entity in chunk.TileEntities)
+            {
+                // ...
+            }
             LoadedChunks.Add(position);
         }
 

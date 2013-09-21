@@ -13,6 +13,6 @@ namespace Craft.Net.Logic.Blocks
     {
         public const string DisplayName = "Block of Redstone";
         public const short BlockId = 152;
-		public const double Hardness = 5;
+        public const double Hardness = 5;
     }
 }

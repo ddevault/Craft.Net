@@ -66,7 +66,7 @@ namespace Craft.Net.Entities
 
         public float AccelerationDueToGravity
         {
-            get { return 0.04f; }
+            get { return 0.08f; }
         }
 
         public float Drag

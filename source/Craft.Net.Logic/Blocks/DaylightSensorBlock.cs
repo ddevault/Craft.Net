@@ -13,6 +13,6 @@ namespace Craft.Net.Logic.Blocks
     {
         public const string DisplayName = "Daylight Sensor";
         public const short BlockId = 151;
-		public const double Hardness = 0.2;
+        public const double Hardness = 0.2;
     }
 }

@@ -13,6 +13,6 @@ namespace Craft.Net.Logic.Blocks
     {
         public const string DisplayName = "Fence Gate";
         public const short BlockId = 107;
-		public const double Hardness = 2;
+        public const double Hardness = 2;
     }
 }
