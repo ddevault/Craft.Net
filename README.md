@@ -20,7 +20,7 @@ libraries from Craft.Net to accomplish different tasks. The following libraries 
   * Includes classes for all Minecraft blocks and items
   * Defines logic such as wheat growth, torch placement, etc
 * **Craft.Net.Networking**: Generic Minecraft networking support
-  * Includes all 1.6.4 packet definitions
+  * Includes all 13w38c packet definitions
   * Includes AES/CFB stream crypto utilities
 * **Craft.Net.Physics**: Simple physics engine that aims to recreate Minecraft phsyics
   * Support for AABB entities interacting with each other and Anvil worlds
@@ -41,7 +41,7 @@ Minecraft.
 Craft.Net, please use `git clone --recursive git://github.com/SirCmpwn/Craft.Net.git`. If you've already cloned
 it, you can fetch submodules manually with `git submodule update --init`.
 
-The latest supported Minecraft version is **1.6.4**.
+The latest supported Minecraft version is **13w38c**.
 
 ## Classic Support
 

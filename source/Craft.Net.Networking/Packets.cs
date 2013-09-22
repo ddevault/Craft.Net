@@ -2007,8 +2007,20 @@ namespace Craft.Net.Networking
 
     public struct NamedSoundEffectPacket : IPacket
     {
+        public enum SoundCategory
+        {
+            Master = 0,
+            Music = 1,
+            Records = 2,
+            Weather = 3,
+            Blocks = 4,
+            Mobs = 5,
+            Animals = 6,
+            Players = 7
+        }
+
         public NamedSoundEffectPacket(string soundName, int x, int y,
-                                      int z, float volume, byte pitch)
+            int z, float volume, byte pitch, SoundCategory category)
         {
             SoundName = soundName;
             X = x;
@@ -2016,12 +2028,14 @@ namespace Craft.Net.Networking
             Z = z;
             Volume = volume;
             Pitch = pitch;
+            Category = category;
         }
 
         public string SoundName;
         public int X, Y, Z;
         public float Volume;
         public byte Pitch;
+        public SoundCategory Category;
 
         public const byte PacketId = 0x3E;
         public byte Id { get { return 0x3E; } }
@@ -2034,6 +2048,7 @@ namespace Craft.Net.Networking
             Z = stream.ReadInt32();
             Volume = stream.ReadSingle();
             Pitch = stream.ReadUInt8();
+            Category = (SoundCategory)stream.ReadUInt8();
         }
 
         public void WritePacket(MinecraftStream stream)
@@ -2045,6 +2060,7 @@ namespace Craft.Net.Networking
             stream.WriteInt32(Z);
             stream.WriteSingle(Volume);
             stream.WriteUInt8(Pitch);
+            stream.WriteUInt8((byte)Category);
         }
     }
 
@@ -2769,31 +2785,50 @@ namespace Craft.Net.Networking
         }
     }
 
-    public struct IncrementStatisticPacket : IPacket
+    public struct IncrementStatisticsPacket : IPacket
     {
-        public IncrementStatisticPacket(int statisticId, int amount)
+        public struct StatisticUpdate
         {
-            StatisticId = statisticId;
-            Amount = amount;
+            public StatisticUpdate(string name, int difference)
+            {
+                Name = name;
+                Difference = difference;
+            }
+
+            public string Name;
+            public int Difference;
         }
 
-        public int StatisticId;
-        public int Amount;
+        public IncrementStatisticsPacket(StatisticUpdate[] statistics)
+        {
+            Statistics = statistics;
+        }
+
+        public StatisticUpdate[] Statistics;
 
         public const byte PacketId = 0xC8;
         public byte Id { get { return 0xC8; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
-            StatisticId = stream.ReadInt32();
-            Amount = stream.ReadInt32();
+            int length = stream.ReadInt32();
+            Statistics = new StatisticUpdate[length];
+            for (int i = 0; i < length; i++)
+            {
+                Statistics[i] = new StatisticUpdate(
+                    stream.ReadString(),
+                    stream.ReadInt32());
+            }
         }
 
         public void WritePacket(MinecraftStream stream)
         {
-            stream.WriteUInt8(Id);
-            stream.WriteInt32(StatisticId);
-            stream.WriteInt32(Amount);
+            stream.WriteInt32(Statistics.Length);
+            for (int i = 0; i < Statistics.Length; i++)
+            {
+                stream.WriteString(Statistics[i].Name);
+                stream.WriteInt32(Statistics[i].Difference);
+            }
         }
     }
 
