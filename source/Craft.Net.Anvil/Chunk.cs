@@ -130,7 +130,7 @@ namespace Craft.Net.Anvil
                 if (oldHeight <= coordinates.Y)
                 {
                     // Shift height downwards
-                    while (coordinates.Y >= 0)
+                    while (coordinates.Y > 0)
                     {
                         coordinates.Y--;
                         if (GetBlockId(coordinates) != 0)
