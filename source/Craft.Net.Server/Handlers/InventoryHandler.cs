@@ -52,21 +52,67 @@ namespace Craft.Net.Server.Handlers
         public static void ClickWindow(RemoteClient client, MinecraftServer server, IPacket _packet)
         {
             var packet = (ClickWindowPacket)_packet;
-            if (packet.MouseButton == 3 && packet.Shift)
-                return; // No effect in vanilla minecraft
             Window window = null;
             if (packet.WindowId == 0)
                 window = client.Entity.Inventory;
             // TODO: Fetch appropriate furnace/crafting bench/etc window
             if (window == null)
                 return;
-            if (packet.Shift)
-            {
-                window.MoveToAlternateArea(packet.SlotIndex);
-                return;
-            }
 
             var heldItem = client.Entity.ItemInMouse;
+            ItemStack clickedItem = ItemStack.EmptyStack;
+            if (packet.SlotIndex >= 0 && packet.SlotIndex < client.Entity.Inventory.Length)
+                clickedItem = client.Entity.Inventory[packet.SlotIndex];
+            switch (packet.Action)
+            {
+                case ClickWindowPacket.ClickAction.LeftClick:
+                    if (heldItem.Empty) // Pick up item
+                    {
+                        client.Entity.ItemInMouse = clickedItem;
+                        client.Entity.Inventory[packet.SlotIndex] = ItemStack.EmptyStack;
+                    }
+                    break;
+                case ClickWindowPacket.ClickAction.RightClick:
+                    if (heldItem.Empty) // Pick up half a stack
+                    {
+                        var heldCount = (sbyte)(clickedItem.Count / 2 + (clickedItem.Count % 2));
+                        var leftCount = (sbyte)(clickedItem.Count / 2);
+                        client.Entity.ItemInMouse = new ItemStack(clickedItem.Id, heldCount, clickedItem.Metadata);
+                        var old = client.Entity.Inventory[packet.SlotIndex];
+                        client.Entity.Inventory[packet.SlotIndex] = new ItemStack(old.Id, leftCount, old.Metadata, old.Nbt);
+                    }
+                    else
+                    {
+
+                    }
+                    break;
+                case ClickWindowPacket.ClickAction.ShiftLeftClick:
+                    case ClickWindowPacket.ClickAction.ShiftRightClick:
+                    window.MoveToAlternateArea(packet.SlotIndex);
+                    break;
+                case ClickWindowPacket.ClickAction.Drop:
+                    if (!heldItem.Empty)
+                    {
+                        var drop = (ItemStack)heldItem.Clone();
+                        drop.Count = 1;
+                        var entity = new ItemEntity(client.Entity.Position + new Vector3(0, client.Entity.Size.Height, 0), drop);
+                        entity.Velocity = MathHelper.FowardVector(client.Entity.Yaw) * new Vector3(0.25);
+                        server.EntityManager.SpawnEntity(client.Entity.World, entity);
+                        heldItem.Count--;
+                        client.Entity.ItemInMouse = heldItem;
+                    }
+                    break;
+                case ClickWindowPacket.ClickAction.CtrlDrop:
+                    if (!heldItem.Empty)
+                    {
+                        var entity = new ItemEntity(client.Entity.Position + new Vector3(0, client.Entity.Size.Height, 0), heldItem);
+                        entity.Velocity = MathHelper.FowardVector(client.Entity.Yaw) * new Vector3(0.25);
+                        server.EntityManager.SpawnEntity(client.Entity.World, entity);
+                        client.Entity.ItemInMouse = ItemStack.EmptyStack;
+                    }
+                    break;
+            }
+            return;
 
             if (packet.SlotIndex == -999)
             {
@@ -77,8 +123,6 @@ namespace Craft.Net.Server.Handlers
                 server.EntityManager.SpawnEntity(client.Entity.World, entity);
                 return;
             }
-
-            var clickedItem = client.Entity.Inventory[packet.SlotIndex];
 
             if (heldItem.Empty)
             {

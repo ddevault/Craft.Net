@@ -64,6 +64,7 @@
     <Compile Include="Channels\ServerPingChannel.cs" />
     <Compile Include="Channels\PluginChannel.cs" />
     <Compile Include="Channels\TexturePackChannel.cs" />
+    <Compile Include="ExtensionMethods.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\externals\fNbt\fNbt\fNbt.csproj">

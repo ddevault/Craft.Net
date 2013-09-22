@@ -2260,23 +2260,47 @@ namespace Craft.Net.Networking
 
     public struct ClickWindowPacket : IPacket
     {
+        public enum ClickAction
+        {
+            LeftClick,
+            RightClick,
+            ShiftLeftClick,
+            ShiftRightClick,
+            NumKey1, NumKey2, NumKey3, NumKey4, NumKey5, NumKey6, NumKey7, NumKey8, NumKey9,
+            MiddleClick,
+            Drop,
+            CtrlDrop,
+            LeftClickEdgeWithEmptyHand,
+            RightClickEdgeWithEmptyHand,
+            StartLeftClickPaint,
+            StartRightClickPaint,
+            LeftMousePaintProgress,
+            RightMousePaintProgress,
+            EndLeftMousePaint,
+            EndRightMousePaint,
+            DoubleClick,
+            Invalid
+        }
+
         public ClickWindowPacket(byte windowId, short slotIndex, byte mouseButton,
-                                 short actionNumber, bool shift, ItemStack clickedItem)
+                                 short transactionId, byte mode, ItemStack clickedItem) : this()
         {
             WindowId = windowId;
             SlotIndex = slotIndex;
             MouseButton = mouseButton;
-            ActionNumber = actionNumber;
-            Shift = shift;
+            TransactionId = transactionId;
+            Mode = mode;
             ClickedItem = clickedItem;
         }
 
         public byte WindowId;
         public short SlotIndex;
         public byte MouseButton;
-        public short ActionNumber;
-        public bool Shift;
+        public short TransactionId;
+        public byte Mode;
         public ItemStack ClickedItem;
+
+        public ClickAction Action { get; private set; }
 
         public const byte PacketId = 0x66;
         public byte Id { get { return 0x66; } }
@@ -2286,9 +2310,99 @@ namespace Craft.Net.Networking
             WindowId = stream.ReadUInt8();
             SlotIndex = stream.ReadInt16();
             MouseButton = stream.ReadUInt8();
-            ActionNumber = stream.ReadInt16();
-            Shift = stream.ReadBoolean();
+            TransactionId = stream.ReadInt16();
+            Mode = stream.ReadUInt8();
             ClickedItem = ItemStack.FromStream(stream);
+            if (Mode == 0)
+            {
+                if (MouseButton == 0)
+                    Action = ClickAction.LeftClick;
+                else if (MouseButton == 1)
+                    Action = ClickAction.RightClick;
+                else
+                    Action = ClickAction.Invalid;
+            }
+            else if (Mode == 1)
+            {
+                if (MouseButton == 0)
+                    Action = ClickAction.ShiftLeftClick;
+                else if (MouseButton == 1)
+                    Action = ClickAction.ShiftRightClick;
+                else
+                    Action = ClickAction.Invalid;
+            }
+            else if (Mode == 2)
+            {
+                if (MouseButton == 0)
+                    Action = ClickAction.NumKey1;
+                else if (MouseButton == 1)
+                    Action = ClickAction.NumKey2;
+                else if (MouseButton == 2)
+                    Action = ClickAction.NumKey3;
+                else if (MouseButton == 3)
+                    Action = ClickAction.NumKey4;
+                else if (MouseButton == 4)
+                    Action = ClickAction.NumKey5;
+                else if (MouseButton == 5)
+                    Action = ClickAction.NumKey6;
+                else if (MouseButton == 6)
+                    Action = ClickAction.NumKey7;
+                else if (MouseButton == 7)
+                    Action = ClickAction.NumKey8;
+                else if (MouseButton == 8)
+                    Action = ClickAction.NumKey9;
+                else
+                    Action = ClickAction.Invalid;
+            }
+            else if (Mode == 3)
+            {
+                if (MouseButton == 2)
+                    Action = ClickAction.MiddleClick;
+                else
+                    Action = ClickAction.Invalid;
+            }
+            else if (Mode == 4)
+            {
+                if (SlotIndex == -999)
+                {
+                    if (Mode == 0)
+                        Action = ClickAction.LeftClickEdgeWithEmptyHand;
+                    else if (Mode == 1)
+                        Action = ClickAction.RightClickEdgeWithEmptyHand;
+                    else
+                        Action = ClickAction.Invalid;
+                }
+                else
+                {
+                    if (Mode == 0)
+                        Action = ClickAction.Drop;
+                    else if (Mode == 1)
+                        Action = ClickAction.CtrlDrop;
+                    else
+                        Action = ClickAction.Invalid;
+                }
+            }
+            else if (Mode == 5)
+            {
+                if (MouseButton == 0)
+                    Action = ClickAction.StartLeftClickPaint;
+                else if (MouseButton == 1)
+                    Action = ClickAction.LeftMousePaintProgress;
+                else if (MouseButton == 2)
+                    Action = ClickAction.EndLeftMousePaint;
+                else if (MouseButton == 4)
+                    Action = ClickAction.StartRightClickPaint;
+                else if (MouseButton == 5)
+                    Action = ClickAction.RightMousePaintProgress;
+                else if (MouseButton == 6)
+                    Action = ClickAction.EndRightMousePaint;
+                else
+                    Action = ClickAction.Invalid;
+            }
+            else if (Mode == 6)
+                Action = ClickAction.DoubleClick;
+            else
+                Action = ClickAction.Invalid;
         }
 
         public void WritePacket(MinecraftStream stream)
@@ -2297,8 +2411,8 @@ namespace Craft.Net.Networking
             stream.WriteUInt8(WindowId);
             stream.WriteInt16(SlotIndex);
             stream.WriteUInt8(MouseButton);
-            stream.WriteInt16(ActionNumber);
-            stream.WriteBoolean(Shift);
+            stream.WriteInt16(TransactionId);
+            stream.WriteUInt8(Mode);
             ClickedItem.WriteTo(stream);
         }
     }

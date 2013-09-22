@@ -183,6 +183,7 @@ namespace Craft.Net.Server
                 Clients.Remove(client);
                 if (client.IsLoggedIn)
                 {
+                    Level.SavePlayer(client);
                     var args = new PlayerLogInEventArgs(client);
                     OnPlayerLoggedOut(args);
                     if (!args.Handled)
@@ -218,6 +219,7 @@ namespace Craft.Net.Server
                     {
                         if (client.IsLoggedIn)
                             Clients[i].SendPacket(new PlayerListItemPacket(client.Username, true, client.Ping));
+                        Level.SavePlayer(client);
                     }
                 }
             }
@@ -235,13 +237,7 @@ namespace Craft.Net.Server
         internal void LogInPlayer(RemoteClient client)
         {
             // Spawn player
-            // TODO: Load player data
-            //client.Entity = Level.LoadPlayer(client.Username);
-            client.Entity = new PlayerEntity(client.Username);
-            // Temporary
-            client.Entity.Position = Level.Spawn;
-            client.Entity.SpawnPoint = Level.Spawn;
-            client.GameMode = Level.GameMode;
+            Level.LoadPlayer(client);
             client.PlayerManager = new PlayerManager(client, this);
             EntityManager.SpawnEntity(Level.DefaultWorld, client.Entity);
             client.SendPacket(new LoginRequestPacket(client.Entity.EntityId,
