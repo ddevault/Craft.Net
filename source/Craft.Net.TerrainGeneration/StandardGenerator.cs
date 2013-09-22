@@ -148,7 +148,10 @@ namespace Craft.Net.TerrainGeneration
             const double persistence = 1, frequency = 0.01, amplitude = 80;
             int octaves = 2;
             noise = new Noise(persistence, frequency, amplitude, octaves, (int)Seed);
-            SpawnPoint = new Vector3(0, GetHeight(0, 0), 0);
+            var spawnY = GetHeight(0, 0);
+            if (spawnY < waterLevel - 3)
+                spawnY = waterLevel - 3;
+            SpawnPoint = new Vector3(0, spawnY, 0);
         }
 
         private int GetHeight(int x, int z)
