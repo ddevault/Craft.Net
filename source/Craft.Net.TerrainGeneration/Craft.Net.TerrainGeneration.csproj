@@ -38,9 +38,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.Xna.Framework">
-      <HintPath>..\..\..\..\..\..\..\..\..\Users\tuomas\Downloads\Microsoft.Xna.Framework.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FlatlandGenerator.cs" />
