@@ -68,42 +68,46 @@ namespace Craft.Net.Server
         {
             if (string.IsNullOrEmpty(level.BaseDirectory))
                 return;
-            Directory.CreateDirectory(Path.Combine(level.BaseDirectory, "players"));
-            var file = new NbtFile();
-            file.RootTag.Add(new NbtInt("playerGameType", (int)client.GameMode));
-            file.RootTag.Add(new NbtShort("SelectedItemSlot", client.Entity.SelectedSlot));
-            file.RootTag.Add(new NbtInt("SpawnX", (int)client.Entity.SpawnPoint.X));
-            file.RootTag.Add(new NbtInt("SpawnY", (int)client.Entity.SpawnPoint.Y));
-            file.RootTag.Add(new NbtInt("SpawnZ", (int)client.Entity.SpawnPoint.Z));
-            file.RootTag.Add(new NbtInt("foodLevel", client.Entity.Food));
-            file.RootTag.Add(new NbtFloat("foodExhaustionLevel", client.Entity.FoodExhaustion));
-            file.RootTag.Add(new NbtFloat("foodSaturationLevel", client.Entity.FoodSaturation));
-            file.RootTag.Add(new NbtShort("Health", client.Entity.Health));
-            var inventory = new NbtList("Inventory", NbtTagType.Compound);
-            var slots = client.Entity.Inventory.GetSlots();
-            for (int i = 0; i < slots.Length; i++)
+            try
             {
-                var slot = (ItemStack)slots[i].Clone();
-                slot.Index = Level.NetworkSlotToDataSlot(i);
-                if (!slot.Empty)
-                    inventory.Add(slot.ToNbt());
+                Directory.CreateDirectory(Path.Combine(level.BaseDirectory, "players"));
+                var file = new NbtFile();
+                file.RootTag.Add(new NbtInt("playerGameType", (int)client.GameMode));
+                file.RootTag.Add(new NbtShort("SelectedItemSlot", client.Entity.SelectedSlot));
+                file.RootTag.Add(new NbtInt("SpawnX", (int)client.Entity.SpawnPoint.X));
+                file.RootTag.Add(new NbtInt("SpawnY", (int)client.Entity.SpawnPoint.Y));
+                file.RootTag.Add(new NbtInt("SpawnZ", (int)client.Entity.SpawnPoint.Z));
+                file.RootTag.Add(new NbtInt("foodLevel", client.Entity.Food));
+                file.RootTag.Add(new NbtFloat("foodExhaustionLevel", client.Entity.FoodExhaustion));
+                file.RootTag.Add(new NbtFloat("foodSaturationLevel", client.Entity.FoodSaturation));
+                file.RootTag.Add(new NbtShort("Health", client.Entity.Health));
+                var inventory = new NbtList("Inventory", NbtTagType.Compound);
+                var slots = client.Entity.Inventory.GetSlots();
+                for (int i = 0; i < slots.Length; i++)
+                {
+                    var slot = (ItemStack)slots[i].Clone();
+                    slot.Index = Level.NetworkSlotToDataSlot(i);
+                    if (!slot.Empty)
+                        inventory.Add(slot.ToNbt());
+                }
+                file.RootTag.Add(inventory);
+                var position = new NbtList("Pos", NbtTagType.Double);
+                position.Add(new NbtDouble(client.Entity.Position.X));
+                position.Add(new NbtDouble(client.Entity.Position.Y));
+                position.Add(new NbtDouble(client.Entity.Position.Z));
+                file.RootTag.Add(position);
+                var rotation = new NbtList("Rotation", NbtTagType.Float);
+                rotation.Add(new NbtFloat(client.Entity.Yaw));
+                rotation.Add(new NbtFloat(client.Entity.Pitch));
+                file.RootTag.Add(rotation);
+                var velocity = new NbtList("Motion", NbtTagType.Double);
+                velocity.Add(new NbtDouble(client.Entity.Velocity.X));
+                velocity.Add(new NbtDouble(client.Entity.Velocity.Y));
+                velocity.Add(new NbtDouble(client.Entity.Velocity.Z));
+                file.RootTag.Add(velocity);
+                file.SaveToFile(Path.Combine(level.BaseDirectory, "players", client.Username + ".dat"), NbtCompression.None);
             }
-            file.RootTag.Add(inventory);
-            var position = new NbtList("Pos", NbtTagType.Double);
-            position.Add(new NbtDouble(client.Entity.Position.X));
-            position.Add(new NbtDouble(client.Entity.Position.Y));
-            position.Add(new NbtDouble(client.Entity.Position.Z));
-            file.RootTag.Add(position);
-            var rotation = new NbtList("Rotation", NbtTagType.Float);
-            rotation.Add(new NbtFloat(client.Entity.Yaw));
-            rotation.Add(new NbtFloat(client.Entity.Pitch));
-            file.RootTag.Add(rotation);
-            var velocity = new NbtList("Motion", NbtTagType.Double);
-            velocity.Add(new NbtDouble(client.Entity.Velocity.X));
-            velocity.Add(new NbtDouble(client.Entity.Velocity.Y));
-            velocity.Add(new NbtDouble(client.Entity.Velocity.Z));
-            file.RootTag.Add(velocity);
-            file.SaveToFile(Path.Combine(level.BaseDirectory, "players", client.Username + ".dat"), NbtCompression.None);
+            catch { } // If exceptions happen here, the entire server dies
         }
 
         private static void CreateNewPlayer(Level level, RemoteClient client)
