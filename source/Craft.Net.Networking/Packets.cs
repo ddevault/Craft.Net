@@ -2269,7 +2269,7 @@ namespace Craft.Net.Networking
             NumKey1, NumKey2, NumKey3, NumKey4, NumKey5, NumKey6, NumKey7, NumKey8, NumKey9,
             MiddleClick,
             Drop,
-            CtrlDrop,
+            DropAll,
             LeftClickEdgeWithEmptyHand,
             RightClickEdgeWithEmptyHand,
             StartLeftClickPaint,
@@ -2316,9 +2316,19 @@ namespace Craft.Net.Networking
             if (Mode == 0)
             {
                 if (MouseButton == 0)
-                    Action = ClickAction.LeftClick;
+                {
+                    if (SlotIndex == -999)
+                        Action = ClickAction.DropAll;
+                    else
+                        Action = ClickAction.LeftClick;
+                }
                 else if (MouseButton == 1)
-                    Action = ClickAction.RightClick;
+                {
+                    if (SlotIndex == -999)
+                        Action = ClickAction.Drop;
+                    else
+                        Action = ClickAction.RightClick;
+                }
                 else
                     Action = ClickAction.Invalid;
             }
@@ -2377,7 +2387,7 @@ namespace Craft.Net.Networking
                     if (Mode == 0)
                         Action = ClickAction.Drop;
                     else if (Mode == 1)
-                        Action = ClickAction.CtrlDrop;
+                        Action = ClickAction.DropAll;
                     else
                         Action = ClickAction.Invalid;
                 }

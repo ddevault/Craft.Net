@@ -165,7 +165,7 @@ namespace Craft.Net.Server.Handlers
                             client.Entity.ItemInMouse = heldItem;
                         }
                         break;
-                    case ClickWindowPacket.ClickAction.CtrlDrop:
+                    case ClickWindowPacket.ClickAction.DropAll:
                         if (!heldItem.Empty)
                         {
                             var entity = new ItemEntity(client.Entity.Position + new Vector3(0, client.Entity.Size.Height, 0), heldItem);
