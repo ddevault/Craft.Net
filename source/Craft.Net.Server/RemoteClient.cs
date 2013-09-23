@@ -92,7 +92,6 @@ namespace Craft.Net.Server
         {
             if (!KnownEntities.Contains(entity.EntityId))
             {
-                Console.WriteLine("{0} is tracking entity #{1}", Username, entity.EntityId);
                 KnownEntities.Add(entity.EntityId);
                 if (entity is PlayerEntity)
                 {
@@ -120,7 +119,6 @@ namespace Craft.Net.Server
 
         internal void ForgetEntity(Entity entity)
         {
-            Console.WriteLine("{0} is forgetting entity #{1}", Username, entity.EntityId);
             if (KnownEntities.Contains(entity.EntityId))
                 KnownEntities.Remove(entity.EntityId);
             SendPacket(new DestroyEntityPacket(new int[] { entity.EntityId }));

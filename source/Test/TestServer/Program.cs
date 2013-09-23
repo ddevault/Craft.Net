@@ -23,7 +23,7 @@ namespace TestServer
         {
             if (Directory.Exists("world"))
                 Directory.Delete("world", true);
-            level = new Level(new FlatlandGenerator(), "world");
+            level = new Level(new StandardGenerator(), "world");
             level.AddWorld("region");
             level.SaveTo("world");
             var server = new MinecraftServer(level);
