@@ -13,7 +13,10 @@ namespace Craft.Net.Server
         public static void LoadPlayer(this Level level, RemoteClient client)
         {
             if (string.IsNullOrEmpty(level.BaseDirectory))
+            {
                 CreateNewPlayer(level, client);
+                return;
+            }
             Directory.CreateDirectory(Path.Combine(level.BaseDirectory, "players"));
             if (File.Exists(Path.Combine(level.BaseDirectory, "players", client.Username + ".dat")))
             {

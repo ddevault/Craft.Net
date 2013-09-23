@@ -9,6 +9,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using Craft.Net.Networking;
 
 namespace TestServer
 {
@@ -16,6 +18,8 @@ namespace TestServer
     {
         static void Main(string[] args)
         {
+            if (Directory.Exists("world"))
+                Directory.Delete("world", true);
             var level = new Level(new StandardGenerator(), "world");
             level.AddWorld("region");
             level.SaveTo("world");
