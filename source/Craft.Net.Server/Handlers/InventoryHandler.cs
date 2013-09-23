@@ -174,50 +174,74 @@ namespace Craft.Net.Server.Handlers
                             client.Entity.ItemInMouse = ItemStack.EmptyStack;
                         }
                         break;
-                }
-                return;
-
-                if (packet.SlotIndex == -999)
-                {
-                    if (heldItem.Empty)
-                        return;
-                    var entity = new ItemEntity(client.Entity.Position + new Vector3(0, client.Entity.Size.Height, 0), heldItem);
-                    entity.Velocity = MathHelper.FowardVector(client.Entity.Yaw) * new Vector3(0.25);
-                    server.EntityManager.SpawnEntity(client.Entity.World, entity);
-                    return;
-                }
-
-                if (packet.MouseButton == 1 && ((clickedItem.Id == heldItem.Id &&
-                    clickedItem.Metadata == heldItem.Metadata) || clickedItem.Empty))
-                {
-                    if (!clickedItem.Empty && clickedItem.Count < Item.GetMaximumStackSize(new ItemDescriptor(clickedItem.Id)))
-                    {
-                        client.Entity.Inventory[packet.SlotIndex] = new ItemStack(heldItem.Id,
-                                                                              (sbyte)(clickedItem.Count + (clickedItem.Empty ? 0 : 1)), heldItem.Metadata);
-                        client.Entity.ItemInMouse = new ItemStack(client.Entity.ItemInMouse.Id, (sbyte)(client.Entity.ItemInMouse.Count - 1),
-                                                              client.Entity.ItemInMouse.Metadata, client.Entity.ItemInMouse.Nbt);
-                    }
-                    else
-                        client.Entity.Inventory[packet.SlotIndex] = new ItemStack(heldItem.Id, 1, heldItem.Metadata);
-                }
-                else
-                {
-                    if (clickedItem.Empty)
-                    {
-                        client.Entity.Inventory[packet.SlotIndex] = heldItem;
-                        client.Entity.ItemInMouse = ItemStack.EmptyStack;
-                    }
-                    else
-                    {
-                        client.Entity.ItemInMouse = clickedItem;
-                        client.Entity.Inventory[packet.SlotIndex] = heldItem;
-                    }
+                    case ClickWindowPacket.ClickAction.StartLeftClickPaint:
+                    case ClickWindowPacket.ClickAction.StartRightClickPaint:
+                        client.PaintedSlots = new List<short>();
+                        break;
+                    case ClickWindowPacket.ClickAction.LeftMousePaintProgress:
+                    case ClickWindowPacket.ClickAction.RightMousePaintProgress:
+                        if (!client.PaintedSlots.Contains(packet.SlotIndex))
+                            client.PaintedSlots.Add(packet.SlotIndex);
+                        break;
+                    case ClickWindowPacket.ClickAction.EndLeftMousePaint:
+                        FinishPaint(client, heldItem, false);
+                        break;
+                    case ClickWindowPacket.ClickAction.EndRightMousePaint:
+                        FinishPaint(client, heldItem, true);
+                        break;
                 }
             }
             finally
             {
                 client.PlayerManager.SendInventoryUpdates = true;
             }
+        }
+
+        private static void FinishPaint(RemoteClient client, ItemStack heldItem, bool onePerSlot)
+        {
+            sbyte maxStack = (sbyte)Item.GetMaximumStackSize(new ItemDescriptor(heldItem.Id, heldItem.Metadata));
+            while (heldItem.Count < client.PaintedSlots.Count)
+                client.PaintedSlots.RemoveAt(client.PaintedSlots.Count - 1);
+            for (int i = 0; i < client.PaintedSlots.Count; i++)
+            {
+                if (!client.Entity.Inventory[client.PaintedSlots[i]].CanMerge(heldItem))
+                {
+                    client.PaintedSlots.RemoveAt(i);
+                    i--;
+                }
+            }
+            int itemsPerSlot = heldItem.Count / client.PaintedSlots.Count;
+            if (onePerSlot)
+                itemsPerSlot = 1;
+            var item = (ItemStack)heldItem.Clone();
+            item.Count = (sbyte)itemsPerSlot;
+            foreach (var slot in client.PaintedSlots)
+            {
+                if (client.Entity.Inventory[slot].Empty)
+                {
+                    client.Entity.Inventory[slot] = item;
+                    heldItem.Count -= item.Count;
+                }
+                else // Merge
+                {
+                    sbyte total = (sbyte)(client.Entity.Inventory[slot].Count + item.Count);
+                    if (total <= maxStack)
+                    {
+                        var newSlot = (ItemStack)client.Entity.Inventory[slot].Clone();
+                        newSlot.Count = total;
+                        client.Entity.Inventory[slot] = newSlot;
+                        heldItem.Count -= item.Count;
+                    }
+                    else
+                    {
+                        heldItem.Count -= (sbyte)(maxStack - client.Entity.Inventory[slot].Count);
+                        var newSlot = (ItemStack)client.Entity.Inventory[slot].Clone();
+                        newSlot.Count = maxStack;
+                        client.Entity.Inventory[slot] = newSlot;
+                    }
+                }
+            }
+            client.Entity.ItemInMouse = heldItem;
         }
 
         public static void CloseWindow(RemoteClient client, MinecraftServer server, IPacket _packet)

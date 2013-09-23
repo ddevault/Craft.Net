@@ -50,6 +50,7 @@ namespace Craft.Net.Server
         protected internal int BlockBreakStageTime { get; set; }
         protected internal DateTime? BlockBreakStartTime { get; set; }
         protected internal byte[] VerificationToken { get; set; }
+        protected internal List<short> PaintedSlots { get; set; }
 
         internal PlayerManager PlayerManager { get; set; }
 

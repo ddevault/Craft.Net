@@ -203,6 +203,8 @@ namespace Craft.Net.Common
 
         public bool CanMerge(ItemStack other)
         {
+            if (this.Empty || other.Empty)
+                return true;
             return _Id == other._Id && _Metadata == other._Metadata && Equals(Nbt, other.Nbt);
         }
 
