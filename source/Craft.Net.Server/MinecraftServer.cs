@@ -189,6 +189,7 @@ namespace Craft.Net.Server
                     if (!args.Handled)
                         SendChat(string.Format(ChatColors.Yellow + "{0} left the game.", client.Username));
                 }
+                client.Dispose();
             }
         }
 
