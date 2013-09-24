@@ -11,7 +11,7 @@ namespace Craft.Net.Client
             if (RuntimeInfo.IsLinux)
                 return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), ".minecraft");
             if (RuntimeInfo.IsMacOSX)
-                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Library", "Application Support", ".minecraft");
+                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Library", "Application Support", ".minecraft");
             return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ".minecraft");
         }
     }
