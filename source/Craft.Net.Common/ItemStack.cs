@@ -98,9 +98,8 @@ namespace Craft.Net.Common
             var mStream = new MemoryStream();
             var file = new NbtFile(Nbt);
             file.SaveToStream(mStream, NbtCompression.GZip);
-            var buffer = mStream.GetBuffer();
-            stream.WriteInt16((short)buffer.Length);
-            stream.WriteUInt8Array(buffer);
+            stream.WriteInt16((short)mStream.Position);
+            stream.WriteUInt8Array(mStream.GetBuffer(), 0, (int)mStream.Position);
         }
 
         public static ItemStack FromNbt(NbtCompound compound)
@@ -200,6 +199,13 @@ namespace Craft.Net.Common
             {
                 return new ItemStack(-1);
             }
+        }
+
+        public bool CanMerge(ItemStack other)
+        {
+            if (this.Empty || other.Empty)
+                return true;
+            return _Id == other._Id && _Metadata == other._Metadata && Equals(Nbt, other.Nbt);
         }
 
         public override bool Equals(object obj)

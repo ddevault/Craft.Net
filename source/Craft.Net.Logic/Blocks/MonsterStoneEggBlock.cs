@@ -13,6 +13,6 @@ namespace Craft.Net.Logic.Blocks
     {
         public const string DisplayName = "MonsterStoneEgg";
         public const short BlockId = 97;
-		public const double Hardness = 0.75;
+        public const double Hardness = 0.75;
     }
 }

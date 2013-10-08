@@ -13,6 +13,6 @@ namespace Craft.Net.Logic.Blocks
     {
         public const string DisplayName = "Tripwire";
         public const short BlockId = 132;
-		public const double Hardness = 0;
+        public const double Hardness = 0;
     }
 }

@@ -222,7 +222,7 @@ namespace Craft.Net.Networking
             () => new CreateScoreboardPacket(), // 0xCE
             () => new UpdateScorePacket(), // 0xCF
             () => new DisplayScoreboardPacket(), // 0xD0
-            null, // 0xD1
+            () => new SetTeamsPacket(), // 0xD1
             null, // 0xD2
             null, // 0xD3
             null, // 0xD4

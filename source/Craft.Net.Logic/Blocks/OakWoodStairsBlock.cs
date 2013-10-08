@@ -13,6 +13,6 @@ namespace Craft.Net.Logic.Blocks
     {
         public const string DisplayName = "Oak Wood Stairs";
         public const short BlockId = 53;
-		public const double Hardness = 0;
+        public const double Hardness = 0;
     }
 }

@@ -162,6 +162,19 @@ namespace Craft.Net.Server
                         client.ForgetEntity(entity);
                     foreach (var client in newClients)
                         client.TrackEntity(entity);
+                    if (entity is PlayerEntity)
+                    {
+                        // Update which entities this *player* can see
+                        var player = entity as PlayerEntity;
+                        var client = GetClient(player);
+                        // TODO: Switch to per-client view distance, not a global constant
+                        var toForget = client.KnownEntities.Where(id => !IsInRange(GetEntityById(id).Position, player.Position, MaxClientDistance)).ToArray();
+                        var toTrack = GetEntitiesInRange(player, MaxClientDistance);
+                        foreach (var forget in toForget)
+                            client.ForgetEntity(GetEntityById(forget));
+                        foreach (var track in toTrack)
+                            client.TrackEntity(track);
+                    }
                 }
             }
             if (e.PropertyName == "Position" || e.PropertyName == "Yaw" || e.PropertyName == "Pitch" || e.PropertyName == "HeadYaw")

@@ -76,6 +76,14 @@ namespace Craft.Net.Logic.Windows
             }
         }
 
+        public bool Empty
+        {
+            get
+            {
+                return !WindowAreas.Any(a => a.Items.Any(i => !i.Empty));
+            }
+        }
+
         public ItemStack[] GetSlots()
         {
             int length = WindowAreas.Sum(area => area.Length);

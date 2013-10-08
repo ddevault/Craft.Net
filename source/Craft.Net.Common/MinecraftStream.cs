@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace Craft.Net.Common
@@ -139,13 +137,24 @@ namespace Craft.Net.Common
         {
             var result = new byte[length];
             if (length == 0) return result;
-            Read(result, 0, length);
+            int n = length;
+            while (true) {
+                n -= Read(result, length - n, n);
+                if (n == 0)
+                    break;
+                System.Threading.Thread.Sleep(1);
+            }
             return result;
         }
 
         public void WriteUInt8Array(byte[] value)
         {
             Write(value, 0, value.Length);
+        }
+
+        public void WriteUInt8Array(byte[] value, int offset, int count)
+        {
+            Write(value, offset, count);
         }
 
         public sbyte[] ReadInt8Array(int length)
@@ -262,13 +271,13 @@ namespace Craft.Net.Common
 
         public void WriteBoolean(bool value)
         {
-            if (value) WriteUInt8(1);
-            else       WriteUInt8(0);
+            WriteUInt8(value ? (byte)1 : (byte)0);
         }
 
         public string ReadString()
         {
             ushort length = ReadUInt16();
+            if (length == 0) return string.Empty;
             var data = ReadUInt8Array(length * 2);
             return StringEncoding.GetString(data);
         }
@@ -276,7 +285,8 @@ namespace Craft.Net.Common
         public void WriteString(string value)
         {
             WriteUInt16((ushort)value.Length);
-            WriteUInt8Array(StringEncoding.GetBytes(value));
+            if (value.Length > 0)
+                WriteUInt8Array(StringEncoding.GetBytes(value));
         }
     }
 }

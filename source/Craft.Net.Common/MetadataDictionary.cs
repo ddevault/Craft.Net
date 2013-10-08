@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.IO;
 
 namespace Craft.Net.Common
 {
@@ -10,11 +8,16 @@ namespace Craft.Net.Common
     /// </summary>
     public class MetadataDictionary
     {
-        private Dictionary<byte, MetadataEntry> entries;
+        private readonly Dictionary<byte, MetadataEntry> entries;
 
         public MetadataDictionary()
         {
             entries = new Dictionary<byte, MetadataEntry>();
+        }
+
+        public int Count
+        {
+            get { return entries.Count; }
         }
 
         public MetadataEntry this[byte index]
@@ -26,17 +29,19 @@ namespace Craft.Net.Common
         public static MetadataDictionary FromStream(MinecraftStream stream)
         {
             var value = new MetadataDictionary();
-            byte key = 0;
-            while (key != 127)
+            while (true)
             {
-                key = stream.ReadUInt8();
+                byte key = stream.ReadUInt8();
                 if (key == 127) break;
+
                 byte type = (byte)((key & 0xE0) >> 5);
                 byte index = (byte)(key & 0x1F);
-                var entryType = EntryTypes[type];
-                value[index] = (MetadataEntry)Activator.CreateInstance(entryType);
-                value[index].FromStream(stream);
-                value[index].Index = index;
+
+                var entry = EntryTypes[type]();
+                entry.FromStream(stream);
+                entry.Index = index;
+
+                value[index] = entry;
             }
             return value;
         }
@@ -48,22 +53,36 @@ namespace Craft.Net.Common
             stream.WriteUInt8(0x7F);
         }
 
-        private static Type[] EntryTypes = new[]
+        delegate MetadataEntry CreateEntryInstance();
+
+        private static readonly CreateEntryInstance[] EntryTypes = new CreateEntryInstance[]
             {
-                typeof(MetadataByte), // 0
-                typeof(MetadataShort), // 1
-                typeof(MetadataInt), // 2
-                typeof(MetadataFloat), // 3
-                typeof(MetadataString), // 4
-                typeof(MetadataSlot), // 5
+                () => new MetadataByte(), // 0
+                () => new MetadataShort(), // 1
+                () => new MetadataInt(), // 2
+                () => new MetadataFloat(), // 3
+                () => new MetadataString(), // 4
+                () => new MetadataSlot(), // 5
             };
 
         public override string ToString()
         {
-            var value = "";
-            foreach (var entry in entries)
-                value += entry.Value + ", ";
-            return value.Remove(value.Length - 2);
+            System.Text.StringBuilder sb = null;
+
+            foreach (var entry in entries.Values)
+            {
+                if (sb != null)
+                    sb.Append(", ");
+                else
+                    sb = new System.Text.StringBuilder();
+
+                sb.Append(entry.ToString());
+            }
+
+            if (sb != null)
+                return sb.ToString();
+
+            return string.Empty;
         }
     }
 }

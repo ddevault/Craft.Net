@@ -13,6 +13,6 @@ namespace Craft.Net.Logic.Blocks
     {
         public const string DisplayName = "Dragon Egg";
         public const short BlockId = 122;
-		public const double Hardness = 3;
+        public const double Hardness = 3;
     }
 }

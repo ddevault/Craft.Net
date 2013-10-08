@@ -13,6 +13,6 @@ namespace Craft.Net.Logic.Blocks
     {
         public const string DisplayName = "Weighted Pressure Plate (Heavy)";
         public const short BlockId = 148;
-		public const double Hardness = 0.5;
+        public const double Hardness = 0.5;
     }
 }

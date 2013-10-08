@@ -13,6 +13,6 @@ namespace Craft.Net.Logic.Blocks
     {
         public const string DisplayName = "End Portal";
         public const short BlockId = 120;
-		public const double Hardness = -1;
+        public const double Hardness = -1;
     }
 }

@@ -13,6 +13,6 @@ namespace Craft.Net.Logic.Blocks
     {
         public const string DisplayName = "Monster Spawner";
         public const short BlockId = 52;
-		public const double Hardness = 5;
+        public const double Hardness = 5;
     }
 }

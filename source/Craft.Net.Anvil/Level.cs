@@ -22,7 +22,7 @@ namespace Craft.Net.Anvil
         [NbtIgnore]
         private string DatFile { get; set; }
         [NbtIgnore]
-        private string BaseDirectory { get; set; }
+        public string BaseDirectory { get; private set; }
         [NbtIgnore]
         public List<World> Worlds { get; set; }
         [NbtIgnore]
@@ -191,6 +191,7 @@ namespace Craft.Net.Anvil
         public Level(IWorldGenerator generator) : this()
         {
             GeneratorName = generator.GeneratorName;
+            generator.Seed = RandomSeed;
             generator.Initialize(this);
             WorldGenerator = generator;
             Spawn = WorldGenerator.SpawnPoint;
@@ -353,7 +354,7 @@ namespace Craft.Net.Anvil
         // Internally, we use network slots everywhere, but on disk, we need to use data slots
         // Maybe someday we can use the Window classes to remap these around or something
         // Or better yet, Mojang can stop making terrible design decisions
-        internal static int DataSlotToNetworkSlot(int index)
+        public static int DataSlotToNetworkSlot(int index)
         {
             if (index <= 8)
                 index += 36;
@@ -370,7 +371,7 @@ namespace Craft.Net.Anvil
             return index;
         }
 
-        internal static int NetworkSlotToDataSlot(int index)
+        public static int NetworkSlotToDataSlot(int index)
         {
             if (index >= 36 && index <= 44)
                 index -= 36;

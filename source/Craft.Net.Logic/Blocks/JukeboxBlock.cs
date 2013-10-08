@@ -13,6 +13,6 @@ namespace Craft.Net.Logic.Blocks
     {
         public const string DisplayName = "Jukebox";
         public const short BlockId = 84;
-		public const double Hardness = 2;
+        public const double Hardness = 2;
     }
 }

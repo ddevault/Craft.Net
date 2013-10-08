@@ -42,6 +42,8 @@
   <ItemGroup>
     <Compile Include="FlatlandGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StandardGenerator.cs" />
+    <Compile Include="Noise.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Craft.Net.Common\Craft.Net.Common.csproj">

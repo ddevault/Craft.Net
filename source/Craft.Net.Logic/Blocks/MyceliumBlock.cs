@@ -13,6 +13,6 @@ namespace Craft.Net.Logic.Blocks
     {
         public const string DisplayName = "Mycelium";
         public const short BlockId = 110;
-		public const double Hardness = 0.6;
+        public const double Hardness = 0.6;
     }
 }

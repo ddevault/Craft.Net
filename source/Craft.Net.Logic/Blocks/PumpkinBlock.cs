@@ -13,6 +13,6 @@ namespace Craft.Net.Logic.Blocks
     {
         public const string DisplayName = "Pumpkin";
         public const short BlockId = 86;
-		public const double Hardness = 1;
+        public const double Hardness = 1;
     }
 }

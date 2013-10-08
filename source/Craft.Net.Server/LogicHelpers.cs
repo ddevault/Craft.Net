@@ -24,11 +24,11 @@ namespace Craft.Net.Server
 
         public static void DefaultBlockMinedHandler(BlockDescriptor block, World world, Coordinates3D destroyedBlock, ItemDescriptor? tool)
         {
-			var drops = Block.GetBlockDrop(block, world, destroyedBlock);
-			world.SetBlockId(destroyedBlock, 0);
+            var drops = Block.GetBlockDrop(block, world, destroyedBlock);
+            world.SetBlockId(destroyedBlock, 0);
             world.SetMetadata(destroyedBlock, 0);
-			foreach (var drop in drops)
-				world.OnSpawnEntityRequested(new ItemEntity((Vector3)destroyedBlock + new Vector3(0.5), drop));
+            foreach (var drop in drops)
+                world.OnSpawnEntityRequested(new ItemEntity((Vector3)destroyedBlock + new Vector3(0.5), drop));
         }
     }
 }

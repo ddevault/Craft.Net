@@ -13,6 +13,6 @@ namespace Craft.Net.Logic.Blocks
     {
         public const string DisplayName = "Lapis Lazuli Ore";
         public const short BlockId = 21;
-		public const double Hardness = 3;
+        public const double Hardness = 3;
     }
 }

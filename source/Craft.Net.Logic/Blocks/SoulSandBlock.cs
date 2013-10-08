@@ -13,6 +13,6 @@ namespace Craft.Net.Logic.Blocks
     {
         public const string DisplayName = "Soul Sand";
         public const short BlockId = 88;
-		public const double Hardness = 0.5;
+        public const double Hardness = 0.5;
     }
 }
