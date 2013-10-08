@@ -183,10 +183,7 @@ namespace Craft.Net.Anvil
         /// </summary>
         public void Save(string file)
         {
-            //if (regionFile != null)
-                //Save();
-                //throw new InvalidOperationException("This object is already associated with a region file, use Save()");
-            if (File.Exists(file))
+            if(File.Exists(file))
                 regionFile = regionFile ?? File.Open(file, FileMode.OpenOrCreate);
             else
             {
