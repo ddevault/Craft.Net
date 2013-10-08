@@ -5,8 +5,8 @@ namespace Craft.Net.Networking
 {
     public static class PacketReader
     {
-        public const int ProtocolVersion = 74;
-        public const string FriendlyVersion = "1.6.2";
+        public const int ProtocolVersion = 78;
+        public const string FriendlyVersion = "1.6.4";
 
         public delegate IPacket CreatePacketInstance();
 
