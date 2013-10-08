@@ -93,7 +93,7 @@ namespace Craft.Net.Anvil
         {
             lock (Regions)
             {
-                Regions[coordinates].Save();
+                Regions[coordinates].Save(Path.Combine(BaseDirectory, Region.GetRegionFileName(coordinates)));
                 Regions.Remove(coordinates);
             }
         }
@@ -172,7 +172,7 @@ namespace Craft.Net.Anvil
             lock (Regions)
             {
                 foreach (var region in Regions)
-                    region.Value.Save();
+                    region.Value.Save(Path.Combine(BaseDirectory, Region.GetRegionFileName(region.Key)));
             }
         }
 
