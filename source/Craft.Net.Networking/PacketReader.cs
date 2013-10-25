@@ -303,12 +303,15 @@ namespace Craft.Net.Networking
                     throw new InvalidOperationException("Invalid packet ID: 0x" + id.ToString("X2"));
                 else
                 {
-                    stream.ReadUInt8Array((int)length);
-                    return null;
+                    return new UnknownPacket
+                    {
+                        Id = id,
+                        Data = stream.ReadUInt8Array((int)length)
+                    };
                 }
             }
             var packet = NetworkModes[(int)NetworkMode][id]();
-            NetworkMode = packet.ReadPacket(stream);
+            NetworkMode = packet.ReadPacket(stream, NetworkMode);
             return packet;
         }
 
