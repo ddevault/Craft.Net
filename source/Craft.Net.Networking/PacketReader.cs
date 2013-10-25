@@ -306,12 +306,13 @@ namespace Craft.Net.Networking
                     return new UnknownPacket
                     {
                         Id = id,
-                        Data = stream.ReadUInt8Array((int)length)
+                        Data = stream.ReadUInt8Array((int)length),
+                        NetworkMode = NetworkMode
                     };
                 }
             }
             var packet = NetworkModes[(int)NetworkMode][id]();
-            NetworkMode = packet.ReadPacket(stream, NetworkMode);
+            NetworkMode = packet.ReadPacket(stream);
             return packet;
         }
 

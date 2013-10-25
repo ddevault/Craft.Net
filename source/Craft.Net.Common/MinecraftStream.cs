@@ -23,7 +23,7 @@ namespace Craft.Net.Common
             while (true)
             {
                 byte current = ReadUInt8();
-                result |= (current & 0x7FUL) << shift++ * 7;
+                result |= (current & 0x7Ful) << shift++ * 7;
                 if (shift > 5)
                     throw new InvalidDataException("VarInt may not be longer than 60 bits.");
                 if ((current & 0x80) != 128)

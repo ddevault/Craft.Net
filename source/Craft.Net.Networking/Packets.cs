@@ -11,25 +11,26 @@ namespace Craft.Net.Networking
     public interface IPacket
     {
         long Id { get; }
-        NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode);
-        NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode);
+        NetworkMode ReadPacket(MinecraftStream stream);
+        NetworkMode WritePacket(MinecraftStream stream);
     }
 
     public struct UnknownPacket : IPacket
     {
         public long Id { get; set; }
         public byte[] Data { get; set; }
+        internal NetworkMode NetworkMode { get; set; }
 
-        public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
+        public NetworkMode ReadPacket(MinecraftStream stream)
         {
             throw new NotImplementedException();
         }
 
-        public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode)
+        public NetworkMode WritePacket(MinecraftStream stream)
         {
             stream.WriteVarInt(Data.LongLength);
             stream.WriteUInt8Array(Data);
-            return mode;
+            return NetworkMode;
         }
     }
 
