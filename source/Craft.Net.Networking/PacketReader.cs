@@ -3,14 +3,32 @@ using Craft.Net.Common;
 
 namespace Craft.Net.Networking
 {
-    public static class PacketReader
+    public class PacketReader
     {
-        public const int ProtocolVersion = 78;
-        public const string FriendlyVersion = "1.6.4";
-
+        public const int ProtocolVersion = 4;
+        public const string FriendlyVersion = "1.7.2";
         public delegate IPacket CreatePacketInstance();
 
+        public NetworkMode NetworkMode { get; private set; }
+        public bool Strict { get; set; }
+
+        public PacketReader()
+        {
+            NetworkMode = NetworkMode.Handshake;
+            Strict = true;
+        }
+
         #region Packet Types
+        private static readonly CreatePacketInstance[][] NetworkModes = new CreatePacketInstance[][]
+        {
+            HandshakePackets
+        };
+
+        private static readonly CreatePacketInstance[] HandshakePackets = new CreatePacketInstance[]
+        {
+            () => new HandshakePacket() // 0x00
+        };
+
         private static readonly CreatePacketInstance[] Packets = new CreatePacketInstance[]
         {
             () => new KeepAlivePacket(), // 0x00
@@ -272,13 +290,25 @@ namespace Craft.Net.Networking
         };
         #endregion
 
-        public static IPacket ReadPacket(MinecraftStream stream)
+        /// <summary>
+        /// Reads the next packet from the stream, or NULL if no packets are available.
+        /// </summary>
+        public IPacket ReadPacket(MinecraftStream stream)
         {
-            byte id = stream.ReadUInt8();
-            if (Packets[id] == null)
-                throw new InvalidOperationException("Invalid packet ID: 0x" + id.ToString("X2"));
-            var packet = Packets[id]();
-            packet.ReadPacket(stream);
+            long id = stream.ReadVarInt();
+            long length = stream.ReadVarInt();
+            if (NetworkModes[(int)NetworkMode].Length < id || NetworkModes[(int)NetworkMode][id] == null)
+            {
+                if (Strict)
+                    throw new InvalidOperationException("Invalid packet ID: 0x" + id.ToString("X2"));
+                else
+                {
+                    stream.ReadUInt8Array((int)length);
+                    return null;
+                }
+            }
+            var packet = NetworkModes[(int)NetworkMode][id]();
+            NetworkMode = packet.ReadPacket(stream);
             return packet;
         }
 
@@ -286,7 +316,7 @@ namespace Craft.Net.Networking
         /// Overrides the implementation for a certain packet.
         /// </summary>
         /// <param name="factory">A method that returns a new instance of the packet for populating later.</param>
-        public static void OverridePacket(CreatePacketInstance factory)
+        public void OverridePacket(CreatePacketInstance factory)
         {
             if (factory == null)
                 throw new ArgumentNullException("factory");

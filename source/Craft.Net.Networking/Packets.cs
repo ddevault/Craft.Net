@@ -11,8 +11,8 @@ namespace Craft.Net.Networking
     public interface IPacket
     {
         byte Id { get; }
-        void ReadPacket(MinecraftStream stream);
-        void WritePacket(MinecraftStream stream);
+        NetworkMode ReadPacket(MinecraftStream stream);
+        NetworkMode WritePacket(MinecraftStream stream);
     }
 
     public struct KeepAlivePacket : IPacket
