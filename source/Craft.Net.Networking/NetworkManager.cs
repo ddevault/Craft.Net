@@ -14,6 +14,20 @@ namespace Craft.Net.Networking
         public NetworkMode NetworkMode { get; private set; }
         public bool Strict { get; set; }
 
+        private object streamLock = new object();
+        private Stream _baseStream;
+        public Stream BaseStream
+        {
+            get { return _baseStream; }
+            set
+            {
+                BufferedStream.Flush();
+                _baseStream = value;
+                BufferedStream = new BufferedStream(value);
+                MinecraftStream = new MinecraftStream(BufferedStream);
+            }
+        }
+
         private BufferedStream BufferedStream { get; set; }
         private MinecraftStream MinecraftStream { get; set; }
 
@@ -21,6 +35,15 @@ namespace Craft.Net.Networking
         {
             NetworkMode = NetworkMode.Handshake;
             Strict = true;
+            BaseStream = stream;
+        }
+
+        /// <summary>
+        /// When you enable encrytion or otherwise need to modify which stream this NetworkManager is
+        /// using, you can swap it out with this.
+        /// </summary>
+        public void SwapStream(Stream stream)
+        {
             BufferedStream = new BufferedStream(stream);
             MinecraftStream = new MinecraftStream(BufferedStream);
         }
