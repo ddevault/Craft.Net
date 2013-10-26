@@ -11,7 +11,7 @@ namespace Craft.Net.Common
     {
         static MinecraftStream()
         {
-            StringEncoding = Encoding.BigEndianUnicode;
+            StringEncoding = Encoding.UTF8;
         }
 
         public static Encoding StringEncoding;
