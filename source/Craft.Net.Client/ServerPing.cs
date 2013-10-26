@@ -15,7 +15,7 @@ namespace Craft.Net.Client
             var stream = new MinecraftStream(client.GetStream());
             var ping = new ServerListPingPacket();
             ping.WritePacket(stream);
-            var response = PacketReader.ReadPacket(stream);
+            var response = PacketHandler.ReadPacket(stream);
             client.Close();
             // TODO: Handle old pings
             var pong = (DisconnectPacket)response;

@@ -55,7 +55,7 @@ namespace Craft.Net.Client
             Stream = new MinecraftStream(new BufferedStream(NetworkStream));
             NetworkWorkerThread = new Thread(NetworkWorker);
             NetworkWorkerThread.Start();
-            var handshake = new HandshakePacket(PacketReader.ProtocolVersion, Session.SelectedProfile.Name,
+            var handshake = new HandshakePacket(PacketHandler.ProtocolVersion, Session.SelectedProfile.Name,
                 EndPoint.Address.ToString(), EndPoint.Port);
             SendPacket(handshake);
         }
@@ -127,7 +127,7 @@ namespace Craft.Net.Client
                 {
                     try
                     {
-                        var packet = PacketReader.ReadPacket(Stream);
+                        var packet = PacketHandler.ReadPacket(Stream);
                         HandlePacket(packet);
                         if (packet is DisconnectPacket)
                             return;

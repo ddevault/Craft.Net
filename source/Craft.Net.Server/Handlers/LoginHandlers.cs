@@ -20,12 +20,12 @@ namespace Craft.Net.Server.Handlers
         public static void Handshake(RemoteClient client, MinecraftServer server, IPacket _packet)
         {
             var packet = (HandshakePacket)_packet;
-            if (packet.ProtocolVersion < PacketReader.ProtocolVersion)
+            if (packet.ProtocolVersion < PacketHandler.ProtocolVersion)
             {
                 client.SendPacket(new DisconnectPacket("Outdated client!"));
                 return;
             }
-            if (packet.ProtocolVersion > PacketReader.ProtocolVersion)
+            if (packet.ProtocolVersion > PacketHandler.ProtocolVersion)
             {
                 client.SendPacket(new DisconnectPacket("Outdated server!"));
                 return;

@@ -16,15 +16,18 @@ namespace Craft.Net.Common
 
         public static Encoding StringEncoding;
 
+        /// <summary>
+        /// Reads a variable-length integer from the stream.
+        /// </summary>
         public long ReadVarInt()
         {
             ulong result = 0;
-            int shift = 0;
+            int length = 0;
             while (true)
             {
                 byte current = ReadUInt8();
-                result |= (current & 0x7Ful) << shift++ * 7;
-                if (shift > 5)
+                result |= (current & 0x7Ful) << length++ * 7;
+                if (length > 5)
                     throw new InvalidDataException("VarInt may not be longer than 60 bits.");
                 if ((current & 0x80) != 128)
                     break;
@@ -32,11 +35,55 @@ namespace Craft.Net.Common
             return (long)result;
         }
 
+        /// <summary>
+        /// Reads a variable-length integer from the stream.
+        /// </summary>
+        /// <param name="length">The actual length, in bytes, of the integer.</param>
+        public long ReadVarInt(out int length)
+        {
+            ulong result = 0;
+            length = 0;
+            while (true)
+            {
+                byte current = ReadUInt8();
+                result |= (current & 0x7Ful) << length++ * 7;
+                if (length > 5)
+                    throw new InvalidDataException("VarInt may not be longer than 60 bits.");
+                if ((current & 0x80) != 128)
+                    break;
+            }
+            return (long)result;
+        }
+
+        /// <summary>
+        /// Writes a variable-length integer to the stream.
+        /// </summary>
         public void WriteVarInt(long _value)
         {
             ulong value = (ulong)_value;
             while (true)
             {
+                if ((value & 0xFF) == 0)
+                {
+                    WriteUInt8((byte)value);
+                    break;
+                }
+                WriteUInt8((byte)(value & 0x7F | 0x80));
+                value >>= 7;
+            }
+        }
+
+        /// <summary>
+        /// Writes a variable-length integer to the stream.
+        /// </summary>
+        /// <param name="length">The actual length, in bytes, of the written integer.</param>
+        public void WriteVarInt(long _value, out int length)
+        {
+            ulong value = (ulong)_value;
+            length = 0;
+            while (true)
+            {
+                length++;
                 if ((value & 0xFF) == 0)
                 {
                     WriteUInt8((byte)value);

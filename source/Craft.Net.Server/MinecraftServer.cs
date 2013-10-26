@@ -335,7 +335,7 @@ namespace Craft.Net.Server
                         {
                             try
                             {
-                                var packet = PacketReader.ReadPacket(client.NetworkStream);
+                                var packet = PacketHandler.ReadPacket(client.NetworkStream);
                                 if (packet is DisconnectPacket)
                                 {
                                     DisconnectPlayer(client);

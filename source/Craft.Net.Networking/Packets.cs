@@ -11,7 +11,15 @@ namespace Craft.Net.Networking
     public interface IPacket
     {
         long Id { get; }
+        /// <summary>
+        /// Reads this packet data from the stream, not including its length or packet ID, and returns
+        /// the new network state (if it has changed).
+        /// </summary>
         NetworkMode ReadPacket(MinecraftStream stream);
+        /// <summary>
+        /// Writes this packet data to the stream, not including its length or packet ID, and returns
+        /// the new network state (if it has changed).
+        /// </summary>
         NetworkMode WritePacket(MinecraftStream stream);
     }
 
@@ -33,6 +41,47 @@ namespace Craft.Net.Networking
             return NetworkMode;
         }
     }
+
+    #region Handshake
+
+    public struct HandshakePacket : IPacket
+    {
+        public HandshakePacket(long protocolVersion, string hostname, ushort port, NetworkMode nextState)
+        {
+            ProtocolVersion = protocolVersion;
+            ServerHostname = hostname;
+            ServerPort = port;
+            NextState = nextState;
+        }
+
+        public long ProtocolVersion;
+        public string ServerHostname;
+        public ushort ServerPort;
+        public NetworkMode NextState;
+
+        public const long PacketId = 0x00;
+        public long Id { get { return 0x00; } }
+
+        public NetworkMode ReadPacket(MinecraftStream stream)
+        {
+            ProtocolVersion = stream.ReadVarInt();
+            ServerHostname = stream.ReadString();
+            ServerPort = stream.ReadUInt16();
+            NextState = (NetworkMode)stream.ReadVarInt();
+            return NextState;
+        }
+
+        public NetworkMode WritePacket(MinecraftStream stream)
+        {
+            stream.WriteVarInt(ProtocolVersion);
+            stream.WriteString(ServerHostname);
+            stream.WriteUInt16(ServerPort);
+            stream.WriteVarInt((long)NextState);
+            return NextState;
+        }
+    }
+
+    #endregion
 
     public struct KeepAlivePacket : IPacket
     {
@@ -104,43 +153,6 @@ namespace Craft.Net.Networking
             stream.WriteUInt8((byte)Difficulty);
             stream.WriteUInt8(Discarded);
             stream.WriteUInt8(MaxPlayers);
-        }
-    }
-
-    public struct HandshakePacket : IPacket
-    {
-        public HandshakePacket(byte protocolVersion, string username, string hostname, 
-                               int port)
-        {
-            ProtocolVersion = protocolVersion;
-            Username = username;
-            ServerHostname = hostname;
-            ServerPort = port;
-        }
-
-        public byte ProtocolVersion;
-        public string Username;
-        public string ServerHostname;
-        public int ServerPort;
-
-        public const byte PacketId = 0x02;
-        public byte Id { get { return 0x02; } }
-
-        public void ReadPacket(MinecraftStream stream)
-        {
-            ProtocolVersion = stream.ReadUInt8();
-            Username = stream.ReadString();
-            ServerHostname = stream.ReadString();
-            ServerPort = stream.ReadInt32();
-        }
-
-        public void WritePacket(MinecraftStream stream)
-        {
-            stream.WriteUInt8(Id);
-            stream.WriteUInt8(ProtocolVersion);
-            stream.WriteString(Username);
-            stream.WriteString(ServerHostname);
-            stream.WriteInt32(ServerPort);
         }
     }
 

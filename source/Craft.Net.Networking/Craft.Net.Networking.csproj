@@ -46,11 +46,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AesStream.cs" />
-    <Compile Include="PacketReader.cs" />
     <Compile Include="Packets.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BufferedStream.cs" />
     <Compile Include="NetworkMode.cs" />
+    <Compile Include="PacketDirection.cs" />
+    <Compile Include="NetworkManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Craft.Net.Common\Craft.Net.Common.csproj">
