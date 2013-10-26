@@ -43,6 +43,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AesStream.cs" />
@@ -52,6 +55,7 @@
     <Compile Include="NetworkMode.cs" />
     <Compile Include="PacketDirection.cs" />
     <Compile Include="NetworkManager.cs" />
+    <Compile Include="ServerStatus.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Craft.Net.Common\Craft.Net.Common.csproj">

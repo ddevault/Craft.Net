@@ -41,7 +41,8 @@ namespace Craft.Net.Networking
 
         private static readonly CreatePacketInstance[] StatusPackets  = new CreatePacketInstance[]
         {
-
+            d => d == PacketDirection.ClientToServer ? (IPacket)new StatusRequestPacket() : (IPacket)new StatusResponsePacket(), // 0x00
+            d => new StatusPingPacket() // 0x01
         };
 
         private static readonly CreatePacketInstance[] LoginPackets  = new CreatePacketInstance[]
@@ -69,19 +70,18 @@ namespace Craft.Net.Networking
                     return new UnknownPacket
                     {
                         Id = id,
-                        Data = MinecraftStream.ReadUInt8Array((int)(length - lengthLength - idLength)),
-                        NetworkMode = NetworkMode
+                        Data = MinecraftStream.ReadUInt8Array((int)(length - lengthLength - idLength))
                     };
                 }
             }
             var packet = NetworkModes[(int)NetworkMode][id](direction);
-            NetworkMode = packet.ReadPacket(MinecraftStream);
+            NetworkMode = packet.ReadPacket(MinecraftStream, NetworkMode);
             return packet;
         }
 
         public void WritePacket(IPacket packet)
         {
-            packet.WritePacket(MinecraftStream);
+            NetworkMode = packet.WritePacket(MinecraftStream, NetworkMode);
             BufferedStream.WriteImmediately = true;
             MinecraftStream.WriteVarInt(packet.Id);
             MinecraftStream.WriteVarInt(BufferedStream.PendingWrites);
