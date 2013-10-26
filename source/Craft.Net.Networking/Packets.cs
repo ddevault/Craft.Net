@@ -152,4 +152,177 @@ namespace Craft.Net.Networking
     }
 
     #endregion
+
+    #region Login
+
+    public struct LoginDisconnectPacket : IPacket
+    {
+        public LoginDisconnectPacket(string jsonData)
+        {
+            JsonData = jsonData;
+        }
+
+        /// <summary>
+        /// Note: This will eventually be replaced with a strongly-typed represenation of this data.
+        /// </summary>
+        public string JsonData;
+
+        public const long PacketId = 0x00;
+        public long Id { get { return 0x00; } }
+
+        public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
+        {
+            JsonData = stream.ReadString();
+            return mode;
+        }
+
+        public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode)
+        {
+            stream.WriteString(JsonData);
+            return mode;
+        }
+    }
+
+    public struct EncryptionKeyRequestPacket : IPacket
+    {
+        public EncryptionKeyRequestPacket(string serverId, byte[] publicKey, byte[] verificationToken)
+        {
+            ServerId = serverId;
+            PublicKey = publicKey;
+            VerificationToken = verificationToken;
+        }
+
+        public string ServerId;
+        public byte[] PublicKey;
+        public byte[] VerificationToken;
+
+        public const long PacketId = 0x01;
+        public long Id { get { return 0x01; } }
+
+        public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
+        {
+            ServerId = stream.ReadString();
+            var pkLength = stream.ReadInt16();
+            PublicKey = stream.ReadUInt8Array(pkLength);
+            var vtLength = stream.ReadInt16();
+            VerificationToken = stream.ReadUInt8Array(vtLength);
+            return mode;
+        }
+
+        public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode)
+        {
+            stream.WriteString(ServerId);
+            stream.WriteInt16((short)PublicKey.Length);
+            stream.WriteUInt8Array(PublicKey);
+            stream.WriteInt16((short)VerificationToken.Length);
+            stream.WriteUInt8Array(VerificationToken);
+            return mode;
+        }
+    }
+
+    public struct LoginSuccessPacket : IPacket
+    {
+        public LoginSuccessPacket(string uuid, string username)
+        {
+            UUID = uuid;
+            Username = username;
+        }
+
+        public string UUID;
+        public string Username;
+
+        public const long PacketId = 0x02;
+        public long Id { get { return 0x02; } }
+
+        public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
+        {
+            UUID = stream.ReadString();
+            Username = stream.ReadString();
+            return mode;
+        }
+
+        public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode)
+        {
+            stream.WriteString(UUID);
+            stream.WriteString(Username);
+            return mode;
+        }
+    }
+
+    public struct LoginStartPacket : IPacket
+    {
+        public LoginStartPacket(string username)
+        {
+            Username = username;
+        }
+
+        public string Username;
+
+        public const long PacketId = 0x00;
+        public long Id { get { return 0x00; } }
+
+        public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
+        {
+            Username = stream.ReadString();
+            return mode;
+        }
+
+        public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode)
+        {
+            stream.WriteString(Username);
+            return mode;
+        }
+    }
+
+    public struct EncryptionKeyResponsePacket : IPacket
+    {
+        public EncryptionKeyResponsePacket(byte[] sharedSecret, byte[] verificationToken)
+        {
+            SharedSecret = sharedSecret;
+            VerificationToken = verificationToken;
+        }
+
+        public byte[] SharedSecret;
+        public byte[] VerificationToken;
+
+        public const long PacketId = 0x01;
+        public long Id { get { return 0x01; } }
+
+        public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
+        {
+            var ssLength = stream.ReadInt16();
+            SharedSecret = stream.ReadUInt8Array(ssLength);
+            var vtLength = stream.ReadInt16();
+            VerificationToken = stream.ReadUInt8Array(vtLength);
+            return mode;
+        }
+
+        public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode)
+        {
+            stream.WriteInt16((short)SharedSecret.Length);
+            stream.WriteUInt8Array(SharedSecret);
+            stream.WriteInt16((short)VerificationToken.Length);
+            stream.WriteUInt8Array(VerificationToken);
+            return mode;
+        }
+    }
+
+    #endregion
 }
+/*
+public struct StatusRequestPacket : IPacket
+{
+    public const long PacketId = 0x00;
+    public long Id { get { return 0x00; } }
+
+    public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
+    {
+        return mode;
+    }
+
+    public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode)
+    {
+        return mode;
+    }
+}
+*/

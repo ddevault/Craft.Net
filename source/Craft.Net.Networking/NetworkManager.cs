@@ -38,16 +38,6 @@ namespace Craft.Net.Networking
             BaseStream = stream;
         }
 
-        /// <summary>
-        /// When you enable encrytion or otherwise need to modify which stream this NetworkManager is
-        /// using, you can swap it out with this.
-        /// </summary>
-        public void SwapStream(Stream stream)
-        {
-            BufferedStream = new BufferedStream(stream);
-            MinecraftStream = new MinecraftStream(BufferedStream);
-        }
-
         #region Packet Types
         private static readonly CreatePacketInstance[][] NetworkModes = new CreatePacketInstance[][]
         {
@@ -70,7 +60,8 @@ namespace Craft.Net.Networking
 
         private static readonly CreatePacketInstance[] LoginPackets  = new CreatePacketInstance[]
         {
-
+            d => d == PacketDirection.ClientToServer ? (IPacket)new LoginStartPacket() : (IPacket)new LoginDisconnectPacket(), // 0x00
+            d => d == PacketDirection.ClientToServer ? (IPacket)new EncryptionKeyResponsePacket() : (IPacket)new EncryptionKeyRequestPacket(), // 0x01
         };
 
         private static readonly CreatePacketInstance[] PlayPackets  = new CreatePacketInstance[]
