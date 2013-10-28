@@ -21,10 +21,13 @@ namespace Craft.Net.Networking
             get { return _baseStream; }
             set
             {
-                BufferedStream.Flush();
-                _baseStream = value;
-                BufferedStream = new BufferedStream(value);
-                MinecraftStream = new MinecraftStream(BufferedStream);
+                lock (streamLock)
+                {
+                    BufferedStream.Flush();
+                    _baseStream = value;
+                    BufferedStream = new BufferedStream(value);
+                    MinecraftStream = new MinecraftStream(BufferedStream);
+                }
             }
         }
 
@@ -72,35 +75,41 @@ namespace Craft.Net.Networking
 
         public IPacket ReadPacket(PacketDirection direction)
         {
-            int lengthLength, idLength;
-            long length = MinecraftStream.ReadVarInt(out lengthLength);
-            long id = MinecraftStream.ReadVarInt(out idLength);
-            if (NetworkModes[(int)NetworkMode].Length < id || NetworkModes[(int)NetworkMode][id] == null)
+            lock (streamLock)
             {
-                if (Strict)
-                    throw new InvalidOperationException("Invalid packet ID: 0x" + id.ToString("X2"));
-                else
+                int lengthLength, idLength;
+                long length = MinecraftStream.ReadVarInt(out lengthLength);
+                long id = MinecraftStream.ReadVarInt(out idLength);
+                if (NetworkModes[(int)NetworkMode].Length < id || NetworkModes[(int)NetworkMode][id] == null)
                 {
-                    return new UnknownPacket
+                    if (Strict)
+                        throw new InvalidOperationException("Invalid packet ID: 0x" + id.ToString("X2"));
+                    else
                     {
-                        Id = id,
-                        Data = MinecraftStream.ReadUInt8Array((int)(length - lengthLength - idLength))
-                    };
+                        return new UnknownPacket
+                        {
+                            Id = id,
+                            Data = MinecraftStream.ReadUInt8Array((int)(length - lengthLength - idLength))
+                        };
+                    }
                 }
+                var packet = NetworkModes[(int)NetworkMode][id](direction);
+                NetworkMode = packet.ReadPacket(MinecraftStream, NetworkMode);
+                return packet;
             }
-            var packet = NetworkModes[(int)NetworkMode][id](direction);
-            NetworkMode = packet.ReadPacket(MinecraftStream, NetworkMode);
-            return packet;
         }
 
         public void WritePacket(IPacket packet)
         {
-            NetworkMode = packet.WritePacket(MinecraftStream, NetworkMode);
-            BufferedStream.WriteImmediately = true;
-            MinecraftStream.WriteVarInt(packet.Id);
-            MinecraftStream.WriteVarInt(BufferedStream.PendingWrites);
-            BufferedStream.WriteImmediately = false;
-            BufferedStream.Flush();
+            lock (streamLock)
+            {
+                NetworkMode = packet.WritePacket(MinecraftStream, NetworkMode);
+                BufferedStream.WriteImmediately = true;
+                MinecraftStream.WriteVarInt(packet.Id);
+                MinecraftStream.WriteVarInt(BufferedStream.PendingWrites);
+                BufferedStream.WriteImmediately = false;
+                BufferedStream.Flush();
+            }
         }
 
         /// <summary>

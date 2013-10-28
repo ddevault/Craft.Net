@@ -354,15 +354,15 @@ namespace Craft.Net.Common
 
         public string ReadString()
         {
-            ushort length = ReadUInt16();
+            long length = ReadVarInt();
             if (length == 0) return string.Empty;
-            var data = ReadUInt8Array(length * 2);
+            var data = ReadUInt8Array((int)length);
             return StringEncoding.GetString(data);
         }
 
         public void WriteString(string value)
         {
-            WriteUInt16((ushort)value.Length);
+            WriteVarInt(StringEncoding.GetByteCount(value));
             if (value.Length > 0)
                 WriteUInt8Array(StringEncoding.GetBytes(value));
         }

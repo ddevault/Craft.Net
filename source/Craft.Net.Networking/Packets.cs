@@ -308,6 +308,35 @@ namespace Craft.Net.Networking
     }
 
     #endregion
+
+    #region Play
+
+    public struct KeepAlivePacket : IPacket
+    {
+        public KeepAlivePacket(int keepAlive)
+        {
+            KeepAlive = keepAlive;
+        }
+
+        public int KeepAlive;
+
+        public const long PacketId = 0x00;
+        public long Id { get { return 0x00; } }
+
+        public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
+        {
+            KeepAlive = stream.ReadInt32();
+            return mode;
+        }
+
+        public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode)
+        {
+            stream.WriteInt32(KeepAlive);
+            return mode;
+        }
+    }
+
+    #endregion
 }
 /*
 public struct StatusRequestPacket : IPacket
