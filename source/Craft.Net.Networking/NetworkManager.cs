@@ -77,8 +77,8 @@ namespace Craft.Net.Networking
         {
             lock (streamLock)
             {
-                int lengthLength, idLength;
-                long length = MinecraftStream.ReadVarInt(out lengthLength);
+                int idLength;
+                long length = MinecraftStream.ReadVarInt();
                 long id = MinecraftStream.ReadVarInt(out idLength);
                 if (NetworkModes[(int)NetworkMode].Length < id || NetworkModes[(int)NetworkMode][id] == null)
                 {
@@ -89,7 +89,7 @@ namespace Craft.Net.Networking
                         return new UnknownPacket
                         {
                             Id = id,
-                            Data = MinecraftStream.ReadUInt8Array((int)(length - lengthLength - idLength))
+                            Data = MinecraftStream.ReadUInt8Array((int)(length - idLength))
                         };
                     }
                 }
@@ -105,8 +105,8 @@ namespace Craft.Net.Networking
             {
                 NetworkMode = packet.WritePacket(MinecraftStream, NetworkMode);
                 BufferedStream.WriteImmediately = true;
+                MinecraftStream.WriteVarInt(BufferedStream.PendingWrites + MinecraftStream.GetVarIntLength(packet.Id));
                 MinecraftStream.WriteVarInt(packet.Id);
-                MinecraftStream.WriteVarInt(BufferedStream.PendingWrites);
                 BufferedStream.WriteImmediately = false;
                 BufferedStream.Flush();
             }

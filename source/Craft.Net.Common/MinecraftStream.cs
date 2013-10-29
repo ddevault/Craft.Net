@@ -94,6 +94,20 @@ namespace Craft.Net.Common
             }
         }
 
+        public static int GetVarIntLength(long _value)
+        {
+            ulong value = (ulong)_value;
+            int length = 0;
+            while (true)
+            {
+                length++;
+                if ((value & 0xFF) == 0)
+                    break;
+                value >>= 7;
+            }
+            return length;
+        }
+
         public byte ReadUInt8()
         {
             int value = BaseStream.ReadByte();
