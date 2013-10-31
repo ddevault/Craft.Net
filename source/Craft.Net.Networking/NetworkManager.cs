@@ -57,14 +57,14 @@ namespace Craft.Net.Networking
 
         private static readonly CreatePacketInstance[] StatusPackets  = new CreatePacketInstance[]
         {
-            d => d == PacketDirection.ClientToServer ? (IPacket)new StatusRequestPacket() : (IPacket)new StatusResponsePacket(), // 0x00
+            d => d == PacketDirection.Serverbound ? (IPacket)new StatusRequestPacket() : (IPacket)new StatusResponsePacket(), // 0x00
             d => new StatusPingPacket() // 0x01
         };
 
         private static readonly CreatePacketInstance[] LoginPackets  = new CreatePacketInstance[]
         {
-            d => d == PacketDirection.ClientToServer ? (IPacket)new LoginStartPacket() : (IPacket)new LoginDisconnectPacket(), // 0x00
-            d => d == PacketDirection.ClientToServer ? (IPacket)new EncryptionKeyResponsePacket() : (IPacket)new EncryptionKeyRequestPacket(), // 0x01
+            d => d == PacketDirection.Serverbound ? (IPacket)new LoginStartPacket() : (IPacket)new LoginDisconnectPacket(), // 0x00
+            d => d == PacketDirection.Serverbound ? (IPacket)new EncryptionKeyResponsePacket() : (IPacket)new EncryptionKeyRequestPacket(), // 0x01
         };
 
         private static readonly CreatePacketInstance[] PlayPackets  = new CreatePacketInstance[]
@@ -120,10 +120,10 @@ namespace Craft.Net.Networking
         {
             if (factory == null)
                 throw new ArgumentNullException("factory");
-            var packet = factory(PacketDirection.ClientToServer);
+            var packet = factory(PacketDirection.Serverbound);
             if (packet == null)
                 throw new NullReferenceException("Factory must not return null packet.");
-            packet = factory(PacketDirection.ServerToClient);
+            packet = factory(PacketDirection.Clientbound);
             if (packet == null)
                 throw new NullReferenceException("Factory must not return null packet.");
             NetworkModes[(int)NetworkMode][packet.Id] = factory;
