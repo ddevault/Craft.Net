@@ -23,7 +23,8 @@ namespace Craft.Net.Networking
             {
                 lock (streamLock)
                 {
-                    BufferedStream.Flush();
+                    if (BufferedStream != null)
+                        BufferedStream.Flush();
                     _baseStream = value;
                     BufferedStream = new BufferedStream(value);
                     MinecraftStream = new MinecraftStream(BufferedStream);
