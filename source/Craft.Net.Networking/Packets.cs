@@ -35,7 +35,7 @@ namespace Craft.Net.Networking
 
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode)
         {
-            stream.WriteVarInt(Data.LongLength);
+            stream.WriteVarInt(Data.Length);
             stream.WriteUInt8Array(Data);
             return mode;
         }
@@ -45,7 +45,7 @@ namespace Craft.Net.Networking
 
     public struct HandshakePacket : IPacket
     {
-        public HandshakePacket(long protocolVersion, string hostname, ushort port, NetworkMode nextState)
+        public HandshakePacket(int protocolVersion, string hostname, ushort port, NetworkMode nextState)
         {
             ProtocolVersion = protocolVersion;
             ServerHostname = hostname;
@@ -53,7 +53,7 @@ namespace Craft.Net.Networking
             NextState = nextState;
         }
 
-        public long ProtocolVersion;
+        public int ProtocolVersion;
         public string ServerHostname;
         public ushort ServerPort;
         public NetworkMode NextState;
@@ -72,7 +72,7 @@ namespace Craft.Net.Networking
             stream.WriteVarInt(ProtocolVersion);
             stream.WriteString(ServerHostname);
             stream.WriteUInt16(ServerPort);
-            stream.WriteVarInt((long)NextState);
+            stream.WriteVarInt((int)NextState);
             return NextState;
         }
     }
@@ -627,13 +627,13 @@ namespace Craft.Net.Networking
             Uncrouch = 105
         }
 
-        public AnimationPacket(long entityId, AnimationType animation)
+        public AnimationPacket(int entityId, AnimationType animation)
         {
             EntityId = entityId;
             Animation = animation;
         }
 
-        public long EntityId;
+        public int EntityId;
         public AnimationType Animation;
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
@@ -653,7 +653,7 @@ namespace Craft.Net.Networking
 
     public struct SpawnPlayerPacket : IPacket
     {
-        public SpawnPlayerPacket(long entityId, string playerName, int x,
+        public SpawnPlayerPacket(int entityId, string playerName, int x,
             int y, int z, byte yaw, byte pitch, short heldItem, MetadataDictionary metadata)
         {
             EntityId = entityId;
@@ -667,7 +667,7 @@ namespace Craft.Net.Networking
             Metadata = metadata;
         }
 
-        public long EntityId;
+        public int EntityId;
         public string PlayerName;
         public int X, Y, Z;
         public byte Yaw, Pitch;
@@ -731,7 +731,7 @@ namespace Craft.Net.Networking
 
     public struct SpawnObjectPacket : IPacket
     {
-        public SpawnObjectPacket(long entityId, byte type, int x,
+        public SpawnObjectPacket(int entityId, byte type, int x,
              int y, int z, byte yaw, byte pitch,
              int data, short? speedX, short? speedY, short? speedZ)
         {
@@ -748,7 +748,7 @@ namespace Craft.Net.Networking
             SpeedZ = speedZ;
         }
         
-        public long EntityId;
+        public int EntityId;
         public byte Type;
         public int X, Y, Z;
         public byte Yaw, Pitch;
@@ -796,7 +796,7 @@ namespace Craft.Net.Networking
 
     public struct SpawnMobPacket : IPacket
     {
-        public SpawnMobPacket(long entityId, byte type, int x,
+        public SpawnMobPacket(int entityId, byte type, int x,
             int y, int z, byte yaw, byte pitch, byte headYaw, short velocityX,
             short velocityY, short velocityZ, MetadataDictionary metadata)
         {
@@ -814,7 +814,7 @@ namespace Craft.Net.Networking
             Metadata = metadata;
         }
 
-        public long EntityId;
+        public int EntityId;
         public byte Type;
         public int X, Y, Z;
         public byte Yaw, Pitch, HeadYaw;
@@ -858,7 +858,7 @@ namespace Craft.Net.Networking
 
     public struct SpawnPaintingPacket : IPacket
     {
-        public SpawnPaintingPacket(long entityId, string title, int x,
+        public SpawnPaintingPacket(int entityId, string title, int x,
             int y, int z, int direction)
         {
             EntityId = entityId;
@@ -869,7 +869,7 @@ namespace Craft.Net.Networking
             Direction = direction;
         }
         
-        public long EntityId;
+        public int EntityId;
         public string Title;
         public int X, Y, Z;
         public int Direction;
@@ -899,7 +899,7 @@ namespace Craft.Net.Networking
 
     public struct SpawnExperienceOrbPacket : IPacket
     {
-        public SpawnExperienceOrbPacket(long entityId, int x, int y,
+        public SpawnExperienceOrbPacket(int entityId, int x, int y,
             int z, short count)
         {
             EntityId = entityId;
@@ -909,7 +909,7 @@ namespace Craft.Net.Networking
             Count = count;
         }
         
-        public long EntityId;
+        public int EntityId;
         public int X, Y, Z;
         public short Count;
 
@@ -1533,7 +1533,7 @@ namespace Craft.Net.Networking
     public struct BlockChangePacket : IPacket
     {
         public BlockChangePacket(int x, byte y, int z,
-            long blockType, byte blockMetadata)
+            int blockType, byte blockMetadata)
         {
             X = x;
             Y = y;
@@ -1545,7 +1545,7 @@ namespace Craft.Net.Networking
         public int X;
         public byte Y;
         public int Z;
-        public long BlockType;
+        public int BlockType;
         public byte BlockMetadata;
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
@@ -1572,7 +1572,7 @@ namespace Craft.Net.Networking
     public struct BlockActionPacket : IPacket
     {
         public BlockActionPacket(int x, short y, int z,
-            byte data1, byte data2, long blockId)
+            byte data1, byte data2, int blockId)
         {
             X = x;
             Y = y;
@@ -1587,7 +1587,7 @@ namespace Craft.Net.Networking
         public int Z;
         public byte Data1;
         public byte Data2;
-        public long BlockId;
+        public int BlockId;
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -1614,7 +1614,7 @@ namespace Craft.Net.Networking
 
     public struct BlockBreakAnimationPacket : IPacket
     {
-        public BlockBreakAnimationPacket(long entityId, int x, int y,
+        public BlockBreakAnimationPacket(int entityId, int x, int y,
             int z, byte destroyStage)
         {
             EntityId = entityId;
@@ -1624,7 +1624,7 @@ namespace Craft.Net.Networking
             DestroyStage = destroyStage;
         }
 
-        public long EntityId;
+        public int EntityId;
         public int X, Y, Z;
         public byte DestroyStage;
 
@@ -1942,7 +1942,7 @@ namespace Craft.Net.Networking
 
     public struct SpawnGlobalEntityPacket : IPacket
     {
-        public SpawnGlobalEntityPacket(long entityId, byte type, int x, int y, int z)
+        public SpawnGlobalEntityPacket(int entityId, byte type, int x, int y, int z)
         {
             EntityId = entityId;
             Type = type;
@@ -1951,7 +1951,7 @@ namespace Craft.Net.Networking
             Z = z;
         }
         
-        public long EntityId;
+        public int EntityId;
         public byte Type;
         public int X, Y, Z;
 
@@ -2210,13 +2210,13 @@ namespace Craft.Net.Networking
 
     public struct MapDataPacket : IPacket
     {
-        public MapDataPacket(long metadata, byte[] data)
+        public MapDataPacket(int metadata, byte[] data)
         {
             Metadata = metadata;
             Data = data;
         }
 
-        public long Metadata;
+        public int Metadata;
         public byte[] Data;
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
@@ -2311,14 +2311,14 @@ namespace Craft.Net.Networking
 
     public struct Statistic
     {
-        public Statistic(string name, long value)
+        public Statistic(string name, int value)
         {
             Name = name;
             Value = value;
         }
 
         public string Name;
-        public long Value;
+        public int Value;
     }
 
     public struct UpdateStatisticsPacket : IPacket
@@ -2345,7 +2345,7 @@ namespace Craft.Net.Networking
 
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode)
         {
-            stream.WriteVarInt(Statistics.LongLength);
+            stream.WriteVarInt(Statistics.Length);
             for (long i = 0; i < Statistics.LongLength; i++)
             {
                 stream.WriteString(Statistics[i].Name);
@@ -2434,8 +2434,8 @@ namespace Craft.Net.Networking
 
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode)
         {
-            stream.WriteVarInt(Completions.LongLength);
-            for (long i = 0; i < Completions.LongLength; i++)
+            stream.WriteVarInt(Completions.Length);
+            for (long i = 0; i < Completions.Length; i++)
                 stream.WriteString(Completions[i]);
             return mode;
         }

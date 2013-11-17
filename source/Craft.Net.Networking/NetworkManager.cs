@@ -108,17 +108,20 @@ namespace Craft.Net.Networking
             {
                 NetworkMode = packet.WritePacket(MinecraftStream, NetworkMode);
                 BufferedStream.WriteImmediately = true;
-                long id = -1;
+                int id = -1;
                 var type = packet.GetType();
                 // Find packet ID for this type
-                for (long i = 0; i < NetworkModes[(int)NetworkMode].LongLength; i++)
+                for (int i = 0; i < NetworkModes[(int)NetworkMode].LongLength; i++)
                 {
                     if (NetworkModes[(int)NetworkMode][i][(int)direction] == type)
+                    {
+                        id = i;
                         break;
+                    }
                 }
                 if (id == -1)
                     throw new InvalidOperationException("Attempted to write invalid packet type.");
-                MinecraftStream.WriteVarInt(BufferedStream.PendingWrites + MinecraftStream.GetVarIntLength(id));
+                MinecraftStream.WriteVarInt((int)BufferedStream.PendingWrites + MinecraftStream.GetVarIntLength(id));
                 MinecraftStream.WriteVarInt(id);
                 BufferedStream.WriteImmediately = false;
                 BufferedStream.Flush();

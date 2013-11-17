@@ -19,51 +19,51 @@ namespace Craft.Net.Common
         /// <summary>
         /// Reads a variable-length integer from the stream.
         /// </summary>
-        public long ReadVarInt()
+        public int ReadVarInt()
         {
-            ulong result = 0;
+            uint result = 0;
             int length = 0;
             while (true)
             {
                 byte current = ReadUInt8();
-                result |= (current & 0x7Ful) << length++ * 7;
+                result |= (current & 0x7Fu) << length++ * 7;
                 if (length > 5)
-                    throw new InvalidDataException("VarInt may not be longer than 60 bits.");
+                    throw new InvalidDataException("VarInt may not be longer than 28 bits.");
                 if ((current & 0x80) != 128)
                     break;
             }
-            return (long)result;
+            return (int)result;
         }
 
         /// <summary>
         /// Reads a variable-length integer from the stream.
         /// </summary>
         /// <param name="length">The actual length, in bytes, of the integer.</param>
-        public long ReadVarInt(out int length)
+        public int ReadVarInt(out int length)
         {
-            ulong result = 0;
+            uint result = 0;
             length = 0;
             while (true)
             {
                 byte current = ReadUInt8();
-                result |= (current & 0x7Ful) << length++ * 7;
+                result |= (current & 0x7Fu) << length++ * 7;
                 if (length > 5)
                     throw new InvalidDataException("VarInt may not be longer than 60 bits.");
                 if ((current & 0x80) != 128)
                     break;
             }
-            return (long)result;
+            return (int)result;
         }
 
         /// <summary>
         /// Writes a variable-length integer to the stream.
         /// </summary>
-        public void WriteVarInt(long _value)
+        public void WriteVarInt(int _value)
         {
-            ulong value = (ulong)_value;
+            uint value = (uint)_value;
             while (true)
             {
-                if ((value & 0xFF) == 0)
+                if ((value & 0xFFFFFF80u) == 0)
                 {
                     WriteUInt8((byte)value);
                     break;
@@ -77,14 +77,15 @@ namespace Craft.Net.Common
         /// Writes a variable-length integer to the stream.
         /// </summary>
         /// <param name="length">The actual length, in bytes, of the written integer.</param>
-        public void WriteVarInt(long _value, out int length)
+        public void WriteVarInt(int _value, out int length)
         {
-            ulong value = (ulong)_value;
+            uint value = (uint)_value;
+            Console.WriteLine(value.ToString("X"));
             length = 0;
             while (true)
             {
                 length++;
-                if ((value & 0xFF) == 0)
+                if ((value & 0xFFFFFF80u) == 0)
                 {
                     WriteUInt8((byte)value);
                     break;
@@ -94,14 +95,14 @@ namespace Craft.Net.Common
             }
         }
 
-        public static int GetVarIntLength(long _value)
+        public static int GetVarIntLength(int _value)
         {
-            ulong value = (ulong)_value;
+            uint value = (uint)_value;
             int length = 0;
             while (true)
             {
                 length++;
-                if ((value & 0xFF) == 0)
+                if ((value & 0xFFFFFF80u) == 0)
                     break;
                 value >>= 7;
             }
