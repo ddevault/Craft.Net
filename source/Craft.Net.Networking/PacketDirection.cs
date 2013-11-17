@@ -4,8 +4,8 @@ namespace Craft.Net
 {
     public enum PacketDirection
     {
-        Serverbound,
-        Clientbound
+        Serverbound = 0,
+        Clientbound = 1
     }
 }
 

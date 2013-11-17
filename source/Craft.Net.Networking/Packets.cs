@@ -11,7 +11,6 @@ namespace Craft.Net.Networking
 {
     public interface IPacket
     {
-        long Id { get; }
         /// <summary>
         /// Reads this packet data from the stream, not including its length or packet ID, and returns
         /// the new network state (if it has changed).
@@ -59,9 +58,6 @@ namespace Craft.Net.Networking
         public ushort ServerPort;
         public NetworkMode NextState;
 
-        public const long PacketId = 0x00;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             ProtocolVersion = stream.ReadVarInt();
@@ -87,8 +83,6 @@ namespace Craft.Net.Networking
 
     public struct StatusRequestPacket : IPacket
     {
-        public const long PacketId = 0x00;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -109,9 +103,6 @@ namespace Craft.Net.Networking
         }
 
         public ServerStatus Status;
-
-        public const long PacketId = 0x00;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -134,9 +125,6 @@ namespace Craft.Net.Networking
         }
 
         public long Time;
-
-        public const long PacketId = 0x01;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -167,9 +155,6 @@ namespace Craft.Net.Networking
         /// </summary>
         public string JsonData;
 
-        public const long PacketId = 0x00;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             JsonData = stream.ReadString();
@@ -195,9 +180,6 @@ namespace Craft.Net.Networking
         public string ServerId;
         public byte[] PublicKey;
         public byte[] VerificationToken;
-
-        public const long PacketId = 0x01;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -231,9 +213,6 @@ namespace Craft.Net.Networking
         public string UUID;
         public string Username;
 
-        public const long PacketId = 0x02;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             UUID = stream.ReadString();
@@ -258,9 +237,6 @@ namespace Craft.Net.Networking
 
         public string Username;
 
-        public const long PacketId = 0x00;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             Username = stream.ReadString();
@@ -284,9 +260,6 @@ namespace Craft.Net.Networking
 
         public byte[] SharedSecret;
         public byte[] VerificationToken;
-
-        public const long PacketId = 0x01;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -319,9 +292,6 @@ namespace Craft.Net.Networking
         }
 
         public int KeepAlive;
-
-        public const long PacketId = 0x00;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -356,9 +326,6 @@ namespace Craft.Net.Networking
         public byte MaxPlayers;
         public string LevelType;
 
-        public const long PacketId = 0x01;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             EntityId = stream.ReadInt32();
@@ -391,9 +358,6 @@ namespace Craft.Net.Networking
 
         public string Message; // TODO: Deserialize JSON and strongly type this
 
-        public const long PacketId = 0x02;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             Message = stream.ReadString();
@@ -417,9 +381,6 @@ namespace Craft.Net.Networking
 
         public long WorldAge;
         public long TimeOfDay;
-
-        public const long PacketId = 0x03;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -449,9 +410,6 @@ namespace Craft.Net.Networking
         public short Slot;
         public ItemStack Item;
 
-        public const long PacketId = 0x04;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             EntityId = stream.ReadInt32();
@@ -479,9 +437,6 @@ namespace Craft.Net.Networking
         }
 
         public int X, Y, Z;
-
-        public const long PacketId = 0x05;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -512,9 +467,6 @@ namespace Craft.Net.Networking
         public float Health;
         public short Food;
         public float FoodSaturation;
-
-        public const long PacketId = 0x06;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -547,9 +499,6 @@ namespace Craft.Net.Networking
         public Difficulty Difficulty;
         public GameMode GameMode;
         public string LevelType;
-
-        public const long PacketId = 0x07;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -586,9 +535,6 @@ namespace Craft.Net.Networking
         public float Yaw, Pitch;
         public bool OnGround;
 
-        public const long PacketId = 0x08;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             X = stream.ReadDouble();
@@ -621,9 +567,6 @@ namespace Craft.Net.Networking
 
         public sbyte Slot;
 
-        public const long PacketId = 0x09;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             Slot = stream.ReadInt8();
@@ -651,9 +594,6 @@ namespace Craft.Net.Networking
         public int X;
         public byte Y;
         public int Z;
-
-        public const long PacketId = 0x0A;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -693,11 +633,8 @@ namespace Craft.Net.Networking
             Animation = animation;
         }
 
-        public long EntityId; // Seriously, Mojang?
+        public long EntityId;
         public AnimationType Animation;
-
-        public const long PacketId = 0x0B;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -736,9 +673,6 @@ namespace Craft.Net.Networking
         public byte Yaw, Pitch;
         public short HeldItem;
         public MetadataDictionary Metadata;
-
-        public const long PacketId = 0x0C;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -780,9 +714,6 @@ namespace Craft.Net.Networking
         public int ItemId;
         public int PlayerId;
 
-        public const long PacketId = 0x0D;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             ItemId = stream.ReadInt32();
@@ -823,9 +754,6 @@ namespace Craft.Net.Networking
         public byte Yaw, Pitch;
         public int Data;
         public short? SpeedX, SpeedY, SpeedZ;
-
-        public const long PacketId = 0x0E;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -893,9 +821,6 @@ namespace Craft.Net.Networking
         public short VelocityX, VelocityY, VelocityZ;
         public MetadataDictionary Metadata;
 
-        public const long PacketId = 0x0F;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             EntityId = stream.ReadVarInt();
@@ -949,9 +874,6 @@ namespace Craft.Net.Networking
         public int X, Y, Z;
         public int Direction;
 
-        public const long PacketId = 0x10;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             EntityId = stream.ReadVarInt();
@@ -991,9 +913,6 @@ namespace Craft.Net.Networking
         public int X, Y, Z;
         public short Count;
 
-        public const long PacketId = 0x11;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             EntityId = stream.ReadVarInt();
@@ -1029,9 +948,6 @@ namespace Craft.Net.Networking
         public int EntityId;
         public short VelocityX, VelocityY, VelocityZ;
 
-        public const long PacketId = 0x12;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             EntityId = stream.ReadInt32();
@@ -1060,9 +976,6 @@ namespace Craft.Net.Networking
 
         public int[] EntityIds;
 
-        public const long PacketId = 0x13;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             var length = stream.ReadUInt8();
@@ -1086,9 +999,6 @@ namespace Craft.Net.Networking
         }
 
         public int EntityId;
-
-        public const long PacketId = 0x14;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -1116,9 +1026,6 @@ namespace Craft.Net.Networking
 
         public int EntityId;
         public sbyte DeltaX, DeltaY, DeltaZ;
-
-        public const long PacketId = 0x15;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -1150,9 +1057,6 @@ namespace Craft.Net.Networking
 
         public int EntityId;
         public byte Yaw, Pitch;
-
-        public const long PacketId = 0x16;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -1187,9 +1091,6 @@ namespace Craft.Net.Networking
         public int EntityId;
         public sbyte DeltaX, DeltaY, DeltaZ;
         public byte Yaw, Pitch;
-
-        public const long PacketId = 0x17;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -1231,9 +1132,6 @@ namespace Craft.Net.Networking
         public int X, Y, Z;
         public byte Yaw, Pitch;
 
-        public const long PacketId = 0x18;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             EntityId = stream.ReadInt32();
@@ -1267,9 +1165,6 @@ namespace Craft.Net.Networking
 
         public int EntityId;
         public byte HeadYaw;
-
-        public const long PacketId = 0x19;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -1314,9 +1209,6 @@ namespace Craft.Net.Networking
         public int EntityId;
         public EntityStatus Status;
 
-        public const long PacketId = 0x1A;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             EntityId = stream.ReadInt32();
@@ -1343,9 +1235,6 @@ namespace Craft.Net.Networking
 
         public int EntityId, VehicleId;
         public bool Leash;
-
-        public const long PacketId = 0x1B;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -1374,9 +1263,6 @@ namespace Craft.Net.Networking
 
         public int EntityId;
         public MetadataDictionary Metadata;
-
-        public const long PacketId = 0x1C;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -1408,9 +1294,6 @@ namespace Craft.Net.Networking
         public byte Amplifier;
         public short Duration;
 
-        public const long PacketId = 0x1D;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             EntityId = stream.ReadInt32();
@@ -1441,9 +1324,6 @@ namespace Craft.Net.Networking
         public int EntityId;
         public byte EffectId;
 
-        public const long PacketId = 0x1F;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             EntityId = stream.ReadInt32();
@@ -1472,9 +1352,6 @@ namespace Craft.Net.Networking
         public short Level;
         public short TotalExperience;
 
-        public const long PacketId = 0x1F;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             ExperienceBar = stream.ReadSingle();
@@ -1502,9 +1379,6 @@ namespace Craft.Net.Networking
 
         public int EntityId;
         public EntityProperty[] Properties;
-
-        public const long PacketId = 0x20;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -1595,9 +1469,6 @@ namespace Craft.Net.Networking
         public ushort AddBitMap;
         public byte[] Data;
 
-        public const long PacketId = 0x21;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             X = stream.ReadInt32();
@@ -1638,9 +1509,6 @@ namespace Craft.Net.Networking
         public short RecordCount;
         public int[] Data;
 
-        public const long PacketId = 0x22;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             ChunkX = stream.ReadInt32();
@@ -1679,9 +1547,6 @@ namespace Craft.Net.Networking
         public int Z;
         public long BlockType;
         public byte BlockMetadata;
-
-        public const long PacketId = 0x23;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -1724,9 +1589,6 @@ namespace Craft.Net.Networking
         public byte Data2;
         public long BlockId;
 
-        public const long PacketId = 0x24;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             X = stream.ReadInt32();
@@ -1765,9 +1627,6 @@ namespace Craft.Net.Networking
         public long EntityId;
         public int X, Y, Z;
         public byte DestroyStage;
-
-        public const long PacketId = 0x25;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -1812,9 +1671,6 @@ namespace Craft.Net.Networking
         public bool LightIncluded;
         public byte[] ChunkData;
         public Metadata[] ChunkMetadata;
-
-        public const long PacketId = 0x26;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -1878,9 +1734,6 @@ namespace Craft.Net.Networking
         public byte[] Records;
         public float PlayerVelocityX, PlayerVelocityY, PlayerVelocityZ;
 
-        public const long PacketId = 0x27;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             X = stream.ReadSingle();
@@ -1930,9 +1783,6 @@ namespace Craft.Net.Networking
         public int Data;
         public bool DisableRelativeVolume;
 
-        public const long PacketId = 0x28;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             EffectId = stream.ReadInt32();
@@ -1973,9 +1823,6 @@ namespace Craft.Net.Networking
         public int X, Y, Z;
         public float Volume;
         public byte Pitch;
-
-        public const long PacketId = 0x29;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -2022,9 +1869,6 @@ namespace Craft.Net.Networking
         public float OffsetX, OffsetY, OffsetZ;
         public float ParticleSpeed;
         public int ParticleCount;
-
-        public const long PacketId = 0x2A;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -2081,9 +1925,6 @@ namespace Craft.Net.Networking
         public GameState State;
         public GameMode GameMode;
 
-        public const long PacketId = 0x2B;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             State = (GameState)stream.ReadUInt8();
@@ -2113,9 +1954,6 @@ namespace Craft.Net.Networking
         public long EntityId;
         public byte Type;
         public int X, Y, Z;
-
-        public const long PacketId = 0x2C;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -2158,9 +1996,6 @@ namespace Craft.Net.Networking
         public bool UseProvidedTitle;
         public int? EntityId;
 
-        public const long PacketId = 0x2D;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             WindowId = stream.ReadUInt8();
@@ -2195,9 +2030,6 @@ namespace Craft.Net.Networking
 
         public byte WindowId;
 
-        public const long PacketId = 0x2E;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             WindowId = stream.ReadUInt8();
@@ -2223,9 +2055,6 @@ namespace Craft.Net.Networking
         public byte WindowId;
         public short SlotIndex;
         public ItemStack Item;
-
-        public const long PacketId = 0x2F;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -2254,9 +2083,6 @@ namespace Craft.Net.Networking
         
         public byte WindowId;
         public ItemStack[] Items;
-
-        public const long PacketId = 0x30;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -2291,9 +2117,6 @@ namespace Craft.Net.Networking
         public short PropertyId;
         public short Value;
 
-        public const long PacketId = 0x31;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             WindowId = stream.ReadUInt8();
@@ -2323,9 +2146,6 @@ namespace Craft.Net.Networking
         public byte WindowId;
         public short ActionNumber;
         public bool Accepted;
-
-        public const long PacketId = 0x32;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -2363,9 +2183,6 @@ namespace Craft.Net.Networking
         public int Z;
         public string Text1, Text2, Text3, Text4;
 
-        public const long PacketId = 0x33;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             X = stream.ReadInt32();
@@ -2402,9 +2219,6 @@ namespace Craft.Net.Networking
         public long Metadata;
         public byte[] Data;
 
-        public const long PacketId = 0x34;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             Metadata = stream.ReadVarInt();
@@ -2438,9 +2252,6 @@ namespace Craft.Net.Networking
         public int Z;
         public byte Action;
         public NbtFile Nbt;
-
-        public const long PacketId = 0x35;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -2481,9 +2292,6 @@ namespace Craft.Net.Networking
 
         public int X, Y, Z;
 
-        public const long PacketId = 0x36;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             X = stream.ReadInt32();
@@ -2521,9 +2329,6 @@ namespace Craft.Net.Networking
         }
 
         public Statistic[] Statistics;
-
-        public const long PacketId = 0x37;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -2563,9 +2368,6 @@ namespace Craft.Net.Networking
         public bool Online;
         public short Ping;
 
-        public const long PacketId = 0x38;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             PlayerName = stream.ReadString();
@@ -2595,9 +2397,6 @@ namespace Craft.Net.Networking
         public byte Flags;
         public float FlyingSpeed, WalkingSpeed;
 
-        public const long PacketId = 0x39;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             Flags = stream.ReadUInt8();
@@ -2623,9 +2422,6 @@ namespace Craft.Net.Networking
         }
 
         public string[] Completions;
-
-        public const long PacketId = 0x3A;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -2664,9 +2460,6 @@ namespace Craft.Net.Networking
         public string Name;
         public string DisplayName;
         public UpdateMode Mode;
-
-        public const long PacketId = 0x3B;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -2707,9 +2500,6 @@ namespace Craft.Net.Networking
         public bool RemoveItem;
         public string ScoreName;
         public int? Value;
-
-        public const long PacketId = 0x3C;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -2753,9 +2543,6 @@ namespace Craft.Net.Networking
 
         public ScoreboardPosition Position;
         public string ScoreName;
-
-        public const long PacketId = 0x3D;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
@@ -2844,9 +2631,6 @@ namespace Craft.Net.Networking
         public bool? EnableFriendlyFire;
         public string[] Players;
 
-        public const long PacketId = 0x3E;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             TeamName = stream.ReadString();
@@ -2902,9 +2686,6 @@ namespace Craft.Net.Networking
         public string Channel;
         public byte[] Data;
 
-        public const long PacketId = 0x3F;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             Channel = stream.ReadString();
@@ -2931,9 +2712,6 @@ namespace Craft.Net.Networking
 
         public string Reason;
 
-        public const long PacketId = 0x40;
-        public long Id { get { return PacketId; } }
-
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {
             Reason = stream.ReadString();
@@ -2956,8 +2734,6 @@ namespace Craft.Net.Networking
         {
         }
 
-        public const long PacketId = 0x00;
-        public long Id { get { return PacketId; } }
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode)
         {

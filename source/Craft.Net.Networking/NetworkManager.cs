@@ -9,7 +9,6 @@ namespace Craft.Net.Networking
     {
         public const int ProtocolVersion = 4;
         public const string FriendlyVersion = "1.7.2";
-        public delegate IPacket CreatePacketInstance(PacketDirection direction);
 
         public NetworkMode NetworkMode { get; private set; }
         public bool Strict { get; set; }
@@ -43,7 +42,7 @@ namespace Craft.Net.Networking
         }
 
         #region Packet Types
-        private static readonly CreatePacketInstance[][] NetworkModes = new CreatePacketInstance[][]
+        private static readonly Type[][][] NetworkModes = new Type[][][]
         {
             HandshakePackets,
             StatusPackets,
@@ -51,26 +50,29 @@ namespace Craft.Net.Networking
             PlayPackets
         };
 
-        private static readonly CreatePacketInstance[] HandshakePackets = new CreatePacketInstance[]
+        private static readonly Type[][] HandshakePackets = new Type[][]
         {
-            d => new HandshakePacket() // 0x00
+            // { typeof(serverbound), typeof(clientbound) },
+            new Type[] { typeof(HandshakePacket), typeof(HandshakePacket) } // 0x00
         };
 
-        private static readonly CreatePacketInstance[] StatusPackets  = new CreatePacketInstance[]
+        private static readonly Type[][] StatusPackets  = new Type[][]
         {
-            d => d == PacketDirection.Serverbound ? (IPacket)new StatusRequestPacket() : (IPacket)new StatusResponsePacket(), // 0x00
-            d => new StatusPingPacket() // 0x01
+            // { typeof(serverbound), typeof(clientbound) },
+            new Type[] { typeof(StatusRequestPacket), typeof(StatusResponsePacket) }, // 0x00
+            new Type[] { typeof(StatusPingPacket), typeof(StatusPingPacket) }, // 0x01
         };
 
-        private static readonly CreatePacketInstance[] LoginPackets  = new CreatePacketInstance[]
+        private static readonly Type[][] LoginPackets = new Type[][]
         {
-            d => d == PacketDirection.Serverbound ? (IPacket)new LoginStartPacket() : (IPacket)new LoginDisconnectPacket(), // 0x00
-            d => d == PacketDirection.Serverbound ? (IPacket)new EncryptionKeyResponsePacket() : (IPacket)new EncryptionKeyRequestPacket(), // 0x01
+            // { typeof(serverbound), typeof(clientbound) }, // 0xID
+            new Type[] { typeof(LoginStartPacket), typeof(LoginDisconnectPacket) }, // 0x00
+            new Type[] { typeof(EncryptionKeyRequestPacket), typeof(EncryptionKeyResponsePacket) }, // 0x01
         };
 
-        private static readonly CreatePacketInstance[] PlayPackets  = new CreatePacketInstance[]
+        private static readonly Type[][] PlayPackets  = new Type[][]
         {
-
+            // { typeof(serverbound), typeof(clientbound) }, // 0xID
         };
         #endregion
 
@@ -81,7 +83,7 @@ namespace Craft.Net.Networking
                 int idLength;
                 long length = MinecraftStream.ReadVarInt();
                 long id = MinecraftStream.ReadVarInt(out idLength);
-                if (NetworkModes[(int)NetworkMode].Length < id || NetworkModes[(int)NetworkMode][id] == null)
+                if (NetworkModes[(int)NetworkMode].Length < id || NetworkModes[(int)NetworkMode][id][(int)direction] == null)
                 {
                     if (Strict)
                         throw new InvalidOperationException("Invalid packet ID: 0x" + id.ToString("X2"));
@@ -94,20 +96,30 @@ namespace Craft.Net.Networking
                         };
                     }
                 }
-                var packet = NetworkModes[(int)NetworkMode][id](direction);
+                var packet = (IPacket)Activator.CreateInstance(NetworkModes[(int)NetworkMode][id][(int)direction]);
                 NetworkMode = packet.ReadPacket(MinecraftStream, NetworkMode);
                 return packet;
             }
         }
 
-        public void WritePacket(IPacket packet)
+        public void WritePacket(IPacket packet, PacketDirection direction)
         {
             lock (streamLock)
             {
                 NetworkMode = packet.WritePacket(MinecraftStream, NetworkMode);
                 BufferedStream.WriteImmediately = true;
-                MinecraftStream.WriteVarInt(BufferedStream.PendingWrites + MinecraftStream.GetVarIntLength(packet.Id));
-                MinecraftStream.WriteVarInt(packet.Id);
+                long id = -1;
+                var type = packet.GetType();
+                // Find packet ID for this type
+                for (long i = 0; i < NetworkModes[(int)NetworkMode].LongLength; i++)
+                {
+                    if (NetworkModes[(int)NetworkMode][i][(int)direction] == type)
+                        break;
+                }
+                if (id == -1)
+                    throw new InvalidOperationException("Attempted to write invalid packet type.");
+                MinecraftStream.WriteVarInt(BufferedStream.PendingWrites + MinecraftStream.GetVarIntLength(id));
+                MinecraftStream.WriteVarInt(id);
                 BufferedStream.WriteImmediately = false;
                 BufferedStream.Flush();
             }
@@ -117,17 +129,17 @@ namespace Craft.Net.Networking
         /// Overrides the implementation for a certain packet.
         /// </summary>
         /// <param name="factory">A method that returns a new instance of the packet for populating later.</param>
-        public void OverridePacket(CreatePacketInstance factory)
-        {
-            if (factory == null)
-                throw new ArgumentNullException("factory");
-            var packet = factory(PacketDirection.Serverbound);
-            if (packet == null)
-                throw new NullReferenceException("Factory must not return null packet.");
-            packet = factory(PacketDirection.Clientbound);
-            if (packet == null)
-                throw new NullReferenceException("Factory must not return null packet.");
-            NetworkModes[(int)NetworkMode][packet.Id] = factory;
-        }
+//        public void OverridePacket(CreatePacketInstance factory)
+//        {
+//            if (factory == null)
+//                throw new ArgumentNullException("factory");
+//            var packet = factory(PacketDirection.Serverbound);
+//            if (packet == null)
+//                throw new NullReferenceException("Factory must not return null packet.");
+//            packet = factory(PacketDirection.Clientbound);
+//            if (packet == null)
+//                throw new NullReferenceException("Factory must not return null packet.");
+//            NetworkModes[(int)NetworkMode][packet.Id] = factory;
+//        }
     }
 }
