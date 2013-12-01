@@ -217,14 +217,14 @@ namespace Craft.Net.Networking
         {
             UUID = stream.ReadString();
             Username = stream.ReadString();
-            return mode;
+            return NetworkMode.Play;
         }
 
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
             stream.WriteString(UUID);
             stream.WriteString(Username);
-            return mode;
+            return NetworkMode.Play;
         }
     }
 
