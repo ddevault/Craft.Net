@@ -97,7 +97,7 @@ namespace Craft.Net.Networking
                     }
                 }
                 var packet = (IPacket)Activator.CreateInstance(NetworkModes[(int)NetworkMode][id][(int)direction]);
-                NetworkMode = packet.ReadPacket(MinecraftStream, NetworkMode);
+                NetworkMode = packet.ReadPacket(MinecraftStream, NetworkMode, direction);
                 return packet;
             }
         }
@@ -106,7 +106,7 @@ namespace Craft.Net.Networking
         {
             lock (streamLock)
             {
-                NetworkMode = packet.WritePacket(MinecraftStream, NetworkMode);
+                NetworkMode = packet.WritePacket(MinecraftStream, NetworkMode, direction);
                 BufferedStream.WriteImmediately = true;
                 int id = -1;
                 var type = packet.GetType();
