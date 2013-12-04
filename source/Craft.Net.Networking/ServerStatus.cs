@@ -31,7 +31,7 @@ namespace Craft.Net
                 {
                 }
 
-                public Player(string name, long id)
+                public Player(string name, string id)
                 {
                     Name = name;
                     Id = id;
@@ -39,8 +39,8 @@ namespace Craft.Net
 
                 [JsonProperty("name")]
                 public string Name { get; set; }
-                [JsonProperty("name")]
-                public long Id { get; set; }
+                [JsonProperty("id")]
+                public string Id { get; set; }
             }
 
             public PlayerList()

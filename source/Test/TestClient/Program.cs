@@ -12,12 +12,18 @@ namespace TestClient
         {
             var endPoint = ParseEndPoint(args[0]);
             var ping = ServerPing.DoPing(endPoint);
-            Console.WriteLine("{0}/{1} {2} ({3}): {4}",
+            Console.WriteLine("{0}/{1} {2} ({3}): {4} [{5}ms latency]",
                 ping.Players.OnlinePlayers,
                 ping.Players.MaxPlayers,
                 ping.Version.Name,
                 ping.Version.ProtocolVersion,
-                ping.Description);
+                ping.Description,
+                (int)ping.Latency.TotalMilliseconds);
+            Console.WriteLine("Player list sample:");
+            foreach (var player in ping.Players.Players)
+                Console.WriteLine("{0} ({1})", player.Name, player.Id);
+            if (!string.IsNullOrEmpty(ping.Icon))
+                Console.WriteLine("Server icon: {0}", ping.Icon);
 
             //var lastLogin = LastLogin.GetLastLogin();
             //var session = Session.DoLogin(lastLogin.Username, lastLogin.Password);
