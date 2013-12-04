@@ -12,26 +12,31 @@ namespace TestClient
         {
             var endPoint = ParseEndPoint(args[0]);
             var ping = ServerPing.DoPing(endPoint);
-            Console.WriteLine("{0}/{1} {2} ({3}): {4}", ping.CurrentPlayers, ping.MaxPlayers, ping.ServerVersion, ping.ProtocolVersion, ping.MotD);
+            Console.WriteLine("{0}/{1} {2} ({3}): {4}",
+                ping.Players.OnlinePlayers,
+                ping.Players.MaxPlayers,
+                ping.Version.Name,
+                ping.Version.ProtocolVersion,
+                ping.Description);
 
             //var lastLogin = LastLogin.GetLastLogin();
             //var session = Session.DoLogin(lastLogin.Username, lastLogin.Password);
             var session = new Session("TestBot");
 
             // Connect to server
-            var client = new MinecraftClient(session);
-            client.Connect(endPoint);
+            //var client = new MinecraftClient(session);
+            //client.Connect(endPoint);
 
-            client.ChatMessage += (sender, e) => Console.WriteLine(e.RawMessage);
-            string command;
-            do
-            {
-                command = Console.ReadLine();
-                if (command.StartsWith("say "))
-                    client.SendChat(command.Substring(4));
-            } while (command != "quit");
+            //client.ChatMessage += (sender, e) => Console.WriteLine(e.RawMessage);
+            //string command;
+            //do
+            //{
+            //    command = Console.ReadLine();
+            //    if (command.StartsWith("say "))
+            //        client.SendChat(command.Substring(4));
+            //} while (command != "quit");
 
-            client.Disconnect("Quitting");
+            //client.Disconnect("Quitting");
         }
 
         private static IPEndPoint ParseEndPoint(string arg)

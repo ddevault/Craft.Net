@@ -82,6 +82,8 @@ namespace Craft.Net
         public string Description { get; set; }
         [JsonProperty("favicon")]
         public string Icon { get; set; }
+        [JsonIgnore]
+        public TimeSpan Latency { get; set; }
 
         public override string ToString()
         {

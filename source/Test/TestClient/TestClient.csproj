@@ -9,6 +9,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>TestClient</RootNamespace>
     <AssemblyName>TestClient</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -18,8 +19,8 @@
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Externalconsole>true</Externalconsole>
-    <Commandlineparameters>127.0.0.1:25565</Commandlineparameters>
+    <Commandlineparameters>127.0.0.1:25566</Commandlineparameters>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -42,6 +43,10 @@
     <ProjectReference Include="..\..\Craft.Net.Client\Craft.Net.Client.csproj">
       <Project>{AA930BF3-2073-4C4D-8ADD-07103B29198B}</Project>
       <Name>Craft.Net.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Craft.Net.Networking\Craft.Net.Networking.csproj">
+      <Project>{C3BBAB7E-606F-420E-9461-C8CFAEC2476B}</Project>
+      <Name>Craft.Net.Networking</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

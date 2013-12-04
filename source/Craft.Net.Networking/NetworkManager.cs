@@ -42,14 +42,6 @@ namespace Craft.Net.Networking
         }
 
         #region Packet Types
-        private static readonly Type[][][] NetworkModes = new Type[][][]
-        {
-            HandshakePackets,
-            StatusPackets,
-            LoginPackets,
-            PlayPackets
-        };
-
         private static readonly Type[][] HandshakePackets = new Type[][]
         {
             // { typeof(serverbound), typeof(clientbound) }, // 0xID
@@ -138,6 +130,14 @@ namespace Craft.Net.Networking
             new Type[] { null, typeof(PluginMessagePacket) }, // 0x3D
             new Type[] { null, typeof(DisconnectPacket) }, // 0x3E
         };
+
+        private static readonly Type[][][] NetworkModes = new Type[][][]
+        {
+            HandshakePackets,
+            StatusPackets,
+            LoginPackets,
+            PlayPackets
+        };
         #endregion
 
         public IPacket ReadPacket(PacketDirection direction)
@@ -170,7 +170,7 @@ namespace Craft.Net.Networking
         {
             lock (streamLock)
             {
-                NetworkMode = packet.WritePacket(MinecraftStream, NetworkMode, direction);
+                var newNetworkMode = packet.WritePacket(MinecraftStream, NetworkMode, direction);
                 BufferedStream.WriteImmediately = true;
                 int id = -1;
                 var type = packet.GetType();
@@ -189,6 +189,7 @@ namespace Craft.Net.Networking
                 MinecraftStream.WriteVarInt(id);
                 BufferedStream.WriteImmediately = false;
                 BufferedStream.Flush();
+                NetworkMode = newNetworkMode;
             }
         }
     }
