@@ -8,8 +8,7 @@ namespace Craft.Net.Client.Handlers
         public static void Register(MinecraftClient client)
         {
             client.RegisterPacketHandler(typeof(EncryptionKeyRequestPacket), LoginHandlers.EncryptionKeyRequest);
-            client.RegisterPacketHandler(typeof(EncryptionKeyResponsePacket), LoginHandlers.EncryptionKeyResponse);
-            client.RegisterPacketHandler(typeof(LoginRequestPacket), LoginHandlers.LoginRequest);
+            client.RegisterPacketHandler(typeof(LoginSuccessPacket), LoginHandlers.LoginSuccess);
             client.RegisterPacketHandler(typeof(DisconnectPacket), LoginHandlers.Disconnect);
 
             client.RegisterPacketHandler(typeof(PlayerPositionAndLookPacket), EntityHandlers.PlayerPositionAndLook);

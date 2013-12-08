@@ -40,6 +40,7 @@ namespace Craft.Net.Client
 
         private Thread NetworkWorkerThread { get; set; }
         private Dictionary<Type, PacketHandler> PacketHandlers { get; set; }
+        private ManualResetEvent NetworkingReset { get; set; }
 
         public void RegisterPacketHandler(Type packetType, PacketHandler handler)
         {
@@ -57,11 +58,14 @@ namespace Craft.Net.Client
             Client.Connect(EndPoint);
             NetworkStream = Client.GetStream();
             NetworkManager = new NetworkManager(NetworkStream);
+            NetworkingReset = new ManualResetEvent(true);
             NetworkWorkerThread = new Thread(NetworkWorker);
             NetworkWorkerThread.Start();
             var handshake = new HandshakePacket(NetworkManager.ProtocolVersion, 
                 EndPoint.Address.ToString(), (ushort)EndPoint.Port, NetworkMode.Login);
             SendPacket(handshake);
+            var login = new LoginStartPacket(Session.SelectedProfile.Name);
+            SendPacket(login);
         }
 
         public void Disconnect(string reason)
@@ -136,8 +140,16 @@ namespace Craft.Net.Client
                     }
                     catch { /* TODO */ }
                 }
+                NetworkingReset.Set();
+                NetworkingReset.Reset();
                 Thread.Sleep(1);
             }
+        }
+
+        protected internal void FlushPackets()
+        {
+            // Writes all pending packets to the underlying network stream
+            NetworkingReset.WaitOne();
         }
 
         private void HandlePacket(IPacket packet)
