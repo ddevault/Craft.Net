@@ -30,19 +30,21 @@ namespace TestClient
             var session = new Session("TestBot");
 
             // Connect to server
-            //var client = new MinecraftClient(session);
-            //client.Connect(endPoint);
+            var client = new MinecraftClient(session);
+            client.Connect(endPoint);
 
-            //client.ChatMessage += (sender, e) => Console.WriteLine(e.RawMessage);
-            //string command;
-            //do
-            //{
-            //    command = Console.ReadLine();
-            //    if (command.StartsWith("say "))
-            //        client.SendChat(command.Substring(4));
-            //} while (command != "quit");
+            client.ChatMessage += (sender, e) => Console.WriteLine(e.RawMessage);
+            string command;
+            do
+            {
+                command = Console.ReadLine();
+                if (command == null)
+                    continue; // MonoDevelop debugger does this sometimes
+                if (command.StartsWith("say "))
+                    client.SendChat(command.Substring(4));
+            } while (command != "quit");
 
-            //client.Disconnect("Quitting");
+            client.Disconnect("Quitting");
         }
 
         private static IPEndPoint ParseEndPoint(string arg)

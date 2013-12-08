@@ -60,9 +60,9 @@ namespace Craft.Net.Client.Handlers
             var packet = (LoginSuccessPacket)_packet;
             Console.WriteLine(packet.UUID);
             //client.EntityId = packet.EntityId;
-            //client.IsLoggedIn = true;
-            //client.World = new ReadOnlyWorld();
-            //client.OnLoggedIn();
+            client.IsLoggedIn = true;
+            client.World = new ReadOnlyWorld();
+            client.OnLoggedIn();
         }
 
         public static void Disconnect(MinecraftClient client, IPacket _packet)
