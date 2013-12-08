@@ -13,8 +13,7 @@ namespace Craft.Net.Client
             set
             {
                 _position = value;
-                //SendPacket(new PlayerPositionPacket(Position.X, Position.Y, Position.Z, Position.Y + 1.62, true));
-                SendPacket(new PlayerPositionAndLookPacket(Position.X, Position.Y, Position.Z, Position.Y + 1.62, Yaw, Pitch, true));
+                SendPacket(new PlayerPositionPacket(Position.X, Position.Y, Position.Z, Position.Y - 1.62, true));
             }
         }
 

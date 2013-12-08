@@ -633,9 +633,9 @@ namespace Craft.Net.Networking
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
             X = stream.ReadDouble();
-            Y = stream.ReadDouble();
             if (direction == PacketDirection.Serverbound)
                 Stance = stream.ReadDouble();
+            Y = stream.ReadDouble();
             Z = stream.ReadDouble();
             Yaw = stream.ReadSingle();
             Pitch = stream.ReadSingle();
@@ -646,9 +646,9 @@ namespace Craft.Net.Networking
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
             stream.WriteDouble(X);
-            stream.WriteDouble(Y);
             if (direction == PacketDirection.Serverbound)
                 stream.WriteDouble(Stance.GetValueOrDefault());
+            stream.WriteDouble(Y);
             stream.WriteDouble(Z);
             stream.WriteSingle(Yaw);
             stream.WriteSingle(Pitch);
