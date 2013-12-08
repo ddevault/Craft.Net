@@ -24,6 +24,7 @@ namespace Craft.Net.Client
             PacketHandlers = new Dictionary<Type, PacketHandler>();
             Handlers.PacketHandlers.Register(this);
             PacketLog = new StreamWriter(File.Create("packetlog.txt"));
+            PacketLog.AutoFlush = true;
         }
 
         public Session Session { get; set; }

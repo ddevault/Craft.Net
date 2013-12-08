@@ -111,6 +111,7 @@ namespace Craft.Net.Networking
             clientbound.Add(typeof(SpawnPlayerPacket));
             clientbound.Add(typeof(CollectItemPacket));
             clientbound.Add(typeof(SpawnObjectPacket));
+            clientbound.Add(typeof(SpawnMobPacket));
             clientbound.Add(typeof(SpawnPaintingPacket));
             clientbound.Add(typeof(SpawnExperienceOrbPacket));
             clientbound.Add(typeof(EntityVelocityPacket));
