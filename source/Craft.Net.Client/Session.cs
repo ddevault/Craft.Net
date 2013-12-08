@@ -140,7 +140,7 @@ namespace Craft.Net.Client
             var serializer = new JsonSerializer();
             try
             {
-                var request = (HttpWebRequest)WebRequest.Create("https://authserver.mojang.com/authenticate");
+                var request = (HttpWebRequest)WebRequest.Create("https://authserver.mojang.com/refresh");
                 request.ContentType = "application/json";
                 request.Method = "POST";
                 var blob = new RefreshBlob(this);
