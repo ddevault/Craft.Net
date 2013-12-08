@@ -20,8 +20,9 @@ namespace TestClient
                 ping.Description,
                 (int)ping.Latency.TotalMilliseconds);
             Console.WriteLine("Player list sample:");
-            foreach (var player in ping.Players.Players)
-                Console.WriteLine("{0} ({1})", player.Name, player.Id);
+            if (ping.Players.Players != null)
+                foreach (var player in ping.Players.Players)
+                    Console.WriteLine("{0} ({1})", player.Name, player.Id);
             if (!string.IsNullOrEmpty(ping.Icon))
                 Console.WriteLine("Server icon: {0}", ping.Icon);
 

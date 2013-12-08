@@ -8,6 +8,7 @@ using System.Threading;
 using Craft.Net.Client.Events;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 
 namespace Craft.Net.Client
 {
@@ -15,12 +16,14 @@ namespace Craft.Net.Client
     {
         public delegate void PacketHandler(MinecraftClient client, IPacket packet);
 
+        private StreamWriter PacketLog;
         public MinecraftClient(Session session)
         {
             Session = session;
             PacketQueue = new ConcurrentQueue<IPacket>();
             PacketHandlers = new Dictionary<Type, PacketHandler>();
             Handlers.PacketHandlers.Register(this);
+            PacketLog = new StreamWriter(File.Create("packetlog.txt"));
         }
 
         public Session Session { get; set; }
@@ -120,6 +123,7 @@ namespace Craft.Net.Client
                         try
                         {
                             // Write packet
+                            PacketLog.WriteLine(PacketLogger.LogPacket(packet, PacketDirection.Serverbound));
                             NetworkManager.WritePacket(packet, PacketDirection.Serverbound);
                             if (packet is DisconnectPacket)
                                 return;
@@ -134,6 +138,7 @@ namespace Craft.Net.Client
                     try
                     {
                         var packet = NetworkManager.ReadPacket(PacketDirection.Clientbound);
+                        PacketLog.WriteLine(PacketLogger.LogPacket(packet, PacketDirection.Clientbound));
                         HandlePacket(packet);
                         if (packet is DisconnectPacket)
                             return;

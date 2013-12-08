@@ -57,9 +57,15 @@ namespace Craft.Net.Client.Handlers
 
         public static void LoginSuccess(MinecraftClient client, IPacket _packet)
         {
-            var packet = (LoginSuccessPacket)_packet;
-            Console.WriteLine(packet.UUID);
-            //client.EntityId = packet.EntityId;
+            // var packet = (LoginSuccessPacket)_packet;
+            // TODO: We might want to do something here, dunno
+        }
+
+        public static void JoinGame(MinecraftClient client, IPacket _packet)
+        {
+            var packet = (JoinGamePacket)_packet;
+            // TODO: We might want to store the other packet fields somewhere
+            client.EntityId = packet.EntityId;
             client.IsLoggedIn = true;
             client.World = new ReadOnlyWorld();
             client.OnLoggedIn();

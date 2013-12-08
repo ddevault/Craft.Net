@@ -10,7 +10,7 @@ namespace Craft.Net.Networking
         public static string LogPacket(IPacket packet, PacketDirection direction)
         {
             var memory = new MemoryStream();
-            var stream = new StreamWriter(memory, Encoding.UTF8);
+            var stream = new StreamWriter(memory);
             var type = packet.GetType();
             var fields = type.GetFields();
             // Log time, direction, name
