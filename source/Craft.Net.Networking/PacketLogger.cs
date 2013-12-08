@@ -7,8 +7,10 @@ namespace Craft.Net.Networking
 {
     public static class PacketLogger
     {
-        public static void LogPacket(StreamWriter stream, IPacket packet, PacketDirection direction)
+        public static string LogPacket(IPacket packet, PacketDirection direction)
         {
+            var memory = new MemoryStream();
+            var stream = new StreamWriter(memory, Encoding.UTF8);
             var type = packet.GetType();
             var fields = type.GetFields();
             // Log time, direction, name
@@ -55,6 +57,7 @@ namespace Craft.Net.Networking
             }
             stream.WriteLine();
             stream.Flush();
+            return Encoding.UTF8.GetString(memory.GetBuffer().Take((int)memory.Length).ToArray());
         }
 
         private static string FormatPacketName(string name)
