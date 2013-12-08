@@ -47,6 +47,19 @@
     <Compile Include="ServerPing.cs" />
     <Compile Include="ReadOnlyWorld.cs" />
     <Compile Include="Session.cs" />
+    <Compile Include="Handlers\PacketHandlers.cs" />
+    <Compile Include="Handlers\ChatHandler.cs" />
+    <Compile Include="Handlers\LoginHandlers.cs" />
+    <Compile Include="Handlers\WorldHandlers.cs" />
+    <Compile Include="Handlers\EntityHandlers.cs" />
+    <Compile Include="Handlers\StateHandlers.cs" />
+    <Compile Include="MinecraftClient.cs" />
+    <Compile Include="MinecraftClient.Properties.cs" />
+    <Compile Include="MinecraftClient.Actions.cs" />
+    <Compile Include="Events\ChatMessageEventArgs.cs" />
+    <Compile Include="Events\DisconnectEventArgs.cs" />
+    <Compile Include="Events\EntitySpawnEventArgs.cs" />
+    <Compile Include="Events\HealthAndFoodEventArgs.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -70,20 +83,5 @@
   <ItemGroup>
     <Folder Include="Handlers\" />
     <Folder Include="Events\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Handlers\PacketHandlers.cs" />
-    <None Include="Handlers\ChatHandler.cs" />
-    <None Include="Handlers\LoginHandlers.cs" />
-    <None Include="Handlers\WorldHandlers.cs" />
-    <None Include="Handlers\EntityHandlers.cs" />
-    <None Include="Handlers\StateHandlers.cs" />
-    <None Include="MinecraftClient.cs" />
-    <None Include="MinecraftClient.Properties.cs" />
-    <None Include="MinecraftClient.Actions.cs" />
-    <None Include="Events\ChatMessageEventArgs.cs" />
-    <None Include="Events\DisconnectEventArgs.cs" />
-    <None Include="Events\EntitySpawnEventArgs.cs" />
-    <None Include="Events\HealthAndFoodEventArgs.cs" />
   </ItemGroup>
 </Project>
