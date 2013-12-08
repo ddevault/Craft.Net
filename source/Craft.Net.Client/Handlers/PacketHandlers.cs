@@ -7,21 +7,21 @@ namespace Craft.Net.Client.Handlers
     {
         public static void Register(MinecraftClient client)
         {
-            client.RegisterPacketHandler(EncryptionKeyRequestPacket.PacketId, LoginHandlers.EncryptionKeyRequest);
-            client.RegisterPacketHandler(EncryptionKeyResponsePacket.PacketId, LoginHandlers.EncryptionKeyResponse);
-            client.RegisterPacketHandler(LoginRequestPacket.PacketId, LoginHandlers.LoginRequest);
-            client.RegisterPacketHandler(DisconnectPacket.PacketId, LoginHandlers.Disconnect);
+            client.RegisterPacketHandler(typeof(EncryptionKeyRequestPacket), LoginHandlers.EncryptionKeyRequest);
+            client.RegisterPacketHandler(typeof(EncryptionKeyResponsePacket), LoginHandlers.EncryptionKeyResponse);
+            client.RegisterPacketHandler(typeof(LoginRequestPacket), LoginHandlers.LoginRequest);
+            client.RegisterPacketHandler(typeof(DisconnectPacket), LoginHandlers.Disconnect);
 
-            client.RegisterPacketHandler(PlayerPositionAndLookPacket.PacketId, EntityHandlers.PlayerPositionAndLook);
+            client.RegisterPacketHandler(typeof(PlayerPositionAndLookPacket), EntityHandlers.PlayerPositionAndLook);
 
-            client.RegisterPacketHandler(KeepAlivePacket.PacketId, KeepAlive);
-            client.RegisterPacketHandler(ChatMessagePacket.PacketId, ChatHandler.ChatMessage);
+            client.RegisterPacketHandler(typeof(KeepAlivePacket), KeepAlive);
+            client.RegisterPacketHandler(typeof(ChatMessagePacket), ChatHandler.ChatMessage);
 
-            client.RegisterPacketHandler(UpdateHealthPacket.PacketId, StateHandlers.UpdateHealth);
-            client.RegisterPacketHandler(RespawnPacket.PacketId, StateHandlers.Respawn);
+            client.RegisterPacketHandler(typeof(UpdateHealthPacket), StateHandlers.UpdateHealth);
+            client.RegisterPacketHandler(typeof(RespawnPacket), StateHandlers.Respawn);
 
-            client.RegisterPacketHandler(MapChunkBulkPacket.PacketId, WorldHandlers.MapChunkBulk);
-            client.RegisterPacketHandler(ChunkDataPacket.PacketId, WorldHandlers.ChunkData);
+            client.RegisterPacketHandler(typeof(MapChunkBulkPacket), WorldHandlers.MapChunkBulk);
+            client.RegisterPacketHandler(typeof(ChunkDataPacket), WorldHandlers.ChunkData);
         }
 
         public static void KeepAlive(MinecraftClient client, IPacket _packet)

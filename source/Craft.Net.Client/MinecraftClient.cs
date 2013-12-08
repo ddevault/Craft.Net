@@ -6,6 +6,8 @@ using System.Net.Sockets;
 using Craft.Net.Common;
 using System.Threading;
 using Craft.Net.Client.Events;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Craft.Net.Client
 {
@@ -17,7 +19,7 @@ namespace Craft.Net.Client
         {
             Session = session;
             PacketQueue = new ConcurrentQueue<IPacket>();
-            PacketHandlers = new PacketHandler[256];
+            PacketHandlers = new Dictionary<Type, PacketHandler>();
             Handlers.PacketHandlers.Register(this);
         }
 
@@ -29,19 +31,21 @@ namespace Craft.Net.Client
         public ReadOnlyWorld World { get; protected internal set; }
         public int EntityId { get; protected internal set; }
 
-        protected internal MinecraftStream Stream { get; set; }
         protected internal NetworkStream NetworkStream { get; set; }
+        protected internal NetworkManager NetworkManager { get; set; }
 
         internal byte[] SharedSecret { get; set; }
         internal bool IsLoggedIn { get; set; }
         internal bool IsSpawned { get; set; }
 
         private Thread NetworkWorkerThread { get; set; }
-        private PacketHandler[] PacketHandlers { get; set; }
+        private Dictionary<Type, PacketHandler> PacketHandlers { get; set; }
 
-        public void RegisterPacketHandler(byte packetId, PacketHandler handler)
+        public void RegisterPacketHandler(Type packetType, PacketHandler handler)
         {
-            PacketHandlers[packetId] = handler;
+            if (!packetType.GetInterfaces().Any(p => p == typeof(IPacket)))
+                throw new InvalidOperationException("Packet type must implement Craft.Net.Networking.IPacket");
+            PacketHandlers[packetType] = handler;
         }
 
         public void Connect(IPEndPoint endPoint)
@@ -52,11 +56,11 @@ namespace Craft.Net.Client
             Client = new TcpClient();
             Client.Connect(EndPoint);
             NetworkStream = Client.GetStream();
-            Stream = new MinecraftStream(new BufferedStream(NetworkStream));
+            NetworkManager = new NetworkManager(NetworkStream);
             NetworkWorkerThread = new Thread(NetworkWorker);
             NetworkWorkerThread.Start();
-            var handshake = new HandshakePacket(PacketHandler.ProtocolVersion, Session.SelectedProfile.Name,
-                EndPoint.Address.ToString(), EndPoint.Port);
+            var handshake = new HandshakePacket(NetworkManager.ProtocolVersion, 
+                EndPoint.Address.ToString(), (ushort)EndPoint.Port, NetworkMode.Login);
             SendPacket(handshake);
         }
 
@@ -67,8 +71,7 @@ namespace Craft.Net.Client
             {
                 try
                 {
-                    new DisconnectPacket(reason).WritePacket(Stream);
-                    Stream.Flush();
+                    NetworkManager.WritePacket(new DisconnectPacket(reason), PacketDirection.Serverbound);
                     Client.Close();
                 }
                 catch { }
@@ -81,7 +84,7 @@ namespace Craft.Net.Client
                 throw new InvalidOperationException("Player is not dead!");
             //SendPacket(new RespawnPacket(Dimension.Overworld, // TODO: Other dimensions
             //    Level.Difficulty, Level.GameMode, World.Height, Level.World.LevelType));
-            SendPacket(new ClientStatusPacket(ClientStatusPacket.ClientStatus.Respawn));
+            SendPacket(new ClientStatusPacket(ClientStatusPacket.StatusChange.Respawn));
         }
 
         public void SendPacket(IPacket packet)
@@ -113,8 +116,7 @@ namespace Craft.Net.Client
                         try
                         {
                             // Write packet
-                            packet.WritePacket(Stream);
-                            Stream.Flush();
+                            NetworkManager.WritePacket(packet, PacketDirection.Serverbound);
                             if (packet is DisconnectPacket)
                                 return;
                         }
@@ -127,7 +129,7 @@ namespace Craft.Net.Client
                 {
                     try
                     {
-                        var packet = PacketHandler.ReadPacket(Stream);
+                        var packet = NetworkManager.ReadPacket(PacketDirection.Clientbound);
                         HandlePacket(packet);
                         if (packet is DisconnectPacket)
                             return;
@@ -140,8 +142,9 @@ namespace Craft.Net.Client
 
         private void HandlePacket(IPacket packet)
         {
-            if (PacketHandlers[packet.Id] != null)
-                PacketHandlers[packet.Id](this, packet);
+            var type = packet.GetType();
+            if (PacketHandlers[type] != null)
+                PacketHandlers[type](this, packet);
             //throw new InvalidOperationException("Recieved a packet we can't handle: " + packet.GetType().Name);
         }
 
