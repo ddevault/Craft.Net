@@ -9,6 +9,7 @@ namespace Craft.Net.Client.Handlers
         {
             client.RegisterPacketHandler(typeof(EncryptionKeyRequestPacket), LoginHandlers.EncryptionKeyRequest);
             client.RegisterPacketHandler(typeof(LoginSuccessPacket), LoginHandlers.LoginSuccess);
+            client.RegisterPacketHandler(typeof(JoinGamePacket), LoginHandlers.JoinGame);
             client.RegisterPacketHandler(typeof(DisconnectPacket), LoginHandlers.Disconnect);
 
             client.RegisterPacketHandler(typeof(PlayerPositionAndLookPacket), EntityHandlers.PlayerPositionAndLook);

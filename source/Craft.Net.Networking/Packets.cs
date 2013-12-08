@@ -559,8 +559,8 @@ namespace Craft.Net.Networking
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
             X = stream.ReadDouble();
-            Y = stream.ReadDouble();
             Stance = stream.ReadDouble();
+            Y = stream.ReadDouble();
             Z = stream.ReadDouble();
             OnGround = stream.ReadBoolean();
             return mode;
@@ -569,8 +569,8 @@ namespace Craft.Net.Networking
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
             stream.WriteDouble(X);
-            stream.WriteDouble(Y);
             stream.WriteDouble(Stance);
+            stream.WriteDouble(Y);
             stream.WriteDouble(Z);
             stream.WriteBoolean(OnGround);
             return mode;

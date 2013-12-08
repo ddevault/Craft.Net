@@ -90,8 +90,6 @@ namespace Craft.Net.Client
         {
             if (Health > 0)
                 throw new InvalidOperationException("Player is not dead!");
-            //SendPacket(new RespawnPacket(Dimension.Overworld, // TODO: Other dimensions
-            //    Level.Difficulty, Level.GameMode, World.Height, Level.World.LevelType));
             SendPacket(new ClientStatusPacket(ClientStatusPacket.StatusChange.Respawn));
         }
 
@@ -112,7 +110,7 @@ namespace Craft.Net.Client
             {
                 if (IsSpawned && nextPlayerUpdate < DateTime.Now)
                 {
-                    nextPlayerUpdate = DateTime.Now.AddMilliseconds(500);
+                    nextPlayerUpdate = DateTime.Now.AddMilliseconds(10);
                     SendPacket(new PlayerPacket(true)); // TODO: Store OnGround properly
                 }
                 // Send queued packets

@@ -34,7 +34,14 @@ namespace TestClient
             var client = new MinecraftClient(session);
             client.Connect(endPoint);
 
-            client.ChatMessage += (sender, e) => Console.WriteLine(e.RawMessage);
+            client.ChatMessage += (sender, e) =>
+            {
+                var position = client.Position;
+                position.X++;
+                client.Position = position;
+                Console.WriteLine("Moving to x:{0}", position.X);
+                Console.WriteLine(e.RawMessage);
+            };
             string command;
             do
             {
