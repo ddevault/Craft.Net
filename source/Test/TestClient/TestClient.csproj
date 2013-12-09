@@ -52,5 +52,9 @@
       <Project>{50462849-2223-4E39-B5D9-A928A9A58A33}</Project>
       <Name>Craft.Net.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Craft.Net.Anvil\Craft.Net.Anvil.csproj">
+      <Project>{02031C5C-5007-48D5-A253-F7C8BDF0C0B2}</Project>
+      <Name>Craft.Net.Anvil</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

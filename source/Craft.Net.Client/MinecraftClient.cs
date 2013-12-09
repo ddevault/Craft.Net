@@ -107,8 +107,8 @@ namespace Craft.Net.Client
             {
                 if (IsSpawned && nextPlayerUpdate < DateTime.Now)
                 {
-                    nextPlayerUpdate = DateTime.Now.AddMilliseconds(10);
-                    SendPacket(new PlayerPacket(true)); // TODO: Store OnGround properly
+                    nextPlayerUpdate = DateTime.Now.AddMilliseconds(100);
+                    SendPacket(new PlayerPacket(false)); // TODO: Store OnGround properly
                 }
                 // Send queued packets
                 while (PacketQueue.Count != 0)

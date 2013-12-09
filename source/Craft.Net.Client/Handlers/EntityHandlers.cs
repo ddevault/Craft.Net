@@ -13,6 +13,8 @@ namespace Craft.Net.Client.Handlers
         public static void PlayerPositionAndLook(MinecraftClient client, IPacket _packet)
         {
             var packet = (PlayerPositionAndLookPacket)_packet;
+            if (Math.Abs(packet.X) < 0.01 && Math.Abs(packet.X) > 0)
+                return; // Sometimes the vanilla server sends weird position updates like this
             client._position = new Vector3(packet.X, packet.Y, packet.Z);
             if (!client.IsSpawned)
             {

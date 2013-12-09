@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using Craft.Net.Client;
 using System.Linq;
+using Craft.Net.Anvil;
 
 namespace TestClient
 {
@@ -34,14 +35,7 @@ namespace TestClient
             var client = new MinecraftClient(session);
             client.Connect(endPoint);
 
-            client.ChatMessage += (sender, e) =>
-            {
-                var position = client.Position;
-                position.X++;
-                client.Position = position;
-                Console.WriteLine("Moving to x:{0}", position.X);
-                Console.WriteLine(e.RawMessage);
-            };
+            client.ChatMessage += (sender, e) => Console.WriteLine(e.RawMessage);
             string command;
             do
             {
@@ -50,6 +44,11 @@ namespace TestClient
                     continue; // MonoDevelop debugger does this sometimes
                 if (command.StartsWith("say "))
                     client.SendChat(command.Substring(4));
+                if (command == "detect")
+                {
+                    var id = client.World.GetBlockId(new Coordinates3D((int)client.Position.X, (int)client.Position.Y - 1, (int)client.Position.Z));
+                    client.SendChat("Block ID: {0}" + id);
+                }
             } while (command != "quit");
 
             client.Disconnect("Quitting");
