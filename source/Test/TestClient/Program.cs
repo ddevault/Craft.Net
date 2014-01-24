@@ -46,8 +46,10 @@ namespace TestClient
                     client.SendChat(command.Substring(4));
                 if (command == "detect")
                 {
-                    var id = client.World.GetBlockId(new Coordinates3D((int)client.Position.X, (int)client.Position.Y - 1, (int)client.Position.Z));
-                    client.SendChat("Block ID: {0}" + id);
+                    var coordinates = new Coordinates3D((int)client.Position.X, (int)client.Position.Y - 1, (int)client.Position.Z);
+                    Console.WriteLine("Looking up " + coordinates);
+                    var id = client.World.GetBlockId(coordinates);
+                    Console.WriteLine("Block ID: " + id);
                 }
             } while (command != "quit");
 

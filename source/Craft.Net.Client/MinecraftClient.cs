@@ -133,11 +133,17 @@ namespace Craft.Net.Client
                     try
                     {
                         var packet = NetworkManager.ReadPacket(PacketDirection.Clientbound);
+                        if (packet.GetType() == typeof(ChunkDataPacket) || packet.GetType() == typeof(MapChunkBulkPacket))
+                            Console.WriteLine("Got chunks");
                         HandlePacket(packet);
                         if (packet is DisconnectPacket)
                             return;
                     }
-                    catch { /* TODO */ }
+                    catch (Exception e) 
+                    {
+                         // TODO: OnNetworkException or something
+                        Console.WriteLine(e);
+                    }
                 }
                 NetworkingReset.Set();
                 NetworkingReset.Reset();
@@ -154,7 +160,7 @@ namespace Craft.Net.Client
         private void HandlePacket(IPacket packet)
         {
             var type = packet.GetType();
-            if (PacketHandlers[type] != null)
+            if (PacketHandlers.ContainsKey(type))
                 PacketHandlers[type](this, packet);
             //throw new InvalidOperationException("Recieved a packet we can't handle: " + packet.GetType().Name);
         }

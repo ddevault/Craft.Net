@@ -83,7 +83,7 @@ namespace Craft.Net.Anvil
 
         public override string ToString()
         {
-            return string.Format("<{0},{2}>", X, Z);
+            return string.Format("<{0},{1}>", X, Z);
         }
 
         public bool Equals(Coordinates2D other)
