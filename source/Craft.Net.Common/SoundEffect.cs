@@ -1,3 +1,8 @@
+// This file has been linked to from a number of places that cite it as the go-to reference for sound effect
+// names in Minecraft. Please note that it is infrequently updated. You would probably be better off generating
+// it yourself the same way I did - by parsing this stuff: http://s3.amazonaws.com/MinecraftResources
+// TkTech has provided this script to help: https://gist.github.com/TkTech/d4fe658ad8024c812c1e
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
