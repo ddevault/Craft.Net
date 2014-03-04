@@ -112,6 +112,7 @@ namespace Craft.Net.Networking
 
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
+            Console.WriteLine(JsonConvert.SerializeObject(Status));
             stream.WriteString(JsonConvert.SerializeObject(Status));
             return mode;
         }
@@ -399,7 +400,16 @@ namespace Craft.Net.Networking
 
     public struct EntityEquipmentPacket : IPacket
     {
-        public EntityEquipmentPacket(int entityId, short slot, ItemStack item)
+        public enum EntityEquipmentSlot
+        {
+            HeldItem = 0,
+            Headgear = 1,
+            Chestplate = 2,
+            Pants = 3,
+            Footwear = 4
+        }
+
+        public EntityEquipmentPacket(int entityId, EntityEquipmentSlot slot, ItemStack item)
         {
             EntityId = entityId;
             Slot = slot;
@@ -407,13 +417,13 @@ namespace Craft.Net.Networking
         }
 
         public int EntityId;
-        public short Slot;
+        public EntityEquipmentSlot Slot;
         public ItemStack Item;
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
             EntityId = stream.ReadInt32();
-            Slot = stream.ReadInt16();
+            Slot = (EntityEquipmentSlot)stream.ReadInt16();
             Item = ItemStack.FromStream(stream);
             return mode;
         }
@@ -421,7 +431,7 @@ namespace Craft.Net.Networking
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
             stream.WriteInt32(EntityId);
-            stream.WriteInt16(Slot);
+            stream.WriteInt16((short)Slot);
             Item.WriteTo(stream);
             return mode;
         }

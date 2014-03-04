@@ -15,37 +15,41 @@ namespace Craft.Net.Server.Handlers
         public static void CreativeInventoryAction(RemoteClient client, MinecraftServer server, IPacket _packet)
         {
             var packet = (CreativeInventoryActionPacket)_packet;
-            if (packet.SlotIndex == -1)
+            if (packet.Slot == -1)
             {
                 var entity = new ItemEntity(client.Entity.Position +
                     new Vector3(0, client.Entity.Size.Height, 0), packet.Item);
                 entity.Velocity = MathHelper.FowardVector(client.Entity.Yaw) * new Vector3(0.25);
                 server.EntityManager.SpawnEntity(client.Entity.World, entity);
             }
-            else if (packet.SlotIndex < client.Entity.Inventory.Length && packet.SlotIndex > 0)
+            else if (packet.Slot < client.Entity.Inventory.Length && packet.Slot > 0)
             {
-                client.Entity.Inventory[packet.SlotIndex] = packet.Item;
-                if (packet.SlotIndex == client.Entity.SelectedSlot)
+                client.Entity.Inventory[packet.Slot] = packet.Item;
+                if (packet.Slot == client.Entity.SelectedSlot)
                 {
                     var clients = server.EntityManager.GetKnownClients(client.Entity);
                     foreach (var _client in clients)
+                    {
                         _client.SendPacket(new EntityEquipmentPacket(client.Entity.EntityId, EntityEquipmentPacket.EntityEquipmentSlot.HeldItem,
-                                                                     client.Entity.Inventory[packet.SlotIndex]));
+                            client.Entity.Inventory[packet.Slot]));
+                    }
                 }
             }
         }
 
         public static void HeldItemChange(RemoteClient client, MinecraftServer server, IPacket _packet)
         {
-            var packet = (HeldItemChangePacket)_packet;
-            if (packet.SlotIndex < 10 && packet.SlotIndex >= 0)
+            var packet = (HeldItemPacket)_packet;
+            if (packet.Slot < 10 && packet.Slot >= 0)
             {
                 // TODO: Move the equipment update packet to an OnPropertyChanged event handler
-                client.Entity.SelectedSlot = (short)(InventoryWindow.HotbarIndex + packet.SlotIndex);
+                client.Entity.SelectedSlot = (short)(InventoryWindow.HotbarIndex + packet.Slot);
                 var clients = server.EntityManager.GetKnownClients(client.Entity);
                 foreach (var _client in clients)
+                {
                     _client.SendPacket(new EntityEquipmentPacket(client.Entity.EntityId, EntityEquipmentPacket.EntityEquipmentSlot.HeldItem,
-                                                                 client.Entity.Inventory[client.Entity.SelectedSlot]));
+                        client.Entity.Inventory[client.Entity.SelectedSlot]));
+                }
             }
         }
 

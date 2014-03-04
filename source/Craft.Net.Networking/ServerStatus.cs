@@ -62,6 +62,17 @@ namespace Craft.Net
             public Player[] Players { get; set; }
         }
 
+        public class StatusDescription
+        {
+            public StatusDescription(string text)
+            {
+                Text = text;
+            }
+
+            [JsonProperty("text")]
+            public string Text { get; set; }
+        }
+
         public ServerStatus()
         {
         }
@@ -70,7 +81,7 @@ namespace Craft.Net
         {
             Version = version;
             Players = players;
-            Description = description;
+            Description = new StatusDescription(description);
             Icon = icon;
         }
 
@@ -79,7 +90,7 @@ namespace Craft.Net
         [JsonProperty("players")]
         public PlayerList Players { get; set; }
         [JsonProperty("description")]
-        public string Description { get; set; }
+        public StatusDescription Description { get; set; }
         [JsonProperty("favicon")]
         public string Icon { get; set; }
         [JsonIgnore]

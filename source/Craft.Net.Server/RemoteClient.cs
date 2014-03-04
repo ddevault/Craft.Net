@@ -28,8 +28,9 @@ namespace Craft.Net.Server
             Tags = new Dictionary<string, object>();
         }
 
+        public NetworkManager NetworkManager { get; set; }
         public TcpClient NetworkClient { get; set; }
-        public MinecraftStream NetworkStream { get; set; }
+        public Stream NetworkStream { get; set; }
         public bool IsLoggedIn { get; internal set; }
         public ConcurrentQueue<IPacket> PacketQueue { get; set; }
         public ClientSettings Settings { get; set; }

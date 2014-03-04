@@ -11,35 +11,41 @@ namespace Craft.Net.Server.Handlers
     {
         public static void RegisterHandlers(MinecraftServer server)
         {
-            server.RegisterPacketHandler(HandshakePacket.PacketId, LoginHandlers.Handshake);
-            server.RegisterPacketHandler(EncryptionKeyResponsePacket.PacketId, LoginHandlers.EncryptionKeyResponse);
-            server.RegisterPacketHandler(ClientStatusPacket.PacketId, LoginHandlers.ClientStatus);
-            server.RegisterPacketHandler(ClientSettingsPacket.PacketId, LoginHandlers.ClientSettings);
+            server.RegisterPacketHandler(typeof(HandshakePacket), LoginHandlers.Handshake);
+            server.RegisterPacketHandler(typeof(EncryptionKeyResponsePacket), LoginHandlers.EncryptionKeyResponse);
+            server.RegisterPacketHandler(typeof(ClientStatusPacket), LoginHandlers.ClientStatus);
+            server.RegisterPacketHandler(typeof(ClientSettingsPacket), LoginHandlers.ClientSettings);
 
-            server.RegisterPacketHandler(PlayerPacket.PacketId, PlayerMovementHandlers.Player);
-            server.RegisterPacketHandler(PlayerPositionPacket.PacketId, PlayerMovementHandlers.PlayerPosition);
-            server.RegisterPacketHandler(PlayerLookPacket.PacketId, PlayerMovementHandlers.PlayerLook);
-            server.RegisterPacketHandler(PlayerPositionAndLookPacket.PacketId, PlayerMovementHandlers.PlayerPositionAndLook);
-            server.RegisterPacketHandler(AnimationPacket.PacketId, PlayerMovementHandlers.Animation);
-            server.RegisterPacketHandler(EntityActionPacket.PacketId, PlayerMovementHandlers.EntityAction);
-            server.RegisterPacketHandler(PlayerAbilitiesPacket.PacketId, PlayerMovementHandlers.PlayerAbilities);
+            server.RegisterPacketHandler(typeof(PlayerPacket), PlayerMovementHandlers.Player);
+            server.RegisterPacketHandler(typeof(PlayerPositionPacket), PlayerMovementHandlers.PlayerPosition);
+            server.RegisterPacketHandler(typeof(PlayerLookPacket), PlayerMovementHandlers.PlayerLook);
+            server.RegisterPacketHandler(typeof(PlayerPositionAndLookPacket), PlayerMovementHandlers.PlayerPositionAndLook);
+            server.RegisterPacketHandler(typeof(AnimationPacket), PlayerMovementHandlers.Animation);
+            server.RegisterPacketHandler(typeof(EntityActionPacket), PlayerMovementHandlers.EntityAction);
+            server.RegisterPacketHandler(typeof(PlayerAbilitiesPacket), PlayerMovementHandlers.PlayerAbilities);
 
-            server.RegisterPacketHandler(CreativeInventoryActionPacket.PacketId, InventoryHandlers.CreativeInventoryAction);
-            server.RegisterPacketHandler(ClickWindowPacket.PacketId, InventoryHandlers.ClickWindow);
-            server.RegisterPacketHandler(CloseWindowPacket.PacketId, InventoryHandlers.CloseWindow);
-            server.RegisterPacketHandler(HeldItemChangePacket.PacketId, InventoryHandlers.HeldItemChange);
+            server.RegisterPacketHandler(typeof(CreativeInventoryActionPacket), InventoryHandlers.CreativeInventoryAction);
+            server.RegisterPacketHandler(typeof(ClickWindowPacket), InventoryHandlers.ClickWindow);
+            server.RegisterPacketHandler(typeof(CloseWindowPacket), InventoryHandlers.CloseWindow);
+            server.RegisterPacketHandler(typeof(HeldItemPacket), InventoryHandlers.HeldItemChange);
 
-            server.RegisterPacketHandler(PlayerDiggingPacket.PacketId, InteractionHandlers.PlayerDigging);
-            server.RegisterPacketHandler(RightClickPacket.PacketId, InteractionHandlers.RightClick);
+            server.RegisterPacketHandler(typeof(PlayerBlockActionPacket), InteractionHandlers.PlayerDigging);
+            server.RegisterPacketHandler(typeof(RightClickPacket), InteractionHandlers.RightClick);
 
-            server.RegisterPacketHandler(ServerListPingPacket.PacketId, ServerListPing);
-            server.RegisterPacketHandler(ChatMessagePacket.PacketId, ChatMessage);
-            server.RegisterPacketHandler(KeepAlivePacket.PacketId, KeepAlive);
+            server.RegisterPacketHandler(typeof(StatusRequestPacket), StatusRequest);
+            server.RegisterPacketHandler(typeof(StatusPingPacket), StatusPing);
+            server.RegisterPacketHandler(typeof(ChatMessagePacket), ChatMessage);
+            server.RegisterPacketHandler(typeof(KeepAlivePacket), KeepAlive);
         }
 
-        public static void ServerListPing(RemoteClient client, MinecraftServer server, IPacket _packet)
+        public static void StatusRequest(RemoteClient client, MinecraftServer server, IPacket _packet)
         {
-            client.SendPacket(new DisconnectPacket(GetPingValue(server)));
+            client.SendPacket(new StatusResponsePacket(GetServerStatus(server)));
+        }
+
+        public static void StatusPing(RemoteClient client, MinecraftServer server, IPacket _packet)
+        {
+            client.SendPacket(_packet);
         }
 
         public static void ChatMessage(RemoteClient client, MinecraftServer server, IPacket _packet)
@@ -67,12 +73,15 @@ namespace Craft.Net.Server.Handlers
             client.Ping = (short)(client.LastKeepAlive - client.LastKeepAliveSent).TotalMilliseconds;
         }
 
-        private static string GetPingValue(MinecraftServer server)
+        private static ServerStatus GetServerStatus(MinecraftServer server)
         {
-            return "§1\0" + PacketHandler.ProtocolVersion + "\0" +
-                PacketHandler.FriendlyVersion + "\0" +
-                server.Settings.MotD + "\0" + server.Clients.Count(c => c.IsLoggedIn) +
-                "\0" + server.Settings.MaxPlayers;
+            return new ServerStatus(
+                new ServerStatus.ServerVersion(NetworkManager.FriendlyVersion, NetworkManager.ProtocolVersion),
+                new ServerStatus.PlayerList(server.Settings.MaxPlayers, server.Clients.Count(c => c.IsLoggedIn),
+                    server.Clients.Where(c => c.IsLoggedIn).Take(10).Select(p =>
+                    new ServerStatus.PlayerList.Player(p.Username, p.Entity.EntityId.ToString())).ToArray()),
+                server.Settings.MotD,
+                ""); // TODO: Icon
         }
     }
 }

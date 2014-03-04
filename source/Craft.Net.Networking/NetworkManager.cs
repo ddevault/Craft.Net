@@ -9,7 +9,7 @@ namespace Craft.Net.Networking
     public class NetworkManager
     {
         public const int ProtocolVersion = 4;
-        public const string FriendlyVersion = "1.7.2";
+        public const string FriendlyVersion = "1.7.4";
 
         public NetworkMode NetworkMode { get; private set; }
         public bool Strict { get; set; }
@@ -58,7 +58,7 @@ namespace Craft.Net.Networking
             serverbound.Add(typeof(HandshakePacket)); // Serverbound
             clientbound.Add(typeof(HandshakePacket)); // Clientbound
             HandshakePackets = Populate(serverbound, clientbound);
-            // Ping packets
+            // Status packets
             serverbound.Add(typeof(StatusRequestPacket)); // Serverbound
             serverbound.Add(typeof(StatusPingPacket));
             clientbound.Add(typeof(StatusResponsePacket)); // Clientbound

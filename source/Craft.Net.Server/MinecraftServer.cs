@@ -26,7 +26,7 @@ namespace Craft.Net.Server
         public MinecraftServer()
         {
             LogicHelpers.Register();
-            PacketHandlers = new PacketHandler[256];
+            PacketHandlers = new Dictionary<Type, PacketHandler>();
             Handlers.PacketHandlers.RegisterHandlers(this);
             NetworkLock = new object();
             Clients = new List<RemoteClient>();
@@ -70,7 +70,7 @@ namespace Craft.Net.Server
 
         protected Thread NetworkThread { get; set; }
         protected Thread EntityThread { get; set; }
-        protected PacketHandler[] PacketHandlers { get; set; }
+        protected Dictionary<Type, PacketHandler> PacketHandlers { get; set; }
 
         private DateTime NextPlayerUpdate { get; set; }
         private DateTime NextChunkUpdate { get; set; }
@@ -80,9 +80,11 @@ namespace Craft.Net.Server
 
         #region Public methods
 
-        public void RegisterPacketHandler(byte packetId, PacketHandler handler)
+        public void RegisterPacketHandler(Type packetType, PacketHandler handler)
         {
-            PacketHandlers[packetId] = handler;
+            if (!typeof(IPacket).IsAssignableFrom(packetType))
+                throw new ArgumentException("Packet type must derive from Craft.Net.Networking.IPacket");
+            PacketHandlers[packetType] = handler;
         }
 
         public void Start(IPEndPoint endPoint)
@@ -164,8 +166,7 @@ namespace Craft.Net.Server
                     {
                         if (client.NetworkClient != null && client.NetworkClient.Connected)
                         {
-                            new DisconnectPacket(reason).WritePacket(client.NetworkStream);
-                            client.NetworkStream.Flush();
+                            client.NetworkManager.WritePacket(new DisconnectPacket(reason), PacketDirection.Clientbound);
                         }
                     }
                     catch { }
@@ -204,7 +205,8 @@ namespace Craft.Net.Server
                 if (Listener == null)
                     return; // Server shutting down
                 var client = new RemoteClient(Listener.EndAcceptTcpClient(result));
-                client.NetworkStream = new MinecraftStream(new BufferedStream(client.NetworkClient.GetStream()));
+                client.NetworkStream = client.NetworkClient.GetStream();
+                client.NetworkManager = new NetworkManager(client.NetworkStream);
                 Clients.Add(client);
                 Listener.BeginAcceptTcpClient(AcceptClientAsync, null);
             }
@@ -238,38 +240,38 @@ namespace Craft.Net.Server
         internal void LogInPlayer(RemoteClient client)
         {
             // Spawn player
-            Level.LoadPlayer(client);
-            client.PlayerManager = new PlayerManager(client, this);
-            EntityManager.SpawnEntity(Level.DefaultWorld, client.Entity);
-            client.SendPacket(new LoginRequestPacket(client.Entity.EntityId,
-                Level.DefaultWorld.WorldGenerator.GeneratorName, client.GameMode,
-                Dimension.Overworld, Settings.Difficulty, Settings.MaxPlayers));
-            client.SendPacket(new SpawnPositionPacket((int)client.Entity.SpawnPoint.X, (int)client.Entity.SpawnPoint.Y, (int)client.Entity.SpawnPoint.Z));
-            client.SendPacket(new PlayerAbilitiesPacket(client.Entity.Abilities.AsFlags(), client.Entity.Abilities.FlyingSpeed, client.Entity.Abilities.WalkingSpeed));
-            client.SendPacket(new EntityPropertiesPacket(client.Entity.EntityId,
-                new[] { new EntityProperty("generic.movementSpeed", client.Entity.Abilities.WalkingSpeed) }));
-            client.SendPacket(new TimeUpdatePacket(Level.Time, Level.Time));
-            client.SendPacket(new SetWindowItemsPacket(0, client.Entity.Inventory.GetSlots()));
-
-            // Send initial chunks
-            client.UpdateChunks(true);
-            // Adding 0.1 here prevents the client from falling through the ground upon logging in
-            // Presumably, Minecraft runs some physics stuff and if it spawns exactly at ground level, it falls a little and
-            // clips through the ground. This fixes that.
-            client.SendPacket(new PlayerPositionAndLookPacket(client.Entity.Position.X, client.Entity.Position.Y + 0.1 + PlayerEntity.Height,
-                client.Entity.Position.Z, client.Entity.Position.Y + 0.1, client.Entity.Yaw, client.Entity.Pitch, false));
-            client.IsLoggedIn = true;
-            UpdatePlayerList();
-
-            // Send entities
-            EntityManager.SendClientEntities(client);
-
-            client.SendPacket(new UpdateHealthPacket(client.Entity.Health, client.Entity.Food, client.Entity.FoodSaturation));
-            var args = new PlayerLogInEventArgs(client);
-            OnPlayerLoggedIn(args);
-            //LogProvider.Log(client.Username + " joined the game.");
-            if (!args.Handled)
-                SendChat(ChatColors.Yellow + client.Username + " joined the game.");
+//            Level.LoadPlayer(client);
+//            client.PlayerManager = new PlayerManager(client, this);
+//            EntityManager.SpawnEntity(Level.DefaultWorld, client.Entity);
+//            client.SendPacket(new LoginRequestPacket(client.Entity.EntityId,
+//                Level.DefaultWorld.WorldGenerator.GeneratorName, client.GameMode,
+//                Dimension.Overworld, Settings.Difficulty, Settings.MaxPlayers));
+//            client.SendPacket(new SpawnPositionPacket((int)client.Entity.SpawnPoint.X, (int)client.Entity.SpawnPoint.Y, (int)client.Entity.SpawnPoint.Z));
+//            client.SendPacket(new PlayerAbilitiesPacket(client.Entity.Abilities.AsFlags(), client.Entity.Abilities.FlyingSpeed, client.Entity.Abilities.WalkingSpeed));
+//            client.SendPacket(new EntityPropertiesPacket(client.Entity.EntityId,
+//                new[] { new EntityProperty("generic.movementSpeed", client.Entity.Abilities.WalkingSpeed) }));
+//            client.SendPacket(new TimeUpdatePacket(Level.Time, Level.Time));
+//            client.SendPacket(new SetWindowItemsPacket(0, client.Entity.Inventory.GetSlots()));
+//
+//            // Send initial chunks
+//            client.UpdateChunks(true);
+//            // Adding 0.1 here prevents the client from falling through the ground upon logging in
+//            // Presumably, Minecraft runs some physics stuff and if it spawns exactly at ground level, it falls a little and
+//            // clips through the ground. This fixes that.
+//            client.SendPacket(new PlayerPositionAndLookPacket(client.Entity.Position.X, client.Entity.Position.Y + 0.1 + PlayerEntity.Height,
+//                client.Entity.Position.Z, client.Entity.Position.Y + 0.1, client.Entity.Yaw, client.Entity.Pitch, false));
+//            client.IsLoggedIn = true;
+//            UpdatePlayerList();
+//
+//            // Send entities
+//            EntityManager.SendClientEntities(client);
+//
+//            client.SendPacket(new UpdateHealthPacket(client.Entity.Health, client.Entity.Food, client.Entity.FoodSaturation));
+//            var args = new PlayerLogInEventArgs(client);
+//            OnPlayerLoggedIn(args);
+//            //LogProvider.Log(client.Username + " joined the game.");
+//            if (!args.Handled)
+//                SendChat(ChatColors.Yellow + client.Username + " joined the game.");
         }
 
         #endregion
@@ -303,22 +305,22 @@ namespace Craft.Net.Server
                             IPacket nextPacket;
                             if (client.PacketQueue.TryDequeue(out nextPacket))
                             {
-                                nextPacket.WritePacket(client.NetworkStream);
                                 try
                                 {
-                                    client.NetworkStream.Flush();
+                                    client.NetworkManager.WritePacket(nextPacket, PacketDirection.Clientbound);
                                 }
                                 catch (System.IO.IOException)
                                 {
                                     disconnect = true;
                                     continue;
                                 }
-                                if (nextPacket is DisconnectPacket)
+                                if (nextPacket is DisconnectPacket // TODO: This could be cleaner
+                                    || (nextPacket is StatusPingPacket && client.NetworkManager.NetworkMode == NetworkMode.Status))
                                     disconnect = true;
                                 if (nextPacket is EncryptionKeyResponsePacket)
                                 {
-                                    client.NetworkStream = new MinecraftStream(new BufferedStream(
-                                        new AesStream(client.NetworkClient.GetStream(), client.SharedKey)));
+                                    client.NetworkStream = new AesStream(client.NetworkClient.GetStream(), client.SharedKey);
+                                    client.NetworkManager.BaseStream = client.NetworkStream;
                                     client.EncryptionEnabled = true;
                                 }
                             }
@@ -335,7 +337,7 @@ namespace Craft.Net.Server
                         {
                             try
                             {
-                                var packet = PacketHandler.ReadPacket(client.NetworkStream);
+                                var packet = client.NetworkManager.ReadPacket(PacketDirection.Serverbound);
                                 if (packet is DisconnectPacket)
                                 {
                                     DisconnectPlayer(client);
@@ -377,10 +379,10 @@ namespace Craft.Net.Server
 
         private void HandlePacket(RemoteClient client, IPacket packet)
         {
-            if (PacketHandlers[packet.Id] == null)
+            if (PacketHandlers[packet.GetType()] == null)
                 return;
                 //throw new InvalidOperationException("No packet handler registered for 0x" + packet.Id.ToString("X2"));
-            PacketHandlers[packet.Id](client, this, packet);
+            PacketHandlers[packet.GetType()](client, this, packet);
         }
 
         private void UpdateScheduledEvents()

@@ -16,14 +16,14 @@ namespace Craft.Net.Server.Handlers
     {
         public static void PlayerDigging(RemoteClient client, MinecraftServer server, IPacket _packet)
         {
-            var packet = (PlayerDiggingPacket)_packet;
+            var packet = (PlayerBlockActionPacket)_packet;
             var position = new Coordinates3D(packet.X, packet.Y, packet.Z);
             // TODO: Enforce line-of-sight
             var block = client.World.GetBlock(position);
             short damage;
             switch (packet.Action)
             {
-                case PlayerDiggingPacket.PlayerAction.StartedDigging:
+                case PlayerBlockActionPacket.BlockAction.StartDigging:
                     if (client.Entity.Position.DistanceTo(position) <= client.MaxDigDistance)
                     {
                         if (client.GameMode == GameMode.Creative || client.Entity.Abilities.InstantMine || Block.GetLogicDescriptor(block).Hardness == 0)
@@ -45,7 +45,7 @@ namespace Craft.Net.Server.Handlers
                         }
                     }
                     break;
-                case PlayerDiggingPacket.PlayerAction.CancelDigging:
+                case PlayerBlockActionPacket.BlockAction.CancelDigging:
                     {
                         client.BlockBreakStartTime = null;
                         var knownClients = server.EntityManager.GetKnownClients(client.Entity);
@@ -53,7 +53,7 @@ namespace Craft.Net.Server.Handlers
                             c.SendPacket(new BlockBreakAnimationPacket(client.Entity.EntityId, position.X, position.Y, position.Z, 0xFF)); // reset
                     }
                     break;
-                case PlayerDiggingPacket.PlayerAction.FinishedDigging:
+                case PlayerBlockActionPacket.BlockAction.FinishDigging:
                     if (client.Entity.Position.DistanceTo(position) <= client.MaxDigDistance)
                     {
                         client.BlockBreakStartTime = null;
@@ -84,13 +84,13 @@ namespace Craft.Net.Server.Handlers
                         client.Entity.FoodExhaustion += 0.025f;
                     }
                     break;
-                case PlayerDiggingPacket.PlayerAction.DropItem:
-                case PlayerDiggingPacket.PlayerAction.DropStack:
+                case PlayerBlockActionPacket.BlockAction.DropItem:
+                case PlayerBlockActionPacket.BlockAction.DropItemStack:
                     var SlotItem = client.Entity.Inventory[client.Entity.SelectedSlot];
                     if (!SlotItem.Empty)
                     {
                         var ItemCopy = (ItemStack)SlotItem.Clone();
-                        if (packet.Action == PlayerDiggingPacket.PlayerAction.DropStack)
+                        if (packet.Action == PlayerBlockActionPacket.BlockAction.DropItemStack)
                             client.Entity.Inventory[client.Entity.SelectedSlot] = ItemStack.EmptyStack;
                         else
                         {
@@ -125,7 +125,7 @@ namespace Craft.Net.Server.Handlers
             }
             bool use = true;
             if (block != null)
-                use = Block.OnBlockRightClicked(block.Value, client.World, position, AdjustByDirection(packet.Direction), cursorPosition);
+                use = Block.OnBlockRightClicked(block.Value, client.World, position, AdjustByDirection(packet.Face), cursorPosition);
             if (!slot.Empty)
             {
                 var item = new ItemDescriptor(slot.Id, slot.Metadata);
@@ -133,7 +133,7 @@ namespace Craft.Net.Server.Handlers
                 {
                     if (block != null)
                     {
-                        Item.OnItemUsedOnBlock(item, client.World, position, AdjustByDirection(packet.Direction), cursorPosition);
+                        Item.OnItemUsedOnBlock(item, client.World, position, AdjustByDirection(packet.Face), cursorPosition);
                         if (client.GameMode != GameMode.Creative)
                         {
                             slot.Count--; // TODO: This is probably a bad place to put this code
@@ -149,19 +149,19 @@ namespace Craft.Net.Server.Handlers
             }
         }
 
-        private static Vector3 AdjustByDirection(byte direction)
+        private static Vector3 AdjustByDirection(BlockFace face)
         {
-            switch (direction)
+            switch (face)
             {
-                case 0:
+                case BlockFace.NegativeY:
                     return Vector3.Down;
-                case 1:
+                case BlockFace.PositiveY:
                     return Vector3.Up;
-                case 2:
+                case BlockFace.NegativeZ:
                     return Vector3.Backwards;
-                case 3:
+                case BlockFace.PositiveZ:
                     return Vector3.Forwards;
-                case 4:
+                case BlockFace.NegativeX:
                     return Vector3.Left;
                 default:
                     return Vector3.Right;
