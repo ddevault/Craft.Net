@@ -9,7 +9,7 @@ namespace Craft.Net.Networking
     public class NetworkManager
     {
         public const int ProtocolVersion = 4;
-        public const string FriendlyVersion = "1.7.4";
+        public const string FriendlyVersion = "1.7.5";
 
         public NetworkMode NetworkMode { get; private set; }
         public bool Strict { get; set; }
@@ -190,6 +190,7 @@ namespace Craft.Net.Networking
                 int idLength;
                 long length = MinecraftStream.ReadVarInt();
                 long id = MinecraftStream.ReadVarInt(out idLength);
+                var data = MinecraftStream.ReadUInt8Array((int)(length - idLength));
                 if (NetworkModes[(int)NetworkMode].Length < id || NetworkModes[(int)NetworkMode][id][(int)direction] == null)
                 {
                     if (Strict)
@@ -199,12 +200,15 @@ namespace Craft.Net.Networking
                         return new UnknownPacket
                         {
                             Id = id,
-                            Data = MinecraftStream.ReadUInt8Array((int)(length - idLength))
+                            Data = data
                         };
                     }
                 }
+                var ms = new MinecraftStream(new MemoryStream(data));
                 var packet = (IPacket)Activator.CreateInstance(NetworkModes[(int)NetworkMode][id][(int)direction]);
-                NetworkMode = packet.ReadPacket(MinecraftStream, NetworkMode, direction);
+                NetworkMode = packet.ReadPacket(ms, NetworkMode, direction);
+                if (ms.Position < data.Length)
+                    Console.WriteLine("Warning: did not completely read packet: {0}", packet.GetType().Name); // TODO: Find some other way to warn about this
                 return packet;
             }
         }

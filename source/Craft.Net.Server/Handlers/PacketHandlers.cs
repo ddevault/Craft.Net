@@ -12,6 +12,7 @@ namespace Craft.Net.Server.Handlers
         public static void RegisterHandlers(MinecraftServer server)
         {
             server.RegisterPacketHandler(typeof(HandshakePacket), LoginHandlers.Handshake);
+            server.RegisterPacketHandler(typeof(LoginStartPacket), LoginHandlers.LoginStart);
             server.RegisterPacketHandler(typeof(EncryptionKeyResponsePacket), LoginHandlers.EncryptionKeyResponse);
             server.RegisterPacketHandler(typeof(ClientStatusPacket), LoginHandlers.ClientStatus);
             server.RegisterPacketHandler(typeof(ClientSettingsPacket), LoginHandlers.ClientSettings);

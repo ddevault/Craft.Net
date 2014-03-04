@@ -15,7 +15,7 @@ namespace Craft.Net.Server.Handlers
 {
     internal static class LoginHandlers
     {
-        private const string sessionCheckUri = "http://session.minecraft.net/game/checkserver.jsp?user={0}&serverId={1}";
+        private const string sessionCheckUri = "https://sessionserver.mojang.com/session/minecraft/hasJoined?username={0}&serverId={1}";
 
         public static void Handshake(RemoteClient client, MinecraftServer server, IPacket _packet)
         {
@@ -31,14 +31,25 @@ namespace Craft.Net.Server.Handlers
                 return;
             }
             client.Hostname = packet.ServerHostname + ":" + packet.ServerPort;
-//            if (server.Settings.OnlineMode)
-//                client.AuthenticationHash = CreateHash();
-//            else
-//                client.AuthenticationHash = "-";
-//            if (server.Settings.EnableEncryption)
-//                client.SendPacket(CreateEncryptionRequest(client, server));
-//            else
-//                server.LogInPlayer(client);
+        }
+
+        public static void LoginStart(RemoteClient client, MinecraftServer server, IPacket _packet)
+        {
+            var packet = (LoginStartPacket)_packet;
+            if (server.Clients.Any(c => c.IsLoggedIn && c.Username == packet.Username))
+                client.Disconnect("You're already on this server!");
+            else
+            {
+                client.Username = packet.Username;
+                if (server.Settings.OnlineMode)
+                    client.ServerId = CreateId();
+                else
+                    client.ServerId = "-";
+                if (server.Settings.EnableEncryption)
+                    client.SendPacket(CreateEncryptionRequest(client, server));
+                else
+                    server.LogInPlayer(client);
+            }
         }
 
         public static void EncryptionKeyResponse(RemoteClient client, MinecraftServer server, IPacket _packet)
@@ -54,60 +65,55 @@ namespace Craft.Net.Server.Handlers
                 }
             }
             client.SharedKey = server.CryptoServiceProvider.Decrypt(packet.SharedSecret, false);
-            client.SendPacket(new EncryptionKeyResponsePacket(new byte[0], new byte[0]));
+            // Create a hash for session verification
+            AsnKeyBuilder.AsnMessage encodedKey = AsnKeyBuilder.PublicKeyToX509(server.ServerKey);
+            byte[] shaData = Encoding.UTF8.GetBytes(client.ServerId)
+                .Concat(client.SharedKey)
+                .Concat(encodedKey.GetBytes()).ToArray();
+            string hash = Cryptography.JavaHexDigest(shaData);
+
+            // Talk to sessionserver.minecraft.net
+            if (server.Settings.OnlineMode)
+            {
+//                var webClient = new WebClient();
+//                var webReader = new StreamReader(webClient.OpenRead(
+//                    new Uri(string.Format(sessionCheckUri, client.Username, hash))));
+//                string response = webReader.ReadToEnd();
+//                webReader.Close();
+//                if (response != "YES")
+//                {
+//                    client.Disconnect("Failed to verify username!");
+//                    return;
+//                }
+            }
+            var eventArgs = new ConnectionEstablishedEventArgs(client);
+            server.OnConnectionEstablished(eventArgs);
+            if (eventArgs.PermitConnection)
+                server.LogInPlayer(client);
+            else
+                client.Disconnect(eventArgs.DisconnectReason);
         }
 
         public static void ClientStatus(RemoteClient client, MinecraftServer server, IPacket _packet)
         {
-//            var packet = (ClientStatusPacket)_packet;
-//            if (packet.Change == ClientStatusPacket.StatusChange.InitialSpawn) // TODO: This goes somewhere else
-//            {
-//                // Create a hash for session verification
-//                AsnKeyBuilder.AsnMessage encodedKey = AsnKeyBuilder.PublicKeyToX509(server.ServerKey);
-//                byte[] shaData = Encoding.UTF8.GetBytes(client.AuthenticationHash)
-//                    .Concat(client.SharedKey)
-//                    .Concat(encodedKey.GetBytes()).ToArray();
-//                string hash = Cryptography.JavaHexDigest(shaData);
-//
-//                // Talk to session.minecraft.net
-//                if (server.Settings.OnlineMode)
-//                {
-//                    var webClient = new WebClient();
-//                    var webReader = new StreamReader(webClient.OpenRead(
-//                        new Uri(string.Format(sessionCheckUri, client.Username, hash))));
-//                    string response = webReader.ReadToEnd();
-//                    webReader.Close();
-//                    if (response != "YES")
-//                    {
-//                        client.Disconnect("Failed to verify username!");
-//                        return;
-//                    }
-//                }
-//
-//                var eventArgs = new ConnectionEstablishedEventArgs(client);
-//                server.OnConnectionEstablished(eventArgs);
-//                if (eventArgs.PermitConnection)
-//                    server.LogInPlayer(client);
-//                else
-//                    client.Disconnect(eventArgs.DisconnectReason);
-//            }
-//            else if (packet.Change == ClientStatusPacket.StatusChange.Respawn)
-//            {
-//                var world = client.Entity.World;
-//                client.Entity.Position = new Vector3(
-//                    client.Entity.SpawnPoint.X,
-//                    // FIXME: This seems to drop the player camera from half the height of a login spawn
-//                    client.Entity.SpawnPoint.Y,
-//                    client.Entity.SpawnPoint.Z);
-//                client.Entity.Health = client.Entity.MaxHealth;
-//                client.Entity.Food = 20;
-//                client.Entity.FoodSaturation = 20;
-//                server.EntityManager.SpawnEntity(world, client.Entity);
-//                client.SendPacket(new UpdateHealthPacket(client.Entity.Health, client.Entity.Food, client.Entity.FoodSaturation));
-//                client.SendPacket(new RespawnPacket(Dimension.Overworld, server.Settings.Difficulty, client.GameMode, world.WorldGenerator.GeneratorName));
-//                client.SendPacket(new PlayerPositionAndLookPacket(client.Entity.Position.X, client.Entity.Position.Y, client.Entity.Position.Z,
-//                    client.Entity.Position.Y + PlayerEntity.Height, client.Entity.Yaw, client.Entity.Pitch, true));
-//            }
+            var packet = (ClientStatusPacket)_packet;
+            if (packet.Change == ClientStatusPacket.StatusChange.Respawn)
+            {
+                var world = client.Entity.World;
+                client.Entity.Position = new Vector3(
+                    client.Entity.SpawnPoint.X,
+                    // FIXME: This seems to drop the player camera from half the height of a login spawn
+                    client.Entity.SpawnPoint.Y,
+                    client.Entity.SpawnPoint.Z);
+                client.Entity.Health = client.Entity.MaxHealth;
+                client.Entity.Food = 20;
+                client.Entity.FoodSaturation = 20;
+                server.EntityManager.SpawnEntity(world, client.Entity);
+                client.SendPacket(new UpdateHealthPacket(client.Entity.Health, client.Entity.Food, client.Entity.FoodSaturation));
+                client.SendPacket(new RespawnPacket(Dimension.Overworld, server.Settings.Difficulty, client.GameMode, world.WorldGenerator.GeneratorName));
+                client.SendPacket(new PlayerPositionAndLookPacket(client.Entity.Position.X, client.Entity.Position.Y, client.Entity.Position.Z,
+                    client.Entity.Position.Y + PlayerEntity.Height, client.Entity.Yaw, client.Entity.Pitch, true));
+            }
         }
 
         public static void ClientSettings(RemoteClient client, MinecraftServer server, IPacket _packet)
@@ -134,17 +140,19 @@ namespace Craft.Net.Server.Handlers
             client.VerificationToken = verifyToken;
 
             var encodedKey = AsnKeyBuilder.PublicKeyToX509(server.ServerKey);
-            var request = new EncryptionKeyRequestPacket(client.AuthenticationHash,
+            var request = new EncryptionKeyRequestPacket(client.ServerId,
                 encodedKey.GetBytes(), verifyToken);
             return request;
         }
 
-        private static string CreateHash()
+        private static string CreateId()
         {
-            byte[] hash = BitConverter.GetBytes(MathHelper.Random.Next());
-            string response = "";
-            foreach (byte b in hash)
-                response += b.ToString("x2");
+            var random = RandomNumberGenerator.Create();
+            byte[] data = new byte[10];
+            random.GetBytes(data);
+            var response = "";
+            foreach (byte b in data)
+                response += b.ToString("X2");
             return response;
         }
     }

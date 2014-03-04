@@ -112,7 +112,6 @@ namespace Craft.Net.Networking
 
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
-            Console.WriteLine(JsonConvert.SerializeObject(Status));
             stream.WriteString(JsonConvert.SerializeObject(Status));
             return mode;
         }
@@ -796,10 +795,11 @@ namespace Craft.Net.Networking
 
     public struct SpawnPlayerPacket : IPacket
     {
-        public SpawnPlayerPacket(int entityId, string playerName, int x,
+        public SpawnPlayerPacket(int entityId, string uuid, string playerName, int x,
             int y, int z, byte yaw, byte pitch, short heldItem, MetadataDictionary metadata)
         {
             EntityId = entityId;
+            UUID = uuid;
             PlayerName = playerName;
             X = x;
             Y = y;
@@ -811,7 +811,7 @@ namespace Craft.Net.Networking
         }
 
         public int EntityId;
-        public string PlayerName;
+        public string PlayerName, UUID;
         public int X, Y, Z;
         public byte Yaw, Pitch;
         public short HeldItem;
@@ -820,6 +820,7 @@ namespace Craft.Net.Networking
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
             EntityId = stream.ReadVarInt();
+            UUID = stream.ReadString();
             PlayerName = stream.ReadString();
             X = stream.ReadInt32();
             Y = stream.ReadInt32();
@@ -834,6 +835,7 @@ namespace Craft.Net.Networking
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
             stream.WriteVarInt(EntityId);
+            stream.WriteString(UUID);
             stream.WriteString(PlayerName);
             stream.WriteInt32(X);
             stream.WriteInt32(Y);

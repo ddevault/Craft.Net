@@ -133,8 +133,6 @@ namespace Craft.Net.Client
                     try
                     {
                         var packet = NetworkManager.ReadPacket(PacketDirection.Clientbound);
-                        if (packet.GetType() == typeof(ChunkDataPacket) || packet.GetType() == typeof(MapChunkBulkPacket))
-                            Console.WriteLine("Got chunks");
                         HandlePacket(packet);
                         if (packet is DisconnectPacket)
                             return;

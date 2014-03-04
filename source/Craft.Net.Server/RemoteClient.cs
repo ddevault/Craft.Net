@@ -75,7 +75,7 @@ namespace Craft.Net.Server
         }
 
         internal List<int> KnownEntities { get; set; }
-        internal string AuthenticationHash { get; set; }
+        internal string ServerId { get; set; }
 
         protected internal byte[] SharedKey { get; set; }
 

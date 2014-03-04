@@ -27,7 +27,6 @@ namespace Craft.Net.Client.Handlers
         private static void AddChunk(MinecraftClient client, int x, int z, ushort primaryBitMap, ushort addBitMap, bool lightIncluded, bool groundUp, byte[] data)
         {
             var coordinates = new Coordinates2D(x, z);
-            Console.WriteLine("Loading {0}", coordinates);
             var relativePosition = GetRelativeChunkPosition(coordinates);
             var chunk = new Chunk(relativePosition);
             var sectionCount = GetSectionCount(primaryBitMap);
@@ -63,7 +62,6 @@ namespace Craft.Net.Client.Handlers
         public static void MapChunkBulk(MinecraftClient client, IPacket _packet)
         {
             var packet = (MapChunkBulkPacket)_packet;
-            Console.WriteLine("Loading {0} chunks...", packet.ChunkCount);
             var data = ZlibStream.UncompressBuffer(packet.ChunkData);
 
             var offset = 0;
@@ -75,9 +73,7 @@ namespace Craft.Net.Client.Handlers
 
                 var chunkData = new byte[chunkLength];
                 Array.Copy(data, offset, chunkData, 0, chunkLength);
-                Console.WriteLine("Handling <{0}, {1}>", metadata.ChunkX, metadata.ChunkZ);
                 AddChunk(client, metadata.ChunkX, metadata.ChunkZ, metadata.PrimaryBitMap, metadata.AddBitMap, packet.LightIncluded, true, chunkData);
-                Console.WriteLine("Loaded.");
 
                 offset += chunkLength;
             }

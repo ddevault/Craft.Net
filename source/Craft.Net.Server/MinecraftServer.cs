@@ -239,13 +239,14 @@ namespace Craft.Net.Server
 
         internal void LogInPlayer(RemoteClient client)
         {
+            client.SendPacket(new LoginSuccessPacket(Guid.NewGuid().ToString(), client.Username));
             // Spawn player
-//            Level.LoadPlayer(client);
-//            client.PlayerManager = new PlayerManager(client, this);
-//            EntityManager.SpawnEntity(Level.DefaultWorld, client.Entity);
-//            client.SendPacket(new LoginRequestPacket(client.Entity.EntityId,
-//                Level.DefaultWorld.WorldGenerator.GeneratorName, client.GameMode,
-//                Dimension.Overworld, Settings.Difficulty, Settings.MaxPlayers));
+            Level.LoadPlayer(client);
+            client.PlayerManager = new PlayerManager(client, this);
+            EntityManager.SpawnEntity(Level.DefaultWorld, client.Entity);
+            client.SendPacket(new JoinGamePacket(client.Entity.EntityId,
+                client.GameMode, Dimension.Overworld, Settings.Difficulty,
+                Settings.MaxPlayers, Level.DefaultWorld.WorldGenerator.GeneratorName));
 //            client.SendPacket(new SpawnPositionPacket((int)client.Entity.SpawnPoint.X, (int)client.Entity.SpawnPoint.Y, (int)client.Entity.SpawnPoint.Z));
 //            client.SendPacket(new PlayerAbilitiesPacket(client.Entity.Abilities.AsFlags(), client.Entity.Abilities.FlyingSpeed, client.Entity.Abilities.WalkingSpeed));
 //            client.SendPacket(new EntityPropertiesPacket(client.Entity.EntityId,
@@ -305,8 +306,15 @@ namespace Craft.Net.Server
                             IPacket nextPacket;
                             if (client.PacketQueue.TryDequeue(out nextPacket))
                             {
+                                if (nextPacket is LoginSuccessPacket)
+                                {
+                                    client.NetworkStream = new AesStream(client.NetworkClient.GetStream(), client.SharedKey);
+                                    client.NetworkManager.BaseStream = client.NetworkStream;
+                                    client.EncryptionEnabled = true;
+                                }
                                 try
                                 {
+                                    Console.WriteLine("-> {0}", nextPacket.GetType().Name);
                                     client.NetworkManager.WritePacket(nextPacket, PacketDirection.Clientbound);
                                 }
                                 catch (System.IO.IOException)
@@ -316,12 +324,8 @@ namespace Craft.Net.Server
                                 }
                                 if (nextPacket is DisconnectPacket // TODO: This could be cleaner
                                     || (nextPacket is StatusPingPacket && client.NetworkManager.NetworkMode == NetworkMode.Status))
-                                    disconnect = true;
-                                if (nextPacket is EncryptionKeyResponsePacket)
                                 {
-                                    client.NetworkStream = new AesStream(client.NetworkClient.GetStream(), client.SharedKey);
-                                    client.NetworkManager.BaseStream = client.NetworkStream;
-                                    client.EncryptionEnabled = true;
+                                    disconnect = true;
                                 }
                             }
                         }
@@ -338,6 +342,7 @@ namespace Craft.Net.Server
                             try
                             {
                                 var packet = client.NetworkManager.ReadPacket(PacketDirection.Serverbound);
+                                Console.WriteLine("<- {0}", packet.GetType().Name);
                                 if (packet is DisconnectPacket)
                                 {
                                     DisconnectPlayer(client);
