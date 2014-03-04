@@ -29,7 +29,7 @@ namespace TestServer
             var server = new MinecraftServer(level);
             server.ChatMessage += server_ChatMessage;
             server.PlayerLoggedIn += server_PlayerLoggedIn;
-            server.Settings.OnlineMode = false;
+            server.Settings.OnlineMode = true;
             server.Start(new IPEndPoint(IPAddress.Any, 25565));
             Console.WriteLine("Press 'q' to exit");
             ConsoleKeyInfo cki;

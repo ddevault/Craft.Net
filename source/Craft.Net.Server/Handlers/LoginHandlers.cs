@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using Newtonsoft.Json.Linq;
 
 namespace Craft.Net.Server.Handlers
 {
@@ -78,16 +79,18 @@ namespace Craft.Net.Server.Handlers
             // Talk to sessionserver.minecraft.net
             if (server.Settings.OnlineMode)
             {
-//                var webClient = new WebClient();
-//                var webReader = new StreamReader(webClient.OpenRead(
-//                    new Uri(string.Format(sessionCheckUri, client.Username, hash))));
-//                string response = webReader.ReadToEnd();
-//                webReader.Close();
-//                if (response != "YES")
-//                {
-//                    client.Disconnect("Failed to verify username!");
-//                    return;
-//                }
+                var webClient = new WebClient();
+                var webReader = new StreamReader(webClient.OpenRead(
+                    new Uri(string.Format(sessionCheckUri, client.Username, hash))));
+                string response = webReader.ReadToEnd();
+                webReader.Close();
+                var json = JToken.Parse(response);
+                if (string.IsNullOrEmpty(response))
+                {
+                    client.Disconnect("Failed to verify username!");
+                    return;
+                }
+                client.UUID = json["id"].Value<string>();
             }
             client.NetworkStream = new AesStream(client.NetworkClient.GetStream(), client.SharedKey);
             client.NetworkManager.BaseStream = client.NetworkStream;

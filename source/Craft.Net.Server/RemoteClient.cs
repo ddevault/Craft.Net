@@ -87,7 +87,10 @@ namespace Craft.Net.Server
 
         public void Disconnect(string reason)
         {
-            SendPacket(new DisconnectPacket(reason));
+            if (NetworkManager.NetworkMode == NetworkMode.Login)
+                SendPacket(new LoginDisconnectPacket(reason));
+            else
+                SendPacket(new DisconnectPacket(reason));
         }
 
         internal void TrackEntity(Entity entity)
