@@ -3344,7 +3344,7 @@ namespace Craft.Net.Networking
             ViewDistance = stream.ReadUInt8();
             var flags = stream.ReadUInt8();
             ChatFlags = (ChatMode)(flags & 0x3);
-            ColorEnabled = (flags & 0x08) > 0;
+            ColorEnabled = stream.ReadBoolean();
             Difficulty = (Difficulty)stream.ReadUInt8();
             ShowCape = stream.ReadBoolean();
             return mode;
@@ -3354,7 +3354,8 @@ namespace Craft.Net.Networking
         {
             stream.WriteString(Locale);
             stream.WriteUInt8(ViewDistance);
-            stream.WriteUInt8((byte)(((byte)ChatFlags) | (ColorEnabled ? 0x08 : 0)));
+            stream.WriteUInt8((byte)ChatFlags);
+            stream.WriteBoolean(ColorEnabled);
             stream.WriteUInt8((byte)Difficulty);
             stream.WriteBoolean(ShowCape);
             return mode;

@@ -10,7 +10,7 @@ namespace Craft.Net.TerrainGeneration
     {
         public string LevelType { get { return "DEFAULT"; } }
 
-        public string GeneratorName { get { return "STANDARD"; } }
+        public string GeneratorName { get { return "default"; } }
 
         public string GeneratorOptions { get; set; }
 

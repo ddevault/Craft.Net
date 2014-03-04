@@ -35,13 +35,14 @@ namespace Craft.Net.Server
         public ConcurrentQueue<IPacket> PacketQueue { get; set; }
         public ClientSettings Settings { get; set; }
         public bool EncryptionEnabled { get; protected internal set; }
-        public string Hostname { get; set; }
-        public short Ping { get; set; }
-        public string Username { get; set; }
+        public string Hostname { get; internal set; }
+        public short Ping { get; internal set; }
+        public string Username { get; internal set; }
         public PlayerEntity Entity { get; set; }
         public int Reach { get { return GameMode == GameMode.Creative ? 6 : 5; } } // TODO: Allow customization
         public int MaxDigDistance { get; set; }
         public Dictionary<string, object> Tags { get; set; }
+        public string UUID { get; internal set; }
 
         protected internal List<Coordinates2D> LoadedChunks { get; set; }
         protected internal DateTime LastKeepAlive { get; set; }
@@ -99,7 +100,7 @@ namespace Craft.Net.Server
                     var player = entity as PlayerEntity;
                     var selectedItem = player.SelectedItem.Id;
                     if (selectedItem == -1) selectedItem = 0;
-                    SendPacket(new SpawnPlayerPacket(player.EntityId, player.Username, MathHelper.CreateAbsoluteInt(player.Position.X),
+                    SendPacket(new SpawnPlayerPacket(player.EntityId, UUID, player.Username, MathHelper.CreateAbsoluteInt(player.Position.X),
                         MathHelper.CreateAbsoluteInt(player.Position.Y), MathHelper.CreateAbsoluteInt(player.Position.Z),
                         MathHelper.CreateRotationByte(player.Yaw), MathHelper.CreateRotationByte(player.Pitch), selectedItem, player.Metadata));
                     if (!player.SelectedItem.Empty)

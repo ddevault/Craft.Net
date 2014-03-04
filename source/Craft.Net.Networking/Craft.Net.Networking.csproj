@@ -57,6 +57,7 @@
     <Compile Include="NetworkManager.cs" />
     <Compile Include="ServerStatus.cs" />
     <Compile Include="PacketLogger.cs" />
+    <Compile Include="Extensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Craft.Net.Common\Craft.Net.Common.csproj">

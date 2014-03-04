@@ -110,7 +110,8 @@ namespace Craft.Net.Server
                     }
                     foreach (var client in GetKnownClients(entity))
                         client.ForgetEntity(entity);
-                    entity.PropertyChanged -= EntityPropertyChanged;
+                    if (entity != null)
+                        entity.PropertyChanged -= EntityPropertyChanged;
                 }
             }
         }

@@ -44,9 +44,12 @@ namespace Craft.Net.Server.Handlers
                 if (server.Settings.OnlineMode)
                     client.ServerId = CreateId();
                 else
-                    client.ServerId = "-";
+                {
+                    client.ServerId = CreateId();
+                    client.UUID = Guid.NewGuid().ToJavaUUID();
+                }
                 if (server.Settings.EnableEncryption)
-                    client.SendPacket(CreateEncryptionRequest(client, server));
+                   client.SendPacket(CreateEncryptionRequest(client, server));
                 else
                     server.LogInPlayer(client);
             }
@@ -86,6 +89,9 @@ namespace Craft.Net.Server.Handlers
 //                    return;
 //                }
             }
+            client.NetworkStream = new AesStream(client.NetworkClient.GetStream(), client.SharedKey);
+            client.NetworkManager.BaseStream = client.NetworkStream;
+            client.EncryptionEnabled = true;
             var eventArgs = new ConnectionEstablishedEventArgs(client);
             server.OnConnectionEstablished(eventArgs);
             if (eventArgs.PermitConnection)
@@ -148,7 +154,7 @@ namespace Craft.Net.Server.Handlers
         private static string CreateId()
         {
             var random = RandomNumberGenerator.Create();
-            byte[] data = new byte[10];
+            byte[] data = new byte[8];
             random.GetBytes(data);
             var response = "";
             foreach (byte b in data)

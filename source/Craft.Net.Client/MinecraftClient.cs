@@ -119,6 +119,7 @@ namespace Craft.Net.Client
                         try
                         {
                             // Write packet
+                            Console.WriteLine("-> " + packet.GetType().Name);
                             NetworkManager.WritePacket(packet, PacketDirection.Serverbound);
                             if (packet is DisconnectPacket)
                                 return;
@@ -133,9 +134,13 @@ namespace Craft.Net.Client
                     try
                     {
                         var packet = NetworkManager.ReadPacket(PacketDirection.Clientbound);
+                        Console.WriteLine("<- " + packet.GetType().Name);
                         HandlePacket(packet);
                         if (packet is DisconnectPacket)
+                        {
+                            Console.WriteLine(((DisconnectPacket)packet).Reason);
                             return;
+                        }
                     }
                     catch (Exception e) 
                     {

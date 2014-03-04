@@ -56,17 +56,20 @@ namespace Craft.Net.Networking
             List<Type> clientbound = new List<Type>();
             // Handshake packets
             serverbound.Add(typeof(HandshakePacket)); // Serverbound
+
             clientbound.Add(typeof(HandshakePacket)); // Clientbound
             HandshakePackets = Populate(serverbound, clientbound);
             // Status packets
             serverbound.Add(typeof(StatusRequestPacket)); // Serverbound
             serverbound.Add(typeof(StatusPingPacket));
+
             clientbound.Add(typeof(StatusResponsePacket)); // Clientbound
             clientbound.Add(typeof(StatusPingPacket));
             StatusPackets = Populate(serverbound, clientbound);
             // Login packets
             serverbound.Add(typeof(LoginStartPacket)); // Serverbound
             serverbound.Add(typeof(EncryptionKeyResponsePacket));
+
             clientbound.Add(typeof(LoginDisconnectPacket)); // Clientbound
             clientbound.Add(typeof(EncryptionKeyRequestPacket));
             clientbound.Add(typeof(LoginSuccessPacket));
@@ -96,6 +99,7 @@ namespace Craft.Net.Networking
             serverbound.Add(typeof(ClientSettingsPacket));
             serverbound.Add(typeof(ClientStatusPacket));
             serverbound.Add(typeof(PluginMessagePacket));
+
             clientbound.Add(typeof(KeepAlivePacket)); // Clientbound
             clientbound.Add(typeof(JoinGamePacket));
             clientbound.Add(typeof(ChatMessagePacket));

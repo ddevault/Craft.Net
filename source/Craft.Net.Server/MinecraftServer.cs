@@ -166,7 +166,10 @@ namespace Craft.Net.Server
                     {
                         if (client.NetworkClient != null && client.NetworkClient.Connected)
                         {
-                            client.NetworkManager.WritePacket(new DisconnectPacket(reason), PacketDirection.Clientbound);
+                            if (client.NetworkManager.NetworkMode == NetworkMode.Login)
+                                client.NetworkManager.WritePacket(new LoginDisconnectPacket("\"" + reason + "\""), PacketDirection.Clientbound);
+                            else
+                                client.NetworkManager.WritePacket(new DisconnectPacket("\"" + reason + "\""), PacketDirection.Clientbound);
                         }
                     }
                     catch { }
@@ -239,7 +242,7 @@ namespace Craft.Net.Server
 
         internal void LogInPlayer(RemoteClient client)
         {
-            client.SendPacket(new LoginSuccessPacket(Guid.NewGuid().ToString(), client.Username));
+            client.SendPacket(new LoginSuccessPacket(client.UUID, client.Username));
             // Spawn player
             Level.LoadPlayer(client);
             client.PlayerManager = new PlayerManager(client, this);
@@ -247,32 +250,32 @@ namespace Craft.Net.Server
             client.SendPacket(new JoinGamePacket(client.Entity.EntityId,
                 client.GameMode, Dimension.Overworld, Settings.Difficulty,
                 Settings.MaxPlayers, Level.DefaultWorld.WorldGenerator.GeneratorName));
-//            client.SendPacket(new SpawnPositionPacket((int)client.Entity.SpawnPoint.X, (int)client.Entity.SpawnPoint.Y, (int)client.Entity.SpawnPoint.Z));
-//            client.SendPacket(new PlayerAbilitiesPacket(client.Entity.Abilities.AsFlags(), client.Entity.Abilities.FlyingSpeed, client.Entity.Abilities.WalkingSpeed));
-//            client.SendPacket(new EntityPropertiesPacket(client.Entity.EntityId,
-//                new[] { new EntityProperty("generic.movementSpeed", client.Entity.Abilities.WalkingSpeed) }));
-//            client.SendPacket(new TimeUpdatePacket(Level.Time, Level.Time));
-//            client.SendPacket(new SetWindowItemsPacket(0, client.Entity.Inventory.GetSlots()));
-//
-//            // Send initial chunks
-//            client.UpdateChunks(true);
-//            // Adding 0.1 here prevents the client from falling through the ground upon logging in
-//            // Presumably, Minecraft runs some physics stuff and if it spawns exactly at ground level, it falls a little and
-//            // clips through the ground. This fixes that.
-//            client.SendPacket(new PlayerPositionAndLookPacket(client.Entity.Position.X, client.Entity.Position.Y + 0.1 + PlayerEntity.Height,
-//                client.Entity.Position.Z, client.Entity.Position.Y + 0.1, client.Entity.Yaw, client.Entity.Pitch, false));
-//            client.IsLoggedIn = true;
-//            UpdatePlayerList();
-//
-//            // Send entities
-//            EntityManager.SendClientEntities(client);
-//
-//            client.SendPacket(new UpdateHealthPacket(client.Entity.Health, client.Entity.Food, client.Entity.FoodSaturation));
-//            var args = new PlayerLogInEventArgs(client);
-//            OnPlayerLoggedIn(args);
-//            //LogProvider.Log(client.Username + " joined the game.");
-//            if (!args.Handled)
-//                SendChat(ChatColors.Yellow + client.Username + " joined the game.");
+            client.SendPacket(new SpawnPositionPacket((int)client.Entity.SpawnPoint.X, (int)client.Entity.SpawnPoint.Y, (int)client.Entity.SpawnPoint.Z));
+            client.SendPacket(new PlayerAbilitiesPacket(client.Entity.Abilities.AsFlags(), client.Entity.Abilities.FlyingSpeed, client.Entity.Abilities.WalkingSpeed));
+            // Adding 0.1 to Y here prevents the client from falling through the ground upon logging in
+            // Presumably, Minecraft runs some physics stuff and if it spawns exactly at ground level, it falls a little and
+            // clips through the ground. This fixes that.
+            client.SendPacket(new PlayerPositionAndLookPacket(client.Entity.Position.X, client.Entity.Position.Y + 0.1 + PlayerEntity.Height,
+                client.Entity.Position.Z, client.Entity.Position.Y + 0.1, client.Entity.Yaw, client.Entity.Pitch, false));
+            client.SendPacket(new TimeUpdatePacket(Level.Time, Level.Time));
+            client.SendPacket(new SetWindowItemsPacket(0, client.Entity.Inventory.GetSlots()));
+            // Send initial chunks
+            client.UpdateChunks(true);
+            UpdatePlayerList();
+            client.SendPacket(new UpdateHealthPacket(client.Entity.Health, client.Entity.Food, client.Entity.FoodSaturation));
+            client.SendPacket(new EntityPropertiesPacket(client.Entity.EntityId,
+                new[] { new EntityProperty("generic.movementSpeed", client.Entity.Abilities.WalkingSpeed) }));
+
+            // Send entities
+            EntityManager.SendClientEntities(client);
+            client.LastKeepAliveSent = DateTime.Now;
+            client.IsLoggedIn = true;
+
+            var args = new PlayerLogInEventArgs(client);
+            OnPlayerLoggedIn(args);
+            //LogProvider.Log(client.Username + " joined the game.");
+            if (!args.Handled)
+                SendChat(ChatColors.Yellow + client.Username + " joined the game.");
         }
 
         #endregion
@@ -306,15 +309,8 @@ namespace Craft.Net.Server
                             IPacket nextPacket;
                             if (client.PacketQueue.TryDequeue(out nextPacket))
                             {
-                                if (nextPacket is LoginSuccessPacket)
-                                {
-                                    client.NetworkStream = new AesStream(client.NetworkClient.GetStream(), client.SharedKey);
-                                    client.NetworkManager.BaseStream = client.NetworkStream;
-                                    client.EncryptionEnabled = true;
-                                }
                                 try
                                 {
-                                    Console.WriteLine("-> {0}", nextPacket.GetType().Name);
                                     client.NetworkManager.WritePacket(nextPacket, PacketDirection.Clientbound);
                                 }
                                 catch (System.IO.IOException)
@@ -342,7 +338,6 @@ namespace Craft.Net.Server
                             try
                             {
                                 var packet = client.NetworkManager.ReadPacket(PacketDirection.Serverbound);
-                                Console.WriteLine("<- {0}", packet.GetType().Name);
                                 if (packet is DisconnectPacket)
                                 {
                                     DisconnectPlayer(client);
@@ -384,7 +379,7 @@ namespace Craft.Net.Server
 
         private void HandlePacket(RemoteClient client, IPacket packet)
         {
-            if (PacketHandlers[packet.GetType()] == null)
+            if (!PacketHandlers.ContainsKey(packet.GetType()))
                 return;
                 //throw new InvalidOperationException("No packet handler registered for 0x" + packet.Id.ToString("X2"));
             PacketHandlers[packet.GetType()](client, this, packet);
