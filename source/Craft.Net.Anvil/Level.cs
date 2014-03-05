@@ -320,7 +320,7 @@ namespace Craft.Net.Anvil
             level.WorldGenerator = GetGenerator(level.GeneratorName);
             level.WorldGenerator.Initialize(level);
             var worlds = Directory.GetDirectories(level.BaseDirectory).Where(
-                d => !Directory.GetFiles(d).Any(f => !f.EndsWith(".mca") && !f.EndsWith(".mcr")));
+                d => Directory.GetFiles(d).Any(f => f.EndsWith(".mca") || f.EndsWith(".mcr")));
             foreach (var world in worlds)
             {
                 var w = World.LoadWorld(world);
