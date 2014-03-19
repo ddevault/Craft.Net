@@ -673,17 +673,17 @@ namespace Craft.Net.Networking
             Slot = slot;
         }
 
-        public sbyte Slot;
+        public short Slot;
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
-            Slot = stream.ReadInt8();
+            Slot = stream.ReadInt16();
             return mode;
         }
 
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
-            stream.WriteInt8(Slot);
+            stream.WriteInt16(Slot);
             return mode;
         }
     }
