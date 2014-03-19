@@ -57,7 +57,6 @@
     <Compile Include="Handlers\LoginHandlers.cs" />
     <Compile Include="Handlers\PacketHandlers.cs" />
     <Compile Include="Handlers\PlayerMovementHandlers.cs" />
-    <Compile Include="LogicHelpers.cs" />
     <Compile Include="MinecraftServer.cs" />
     <Compile Include="PlayerManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -81,10 +80,6 @@
     <ProjectReference Include="..\Craft.Net.Common\Craft.Net.Common.csproj">
       <Project>{50462849-2223-4E39-B5D9-A928A9A58A33}</Project>
       <Name>Craft.Net.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Craft.Net.Entities\Craft.Net.Entities.csproj">
-      <Project>{451B4EE5-D815-47BF-9CE6-08328B4A2BA7}</Project>
-      <Name>Craft.Net.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\Craft.Net.Logic\Craft.Net.Logic.csproj">
       <Project>{E001ADA1-6BCB-420E-B187-07FF361D60B8}</Project>

@@ -1,6 +1,5 @@
 ﻿using Craft.Net.Anvil;
 using Craft.Net.Common;
-using Craft.Net.Entities;
 using Craft.Net.Networking;
 using Craft.Net.Server.Events;
 using System;
@@ -24,7 +23,6 @@ namespace Craft.Net.Server
 
         public MinecraftServer()
         {
-            LogicHelpers.Register();
             PacketHandlers = new Dictionary<Type, PacketHandler>();
             Handlers.PacketHandlers.RegisterHandlers(this);
             NetworkLock = new object();
@@ -97,7 +95,7 @@ namespace Craft.Net.Server
                 world.BlockChange += WorldBlockChange;
                 world.SpawnEntityRequested -= WorldSpawnEntityRequested;
                 world.SpawnEntityRequested += WorldSpawnEntityRequested;
-                PhysicsEngines.Add(new PhysicsEngine(world));
+                PhysicsEngines.Add(new PhysicsEngine(world, LogicManager.PhysicsProvider));
             }
 
             CryptoServiceProvider = new RSACryptoServiceProvider(1024);

@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
-namespace Craft.Net.Entities
+namespace Craft.Net.Logic
 {
     public abstract class Entity : INotifyPropertyChanged
     {

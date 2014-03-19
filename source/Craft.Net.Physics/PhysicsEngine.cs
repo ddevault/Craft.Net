@@ -11,15 +11,17 @@ namespace Craft.Net.Physics
     {
         public const int MillisecondsBetweenUpdates = 250;
 
-        public PhysicsEngine(World world)
+        public PhysicsEngine(World world, IBlockPhysicsProvider physicsProvider)
         {
             World = world;
             Entities = new List<IPhysicsEntity>();
             EntityLock = new object();
             LastUpdate = DateTime.MinValue;
+            BlockPhysicsProvider = physicsProvider;
         }
 
         public World World { get; set; }
+        public IBlockPhysicsProvider BlockPhysicsProvider { get; set; }
         public List<IPhysicsEntity> Entities { get; set; }
         private object EntityLock { get; set; }
         private DateTime LastUpdate { get; set; }
@@ -134,10 +136,8 @@ namespace Craft.Net.Physics
                     for (int z = minZ; z <= maxZ; z++)
                     {
                         var position = new Vector3(x, y, z);
-                        var blockId = world.GetBlockId(position);
-                        //var boundingBox = Block.GetBoundingBox(blockId); // TODO
-                        var boundingBox = (BoundingBox?)new BoundingBox(Vector3.Zero, Vector3.One);
-                        if (blockId == 0)
+                        var boundingBox = BlockPhysicsProvider.GetBoundingBox(world, (Coordinates3D)position);
+                        if (boundingBox == null)
                             continue;
                         blockBox = new BoundingBox(boundingBox.Value.Min + position,
                             boundingBox.Value.Max + position);
@@ -236,10 +236,8 @@ namespace Craft.Net.Physics
                     for (int z = minZ; z <= maxZ; z++)
                     {
                         var position = new Vector3(x, y, z);
-                        var blockId = world.GetBlockId(position);
-                        //var boundingBox = Block.GetBoundingBox(blockId);
-                        var boundingBox = (BoundingBox?)new BoundingBox(Vector3.Zero, Vector3.One);
-                        if (blockId == 0)
+                        var boundingBox = BlockPhysicsProvider.GetBoundingBox(world, (Coordinates3D)position);
+                        if (boundingBox == null)
                             continue;
                         blockBox = new BoundingBox(boundingBox.Value.Min + position,
                             boundingBox.Value.Max + position);
@@ -335,10 +333,8 @@ namespace Craft.Net.Physics
                     for (int z = minZ; z <= maxZ; z++)
                     {
                         var position = new Vector3(x, y, z);
-                        var blockId = world.GetBlockId(position);
-                        //var boundingBox = Block.GetBoundingBox(blockId);
-                        var boundingBox = (BoundingBox?)new BoundingBox(Vector3.Zero, Vector3.One);
-                        if (blockId == 0)
+                        var boundingBox = BlockPhysicsProvider.GetBoundingBox(world, (Coordinates3D)position);
+                        if (boundingBox == null)
                             continue;
                         blockBox = new BoundingBox(boundingBox.Value.Min + position,
                             boundingBox.Value.Max + position);

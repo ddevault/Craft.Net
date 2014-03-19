@@ -1,5 +1,5 @@
 ﻿using Craft.Net.Common;
-using Craft.Net.Entities;
+using Craft.Net.Logic;
 using Craft.Net.Logic.Windows;
 using Craft.Net.Networking;
 using System;

@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using Craft.Net.Logic;
 using Craft.Net.Anvil;
-using Craft.Net.Entities;
 
 namespace Craft.Net.Server.Handlers
 {
@@ -17,7 +16,7 @@ namespace Craft.Net.Server.Handlers
             var packet = (PlayerBlockActionPacket)_packet;
             var position = new Coordinates3D(packet.X, packet.Y, packet.Z);
             // TODO: Enforce line-of-sight
-            //var block = client.World.GetBlock(position);
+            var block = client.World.GetBlockInfo(position);
             short damage;
             switch (packet.Action)
             {
@@ -27,7 +26,6 @@ namespace Craft.Net.Server.Handlers
                         // TODO: Block stuff
                         if (client.GameMode == GameMode.Creative || client.Entity.Abilities.InstantMine)// || Block.GetLogicDescriptor(block).Hardness == 0)
                         {
-                            //Block.OnBlockMined(block, client.World, position, null); // TODO: See if we really need to call this
                             client.World.SetBlockId(position, 0);
                             client.World.SetMetadata(position, 0);
                         }
@@ -80,7 +78,7 @@ namespace Craft.Net.Server.Handlers
                                 //}
                             }
                         }
-                        //Block.OnBlockMined(block, client.World, position, null);
+                        client.World.MineBlock(position); // TODO: Tools
                         client.Entity.FoodExhaustion += 0.025f;
                     }
                     break;
@@ -116,16 +114,16 @@ namespace Craft.Net.Server.Handlers
             var slot = client.Entity.Inventory[client.Entity.SelectedSlot];
             var position = new Coordinates3D(packet.X, packet.Y, packet.Z);
             var cursorPosition = new Coordinates3D(packet.CursorX, packet.CursorY, packet.CursorZ);
-            //BlockDescriptor? block = null;
+            BlockInfo? block = null;
             if (position != -Coordinates3D.One)
             {
                 if (position.DistanceTo(client.Entity.Position) > client.Reach)
                     return;
-                //block = client.World.GetBlock(position);
+                block = client.World.GetBlockInfo(position);
             }
             bool use = true;
-            //if (block != null)
-            //   use = Block.OnBlockRightClicked(block.Value, client.World, position, AdjustByDirection(packet.Face), cursorPosition);
+            if (block != null)
+                ;//use = Block.OnBlockRightClicked(block.Value, client.World, position, AdjustByDirection(packet.Face), cursorPosition);
             if (!slot.Empty)
             {
                 //var item = new ItemDescriptor(slot.Id, slot.Metadata);

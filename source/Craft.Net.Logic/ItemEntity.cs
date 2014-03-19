@@ -5,11 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Craft.Net.Entities
+namespace Craft.Net.Logic
 {
     public class ItemEntity : ObjectEntity, IAABBEntity
     {
-        public static double PickupRange = 1.5;
+        public static double PickupRange = 2;
 
         public ItemEntity(Vector3 position, ItemStack item)
         {

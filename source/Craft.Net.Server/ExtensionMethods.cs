@@ -1,5 +1,5 @@
 using System;
-using Craft.Net.Entities;
+using Craft.Net.Logic;
 using Craft.Net.Anvil;
 using System.IO;
 using fNbt;

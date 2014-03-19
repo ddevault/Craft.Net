@@ -44,6 +44,7 @@
     <Compile Include="IPhysicsEntity.cs" />
     <Compile Include="PhysicsEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="IBlockPhysicsProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\externals\fNbt\fNbt\fNbt.csproj">
@@ -57,10 +58,6 @@
     <ProjectReference Include="..\Craft.Net.Common\Craft.Net.Common.csproj">
       <Project>{50462849-2223-4E39-B5D9-A928A9A58A33}</Project>
       <Name>Craft.Net.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Craft.Net.Logic\Craft.Net.Logic.csproj">
-      <Project>{E001ADA1-6BCB-420E-B187-07FF361D60B8}</Project>
-      <Name>Craft.Net.Logic</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

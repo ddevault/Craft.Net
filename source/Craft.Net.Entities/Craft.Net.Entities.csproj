@@ -40,13 +40,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entity.cs" />
-    <Compile Include="EntityEventArgs.cs" />
-    <Compile Include="ItemEntity.cs" />
-    <Compile Include="LivingEntity.cs" />
-    <Compile Include="ObjectEntity.cs" />
-    <Compile Include="PlayerAbilities.cs" />
-    <Compile Include="PlayerEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

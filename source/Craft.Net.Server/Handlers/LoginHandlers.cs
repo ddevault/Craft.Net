@@ -1,6 +1,6 @@
 ﻿using Craft.Net.Anvil;
 using Craft.Net.Common;
-using Craft.Net.Entities;
+using Craft.Net.Logic;
 using Craft.Net.Networking;
 using System;
 using System.Collections.Generic;

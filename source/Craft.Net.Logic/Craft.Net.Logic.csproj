@@ -47,6 +47,19 @@
     <Compile Include="Windows\Window.cs" />
     <Compile Include="Windows\WindowArea.cs" />
     <Compile Include="Windows\WindowChangeEventArgs.cs" />
+    <Compile Include="BlockInfo.cs" />
+    <Compile Include="ItemInfo.cs" />
+    <Compile Include="WorldExtensions.cs" />
+    <Compile Include="LogicManager.cs" />
+    <Compile Include="Entity.cs" />
+    <Compile Include="EntityEventArgs.cs" />
+    <Compile Include="ItemEntity.cs" />
+    <Compile Include="LivingEntity.cs" />
+    <Compile Include="ObjectEntity.cs" />
+    <Compile Include="PlayerAbilities.cs" />
+    <Compile Include="PlayerEntity.cs" />
+    <Compile Include="Blocks\AirBlock.cs" />
+    <Compile Include="Block.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\externals\fNbt\fNbt\fNbt.csproj">
@@ -61,6 +74,10 @@
       <Project>{02031C5C-5007-48D5-A253-F7C8BDF0C0B2}</Project>
       <Name>Craft.Net.Anvil</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Craft.Net.Physics\Craft.Net.Physics.csproj">
+      <Project>{C04C72EF-5FD5-42DA-B1DC-F232D3E86636}</Project>
+      <Name>Craft.Net.Physics</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -70,4 +87,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Folder Include="Blocks\" />
+  </ItemGroup>
 </Project>

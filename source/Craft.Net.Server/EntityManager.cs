@@ -1,6 +1,5 @@
 ﻿using Craft.Net.Anvil;
 using Craft.Net.Common;
-using Craft.Net.Entities;
 using Craft.Net.Networking;
 using Craft.Net.Physics;
 using System;
@@ -10,6 +9,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Craft.Net.Logic;
 
 namespace Craft.Net.Server
 {
