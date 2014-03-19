@@ -24,7 +24,7 @@ namespace Craft.Net.Logic
                 if (typeof(Block).IsAssignableFrom(type) && !type.IsAbstract && !type.IsInterface)
                 {
                     var block = (Block)Activator.CreateInstance(type);
-                    block.Initialize();
+                    block._Initialize();
                 }
             }
         }
@@ -32,11 +32,20 @@ namespace Craft.Net.Logic
         public static void LoadBlock<T>() where T : Block
         {
             var block = default(T) as Block;
-            block.Initialize();
+            block._Initialize();
         }
 
-        #region Bounding Boxes
+        public static void SetBoundingBox(short blockId, BoundingBox? boundingBox)
+        {
+            BoundingBoxes[blockId] = boundingBox;
+        }
 
+        public static void SetBlockMinedHandler(short blockId, BlockMinedHandler handler)
+        {
+            BlockMinedHandlers[blockId] = handler;
+        }
+
+        public static IBlockPhysicsProvider PhysicsProvider { get; private set; }
         private static Dictionary<short, BoundingBox?> BoundingBoxes { get; set; }
         private class BlockPhysicsProvider : IBlockPhysicsProvider
         {
@@ -49,17 +58,8 @@ namespace Craft.Net.Logic
                 return new BoundingBox(Vector3.Zero, Vector3.One);
             }
         }
-        public static void SetBoundingBox(short blockId, BoundingBox? boundingBox)
-        {
-            BoundingBoxes[blockId] = boundingBox;
-        }
-        public static IBlockPhysicsProvider PhysicsProvider { get; private set; }
 
-        #endregion
-
-        #region Block Mined
-
-        internal delegate void BlockMinedHandler(World world, Coordinates3D coordinates, BlockInfo info);
+        public delegate void BlockMinedHandler(World world, Coordinates3D coordinates, BlockInfo info);
         private static Dictionary<short, BlockMinedHandler> BlockMinedHandlers { get; set; }
         internal static void OnBlockMined(World world, Coordinates3D coordinates)
         {
@@ -77,7 +77,5 @@ namespace Craft.Net.Logic
             world.OnSpawnEntityRequested(new ItemEntity((Vector3)coordinates + new Vector3(0.5),
                 new ItemStack(info.BlockId, 1, info.Metadata)));
         }
-
-        #endregion
     }
 }

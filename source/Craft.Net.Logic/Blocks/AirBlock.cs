@@ -4,11 +4,12 @@ namespace Craft.Net.Logic.Blocks
 {
     public class AirBlock : Block
     {
-        public static short Id = 0;
+        public static readonly short Id = 0;
 
-        public override void Initialize()
+        protected override string Initialize()
         {
             LogicManager.SetBoundingBox(Id, null);
+            return "minecraft::air";
         }
     }
 }
