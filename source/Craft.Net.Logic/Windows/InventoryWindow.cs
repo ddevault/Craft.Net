@@ -1,5 +1,4 @@
 using Craft.Net.Common;
-using Craft.Net.Logic.Items;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -74,8 +73,8 @@ namespace Craft.Net.Logic.Windows
             var area = MainInventory;
             foreach (var item in Hotbar.Items)
             {
-                if (item.Empty || (slot.Id == item.Id && slot.Metadata == item.Metadata &&
-                    item.Count + slot.Count < Item.GetMaximumStackSize(new ItemDescriptor(item.Id, item.Metadata))))
+                if (item.Empty || (slot.Id == item.Id && slot.Metadata == item.Metadata))
+                    //&& item.Count + slot.Count < Item.GetMaximumStackSize(new ItemDescriptor(item.Id, item.Metadata)))) // TODO
                 {
                     area = Hotbar;
                     break;

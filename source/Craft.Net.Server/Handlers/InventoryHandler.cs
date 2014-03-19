@@ -1,6 +1,5 @@
 ﻿using Craft.Net.Common;
 using Craft.Net.Entities;
-using Craft.Net.Logic.Items;
 using Craft.Net.Logic.Windows;
 using Craft.Net.Networking;
 using System;
@@ -88,7 +87,8 @@ namespace Craft.Net.Server.Handlers
                             {
                                 // Attempt to combine stacks
                                 var newSize = clickedItem.Count + heldItem.Count;
-                                var maxSize = Item.GetMaximumStackSize(new ItemDescriptor(clickedItem.Id, clickedItem.Metadata));
+                                //var maxSize = Item.GetMaximumStackSize(new ItemDescriptor(clickedItem.Id, clickedItem.Metadata));
+                                var maxSize = 64; // TODO
                                 if (newSize < maxSize)
                                 {
                                     clickedItem.Count = (sbyte)newSize;
@@ -136,7 +136,8 @@ namespace Craft.Net.Server.Handlers
                             else if (heldItem.CanMerge(clickedItem))
                             {
                                 // Merge one item in
-                                var maxSize = Item.GetMaximumStackSize(new ItemDescriptor(clickedItem.Id, clickedItem.Metadata));
+                                //var maxSize = Item.GetMaximumStackSize(new ItemDescriptor(clickedItem.Id, clickedItem.Metadata));
+                                var maxSize = 64; // TODO
                                 if (clickedItem.Count < maxSize)
                                 {
                                     clickedItem.Count++;
@@ -203,7 +204,8 @@ namespace Craft.Net.Server.Handlers
 
         private static void FinishPaint(RemoteClient client, ItemStack heldItem, bool onePerSlot)
         {
-            sbyte maxStack = (sbyte)Item.GetMaximumStackSize(new ItemDescriptor(heldItem.Id, heldItem.Metadata));
+            //sbyte maxStack = (sbyte)Item.GetMaximumStackSize(new ItemDescriptor(heldItem.Id, heldItem.Metadata));
+            sbyte maxStack = 64; // TODO
             while (heldItem.Count < client.PaintedSlots.Count)
                 client.PaintedSlots.RemoveAt(client.PaintedSlots.Count - 1);
             for (int i = 0; i < client.PaintedSlots.Count; i++)

@@ -5,9 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Craft.Net.Logic;
-using Craft.Net.Logic.Blocks;
 using Craft.Net.Anvil;
-using Craft.Net.Logic.Items;
 using Craft.Net.Entities;
 
 namespace Craft.Net.Server.Handlers
@@ -19,14 +17,15 @@ namespace Craft.Net.Server.Handlers
             var packet = (PlayerBlockActionPacket)_packet;
             var position = new Coordinates3D(packet.X, packet.Y, packet.Z);
             // TODO: Enforce line-of-sight
-            var block = client.World.GetBlock(position);
+            //var block = client.World.GetBlock(position);
             short damage;
             switch (packet.Action)
             {
                 case PlayerBlockActionPacket.BlockAction.StartDigging:
                     if (client.Entity.Position.DistanceTo(position) <= client.MaxDigDistance)
                     {
-                        if (client.GameMode == GameMode.Creative || client.Entity.Abilities.InstantMine || Block.GetLogicDescriptor(block).Hardness == 0)
+                        // TODO: Block stuff
+                        if (client.GameMode == GameMode.Creative || client.Entity.Abilities.InstantMine)// || Block.GetLogicDescriptor(block).Hardness == 0)
                         {
                             //Block.OnBlockMined(block, client.World, position, null); // TODO: See if we really need to call this
                             client.World.SetBlockId(position, 0);
@@ -34,7 +33,7 @@ namespace Craft.Net.Server.Handlers
                         }
                         else
                         {
-                            int time = Block.GetHarvestTime(new ItemDescriptor(client.Entity.SelectedItem.Id), block, out damage);
+                            int time = 1; //Block.GetHarvestTime(new ItemDescriptor(client.Entity.SelectedItem.Id), block, out damage);
                             client.ExpectedMiningEnd = DateTime.Now.AddMilliseconds(time - (client.Ping + 100));
                             client.ExpectedBlockToMine = position;
                             var knownClients = server.EntityManager.GetKnownClients(client.Entity);
@@ -62,7 +61,8 @@ namespace Craft.Net.Server.Handlers
                             c.SendPacket(new BlockBreakAnimationPacket(client.Entity.EntityId, position.X, position.Y, position.Z, 0xFF)); // reset
                         if (client.ExpectedMiningEnd > DateTime.Now || client.ExpectedBlockToMine != position)
                             return;
-                        Block.GetHarvestTime(new ItemDescriptor(client.Entity.SelectedItem.Id), block, out damage);
+                        //Block.GetHarvestTime(new ItemDescriptor(client.Entity.SelectedItem.Id), block, out damage);
+                        damage = 0;
                         if (damage != 0)
                         {
                             var slot = client.Entity.Inventory[client.Entity.SelectedSlot];
@@ -80,7 +80,7 @@ namespace Craft.Net.Server.Handlers
                                 //}
                             }
                         }
-                        Block.OnBlockMined(block, client.World, position, null);
+                        //Block.OnBlockMined(block, client.World, position, null);
                         client.Entity.FoodExhaustion += 0.025f;
                     }
                     break;
@@ -116,35 +116,35 @@ namespace Craft.Net.Server.Handlers
             var slot = client.Entity.Inventory[client.Entity.SelectedSlot];
             var position = new Coordinates3D(packet.X, packet.Y, packet.Z);
             var cursorPosition = new Coordinates3D(packet.CursorX, packet.CursorY, packet.CursorZ);
-            BlockDescriptor? block = null;
+            //BlockDescriptor? block = null;
             if (position != -Coordinates3D.One)
             {
                 if (position.DistanceTo(client.Entity.Position) > client.Reach)
                     return;
-                block = client.World.GetBlock(position);
+                //block = client.World.GetBlock(position);
             }
             bool use = true;
-            if (block != null)
-                use = Block.OnBlockRightClicked(block.Value, client.World, position, AdjustByDirection(packet.Face), cursorPosition);
+            //if (block != null)
+            //   use = Block.OnBlockRightClicked(block.Value, client.World, position, AdjustByDirection(packet.Face), cursorPosition);
             if (!slot.Empty)
             {
-                var item = new ItemDescriptor(slot.Id, slot.Metadata);
+                //var item = new ItemDescriptor(slot.Id, slot.Metadata);
                 if (use)
                 {
-                    if (block != null)
-                    {
-                        Item.OnItemUsedOnBlock(item, client.World, position, AdjustByDirection(packet.Face), cursorPosition);
-                        if (client.GameMode != GameMode.Creative)
-                        {
-                            slot.Count--; // TODO: This is probably a bad place to put this code
-                            if (slot.Count == 0)
-                                client.Entity.Inventory[client.Entity.SelectedSlot] = ItemStack.EmptyStack;
-                            else
-                                client.Entity.Inventory[client.Entity.SelectedSlot] = slot;
-                        }
-                    }
-                    else
-                        Item.OnItemUsed(item);
+//                    if (block != null)
+//                    {
+//                        Item.OnItemUsedOnBlock(item, client.World, position, AdjustByDirection(packet.Face), cursorPosition);
+//                        if (client.GameMode != GameMode.Creative)
+//                        {
+//                            slot.Count--; // TODO: This is probably a bad place to put this code
+//                            if (slot.Count == 0)
+//                                client.Entity.Inventory[client.Entity.SelectedSlot] = ItemStack.EmptyStack;
+//                            else
+//                                client.Entity.Inventory[client.Entity.SelectedSlot] = slot;
+//                        }
+//                    }
+//                    else
+//                        Item.OnItemUsed(item);
                 }
             }
         }

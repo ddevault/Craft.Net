@@ -11,7 +11,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using Craft.Net.Networking;
-using Craft.Net.Logic.Blocks;
 
 namespace TestServer
 {
@@ -28,7 +27,6 @@ namespace TestServer
             level.SaveTo("world");
             var server = new MinecraftServer(level);
             server.ChatMessage += server_ChatMessage;
-            server.PlayerLoggedIn += server_PlayerLoggedIn;
             server.Settings.OnlineMode = true;
             server.Start(new IPEndPoint(IPAddress.Any, 25565));
             Console.WriteLine("Press 'q' to exit");
@@ -36,16 +34,6 @@ namespace TestServer
             do cki = Console.ReadKey(true);
             while (cki.KeyChar != 'q');
             server.Stop();
-        }
-
-        static void server_PlayerLoggedIn(object sender, PlayerLogInEventArgs e)
-        {
-            if (e.Client.Entity.Inventory.Empty)
-            {
-                e.Client.Entity.Inventory.Hotbar[0] = new ItemStack(CobblestoneBlock.BlockId, 64);
-                e.Client.Entity.Inventory.Hotbar[1] = new ItemStack(CobblestoneBlock.BlockId, 64);
-                e.Client.Entity.Inventory.Hotbar[2] = new ItemStack(DirtBlock.BlockId, 32);
-            }
         }
 
         static void server_ChatMessage(object sender, ChatMessageEventArgs e)

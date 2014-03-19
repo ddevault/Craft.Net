@@ -1,5 +1,4 @@
 using Craft.Net.Common;
-using Craft.Net.Logic.Items;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,7 +36,9 @@ namespace Craft.Net.Logic.Windows
         protected internal virtual int MoveOrMergeItem(int index, ItemStack item, WindowArea from)
         {
             int emptyIndex = -1;
-            var maximumStackSize = Item.GetMaximumStackSize(new ItemDescriptor(item.Id, item.Metadata));
+            //var maximumStackSize = Item.GetMaximumStackSize(new ItemDescriptor(item.Id, item.Metadata));
+            // TODO
+            var maximumStackSize = 64;
             for (int i = 0; i < Length; i++)
             {
                 if (this[i].Empty && emptyIndex == -1)

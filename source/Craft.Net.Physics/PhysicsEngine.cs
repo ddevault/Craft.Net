@@ -1,6 +1,5 @@
 ﻿using Craft.Net.Anvil;
 using Craft.Net.Common;
-using Craft.Net.Logic.Blocks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -136,8 +135,9 @@ namespace Craft.Net.Physics
                     {
                         var position = new Vector3(x, y, z);
                         var blockId = world.GetBlockId(position);
-                        var boundingBox = Block.GetBoundingBox(blockId);
-                        if (boundingBox == null)
+                        //var boundingBox = Block.GetBoundingBox(blockId); // TODO
+                        var boundingBox = (BoundingBox?)new BoundingBox(Vector3.Zero, Vector3.One);
+                        if (blockId == 0)
                             continue;
                         blockBox = new BoundingBox(boundingBox.Value.Min + position,
                             boundingBox.Value.Max + position);
@@ -237,8 +237,9 @@ namespace Craft.Net.Physics
                     {
                         var position = new Vector3(x, y, z);
                         var blockId = world.GetBlockId(position);
-                        var boundingBox = Block.GetBoundingBox(blockId);
-                        if (boundingBox == null)
+                        //var boundingBox = Block.GetBoundingBox(blockId);
+                        var boundingBox = (BoundingBox?)new BoundingBox(Vector3.Zero, Vector3.One);
+                        if (blockId == 0)
                             continue;
                         blockBox = new BoundingBox(boundingBox.Value.Min + position,
                             boundingBox.Value.Max + position);
@@ -335,8 +336,9 @@ namespace Craft.Net.Physics
                     {
                         var position = new Vector3(x, y, z);
                         var blockId = world.GetBlockId(position);
-                        var boundingBox = Block.GetBoundingBox(blockId);
-                        if (boundingBox == null)
+                        //var boundingBox = Block.GetBoundingBox(blockId);
+                        var boundingBox = (BoundingBox?)new BoundingBox(Vector3.Zero, Vector3.One);
+                        if (blockId == 0)
                             continue;
                         blockBox = new BoundingBox(boundingBox.Value.Min + position,
                             boundingBox.Value.Max + position);
