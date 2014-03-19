@@ -50,7 +50,7 @@ namespace Craft.Net.Server
             switch (e.PropertyName)
             {
                 case "GameMode":
-                    Client.SendPacket(new ChangeGameStatePacket(Client.GameMode));
+                    Client.SendPacket(new ChangeGameStatePacket(ChangeGameStatePacket.GameState.ChangeGameMode, (float)Client.GameMode));
                     if (Client.GameMode == GameMode.Creative)
                     {
                         Client.Entity.Abilities.InstantMine = true;

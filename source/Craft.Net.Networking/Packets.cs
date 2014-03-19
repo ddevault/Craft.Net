@@ -2049,38 +2049,36 @@ namespace Craft.Net.Networking
         public enum GameState
         {
             InvalidBed = 0,
-            BeginRaining = 1,
-            EndRaining = 2,
+            EndRaining = 1,
+            BeginRaining = 2,
             ChangeGameMode = 3,
-            EnterCredits = 4
+            EnterCredits = 4,
+            DemoMessages = 5,
+            ArrowHitPlayer = 6,
+            FadeValue = 7,
+            FadeTime = 8
         }
 
-        public ChangeGameStatePacket(GameState state)
+        public ChangeGameStatePacket(GameState state, float value)
         {
             State = state;
-            GameMode = GameMode.Survival;
-        }
-
-        public ChangeGameStatePacket(GameMode gameMode)
-        {
-            State = GameState.ChangeGameMode;
-            GameMode = gameMode;
+            Value = value;
         }
         
         public GameState State;
-        public GameMode GameMode;
+        public float Value;
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
             State = (GameState)stream.ReadUInt8();
-            GameMode = (GameMode)stream.ReadUInt8();
+            Value = stream.ReadSingle();
             return mode;
         }
 
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
             stream.WriteUInt8((byte)State);
-            stream.WriteUInt8((byte)GameMode);
+            stream.WriteSingle(Value);
             return mode;
         }
     }
