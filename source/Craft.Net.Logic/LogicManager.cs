@@ -35,9 +35,18 @@ namespace Craft.Net.Logic
             block._Initialize();
         }
 
+        private static Dictionary<short, BoundingBox?> BoundingBoxes { get; set; }
+
         public static void SetBoundingBox(short blockId, BoundingBox? boundingBox)
         {
             BoundingBoxes[blockId] = boundingBox;
+        }
+
+        public static BoundingBox? GetBoundingBox (short blockId)
+        {
+            if (BoundingBoxes.ContainsKey (blockId))
+                return BoundingBoxes [blockId];
+            return new BoundingBox (Vector3.One, Vector3.Zero);
         }
 
         public static void SetBlockMinedHandler(short blockId, BlockMinedHandler handler)
@@ -46,16 +55,13 @@ namespace Craft.Net.Logic
         }
 
         public static IBlockPhysicsProvider PhysicsProvider { get; private set; }
-        private static Dictionary<short, BoundingBox?> BoundingBoxes { get; set; }
         private class BlockPhysicsProvider : IBlockPhysicsProvider
         {
-            public BoundingBox? GetBoundingBox(World world, Coordinates3D coordinates)
+            public BoundingBox? GetBoundingBox (World world, Coordinates3D coordinates)
             {
                 // TODO: Consider passing block info to a handler to get a fancier bounding box
-                var blockId = world.GetBlockId(coordinates);
-                if (BoundingBoxes.ContainsKey(blockId))
-                    return BoundingBoxes[blockId];
-                return new BoundingBox(Vector3.Zero, Vector3.One);
+                var blockId = world.GetBlockId (coordinates);
+                return LogicManager.GetBoundingBox (blockId);
             }
         }
 

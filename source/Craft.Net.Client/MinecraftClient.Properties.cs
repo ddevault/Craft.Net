@@ -1,19 +1,28 @@
 using System;
+using Craft.Net.Anvil;
 using Craft.Net.Common;
 using Craft.Net.Networking;
+using Craft.Net.Logic;
 
 namespace Craft.Net.Client
 {
     public partial class MinecraftClient
     {
         internal Vector3 _position;
+        bool _onGround;
         public Vector3 Position
         {
             get { return _position; }
             set
             {
                 _position = value;
-                SendPacket(new PlayerPositionPacket(Position.X, Position.Y, Position.Z, Position.Y - 1.62, true));
+                var coordinates = new Coordinates3D((int)_position.X, (int)_position.Y, (int)_position.Z);
+                var blockBoundingBox = LogicManager.GetBoundingBox(World.GetBlockId(coordinates)).Value;
+                if (blockBoundingBox.Contains(_position - (Vector3)coordinates))
+                    _onGround = true;
+                else
+                    _onGround = false;
+                SendPacket(new PlayerPositionPacket(Position.X, Position.Y, Position.Z, Position.Y - 1.62, _onGround));
             }
         }
 
