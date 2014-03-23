@@ -22,6 +22,7 @@ namespace Craft.Net.Client.Handlers
 
             client.RegisterPacketHandler(typeof(MapChunkBulkPacket), WorldHandlers.MapChunkBulk);
             client.RegisterPacketHandler(typeof(ChunkDataPacket), WorldHandlers.ChunkData);
+            client.RegisterPacketHandler(typeof(BlockChangePacket), WorldHandlers.BlockChange);
         }
 
         public static void KeepAlive(MinecraftClient client, IPacket _packet)
