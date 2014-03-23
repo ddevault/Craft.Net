@@ -108,7 +108,9 @@ namespace Craft.Net.Client
                 if (IsSpawned && nextPlayerUpdate < DateTime.Now)
                 {
                     nextPlayerUpdate = DateTime.Now.AddMilliseconds(100);
+                    UpdateOnGround();
                     SendPacket(new PlayerPacket(OnGround));
+                    //SendPacket(new PlayerPositionPacket(Position.X, Position.Y, Position.Z, Position.Y - 1.62, OnGround));
                 }
                 // Send queued packets
                 while (PacketQueue.Count != 0)

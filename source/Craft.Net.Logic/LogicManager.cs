@@ -44,11 +44,9 @@ namespace Craft.Net.Logic
 
         public static BoundingBox? GetBoundingBox(short blockId)
         {
-            if (BoundingBoxes.ContainsKey(blockId) && BoundingBoxes[blockId].HasValue)
-            {
+            if (BoundingBoxes.ContainsKey(blockId))
                 return BoundingBoxes [blockId];
-            }
-            return new BoundingBox (Vector3.One, Vector3.Zero);
+            return new BoundingBox (Vector3.Zero, Vector3.One);
         }
 
         public static void SetBlockMinedHandler(short blockId, BlockMinedHandler handler)

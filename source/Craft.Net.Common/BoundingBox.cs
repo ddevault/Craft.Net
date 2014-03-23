@@ -62,11 +62,9 @@ namespace Craft.Net.Common
 
         public bool Contains(Vector3 vec)
         {
-            if (Min.X < vec.X && vec.X < Max.X &&
-                Min.Y < vec.Y && vec.Y < Max.Y &&
-                Min.Z < vec.Z && vec.Z < Max.Z)
-                return true;
-            return false;
+            return Min.X <= vec.X && vec.X <= Max.X &&
+                Min.Y <= vec.Y && vec.Y <= Max.Y &&
+                Min.Z <= vec.Z && vec.Z <= Max.Z;
         }
 
         public static BoundingBox CreateFromPoints(IEnumerable<Vector3> points)
