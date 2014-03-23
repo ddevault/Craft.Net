@@ -686,7 +686,10 @@ namespace Craft.Net.Networking
 
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
-            stream.WriteInt16(Slot);
+            if (direction == PacketDirection.Clientbound)
+                stream.WriteInt8((sbyte)Slot);
+            else
+                stream.WriteInt16(Slot);
             return mode;
         }
     }
