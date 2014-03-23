@@ -11,29 +11,39 @@ namespace Craft.Net.Client
         internal bool _onGround;
         public bool OnGround
         {
-            get { return _onGround; }
+            get
+            {
+                if (_position.Y > Craft.Net.Anvil.World.Height || _position.Y < 0)
+                {
+                    _onGround = false;
+                } else
+                {
+                    try
+                    {
+                        var feetPosition = new Vector3(_position.X, _position.Y - 1.62 - 1, _position.Z);
+                        var coordinates = new Coordinates3D((int)feetPosition.X, (int)feetPosition.Y, (int)feetPosition.Z);
+                        var blockBoundingBox = LogicManager.GetBoundingBox(World.GetBlockId(coordinates));
+                        _onGround = blockBoundingBox.HasValue && blockBoundingBox.Value.Contains(feetPosition - (Vector3)coordinates);
+                    } catch (ArgumentException)
+                    {
+                        //Sometimes the world isn't loaded when we want it to be, so we pretend we are on the ground to
+                        //prevent falling through the world
+                        _onGround = true;
+                    }
+                }
+                return _onGround;
+            }
             private set { _onGround = value; }
         }
+
         internal Vector3 _position;
         public Vector3 Position
         {
             get { return _position; }
             set
             {
-                _position = value;
-                if (_position.Y > Craft.Net.Anvil.World.Height || _position.Y < 0)
-                {
-                    _onGround = false;
-                } else
-                {
-                    var coordinates = new Coordinates3D((int)_position.X, (int)_position.Y, (int)_position.Z);
-                    var blockBoundingBox = LogicManager.GetBoundingBox(World.GetBlockId(coordinates)).Value;
-                    if (blockBoundingBox.Contains(_position - (Vector3)coordinates))
-                        _onGround = true;
-                    else
-                        _onGround = false;
-                }
-                SendPacket(new PlayerPositionPacket(Position.X, Position.Y, Position.Z, Position.Y - 1.62, _onGround));
+                _position = value
+                SendPacket(new PlayerPositionPacket(Position.X, Position.Y, Position.Z, Position.Y - 1.62, OnGround));
             }
         }
 
