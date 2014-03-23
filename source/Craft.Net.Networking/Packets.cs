@@ -677,7 +677,10 @@ namespace Craft.Net.Networking
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
-            Slot = stream.ReadInt16();
+            if (direction == PacketDirection.Clientbound)
+                Slot = stream.ReadInt8();
+            else
+                Slot = stream.ReadInt16();
             return mode;
         }
 
