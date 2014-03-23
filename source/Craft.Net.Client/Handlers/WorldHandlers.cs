@@ -79,6 +79,14 @@ namespace Craft.Net.Client.Handlers
             }
         }
 
+        public static void BlockChange(MinecraftClient client, IPacket _packet)
+        {
+          var packet = (BlockChangePacket)_packet;
+          var position = new Coordinates3D(packet.X, packet.Y, packet.Z);
+          client.World.SetBlockId(position, (short)packet.BlockType);
+          client.World.SetMetadata(position, packet.BlockMetadata);
+        }
+
         public static void ChunkData(MinecraftClient client, IPacket _packet)
         {
             var packet = (ChunkDataPacket)_packet;

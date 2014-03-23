@@ -38,6 +38,14 @@ namespace Craft.Net.Client
             return World.GetBlockId(coordinates);
         }
 
+        internal void SetBlockId(Coordinates3D coordinates, short value) {
+          World.SetBlockId(coordinates, value);
+        }
+
+        internal void SetMetadata(Coordinates3D coordinates, byte value) {
+          World.SetMetadata(coordinates, value);
+        }
+
         public byte GetMetadata(Coordinates3D coordinates)
         {
             return World.GetMetadata(coordinates);
