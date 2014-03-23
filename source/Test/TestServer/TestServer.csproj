@@ -70,13 +70,13 @@
       <Project>{C3BBAB7E-606F-420E-9461-C8CFAEC2476B}</Project>
       <Name>Craft.Net.Networking</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Craft.Net.Server\Craft.Net.Server.csproj">
-      <Project>{81467141-9C7D-41EE-BFB0-D40251E10F8C}</Project>
-      <Name>Craft.Net.Server</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Craft.Net.TerrainGeneration\Craft.Net.TerrainGeneration.csproj">
       <Project>{B415FC03-C6FB-4B20-A5A1-81F526ADFEF5}</Project>
       <Name>Craft.Net.TerrainGeneration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Craft.Net.Server\Craft.Net.Server.csproj">
+      <Project>{81467141-9C7D-41EE-BFB0-D40251E10F8C}</Project>
+      <Name>Craft.Net.Server</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
