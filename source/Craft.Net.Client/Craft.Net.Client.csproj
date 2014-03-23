@@ -21,7 +21,7 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>full</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
@@ -63,6 +63,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <Folder Include="Handlers\" />
+    <Folder Include="Events\" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Craft.Net.Anvil\Craft.Net.Anvil.csproj">
       <Project>{02031C5C-5007-48D5-A253-F7C8BDF0C0B2}</Project>
       <Name>Craft.Net.Anvil</Name>
@@ -71,17 +75,17 @@
       <Project>{50462849-2223-4E39-B5D9-A928A9A58A33}</Project>
       <Name>Craft.Net.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Craft.Net.Networking\Craft.Net.Networking.csproj">
-      <Project>{C3BBAB7E-606F-420E-9461-C8CFAEC2476B}</Project>
-      <Name>Craft.Net.Networking</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\externals\fNbt\fNbt\fNbt.csproj">
       <Project>{4488498D-976D-4DA3-BF72-109531AF0488}</Project>
       <Name>fNbt</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Handlers\" />
-    <Folder Include="Events\" />
+    <ProjectReference Include="..\Craft.Net.Networking\Craft.Net.Networking.csproj">
+      <Project>{C3BBAB7E-606F-420E-9461-C8CFAEC2476B}</Project>
+      <Name>Craft.Net.Networking</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Craft.Net.Logic\Craft.Net.Logic.csproj">
+      <Project>{E001ADA1-6BCB-420E-B187-07FF361D60B8}</Project>
+      <Name>Craft.Net.Logic</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
