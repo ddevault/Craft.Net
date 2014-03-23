@@ -42,10 +42,12 @@ namespace Craft.Net.Logic
             BoundingBoxes[blockId] = boundingBox;
         }
 
-        public static BoundingBox? GetBoundingBox (short blockId)
+        public static BoundingBox? GetBoundingBox(short blockId)
         {
-            if (BoundingBoxes.ContainsKey (blockId))
+            if (BoundingBoxes.ContainsKey(blockId) && BoundingBoxes[blockId].HasValue)
+            {
                 return BoundingBoxes [blockId];
+            }
             return new BoundingBox (Vector3.One, Vector3.Zero);
         }
 
