@@ -42,7 +42,7 @@ namespace Craft.Net.Client
             get { return _position; }
             set
             {
-                _position = value
+                _position = value;
                 SendPacket(new PlayerPositionPacket(Position.X, Position.Y, Position.Z, Position.Y - 1.62, OnGround));
             }
         }
