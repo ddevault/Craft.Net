@@ -1,5 +1,7 @@
 using System;
 using Craft.Net.Networking;
+using Craft.Net.Physics;
+using Craft.Net.Logic;
 using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Sockets;
@@ -100,6 +102,39 @@ namespace Craft.Net.Client
             SendPacket(new ChatMessagePacket(message));
         }
 
+        public bool BeginUpdate()
+        {
+            Monitor.Enter(_positionLock);
+            Monitor.Enter(_velocityLock);
+            return true;
+        }
+
+        public void EndUpdate(Vector3 newPosition)
+        {
+            Monitor.Exit(_velocityLock);
+            Monitor.Exit(_positionLock);
+            Position = newPosition;
+        }
+
+        private DateTime nextPhysicsUpdate = DateTime.MinValue;
+        private PhysicsEngine engine;
+        private void PhysicsWorker()
+        {
+            engine = new PhysicsEngine(World.World, LogicManager.PhysicsProvider);
+            engine.AddEntity(this);
+            while (true)
+            {
+                if (nextPhysicsUpdate < DateTime.Now)
+                {
+                    nextPhysicsUpdate = DateTime.Now.AddMilliseconds(100);
+                    engine.Update();
+                } else
+                {
+                    Thread.Sleep((nextPhysicsUpdate - DateTime.Now).Milliseconds);
+                }
+            }
+        }
+
         private DateTime nextPlayerUpdate = DateTime.MinValue;
         private void NetworkWorker()
         {
@@ -108,7 +143,20 @@ namespace Craft.Net.Client
                 if (IsSpawned && nextPlayerUpdate < DateTime.Now)
                 {
                     nextPlayerUpdate = DateTime.Now.AddMilliseconds(100);
-                    SendPacket(new PlayerPacket(OnGround));
+                    lock (_positionLock)
+                    {
+                        SendPacket(new PlayerPacket(OnGround));
+                        if (_positionChanged) {
+                            SendPacket(new PlayerPositionPacket(
+                                Position.X,
+                                Position.Y,
+                                Position.Z,
+                                Position.Y - 1.62,
+                                OnGround
+                            ));
+                        _positionChanged = false;
+                        }
+                    }
                 }
                 // Send queued packets
                 while (PacketQueue.Count != 0)
