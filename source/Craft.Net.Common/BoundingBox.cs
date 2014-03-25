@@ -32,6 +32,12 @@ namespace Craft.Net.Common
             this.Max = max;
         }
 
+        public BoundingBox(BoundingBox b)
+        {
+            this.Min = new Vector3(b.Min);
+            this.Max = new Vector3(b.Max);
+        }
+
         #endregion Public Constructors
 
 

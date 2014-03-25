@@ -16,6 +16,13 @@ namespace Craft.Net.Common
             this.Depth = depth;
         }
 
+        public Size(Size s)
+        {
+            this.Width = s.Width;
+            this.Height = s.Height;
+            this.Depth = s.Depth;
+        }
+
         // TODO: More operators
         public static Size operator /(Size a, double b)
         {
