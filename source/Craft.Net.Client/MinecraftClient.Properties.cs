@@ -22,8 +22,7 @@ namespace Craft.Net.Client
 
         public bool OnGround
         {
-            get
-            { return _onGround; }
+            get { return _onGround; }
             private set { _onGround = value; }
         }
 
