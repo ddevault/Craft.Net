@@ -63,12 +63,15 @@ namespace Craft.Net.Client
             NetworkManager = new NetworkManager(NetworkStream);
             NetworkingReset = new ManualResetEvent(true);
             NetworkWorkerThread = new Thread(NetworkWorker);
+            PhysicsWorkerThread = new Thread(PhysicsWorker);
+
             NetworkWorkerThread.Start();
             var handshake = new HandshakePacket(NetworkManager.ProtocolVersion, 
                 EndPoint.Address.ToString(), (ushort)EndPoint.Port, NetworkMode.Login);
             SendPacket(handshake);
             var login = new LoginStartPacket(Session.SelectedProfile.Name);
             SendPacket(login);
+            PhysicsWorkerThread.Start();
         }
 
         public void Disconnect(string reason)
@@ -102,32 +105,30 @@ namespace Craft.Net.Client
             SendPacket(new ChatMessagePacket(message));
         }
 
-        public bool BeginUpdate()
-        {
-            Monitor.Enter(_positionLock);
-            Monitor.Enter(_velocityLock);
-            return true;
-        }
-
-        public void EndUpdate(Vector3 newPosition)
-        {
-            Monitor.Exit(_velocityLock);
-            Monitor.Exit(_positionLock);
-            Position = newPosition;
-        }
-
         private DateTime nextPhysicsUpdate = DateTime.MinValue;
+        private Thread PhysicsWorkerThread;
         private PhysicsEngine engine;
         private void PhysicsWorker()
         {
-            engine = new PhysicsEngine(World.World, LogicManager.PhysicsProvider);
-            engine.AddEntity(this);
-            while (true)
+            while (NetworkWorkerThread.IsAlive)
             {
                 if (nextPhysicsUpdate < DateTime.Now)
                 {
-                    nextPhysicsUpdate = DateTime.Now.AddMilliseconds(100);
-                    engine.Update();
+                    //We need to wait for a login packet to initialize the physics subsystem
+                    if (World != null && engine == null)
+                    {
+                        engine = new PhysicsEngine(World.World, LogicManager.PhysicsProvider);
+                        engine.AddEntity(this);
+                    }
+                    nextPhysicsUpdate = DateTime.Now.AddMilliseconds(50);
+                    try
+                    {
+                        engine.Update();
+                    } catch (Exception)
+                    {
+                        // Sometimes the world hasn't loaded yet, so the Phyics update can't properly read blocks and
+                        // throws an exception.
+                    }
                 } else
                 {
                     Thread.Sleep((nextPhysicsUpdate - DateTime.Now).Milliseconds);
