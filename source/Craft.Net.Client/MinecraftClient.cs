@@ -131,7 +131,11 @@ namespace Craft.Net.Client
                     }
                 } else
                 {
-                    Thread.Sleep((nextPhysicsUpdate - DateTime.Now).Milliseconds);
+                    var sleepTime = nextPhysicsUpdate - DateTime.Now).Milliseconds);
+                    if (sleepTime > 0)
+                    {
+                        Thread.Sleep(sleepTime);
+                    }
                 }
             }
         }
