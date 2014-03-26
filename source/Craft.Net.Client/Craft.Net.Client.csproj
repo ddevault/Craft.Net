@@ -60,6 +60,7 @@
     <Compile Include="Events\DisconnectEventArgs.cs" />
     <Compile Include="Events\EntitySpawnEventArgs.cs" />
     <Compile Include="Events\HealthAndFoodEventArgs.cs" />
+    <Compile Include="MinecraftClient.Physics.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
