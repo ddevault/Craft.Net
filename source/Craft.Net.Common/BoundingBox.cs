@@ -93,6 +93,20 @@ namespace Craft.Net.Common
             return new BoundingBox(vector2, vector1);
         }
 
+        /// <summary>
+        /// Offsets this BoundingBox. Does not modify this object, but returns a new one
+        /// </summary>
+        /// <returns>
+        /// The offset bounding box.
+        /// </returns>
+        /// <param name='Offset'>
+        /// The offset.
+        /// </param>
+        public BoundingBox OffsetBy(Vector3 Offset)
+        {
+            return new BoundingBox(Min + Offset, Max + Offset);
+        }
+
         public Vector3[] GetCorners()
         {
             return new Vector3[]
