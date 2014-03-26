@@ -72,13 +72,11 @@ namespace Craft.Net.Client
 
         public bool BeginUpdate()
         {
-            Monitor.Enter(_velocityLock);
             return true;
         }
 
         public void EndUpdate(Vector3 newPosition)
         {
-            Monitor.Exit(_velocityLock);
             //Console.WriteLine("{0} {1}", newPosition, _position);
             Position = newPosition;
         }
