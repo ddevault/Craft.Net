@@ -55,7 +55,7 @@ namespace Craft.Net.Client
 
         private static BoundingBox _boundingBox = new BoundingBox(new Vector3(0), new Vector3(_size.Width, _size.Height, _size.Depth));
         // Make the magic in PhysicsEngine work
-        private static Vector3 _positionOffset = new Vector3(_size.Width / 2, -_size.Height , _size.Depth / 2);
+        private static Vector3 _positionOffset = new Vector3(_size.Width / 2, _size.Height / 2 , _size.Depth / 2);
 
         public BoundingBox BoundingBox
         {
@@ -77,7 +77,6 @@ namespace Craft.Net.Client
 
         public void EndUpdate(Vector3 newPosition)
         {
-            //Console.WriteLine("{0} {1}", newPosition, _position);
             Position = newPosition;
         }
         
