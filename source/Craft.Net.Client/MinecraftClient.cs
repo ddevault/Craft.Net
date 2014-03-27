@@ -154,7 +154,7 @@ namespace Craft.Net.Client
 
                         if (_positionChanged)
                         {
-                            SendPacket(new PlaerPositionPacket(
+                            SendPacket(new PlayerPositionPacket(
                                 Position.X,
                                 Position.Y,
                                 Position.Z,
