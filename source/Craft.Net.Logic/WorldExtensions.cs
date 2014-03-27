@@ -1,5 +1,6 @@
 using System;
 using Craft.Net.Anvil;
+using Craft.Net.Common;
 
 namespace Craft.Net.Logic
 {
@@ -21,7 +22,24 @@ namespace Craft.Net.Logic
 
         public static void MineBlock(this World world, Coordinates3D coordinates)
         {
-            LogicManager.OnBlockMined(world, coordinates);
+            Block.OnBlockMined(world, coordinates);
+        }
+        
+        public static bool RightClickBlock(this World world, Coordinates3D coordinates, BlockFace face, Coordinates3D cursor, ItemInfo? item)
+        {
+            return Block.OnBlockRightClicked(world, coordinates, face, cursor, item);
+        }
+        
+        public static void UseItemOnBlock(this World world, Coordinates3D coordinates, BlockFace face, Coordinates3D cursor, ItemInfo item)
+        {
+            Item.OnItemUsedOnBlock(world, coordinates, face, cursor, item);
+        }
+        
+        public static ItemInfo? AsItem(this ItemStack stack)
+        {
+            if (stack.Empty)
+                return null;
+            return new ItemInfo(stack.Id, stack.Metadata);
         }
     }
 }

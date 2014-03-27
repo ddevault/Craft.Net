@@ -5,11 +5,11 @@ namespace Craft.Net.Logic.Blocks
     public class WheatBlock : Block
     {
         public static readonly short Id = 59;
+        public override short BlockId { get { return Id; } }
 
-        protected override string Initialize()
+        public WheatBlock() : base("minecraft:seeds")
         {
-            LogicManager.SetBoundingBox(Id, null);
-            return "minecraft:seeds";
+            base.SetBoundingBox(null);
         }
     }
 }

@@ -26,6 +26,25 @@ namespace Craft.Net.Common
             return (int)(value * 32);
         }
 
+        public static Coordinates3D BlockFaceToCoordinates(BlockFace face)
+        {
+            switch (face)
+            {
+                case BlockFace.NegativeY:
+                    return Coordinates3D.Down;
+                case BlockFace.PositiveY:
+                    return Coordinates3D.Up;
+                case BlockFace.NegativeZ:
+                    return Coordinates3D.Backwards;
+                case BlockFace.PositiveZ:
+                    return Coordinates3D.Forwards;
+                case BlockFace.NegativeX:
+                    return Coordinates3D.Left;
+                default:
+                    return Coordinates3D.Right;
+            }
+        }
+
         public static double Distance2D(double a1, double a2, double b1, double b2)
         {
             return Math.Sqrt(Math.Pow(b1 - a1, 2) + Math.Pow(b2 - a2, 2));

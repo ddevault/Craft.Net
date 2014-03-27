@@ -97,7 +97,7 @@ namespace Craft.Net.Server
                 world.BlockChange += WorldBlockChange;
                 world.SpawnEntityRequested -= WorldSpawnEntityRequested;
                 world.SpawnEntityRequested += WorldSpawnEntityRequested;
-                PhysicsEngines.Add(new PhysicsEngine(world, LogicManager.PhysicsProvider, _millisecondsBetweenPhysicsUpdates));
+                PhysicsEngines.Add(new PhysicsEngine(world, Block.PhysicsProvider, _millisecondsBetweenPhysicsUpdates));
             }
 
             CryptoServiceProvider = new RSACryptoServiceProvider(1024);
@@ -351,12 +351,12 @@ namespace Craft.Net.Server
                                 i--;
                                 break;
                             }
-                            catch (Exception e)
-                            {
-                                DisconnectPlayer(client, e.Message);
-                                i--;
-                                break;
-                            }
+//                            catch (Exception e)
+//                            {
+//                                DisconnectPlayer(client, e.Message);
+//                                i--;
+//                                break;
+//                            }
                         }
                         if (client.IsLoggedIn)
                             DoClientUpdates(client);

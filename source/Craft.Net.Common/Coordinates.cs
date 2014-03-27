@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Craft.Net.Anvil
+namespace Craft.Net.Common
 {
     public struct Coordinates2D
     {

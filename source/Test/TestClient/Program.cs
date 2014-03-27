@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using Craft.Net.Client;
 using System.Linq;
 using Craft.Net.Anvil;
+using Craft.Net.Common;
 
 namespace TestClient
 {

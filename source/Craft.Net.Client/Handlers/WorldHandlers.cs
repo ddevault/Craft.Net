@@ -3,6 +3,7 @@ using Craft.Net.Client.Events;
 using Ionic.Zlib;
 using Craft.Net.Anvil;
 using Craft.Net.Networking;
+using Craft.Net.Common;
 
 namespace Craft.Net.Client.Handlers
 {
