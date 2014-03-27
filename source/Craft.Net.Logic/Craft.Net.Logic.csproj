@@ -62,6 +62,9 @@
     <Compile Include="Block.cs" />
     <Compile Include="Blocks\GrassBlock.cs" />
     <Compile Include="Blocks\DirtBlock.cs" />
+    <Compile Include="Blocks\DecorativeGrassBlock.cs" />
+    <Compile Include="Blocks\WheatBlock.cs" />
+    <Compile Include="Blocks\FlowerBlock.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\externals\fNbt\fNbt\fNbt.csproj">
