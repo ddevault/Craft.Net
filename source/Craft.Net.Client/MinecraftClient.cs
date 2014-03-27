@@ -118,7 +118,7 @@ namespace Craft.Net.Client
                     if (World != null && engine == null)
                     {
                         // 50 ms / update for 20 ticks per second
-                        engine = new PhysicsEngine(World.World, LogicManager.PhysicsProvider, 50);
+                        engine = new PhysicsEngine(World.World, Block.PhysicsProvider, 50);
                         engine.AddEntity(this);
                     }
                     nextPhysicsUpdate = DateTime.Now.AddMilliseconds(50);
