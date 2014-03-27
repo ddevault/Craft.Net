@@ -9,15 +9,16 @@ namespace Craft.Net.Physics
 {
     public class PhysicsEngine
     {
-        public const int MillisecondsBetweenUpdates = 250;
+        public int MillisecondsBetweenUpdates { get; protected set; }
 
-        public PhysicsEngine(World world, IBlockPhysicsProvider physicsProvider)
+        public PhysicsEngine(World world, IBlockPhysicsProvider physicsProvider, int MillisecondsBetweenUpdates)
         {
             World = world;
             Entities = new List<IPhysicsEntity>();
             EntityLock = new object();
             LastUpdate = DateTime.MinValue;
             BlockPhysicsProvider = physicsProvider;
+            this.MillisecondsBetweenUpdates = MillisecondsBetweenUpdates;
         }
 
         public World World { get; set; }
@@ -44,7 +45,7 @@ namespace Craft.Net.Physics
         private BoundingBox TempBoundingBox;
         public void Update()
         {
-            double multipler = (DateTime.Now - LastUpdate).TotalMilliseconds / 150;
+            double multipler = (DateTime.Now - LastUpdate).TotalMilliseconds / MillisecondsBetweenUpdates;
             if (LastUpdate == DateTime.MinValue)
                 multipler = 1;
             lock (EntityLock)
@@ -113,15 +114,19 @@ namespace Craft.Net.Physics
             {
                 TempBoundingBox = new BoundingBox(
                     new Vector3(entity.BoundingBox.Min.X + entity.Velocity.X, entity.BoundingBox.Min.Y, entity.BoundingBox.Min.Z) - (entity.Size / 2),
-                    new Vector3(entity.BoundingBox.Max.X, entity.BoundingBox.Max.Y, entity.BoundingBox.Max.Z) - (entity.Size / 2));
+                    new Vector3(entity.BoundingBox.Max.X, entity.BoundingBox.Max.Y, entity.BoundingBox.Max.Z) - (entity.Size / 2)
+                );
 
                 maxX = (int)(TempBoundingBox.Max.X);
                 minX = (int)(TempBoundingBox.Min.X + entity.Velocity.X);
             }
             else
             {
-                TempBoundingBox = new BoundingBox(entity.BoundingBox.Min - (entity.Size / 2), new Vector3(
-                    entity.BoundingBox.Max.X + entity.Velocity.X, entity.BoundingBox.Max.Y, entity.BoundingBox.Max.Z) - (entity.Size / 2));
+                TempBoundingBox = new BoundingBox(
+                    entity.BoundingBox.Min - (entity.Size / 2),
+                    new Vector3(
+                    entity.BoundingBox.Max.X + entity.Velocity.X, entity.BoundingBox.Max.Y, entity.BoundingBox.Max.Z) - (entity.Size / 2)
+                );
                 minX = (int)(entity.BoundingBox.Min.X);
                 maxX = (int)(entity.BoundingBox.Max.X + entity.Velocity.X);
             }
@@ -139,8 +144,7 @@ namespace Craft.Net.Physics
                         var boundingBox = BlockPhysicsProvider.GetBoundingBox(world, (Coordinates3D)position);
                         if (boundingBox == null)
                             continue;
-                        blockBox = new BoundingBox(boundingBox.Value.Min + position,
-                            boundingBox.Value.Max + position);
+                        blockBox = boundingBox.Value.OffsetBy(position);
                         if (TempBoundingBox.Intersects(blockBox))
                         {
                             if (entity.Velocity.X < 0)
@@ -209,22 +213,32 @@ namespace Craft.Net.Physics
             {
                 TempBoundingBox = new BoundingBox(
                     new Vector3(entity.BoundingBox.Min.X, entity.BoundingBox.Min.Y + entity.Velocity.Y, entity.BoundingBox.Min.Z) - (entity.Size / 2),
-                    new Vector3(entity.BoundingBox.Max.X, entity.BoundingBox.Max.Y, entity.BoundingBox.Max.Z) - (entity.Size / 2));
+                    new Vector3(entity.BoundingBox.Max.X, entity.BoundingBox.Max.Y, entity.BoundingBox.Max.Z) - (entity.Size / 2)
+                );
 
                 maxY = (int)(TempBoundingBox.Max.Y);
                 minY = (int)(TempBoundingBox.Min.Y + entity.Velocity.Y);
             }
             else
             {
-                TempBoundingBox = new BoundingBox(entity.BoundingBox.Min - (entity.Size / 2), new Vector3(
-                    entity.BoundingBox.Max.X, entity.BoundingBox.Max.Y + entity.Velocity.Y, entity.BoundingBox.Max.Z) - (entity.Size / 2));
+                TempBoundingBox = new BoundingBox(
+                    entity.BoundingBox.Min - (entity.Size / 2),
+                    new Vector3(
+                    entity.BoundingBox.Max.X, entity.BoundingBox.Max.Y + entity.Velocity.Y, entity.BoundingBox.Max.Z) - (entity.Size / 2)
+                );
                 minY = (int)(entity.BoundingBox.Min.Y);
                 maxY = (int)(entity.BoundingBox.Max.Y + entity.Velocity.Y);
             }
 
             // Clamp Y into map boundaries
-            if (minY < 0) minY = 0; if (minY >= World.Height) minY = World.Height - 1;
-            if (maxY < 0) maxY = 0; if (maxY >= World.Height) maxY = World.Height - 1;
+            if (minY < 0)
+                minY = 0;
+            if (minY >= World.Height)
+                minY = World.Height - 1;
+            if (maxY < 0)
+                maxY = 0;
+            if (maxY >= World.Height)
+                maxY = World.Height - 1;
 
             // Do terrain checks
             double? collisionPoint = null;
@@ -239,8 +253,7 @@ namespace Craft.Net.Physics
                         var boundingBox = BlockPhysicsProvider.GetBoundingBox(world, (Coordinates3D)position);
                         if (boundingBox == null)
                             continue;
-                        blockBox = new BoundingBox(boundingBox.Value.Min + position,
-                            boundingBox.Value.Max + position);
+                        blockBox = boundingBox.Value.OffsetBy(position);
                         if (TempBoundingBox.Intersects(blockBox))
                         {
                             if (entity.Velocity.Y < 0)
@@ -310,15 +323,19 @@ namespace Craft.Net.Physics
             {
                 TempBoundingBox = new BoundingBox(
                     new Vector3(entity.BoundingBox.Min.X, entity.BoundingBox.Min.Y, entity.BoundingBox.Min.Z + entity.Velocity.Z) - (entity.Size / 2),
-                    new Vector3(entity.BoundingBox.Max.X, entity.BoundingBox.Max.Y, entity.BoundingBox.Max.Z) - (entity.Size / 2));
+                    new Vector3(entity.BoundingBox.Max.X, entity.BoundingBox.Max.Y, entity.BoundingBox.Max.Z) - (entity.Size / 2)
+                );
 
                 maxZ = (int)(TempBoundingBox.Max.Z);
                 minZ = (int)(TempBoundingBox.Min.Z + entity.Velocity.Z);
             }
             else
             {
-                TempBoundingBox = new BoundingBox(entity.BoundingBox.Min - (entity.Size / 2), new Vector3(
-                    entity.BoundingBox.Max.X, entity.BoundingBox.Max.Y, entity.BoundingBox.Max.Z + entity.Velocity.Z) - (entity.Size / 2));
+                TempBoundingBox = new BoundingBox(
+                    entity.BoundingBox.Min - (entity.Size / 2),
+                    new Vector3(
+                    entity.BoundingBox.Max.X, entity.BoundingBox.Max.Y, entity.BoundingBox.Max.Z + entity.Velocity.Z) - (entity.Size / 2)
+                );
                 minZ = (int)(entity.BoundingBox.Min.Z);
                 maxZ = (int)(entity.BoundingBox.Max.Z + entity.Velocity.Z);
             }
@@ -336,8 +353,7 @@ namespace Craft.Net.Physics
                         var boundingBox = BlockPhysicsProvider.GetBoundingBox(world, (Coordinates3D)position);
                         if (boundingBox == null)
                             continue;
-                        blockBox = new BoundingBox(boundingBox.Value.Min + position,
-                            boundingBox.Value.Max + position);
+                        blockBox = boundingBox.Value.OffsetBy(position);
                         if (TempBoundingBox.Intersects(blockBox))
                         {
                             if (entity.Velocity.Z < 0)

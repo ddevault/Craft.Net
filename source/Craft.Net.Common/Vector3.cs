@@ -28,6 +28,13 @@ namespace Craft.Net.Common
             this.Z = z;
         }
 
+        public Vector3(Vector3 V)
+        {
+            this.X = V.X;
+            this.Y = V.Y;
+            this.Z = V.Z;
+        }
+
         /// <summary>
         /// Converts this Vector3 to a string in the format &lt;x, y, z&gt;.
         /// </summary>
