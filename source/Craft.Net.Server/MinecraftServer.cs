@@ -73,6 +73,8 @@ namespace Craft.Net.Server
         private DateTime NextChunkUpdate { get; set; }
         private DateTime LastTimeUpdate { get; set; }
 
+        private const int _millisecondsBetweenPhysicsUpdates = 250;
+
         #endregion
 
         #region Public methods
@@ -95,7 +97,7 @@ namespace Craft.Net.Server
                 world.BlockChange += WorldBlockChange;
                 world.SpawnEntityRequested -= WorldSpawnEntityRequested;
                 world.SpawnEntityRequested += WorldSpawnEntityRequested;
-                PhysicsEngines.Add(new PhysicsEngine(world, LogicManager.PhysicsProvider));
+                PhysicsEngines.Add(new PhysicsEngine(world, LogicManager.PhysicsProvider, _millisecondsBetweenPhysicsUpdates));
             }
 
             CryptoServiceProvider = new RSACryptoServiceProvider(1024);
@@ -286,7 +288,7 @@ namespace Craft.Net.Server
                 foreach (var engine in PhysicsEngines)
                     engine.Update();
                 EntityManager.Update();
-                Thread.Sleep(PhysicsEngine.MillisecondsBetweenUpdates);
+                Thread.Sleep(_millisecondsBetweenPhysicsUpdates);
             }
         }
 

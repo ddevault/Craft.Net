@@ -117,7 +117,8 @@ namespace Craft.Net.Client
                     //We need to wait for a login packet to initialize the physics subsystem
                     if (World != null && engine == null)
                     {
-                        engine = new PhysicsEngine(World.World, LogicManager.PhysicsProvider);
+                        // 50 ms / update for 20 ticks per second
+                        engine = new PhysicsEngine(World.World, LogicManager.PhysicsProvider, 50);
                         engine.AddEntity(this);
                     }
                     nextPhysicsUpdate = DateTime.Now.AddMilliseconds(50);
