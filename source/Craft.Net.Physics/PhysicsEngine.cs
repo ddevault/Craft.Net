@@ -9,8 +9,8 @@ namespace Craft.Net.Physics
 {
     public class PhysicsEngine
     {
-        // Must run at 20 ticks per second
-        public const int MillisecondsBetweenUpdates = 50;
+        // Runs at 20 ticks per second by default, but can be changed.
+        public int MillisecondsBetweenUpdates = 50;
 
         public PhysicsEngine(World world, IBlockPhysicsProvider physicsProvider)
         {
@@ -119,7 +119,8 @@ namespace Craft.Net.Physics
 
                 maxX = (int)(TempBoundingBox.Max.X);
                 minX = (int)(TempBoundingBox.Min.X + entity.Velocity.X);
-            } else
+            }
+            else
             {
                 TempBoundingBox = new BoundingBox(
                     entity.BoundingBox.Min - (entity.Size / 2),
@@ -217,7 +218,8 @@ namespace Craft.Net.Physics
 
                 maxY = (int)(TempBoundingBox.Max.Y);
                 minY = (int)(TempBoundingBox.Min.Y + entity.Velocity.Y);
-            } else
+            }
+            else
             {
                 TempBoundingBox = new BoundingBox(
                     entity.BoundingBox.Min - (entity.Size / 2),
@@ -326,7 +328,8 @@ namespace Craft.Net.Physics
 
                 maxZ = (int)(TempBoundingBox.Max.Z);
                 minZ = (int)(TempBoundingBox.Min.Z + entity.Velocity.Z);
-            } else
+            }
+            else
             {
                 TempBoundingBox = new BoundingBox(
                     entity.BoundingBox.Min - (entity.Size / 2),

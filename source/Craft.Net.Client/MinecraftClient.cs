@@ -151,15 +151,17 @@ namespace Craft.Net.Client
                     lock (_positionLock)
                     {
                         SendPacket(new PlayerPacket(OnGround));
-                        if (_positionChanged) {
-                            SendPacket(new PlayerPositionPacket(
+
+                        if (_positionChanged)
+                        {
+                            SendPacket(new PlaerPositionPacket(
                                 Position.X,
                                 Position.Y,
                                 Position.Z,
                                 Position.Y - 1.62,
                                 OnGround
                             ));
-                        _positionChanged = false;
+                            _positionChanged = false;
                         }
                     }
                 }
