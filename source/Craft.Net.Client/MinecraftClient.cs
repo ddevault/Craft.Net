@@ -124,12 +124,14 @@ namespace Craft.Net.Client
                     try
                     {
                         engine.Update();
-                    } catch (Exception)
+                    }
+                    catch (Exception)
                     {
                         // Sometimes the world hasn't loaded yet, so the Phyics update can't properly read blocks and
                         // throws an exception.
                     }
-                } else
+                }
+                else
                 {
                     var sleepTime = (nextPhysicsUpdate - DateTime.Now).Milliseconds;
                     if (sleepTime > 0)
