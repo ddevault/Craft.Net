@@ -50,7 +50,6 @@
     <Compile Include="BlockInfo.cs" />
     <Compile Include="ItemInfo.cs" />
     <Compile Include="WorldExtensions.cs" />
-    <Compile Include="LogicManager.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="EntityEventArgs.cs" />
     <Compile Include="ItemEntity.cs" />
@@ -65,6 +64,10 @@
     <Compile Include="Blocks\DecorativeGrassBlock.cs" />
     <Compile Include="Blocks\WheatBlock.cs" />
     <Compile Include="Blocks\FlowerBlock.cs" />
+    <Compile Include="Item.cs" />
+    <Compile Include="ItemMaterial.cs" />
+    <Compile Include="ToolType.cs" />
+    <Compile Include="Items\FlintAndSteelItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\externals\fNbt\fNbt\fNbt.csproj">
@@ -94,6 +97,7 @@
   -->
   <ItemGroup>
     <Folder Include="Blocks\" />
+    <Folder Include="Items\" />
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>

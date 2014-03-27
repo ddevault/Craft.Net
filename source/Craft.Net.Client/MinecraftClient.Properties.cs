@@ -22,9 +22,10 @@ namespace Craft.Net.Client
                     {
                         var feetPosition = new Vector3(_position.X, _position.Y - 1.62 - 1, _position.Z);
                         var coordinates = new Coordinates3D((int)feetPosition.X, (int)feetPosition.Y, (int)feetPosition.Z);
-                        var blockBoundingBox = LogicManager.GetBoundingBox(World.GetBlockId(coordinates));
+                        var blockBoundingBox = Block.GetBoundingBox(World.GetBlockId(coordinates));
                         _onGround = blockBoundingBox.HasValue && blockBoundingBox.Value.Contains(feetPosition - (Vector3)coordinates);
-                    } catch (ArgumentException)
+                    }
+                    catch (ArgumentException)
                     {
                         //Sometimes the world isn't loaded when we want it to be, so we pretend we are on the ground to
                         //prevent falling through the world

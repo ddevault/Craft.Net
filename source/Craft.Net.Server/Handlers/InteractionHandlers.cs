@@ -117,52 +117,33 @@ namespace Craft.Net.Server.Handlers
             BlockInfo? block = null;
             if (position != -Coordinates3D.One)
             {
-                if (position.DistanceTo(client.Entity.Position) > client.Reach)
+                if (position.DistanceTo((Coordinates3D)client.Entity.Position) > client.Reach)
                     return;
                 block = client.World.GetBlockInfo(position);
             }
             bool use = true;
             if (block != null)
-                ;//use = Block.OnBlockRightClicked(block.Value, client.World, position, AdjustByDirection(packet.Face), cursorPosition);
+                use = client.World.RightClickBlock(position, packet.Face, cursorPosition, slot.AsItem());
             if (!slot.Empty)
             {
-                //var item = new ItemDescriptor(slot.Id, slot.Metadata);
+                var item = slot.AsItem();
                 if (use)
                 {
-//                    if (block != null)
-//                    {
-//                        Item.OnItemUsedOnBlock(item, client.World, position, AdjustByDirection(packet.Face), cursorPosition);
-//                        if (client.GameMode != GameMode.Creative)
-//                        {
-//                            slot.Count--; // TODO: This is probably a bad place to put this code
-//                            if (slot.Count == 0)
-//                                client.Entity.Inventory[client.Entity.SelectedSlot] = ItemStack.EmptyStack;
-//                            else
-//                                client.Entity.Inventory[client.Entity.SelectedSlot] = slot;
-//                        }
-//                    }
-//                    else
-//                        Item.OnItemUsed(item);
+                    if (block != null)
+                    {
+                        client.World.UseItemOnBlock(position, packet.Face, cursorPosition, item.Value);
+                        if (client.GameMode != GameMode.Creative)
+                        {
+                            slot.Count--; // TODO: This is probably a bad place to put this code
+                            if (slot.Count == 0)
+                                client.Entity.Inventory[client.Entity.SelectedSlot] = ItemStack.EmptyStack;
+                            else
+                                client.Entity.Inventory[client.Entity.SelectedSlot] = slot;
+                        }
+                    }
+                    else
+                        client.World.UseItemOnBlock(position, packet.Face, cursorPosition, item.Value);
                 }
-            }
-        }
-
-        private static Vector3 AdjustByDirection(BlockFace face)
-        {
-            switch (face)
-            {
-                case BlockFace.NegativeY:
-                    return Vector3.Down;
-                case BlockFace.PositiveY:
-                    return Vector3.Up;
-                case BlockFace.NegativeZ:
-                    return Vector3.Backwards;
-                case BlockFace.PositiveZ:
-                    return Vector3.Forwards;
-                case BlockFace.NegativeX:
-                    return Vector3.Left;
-                default:
-                    return Vector3.Right;
             }
         }
     }

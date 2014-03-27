@@ -7,11 +7,11 @@ namespace Craft.Net.Logic.Blocks
     public class GrassBlock : Block
     {
         public static readonly short Id = 2;
+        public override short BlockId { get { return Id; } }
 
-        protected override string Initialize()
+        public GrassBlock() : base("minecraft:grass")
         {
-            SetDropHandler(Id, (world, coordinates, info) => new[] { new ItemStack(DirtBlock.Id) });
-            return "minecraft:grass";
+            base.SetDropHandler((world, coordinates, info) => new[] { new ItemStack(DirtBlock.Id) });
         }
     }
 }

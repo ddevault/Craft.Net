@@ -60,6 +60,10 @@
       <Project>{4488498D-976D-4DA3-BF72-109531AF0488}</Project>
       <Name>fNbt</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Craft.Net.Common\Craft.Net.Common.csproj">
+      <Project>{50462849-2223-4E39-B5D9-A928A9A58A33}</Project>
+      <Name>Craft.Net.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Test World\data\villages.dat">

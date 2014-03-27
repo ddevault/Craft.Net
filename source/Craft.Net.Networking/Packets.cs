@@ -3085,16 +3085,6 @@ namespace Craft.Net.Networking
         }
     }
 
-    public enum BlockFace
-    {
-        NegativeY = 0,
-        PositiveY = 1,
-        NegativeZ = 2,
-        PositiveZ = 3,
-        NegativeX = 4,
-        PositiveX = 5
-    }
-
     public struct PlayerBlockActionPacket : IPacket
     {
         public enum BlockAction

@@ -5,22 +5,22 @@ namespace Craft.Net.Logic.Blocks
     public class YellowFlowerBlock : Block
     {
         public static readonly short Id = 37;
+        public override short BlockId { get { return Id; } }
 
-        protected override string Initialize()
+        public YellowFlowerBlock() : base("minecraft:yellow_flower")
         {
-            LogicManager.SetBoundingBox(Id, null);
-            return "minecraft:yellow_flower";
+            base.SetBoundingBox(null);
         }
     }
 
     public class FlowerBlock : Block
     {
         public static readonly short Id = 38;
+        public override short BlockId { get { return Id; } }
 
-        protected override string Initialize()
+        public FlowerBlock() : base("minecraft:red_flower")
         {
-            LogicManager.SetBoundingBox(Id, null);
-            return "minecraft:red_flower";
+            base.SetBoundingBox(null);
         }
     }
 }

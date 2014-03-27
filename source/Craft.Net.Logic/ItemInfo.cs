@@ -2,7 +2,7 @@ using System;
 
 namespace Craft.Net.Logic
 {
-    public class ItemInfo
+    public struct ItemInfo
     {
         public ItemInfo(short itemId, short metadata)
         {

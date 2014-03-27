@@ -5,10 +5,10 @@ namespace Craft.Net.Logic.Blocks
     public class DirtBlock : Block
     {
         public static readonly short Id = 3;
+        public override short BlockId { get { return Id; } }
 
-        protected override string Initialize()
+        public DirtBlock() : base("minecraft:dirt")
         {
-            return "minecraft:dirt";
         }
     }
 }
