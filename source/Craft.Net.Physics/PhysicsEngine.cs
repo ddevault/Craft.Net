@@ -9,16 +9,16 @@ namespace Craft.Net.Physics
 {
     public class PhysicsEngine
     {
-        // Runs at 20 ticks per second by default, but can be changed.
-        public static int MillisecondsBetweenUpdates = 50;
+        public int MillisecondsBetweenUpdates { get; protected set; }
 
-        public PhysicsEngine(World world, IBlockPhysicsProvider physicsProvider)
+        public PhysicsEngine(World world, IBlockPhysicsProvider physicsProvider, int MillisecondsBetweenUpdates)
         {
             World = world;
             Entities = new List<IPhysicsEntity>();
             EntityLock = new object();
             LastUpdate = DateTime.MinValue;
             BlockPhysicsProvider = physicsProvider;
+            this.MillisecondsBetweenUpdates = MillisecondsBetweenUpdates;
         }
 
         public World World { get; set; }
