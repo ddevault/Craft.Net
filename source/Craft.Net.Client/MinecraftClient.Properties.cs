@@ -1,50 +1,50 @@
 using System;
+using System.Threading;
 using Craft.Net.Anvil;
 using Craft.Net.Common;
 using Craft.Net.Networking;
 using Craft.Net.Logic;
+using Craft.Net.Physics;
 
 namespace Craft.Net.Client
 {
     public partial class MinecraftClient
     {
-        internal bool _onGround;
+        // Private so that silly people won't try to modify it behind our backs - everything should go through the
+        // Position and OnGround properties
+
+        // Lock on all position data
+        private object _positionLock = new object();
+        private bool _onGround;
+        private Vector3 _position;
+        // We keep track of when the position has been set so that the NetworkWorker can update it properly.
+        private bool _positionChanged;
+
         public bool OnGround
         {
-            get
-            {
-                if (_position.Y > Craft.Net.Anvil.World.Height || _position.Y < 0)
-                {
-                    _onGround = false;
-                } else
-                {
-                    try
-                    {
-                        var feetPosition = new Vector3(_position.X, _position.Y - 1.62 - 1, _position.Z);
-                        var coordinates = new Coordinates3D((int)feetPosition.X, (int)feetPosition.Y, (int)feetPosition.Z);
-                        var blockBoundingBox = Block.GetBoundingBox(World.GetBlockId(coordinates));
-                        _onGround = blockBoundingBox.HasValue && blockBoundingBox.Value.Contains(feetPosition - (Vector3)coordinates);
-                    }
-                    catch (ArgumentException)
-                    {
-                        //Sometimes the world isn't loaded when we want it to be, so we pretend we are on the ground to
-                        //prevent falling through the world
-                        _onGround = true;
-                    }
-                }
-                return _onGround;
-            }
+            get { return _onGround; }
             private set { _onGround = value; }
         }
 
-        internal Vector3 _position;
         public Vector3 Position
         {
-            get { return _position; }
+            get
+            {
+                Vector3 ret;
+                // Make sure that position data is in a consistent state.
+                lock (_positionLock)
+                {
+                    ret = _position;
+                }
+                return ret;
+            }
             set
             {
-                _position = value;
-                SendPacket(new PlayerPositionPacket(Position.X, Position.Y, Position.Z, Position.Y - 1.62, OnGround));
+                lock (_positionLock)
+                {
+                    _positionChanged = _position != value;
+                    _position = value;
+                }
             }
         }
 

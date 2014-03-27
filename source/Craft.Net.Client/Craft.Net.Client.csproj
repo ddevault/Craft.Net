@@ -60,6 +60,7 @@
     <Compile Include="Events\DisconnectEventArgs.cs" />
     <Compile Include="Events\EntitySpawnEventArgs.cs" />
     <Compile Include="Events\HealthAndFoodEventArgs.cs" />
+    <Compile Include="MinecraftClient.Physics.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -86,6 +87,10 @@
     <ProjectReference Include="..\Craft.Net.Logic\Craft.Net.Logic.csproj">
       <Project>{E001ADA1-6BCB-420E-B187-07FF361D60B8}</Project>
       <Name>Craft.Net.Logic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Craft.Net.Physics\Craft.Net.Physics.csproj">
+      <Project>{C04C72EF-5FD5-42DA-B1DC-F232D3E86636}</Project>
+      <Name>Craft.Net.Physics</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
