@@ -39,12 +39,13 @@ namespace TestServer
 
         static void server_ChatMessage(object sender, ChatMessageEventArgs e)
         {
-            if (e.RawMessage.StartsWith("/"))
+            if (e.Message.IsCommand)
             {
+                string command = e.Message.FullText();
                 e.Handled = true;
-                if (e.RawMessage == "/creative")
+                if (command == "/creative")
                     e.Origin.GameMode = GameMode.Creative;
-                else if (e.RawMessage == "/survival")
+                else if (command == "/survival")
                     e.Origin.GameMode = GameMode.Survival;
             }
         }

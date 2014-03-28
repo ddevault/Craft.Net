@@ -36,7 +36,7 @@ namespace TestClient
             var client = new MinecraftClient(session);
             client.Connect(endPoint);
 
-            client.ChatMessage += (sender, e) => Console.WriteLine(e.RawMessage);
+            client.ChatMessage += (sender, e) => Console.WriteLine(e.Message);
             string command;
             do
             {

@@ -58,6 +58,7 @@
     <Compile Include="ServerStatus.cs" />
     <Compile Include="PacketLogger.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="ChatTransciever.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Craft.Net.Common\Craft.Net.Common.csproj">
