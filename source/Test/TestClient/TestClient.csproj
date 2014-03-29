@@ -56,5 +56,9 @@
       <Project>{02031C5C-5007-48D5-A253-F7C8BDF0C0B2}</Project>
       <Name>Craft.Net.Anvil</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Craft.Net.Physics\Craft.Net.Physics.csproj">
+      <Project>{C04C72EF-5FD5-42DA-B1DC-F232D3E86636}</Project>
+      <Name>Craft.Net.Physics</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

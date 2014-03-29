@@ -1,5 +1,7 @@
 using System;
 using Craft.Net.Networking;
+using Craft.Net.Physics;
+using Craft.Net.Logic;
 using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Sockets;
@@ -61,12 +63,15 @@ namespace Craft.Net.Client
             NetworkManager = new NetworkManager(NetworkStream);
             NetworkingReset = new ManualResetEvent(true);
             NetworkWorkerThread = new Thread(NetworkWorker);
+            PhysicsWorkerThread = new Thread(PhysicsWorker);
+
             NetworkWorkerThread.Start();
             var handshake = new HandshakePacket(NetworkManager.ProtocolVersion, 
                 EndPoint.Address.ToString(), (ushort)EndPoint.Port, NetworkMode.Login);
             SendPacket(handshake);
             var login = new LoginStartPacket(Session.SelectedProfile.Name);
             SendPacket(login);
+            PhysicsWorkerThread.Start();
         }
 
         public void Disconnect(string reason)
@@ -100,6 +105,44 @@ namespace Craft.Net.Client
             SendPacket(new ChatMessagePacket(message));
         }
 
+        private DateTime nextPhysicsUpdate = DateTime.MinValue;
+        private Thread PhysicsWorkerThread;
+        private PhysicsEngine engine;
+        private void PhysicsWorker()
+        {
+            while (NetworkWorkerThread.IsAlive)
+            {
+                if (nextPhysicsUpdate < DateTime.Now)
+                {
+                    //We need to wait for a login packet to initialize the physics subsystem
+                    if (World != null && engine == null)
+                    {
+                        // 50 ms / update for 20 ticks per second
+                        engine = new PhysicsEngine(World.World, Block.PhysicsProvider, 50);
+                        engine.AddEntity(this);
+                    }
+                    nextPhysicsUpdate = DateTime.Now.AddMilliseconds(50);
+                    try
+                    {
+                        engine.Update();
+                    }
+                    catch (Exception)
+                    {
+                        // Sometimes the world hasn't loaded yet, so the Phyics update can't properly read blocks and
+                        // throws an exception.
+                    }
+                }
+                else
+                {
+                    var sleepTime = (nextPhysicsUpdate - DateTime.Now).Milliseconds;
+                    if (sleepTime > 0)
+                    {
+                        Thread.Sleep(sleepTime);
+                    }
+                }
+            }
+        }
+
         private DateTime nextPlayerUpdate = DateTime.MinValue;
         private void NetworkWorker()
         {
@@ -108,7 +151,22 @@ namespace Craft.Net.Client
                 if (IsSpawned && nextPlayerUpdate < DateTime.Now)
                 {
                     nextPlayerUpdate = DateTime.Now.AddMilliseconds(100);
-                    SendPacket(new PlayerPacket(OnGround));
+                    lock (_positionLock)
+                    {
+                        SendPacket(new PlayerPacket(OnGround));
+
+                        if (_positionChanged)
+                        {
+                            SendPacket(new PlayerPositionPacket(
+                                Position.X,
+                                Position.Y,
+                                Position.Z,
+                                Position.Y - 1.62,
+                                OnGround
+                            ));
+                            _positionChanged = false;
+                        }
+                    }
                 }
                 // Send queued packets
                 while (PacketQueue.Count != 0)

@@ -15,7 +15,7 @@ namespace Craft.Net.Client.Handlers
             var packet = (PlayerPositionAndLookPacket)_packet;
             if (Math.Abs(packet.X) < 0.01 && Math.Abs(packet.X) > 0)
                 return; // Sometimes the vanilla server sends weird position updates like this
-            client._position = new Vector3(packet.X, packet.Y, packet.Z);
+            client.Position = new Vector3(packet.X, packet.Y, packet.Z);
             if (!client.IsSpawned)
             {
                 client.IsSpawned = true;
@@ -28,7 +28,7 @@ namespace Craft.Net.Client.Handlers
         {
             var packet = (EntityTeleportPacket)_packet;
             if (packet.EntityId == client.EntityId)
-                client._position = new Vector3(packet.X, packet.Y, packet.Z);
+                client.Position = new Vector3(packet.X, packet.Y, packet.Z);
         }
     }
 }
