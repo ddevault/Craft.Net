@@ -83,6 +83,11 @@ namespace Craft.Net.Logic
         {
             BlockMinedHandlers[BlockId] = handler;
         }
+        
+        protected void SetBlockRightClickedHandler(BlockRightClickedHandler handler)
+        {
+            BlockRightClickedHandlers[BlockId] = handler;
+        }
 
         private class BlockPhysicsProvider : IBlockPhysicsProvider
         {
