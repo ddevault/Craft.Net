@@ -7,8 +7,10 @@ using Craft.Net.Physics;
 
 namespace Craft.Net.Logic
 {
-    public abstract class Block
+    public abstract class Block : Item
     {
+        public override short ItemId { get { return BlockId; } }
+        
         private static Dictionary<short, BoundingBox?> BoundingBoxes { get; set; }
         private static Dictionary<short, string> BlockNames { get; set; }
         public static IBlockPhysicsProvider PhysicsProvider { get; private set; }
@@ -48,20 +50,9 @@ namespace Craft.Net.Logic
         private static void LoadBlock(Block block)
         {
             BlockNames.Add(block.BlockId, block.Name);
-            Item.LoadItem(new MockItem(block.Name, block.BlockId));
+            Item.LoadItem(block);
             if (!Item.ItemUsedOnBlockHandlers.ContainsKey(block.BlockId))
                 Item.ItemUsedOnBlockHandlers[block.BlockId] = DefaultUsedOnBlockHandler;
-        }
-        
-        private class MockItem : Item
-        {
-            private short _ItemId;
-            public override short ItemId { get { return _ItemId; } }
-            
-            public MockItem(string name, short id) : base(name)
-            {
-                _ItemId = id;
-            }
         }
 
         protected void SetBoundingBox(BoundingBox? boundingBox)
@@ -142,11 +133,10 @@ namespace Craft.Net.Logic
         }
         
         public abstract short BlockId { get; }
-        public string Name { get; private set; }
 
-        protected Block(string name)
+        protected Block(string name, ItemMaterial? material = null, ToolType? toolType = null)
+            : base(name, material, toolType)
         {
-            Name = name;
         }
 
         protected void SetDropHandler(Func<World, Coordinates3D, BlockInfo, ItemStack[]> dropHandler, bool overrideSilkTouch = false)

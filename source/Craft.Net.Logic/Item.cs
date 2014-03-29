@@ -20,6 +20,7 @@ namespace Craft.Net.Logic
             ToolTypes = new Dictionary<short, ToolType>();
             ItemMaterials = new Dictionary<short, ItemMaterial>();
             ItemUsedOnBlockHandlers = new Dictionary<short, ItemUsedOnBlockHandler>();
+            ReflectItems(typeof(Item).Assembly);
         }
 
         public static void ReflectItems(Assembly assembly)
@@ -40,11 +41,11 @@ namespace Craft.Net.Logic
 
         internal static void LoadItem(Item item)
         {
-            ItemNames.Add(item.ItemId, item.Name);
+            ItemNames[item.ItemId] = item.Name;
             if (item.ToolType != null)
-                ToolTypes.Add(item.ItemId, item.ToolType.Value);
+                ToolTypes[item.ItemId] = item.ToolType.Value;
             if (item.Material != null)
-                ItemMaterials.Add(item.ItemId, item.Material.Value);
+                ItemMaterials[item.ItemId] = item.Material.Value;
         }
         
         internal static void OnItemUsedOnBlock(World world, Coordinates3D coordinates, BlockFace face, Coordinates3D cursor, ItemInfo item)

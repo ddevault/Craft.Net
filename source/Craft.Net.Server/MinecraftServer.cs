@@ -432,13 +432,13 @@ namespace Craft.Net.Server
             var world = sender as World;
             var chunk = world.FindChunk(e.Coordinates);
             var chunkCoordinates = new Coordinates2D(chunk.X, chunk.Z);
-            //var block = world.GetBlock(e.Coordinates);
+            var block = world.GetBlockInfo(e.Coordinates);
             //Block.DoBlockUpdates(world, e.Coordinates);
             foreach (var client in GetClientsInWorld(world))
             {
                 if (client.LoadedChunks.Contains(chunkCoordinates))
                 {
-                    //client.SendPacket(new BlockChangePacket(e.Coordinates.X, (byte)e.Coordinates.Y, e.Coordinates.Z, block.Id, block.Metadata));
+                    client.SendPacket(new BlockChangePacket(e.Coordinates.X, (byte)e.Coordinates.Y, e.Coordinates.Z, block.BlockId, block.Metadata));
                 }
             }
         }

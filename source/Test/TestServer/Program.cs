@@ -28,6 +28,7 @@ namespace TestServer
             var server = new MinecraftServer(level);
             server.ChatMessage += server_ChatMessage;
             server.Settings.OnlineMode = true;
+            server.Settings.MotD = "Craft.Net Test Server";
             server.Start(new IPEndPoint(IPAddress.Any, 25565));
             Console.WriteLine("Press 'q' to exit");
             ConsoleKeyInfo cki;

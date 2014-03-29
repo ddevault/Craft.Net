@@ -1,4 +1,4 @@
-﻿using Craft.Net.Logic;
+using Craft.Net.Logic;
 using Craft.Net.Logic.Windows;
 using Craft.Net.Networking;
 using System;
