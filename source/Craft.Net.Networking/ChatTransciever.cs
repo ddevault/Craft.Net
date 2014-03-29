@@ -1,5 +1,5 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using Craft.Net.Common;
 
@@ -134,13 +134,20 @@ namespace Craft.Net.Networking
 
         public bool IsCommand { get; private set; }
 
+        protected IList<ChatMessage> _subMessages;
+        public IList<ChatMessage> SubMessages
+        {
+            get { return _subMessages; }
+            protected set { _subMessages = value; }
+        }
+
         #endregion
 
         #region Constructors
 
         public ChatMessage(string Message)
         {
-            Console.WriteLine("{0}", Message);
+            _rawMessage = Message;
             try
             {
                 Init(JObject.Parse(Message));
@@ -219,7 +226,27 @@ namespace Craft.Net.Networking
             }
             #endregion
             #region recursion
-            //TODO
+
+            if (obj.TryGetValue("extra", out temp))
+            {
+                if (temp.Type == JTokenType.Array)
+                {
+                    _subMessages = new List<ChatMessage>();
+                    foreach (object o in (JArray)obj["extra"])
+                    {
+                        if (o.GetType() == typeof(JValue))
+                        {
+                            Console.WriteLine(((JValue)o).Type);
+                            _subMessages.Add(new ChatMessage((string)((JValue)o).Value));
+                        }
+                        else
+                        {
+                            _subMessages.Add(new ChatMessage((JObject)o));
+                        }
+                    }
+                }
+            }
+
             #endregion
         }
 
@@ -231,6 +258,30 @@ namespace Craft.Net.Networking
         {
             //TODO
             return "";
+        }
+
+        public override string ToString()
+        {
+            string extras = "[";
+            if (_subMessages != null)
+            {
+                foreach (ChatMessage c in _subMessages)
+                {
+                    extras += c.ToString();
+                    extras += ",";
+                }
+                extras = extras.Substring(0, extras.Length - 1); // Strip off last comma
+            }
+            extras += "]";
+            //{}'s are added after format to avoid confusing the formating engine
+            return "{" + string.Format(
+                "\"text\":\"{0}\",\"bold\":{1},\"italic\":{2},\"underlined\":{3},\"strikethrough\":{4},\"obfuscated\":{5}" +
+                "\"color\":{6},\"clickEvent\":{{\"action\":\"{7}\",\"value\":\"{8}\"}},\"hoverEvent\":{{\"action\":\"{9}\",\"value\":\"{10}\"}}," +
+                "\"extra\":{11}",
+                _text, Bold, Italic, Underlined, StrikeThrough, Obfuscated, _color,
+                ((_action != ChatActionType.none) ? _action.ToString() : ""), ChatActionValue,
+                ((_hoverAction != ChatHoverActionType.none) ? _hoverAction.ToString() : ""), ChatHoverActionValue, extras
+                ) + "}";
         }
 
         #endregion
