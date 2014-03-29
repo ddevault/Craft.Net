@@ -1959,6 +1959,9 @@ namespace Craft.Net.Networking
 
     public struct SoundEffectPacket : IPacket
     {
+        public static readonly byte DefaultPitch = 63;
+        public static readonly float DefaultVolume = 1.0f;
+
         public SoundEffectPacket(string soundName, int x, int y,
             int z, float volume, byte pitch)
         {
@@ -1978,9 +1981,9 @@ namespace Craft.Net.Networking
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
             SoundName = stream.ReadString();
-            X = stream.ReadInt32();
-            Y = stream.ReadInt32();
-            Z = stream.ReadInt32();
+            X = stream.ReadInt32() / 8;
+            Y = stream.ReadInt32() / 8;
+            Z = stream.ReadInt32() / 8;
             Volume = stream.ReadSingle();
             Pitch = stream.ReadUInt8();
             return mode;
@@ -1989,9 +1992,9 @@ namespace Craft.Net.Networking
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
             stream.WriteString(SoundName);
-            stream.WriteInt32(X);
-            stream.WriteInt32(Y);
-            stream.WriteInt32(Z);
+            stream.WriteInt32(X * 8);
+            stream.WriteInt32(Y * 8);
+            stream.WriteInt32(Z * 8);
             stream.WriteSingle(Volume);
             stream.WriteUInt8(Pitch);
             return mode;

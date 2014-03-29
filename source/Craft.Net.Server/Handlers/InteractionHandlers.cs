@@ -132,6 +132,11 @@ namespace Craft.Net.Server.Handlers
                     if (block != null)
                     {
                         client.World.UseItemOnBlock(position, packet.Face, cursorPosition, item.Value);
+                        if (item.Value.ItemId < 0x100)
+                        {
+                            client.SendPacket(new SoundEffectPacket(Block.GetPlacementSoundEffect(item.Value.ItemId),
+                                position.X, position.Y, position.Z, SoundEffectPacket.DefaultVolume, SoundEffectPacket.DefaultPitch));
+                        }
                         if (client.GameMode != GameMode.Creative)
                         {
                             slot.Count--; // TODO: This is probably a bad place to put this code
@@ -142,7 +147,14 @@ namespace Craft.Net.Server.Handlers
                         }
                     }
                     else
+                    {
                         client.World.UseItemOnBlock(position, packet.Face, cursorPosition, item.Value);
+                        if (item.Value.ItemId < 0x100)
+                        {
+                            client.SendPacket(new SoundEffectPacket(Block.GetPlacementSoundEffect(item.Value.ItemId),
+                                position.X, position.Y, position.Z, SoundEffectPacket.DefaultVolume, SoundEffectPacket.DefaultPitch));
+                        }
+                    }
                 }
             }
         }

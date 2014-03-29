@@ -11,6 +11,7 @@ namespace Craft.Net.Logic.Blocks
 
         public GrassBlock() : base("minecraft:grass")
         {
+            base.SetPlacementSoundEffect(SoundEffect.DigGrass);
             base.SetDropHandler((world, coordinates, info) => new[] { new ItemStack(DirtBlock.Id) });
         }
     }

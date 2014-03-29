@@ -16,6 +16,7 @@ namespace Craft.Net.Logic
         private static Dictionary<short, BlockMinedHandler> BlockMinedHandlers { get; set; }
         public delegate bool BlockRightClickedHandler(World world, Coordinates3D coordinates, BlockInfo info, BlockFace face, Coordinates3D cursor, ItemInfo? item);
         private static Dictionary<short, BlockRightClickedHandler> BlockRightClickedHandlers { get; set; }
+        private static Dictionary<short, string> BlockPlacementSoundEffects { get; set; }
         
         static Block()
         {
@@ -24,6 +25,7 @@ namespace Craft.Net.Logic
             BlockMinedHandlers = new Dictionary<short, BlockMinedHandler>();
             BlockRightClickedHandlers = new Dictionary<short, BlockRightClickedHandler>();
             BlockNames = new Dictionary<short, string>();
+            BlockPlacementSoundEffects = new Dictionary<short, string>();
             ReflectBlocks(typeof(Block).Assembly);
         }
 
@@ -72,6 +74,18 @@ namespace Craft.Net.Logic
             if (BoundingBoxes.ContainsKey(blockId))
                 return BoundingBoxes[blockId];
             return new BoundingBox(Vector3.Zero, Vector3.One);
+        }
+        
+        public static string GetPlacementSoundEffect(short blockId)
+        {
+            if (BlockPlacementSoundEffects.ContainsKey(blockId))
+                return BlockPlacementSoundEffects[blockId];
+            return SoundEffect.DigStone;
+        }
+        
+        protected void SetPlacementSoundEffect(string soundEffect)
+        {
+            BlockPlacementSoundEffects[BlockId] = soundEffect;
         }
 
         protected void SetBlockMinedHandler(BlockMinedHandler handler)

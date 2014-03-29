@@ -1,4 +1,5 @@
 using System;
+using Craft.Net.Common;
 
 namespace Craft.Net.Logic.Blocks
 {
@@ -9,6 +10,7 @@ namespace Craft.Net.Logic.Blocks
 
         public DirtBlock() : base("minecraft:dirt")
         {
+            base.SetPlacementSoundEffect(SoundEffect.DigGrass);
         }
     }
 }
