@@ -69,6 +69,7 @@
     <Compile Include="ToolType.cs" />
     <Compile Include="Items\FlintAndSteelItem.cs" />
     <Compile Include="Items\PickaxeItem.cs" />
+    <Compile Include="Blocks\LadderBlock.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\externals\fNbt\fNbt\fNbt.csproj">

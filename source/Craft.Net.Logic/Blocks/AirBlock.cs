@@ -1,4 +1,5 @@
 using System;
+using Craft.Net.Common;
 
 namespace Craft.Net.Logic.Blocks
 {
@@ -9,7 +10,12 @@ namespace Craft.Net.Logic.Blocks
 
         public AirBlock() : base("minecraft:air")
         {
-            base.SetBoundingBox(null);
+            base.SetBoundingBoxHandler(BoundingBox);
+        }
+        
+        private BoundingBox? BoundingBox(BlockInfo info)
+        {
+            return null;   
         }
     }
 }
