@@ -13,6 +13,7 @@ namespace Craft.Net.Logic
         
         private static Dictionary<short, BoundingBox?> BoundingBoxes { get; set; }
         private static Dictionary<short, string> BlockNames { get; set; }
+        private static Dictionary<short, double> BlockHardness { get; set; }
         public static IBlockPhysicsProvider PhysicsProvider { get; private set; }
         public delegate void BlockMinedHandler(World world, Coordinates3D coordinates, BlockInfo info);
         private static Dictionary<short, BlockMinedHandler> BlockMinedHandlers { get; set; }
@@ -26,6 +27,7 @@ namespace Craft.Net.Logic
             BoundingBoxes = new Dictionary<short, BoundingBox?>();
             BlockMinedHandlers = new Dictionary<short, BlockMinedHandler>();
             BlockRightClickedHandlers = new Dictionary<short, BlockRightClickedHandler>();
+            BlockHardness = new Dictionary<short, double>();
             BlockNames = new Dictionary<short, string>();
             BlockPlacementSoundEffects = new Dictionary<short, string>();
             ReflectBlocks(typeof(Block).Assembly);
@@ -89,6 +91,17 @@ namespace Craft.Net.Logic
             BlockRightClickedHandlers[BlockId] = handler;
         }
 
+        protected void SetDropHandler(Func<World, Coordinates3D, BlockInfo, ItemStack[]> dropHandler, bool overrideSilkTouch = false)
+        {
+            SetBlockMinedHandler((world, coordinates, info) =>
+                {
+                    world.SetBlockId(coordinates, 0);
+                    world.SetMetadata(coordinates, 0);
+                    foreach (var drop in dropHandler(world, coordinates, info))
+                        world.OnSpawnEntityRequested(new ItemEntity((Vector3)coordinates + new Vector3(0.5), drop));
+                });
+        }
+
         private class BlockPhysicsProvider : IBlockPhysicsProvider
         {
             public BoundingBox? GetBoundingBox(World world, Coordinates3D coordinates)
@@ -116,6 +129,109 @@ namespace Craft.Net.Logic
             else
                 return DefaultBlockRightClickedHandler(world, coordinates, info, face, item);
         }
+        
+        public static int GetHarvestTime(short blockId, short itemId, World world, PlayerEntity entity, out short damage)
+        {
+            int time = GetHarvestTime(blockId, itemId, out damage);
+            var type = Item.GetToolType(itemId);
+            if (type != null)
+            {
+                if (!Item.IsEfficient(itemId, blockId))
+                {
+                    //if (entity.IsUnderwater(world) && !entity.IsOnGround(world))
+                    //    time *= 25;
+                    //else if (entity.IsUnderwater(world) || !entity.IsOnGround(world))
+                    //   time *= 5;
+                    // TODO
+                }
+            }
+            return time;
+        }
+        
+        public static double GetBlockHardness(short blockId)
+        {
+            if (BlockHardness.ContainsKey(blockId))
+                return BlockHardness[blockId];
+            return 0;
+        }
+
+        /// <summary>
+        /// Gets the amount of time (in milliseconds) it takes to harvest this
+        /// block with the given tool.
+        /// </summary>
+        public static int GetHarvestTime(short blockId, short itemId, out short damage)
+        {
+            // time is in seconds until returned
+            double hardness = GetBlockHardness(blockId);
+            if (hardness == -1)
+            {
+                damage = 0;
+                return -1;
+            }
+            double time = hardness * 1.5;
+            var tool = Item.GetToolType(itemId);
+            var material = Item.GetItemMaterial(itemId);
+            damage = 0;
+            // Adjust for tool in use
+            if (tool != null)
+            {
+                //if (!CanHarvest(tool))
+                //    time *= 3.33;
+                if (Item.IsEfficient(itemId, blockId) && material != null)
+                {
+                    switch (material.Value)
+                    {
+                        case ItemMaterial.Wood:
+                            time /= 2;
+                            break;
+                        case ItemMaterial.Stone:
+                            time /= 4;
+                            break;
+                        case ItemMaterial.Iron:
+                            time /= 6;
+                            break;
+                        case ItemMaterial.Diamond:
+                            time /= 8;
+                            break;
+                        case ItemMaterial.Gold:
+                            time /= 12;
+                            break;
+                    }
+                }
+                // Do tool damage
+                damage = 1;
+                if (tool.Value == Craft.Net.Logic.ToolType.Pickaxe
+                    || tool.Value == Craft.Net.Logic.ToolType.Axe
+                    || tool.Value == Craft.Net.Logic.ToolType.Shovel)
+                {
+                    damage = (short)(hardness != 0 ? 1 : 0);
+                }
+                else if (tool.Value == Craft.Net.Logic.ToolType.Sword)
+                {
+                    damage = (short)(hardness != 0 ? 2 : 0);
+                    time /= 1.5;
+                    //if (this is CobwebBlock) // TODO
+                    //    time /= 15;
+                }
+                else if (tool.Value == Craft.Net.Logic.ToolType.Hoe)
+                    damage = 0;
+//               else if (tool is ShearsItem) // TODO
+//                {
+//                    if (this is WoolBlock)
+//                        time /= 5;
+//                    if (this is LeavesBlock || this is CobwebBlock)
+//                        time /= 15;
+//                    if (this is CobwebBlock || this is LeavesBlock || this is TallGrassBlock ||
+//                        this is TripwireBlock || this is VineBlock)
+//                        damage = 1;
+//                    else
+//                        damage = 0;
+//                }
+                else
+                    damage = 0;
+            }
+            return (int)(time * 1000);
+        }
 
         private static void DefaultBlockMinedHandler(World world, Coordinates3D coordinates, BlockInfo info)
         {
@@ -139,20 +255,11 @@ namespace Craft.Net.Logic
         
         public abstract short BlockId { get; }
 
-        protected Block(string name, ItemMaterial? material = null, ToolType? toolType = null)
+        protected Block(string name, ItemMaterial? material = null, ToolType? toolType = null, double? hardness = null)
             : base(name, material, toolType)
         {
-        }
-
-        protected void SetDropHandler(Func<World, Coordinates3D, BlockInfo, ItemStack[]> dropHandler, bool overrideSilkTouch = false)
-        {
-            SetBlockMinedHandler((world, coordinates, info) =>
-                {
-                    world.SetBlockId(coordinates, 0);
-                    world.SetMetadata(coordinates, 0);
-                    foreach (var drop in dropHandler(world, coordinates, info))
-                        world.OnSpawnEntityRequested(new ItemEntity((Vector3)coordinates + new Vector3(0.5), drop));
-                });
+            if (hardness != null)
+                BlockHardness[BlockId] = hardness.Value;
         }
     }
 }

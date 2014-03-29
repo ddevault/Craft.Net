@@ -24,14 +24,14 @@ namespace Craft.Net.Server.Handlers
                     if (client.Entity.Position.DistanceTo(position) <= client.MaxDigDistance)
                     {
                         // TODO: Block stuff
-                        if (client.GameMode == GameMode.Creative || client.Entity.Abilities.InstantMine)// || Block.GetLogicDescriptor(block).Hardness == 0)
+                        if (client.GameMode == GameMode.Creative || client.Entity.Abilities.InstantMine)// || Block.GetBlockHardness(block.BlockId) == 0)
                         {
                             client.World.SetBlockId(position, 0);
                             client.World.SetMetadata(position, 0);
                         }
                         else
                         {
-                            int time = 1; //Block.GetHarvestTime(new ItemDescriptor(client.Entity.SelectedItem.Id), block, out damage);
+                            int time = Block.GetHarvestTime(block.BlockId, client.Entity.SelectedItem.Id, client.World, client.Entity, out damage);
                             client.ExpectedMiningEnd = DateTime.Now.AddMilliseconds(time - (client.Ping + 100));
                             client.ExpectedBlockToMine = position;
                             var knownClients = server.EntityManager.GetKnownClients(client.Entity);
@@ -59,26 +59,28 @@ namespace Craft.Net.Server.Handlers
                             c.SendPacket(new BlockBreakAnimationPacket(client.Entity.EntityId, position.X, position.Y, position.Z, 0xFF)); // reset
                         if (client.ExpectedMiningEnd > DateTime.Now || client.ExpectedBlockToMine != position)
                             return;
-                        //Block.GetHarvestTime(new ItemDescriptor(client.Entity.SelectedItem.Id), block, out damage);
-                        damage = 0;
+                        Block.GetHarvestTime(block.BlockId, client.Entity.SelectedItem.Id, client.World, client.Entity, out damage);
                         if (damage != 0)
                         {
                             var slot = client.Entity.Inventory[client.Entity.SelectedSlot];
                             if (!slot.Empty)
                             {
-                                //if (slot.AsItem() is ToolItem)
-                                //{
-                                //    var tool = slot.AsItem() as ToolItem;
-                                //    bool destroy = tool.Damage(damage);
-                                //    slot.Metadata = tool.Data;
-                                //    if (destroy)
-                                //        client.Entity.SetSlot(client.Entity.SelectedSlot, ItemStack.EmptyStack);
-                                //    else
-                                //        client.Entity.SetSlot(client.Entity.SelectedSlot, slot);
-                                //}
+                                if (slot.AsItem() != null)
+                                {
+                                    var item = slot.AsItem().Value;
+                                    if (Item.GetToolType(item.ItemId) != null)
+                                    {
+                                        bool destroyed = Item.Damage(ref item, damage);
+                                        slot.Metadata = item.Metadata;
+                                        if (destroyed)
+                                            client.Entity.Inventory[client.Entity.SelectedSlot] = ItemStack.EmptyStack;
+                                        else
+                                            client.Entity.Inventory[client.Entity.SelectedSlot] = slot;
+                                    }
+                                }
                             }
                         }
-                        client.World.MineBlock(position); // TODO: Tools
+                        client.World.MineBlock(position);
                         client.Entity.FoodExhaustion += 0.025f;
                     }
                     break;

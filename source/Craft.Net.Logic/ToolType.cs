@@ -6,9 +6,10 @@ namespace Craft.Net.Logic
     {
         Shovel,
         Pickaxe,
+        Hoe,
         Axe,
         Sword,
-        Shears,
+        Other
     }
 }
 

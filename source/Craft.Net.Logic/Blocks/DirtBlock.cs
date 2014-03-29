@@ -9,7 +9,7 @@ namespace Craft.Net.Logic.Blocks
         public static readonly short Id = 3;
         public override short BlockId { get { return Id; } }
 
-        public DirtBlock() : base("minecraft:dirt")
+        public DirtBlock() : base("minecraft:dirt", hardness: 0.5)
         {
             base.SetPlacementSoundEffect(SoundEffect.DigGrass);
         }
