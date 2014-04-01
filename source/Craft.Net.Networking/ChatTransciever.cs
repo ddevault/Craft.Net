@@ -35,21 +35,21 @@ namespace Craft.Net.Networking
     //In fact, the vanilla server will only send the message if it's lowercase.
     public enum ChatActionType
     {
+        none,
         open_url,
         open_file,
         run_command,
         suggest_command,
-        none
     }
     
     //Lowercase because that's the way vanilla sends the "hoverEvent" field.
     //In fact, the vanilla server will only send the message if it's lowercase.
     public enum ChatHoverActionType
     {
+        none,
         show_text,
         show_achievement,
         show_item,
-        none
     }
 
     public class ChatMessage
@@ -159,7 +159,9 @@ namespace Craft.Net.Networking
             }
             if (obj["clickEvent"] != null)
             {
-                var action = obj.Value<String>("clickEvent");
+                var eventSpec = obj["clickEvent"];
+                var action = eventSpec.Value<string>("action");
+                this.ChatActionValue = eventSpec.Value<string>("value");
                 ChatActionType c;
                 if (!ChatActionType.TryParse(action, out c))
                     this.Action = ChatActionType.none;
@@ -172,9 +174,11 @@ namespace Craft.Net.Networking
             }
             if (obj["hoverEvent"] != null)
             {
-                var hover = obj.Value<string>("hoverEvent");
+                var eventSpec = obj["hoverEvent"];
+                var action = eventSpec.Value<string>("action");
+                this.ChatHoverActionValue = eventSpec.Value<string>("value");
                 ChatHoverActionType c;
-                if (!ChatHoverActionType.TryParse(hover, out c))
+                if (!ChatHoverActionType.TryParse(action, out c))
                     this.HoverAction = ChatHoverActionType.none;
                 else
                     this.HoverAction = c;
@@ -212,7 +216,6 @@ namespace Craft.Net.Networking
                 {
                     if (o.GetType() == typeof(JValue))
                     {
-                        Console.WriteLine(((JValue)o).Type);
                         this.SubMessages.Add(new ChatMessage((string)((JValue)o).Value));
                     }
                     else
