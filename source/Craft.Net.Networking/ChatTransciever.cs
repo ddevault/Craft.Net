@@ -5,32 +5,30 @@ using Craft.Net.Common;
 
 namespace Craft.Net.Networking
 {
-    //Lowercase because that's the way vanilla sends the "color" field
-    //In fact, the vanilla server will not have it any other way.
     public enum ChatColor
     {
-        black,
-        dark_blue,
-        dark_green,
-        dark_aqua,
-        dark_red,
-        dark_purple,
-        gold,
-        gray,
-        dark_gray,
-        blue,
-        green,
-        aqua,
-        red,
-        light_purple,
-        yellow,
-        white,
-        obfuscated,
-        bold,
-        strikethrough,
-        underline,
-        italic,
-        reset
+        BLACK,
+        DARK_BLUE,
+        DARK_GREEN,
+        DARK_AQUA,
+        DARK_RED,
+        DARK_PURPLE,
+        GOLD,
+        GRAY,
+        DARK_GRAY,
+        BLUE,
+        GREEN,
+        AQUA,
+        RED,
+        LIGHT_PURPLE,
+        YELLOW,
+        WHITE,
+        OBFUSCATED,
+        BOLD,
+        STRIKETHROUGH,
+        UNDERLINE,
+        ITALIC,
+        RESET,
     }
 
     //Lowercase because that's the way vanilla sends the "clickEvent" field.
@@ -58,25 +56,11 @@ namespace Craft.Net.Networking
     {
         #region Properties
 
-        protected string _rawMessage;
-        public string RawMessage
-        {
-            get { return _rawMessage; }
-        }
+        public string RawMessage { get; private set; }
 
-        protected string _text;
-        public string Text
-        {
-            get { return _text; }
-            private set { _text = value; }
-        }
+        public string Text { get; protected set; }
 
-        protected ChatColor _color;
-        public ChatColor Color
-        {
-            get { return _color; }
-            protected set { _color = value; }
-        }
+        public ChatColor Color { get; protected set; }
         
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="Craft.Net.Networking.ChatMessage"/> is bolded.
@@ -109,13 +93,8 @@ namespace Craft.Net.Networking
         /// Can be overriden by submessages with a different value.
         /// </summary>
         public bool Obfuscated { get; protected set; }
-        
-        protected ChatActionType _action;
-        public ChatActionType Action
-        { 
-            get { return _action; }
-            protected set { _action = value; }
-        }
+
+        public ChatActionType Action { get; protected set; }
 
         /// <summary>
         /// Gets or sets the chat action value.
@@ -123,23 +102,13 @@ namespace Craft.Net.Networking
         /// </summary>
         public string ChatActionValue { get; protected set; }
 
-        protected ChatHoverActionType _hoverAction;
-        public ChatHoverActionType HoverAction
-        {
-            get { return _hoverAction; }
-            protected set { _hoverAction = value; }
-        }
+        public ChatHoverActionType HoverAction { get; protected set; }
 
         public string ChatHoverActionValue { get; protected set; }
 
         public bool IsCommand { get; private set; }
 
-        protected IList<ChatMessage> _subMessages;
-        public IList<ChatMessage> SubMessages
-        {
-            get { return _subMessages; }
-            protected set { _subMessages = value; }
-        }
+        public IList<ChatMessage> SubMessages { get; protected set; }
 
         #endregion
 
@@ -147,17 +116,18 @@ namespace Craft.Net.Networking
 
         public ChatMessage(string Message)
         {
-            _rawMessage = Message;
+            RawMessage = Message;
             try
             {
                 Init(JObject.Parse(Message));
-            } catch (Newtonsoft.Json.JsonReaderException)
+            }
+            catch (Newtonsoft.Json.JsonReaderException)
             {
                 //If Newtonsoft.Json couldn't parse it, that means we got something that isn't a new-format chat message.
                 // (Or there's a bug in the server)
                 //So we're just gona set the text content and call it a day.
-                _text = Message;
-                if (_text.StartsWith("/"))
+                Text = Message;
+                if (Text.StartsWith("/"))
                     this.IsCommand = true;
             }
         }
@@ -169,88 +139,91 @@ namespace Craft.Net.Networking
 
         private void Init(JObject obj)
         {
-            JToken temp;
-            #region parsing
-            if (obj.TryGetValue("text", out temp))
+            if (obj["text"] != null)
             {
-                _text = (string)temp;
+                Text = obj.Value<string>("text");
             }
             // Try to parse enumerations
-            if (obj.TryGetValue("color", out temp))
+            if (obj["color"] != null)
             {
-                if (!ChatColor.TryParse((string)temp.ToString(), out _color))
-                    this.Color = ChatColor.reset;
+                var color = obj.Value<string>("color").ToUpper();
+                ChatColor c;
+                if (!ChatColor.TryParse(color, out c))
+                    this.Color = ChatColor.RESET;
+                else
+                    this.Color = c;
             }
             else
             {
-                this.Color = ChatColor.reset;
+                this.Color = ChatColor.RESET;
             }
-            if (obj.TryGetValue("clickEvent", out temp))
+            if (obj["clickEvent"] != null)
             {
-                if (!ChatActionType.TryParse((string)temp, out _action))
-                    _action = ChatActionType.none;
-            }
-            else
-            {
-                _action = ChatActionType.none;
-            }
-            if (obj.TryGetValue("hoverEvent", out temp))
-            {
-                if (!ChatHoverActionType.TryParse((string)temp, out _hoverAction))
-                    _hoverAction = ChatHoverActionType.none;
+                var action = obj.Value<String>("clickEvent");
+                ChatActionType c;
+                if (!ChatActionType.TryParse(action, out c))
+                    this.Action = ChatActionType.none;
+                else
+                    this.Action = c;
             }
             else
             {
-                _hoverAction = ChatHoverActionType.none;
+                this.Action = ChatActionType.none;
+            }
+            if (obj["hoverEvent"] != null)
+            {
+                var hover = obj.Value<string>("hoverEvent");
+                ChatHoverActionType c;
+                if (!ChatHoverActionType.TryParse(hover, out c))
+                    this.HoverAction = ChatHoverActionType.none;
+                else
+                    this.HoverAction = c;
+            }
+            else
+            {
+                this.HoverAction = ChatHoverActionType.none;
             }
             //Parse booleans
-            if (obj.TryGetValue("bold", out temp))
+            if (obj["bold"] != null)
             {
-                Bold = (bool)temp;
+                Bold = obj.Value<bool>("bold");
             }
-            if (obj.TryGetValue("italic", out temp))
+            if (obj["italic"] != null)
             {
-                Italic = (bool)temp;
+                Italic = obj.Value<bool>("italic");
             }
-            if (obj.TryGetValue("underlined", out temp))
+            if (obj["underlined"] != null)
             {
-                Underlined = (bool)temp;
+                Underlined = obj.Value<bool>("underlined");
             }
-            if (obj.TryGetValue("strikethrough", out temp))
+            if (obj["strikethrough"] != null)
             {
-                StrikeThrough = (bool)temp;
+                StrikeThrough = obj.Value<bool>("strikethrough");
             }
-            if (obj.TryGetValue("obfuscated", out temp))
+            if (obj["obfuscated"] != null)
             {
-                StrikeThrough = (bool)temp;
+                Obfuscated = obj.Value<bool>("obfuscated");
             }
-            #endregion
-            #region recursion
 
-            if (obj.TryGetValue("extra", out temp))
+            if (obj["extra"] != null)
             {
-                if (temp.Type == JTokenType.Array)
+                this.SubMessages = new List<ChatMessage>();
+                foreach (object o in (JArray)obj["extra"])
                 {
-                    _subMessages = new List<ChatMessage>();
-                    foreach (object o in (JArray)obj["extra"])
+                    if (o.GetType() == typeof(JValue))
                     {
-                        if (o.GetType() == typeof(JValue))
-                        {
-                            Console.WriteLine(((JValue)o).Type);
-                            _subMessages.Add(new ChatMessage((string)((JValue)o).Value));
-                        }
-                        else
-                        {
-                            _subMessages.Add(new ChatMessage((JObject)o));
-                        }
+                        Console.WriteLine(((JValue)o).Type);
+                        this.SubMessages.Add(new ChatMessage((string)((JValue)o).Value));
+                    }
+                    else
+                    {
+                        this.SubMessages.Add(new ChatMessage((JObject)o));
                     }
                 }
             }
 
             #endregion
         }
-
-        #endregion
 
         #region Public methods
 
@@ -263,9 +236,9 @@ namespace Craft.Net.Networking
         public override string ToString()
         {
             string extras = "[";
-            if (_subMessages != null)
+            if (SubMessages != null)
             {
-                foreach (ChatMessage c in _subMessages)
+                foreach (ChatMessage c in SubMessages)
                 {
                     extras += c.ToString();
                     extras += ",";
@@ -278,9 +251,9 @@ namespace Craft.Net.Networking
                 "\"text\":\"{0}\",\"bold\":{1},\"italic\":{2},\"underlined\":{3},\"strikethrough\":{4},\"obfuscated\":{5}" +
                 "\"color\":{6},\"clickEvent\":{{\"action\":\"{7}\",\"value\":\"{8}\"}},\"hoverEvent\":{{\"action\":\"{9}\",\"value\":\"{10}\"}}," +
                 "\"extra\":{11}",
-                _text, Bold, Italic, Underlined, StrikeThrough, Obfuscated, _color,
-                ((_action != ChatActionType.none) ? _action.ToString() : ""), ChatActionValue,
-                ((_hoverAction != ChatHoverActionType.none) ? _hoverAction.ToString() : ""), ChatHoverActionValue, extras
+                Text, Bold, Italic, Underlined, StrikeThrough, Obfuscated, Color,
+                ((Action != ChatActionType.none) ? Action.ToString() : ""), ChatActionValue,
+                ((HoverAction != ChatHoverActionType.none) ? HoverAction.ToString() : ""), ChatHoverActionValue, extras
                 ) + "}";
         }
 
