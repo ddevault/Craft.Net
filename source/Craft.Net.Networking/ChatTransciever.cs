@@ -31,25 +31,20 @@ namespace Craft.Net.Networking
         RESET,
     }
 
-    //Lowercase because that's the way vanilla sends the "clickEvent" field.
-    //In fact, the vanilla server will only send the message if it's lowercase.
     public enum ChatActionType
     {
-        none,
-        open_url,
-        open_file,
-        run_command,
-        suggest_command,
+        NONE,OPEN_URL,
+        OPEN_FILE,
+        RUN_COMMAND,
+        SUGGEST_COMMAND,
     }
-    
-    //Lowercase because that's the way vanilla sends the "hoverEvent" field.
-    //In fact, the vanilla server will only send the message if it's lowercase.
+
     public enum ChatHoverActionType
     {
-        none,
-        show_text,
-        show_achievement,
-        show_item,
+        NONE,
+        SHOW_TEXT,
+        SHOW_ACHIEVEMENT,
+        SHOW_ITEM,
     }
 
     public class ChatMessage
@@ -160,32 +155,32 @@ namespace Craft.Net.Networking
             if (obj["clickEvent"] != null)
             {
                 var eventSpec = obj["clickEvent"];
-                var action = eventSpec.Value<string>("action");
+                var action = eventSpec.Value<string>("action").ToUpper();
                 this.ChatActionValue = eventSpec.Value<string>("value");
                 ChatActionType c;
                 if (!ChatActionType.TryParse(action, out c))
-                    this.Action = ChatActionType.none;
+                    this.Action = ChatActionType.NONE;
                 else
                     this.Action = c;
             }
             else
             {
-                this.Action = ChatActionType.none;
+                this.Action = ChatActionType.NONE;
             }
             if (obj["hoverEvent"] != null)
             {
                 var eventSpec = obj["hoverEvent"];
-                var action = eventSpec.Value<string>("action");
+                var action = eventSpec.Value<string>("action").ToUpper();
                 this.ChatHoverActionValue = eventSpec.Value<string>("value");
                 ChatHoverActionType c;
                 if (!ChatHoverActionType.TryParse(action, out c))
-                    this.HoverAction = ChatHoverActionType.none;
+                    this.HoverAction = ChatHoverActionType.NONE;
                 else
                     this.HoverAction = c;
             }
             else
             {
-                this.HoverAction = ChatHoverActionType.none;
+                this.HoverAction = ChatHoverActionType.NONE;
             }
             //Parse booleans
             if (obj["bold"] != null)
@@ -261,7 +256,7 @@ namespace Craft.Net.Networking
             self.Add(new JProperty("obfuscated", this.Obfuscated));
             self.Add(new JProperty("underlined", this.Underlined));
             self.Add(new JProperty("color", this.Color.ToString().ToLower()));
-            if (this.Action != ChatActionType.none)
+            if (this.Action != ChatActionType.NONE)
             {
                 self.Add(new JProperty("clickEvent",
                                        new JObject(new JProperty("action", this.Action.ToString().ToLower())
@@ -269,7 +264,7 @@ namespace Craft.Net.Networking
                 )
                 );
             }
-            if (this.HoverAction != ChatHoverActionType.none)
+            if (this.HoverAction != ChatHoverActionType.NONE)
             {
                 self.Add(new JProperty("hoverEvent",
                                        new JObject(new JProperty("action", this.HoverAction.ToString().ToLower())
