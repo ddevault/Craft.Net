@@ -236,28 +236,46 @@ namespace Craft.Net.Networking
             return "";
         }
 
-        public override string ToString()
+        public JObject AsJObject()
         {
-            string extras = "[";
+            JObject self = new JObject();
+            var extras = new JArray();
             if (SubMessages != null)
             {
                 foreach (ChatMessage c in SubMessages)
                 {
-                    extras += c.ToString();
-                    extras += ",";
+                    extras.Add(c.AsJObject());
                 }
-                extras = extras.Substring(0, extras.Length - 1); // Strip off last comma
             }
-            extras += "]";
-            //{}'s are added after format to avoid confusing the formating engine
-            return "{" + string.Format(
-                "\"text\":\"{0}\",\"bold\":{1},\"italic\":{2},\"underlined\":{3},\"strikethrough\":{4},\"obfuscated\":{5}" +
-                "\"color\":{6},\"clickEvent\":{{\"action\":\"{7}\",\"value\":\"{8}\"}},\"hoverEvent\":{{\"action\":\"{9}\",\"value\":\"{10}\"}}," +
-                "\"extra\":{11}",
-                Text, Bold, Italic, Underlined, StrikeThrough, Obfuscated, Color,
-                ((Action != ChatActionType.none) ? Action.ToString() : ""), ChatActionValue,
-                ((HoverAction != ChatHoverActionType.none) ? HoverAction.ToString() : ""), ChatHoverActionValue, extras
-                ) + "}";
+            self.Add(new JProperty("extra", extras));
+            self.Add(new JProperty("text", this.Text));
+            self.Add(new JProperty("bold", this.Bold));
+            self.Add(new JProperty("strikethrough", this.StrikeThrough));
+            self.Add(new JProperty("obfuscated", this.Obfuscated));
+            self.Add(new JProperty("underlined", this.Underlined));
+            self.Add(new JProperty("color", this.Color.ToString().ToLower()));
+            if (this.Action != ChatActionType.none)
+            {
+                self.Add(new JProperty("clickEvent",
+                                       new JObject(new JProperty("action", this.Action.ToString().ToLower())
+                                                  , new JProperty("value", this.ChatActionValue))
+                )
+                );
+            }
+            if (this.HoverAction != ChatHoverActionType.none)
+            {
+                self.Add(new JProperty("hoverEvent",
+                                       new JObject(new JProperty("action", this.HoverAction.ToString().ToLower())
+                                                 , new JProperty("value", this.ChatHoverActionValue))
+                )
+                );
+            }
+            return self;
+        }
+
+        public override string ToString()
+        {
+            return this.AsJObject().ToString();
         }
 
         #endregion
