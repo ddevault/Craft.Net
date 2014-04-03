@@ -49,8 +49,6 @@ namespace Craft.Net.Networking
 
     public class ChatMessage
     {
-        #region Properties
-
         public string RawMessage { get; private set; }
 
         public string Text { get; protected set; }
@@ -104,10 +102,6 @@ namespace Craft.Net.Networking
         public bool IsCommand { get; private set; }
 
         public IList<ChatMessage> SubMessages { get; protected set; }
-
-        #endregion
-
-        #region Constructors
 
         public ChatMessage(string Message)
         {
@@ -219,11 +213,8 @@ namespace Craft.Net.Networking
                     }
                 }
             }
-
-            #endregion
         }
 
-        #region Public methods
 
         public string FullText()
         {
@@ -279,8 +270,6 @@ namespace Craft.Net.Networking
         {
             return this.AsJObject().ToString();
         }
-
-        #endregion
     }
 }
 
