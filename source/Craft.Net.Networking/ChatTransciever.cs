@@ -232,8 +232,15 @@ namespace Craft.Net.Networking
 
         public string FullText()
         {
-            //TODO
-            return "";
+            var text = this.Text;
+            if (SubMessages != null)
+            {
+                foreach (ChatMessage c in SubMessages)
+                {
+                    text += c.FullText();
+                }
+            }
+            return text;
         }
 
         public JObject AsJObject()
