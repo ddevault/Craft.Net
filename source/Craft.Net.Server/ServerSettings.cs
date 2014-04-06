@@ -19,6 +19,7 @@ namespace Craft.Net.Server
                 settings.MotD = "Craft.Net Server";
                 settings.OnlineMode = true;
                 settings.Difficulty = Difficulty.Normal;
+                settings.SaveInterval = 30;
                 return settings;
             }
         }
@@ -48,5 +49,10 @@ namespace Craft.Net.Server
         /// This server's difficulty.
         /// </summary>
         public Difficulty Difficulty;
+        /// <summary>
+        /// The number of seconds between saving the level to disk. Set to -1 to disable periodic
+        /// saves.
+        /// </summary>
+        public int SaveInterval { get; set; }
     }
 }

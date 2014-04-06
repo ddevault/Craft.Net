@@ -33,6 +33,9 @@ namespace Craft.Net.Anvil
 
         public const int Width = 16, Height = 256, Depth = 16;
 
+        [NbtIgnore]
+        internal DateTime LastAccessed { get; set; }
+
         public bool IsModified { get; set; }
 
         public byte[] Biomes { get; set; }
@@ -83,6 +86,7 @@ namespace Craft.Net.Anvil
                 Sections[i] = new Section((byte)i);
             Biomes = new byte[Width * Depth];
             HeightMap = new int[Width * Depth];
+            LastAccessed = DateTime.Now;
         }
 
         public Chunk(Coordinates2D coordinates) : this()
@@ -93,6 +97,7 @@ namespace Craft.Net.Anvil
 
         public short GetBlockId(Coordinates3D coordinates)
         {
+            LastAccessed = DateTime.Now;
             int section = GetSectionNumber(coordinates.Y);
             coordinates.Y = GetPositionInSection(coordinates.Y);
             return Sections[section].GetBlockId(coordinates);
@@ -100,6 +105,7 @@ namespace Craft.Net.Anvil
 
         public byte GetMetadata(Coordinates3D coordinates)
         {
+            LastAccessed = DateTime.Now;
             int section = GetSectionNumber(coordinates.Y);
             coordinates.Y = GetPositionInSection(coordinates.Y);
             return Sections[section].GetMetadata(coordinates);
@@ -107,6 +113,7 @@ namespace Craft.Net.Anvil
 
         public byte GetSkyLight(Coordinates3D coordinates)
         {
+            LastAccessed = DateTime.Now;
             int section = GetSectionNumber(coordinates.Y);
             coordinates.Y = GetPositionInSection(coordinates.Y);
             return Sections[section].GetSkyLight(coordinates);
@@ -114,6 +121,7 @@ namespace Craft.Net.Anvil
 
         public byte GetBlockLight(Coordinates3D coordinates)
         {
+            LastAccessed = DateTime.Now;
             int section = GetSectionNumber(coordinates.Y);
             coordinates.Y = GetPositionInSection(coordinates.Y);
             return Sections[section].GetBlockLight(coordinates);
@@ -121,6 +129,8 @@ namespace Craft.Net.Anvil
 
         public void SetBlockId(Coordinates3D coordinates, short value)
         {
+            LastAccessed = DateTime.Now;
+            IsModified = true;
             int section = GetSectionNumber(coordinates.Y);
             coordinates.Y = GetPositionInSection(coordinates.Y);
             Sections[section].SetBlockId(coordinates, value);
@@ -147,6 +157,8 @@ namespace Craft.Net.Anvil
 
         public void SetMetadata(Coordinates3D coordinates, byte value)
         {
+            LastAccessed = DateTime.Now;
+            IsModified = true;
             int section = GetSectionNumber(coordinates.Y);
             coordinates.Y = GetPositionInSection(coordinates.Y);
             Sections[section].SetMetadata(coordinates, value);
@@ -154,6 +166,8 @@ namespace Craft.Net.Anvil
 
         public void SetSkyLight(Coordinates3D coordinates, byte value)
         {
+            LastAccessed = DateTime.Now;
+            IsModified = true;
             int section = GetSectionNumber(coordinates.Y);
             coordinates.Y = GetPositionInSection(coordinates.Y);
             Sections[section].SetSkyLight(coordinates, value);
@@ -161,6 +175,8 @@ namespace Craft.Net.Anvil
 
         public void SetBlockLight(Coordinates3D coordinates, byte value)
         {
+            LastAccessed = DateTime.Now;
+            IsModified = true;
             int section = GetSectionNumber(coordinates.Y);
             coordinates.Y = GetPositionInSection(coordinates.Y);
             Sections[section].SetBlockLight(coordinates, value);
@@ -168,6 +184,7 @@ namespace Craft.Net.Anvil
 
         public TileEntity GetTileEntity(Coordinates3D coordinates)
         {
+            LastAccessed = DateTime.Now;
             for (int i = 0; i < TileEntities.Count; i++)
                 if (TileEntities[i].Coordinates == coordinates)
                     return TileEntities[i];
@@ -176,6 +193,8 @@ namespace Craft.Net.Anvil
 
         public void SetTileEntity(Coordinates3D coordinates, TileEntity value)
         {
+            LastAccessed = DateTime.Now;
+            IsModified = true;
             for (int i = 0; i < TileEntities.Count; i++)
             {
                 if (TileEntities[i].Coordinates == coordinates)
@@ -202,6 +221,7 @@ namespace Craft.Net.Anvil
         /// </summary>
         public Biome GetBiome(byte x, byte z)
         {
+            LastAccessed = DateTime.Now;
             return (Biome)Biomes[(byte)(z * Depth) + x];
         }
 
@@ -210,6 +230,8 @@ namespace Craft.Net.Anvil
         /// </summary>
         public void SetBiome(byte x, byte z, Biome value)
         {
+            LastAccessed = DateTime.Now;
+            IsModified = true;
             Biomes[(byte)(z * Depth) + x] = (byte)value;
             IsModified = true;
         }
@@ -219,16 +241,20 @@ namespace Craft.Net.Anvil
         /// </summary>
         public int GetHeight(byte x, byte z)
         {
+            LastAccessed = DateTime.Now;
             return HeightMap[(byte)(z * Depth) + x];
         }
 
         private void SetHeight(byte x, byte z, int value)
         {
+            LastAccessed = DateTime.Now;
+            IsModified = true;
             HeightMap[(byte)(z * Depth) + x] = value;
         }
 
         public NbtFile ToNbt()
         {
+            LastAccessed = DateTime.Now;
             var serializer = new NbtSerializer(typeof(Chunk));
             var compound = serializer.Serialize(this, "Level") as NbtCompound;
             var file = new NbtFile();
@@ -263,6 +289,7 @@ namespace Craft.Net.Anvil
 
         public void Deserialize(NbtTag value)
         {
+            IsModified = true;
             var compound = value as NbtCompound;
             var chunk = (Chunk)Serializer.Deserialize(value, true);
 

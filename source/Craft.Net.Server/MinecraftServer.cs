@@ -72,6 +72,7 @@ namespace Craft.Net.Server
         private DateTime NextPlayerUpdate { get; set; }
         private DateTime NextChunkUpdate { get; set; }
         private DateTime LastTimeUpdate { get; set; }
+        private DateTime NextScheduledSave { get; set; }
 
         private const int _millisecondsBetweenPhysicsUpdates = 250;
 
@@ -99,6 +100,8 @@ namespace Craft.Net.Server
                 world.SpawnEntityRequested += WorldSpawnEntityRequested;
                 PhysicsEngines.Add(new PhysicsEngine(world, Block.PhysicsProvider, _millisecondsBetweenPhysicsUpdates));
             }
+            if (Settings.SaveInterval != -1)
+                NextScheduledSave = DateTime.Now.AddSeconds(Settings.SaveInterval);
 
             CryptoServiceProvider = new RSACryptoServiceProvider(1024);
             ServerKey = CryptoServiceProvider.ExportParameters(true);
@@ -288,6 +291,11 @@ namespace Craft.Net.Server
                 foreach (var engine in PhysicsEngines)
                     engine.Update();
                 EntityManager.Update();
+                if (Settings.SaveInterval != -1 && Level.BaseDirectory != null && NextScheduledSave < DateTime.Now)
+                {
+                    Level.Save();
+                    NextScheduledSave = DateTime.Now.AddSeconds(Settings.SaveInterval);
+                }
                 Thread.Sleep(_millisecondsBetweenPhysicsUpdates);
             }
         }

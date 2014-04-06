@@ -175,6 +175,7 @@ namespace Craft.Net.Anvil
             chunk.IsModified = true;
             chunk.X = position.X;
             chunk.Z = position.Z;
+            chunk.LastAccessed = DateTime.Now;
             Chunks[position] = chunk;
         }
 
@@ -202,7 +203,8 @@ namespace Craft.Net.Anvil
             {
                 lock (regionFile)
                 {
-                    foreach (var kvp in  Chunks)
+                    var toRemove = new List<Coordinates2D>();
+                    foreach (var kvp in Chunks)
                     {
                         var chunk = kvp.Value;
                         if (chunk.IsModified)
@@ -218,9 +220,16 @@ namespace Craft.Net.Anvil
                             new MinecraftStream(regionFile).WriteInt32(raw.Length);
                             regionFile.WriteByte(2); // Compressed with zlib
                             regionFile.Write(raw, 0, raw.Length);
+
+                            chunk.IsModified = false;
                         }
+                        if ((DateTime.Now - chunk.LastAccessed).TotalMinutes > 5)
+                            toRemove.Add(kvp.Key);
                     }
                     regionFile.Flush();
+                    // Unload idle chunks
+                    foreach (var chunk in toRemove)
+                        Chunks.Remove(chunk);
                 }
             }
         }
