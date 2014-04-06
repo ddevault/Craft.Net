@@ -17,15 +17,18 @@ namespace TestServer
     class Program
     {
         static Level level;
+        static MinecraftServer server;
 
         static void Main(string[] args)
         {
-            //if (Directory.Exists("world"))
-            //    Directory.Delete("world", true);
+            if (Directory.Exists("world"))
+                Directory.Delete("world", true);
             level = new Level(new StandardGenerator(), "world");
             level.AddWorld("region");
+            level.AddWorld("test", new FlatlandGenerator());
+            level.Worlds[1].GenerateChunk(Coordinates2D.Zero);
             level.SaveTo("world");
-            var server = new MinecraftServer(level);
+            server = new MinecraftServer(level);
             server.ChatMessage += server_ChatMessage;
             server.Settings.OnlineMode = true;
             server.Settings.MotD = "Craft.Net Test Server";
@@ -46,6 +49,10 @@ namespace TestServer
                     e.Origin.GameMode = GameMode.Creative;
                 else if (e.RawMessage == "/survival")
                     e.Origin.GameMode = GameMode.Survival;
+                else if (e.RawMessage == "/world2")
+                    server.MoveClientToWorld(e.Origin, server.GetWorld("test"));
+                else if (e.RawMessage == "/world1")
+                    server.MoveClientToWorld(e.Origin, server.GetWorld("region"));
             }
         }
     }

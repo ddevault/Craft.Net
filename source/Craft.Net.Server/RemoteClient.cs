@@ -54,6 +54,7 @@ namespace Craft.Net.Server
         protected internal byte[] VerificationToken { get; set; }
         protected internal List<short> PaintedSlots { get; set; }
 
+        internal bool PauseChunkUpdates = false;
         internal PlayerManager PlayerManager { get; set; }
 
         public World World
@@ -167,6 +168,8 @@ namespace Craft.Net.Server
         /// </summary>
         public virtual void UpdateChunks(bool forceUpdate)
         {
+            if (!forceUpdate && PauseChunkUpdates)
+                return;
             if (forceUpdate ||
                 (int)(Entity.Position.X) >> 4 != (int)(Entity.OldPosition.X) >> 4 ||
                 (int)(Entity.Position.Z) >> 4 != (int)(Entity.OldPosition.Z) >> 4)
@@ -198,10 +201,21 @@ namespace Craft.Net.Server
             }
         }
 
+        public virtual void UnloadAllChunks()
+        {
+            lock (LoadedChunks)
+            {
+                while (LoadedChunks.Any())
+                {
+                    UnloadChunk(LoadedChunks[0]);
+                }
+            }
+        }
+
         /// <summary>
         /// Loads the given chunk on the client.
         /// </summary>
-        public virtual void LoadChunk (Coordinates2D position)
+        public virtual void LoadChunk(Coordinates2D position)
         {
             var chunk = Entity.World.GetChunk(position);
             SendPacket(ChunkHelper.CreatePacket(chunk));

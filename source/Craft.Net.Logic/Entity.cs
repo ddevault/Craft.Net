@@ -13,6 +13,7 @@ namespace Craft.Net.Logic
         protected Entity()
         {
             EnablePropertyChange = true;
+            EntityId = -1;
         }
 
         public int EntityId { get; set; }

@@ -34,7 +34,8 @@ namespace Craft.Net.Server
 
         public void SpawnEntity(World world, Entity entity)
         {
-            entity.EntityId = NextEntityId++;
+            if (entity.EntityId == -1)
+                entity.EntityId = NextEntityId++;
             entity.World = world;
             if (entity is IDiskEntity) // Assign chunk
             {
@@ -84,7 +85,10 @@ namespace Craft.Net.Server
         public void SendClientEntities(RemoteClient client)
         {
             foreach (var entity in GetEntitiesInRange(client.Entity, MaxClientDistance))
-                client.TrackEntity(entity);
+            {
+                if (entity != client.Entity)
+                    client.TrackEntity(entity);
+            }
         }
 
         public void Update()
@@ -101,6 +105,10 @@ namespace Craft.Net.Server
                     int id;
                     while (!MarkedForDespawn.TryDequeue(out id));
                     var entity = GetEntityById(id);
+                    if (entity == null)
+                        return; // What?
+                    foreach (var client in GetKnownClients(entity))
+                        client.ForgetEntity(entity);
                     Entities.Remove(entity);
                     if (entity is IPhysicsEntity)
                     {
@@ -108,15 +116,13 @@ namespace Craft.Net.Server
                         var engine = Server.GetPhysicsForWorld(entity.World);
                         engine.RemoveEntity((IPhysicsEntity)entity);
                     }
-                    foreach (var client in GetKnownClients(entity))
-                        client.ForgetEntity(entity);
                     if (entity != null)
                         entity.PropertyChanged -= EntityPropertyChanged;
                 }
             }
         }
 
-        private Entity GetEntityById(int id)
+        public Entity GetEntityById(int id)
         {
             return Entities.FirstOrDefault(e => e.EntityId == id);
         }
@@ -131,7 +137,10 @@ namespace Craft.Net.Server
             var clients = Server.Clients.Where(c => c.IsLoggedIn && !c.KnownEntities.Contains(entity.EntityId)
                         && IsInRange(c.Entity.Position, entity.Position, MaxClientDistance)).ToArray();
             foreach (var client in clients)
-                client.TrackEntity(entity);
+            {
+                if (client.Entity.EntityId != entity.EntityId)
+                    client.TrackEntity(entity);
+            }
         }
 
         private void EntityPropertyChanged(object sender, PropertyChangedEventArgs e)

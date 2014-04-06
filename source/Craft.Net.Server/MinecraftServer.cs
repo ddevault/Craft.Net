@@ -156,6 +156,36 @@ namespace Craft.Net.Server
             return Clients.SingleOrDefault(c => c.Username == name);
         }
 
+        public World GetWorld(string name)
+        {
+            return Level.Worlds.SingleOrDefault(w => w.Name == name);
+        }
+
+        public void MoveClientToWorld(RemoteClient client, World world, Vector3? spawnPoint = null)
+        {
+            if (client.World == world)
+                return;
+            lock (client.LoadedChunks)
+                client.PauseChunkUpdates = true;
+            EntityManager.Despawn(client.Entity);
+            while (client.KnownEntities.Any())
+                client.ForgetEntity(EntityManager.GetEntityById(client.KnownEntities[0]));
+            EntityManager.Update();
+            EntityManager.SpawnEntity(world, client.Entity);
+            client.UnloadAllChunks();
+            // TODO: Allow player to save their positions in each world
+            if (spawnPoint == null)
+                client.Entity.Position = world.WorldGenerator.SpawnPoint;
+            else
+                client.Entity.Position = spawnPoint.Value;
+            client.UpdateChunks(true);
+            client.SendPacket(new PlayerPositionAndLookPacket(client.Entity.Position.X, client.Entity.Position.Y + 0.1 + PlayerEntity.Height,
+                client.Entity.Position.Z, client.Entity.Position.Y + 0.1, client.Entity.Yaw, client.Entity.Pitch, false));
+            EntityManager.SendClientEntities(client);
+            lock (client.LoadedChunks)
+                client.PauseChunkUpdates = false;
+        }
+
         public void DisconnectPlayer(RemoteClient client, string reason = null)
         {
             if (!Clients.Contains(client))

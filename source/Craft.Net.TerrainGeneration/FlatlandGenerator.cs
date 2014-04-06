@@ -17,6 +17,7 @@ namespace Craft.Net.TerrainGeneration
 
         public FlatlandGenerator()
         {
+            GeneratorOptions = DefaultGeneratorOptions;
             SpawnPoint = new Vector3(0, 4, 0);
         }
 

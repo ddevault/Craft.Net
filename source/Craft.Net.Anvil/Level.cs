@@ -226,12 +226,15 @@ namespace Craft.Net.Anvil
         /// <summary>
         /// Creates and adds a world to this level, with the given name.
         /// </summary>
-        public void AddWorld(string name)
+        public void AddWorld(string name, IWorldGenerator worldGenerator = null)
         {
             if (Worlds.Any(w => w.Name.ToUpper() == name.ToUpper()))
                 throw new InvalidOperationException("A world with the same name already exists in this level.");
             var world = new World(name);
-            world.WorldGenerator = WorldGenerator;
+            if (worldGenerator == null)
+                world.WorldGenerator = WorldGenerator;
+            else
+                world.WorldGenerator = worldGenerator;
             Worlds.Add(world);
         }
 
