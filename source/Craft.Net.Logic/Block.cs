@@ -11,20 +11,25 @@ namespace Craft.Net.Logic
     {
         public override short ItemId { get { return BlockId; } }
         
-        private static Dictionary<short, BoundingBox?> BoundingBoxes { get; set; }
+        public delegate BoundingBox? BoundingBoxHandler(BlockInfo info);
+        public delegate bool IsSolidOnFaceHandler(BlockInfo info, BlockFace face);
+        public delegate void BlockMinedHandler(World world, Coordinates3D coordinates, BlockInfo info);
+        public delegate bool BlockRightClickedHandler(World world, Coordinates3D coordinates, BlockInfo info, BlockFace face, Coordinates3D cursor, ItemInfo? item);
+        
         private static Dictionary<short, string> BlockNames { get; set; }
         private static Dictionary<short, double> BlockHardness { get; set; }
         public static IBlockPhysicsProvider PhysicsProvider { get; private set; }
-        public delegate void BlockMinedHandler(World world, Coordinates3D coordinates, BlockInfo info);
-        private static Dictionary<short, BlockMinedHandler> BlockMinedHandlers { get; set; }
-        public delegate bool BlockRightClickedHandler(World world, Coordinates3D coordinates, BlockInfo info, BlockFace face, Coordinates3D cursor, ItemInfo? item);
-        private static Dictionary<short, BlockRightClickedHandler> BlockRightClickedHandlers { get; set; }
         private static Dictionary<short, string> BlockPlacementSoundEffects { get; set; }
+        private static Dictionary<short, BoundingBoxHandler> BoundingBoxHandlers { get; set; }
+        private static Dictionary<short, IsSolidOnFaceHandler> IsSolidOnFaceHandlers { get; set; }
+        private static Dictionary<short, BlockMinedHandler> BlockMinedHandlers { get; set; }
+        private static Dictionary<short, BlockRightClickedHandler> BlockRightClickedHandlers { get; set; }
         
         static Block()
         {
             PhysicsProvider = new BlockPhysicsProvider();
-            BoundingBoxes = new Dictionary<short, BoundingBox?>();
+            BoundingBoxHandlers = new Dictionary<short, BoundingBoxHandler>();
+            IsSolidOnFaceHandlers = new Dictionary<short, IsSolidOnFaceHandler>();
             BlockMinedHandlers = new Dictionary<short, BlockMinedHandler>();
             BlockRightClickedHandlers = new Dictionary<short, BlockRightClickedHandler>();
             BlockHardness = new Dictionary<short, double>();
@@ -56,18 +61,6 @@ namespace Craft.Net.Logic
             if (!Item.ItemUsedOnBlockHandlers.ContainsKey(block.BlockId))
                 Item.ItemUsedOnBlockHandlers[block.BlockId] = DefaultUsedOnBlockHandler;
         }
-
-        protected void SetBoundingBox(BoundingBox? boundingBox)
-        {
-            BoundingBoxes[BlockId] = boundingBox;
-        }
-
-        public static BoundingBox? GetBoundingBox(short blockId)
-        {
-            if (BoundingBoxes.ContainsKey(blockId))
-                return BoundingBoxes[blockId];
-            return new BoundingBox(Vector3.Zero, Vector3.One);
-        }
         
         public static string GetPlacementSoundEffect(short blockId)
         {
@@ -79,6 +72,16 @@ namespace Craft.Net.Logic
         protected void SetPlacementSoundEffect(string soundEffect)
         {
             BlockPlacementSoundEffects[BlockId] = soundEffect;
+        }
+        
+        protected void SetBoundingBoxHandler(BoundingBoxHandler handler)
+        {
+            BoundingBoxHandlers[BlockId] = handler;
+        }
+        
+        protected void SetIsSolidOnFaceHandler(IsSolidOnFaceHandler handler)
+        {
+            IsSolidOnFaceHandlers[BlockId] = handler;
         }
 
         protected void SetBlockMinedHandler(BlockMinedHandler handler)
@@ -107,9 +110,25 @@ namespace Craft.Net.Logic
             public BoundingBox? GetBoundingBox(World world, Coordinates3D coordinates)
             {
                 // TODO: Consider passing block info to a handler to get a fancier bounding box
-                var blockId = world.GetBlockId(coordinates);
-                return Block.GetBoundingBox(blockId);
+                var info = world.GetBlockInfo(coordinates);
+                return Block.GetBoundingBox(info);
             }
+        }
+        
+        public static BoundingBox? GetBoundingBox(BlockInfo info)
+        {
+            if (BoundingBoxHandlers.ContainsKey(info.BlockId))
+                return BoundingBoxHandlers[info.BlockId](info);
+            else
+                return DefaultBoundingBoxHandler(info); 
+        }
+        
+        public static bool GetIsSolidOnFace(BlockInfo info, BlockFace face)
+        {
+            if (IsSolidOnFaceHandlers.ContainsKey(info.BlockId))
+                return IsSolidOnFaceHandlers[info.BlockId](info, face);
+            else
+                return DefaultIsSolidOnFaceHandler(info, face);
         }
 
         internal static void OnBlockMined(World world, Coordinates3D coordinates)
@@ -251,6 +270,16 @@ namespace Craft.Net.Logic
         private static bool DefaultBlockRightClickedHandler(World world, Coordinates3D coordinates, BlockInfo block, BlockFace face, ItemInfo? item)
         {
             return true;
+        }
+        
+        private static BoundingBox? DefaultBoundingBoxHandler(BlockInfo info)
+        {
+            return new BoundingBox(Vector3.Zero, Vector3.One);
+        }
+        
+        private static bool DefaultIsSolidOnFaceHandler(BlockInfo info, BlockFace face)
+        {
+            return true;   
         }
         
         public abstract short BlockId { get; }

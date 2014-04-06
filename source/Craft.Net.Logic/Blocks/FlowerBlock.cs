@@ -1,4 +1,5 @@
 using System;
+using Craft.Net.Common;
 
 namespace Craft.Net.Logic.Blocks
 {
@@ -9,7 +10,12 @@ namespace Craft.Net.Logic.Blocks
 
         public YellowFlowerBlock() : base("minecraft:yellow_flower")
         {
-            base.SetBoundingBox(null);
+            base.SetBoundingBoxHandler(BoundingBox);
+        }
+        
+        private BoundingBox? BoundingBox(BlockInfo info)
+        {
+            return null;   
         }
     }
 
@@ -20,7 +26,12 @@ namespace Craft.Net.Logic.Blocks
 
         public FlowerBlock() : base("minecraft:red_flower")
         {
-            base.SetBoundingBox(null);
+            base.SetBoundingBoxHandler(BoundingBox);
+        }
+        
+        private BoundingBox? BoundingBox(BlockInfo info)
+        {
+            return null;   
         }
     }
 }
