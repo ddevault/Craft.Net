@@ -43,6 +43,7 @@ namespace Craft.Net.Server
         public int MaxDigDistance { get; set; }
         public Dictionary<string, object> Tags { get; set; }
         public string UUID { get; internal set; }
+        public static bool GenerateOnWalk { get; set; }
 
         protected internal List<Coordinates2D> LoadedChunks { get; set; }
         protected internal DateTime LastKeepAlive { get; set; }
@@ -217,7 +218,8 @@ namespace Craft.Net.Server
         /// </summary>
         public virtual void LoadChunk(Coordinates2D position)
         {
-            var chunk = Entity.World.GetChunk(position);
+            var chunk = Entity.World.GetChunk(position, GenerateOnWalk);
+            if (chunk == null) return;
             SendPacket(ChunkHelper.CreatePacket(chunk));
             // TODO: Tile entities
             foreach (var entity in chunk.TileEntities)

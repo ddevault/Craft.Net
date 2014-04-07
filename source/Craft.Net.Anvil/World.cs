@@ -48,13 +48,23 @@ namespace Craft.Net.Anvil
             return chunk;
         }
 
-        public Chunk GetChunk(Coordinates2D coordinates)
+        public Chunk GetChunk(Coordinates2D coordinates, bool Generate = true)
+        {
+            if (!Generate)
+                return GetChunkNoGenerate(coordinates);
+            int regionX = coordinates.X / Region.Width - ((coordinates.X < 0) ? 1 : 0);
+            int regionZ = coordinates.Z / Region.Depth - ((coordinates.Z < 0) ? 1 : 0);
+            var region = LoadOrGenerateRegion(new Coordinates2D(regionX, regionZ));
+            return region.GetChunk(new Coordinates2D(coordinates.X - regionX * 32, coordinates.Z - regionZ * 32));
+        }
+
+        public Chunk GetChunkNoGenerate(Coordinates2D coordinates)
         {
             int regionX = coordinates.X / Region.Width - ((coordinates.X < 0) ? 1 : 0);
             int regionZ = coordinates.Z / Region.Depth - ((coordinates.Z < 0) ? 1 : 0);
 
-            var region = LoadOrGenerateRegion(new Coordinates2D(regionX, regionZ));
-            return region.GetChunk(new Coordinates2D(coordinates.X - regionX * 32, coordinates.Z - regionZ * 32));
+            var region = LoadNoGenerateRegion(new Coordinates2D(regionX, regionZ));
+            return region.GetChunkNoGenerate(new Coordinates2D(coordinates.X - regionX * 32, coordinates.Z - regionZ * 32));
         }
 
         public void GenerateChunk(Coordinates2D coordinates)
@@ -210,6 +220,26 @@ namespace Craft.Net.Anvil
         }
 
         private Region LoadOrGenerateRegion(Coordinates2D coordinates)
+        {
+            if (Regions.ContainsKey(coordinates))
+                return Regions[coordinates];
+            Region region;
+            if (BaseDirectory != null)
+            {
+                var file = Path.Combine(BaseDirectory, Region.GetRegionFileName(coordinates));
+                if (File.Exists(file))
+                    region = new Region(coordinates, this, file);
+                else
+                    region = new Region(coordinates, this);
+            }
+            else
+                region = new Region(coordinates, this);
+            lock (Regions)
+                Regions[coordinates] = region;
+            return region;
+        }
+
+        private Region LoadNoGenerateRegion(Coordinates2D coordinates)
         {
             if (Regions.ContainsKey(coordinates))
                 return Regions[coordinates];
