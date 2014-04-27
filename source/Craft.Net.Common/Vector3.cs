@@ -23,16 +23,16 @@ namespace Craft.Net.Common
 
         public Vector3(double x, double y, double z)
         {
-            this.X = x;
-            this.Y = y;
-            this.Z = z;
+            X = x;
+            Y = y;
+            Z = z;
         }
 
-        public Vector3(Vector3 V)
+        public Vector3(Vector3 v)
         {
-            this.X = V.X;
-            this.Y = V.Y;
-            this.Z = V.Z;
+            X = v.X;
+            Y = v.Y;
+            Z = v.Z;
         }
 
         /// <summary>
@@ -171,6 +171,11 @@ namespace Craft.Net.Common
                 a.Z / b.Z);
         }
 
+        public static Vector3 operator %(Vector3 a, Vector3 b)
+        {
+            return new Vector3(a.X % b.X, a.Y % b.Y, a.Z % b.Z);
+        }
+
         public static Vector3 operator +(Vector3 a, double b)
         {
             return new Vector3(
@@ -201,6 +206,11 @@ namespace Craft.Net.Common
                 a.X / b,
                 a.Y / b,
                 a.Z / b);
+        }
+
+        public static Vector3 operator %(Vector3 a, double b)
+        {
+            return new Vector3(a.X % b, a.Y % b, a.Y % b);
         }
 
         public static Vector3 operator +(double a, Vector3 b)
@@ -235,69 +245,29 @@ namespace Craft.Net.Common
                 a / b.Z);
         }
 
+        public static Vector3 operator %(double a, Vector3 b)
+        {
+            return new Vector3(a % b.X, a % b.Y, a % b.Y);
+        }
+
         #endregion
 
         #region Constants
 
-        public static Vector3 Zero
-        {
-            get { return new Vector3(0); }
-        }
+        public static readonly Vector3 Zero = new Vector3(0);
+        public static readonly Vector3 One = new Vector3(1);
 
-        public static Vector3 One
-        {
-            get { return new Vector3(1); }
-        }
+        public static readonly Vector3 Up = new Vector3(0, 1, 0);
+        public static readonly Vector3 Down = new Vector3(0, -1, 0);
+        public static readonly Vector3 Left = new Vector3(-1, 0, 0);
+        public static readonly Vector3 Right = new Vector3(1, 0, 0);
+        public static readonly Vector3 Backwards = new Vector3(0, 0, -1);
+        public static readonly Vector3 Forwards = new Vector3(0, 0, 1);
 
-        public static Vector3 Up
-        {
-            get { return new Vector3(0, 1, 0); }
-        }
-
-        public static Vector3 Down
-        {
-            get { return new Vector3(0, -1, 0); }
-        }
-
-        public static Vector3 Left
-        {
-            get { return new Vector3(-1, 0, 0); }
-        }
-
-        public static Vector3 Right
-        {
-            get { return new Vector3(1, 0, 0); }
-        }
-
-        public static Vector3 Backwards
-        {
-            get { return new Vector3(0, 0, -1); }
-        }
-
-        public static Vector3 Forwards
-        {
-            get { return new Vector3(0, 0, 1); }
-        }
-
-        public static Vector3 South
-        {
-            get { return new Vector3(0, 0, 1); }
-        }
-
-        public static Vector3 North
-        {
-            get { return new Vector3(0, 0, -1); }
-        }
-
-        public static Vector3 West
-        {
-            get { return new Vector3(-1, 0, 0); }
-        }
-
-        public static Vector3 East
-        {
-            get { return new Vector3(1, 0, 0); }
-        }
+        public static readonly Vector3 East = new Vector3(1, 0, 0);
+        public static readonly Vector3 West = new Vector3(-1, 0, 0);
+        public static readonly Vector3 North = new Vector3(0, 0, -1);
+        public static readonly Vector3 South = new Vector3(0, 0, 1);
 
         #endregion
 
