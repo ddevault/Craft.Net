@@ -7,6 +7,8 @@ using System.Runtime.Serialization;
 using System.Security.Cryptography;
 using System.Security.Permissions;
 using System.Text;
+using Org.BouncyCastle.Math;
+
 namespace Craft.Net.Common
 {
     public static class Cryptography
