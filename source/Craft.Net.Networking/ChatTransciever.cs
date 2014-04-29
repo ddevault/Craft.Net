@@ -99,8 +99,6 @@ namespace Craft.Net.Networking
 
         public string ChatHoverActionValue { get; protected set; }
 
-        public bool IsCommand { get; private set; }
-
         public IList<ChatMessage> SubMessages { get; protected set; }
 
         public ChatMessage(string Message)
@@ -109,16 +107,19 @@ namespace Craft.Net.Networking
             try
             {
                 Init(JObject.Parse(Message));
-            }
-            catch (Newtonsoft.Json.JsonReaderException)
+            } catch (Newtonsoft.Json.JsonReaderException)
             {
                 //If Newtonsoft.Json couldn't parse it, that means we got something that isn't a new-format chat message.
                 // (Or there's a bug in the server)
                 //So we're just gona set the text content and call it a day.
                 Text = Message;
-                if (Text.StartsWith("/"))
-                    this.IsCommand = true;
             }
+        }
+
+        public ChatMessage(string Message, ChatColor color)
+        {
+            this.Text = Message;
+            this.Color = color;
         }
 
         private ChatMessage(JObject obj)
@@ -266,9 +267,14 @@ namespace Craft.Net.Networking
             return self;
         }
 
+        public string ToJson()
+        {
+            return AsJObject().ToString();
+        }
+
         public override string ToString()
         {
-            return this.AsJObject().ToString();
+            return this.FullText();
         }
     }
 }

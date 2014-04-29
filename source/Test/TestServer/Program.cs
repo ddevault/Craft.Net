@@ -39,7 +39,7 @@ namespace TestServer
 
         static void server_ChatMessage(object sender, ChatMessageEventArgs e)
         {
-            if (e.Message.IsCommand)
+            if (e.Message.RawMessage.StartsWith("/"))
             {
                 string command = e.Message.FullText();
                 e.Handled = true;
