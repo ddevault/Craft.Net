@@ -140,10 +140,18 @@ namespace Craft.Net.Server
             }
         }
 
+        /*
         public void SendChat(string text)
         {
             foreach (var client in Clients.Where(c => c.IsLoggedIn))
                 client.SendChat(text);
+        }
+        */
+
+        public void SendChat(ChatMessage message)
+        {
+            foreach (var client in Clients.Where(c => c.IsLoggedIn))
+                client.SendChat(message);
         }
 
         public RemoteClient[] GetClientsInWorld(World world)
@@ -223,7 +231,7 @@ namespace Craft.Net.Server
                     var args = new PlayerLogInEventArgs(client);
                     OnPlayerLoggedOut(args);
                     if (!args.Handled)
-                        SendChat(string.Format(ChatColors.Yellow + "{0} left the game.", client.Username));
+                        SendChat(new ChatMessage(string.Format("{0} left the game.", client.Username, ChatColor.YELLOW)));
                 }
                 client.Dispose();
             }
@@ -307,7 +315,7 @@ namespace Craft.Net.Server
             OnPlayerLoggedIn(args);
             //LogProvider.Log(client.Username + " joined the game.");
             if (!args.Handled)
-                SendChat(ChatColors.Yellow + client.Username + " joined the game.");
+                SendChat(new ChatMessage(string.Format("{0} joined the game.", args.Username), ChatColor.YELLOW));
         }
 
         #endregion

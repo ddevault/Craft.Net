@@ -353,20 +353,20 @@ namespace Craft.Net.Networking
     {
         public ChatMessagePacket(string message)
         {
-            Message = message;
+            Message = new ChatMessage(message);
         }
 
-        public string Message;
+        public ChatMessage Message;
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
-            Message = stream.ReadString();
+            Message = new ChatMessage(stream.ReadString());
             return mode;
         }
 
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
-            stream.WriteString(Message);
+            stream.WriteString(Message.RawMessage);
             return mode;
         }
     }

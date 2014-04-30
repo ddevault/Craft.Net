@@ -58,11 +58,11 @@ namespace Craft.Net.Server.Handlers
             if (!args.Handled)
             {
                 //var team = server.ScoreboardManager.GetPlayerTeam(client.Username);
-                string chat;
+                ChatMessage chat;
                 //if (team != null)
                 //    chat = string.Format("<{0}{1}{2}> {3}", team.PlayerPrefix, client.Username, team.PlayerSuffix, packet.Message);
                 //else
-                    chat = string.Format("<{0}> {1}", client.Username, packet.Message);
+                    chat = new ChatMessage(string.Format("<{0}> {1}", client.Username, packet.Message));
                 server.SendChat(chat);
             }
         }

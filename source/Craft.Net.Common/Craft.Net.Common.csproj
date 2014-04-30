@@ -46,7 +46,6 @@
   <ItemGroup>
     <Compile Include="Biome.cs" />
     <Compile Include="BoundingBox.cs" />
-    <Compile Include="ChatColors.cs" />
     <Compile Include="Cryptography.cs" />
     <Compile Include="Difficulty.cs" />
     <Compile Include="Dimension.cs" />
