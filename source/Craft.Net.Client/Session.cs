@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
 namespace Craft.Net.Client
 {
@@ -122,7 +123,7 @@ namespace Craft.Net.Client
         public class MojangUser
         {
             public string id { get; set; }
-            public IList<Userproperty> properties() { get; set; }
+            public IList<Userproperty> properties { get; set; }
         }
         public class Userproperty
         {
@@ -164,7 +165,7 @@ namespace Craft.Net.Client
                 var response = request.GetResponse();
                 stream = response.GetResponseStream();
                 blob = serializer.Deserialize<RefreshBlob>(new JsonTextReader(new StreamReader(stream)));
-                this.User = blob.User
+                this.User = blob.User;
                 this.AccessToken = blob.AccessToken;
                 this.ClientToken = blob.ClientToken;
                 this.SelectedProfile = blob.SelectedProfile;
@@ -198,5 +199,30 @@ namespace Craft.Net.Client
         [JsonProperty("user")]
         public MojangUser User { get; set; }
 
+        public static IList<Servicestatus> Servicestatuses()
+        {
+            using (WebClient wc = new WebClient())
+            {
+                string status = wc.DownloadString("http://status.mojang.com/check");
+                JArray ja = JArray.Parse(status);
+                IList<Servicestatus> list = new List<Servicestatus>();
+                foreach (JObject Item in ja)
+                {
+                    Servicestatus statusitem = new Servicestatus();
+                    statusitem.name = Item.Properties().Select(p => p.Name).First();
+                    statusitem.status = Item.Value<string>(statusitem.name);
+                    list.Add(statusitem);
+                }
+                return list;
+            }
+        }
+        public class Servicestatus
+        {
+            public Servicestatus()
+            {
+            }
+            public string name { get; set; }
+            public string status { get; set; }
+        }
     }
 }
