@@ -122,13 +122,17 @@ namespace Craft.Net.Client
         }
         public class MojangUser
         {
-            public string id { get; set; }
-            public IList<Userproperty> properties { get; set; }
+            [JsonProperty("id")]
+            public string Id { get; set; }
+            [JsonProperty("properties")]
+            public IList<Userproperty> Properties { get; set; }
         }
         public class Userproperty
         {
-            public string name { get; set; }
-            public string value { get; set; }
+            [JsonProperty("name")]
+            public string Name { get; set; }
+            [JsonProperty("value")]
+            public string Value { get; set; }
         }
 
         public Session(string userName)
@@ -199,30 +203,30 @@ namespace Craft.Net.Client
         [JsonProperty("user")]
         public MojangUser User { get; set; }
 
-        public static IList<Servicestatus> Servicestatuses()
+        public static IList<ServiceStatus> ServiceStatuses()
         {
             using (WebClient wc = new WebClient())
             {
                 string status = wc.DownloadString("http://status.mojang.com/check");
                 JArray ja = JArray.Parse(status);
-                IList<Servicestatus> list = new List<Servicestatus>();
-                foreach (JObject Item in ja)
+                IList<ServiceStatus> list = new List<ServiceStatus>();
+                foreach (JObject item in ja)
                 {
-                    Servicestatus statusitem = new Servicestatus();
-                    statusitem.name = Item.Properties().Select(p => p.Name).First();
-                    statusitem.status = Item.Value<string>(statusitem.name);
-                    list.Add(statusitem);
+                    ServiceStatus statusItem = new ServiceStatus();
+                    statusItem.name = item.Properties().Select(p => p.Name).First();
+                    statusItem.status = item.Value<string>(statusItem.name);
+                    list.Add(statusItem);
                 }
                 return list;
             }
         }
-        public class Servicestatus
+        public class ServiceStatus
         {
-            public Servicestatus()
+            public ServiceStatus()
             {
             }
-            public string name { get; set; }
-            public string status { get; set; }
+            public string Name { get; set; }
+            public string Status { get; set; }
         }
     }
 }
