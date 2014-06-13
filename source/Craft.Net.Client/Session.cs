@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
 namespace Craft.Net.Client
 {
@@ -121,13 +122,17 @@ namespace Craft.Net.Client
         }
         public class MojangUser
         {
-            public string id { get; set; }
-            public IList<Userproperty> properties() { get; set; }
+            [JsonProperty("id")]
+            public string Id { get; set; }
+            [JsonProperty("properties")]
+            public IList<Userproperty> Properties { get; set; }
         }
         public class Userproperty
         {
-            public string name { get; set; }
-            public string value { get; set; }
+            [JsonProperty("name")]
+            public string Name { get; set; }
+            [JsonProperty("value")]
+            public string Value { get; set; }
         }
 
         public Session(string userName)
@@ -164,7 +169,7 @@ namespace Craft.Net.Client
                 var response = request.GetResponse();
                 stream = response.GetResponseStream();
                 blob = serializer.Deserialize<RefreshBlob>(new JsonTextReader(new StreamReader(stream)));
-                this.User = blob.User
+                this.User = blob.User;
                 this.AccessToken = blob.AccessToken;
                 this.ClientToken = blob.ClientToken;
                 this.SelectedProfile = blob.SelectedProfile;
@@ -198,5 +203,30 @@ namespace Craft.Net.Client
         [JsonProperty("user")]
         public MojangUser User { get; set; }
 
+        public static IList<ServiceStatus> ServiceStatuses()
+        {
+            using (WebClient wc = new WebClient())
+            {
+                string status = wc.DownloadString("http://status.mojang.com/check");
+                JArray ja = JArray.Parse(status);
+                IList<ServiceStatus> list = new List<ServiceStatus>();
+                foreach (JObject item in ja)
+                {
+                    ServiceStatus statusItem = new ServiceStatus();
+                    statusItem.name = item.Properties().Select(p => p.Name).First();
+                    statusItem.status = item.Value<string>(statusItem.name);
+                    list.Add(statusItem);
+                }
+                return list;
+            }
+        }
+        public class ServiceStatus
+        {
+            public ServiceStatus()
+            {
+            }
+            public string Name { get; set; }
+            public string Status { get; set; }
+        }
     }
 }
