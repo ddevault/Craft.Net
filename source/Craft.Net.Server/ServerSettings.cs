@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Craft.Net.Common;
+using Craft.Net.Anvil;
 
 namespace Craft.Net.Server
 {
@@ -20,6 +21,9 @@ namespace Craft.Net.Server
                 settings.OnlineMode = true;
                 settings.Difficulty = Difficulty.Normal;
                 settings.SaveInterval = 30;
+                settings.ChunkUnloadTimeout = 300;
+                settings.GenerateChunksOnActivity = true;
+                settings.GenerateChunksOnActivity = true;
                 return settings;
             }
         }
@@ -54,5 +58,13 @@ namespace Craft.Net.Server
         /// saves.
         /// </summary>
         public int SaveInterval { get; set; }
+        /// <summary>
+        /// The number of seconds to unload inactive chunks after last activity
+        /// </summary>
+        public int ChunkUnloadTimeout { get { return Region.ChunkUnloadTimeout; } set { Region.ChunkUnloadTimeout = value; } }
+        /// <summary>
+        /// Generate chunks if there's activity going on (Player walks)
+        /// </summary>
+        public bool GenerateChunksOnActivity { get { return RemoteClient.GenerateOnWalk; } set { RemoteClient.GenerateOnWalk = value; } }
     }
 }

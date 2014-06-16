@@ -15,6 +15,8 @@ namespace Craft.Net.Anvil
     /// </summary>
     public class Region : IDisposable
     {
+        public static int ChunkUnloadTimeout { get; set; }
+
         // In chunks
         public const int Width = 32, Depth = 32;
 
@@ -103,6 +105,56 @@ namespace Craft.Net.Anvil
                         throw new ArgumentException("The requested chunk is not loaded.", "position");
                     else
                         GenerateChunk(position);
+                }
+                return Chunks[position];
+            }
+        }
+
+        /// <summary>
+        /// Get chunk without generating any
+        /// </summary>
+        /// <param name="position">The position of the requested local chunk coordinates.</param>
+        /// <returns>Null or Chunk</returns>
+        public Chunk GetChunkNoGenerate(Coordinates2D position)
+        {
+            // TODO: This could use some refactoring
+            lock (Chunks)
+            {
+                if (!Chunks.ContainsKey(position))
+                {
+                    if (regionFile != null)
+                    {
+                        // Search the stream for that region
+                        lock (regionFile)
+                        {
+                            var chunkData = GetChunkFromTable(position);
+                            if (chunkData == null)
+                            {
+                                if (World.WorldGenerator == null)
+                                    throw new ArgumentException("The requested chunk is not loaded.", "position");
+                                return null;
+                            }
+                            regionFile.Seek(chunkData.Item1, SeekOrigin.Begin);
+                            /*int length = */
+                            new MinecraftStream(regionFile).ReadInt32(); // TODO: Avoid making new objects here, and in the WriteInt32
+                            int compressionMode = regionFile.ReadByte();
+                            switch (compressionMode)
+                            {
+                                case 1: // gzip
+                                    break;
+                                case 2: // zlib
+                                    var nbt = new NbtFile();
+                                    nbt.LoadFromStream(regionFile, NbtCompression.ZLib, null);
+                                    var chunk = Chunk.FromNbt(nbt);
+                                    Chunks.Add(position, chunk);
+                                    break;
+                                default:
+                                    throw new InvalidDataException("Invalid compression scheme provided by region file.");
+                            }
+                        }
+                    }
+                    else
+                        return null;
                 }
                 return Chunks[position];
             }
@@ -223,7 +275,7 @@ namespace Craft.Net.Anvil
 
                             chunk.IsModified = false;
                         }
-                        if ((DateTime.Now - chunk.LastAccessed).TotalMinutes > 5)
+                        if ((DateTime.Now - chunk.LastAccessed).TotalSeconds > ChunkUnloadTimeout)
                             toRemove.Add(kvp.Key);
                     }
                     regionFile.Flush();
