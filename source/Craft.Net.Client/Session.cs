@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace Craft.Net.Client
 {
@@ -46,7 +45,6 @@ namespace Craft.Net.Client
                 Password = password;
                 ClientToken = token;
                 Agent = new AgentBlob();
-                RequestUser = true;
             }
 
             public class AgentBlob
@@ -72,8 +70,6 @@ namespace Craft.Net.Client
             public string Password { get; set; }
             [JsonProperty("clientToken")]
             public string ClientToken { get; set; }
-            [JsonProperty("requestUser")]
-            public bool RequestUser { get; set; }
         }
 
         private class RefreshBlob
@@ -83,7 +79,6 @@ namespace Craft.Net.Client
                 AccessToken = session.AccessToken;
                 ClientToken = session.ClientToken;
                 SelectedProfile = session.SelectedProfile;
-                RequestUser = true;
             }
 
             [JsonProperty("accessToken")]
@@ -92,10 +87,6 @@ namespace Craft.Net.Client
             public string ClientToken { get; set; }
             [JsonProperty("selectedProfile")]
             public Profile SelectedProfile { get; set; }
-            [JsonProperty("requestUser")]
-            public bool RequestUser { get; set; }
-            [JsonProperty("user")]
-            public MojangUser User { get; set; }
         }
 
         public class MinecraftAuthenticationException : Exception
@@ -118,16 +109,6 @@ namespace Craft.Net.Client
             public string Id { get; set; }
             [JsonProperty("name")]
             public string Name { get; set; }
-        }
-        public class MojangUser
-        {
-            public string id { get; set; }
-            public IList<Userproperty> properties() { get; set; }
-        }
-        public class Userproperty
-        {
-            public string name { get; set; }
-            public string value { get; set; }
         }
 
         public Session(string userName)
@@ -164,7 +145,6 @@ namespace Craft.Net.Client
                 var response = request.GetResponse();
                 stream = response.GetResponseStream();
                 blob = serializer.Deserialize<RefreshBlob>(new JsonTextReader(new StreamReader(stream)));
-                this.User = blob.User
                 this.AccessToken = blob.AccessToken;
                 this.ClientToken = blob.ClientToken;
                 this.SelectedProfile = blob.SelectedProfile;
@@ -195,8 +175,5 @@ namespace Craft.Net.Client
         public string SessionId { get { return "token:" + AccessToken + ":" + SelectedProfile.Id; } }
         [JsonIgnore]
         public bool OnlineMode { get { return AccessToken != null; } }
-        [JsonProperty("user")]
-        public MojangUser User { get; set; }
-
     }
 }
