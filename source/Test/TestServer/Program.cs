@@ -50,9 +50,9 @@ namespace TestServer
                     e.Origin.GameMode = GameMode.Creative;
                 else if (command == "/survival")
                     e.Origin.GameMode = GameMode.Survival;
-                else if (e.RawMessage == "/world2")
+                else if (command == "/world2")
                     server.MoveClientToWorld(e.Origin, server.GetWorld("test"));
-                else if (e.RawMessage == "/world1")
+                else if (command == "/world1")
                     server.MoveClientToWorld(e.Origin, server.GetWorld("region"));
             }
         }
