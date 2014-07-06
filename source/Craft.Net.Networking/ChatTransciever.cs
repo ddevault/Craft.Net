@@ -233,15 +233,21 @@ namespace Craft.Net.Networking
         public JObject AsJObject()
         {
             JObject self = new JObject();
-            var extras = new JArray();
+            JArray extras = null;
             if (SubMessages != null)
             {
+                extras = new JArray();
+
                 foreach (ChatMessage c in SubMessages)
                 {
                     extras.Add(c.AsJObject());
                 }
             }
-            self.Add(new JProperty("extra", extras));
+            // 'extra' may not be empty if it is present.
+            if (extras != null)
+            {
+                self.Add(new JProperty("extra", extras));
+            }
             self.Add(new JProperty("text", this.Text));
             self.Add(new JProperty("bold", this.Bold));
             self.Add(new JProperty("strikethrough", this.StrikeThrough));
