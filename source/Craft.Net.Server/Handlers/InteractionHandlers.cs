@@ -13,12 +13,13 @@ namespace Craft.Net.Server.Handlers
     {
         public static void PlayerDigging(RemoteClient client, MinecraftServer server, IPacket _packet)
         {
-            var packet = (PlayerBlockActionPacket)_packet;
-            var position = new Coordinates3D(packet.X, packet.Y, packet.Z);
+            var packet = (Position)_packet;
+			var packet_ = (PlayerBlockActionPacket)_packet;
+            var position = new Coordinates3D((int)packet.getX(), (int)packet.getY(), (int)packet.getZ());
             // TODO: Enforce line-of-sight
             var block = client.World.GetBlockInfo(position);
             short damage;
-            switch (packet.Action)
+            switch (packet_.Action)
             {
                 case PlayerBlockActionPacket.BlockAction.StartDigging:
                     if (client.Entity.Position.DistanceTo(position) <= client.MaxDigDistance)
@@ -90,7 +91,7 @@ namespace Craft.Net.Server.Handlers
                     if (!SlotItem.Empty)
                     {
                         var ItemCopy = (ItemStack)SlotItem.Clone();
-                        if (packet.Action == PlayerBlockActionPacket.BlockAction.DropItemStack)
+                        if (packet_.Action == PlayerBlockActionPacket.BlockAction.DropItemStack)
                             client.Entity.Inventory[client.Entity.SelectedSlot] = ItemStack.EmptyStack;
                         else
                         {

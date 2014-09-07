@@ -104,7 +104,7 @@ namespace Craft.Net.Server
                     var player = entity as PlayerEntity;
                     var selectedItem = player.SelectedItem.Id;
                     if (selectedItem == -1) selectedItem = 0;
-                    SendPacket(new SpawnPlayerPacket(player.EntityId, UUID, player.Username, MathHelper.CreateAbsoluteInt(player.Position.X),
+                    SendPacket(new SpawnPlayerPacket(player.EntityId, UUID, MathHelper.CreateAbsoluteInt(player.Position.X),
                         MathHelper.CreateAbsoluteInt(player.Position.Y), MathHelper.CreateAbsoluteInt(player.Position.Z),
                         MathHelper.CreateRotationByte(player.Yaw), MathHelper.CreateRotationByte(player.Pitch), selectedItem, player.Metadata));
                     if (!player.SelectedItem.Empty)
@@ -127,15 +127,19 @@ namespace Craft.Net.Server
         {
             if (KnownEntities.Contains(entity.EntityId))
                 KnownEntities.Remove(entity.EntityId);
-            SendPacket(new DestroyEntityPacket(new int[] { entity.EntityId }));
+            SendPacket(new DestroyEntityPacket(new long[] { entity.EntityId }));
         }
 
         internal void UpdateEntity(Entity entity)
         {
+			bool onGround = true;
+			if (entity.World.GetBlockId (entity.Position) != 0) {
+				onGround = false;
+			}
             // TODO: Check queue for existing updates for this entity and discard them
             SendPacket(new EntityTeleportPacket(entity.EntityId, MathHelper.CreateAbsoluteInt(entity.Position.X),
                 MathHelper.CreateAbsoluteInt(entity.Position.Y), MathHelper.CreateAbsoluteInt(entity.Position.Z),
-                MathHelper.CreateRotationByte(entity.Yaw), MathHelper.CreateRotationByte(entity.Pitch)));
+                MathHelper.CreateRotationByte(entity.Yaw), MathHelper.CreateRotationByte(entity.Pitch), onGround));
             if (entity is LivingEntity)
                 SendPacket(new EntityHeadLookPacket(entity.EntityId, MathHelper.CreateRotationByte((entity as LivingEntity).HeadYaw)));
         }
@@ -233,7 +237,6 @@ namespace Craft.Net.Server
         public virtual void UnloadChunk(Coordinates2D position)
         {
             var dataPacket = new ChunkDataPacket();
-            dataPacket.AddBitMap = 0;
             dataPacket.GroundUpContinuous = true;
             dataPacket.PrimaryBitMap = 0;
             dataPacket.X = (int)position.X;

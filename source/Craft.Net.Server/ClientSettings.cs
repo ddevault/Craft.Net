@@ -21,6 +21,6 @@ namespace Craft.Net.Server
         public CultureInfo Locale { get; set; }
         public byte WalkingSpeed { get; set; }
         public byte FlyingSpeed { get; set; }
-        public bool ShowCape { get; set; }
+        public byte ShowCape { get; set; }
     }
 }

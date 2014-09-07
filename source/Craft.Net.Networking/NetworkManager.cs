@@ -8,7 +8,7 @@ namespace Craft.Net.Networking
 {
     public class NetworkManager
     {
-        public const int ProtocolVersion = 4;
+        public const int ProtocolVersion = 47;
         public const string FriendlyVersion = "1.7.5";
 
         public NetworkMode NetworkMode { get; private set; }
@@ -161,7 +161,7 @@ namespace Craft.Net.Networking
             clientbound.Add(typeof(TabCompletePacket));
             clientbound.Add(typeof(ScoreboardObjectivePacket));
             clientbound.Add(typeof(UpdateScorePacket));
-            clientbound.Add(typeof(DisplayScoreboardPacket));
+            clientbound.Add(typeof(CombatEventPacket));
             clientbound.Add(typeof(SetTeamsPacket));
             clientbound.Add(typeof(PluginMessagePacket));
             clientbound.Add(typeof(DisconnectPacket));
@@ -234,7 +234,7 @@ namespace Craft.Net.Networking
                         break;
                     }
                 }
-                if (id == -1)
+               if (id == -1)
                     throw new InvalidOperationException("Attempted to write invalid packet type.");
                 MinecraftStream.WriteVarInt((int)BufferedStream.PendingWrites + MinecraftStream.GetVarIntLength(id));
                 MinecraftStream.WriteVarInt(id);

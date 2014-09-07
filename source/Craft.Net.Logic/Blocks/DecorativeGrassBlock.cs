@@ -10,9 +10,8 @@ namespace Craft.Net.Logic.Blocks
 
         public DecorativeGrassBlock() : base("minecraft:tallgrass")
         {
-            base.SetBoundingBoxHandler(BoundingBox);
-            //TODO: Once items are implemented, we need to drop seeds here
-            //SetDropHandler(Id, (world, coordinates, info) => new[] { new ItemStack(ItemSeeds.Id) });
+            base.SetBoundingBoxHandler (BoundingBox);
+               base.SetDropHandler ((world, coordinates, info) => new[] { new ItemStack(295) });
         }
         
         private BoundingBox? BoundingBox(BlockInfo info)

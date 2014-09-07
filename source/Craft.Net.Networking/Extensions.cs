@@ -12,6 +12,7 @@ namespace Craft.Net
                 result += b.ToString("x2");
             return result;
         }
+
     }
 }
 

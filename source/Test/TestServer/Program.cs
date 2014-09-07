@@ -20,7 +20,7 @@ namespace TestServer
         static MinecraftServer server;
 
         static void Main(string[] args)
-        {
+		{
             if (Directory.Exists("world"))
                 Directory.Delete("world", true);
             level = new Level(new StandardGenerator(), "world");

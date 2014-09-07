@@ -32,7 +32,7 @@ namespace Craft.Net.Client
         public IPEndPoint EndPoint { get; set; }
 
         public ReadOnlyWorld World { get; protected internal set; }
-        public int EntityId { get; protected internal set; }
+        public long EntityId { get; protected internal set; }
 
         protected internal NetworkStream NetworkStream { get; set; }
         protected internal NetworkManager NetworkManager { get; set; }

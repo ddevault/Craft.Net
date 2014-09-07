@@ -19,7 +19,7 @@ namespace Craft.Net.Client.Handlers
             if (!client.IsSpawned)
             {
                 client.IsSpawned = true;
-                client.OnInitialSpawn(new EntitySpawnEventArgs(client.Position, client.EntityId));
+                client.OnInitialSpawn(new EntitySpawnEventArgs(client.Position, (int)client.EntityId));
             }
             client.SendPacket(new PlayerPositionPacket(client.Position.X, client.Position.Y, client.Position.Z, client.Position.Y - 1.62, true));
         }

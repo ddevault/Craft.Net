@@ -48,7 +48,7 @@ namespace Craft.Net.Server
             blockLight = new byte[totalSections * NibbleDataLength];
             skyLight = new byte[totalSections * NibbleDataLength];
 
-            ushort PrimaryBitMap = 0, AddBitMap = 0;
+			ushort PrimaryBitMap = 0;
 
             // Second pass produces the arrays
             for (int i = 15; i >= 0; i--)
@@ -89,7 +89,7 @@ namespace Craft.Net.Server
             var result = ZlibStream.CompressBuffer(data);
             var GroundUpContiguous = true;
 
-            return new ChunkDataPacket(X, Z, GroundUpContiguous, PrimaryBitMap, AddBitMap, result);
+            return new ChunkDataPacket(X, Z, GroundUpContiguous, PrimaryBitMap, result);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Craft.Net.Client.Handlers
         {
             var packet = (UpdateHealthPacket)_packet;
             var eventArgs = new HealthAndFoodEventArgs(
-                client.Health, client.Food, client.FoodSaturation);
+                client.Health, (short)client.Food, client.FoodSaturation);
             client.Health = packet.Health;
             client.Food = packet.Food;
             client.FoodSaturation = packet.FoodSaturation;

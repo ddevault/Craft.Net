@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Craft.Net.Common;
 
 namespace Craft.Net.Client.Events
 {
@@ -11,7 +12,7 @@ namespace Craft.Net.Client.Events
         public short OldFood { get; set; }
         public float OldFoodSaturation { get; set; }
         public float Health { get; set; }
-        public short Food { get; set; }
+        public long Food { get; set; }
         public float FoodSaturation { get; set; }
 
         internal bool IsChanged()

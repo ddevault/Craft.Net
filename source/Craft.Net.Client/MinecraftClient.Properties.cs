@@ -71,7 +71,7 @@ namespace Craft.Net.Client
         }
 
         public float Health { get; internal set; }
-        public short Food { get; internal set; }
+        public long Food { get; internal set; }
         public float FoodSaturation { get; internal set; }
     }
 }
