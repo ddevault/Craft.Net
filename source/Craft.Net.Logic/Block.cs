@@ -24,6 +24,10 @@ namespace Craft.Net.Logic
         private static Dictionary<short, IsSolidOnFaceHandler> IsSolidOnFaceHandlers { get; set; }
         private static Dictionary<short, BlockMinedHandler> BlockMinedHandlers { get; set; }
         private static Dictionary<short, BlockRightClickedHandler> BlockRightClickedHandlers { get; set; }
+        //HarvestLevesl: 0=Hand, 1=Wooden Tool, 2= Stone Tool, 3= Iron Tool, 4= Diamond Tool
+        private int ToolQuality = 0;
+        //Item Damagevalue, used for blocks to determine subtypes
+        private int MetaData = 0;
         
         static Block()
         {
@@ -73,7 +77,27 @@ namespace Craft.Net.Logic
         {
             BlockPlacementSoundEffects[BlockId] = soundEffect;
         }
-        
+
+        protected void SetToolQuality(int level)
+        {
+            ToolQuality = level;
+        }
+
+        public int GetToolQuality()
+        {
+            return ToolQuality;
+        }
+
+        protected void SetMetaData(int meta)
+        {
+            MetaData = meta;
+        }
+
+        public int GetMetaData()
+        {
+            return MetaData;
+        }
+
         protected void SetBoundingBoxHandler(BoundingBoxHandler handler)
         {
             BoundingBoxHandlers[BlockId] = handler;

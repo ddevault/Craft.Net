@@ -11,6 +11,7 @@ namespace Craft.Net.Logic.Blocks
 
         public DirtBlock() : base("minecraft:dirt", hardness: 0.5)
         {
+            base.SetToolQuality(0);
             base.SetPlacementSoundEffect(SoundEffect.DigGrass);
         }
     }

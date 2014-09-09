@@ -19,6 +19,7 @@ namespace Craft.Net.Logic.Blocks
         
         public LadderBlock() : base("minecraft:ladder")
         {
+            base.SetToolQuality(0);
             base.SetPlacementSoundEffect(SoundEffect.DigWood);
             base.SetBoundingBoxHandler(BoundingBox);
             base.SetItemUsedOnBlockHandler(ItemUsedOnBlock);

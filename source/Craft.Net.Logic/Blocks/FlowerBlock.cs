@@ -10,6 +10,7 @@ namespace Craft.Net.Logic.Blocks
 
         public YellowFlowerBlock() : base("minecraft:yellow_flower")
         {
+            base.SetHarvestLevel(0);
             base.SetBoundingBoxHandler(BoundingBox);
         }
         
