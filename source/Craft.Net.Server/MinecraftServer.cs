@@ -282,6 +282,7 @@ namespace Craft.Net.Server
 
         internal void LogInPlayer(RemoteClient client)
         {
+            Console.WriteLine(client.UUID);
             client.SendPacket(new LoginSuccessPacket(client.UUID, client.Username));
             // Spawn player
             Level.LoadPlayer(client);
@@ -290,24 +291,25 @@ namespace Craft.Net.Server
             client.SendPacket(new JoinGamePacket(client.Entity.EntityId,
                 client.GameMode, Dimension.Overworld, Settings.Difficulty,
                 Settings.MaxPlayers, Level.DefaultWorld.WorldGenerator.GeneratorName));
-            client.SendPacket(new SpawnPositionPacket((int)client.Entity.SpawnPoint.X, (int)client.Entity.SpawnPoint.Y, (int)client.Entity.SpawnPoint.Z));
-            client.SendPacket(new PlayerAbilitiesPacket(client.Entity.Abilities.AsFlags(), client.Entity.Abilities.FlyingSpeed, client.Entity.Abilities.WalkingSpeed));
+            client.SendPacket(new SpawnPositionPacket(0, 0, 0));
+     //       client.SendPacket(new SpawnPositionPacket((int)client.Entity.SpawnPoint.X, (int)client.Entity.SpawnPoint.Y, (int)client.Entity.SpawnPoint.Z));
+         //   client.SendPacket(new PlayerAbilitiesPacket(client.Entity.Abilities.AsFlags(), client.Entity.Abilities.FlyingSpeed, client.Entity.Abilities.WalkingSpeed));
             // Adding 0.1 to Y here prevents the client from falling through the ground upon logging in
             // Presumably, Minecraft runs some physics stuff and if it spawns exactly at ground level, it falls a little and
             // clips through the ground. This fixes that.
-            client.SendPacket(new PlayerPositionAndLookPacket(client.Entity.Position.X, client.Entity.Position.Y + 0.1 + PlayerEntity.Height,
-                client.Entity.Position.Z, client.Entity.Position.Y + 0.1, client.Entity.Yaw, client.Entity.Pitch, false));
-            client.SendPacket(new TimeUpdatePacket(Level.Time, Level.Time));
-            client.SendPacket(new SetWindowItemsPacket(0, client.Entity.Inventory.GetSlots()));
+           // client.SendPacket(new PlayerPositionAndLookPacket(client.Entity.Position.X, client.Entity.Position.Y + 0.1 + PlayerEntity.Height,
+           //     client.Entity.Position.Z, client.Entity.Position.Y + 0.1, client.Entity.Yaw, client.Entity.Pitch, false));
+           // client.SendPacket(new TimeUpdatePacket(Level.Time, Level.Time));
+           // client.SendPacket(new SetWindowItemsPacket(0, client.Entity.Inventory.GetSlots()));
             // Send initial chunks
-            client.UpdateChunks(true);
-            UpdatePlayerList();
-            client.SendPacket(new UpdateHealthPacket(client.Entity.Health, client.Entity.Food, client.Entity.FoodSaturation));
-            client.SendPacket(new EntityPropertiesPacket(client.Entity.EntityId,
-                new[] { new EntityProperty("generic.movementSpeed", client.Entity.Abilities.WalkingSpeed) }));
+           // client.UpdateChunks(true);
+           // UpdatePlayerList();
+           // client.SendPacket(new UpdateHealthPacket(client.Entity.Health, client.Entity.Food, client.Entity.FoodSaturation));
+          //  client.SendPacket(new EntityPropertiesPacket(client.Entity.EntityId,
+          //      new[] { new EntityProperty("generic.movementSpeed", client.Entity.Abilities.WalkingSpeed) }));
 
             // Send entities
-            EntityManager.SendClientEntities(client);
+          //  EntityManager.SendClientEntities(client);
             client.LastKeepAliveSent = DateTime.Now;
             client.IsLoggedIn = true;
 

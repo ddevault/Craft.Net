@@ -43,7 +43,8 @@ namespace Craft.Net.Common
 
 		public static long writePosition (Position pos)
 		{
-			return ((pos.getX () & POSITION_X_MASK) << POSITION_X_SHIFT | (pos.getY () & POSITION_Y_MASK) << POSITION_Y_SHIFT | (pos.getZ () & POSITION_Z_MASK));
+            return ((((long)pos.x & 0x3FFFFFFL) << 38) | (((long)pos.y & 0xFFFL) << 26) | ((long)pos.z & 0x3FFFFFFL));
+          //  return ((pos.getX() & POSITION_X_MASK) << POSITION_X_SHIFT | (pos.getY() & POSITION_Y_MASK) << POSITION_Y_SHIFT | (pos.getZ() & POSITION_Z_MASK));
 		}
 
 	}

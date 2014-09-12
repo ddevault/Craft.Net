@@ -70,7 +70,7 @@ namespace Craft.Net.Client.Handlers
             {
                 var chunkLength = (BlockDataLength + (NibbleDataLength * 2) + (packet.LightIncluded ? NibbleDataLength : 0)) *
                     GetSectionCount(metadata.PrimaryBitMap) +
-                        NibbleDataLength /** GetSectionCount(metadata.AddBitMap)*/ + (Chunk.Width * Chunk.Depth);
+                        NibbleDataLength * GetSectionCount(0) + (Chunk.Width * Chunk.Depth);
 
                 var chunkData = new byte[chunkLength];
                 Array.Copy(data, offset, chunkData, 0, chunkLength);

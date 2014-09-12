@@ -225,6 +225,7 @@ namespace Craft.Net.Networking
                 BufferedStream.WriteImmediately = true;
                 int id = -1;
                 var type = packet.GetType();
+                Console.WriteLine(type);
                 // Find packet ID for this type
                 for (int i = 0; i < NetworkModes[(int)NetworkMode].LongLength; i++)
                 {

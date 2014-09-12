@@ -339,7 +339,7 @@ namespace Craft.Net.Networking
 
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
-            stream.WriteVarInt((int)EntityId);
+            stream.WriteInt32((int)EntityId);
             stream.WriteUInt8((byte)GameMode);
             stream.WriteInt8((sbyte)Dimension);
             stream.WriteUInt8((byte)Difficulty);
@@ -461,7 +461,8 @@ namespace Craft.Net.Networking
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
 			long pos = Position.writePosition (Pos);
-			stream.WriteInt64 (pos);
+            Console.WriteLine(pos.ToString());
+			stream.WriteUInt64 ((ulong)pos);
             return mode;
         }
     }
