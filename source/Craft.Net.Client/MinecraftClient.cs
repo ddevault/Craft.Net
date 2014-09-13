@@ -159,9 +159,8 @@ namespace Craft.Net.Client
                         {
                             SendPacket(new PlayerPositionPacket(
                                 Position.X,
-                                Position.Y,
+								Position.Y - 1.62,
                                 Position.Z,
-                                Position.Y - 1.62,
                                 OnGround
                             ));
                             _positionChanged = false;

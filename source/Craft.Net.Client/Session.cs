@@ -174,6 +174,6 @@ namespace Craft.Net.Client
         [JsonIgnore]
         public string SessionId { get { return "token:" + AccessToken + ":" + SelectedProfile.Id; } }
         [JsonIgnore]
-        public bool OnlineMode { get { return AccessToken != null; } }
+        public bool OnlineMode { get { return AccessToken == null; } }
     }
 }

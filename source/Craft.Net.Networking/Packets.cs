@@ -115,6 +115,7 @@ namespace Craft.Net.Networking
             stream.WriteString(JsonConvert.SerializeObject(Status));
             return mode;
         }
+
     }
 
     public struct StatusPingPacket : IPacket
@@ -184,9 +185,9 @@ namespace Craft.Net.Networking
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
             ServerId = stream.ReadString();
-            var pkLength = stream.ReadInt16();
+            var pkLength = stream.ReadVarInt();
             PublicKey = stream.ReadUInt8Array(pkLength);
-            var vtLength = stream.ReadInt16();
+            var vtLength = stream.ReadVarInt();
             VerificationToken = stream.ReadUInt8Array(vtLength);
             return mode;
         }
@@ -306,56 +307,61 @@ namespace Craft.Net.Networking
         }
     }
 
-    public struct JoinGamePacket : IPacket
-    {
-        public JoinGamePacket(int entityId, GameMode gameMode, Dimension dimension,
-            Difficulty difficulty, byte maxPlayers, string levelType)
-        {
-            EntityId = entityId;
-            GameMode = gameMode;
-            Dimension = dimension;
-            Difficulty = difficulty;
-            MaxPlayers = maxPlayers;
-            LevelType = levelType;
-        }
+	public struct JoinGamePacket : IPacket
+	{
+		public JoinGamePacket(int entityId, GameMode gameMode, Dimension dimension,
+		                      Difficulty difficulty, byte maxPlayers, string levelType, bool Reduceddebug = false)
+		{
+			EntityId = entityId;
+			GameMode = gameMode;
+			Dimension = dimension;
+			Difficulty = difficulty;
+			MaxPlayers = maxPlayers;
+			LevelType = levelType;
+			ReducedDebug = Reduceddebug;
 
-        public long EntityId;
-        public GameMode GameMode;
-        public Dimension Dimension;
-        public Difficulty Difficulty;
-        public byte MaxPlayers;
-        public string LevelType;
+		}
 
-        public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
-        {
-            EntityId = stream.ReadInt32();
-            GameMode = (GameMode)stream.ReadUInt8();
-            Dimension = (Dimension)stream.ReadInt8();
-            Difficulty = (Difficulty)stream.ReadUInt8();
-            MaxPlayers = stream.ReadUInt8();
-            LevelType = stream.ReadString();
-            return mode;
-        }
+		public int EntityId;
+		public GameMode GameMode;
+		public Dimension Dimension;
+		public Difficulty Difficulty;
+		public byte MaxPlayers;
+		public string LevelType;
+		public bool ReducedDebug;
 
-        public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
-        {
-            stream.WriteInt32((int)EntityId);
-            stream.WriteUInt8((byte)GameMode);
-            stream.WriteInt8((sbyte)Dimension);
-            stream.WriteUInt8((byte)Difficulty);
-            stream.WriteUInt8(MaxPlayers);
-            stream.WriteString(LevelType);
-            return mode;
-        }
+		public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
+		{
+			EntityId = stream.ReadInt32();
+			GameMode = (GameMode)stream.ReadUInt8();
+			Dimension = (Dimension)stream.ReadByte();
+			Difficulty = (Difficulty)stream.ReadUInt8();
+			MaxPlayers = stream.ReadUInt8();
+			LevelType = stream.ReadString();
+			ReducedDebug = stream.ReadBoolean ();
+			return mode;
+		}
+
+		public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
+		{
+			stream.WriteInt32(EntityId);
+			stream.WriteUInt8((byte)GameMode);
+			stream.WriteByte((byte)Dimension);
+			stream.WriteUInt8((byte)Difficulty);
+			stream.WriteUInt8((byte)MaxPlayers);
+			stream.WriteString(LevelType);
+			stream.WriteBoolean(ReducedDebug);
+			return mode;
+		}
     }
 
     public struct ChatMessagePacket : IPacket
     {
 		public enum ChatType
 		{
-			Chat = 0,
-			System = 1,
-			AboveActionBar = 2
+			Chat = (byte)0,
+			System = (byte)1,
+			AboveActionBar = (byte)2
 		}
         public ChatMessagePacket(string message, ChatType chattype = 0)
         {
@@ -368,12 +374,14 @@ namespace Craft.Net.Networking
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
             Message = new ChatMessage(stream.ReadString());
+			chatType = (ChatType)stream.ReadByte();
             return mode;
         }
 
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
-            stream.WriteString(Message.RawMessage);
+            stream.WriteString(Message.ToJson().ToString());
+			stream.WriteByte ((byte)chatType);
             return mode;
         }
     }
@@ -428,7 +436,7 @@ namespace Craft.Net.Networking
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
-            EntityId = stream.ReadInt32();
+            EntityId = stream.ReadVarInt();
             Slot = (EntityEquipmentSlot)stream.ReadInt16();
             Item = ItemStack.FromStream(stream);
             return mode;
@@ -436,7 +444,7 @@ namespace Craft.Net.Networking
 
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
-            stream.WriteInt32(EntityId);
+            stream.WriteVarInt(EntityId);
             stream.WriteInt16((short)Slot);
             Item.WriteTo(stream);
             return mode;
@@ -462,7 +470,7 @@ namespace Craft.Net.Networking
         {
 			long pos = Position.writePosition (Pos);
             Console.WriteLine(pos.ToString());
-			stream.WriteUInt64 ((ulong)pos);
+			stream.WriteInt64(pos);
             return mode;
         }
     }
@@ -483,7 +491,7 @@ namespace Craft.Net.Networking
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
             Health = stream.ReadSingle();
-            Food = stream.ReadInt16();
+            Food = stream.ReadVarInt();
             FoodSaturation = stream.ReadSingle();
             return mode;
         }
@@ -555,23 +563,20 @@ namespace Craft.Net.Networking
 
     public struct PlayerPositionPacket : IPacket
     {
-        public PlayerPositionPacket(double x, double y, double z, double stance, bool onGround)
+        public PlayerPositionPacket(double x, double y, double z, bool onGround)
         {
             X = x;
             Y = y;
             Z = z;
-            Stance = stance;
             OnGround = onGround;
         }
 
         public double X, Y, Z;
-        public double Stance;
         public bool OnGround;
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
             X = stream.ReadDouble();
-            Stance = stream.ReadDouble();
             Y = stream.ReadDouble();
             Z = stream.ReadDouble();
             OnGround = stream.ReadBoolean();
@@ -581,7 +586,6 @@ namespace Craft.Net.Networking
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
             stream.WriteDouble(X);
-            stream.WriteDouble(Stance);
             stream.WriteDouble(Y);
             stream.WriteDouble(Z);
             stream.WriteBoolean(OnGround);
@@ -645,8 +649,6 @@ namespace Craft.Net.Networking
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
             X = stream.ReadDouble();
-            if (direction == PacketDirection.Serverbound)
-                Stance = stream.ReadDouble();
             Y = stream.ReadDouble();
             Z = stream.ReadDouble();
             Yaw = stream.ReadSingle();
@@ -658,8 +660,6 @@ namespace Craft.Net.Networking
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
             stream.WriteDouble(X);
-            if (direction == PacketDirection.Serverbound)
-                stream.WriteDouble(Stance.GetValueOrDefault());
             stream.WriteDouble(Y);
             stream.WriteDouble(Z);
             stream.WriteSingle(Yaw);
@@ -710,7 +710,7 @@ namespace Craft.Net.Networking
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
-            EntityId = stream.ReadInt32();
+            EntityId = stream.ReadVarInt();
 			Pos = Position.readPosition(stream);
             return mode;
         }
@@ -860,8 +860,8 @@ namespace Craft.Net.Networking
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
-            ItemId = stream.ReadInt32();
-            PlayerId = stream.ReadInt32();
+            ItemId = stream.ReadVarInt();
+            PlayerId = stream.ReadVarInt();
             return mode;
         }
 
@@ -1043,7 +1043,7 @@ namespace Craft.Net.Networking
             EntityId = stream.ReadVarInt();
             Title = stream.ReadString();
 			Pos = Position.readPosition(stream);
-            Direction = stream.ReadInt32();
+            Direction = stream.ReadUInt8();
             return mode;
         }
 
@@ -1053,7 +1053,7 @@ namespace Craft.Net.Networking
             stream.WriteString(Title);
 			long pos = Position.writePosition(Pos);
 			stream.WriteInt64(pos);
-            stream.WriteInt32(Direction);
+            stream.WriteUInt8((byte)Direction);
             return mode;
         }
     }
@@ -1147,8 +1147,7 @@ namespace Craft.Net.Networking
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
             stream.WriteVarInt(EntityIds.Length);
-			byte[] entityIds = EntityIds.Select(x => (byte)x).ToArray();;
-			stream.WriteUInt8Array(entityIds);
+			stream.WriteVarIntArray(EntityIds);
             return mode;
         }
     }
@@ -1551,65 +1550,65 @@ namespace Craft.Net.Networking
         }
     }
 
-    public struct EntityPropertiesPacket : IPacket
-    {
-        public EntityPropertiesPacket(int entityId, EntityProperty[] properties)
-        {
-            EntityId = entityId;
-            Properties = properties;
-        }
+	public struct EntityPropertiesPacket : IPacket
+	{
+		public EntityPropertiesPacket(int entityId, EntityProperty[] properties)
+		{
+			EntityId = entityId;
+			Properties = properties;
+		}
 
-		public long EntityId;
-        public EntityProperty[] Properties;
+		public int EntityId;
+		public EntityProperty[] Properties;
 
-        public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
-        {
-            EntityId = stream.ReadVarInt();
-            var count = stream.ReadInt32();
-            if (count < 0)
-                throw new InvalidOperationException("Cannot specify less than zero properties.");
-            Properties = new EntityProperty[count];
-            for (int i = 0; i < count; i++)
-            {
-                var property = new EntityProperty();
-                property.Key = stream.ReadString();
-                property.Value = stream.ReadDouble();
-                var listLength = stream.ReadInt16();
-                property.UnknownList = new EntityPropertyListItem[listLength];
-                for (int j = 0; j < listLength; j++)
-                {
-                    var item = new EntityPropertyListItem();
-                    item.UnknownMSB = stream.ReadInt64();
-                    item.UnknownLSB = stream.ReadInt64();
-                    item.UnknownDouble = stream.ReadDouble();
-                    item.UnknownByte = stream.ReadUInt8();
-                    property.UnknownList[j] = item;
-                }
-                Properties[i] = property;
-            }
-            return mode;
-        }
+		public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
+		{
+			EntityId = stream.ReadVarInt();
+			var count = stream.ReadInt32();
+			if (count < 0)
+				throw new InvalidOperationException("Cannot specify less than zero properties.");
+			Properties = new EntityProperty[count];
+			for (int i = 0; i < count; i++)
+			{
+				var property = new EntityProperty();
+				property.Key = stream.ReadString();
+				property.Value = stream.ReadDouble();
+				var listLength = stream.ReadVarInt();
+				property.UnknownList = new EntityPropertyListItem[listLength];
+				for (int j = 0; j < listLength; j++)
+				{
+					var item = new EntityPropertyListItem();
+					item.UnknownMSB = stream.ReadInt64();
+					item.UnknownLSB = stream.ReadInt64();
+					item.UnknownDouble = stream.ReadDouble();
+					item.UnknownByte = stream.ReadUInt8();
+					property.UnknownList[j] = item;
+				}
+				Properties[i] = property;
+			}
+			return mode;
+		}
 
-        public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
-        {
-            stream.WriteVarInt((int)EntityId);
-            stream.WriteInt32(Properties.Length);
-            for (int i = 0; i < Properties.Length; i++)
-            {
-                stream.WriteString(Properties[i].Key);
-                stream.WriteDouble(Properties[i].Value);
-                stream.WriteInt16((short)Properties[i].UnknownList.Length);
-                for (int j = 0; j < Properties[i].UnknownList.Length; j++)
-                {
-                    stream.WriteInt64(Properties[i].UnknownList[j].UnknownMSB);
-                    stream.WriteInt64(Properties[i].UnknownList[j].UnknownLSB);
-                    stream.WriteDouble(Properties[i].UnknownList[j].UnknownDouble);
-                    stream.WriteUInt8(Properties[i].UnknownList[j].UnknownByte);
-                }
-            }
-            return mode;
-        }
-    }
+		public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
+		{
+			stream.WriteVarInt(EntityId);
+			stream.WriteInt32(Properties.Length);
+			for (int i = 0; i < Properties.Length; i++)
+			{
+				stream.WriteString(Properties[i].Key);
+				stream.WriteDouble(Properties[i].Value);
+				stream.WriteVarInt((short)Properties[i].UnknownList.Length);
+				for (int j = 0; j < Properties[i].UnknownList.Length; j++)
+				{
+					stream.WriteInt64(Properties[i].UnknownList[j].UnknownMSB);
+					stream.WriteInt64(Properties[i].UnknownList[j].UnknownLSB);
+					stream.WriteDouble(Properties[i].UnknownList[j].UnknownDouble);
+					stream.WriteUInt8(Properties[i].UnknownList[j].UnknownByte);
+				}
+			}
+			return mode;
+		}
+	}
 
     public struct EntityProperty
     {
@@ -1816,7 +1815,7 @@ namespace Craft.Net.Networking
             public ushort PrimaryBitMap;
         }
 
-        public MapChunkBulkPacket(short chunkCount, bool lightIncluded, byte[] chunkData, Metadata[] chunkMetadata)
+        public MapChunkBulkPacket(int chunkCount, bool lightIncluded, byte[] chunkData, Metadata[] chunkMetadata)
         {
             ChunkCount = chunkCount;
             LightIncluded = lightIncluded;
@@ -1824,7 +1823,7 @@ namespace Craft.Net.Networking
             ChunkMetadata = chunkMetadata;
         }
 
-        public short ChunkCount;
+        public int ChunkCount;
         public bool LightIncluded;
         public byte[] ChunkData;
         public Metadata[] ChunkMetadata;
@@ -1832,7 +1831,7 @@ namespace Craft.Net.Networking
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
             LightIncluded = stream.ReadBoolean();
-			ChunkCount = stream.ReadInt16();
+			ChunkCount = stream.ReadVarInt();
 
             ChunkMetadata = new Metadata[ChunkCount];
             for (int i = 0; i < ChunkCount; i++)
@@ -1851,7 +1850,7 @@ namespace Craft.Net.Networking
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
 			stream.WriteBoolean(LightIncluded);
-            stream.WriteInt16(ChunkCount);
+            stream.WriteVarInt(ChunkCount);
             stream.WriteVarInt((int)ChunkData.Length);
 			
 			for (int i = 0; i < ChunkCount; i++)
@@ -1997,6 +1996,62 @@ namespace Craft.Net.Networking
             return mode;
         }
     }
+
+	public struct ParticlePacket : IPacket
+	{
+		public static readonly byte DefaultPitch = 63;
+		public static readonly float DefaultVolume = 1.0f;
+
+		public ParticlePacket(int id, float x, float y,
+		                         float z, float offsetx, float offsety, float offsetz, float particleData, int particles, long[] data)
+		{
+			ID = id;
+			X = x;
+			Y = y;
+			Z = z;
+			OffsetX = offsetx;
+			OffsetY = offsety;
+			OffsetZ = offsetz;
+			ParticleData = particleData;
+			Particles = particles;
+			Data = data;
+		}
+
+		public int ID;
+		public float X, Y, Z;
+		public float OffsetX, OffsetY, OffsetZ;
+		public float ParticleData;
+		public int Particles;
+		public long[] Data;
+
+		public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
+		{
+			ID = stream.ReadInt32();
+			X = stream.ReadSingle();
+			Y = stream.ReadSingle();
+			Z = stream.ReadSingle();
+			OffsetX = stream.ReadSingle();
+			OffsetY = stream.ReadSingle();
+			OffsetZ = stream.ReadSingle();
+			Particles = stream.ReadInt32();
+			Data = stream.ReadVarIntArray(Particles);
+			return mode;
+		}
+
+		public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
+		{
+			stream.WriteInt32(ID);
+			stream.WriteSingle(X);
+			stream.WriteSingle(Y);
+			stream.WriteSingle(Z);
+			stream.WriteSingle(OffsetX);
+			stream.WriteSingle(OffsetY);
+			stream.WriteSingle(OffsetZ);
+			stream.WriteInt32(Particles);
+			stream.WriteVarIntArray(Data);
+			return mode;
+		}
+	}
 
     public struct ParticleEffectPacket : IPacket
     {
@@ -2510,10 +2565,10 @@ namespace Craft.Net.Networking
         {
 			long pos = Position.writePosition(Pos);
 			stream.WriteInt64 (pos);
-            stream.WriteString(Text1.ToString());
-            stream.WriteString(Text2.ToString());
-            stream.WriteString(Text3.ToString());
-            stream.WriteString(Text4.ToString());
+            stream.WriteString(Text1.ToJson().ToString());
+            stream.WriteString(Text2.ToJson().ToString());
+            stream.WriteString(Text3.ToJson().ToString());
+            stream.WriteString(Text4.ToJson().ToString());
             return mode;
         }
     }
@@ -2550,24 +2605,18 @@ namespace Craft.Net.Networking
     {
         public UpdateTileEntityPacket(int x, short y, int z, byte action, NbtFile nbt)
         {
-            X = x;
-            Y = y;
-            Z = z;
+			Pos = new Position (x, y, z);
             Action = action;
             Nbt = nbt;
         }
         
-        public int X;
-        public short Y;
-        public int Z;
+		public Position Pos;
         public byte Action;
         public NbtFile Nbt;
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
-            X = stream.ReadInt32();
-            Y = stream.ReadInt16();
-            Z = stream.ReadInt32();
+			Pos = Position.readPosition (stream);
             Action = stream.ReadUInt8();
             var length = stream.ReadVarInt();
             var data = stream.ReadUInt8Array(length);
@@ -2578,9 +2627,8 @@ namespace Craft.Net.Networking
 
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
-            stream.WriteInt32(X);
-            stream.WriteInt16(Y);
-            stream.WriteInt32(Z);
+			long pos = Position.writePosition (Pos);
+			stream.WriteInt64 (pos);
             stream.WriteUInt8(Action);
             var tempStream = new MemoryStream();
             Nbt.SaveToStream(tempStream, NbtCompression.GZip);
@@ -2660,32 +2708,161 @@ namespace Craft.Net.Networking
         }
     }
 
+	public struct PlayerListProperties
+	{
+		public PlayerListProperties(string name, string value, bool signed, string signature)
+		{
+			Name = name;
+			Value = value;
+			Signed = signed;
+			Signature = signature;
+		}
+		public PlayerListProperties(PlayerListProperties properties) 
+		{
+			this = properties;
+		}
+			public string Name;
+			public string Value;
+			public bool Signed;
+			public string Signature;
+	}
+
+
     public struct PlayerListItemPacket : IPacket
     {
-        public PlayerListItemPacket(string playerName, bool online, short ping)
-        {
-            PlayerName = playerName;
-            Online = online;
-            Ping = ping;
-        }
 
+		public long Action, Length;
+		public string UUID;
         public string PlayerName;
         public bool Online;
-		public long Ping;
+		public long Ping, Properties, Gamemode;
+		public PlayerListProperties Property;
+		public bool DisplayName;
+		public string displayName;
+
+		public static PlayerListItemPacket AddPlayer(long action, long length, string uuid, string playerName, long properties, PlayerListProperties property, bool online, long ping, long gamemode, bool Displayname, string displayname)
+		{
+			var packet = new PlayerListItemPacket();
+			packet.Action = 0;
+			packet.Length = length;
+			packet.UUID = uuid;
+			packet.PlayerName = playerName;
+			packet.Online = online;
+			packet.Ping = ping;
+			packet.Properties = properties;
+			packet.Property = new PlayerListProperties(property);
+			packet.Gamemode = gamemode;
+			packet.DisplayName = Displayname;
+			packet.displayName = displayname;
+			return packet;
+		}
+
+		public static PlayerListItemPacket UpdateGameMode(long Gamemode_)
+		{
+			var packet = new PlayerListItemPacket();
+			packet.Action = 1;
+			packet.Gamemode = Gamemode_;
+			return packet;
+		}
+
+		public static PlayerListItemPacket UpdateLatency(long ping)
+		{
+			var packet = new PlayerListItemPacket();
+			packet.Action = 2;
+			packet.Ping = ping;
+			return packet;
+		}
+
+		public static PlayerListItemPacket UpdateDisplayName(bool HasDisplayname, string DisplayName)
+		{
+			var packet = new PlayerListItemPacket();
+			packet.Action = 3;
+			packet.DisplayName = HasDisplayname;
+			packet.displayName = DisplayName;
+			return packet;
+		}
+
+		public static PlayerListItemPacket RemovePlayer(long ping)
+		{
+			var packet = new PlayerListItemPacket();
+			packet.Action = 4;
+			return packet;
+		}
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
-            PlayerName = stream.ReadString();
-            Online = stream.ReadBoolean();
-            Ping = stream.ReadVarInt();
+			Action = stream.ReadVarInt ();
+			Length = stream.ReadVarInt ();
+			UUID = stream.ReadString ();
+			if (Action == 0)  {
+				PlayerName = stream.ReadString ();
+				Properties = stream.ReadVarInt ();
+				string Name = stream.ReadString ();
+				string Value = stream.ReadString ();
+				bool Signed = stream.ReadBoolean ();
+				string Signature = "";
+				if (Signed == true)
+				{
+					Signature = stream.ReadString ();
+				}
+				Property = new PlayerListProperties (Name, Value, Signed, Signature);
+				Gamemode = stream.ReadVarInt ();
+				Ping = stream.ReadVarInt ();
+				DisplayName = stream.ReadBoolean ();
+				displayName = "";
+				if (DisplayName) {
+					displayName = stream.ReadString ();
+				}
+			}
+			if (Action == 1) {
+				Gamemode = stream.ReadVarInt ();
+			}
+			if (Action == 2) {
+				Ping = stream.ReadVarInt ();
+			}
+			if (Action == 3) {
+				DisplayName = stream.ReadBoolean ();
+				if (DisplayName) {
+					stream.ReadString ();
+				}
+			}
             return mode;
         }
 
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
-            stream.WriteString(PlayerName);
-            stream.WriteBoolean(Online);
-            stream.WriteVarInt((int)Ping);
+			stream.WriteVarInt ((int)Action);
+			stream.WriteVarInt ((int)Length);
+			stream.WriteString (UUID);
+			if (Action == 0)  {
+				stream.WriteString (PlayerName);
+				stream.WriteString (Property.Name);
+				stream.WriteString (Property.Value);
+				stream.WriteBoolean (Property.Signed);
+				string Signature = "";
+				if (Property.Signed == true)
+				{
+					stream.WriteString (Signature);
+				}
+				stream.WriteVarInt ((int)Gamemode);
+				stream.WriteVarInt ((int)Ping);
+				stream.WriteBoolean (DisplayName);
+				if (DisplayName) {
+					stream.WriteString (displayName);
+				}
+			}
+			if (Action == 1) {
+				stream.WriteVarInt ((int)Gamemode);
+			}
+			if (Action == 2) {
+				stream.WriteVarInt ((int)Ping);
+			}
+			if (Action == 3) {
+				stream.WriteBoolean (DisplayName);
+				if (DisplayName) {
+					stream.WriteString (displayName);
+				}
+			}
             return mode;
         }
     }
@@ -2810,29 +2987,29 @@ namespace Craft.Net.Networking
         public UpdateScorePacket(string itemName)
         {
             ItemName = itemName;
-            RemoveItem = true;
+            Action = 1;
             ScoreName = null;
             Value = null;
         }
 
-        public UpdateScorePacket(string itemName, string scoreName, int value)
+        public UpdateScorePacket(string itemName, byte action, string scoreName, int value)
         {
             ItemName = itemName;
-            RemoveItem = false;
+            Action = action;
             ScoreName = scoreName;
             Value = value;
         }
 
         public string ItemName;
-        public bool RemoveItem;
+        public byte Action;
         public string ScoreName;
 		public long? Value;
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
             ItemName = stream.ReadString();
-            RemoveItem = stream.ReadBoolean();
-            if (!RemoveItem)
+            Action = (byte)stream.ReadByte();
+            if (Action != 1)
             {
                 ScoreName = stream.ReadString();
                 Value = stream.ReadVarInt();
@@ -2843,8 +3020,8 @@ namespace Craft.Net.Networking
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
             stream.WriteString(ItemName);
-            stream.WriteBoolean(RemoveItem);
-            if (!RemoveItem)
+            stream.WriteByte(Action);
+            if (Action != 1)
             {
                 stream.WriteString(ScoreName);
                 stream.WriteVarInt((int)Value);
@@ -2934,7 +3111,7 @@ namespace Craft.Net.Networking
     public struct SetTeamsPacket : IPacket
     {
         public static SetTeamsPacket CreateTeam(string teamName, string displayName, string teamPrefix,
-                                                string teamSuffix, bool enableFriendlyFire, string[] players)
+                                                string teamSuffix, byte enableFriendlyFire, string[] players, string Nametags, string color, long Playercount)
         {
             var packet = new SetTeamsPacket();
             packet.PacketMode = TeamMode.CreateTeam;
@@ -2944,11 +3121,14 @@ namespace Craft.Net.Networking
             packet.TeamSuffix = teamSuffix;
             packet.EnableFriendlyFire = enableFriendlyFire;
             packet.Players = players;
+			packet.NameTags = Nametags;
+			packet.Color = color;
+			packet.PlayerCount = Playercount;
             return packet;
         }
 
         public static SetTeamsPacket UpdateTeam(string teamName, string displayName, string teamPrefix,
-                                                string teamSuffix, bool enableFriendlyFire)
+                                                string teamSuffix, byte enableFriendlyFire, string nametags, string color, long Playercount)
         {
             var packet = new SetTeamsPacket();
             packet.PacketMode = TeamMode.UpdateTeam;
@@ -2957,6 +3137,9 @@ namespace Craft.Net.Networking
             packet.TeamPrefix = teamPrefix;
             packet.TeamSuffix = teamSuffix;
             packet.EnableFriendlyFire = enableFriendlyFire;
+			packet.NameTags = nametags;
+			packet.Color = color;
+			packet.PlayerCount = Playercount;
             return packet;
         }
 
@@ -2977,12 +3160,13 @@ namespace Craft.Net.Networking
             return packet;
         }
 
-        public static SetTeamsPacket RemovePlayers(string teamName, string[] players)
+        public static SetTeamsPacket RemovePlayers(string teamName, string[] players, long Playercount)
         {
             var packet = new SetTeamsPacket();
             packet.PacketMode = TeamMode.RemovePlayers;
             packet.TeamName = teamName;
             packet.Players = players;
+			packet.PlayerCount = Playercount;
             return packet;
         }
 
@@ -3000,8 +3184,11 @@ namespace Craft.Net.Networking
         public string DisplayName;
         public string TeamPrefix;
         public string TeamSuffix;
-        public bool? EnableFriendlyFire;
+        public byte EnableFriendlyFire;
         public string[] Players;
+		public string NameTags;
+		public string Color;
+		public long PlayerCount;
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
@@ -3012,7 +3199,9 @@ namespace Craft.Net.Networking
                 DisplayName = stream.ReadString();
                 TeamPrefix = stream.ReadString();
                 TeamSuffix = stream.ReadString();
-                EnableFriendlyFire = stream.ReadBoolean();
+                EnableFriendlyFire = (byte)stream.ReadByte();
+				NameTags = stream.ReadString ();
+				Color = stream.ReadString ();
             }
             if (PacketMode == TeamMode.CreateTeam || PacketMode == TeamMode.AddPlayers ||
                 PacketMode == TeamMode.RemovePlayers)
@@ -3034,8 +3223,13 @@ namespace Craft.Net.Networking
                 stream.WriteString(DisplayName);
                 stream.WriteString(TeamPrefix);
                 stream.WriteString(TeamSuffix);
-                stream.WriteBoolean(EnableFriendlyFire.Value);
+                stream.WriteByte(EnableFriendlyFire);
+				stream.WriteString (NameTags);
+				stream.WriteString (Color);
             }
+			if (PacketMode != TeamMode.RemoveTeam) {
+				stream.WriteVarInt ((int)PlayerCount);
+			}
             if (PacketMode == TeamMode.CreateTeam || PacketMode == TeamMode.AddPlayers ||
                 PacketMode == TeamMode.RemovePlayers)
             {

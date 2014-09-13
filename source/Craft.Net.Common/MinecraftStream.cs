@@ -396,5 +396,5 @@ namespace Craft.Net.Common
 			if (value.Length > 0)
 				WriteUInt8Array(StringEncoding.GetBytes(value));
 		}
-	}
+	} 
 }

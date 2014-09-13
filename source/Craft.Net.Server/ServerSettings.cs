@@ -17,7 +17,7 @@ namespace Craft.Net.Server
                 settings.EnableEncryption = true;
                 settings.MaxPlayers = 25;
                 settings.MotD = "Craft.Net Server";
-                settings.OnlineMode = true;
+                settings.OnlineMode = false;
                 settings.Difficulty = Difficulty.Normal;
                 settings.SaveInterval = 30;
                 return settings;

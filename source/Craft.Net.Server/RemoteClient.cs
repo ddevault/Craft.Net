@@ -252,7 +252,7 @@ namespace Craft.Net.Server
         public virtual void SendChat(ChatMessage message)
         {
             //SendPacket(new ChatMessagePacket(string.Format("{{\"text\":\"{0}\"}}", text)));
-            SendPacket(new ChatMessagePacket(message.ToJson()));
+            SendPacket(new ChatMessagePacket(message.ToString()));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

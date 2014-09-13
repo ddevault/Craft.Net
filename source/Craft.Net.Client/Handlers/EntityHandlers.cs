@@ -21,7 +21,7 @@ namespace Craft.Net.Client.Handlers
                 client.IsSpawned = true;
                 client.OnInitialSpawn(new EntitySpawnEventArgs(client.Position, (int)client.EntityId));
             }
-            client.SendPacket(new PlayerPositionPacket(client.Position.X, client.Position.Y, client.Position.Z, client.Position.Y - 1.62, true));
+			client.SendPacket(new PlayerPositionPacket(client.Position.X, client.Position.Y - 1.62, client.Position.Z, true));
         }
 
         public static void EntityTeleport(MinecraftClient client, IPacket _packet)
