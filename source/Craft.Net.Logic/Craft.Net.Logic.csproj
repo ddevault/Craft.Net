@@ -70,6 +70,7 @@
     <Compile Include="Items\FlintAndSteelItem.cs" />
     <Compile Include="Items\PickaxeItem.cs" />
     <Compile Include="Blocks\LadderBlock.cs" />
+    <Compile Include="Blocks\GlassBlock.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Craft.Net.Common\Craft.Net.Common.csproj">
