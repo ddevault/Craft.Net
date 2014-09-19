@@ -12,22 +12,22 @@ namespace Craft.Net.Classic.Networking
         #region Packet Types
         private static readonly CreatePacketInstance[] Packets = new CreatePacketInstance[]
         {
-           () => new HandshakePacket(), // 0x00
-           () => new PingPacket(), // 0x01
-           () => new LevelInitializePacket(), // 0x02
-           () => new LevelDataPacket(), // 0x03
-           () => new LevelFinalizePacket(), // 0x04
-           () => new ClientSetBlockPacket(), // 0x05
-           () => new ServerSetBlockPacket(), // 0x06
-           () => new SpawnPlayerPacket(), // 0x07
-           () => new PositionAndOrientationPacket(), // 0x08
-           () => new RelativePositionAndOrientationPacket(), // 0x09
-           () => new RelativePositionPacket(), // 0x0A
-           () => new OrientationPacket(), // 0x0B
-           () => new DespawnPlayerPacket(), // 0x0C
-           () => new ChatMessagePacket(), // 0x0D
-           () => new DisconnectPlayerPacket(), // 0x0E
-           () => new ChangePlayerPermissionPacket(), // 0x0F
+            () => new HandshakePacket(), // 0x00
+            () => new PingPacket(), // 0x01
+            () => new LevelInitializePacket(), // 0x02
+            () => new LevelDataPacket(), // 0x03
+            () => new LevelFinalizePacket(), // 0x04
+            () => new ClientSetBlockPacket(), // 0x05
+            () => new ServerSetBlockPacket(), // 0x06
+            () => new SpawnPlayerPacket(), // 0x07
+            () => new PositionAndOrientationPacket(), // 0x08
+            () => new RelativePositionAndOrientationPacket(), // 0x09
+            () => new RelativePositionPacket(), // 0x0A
+            () => new OrientationPacket(), // 0x0B
+            () => new DespawnPlayerPacket(), // 0x0C
+            () => new ChatMessagePacket(), // 0x0D
+            () => new DisconnectPlayerPacket(), // 0x0E
+            () => new ChangePlayerPermissionPacket(), // 0x0F
             null, // 0x10
             null, // 0x11
             null, // 0x12

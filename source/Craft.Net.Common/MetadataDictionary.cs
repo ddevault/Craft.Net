@@ -57,12 +57,12 @@ namespace Craft.Net.Common
 
         private static readonly CreateEntryInstance[] EntryTypes = new CreateEntryInstance[]
             {
-               () => new MetadataByte(), // 0
-               () => new MetadataShort(), // 1
-               () => new MetadataInt(), // 2
-               () => new MetadataFloat(), // 3
-               () => new MetadataString(), // 4
-               () => new MetadataSlot(), // 5
+                () => new MetadataByte(), // 0
+                () => new MetadataShort(), // 1
+                () => new MetadataInt(), // 2
+                () => new MetadataFloat(), // 3
+                () => new MetadataString(), // 4
+                () => new MetadataSlot(), // 5
             };
 
         public override string ToString()
