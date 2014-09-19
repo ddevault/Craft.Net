@@ -14,7 +14,7 @@ namespace Craft.Net.Server.Handlers
 		public static void PlayerDigging (RemoteClient client, MinecraftServer server, IPacket _packet)
 		{
 			var packet_ = (PlayerBlockActionPacket)_packet;
-			var position = new Coordinates3D ((int)packet_.Pos.getX (), (int)packet_.Pos.getY (), (int)packet_.Pos.getZ ());
+			var position = new Coordinates3D ((int)packet_.Pos.getX(), (int)packet_.Pos.getY(), (int)packet_.Pos.getZ());
 			// TODO: Enforce line-of-sight
 			var block = client.World.GetBlockInfo (position);
 			short damage;
@@ -57,8 +57,8 @@ namespace Craft.Net.Server.Handlers
 					if (damage != 0) {
 						var slot = client.Entity.Inventory [client.Entity.SelectedSlot];
 						if (!slot.Empty) {
-							if (slot.AsItem () != null) {
-								var item = slot.AsItem ().Value;
+							if (slot.AsItem() != null) {
+								var item = slot.AsItem().Value;
 								if (Item.GetToolType (item.ItemId) != null) {
 									bool destroyed = Item.Damage (ref item, damage);
 									slot.Metadata = item.Metadata;
@@ -78,7 +78,7 @@ namespace Craft.Net.Server.Handlers
 			case PlayerBlockActionPacket.BlockAction.DropItemStack:
 				var SlotItem = client.Entity.Inventory [client.Entity.SelectedSlot];
 				if (!SlotItem.Empty) {
-					var ItemCopy = (ItemStack)SlotItem.Clone ();
+					var ItemCopy = (ItemStack)SlotItem.Clone();
 					if (packet_.Action == PlayerBlockActionPacket.BlockAction.DropItemStack)
 						client.Entity.Inventory [client.Entity.SelectedSlot] = ItemStack.EmptyStack;
 					else {
@@ -102,7 +102,7 @@ namespace Craft.Net.Server.Handlers
 		{
 			var packet = (RightClickPacket)_packet;
 			var slot = client.Entity.Inventory [client.Entity.SelectedSlot];
-			var position = new Coordinates3D (packet.Pos.getX (), packet.Pos.getY (), packet.Pos.getZ ());
+			var position = new Coordinates3D (packet.Pos.getX(), packet.Pos.getY(), packet.Pos.getZ());
 			var cursorPosition = new Coordinates3D (packet.CursorX, packet.CursorY, packet.CursorZ);
 			BlockInfo? block = null;
 			if (position != -Coordinates3D.One) {
@@ -112,9 +112,9 @@ namespace Craft.Net.Server.Handlers
 			}
 			bool use = true;
 			if (block != null)
-				use = client.World.RightClickBlock (position, packet.Face, cursorPosition, slot.AsItem ());
+				use = client.World.RightClickBlock (position, packet.Face, cursorPosition, slot.AsItem());
 			if (!slot.Empty) {
-				var item = slot.AsItem ();
+				var item = slot.AsItem();
 				if (use) {
 					if (block != null) {
 						client.World.UseItemOnBlock (position, packet.Face, cursorPosition, item.Value);

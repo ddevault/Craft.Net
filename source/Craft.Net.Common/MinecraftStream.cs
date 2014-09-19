@@ -9,7 +9,7 @@ namespace Craft.Net.Common
 	/// </summary>
 	public partial class MinecraftStream
 	{
-		static MinecraftStream ()
+		static MinecraftStream()
 		{
 			StringEncoding = Encoding.UTF8;
 		}
@@ -19,12 +19,12 @@ namespace Craft.Net.Common
 		/// <summary>
 		/// Reads a variable-length integer from the stream.
 		/// </summary>
-		public int ReadVarInt ()
+		public int ReadVarInt()
 		{
 			uint result = 0;
 			int length = 0;
 			while (true) {
-				byte current = ReadUInt8 ();
+				byte current = ReadUInt8();
 				result |= (current & 0x7Fu) << length++ * 7;
 				if (length > 5)
 					throw new InvalidDataException ("VarInt may not be longer than 28 bits.");
@@ -43,7 +43,7 @@ namespace Craft.Net.Common
 			uint result = 0;
 			length = 0;
 			while (true) {
-				byte current = ReadUInt8 ();
+				byte current = ReadUInt8();
 				result |= (current & 0x7Fu) << length++ * 7;
 				if (length > 5)
 					throw new InvalidDataException ("VarInt may not be longer than 60 bits.");
@@ -107,7 +107,7 @@ namespace Craft.Net.Common
 			if (length == 0)
 				return result;
 			for (int i = 0; i < length; i++)
-				result [i] = ReadVarInt ();
+				result [i] = ReadVarInt();
 			return result;
 		}
 
@@ -117,11 +117,11 @@ namespace Craft.Net.Common
 				WriteVarInt ((int)value [i]);
 		}
 
-		public byte ReadUInt8 ()
+		public byte ReadUInt8()
 		{
-			int value = BaseStream.ReadByte ();
+			int value = BaseStream.ReadByte();
 			if (value == -1)
-				throw new EndOfStreamException ();
+				throw new EndOfStreamException();
 			return (byte)value;
 		}
 
@@ -130,9 +130,9 @@ namespace Craft.Net.Common
 			WriteByte (value);
 		}
 
-		public sbyte ReadInt8 ()
+		public sbyte ReadInt8()
 		{
-			return (sbyte)ReadUInt8 ();
+			return (sbyte)ReadUInt8();
 		}
 
 		public void WriteInt8 (sbyte value)
@@ -140,11 +140,11 @@ namespace Craft.Net.Common
 			WriteUInt8 ((byte)value);
 		}
 
-		public ushort ReadUInt16 ()
+		public ushort ReadUInt16()
 		{
 			return (ushort)(
-				(ReadUInt8 () << 8) |
-				ReadUInt8 ());
+				(ReadUInt8() << 8) |
+				ReadUInt8());
 		}
 
 		public void WriteUInt16 (ushort value)
@@ -155,9 +155,9 @@ namespace Craft.Net.Common
 			}, 0, 2);
 		}
 
-		public short ReadInt16 ()
+		public short ReadInt16()
 		{
-			return (short)ReadUInt16 ();
+			return (short)ReadUInt16();
 		}
 
 		public void WriteInt16 (short value)
@@ -165,13 +165,13 @@ namespace Craft.Net.Common
 			WriteUInt16 ((ushort)value);
 		}
 
-		public uint ReadUInt32 ()
+		public uint ReadUInt32()
 		{
 			return (uint)(
-				(ReadUInt8 () << 24) |
-				(ReadUInt8 () << 16) |
-				(ReadUInt8 () << 8) |
-				ReadUInt8 ());
+				(ReadUInt8() << 24) |
+				(ReadUInt8() << 16) |
+				(ReadUInt8() << 8) |
+				ReadUInt8());
 		}
 
 		public void WriteUInt32 (uint value)
@@ -184,9 +184,9 @@ namespace Craft.Net.Common
 			}, 0, 4);
 		}
 
-		public int ReadInt32 ()
+		public int ReadInt32()
 		{
-			return (int)ReadUInt32 ();
+			return (int)ReadUInt32();
 		}
 
 		public void WriteInt32 (int value)
@@ -194,17 +194,17 @@ namespace Craft.Net.Common
 			WriteUInt32 ((uint)value);
 		}
 
-		public ulong ReadUInt64 ()
+		public ulong ReadUInt64()
 		{
 			return unchecked(
-				((ulong)ReadUInt8 () << 56) |
-				((ulong)ReadUInt8 () << 48) |
-				((ulong)ReadUInt8 () << 40) |
-				((ulong)ReadUInt8 () << 32) |
-				((ulong)ReadUInt8 () << 24) |
-				((ulong)ReadUInt8 () << 16) |
-				((ulong)ReadUInt8 () << 8) |
-				(ulong)ReadUInt8 ());
+				((ulong)ReadUInt8() << 56) |
+				((ulong)ReadUInt8() << 48) |
+				((ulong)ReadUInt8() << 40) |
+				((ulong)ReadUInt8() << 32) |
+				((ulong)ReadUInt8() << 24) |
+				((ulong)ReadUInt8() << 16) |
+				((ulong)ReadUInt8() << 8) |
+				(ulong)ReadUInt8());
 		}
 
 		public void WriteUInt64 (ulong value)
@@ -221,9 +221,9 @@ namespace Craft.Net.Common
 			}, 0, 8);
 		}
 
-		public long ReadInt64 ()
+		public long ReadInt64()
 		{
-			return (long)ReadUInt64 ();
+			return (long)ReadUInt64();
 		}
 
 		public void WriteInt64 (long value)
@@ -272,7 +272,7 @@ namespace Craft.Net.Common
 			if (length == 0)
 				return result;
 			for (int i = 0; i < length; i++)
-				result [i] = ReadUInt16 ();
+				result [i] = ReadUInt16();
 			return result;
 		}
 
@@ -298,7 +298,7 @@ namespace Craft.Net.Common
 			if (length == 0)
 				return result;
 			for (int i = 0; i < length; i++)
-				result [i] = ReadUInt32 ();
+				result [i] = ReadUInt32();
 			return result;
 		}
 
@@ -324,7 +324,7 @@ namespace Craft.Net.Common
 			if (length == 0)
 				return result;
 			for (int i = 0; i < length; i++)
-				result [i] = ReadUInt64 ();
+				result [i] = ReadUInt64();
 			return result;
 		}
 
@@ -344,9 +344,9 @@ namespace Craft.Net.Common
 			WriteUInt64Array ((ulong[])(Array)value);
 		}
 
-		public unsafe float ReadSingle ()
+		public unsafe float ReadSingle()
 		{
-			uint value = ReadUInt32 ();
+			uint value = ReadUInt32();
 			return *(float*)&value;
 		}
 
@@ -355,9 +355,9 @@ namespace Craft.Net.Common
 			WriteUInt32 (*(uint*)&value);
 		}
 
-		public unsafe double ReadDouble ()
+		public unsafe double ReadDouble()
 		{
-			ulong value = ReadUInt64 ();
+			ulong value = ReadUInt64();
 			return *(double*)&value;
 		}
 
@@ -366,9 +366,9 @@ namespace Craft.Net.Common
 			WriteUInt64 (*(ulong*)&value);
 		}
 
-		public bool ReadBoolean ()
+		public bool ReadBoolean()
 		{
-			return ReadUInt8 () != 0;
+			return ReadUInt8() != 0;
 		}
 
 		public void WriteBoolean (bool value)
@@ -376,9 +376,9 @@ namespace Craft.Net.Common
 			WriteUInt8 (value ? (byte)1 : (byte)0);
 		}
 
-		public string ReadString ()
+		public string ReadString()
 		{
-			long length = ReadVarInt ();
+			long length = ReadVarInt();
 			if (length == 0)
 				return string.Empty;
 			var data = ReadUInt8Array ((int)length);
