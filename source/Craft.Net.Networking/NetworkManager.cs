@@ -9,7 +9,7 @@ namespace Craft.Net.Networking
     public class NetworkManager
     {
         public const int ProtocolVersion = 47;
-        public const string FriendlyVersion = "1.7.5";
+        public const string FriendlyVersion = "1.8.0";
 
         public NetworkMode NetworkMode { get; private set; }
         public bool Strict { get; set; }
@@ -212,7 +212,7 @@ namespace Craft.Net.Networking
                 var packet = (IPacket)Activator.CreateInstance(NetworkModes[(int)NetworkMode][id][(int)direction]);
                 NetworkMode = packet.ReadPacket(ms, NetworkMode, direction);
                 if (ms.Position < data.Length)
-                    Console.WriteLine("Warning: did not completely read packet: {0}", packet.GetType().Name); // TODO: Find some other way to warn about this
+                	Console.WriteLine("Warning: did not completely read packet: {0}", packet.GetType().Name); // TODO: Find some other way to warn about this
                 return packet;
             }
         }
@@ -225,7 +225,6 @@ namespace Craft.Net.Networking
                 BufferedStream.WriteImmediately = true;
                 int id = -1;
                 var type = packet.GetType();
-                Console.WriteLine(type);
                 // Find packet ID for this type
                 for (int i = 0; i < NetworkModes[(int)NetworkMode].LongLength; i++)
                 {
@@ -237,6 +236,7 @@ namespace Craft.Net.Networking
                 }
                if (id == -1)
                     throw new InvalidOperationException("Attempted to write invalid packet type.");
+				Console.WriteLine(type.ToString());
                 MinecraftStream.WriteVarInt((int)BufferedStream.PendingWrites + MinecraftStream.GetVarIntLength(id));
                 MinecraftStream.WriteVarInt(id);
                 BufferedStream.WriteImmediately = false;

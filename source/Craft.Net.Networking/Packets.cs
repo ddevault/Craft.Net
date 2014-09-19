@@ -338,7 +338,7 @@ namespace Craft.Net.Networking
 			Difficulty = (Difficulty)stream.ReadUInt8();
 			MaxPlayers = stream.ReadUInt8();
 			LevelType = stream.ReadString();
-			ReducedDebug = stream.ReadBoolean ();
+			ReducedDebug = stream.ReadBoolean();
 			return mode;
 		}
 
@@ -468,8 +468,7 @@ namespace Craft.Net.Networking
 
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
-			long pos = Position.writePosition (Pos);
-            Console.WriteLine(pos.ToString());
+			long pos = Position.writePosition(Pos);
 			stream.WriteInt64(pos);
             return mode;
         }
@@ -750,47 +749,45 @@ namespace Craft.Net.Networking
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
-            if (direction == PacketDirection.Clientbound)
-                EntityId = stream.ReadVarInt();
-            else
-                EntityId = stream.ReadInt32();
-            var animation = stream.ReadUInt8();
-            if (direction == PacketDirection.Clientbound)
-            {
-                switch (animation)
-                {
-                    case 0: Animation = AnimationType.SwingArm; break;
-                    case 1: Animation = AnimationType.Damage; break;
-                    case 2: Animation = AnimationType.LeaveBed; break;
-                    case 3: Animation = AnimationType.EatFood; break;
-                    case 4: Animation = AnimationType.CriticalEffect; break;
-                    case 5: Animation = AnimationType.MagicCriticalEffect; break;
-                    case 104: Animation = AnimationType.Crouch; break;
-                    case 105: Animation = AnimationType.Uncrouch; break;
-                }
-            }
-            else
-            {
-                switch (animation)
-                {
-                    case 0: Animation = AnimationType.NoAnimation; break;
-                    case 1: Animation = AnimationType.SwingArm; break;
-                    case 2: Animation = AnimationType.Damage; break;
-                    case 3: Animation = AnimationType.LeaveBed; break;
-                    case 5: Animation = AnimationType.EatFood; break;
-                    case 6: Animation = AnimationType.CriticalEffect; break;
-                    case 7: Animation = AnimationType.MagicCriticalEffect; break;
-                    case 104: Animation = AnimationType.Crouch; break;
-                    case 105: Animation = AnimationType.Uncrouch; break;
-                }
-            }
+			if (direction == PacketDirection.Clientbound) {
+				//Should this be null?
+				var animation = 0;
+				EntityId = stream.ReadVarInt();
+				animation = stream.ReadUInt8();
+				switch (animation) {
+				case 0:
+					Animation = AnimationType.SwingArm;
+					break;
+				case 1:
+					Animation = AnimationType.Damage;
+					break;
+				case 2:
+					Animation = AnimationType.LeaveBed;
+					break;
+				case 3:
+					Animation = AnimationType.EatFood;
+					break;
+				case 4:
+					Animation = AnimationType.CriticalEffect;
+					break;
+				case 5:
+					Animation = AnimationType.MagicCriticalEffect;
+					break;
+				case 104:
+					Animation = AnimationType.Crouch;
+					break;
+				case 105:
+					Animation = AnimationType.Uncrouch;
+					break;
+				}
+			}
             return mode;
         }
 
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
-            stream.WriteVarInt(EntityId);
-            stream.WriteUInt8((byte)Animation);
+           // stream.WriteVarInt(EntityId);
+            //stream.WriteUInt8((byte)Animation);
             return mode;
         }
     }
@@ -1196,7 +1193,7 @@ namespace Craft.Net.Networking
             DeltaX = stream.ReadInt8();
             DeltaY = stream.ReadInt8();
             DeltaZ = stream.ReadInt8();
-			OnGround = stream.ReadBoolean ();
+			OnGround = stream.ReadBoolean();
             return mode;
         }
 
@@ -1230,7 +1227,7 @@ namespace Craft.Net.Networking
             EntityId = stream.ReadVarInt();
             Yaw = stream.ReadUInt8();
             Pitch = stream.ReadUInt8();
-			OnGround = stream.ReadBoolean ();
+			OnGround = stream.ReadBoolean();
             return mode;
         }
 
@@ -1271,7 +1268,7 @@ namespace Craft.Net.Networking
             DeltaZ = stream.ReadInt8();
             Yaw = stream.ReadUInt8();
             Pitch = stream.ReadUInt8();
-			OnGround = stream.ReadBoolean ();
+			OnGround = stream.ReadBoolean();
             return mode;
         }
 
@@ -1315,7 +1312,7 @@ namespace Craft.Net.Networking
             Z = stream.ReadInt32();
             Yaw = stream.ReadUInt8();
             Pitch = stream.ReadUInt8();
-			OnGround = stream.ReadBoolean ();
+			OnGround = stream.ReadBoolean();
             return mode;
         }
 
@@ -1479,7 +1476,7 @@ namespace Craft.Net.Networking
             EffectId = stream.ReadUInt8();
             Amplifier = stream.ReadUInt8();
             Duration = stream.ReadVarInt();
-			HideParticles = stream.ReadBoolean ();
+			HideParticles = stream.ReadBoolean();
             return mode;
         }
 
@@ -1710,22 +1707,23 @@ namespace Craft.Net.Networking
     public struct BlockChangePacket : IPacket
     {
         public BlockChangePacket(int x, byte y, int z,
-            int blockType, byte blockMetadata)
+            int blockType, byte Blockdata)
         {
 			Pos = new Position (x, y, z);
             BlockType = blockType;
-            BlockMetadata = blockMetadata;
+			BlockData = Blockdata;
         }
 
 		public Position Pos;
         public int BlockType;
-        public byte BlockMetadata;
+        public byte BlockData;
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
 			Pos = Position.readPosition(stream);
-            BlockType = stream.ReadVarInt();
-            BlockMetadata = stream.ReadUInt8();
+            var data = stream.ReadVarInt();
+			BlockType = data >> 4;
+			BlockType = data & 0xf;
             return mode;
         }
 
@@ -1733,8 +1731,7 @@ namespace Craft.Net.Networking
         {
 			long pos = Position.writePosition(Pos);
 			stream.WriteInt64 (pos);
-            stream.WriteVarInt(BlockType);
-            stream.WriteUInt8(BlockMetadata);
+            stream.WriteVarInt((BlockType << 4) | (BlockData & 0xf));
             return mode;
         }
     }
@@ -2791,39 +2788,39 @@ namespace Craft.Net.Networking
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
-			Action = stream.ReadVarInt ();
-			Length = stream.ReadVarInt ();
-			UUID = stream.ReadString ();
+			Action = stream.ReadVarInt();
+			Length = stream.ReadVarInt();
+			UUID = stream.ReadString();
 			if (Action == 0)  {
-				PlayerName = stream.ReadString ();
-				Properties = stream.ReadVarInt ();
-				string Name = stream.ReadString ();
-				string Value = stream.ReadString ();
-				bool Signed = stream.ReadBoolean ();
+				PlayerName = stream.ReadString();
+				Properties = stream.ReadVarInt();
+				string Name = stream.ReadString();
+				string Value = stream.ReadString();
+				bool Signed = stream.ReadBoolean();
 				string Signature = "";
 				if (Signed == true)
 				{
-					Signature = stream.ReadString ();
+					Signature = stream.ReadString();
 				}
 				Property = new PlayerListProperties (Name, Value, Signed, Signature);
-				Gamemode = stream.ReadVarInt ();
-				Ping = stream.ReadVarInt ();
-				DisplayName = stream.ReadBoolean ();
+				Gamemode = stream.ReadVarInt();
+				Ping = stream.ReadVarInt();
+				DisplayName = stream.ReadBoolean();
 				displayName = "";
 				if (DisplayName) {
-					displayName = stream.ReadString ();
+					displayName = stream.ReadString();
 				}
 			}
 			if (Action == 1) {
-				Gamemode = stream.ReadVarInt ();
+				Gamemode = stream.ReadVarInt();
 			}
 			if (Action == 2) {
-				Ping = stream.ReadVarInt ();
+				Ping = stream.ReadVarInt();
 			}
 			if (Action == 3) {
-				DisplayName = stream.ReadBoolean ();
+				DisplayName = stream.ReadBoolean();
 				if (DisplayName) {
-					stream.ReadString ();
+					stream.ReadString();
 				}
 			}
             return mode;
@@ -3058,9 +3055,9 @@ namespace Craft.Net.Networking
 		{
 			Event = (Events)stream.ReadVarInt();
 			Duration = stream.ReadVarInt();
-			EntityID = stream.ReadInt32 ();
+			EntityID = stream.ReadInt32();
 			PlayerID = stream.ReadVarInt();
-			Message = stream.ReadString ();
+			Message = stream.ReadString();
 			return mode;
 		}
 
@@ -3200,8 +3197,8 @@ namespace Craft.Net.Networking
                 TeamPrefix = stream.ReadString();
                 TeamSuffix = stream.ReadString();
                 EnableFriendlyFire = (byte)stream.ReadByte();
-				NameTags = stream.ReadString ();
-				Color = stream.ReadString ();
+				NameTags = stream.ReadString();
+				Color = stream.ReadString();
             }
             if (PacketMode == TeamMode.CreateTeam || PacketMode == TeamMode.AddPlayers ||
                 PacketMode == TeamMode.RemovePlayers)
@@ -3361,9 +3358,7 @@ namespace Craft.Net.Networking
         public RightClickPacket(int x, byte y, int z, BlockFace direction, ItemStack heldItem,
             sbyte cursorX, sbyte cursorY, sbyte cursorZ)
         {
-            X = x;
-            Y = y;
-            Z = z;
+			Pos = new Position(x, y, z);
             Face = direction;
             HeldItem = heldItem;
             CursorX = cursorX;
@@ -3371,18 +3366,14 @@ namespace Craft.Net.Networking
             CursorZ = cursorZ;
         }
 
-        public int X;
-        public byte Y;
-        public int Z;
+		public Position Pos;
         public BlockFace Face;
         public ItemStack HeldItem;
         public sbyte CursorX, CursorY, CursorZ;
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
-            X = stream.ReadInt32();
-            Y = stream.ReadUInt8();
-            Z = stream.ReadInt32();
+			Pos = Position.readPosition(stream);
             Face = (BlockFace)stream.ReadUInt8();
             HeldItem = ItemStack.FromStream(stream);
             CursorX = stream.ReadInt8();
@@ -3393,9 +3384,8 @@ namespace Craft.Net.Networking
 
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
-            stream.WriteInt32(X);
-            stream.WriteUInt8(Y);
-            stream.WriteInt32(Z);
+			long pos = Position.writePosition(Pos);
+			stream.WriteInt64(pos);
             stream.WriteUInt8((byte)Face);
             HeldItem.WriteTo(stream);
             stream.WriteInt8(CursorX);
@@ -3432,7 +3422,7 @@ namespace Craft.Net.Networking
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
             EntityId = stream.ReadVarInt();
-            Action = (EntityAction)stream.ReadInt16();
+            Action = (EntityAction)stream.ReadUInt8();
             JumpBoost = stream.ReadVarInt();
             return mode;
         }
@@ -3440,7 +3430,7 @@ namespace Craft.Net.Networking
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
             stream.WriteVarInt((int)EntityId);
-            stream.WriteInt16((byte)Action);
+            stream.WriteUInt8((byte)Action);
             stream.WriteVarInt((int)JumpBoost);
             return mode;
         }

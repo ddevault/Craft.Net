@@ -32,7 +32,7 @@ namespace Craft.Net.Logic.Items
     {
         public override short ItemId { get { return 257; } }
 
-        public IronPickaxeItem () : base("minecraft:iron_pickaxe", ItemMaterial.Iron)
+        public IronPickaxeItem() : base("minecraft:iron_pickaxe", ItemMaterial.Iron)
         {
         }
     }

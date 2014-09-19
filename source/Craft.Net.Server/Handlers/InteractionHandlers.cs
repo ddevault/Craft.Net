@@ -13,9 +13,8 @@ namespace Craft.Net.Server.Handlers
     {
         public static void PlayerDigging(RemoteClient client, MinecraftServer server, IPacket _packet)
         {
-            var packet = (Position)_packet;
 			var packet_ = (PlayerBlockActionPacket)_packet;
-            var position = new Coordinates3D((int)packet.getX(), (int)packet.getY(), (int)packet.getZ());
+            var position = new Coordinates3D((int)packet_.Pos.getX(), (int)packet_.Pos.getY(), (int)packet_.Pos.getZ());
             // TODO: Enforce line-of-sight
             var block = client.World.GetBlockInfo(position);
             short damage;
@@ -115,7 +114,7 @@ namespace Craft.Net.Server.Handlers
         {
             var packet = (RightClickPacket)_packet;
             var slot = client.Entity.Inventory[client.Entity.SelectedSlot];
-            var position = new Coordinates3D(packet.X, packet.Y, packet.Z);
+            var position = new Coordinates3D(packet.Pos.getX(), packet.Pos.getY(), packet.Pos.getZ());
             var cursorPosition = new Coordinates3D(packet.CursorX, packet.CursorY, packet.CursorZ);
             BlockInfo? block = null;
             if (position != -Coordinates3D.One)

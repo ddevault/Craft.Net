@@ -30,9 +30,6 @@ namespace Craft.Net.Common
 		private static int POSITION_Y_SIZE = 64 - POSITION_X_SIZE - POSITION_Z_SIZE;
 		private static int POSITION_Y_SHIFT = POSITION_Z_SIZE;
 		private static int POSITION_X_SHIFT = POSITION_Y_SHIFT + POSITION_Y_SIZE;
-		private static long POSITION_X_MASK = (1L << POSITION_X_SIZE) - 1;
-		private static long POSITION_Y_MASK = (1L << POSITION_Y_SIZE) - 1;
-		private static long POSITION_Z_MASK = (1L << POSITION_Z_SIZE) - 1;
 		public static Position readPosition(MinecraftStream stream) {
 			long val = stream.ReadInt64();
 			int tempx = (int) (val << 64 - POSITION_X_SHIFT - POSITION_X_SIZE >> 64 - POSITION_X_SIZE);
@@ -43,7 +40,6 @@ namespace Craft.Net.Common
 
 		public static long writePosition (Position pos)
 		{
-			Console.WriteLine(((pos.getX() & 0x3FFFFFF) << 38 | (pos.getY() & 0xFFF) << 26 | (pos.getZ() & 0x3FFFFFF)).ToString());
 			return ((pos.getX() & 0x3FFFFFF) << 38 | (pos.getY() & 0xFFF) << 26 | (pos.getZ() & 0x3FFFFFF));
           //  return ((pos.getX() & POSITION_X_MASK) << POSITION_X_SHIFT | (pos.getY() & POSITION_Y_MASK) << POSITION_Y_SHIFT | (pos.getZ() & POSITION_Z_MASK));
 		}

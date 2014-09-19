@@ -80,7 +80,6 @@ namespace Craft.Net.Common
 		public void WriteVarInt(int _value, out int length)
 		{
 			uint value = (uint)_value;
-			Console.WriteLine(value.ToString("X"));
 			length = 0;
 			while (true)
 			{

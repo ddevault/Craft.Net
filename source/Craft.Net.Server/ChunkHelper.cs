@@ -69,8 +69,7 @@ namespace Craft.Net.Server
 
 				for (int x = 0; x < s.Blocks.Length; x++)
 				{
-					//I think I am doing the encoding wrong here which is leading up to weird chunks
-					int blockid = (s.Blocks[x] << 4) | (s.Blocks[x] & 255);
+					int blockid = (s.Blocks[x] << 4) | (s.Blocks[x] & 0xf);
 					tempblocks[x] = (short)blockid;
 				}
 
