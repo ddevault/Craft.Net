@@ -236,7 +236,6 @@ namespace Craft.Net.Networking
                 }
                if (id == -1)
                     throw new InvalidOperationException("Attempted to write invalid packet type.");
-				Console.WriteLine(type.ToString());
                 MinecraftStream.WriteVarInt((int)BufferedStream.PendingWrites + MinecraftStream.GetVarIntLength(id));
                 MinecraftStream.WriteVarInt(id);
                 BufferedStream.WriteImmediately = false;

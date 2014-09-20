@@ -83,7 +83,6 @@ namespace Craft.Net.Server.Handlers
                 var webReader = new StreamReader(webClient.OpenRead(
                     new Uri(string.Format(sessionCheckUri, client.Username, hash))));
                 string response = webReader.ReadToEnd();
-                Console.WriteLine(response);
                 webReader.Close();
                 var json = JToken.Parse(response);
                 if (string.IsNullOrEmpty(response))
