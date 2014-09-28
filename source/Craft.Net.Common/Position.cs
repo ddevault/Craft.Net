@@ -32,9 +32,9 @@ namespace Craft.Net.Common
 		private static int POSITION_X_SHIFT = POSITION_Y_SHIFT + POSITION_Y_SIZE;
 		public static Position readPosition(MinecraftStream stream) {
 			long val = stream.ReadInt64();
-			int tempx = (int) (val << 64 - POSITION_X_SHIFT - POSITION_X_SIZE >> 64 - POSITION_X_SIZE);
-			int tempy = (int) (val << 64 - POSITION_Y_SHIFT - POSITION_Y_SIZE >> 64 - POSITION_Y_SIZE);
-			int tempz = (int) (val << 64 - POSITION_Z_SIZE >> 64 - POSITION_Z_SIZE);
+			int tempx = (int) value >> 38;
+			int tempy = (int) value << 26 >> 52;
+			int tempz = (int) value << 38 >> 38;
 			return new Position(tempx, tempy, tempz);
 		}
 
