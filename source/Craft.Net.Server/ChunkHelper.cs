@@ -13,15 +13,9 @@ namespace Craft.Net.Server
         //This may be correct or incorrect, I have not tested this
         public static byte[] short2byteArr(short[] arr)
         {
-            System.IO.MemoryStream ms = new System.IO.MemoryStream(); 
-            System.IO.BinaryWriter bw = new System.IO.BinaryWriter(ms);
-            for (int i = 0; i < arr.Length-1;)
-            { 
-
-                Int32 tmp = (int)(arr[i++] | (arr[i++] << 12)); 
-                bw.Write(tmp);
-            }
-            return (byte[])ms.ToArray(); 
+            byte[] Converted = Array.ConvertAll<short, byte>(arr, delegate(short
+                                                             item){return (byte)item;});
+            return Converted; 
         }
 
         public static byte[] ChunkRemovalSequence = new byte[]
@@ -39,8 +33,8 @@ namespace Craft.Net.Server
             0x01,
             0x01
         };
-        private const int BlockDataLength = Section.Width * Section.Height * Section.Depth;
-        private const int NibbleDataLength = BlockDataLength / 2;
+        private const int BlockDataLength = Section.Width * Section.Height * Section.Depth * 2;
+        private const int NibbleDataLength = BlockDataLength / 4;
 
         public static ChunkDataPacket CreatePacket(Chunk chunk)
         {
@@ -70,7 +64,7 @@ namespace Craft.Net.Server
             chunkY = 0;
             nonAir = true;
             //Yes I hard-coded these, I'll un-hard-code them later
-            blockData = new short[(int)totalSections * (int)(Math.Pow(16, 3) * (5 + 1) / 2) + 256];
+            blockData = new short[(int)totalSections * 2 * 16 * 16 * 16];
             //metadata = new byte[totalSections * NibbleDataLength];
             blockLight = new byte[totalSections * NibbleDataLength];
             skyLight = new byte[totalSections * NibbleDataLength];
@@ -81,19 +75,19 @@ namespace Craft.Net.Server
             for (int i = 15; i >= 0; i--)
             {
                 Section s = chunk.Sections[chunkY++];
-                short[] tempblocks = s.Blocks;
 
+                byte[] tempBlock = short2byteArr(s.Blocks);
                 for (int x = 0; x < s.Blocks.Length; x++)
                 {
-                    int blockid = (s.Blocks[x] << 4) | (s.Blocks[x] & 0xf);
-                    tempblocks[x] = (short)blockid;
+                    int blockid = (tempBlock[x] << 4) | (tempBlock[x] & 0xf);
+                    tempBlock[x] = (byte)blockid;
                 }
 
                 if (s.IsAir)
                     nonAir = false;
                 if (nonAir)
                 {
-                    Array.Copy(short2byteArr(tempblocks), 0, blockData, (chunkY - 1) * BlockDataLength, BlockDataLength);
+                    //Array.Copy(tempBlock, 0, blockData, (chunkY - 1) * BlockDataLength, BlockDataLength);
                     //		Array.Copy(s.Metadata.Data, 0, metadata, (chunkY - 1) * NibbleDataLength, NibbleDataLength);
                     Array.Copy(s.BlockLight.Data, 0, blockLight, (chunkY - 1) * NibbleDataLength, NibbleDataLength);
                     Array.Copy(s.SkyLight.Data, 0, skyLight, (chunkY - 1) * NibbleDataLength, NibbleDataLength);

@@ -228,8 +228,12 @@ namespace Craft.Net.Server
                 if (client.IsLoggedIn)
                 {
                     Level.SavePlayer(client);
+                    foreach (RemoteClient clients in Clients)
+                    {
+                        clients.SendPacket(new PlayerListItemPacket(4, 1, client.UUID, client.Username, true, (long)client.Ping, 1, (long)client.GameMode, client.Properties, false, ""));
+                    }
                     var args = new PlayerLogInEventArgs(client);
-                    OnPlayerLoggedOut(args);
+                    OnPlayerLoggedOut(args);                  
                     if (!args.Handled)
                         SendChat(new ChatMessage(string.Format("{0} left the game.", client.Username, ChatColor.YELLOW)));
                 }
@@ -257,18 +261,20 @@ namespace Craft.Net.Server
 
         protected internal void UpdatePlayerList()
         {
-           /* if (Clients.Count != 0)
+            if (Clients.Count != 0)
             {
                 for (int i = 0; i < Clients.Count; i++)
                 {
                     foreach (RemoteClient client in Clients)
                     {
                         if (client.IsLoggedIn)
-                            Clients[i].SendPacket(new PlayerListItemPacket(client.Username, true, client.Ping));
+                            Clients[i].SendPacket(new PlayerListItemPacket(1, 1, client.UUID, client.Username, true, (long)client.Ping, 1, (long)client.GameMode, client.Properties, false, ""));
+                        Clients[i].SendPacket(new PlayerListItemPacket(2, 1, client.UUID, client.Username, true, (long)client.Ping, 1, (long)client.GameMode, client.Properties, false, ""));
+                        Clients[i].SendPacket(new PlayerListItemPacket(3, 1, client.UUID, client.Username, true, (long)client.Ping, 1, (long)client.GameMode, client.Properties, false, ""));
                         Level.SavePlayer(client);
                     }
                 }
-            }*/
+            }
         }
 
         protected internal PhysicsEngine GetPhysicsForWorld(World world)
@@ -301,11 +307,15 @@ namespace Craft.Net.Server
             client.SendPacket(new SetWindowItemsPacket(0, client.Entity.Inventory.GetSlots()));
             // Send initial chunks
             client.UpdateChunks(true);
+            client.SendPacket(new SpawnPlayerPacket(client.Entity.EntityId, client.UUID, (int)client.Entity.Position.X, (int)client.Entity.Position.Y, (int)client.Entity.Position.Z, (byte)client.Entity.Yaw, (byte)client.Entity.Pitch, client.Entity.SelectedItem.Id, client.Entity.Metadata));
             client.SendPacket(new UpdateHealthPacket(client.Entity.Health, client.Entity.Food, client.Entity.FoodSaturation));
-            client.SendPacket(new EntityPropertiesPacket(client.Entity.EntityId,
-                new[] { new EntityProperty("generic.movementSpeed", client.Entity.Abilities.WalkingSpeed) }));
             // Send entities
             EntityManager.SendClientEntities(client);
+            foreach (RemoteClient clients in Clients)
+            {
+                client.SendPacket(new PlayerListItemPacket(0, 1, clients.UUID, clients.Username, true, (long)clients.Ping, 1, (long)clients.GameMode, clients.Properties, false, ""));
+                clients.SendPacket(new PlayerListItemPacket(0, 1, client.UUID, client.Username, true, (long)client.Ping, 1, (long)client.GameMode, client.Properties, false, ""));
+            }
             client.LastKeepAliveSent = DateTime.Now;
             client.IsLoggedIn = true;
 
@@ -433,7 +443,7 @@ namespace Craft.Net.Server
         {
             if (DateTime.Now > NextPlayerUpdate)
             {
-             //  UpdatePlayerList();
+                UpdatePlayerList();
                 NextPlayerUpdate = DateTime.Now.AddMinutes(1);
             }
         }

@@ -43,6 +43,7 @@ namespace Craft.Net.Server
         public int MaxDigDistance { get; set; }
         public Dictionary<string, object> Tags { get; set; }
         public string UUID { get; internal set; }
+        public PlayerListProperties Properties { get; set; }
 
         protected internal List<Coordinates2D> LoadedChunks { get; set; }
         protected internal DateTime LastKeepAlive { get; set; }
@@ -104,8 +105,9 @@ namespace Craft.Net.Server
                     var player = entity as PlayerEntity;
                     var selectedItem = player.SelectedItem.Id;
                     if (selectedItem == -1) selectedItem = 0;
+                    Console.WriteLine("Test");
                     SendPacket(new SpawnPlayerPacket(player.EntityId, UUID, MathHelper.CreateAbsoluteInt(player.Position.X),
-                        MathHelper.CreateAbsoluteInt(player.Position.Y), MathHelper.CreateAbsoluteInt(player.Position.Z),
+                       MathHelper.CreateAbsoluteInt(player.Position.Y), MathHelper.CreateAbsoluteInt(player.Position.Z),
                         MathHelper.CreateRotationByte(player.Yaw), MathHelper.CreateRotationByte(player.Pitch), selectedItem, player.Metadata));
                     if (!player.SelectedItem.Empty)
                         SendPacket(new EntityEquipmentPacket(entity.EntityId, EntityEquipmentPacket.EntityEquipmentSlot.HeldItem, player.SelectedItem));
@@ -133,7 +135,7 @@ namespace Craft.Net.Server
         internal void UpdateEntity(Entity entity)
         {
 			bool onGround = true;
-			if (entity.World.GetBlockId (entity.Position) != 0) {
+            if (entity.World.GetBlockId (entity.Position) != 0) {
 				onGround = false;
 			}
             // TODO: Check queue for existing updates for this entity and discard them

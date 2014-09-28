@@ -826,7 +826,8 @@ namespace Craft.Net.Networking
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
             stream.WriteVarInt(EntityId);
-            stream.WriteString(UUID);
+            Guid ID = new Guid(UUID);
+            stream.WriteUInt8Array(ID.ToByteArray());
             stream.WriteInt32(X);
             stream.WriteInt32(Y);
             stream.WriteInt32(Z);
@@ -835,6 +836,15 @@ namespace Craft.Net.Networking
             stream.WriteInt16(HeldItem);
             Metadata.WriteTo(stream);
             return mode;
+        }
+        public static long GetMSB(short intValue)
+        {
+            return (intValue & 0xFF00);
+        }
+
+        public static long GetLSB(short intValue)
+        {
+            return (intValue & 0x00FF);
         }
     }
 
@@ -2731,7 +2741,41 @@ namespace Craft.Net.Networking
 
     public struct PlayerListItemPacket : IPacket
     {
-
+        public PlayerListItemPacket(long action, long length, string uuid, string playerName, bool online, long ping, long properties, long GameMode, PlayerListProperties property, bool displayname, string displayname_)
+        {
+            Action = action;
+            Length = length;
+            UUID = uuid;
+            PlayerName = playerName;
+            Online = online;
+            Ping = ping;
+            Properties = properties;
+            Gamemode = GameMode;
+            Property = property;
+            DisplayName = displayname;
+            displayName = displayname_;
+            var PLPacket = new PlayerListItemPacket();
+            if (action == 0)
+            {
+                PLPacket = AddPlayer(length, uuid, playerName, properties, property, online, GameMode, ping, displayname, displayname_);
+            }
+            if (action == 1)
+            {
+                PLPacket = UpdateGameMode(length, uuid, (GameMode)GameMode);
+            }
+            if (action == 2)
+            {
+                PLPacket = UpdateLatency(length, uuid, ping);
+            }
+            if (action == 3)
+            {
+                PLPacket = UpdateDisplayName(length, uuid, displayname, displayname_);
+            }
+            if (action == 4)
+            {
+                RemovePlayer(length, uuid);
+            }
+        }
         public long Action, Length;
         public string UUID;
         public string PlayerName;
@@ -2741,7 +2785,7 @@ namespace Craft.Net.Networking
         public bool DisplayName;
         public string displayName;
 
-        public static PlayerListItemPacket AddPlayer(long action, long length, string uuid, string playerName, long properties, PlayerListProperties property, bool online, long ping, long gamemode, bool Displayname, string displayname)
+        public static PlayerListItemPacket AddPlayer(long length, string uuid, string playerName, long properties, PlayerListProperties property, bool online, long ping, long gamemode, bool Displayname, string displayname)
         {
             var packet = new PlayerListItemPacket();
             packet.Action = 0;
@@ -2758,34 +2802,42 @@ namespace Craft.Net.Networking
             return packet;
         }
 
-        public static PlayerListItemPacket UpdateGameMode(long Gamemode_)
+        public static PlayerListItemPacket UpdateGameMode(long length, string uuid, GameMode Gamemode)
         {
             var packet = new PlayerListItemPacket();
             packet.Action = 1;
-            packet.Gamemode = Gamemode_;
+            packet.Length = length;
+            packet.UUID = uuid;
+            packet.Gamemode = (long)Gamemode;
             return packet;
         }
 
-        public static PlayerListItemPacket UpdateLatency(long ping)
+        public static PlayerListItemPacket UpdateLatency(long length, string uuid, long ping)
         {
             var packet = new PlayerListItemPacket();
             packet.Action = 2;
+            packet.Length = length;
+            packet.UUID = uuid;
             packet.Ping = ping;
             return packet;
         }
 
-        public static PlayerListItemPacket UpdateDisplayName(bool HasDisplayname, string DisplayName)
+        public static PlayerListItemPacket UpdateDisplayName(long length, string uuid, bool HasDisplayname, string DisplayName)
         {
             var packet = new PlayerListItemPacket();
             packet.Action = 3;
+            packet.Length = length;
+            packet.UUID = uuid;
             packet.DisplayName = HasDisplayname;
             packet.displayName = DisplayName;
             return packet;
         }
 
-        public static PlayerListItemPacket RemovePlayer(long ping)
+        public static PlayerListItemPacket RemovePlayer(long length, string uuid)
         {
             var packet = new PlayerListItemPacket();
+            packet.Length = length;
+            packet.UUID = uuid;
             packet.Action = 4;
             return packet;
         }
@@ -2794,7 +2846,7 @@ namespace Craft.Net.Networking
         {
             Action = stream.ReadVarInt();
             Length = stream.ReadVarInt();
-            UUID = stream.ReadString();
+            UUID = WrapUUID(new Guid(stream.ReadUInt8Array((int)Length)).ToJavaUUID());
             if (Action == 0)
             {
                 PlayerName = stream.ReadString();
@@ -2840,10 +2892,11 @@ namespace Craft.Net.Networking
         {
             stream.WriteVarInt((int)Action);
             stream.WriteVarInt((int)Length);
-            stream.WriteString(UUID);
+            stream.WriteUInt8Array(new Guid(UUID).ToByteArray());
             if (Action == 0)
             {
                 stream.WriteString(PlayerName);
+                stream.WriteVarInt((int)Properties);
                 stream.WriteString(Property.Name);
                 stream.WriteString(Property.Value);
                 stream.WriteBoolean(Property.Signed);
@@ -2877,6 +2930,43 @@ namespace Craft.Net.Networking
                 }
             }
             return mode;
+        }
+
+    public static string WrapUUID(string uuid)
+        {
+            //Very un-efficient way to do it
+            StringBuilder sb = new StringBuilder(uuid);
+            int chars = 0;
+            int length = sb.Length;
+
+            for (int i = 0; i < length; i++)
+            {
+                //Just in case
+                if (sb[i] != '-')
+                {
+                    chars++;
+                }
+                //Number + 1
+                if (chars == 9)
+                {
+                    sb.Insert(i, "-");
+                }
+                if (chars == 14)
+                {
+                    sb.Insert(i, "-");
+                }
+                if (chars == 19)
+                {
+                    sb.Insert(i, "-");
+                }
+                if (chars == 24)
+                {
+                    sb.Insert(i, "-");
+                }
+            }
+
+            string str = sb.ToString();
+            return str;
         }
     }
 

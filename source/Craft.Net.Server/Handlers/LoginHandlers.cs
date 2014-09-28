@@ -91,6 +91,9 @@ namespace Craft.Net.Server.Handlers
                     return;
                 }
                 string uuid = WrapUUID(json["id"].Value<string>());
+                string name = json["properties"][0]["name"].Value<string>();
+                string value = json["properties"][0]["value"].Value<string>();
+                client.Properties = new PlayerListProperties(name, value, false, "");
                 client.UUID = uuid;
             }
             client.NetworkStream = new AesStream(client.NetworkClient.GetStream(), client.SharedKey);
