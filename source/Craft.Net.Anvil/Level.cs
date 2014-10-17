@@ -128,10 +128,15 @@ namespace Craft.Net.Anvil
                 SpawnZ = (int)value.Z;
             }
         }
-        private int SpawnX { get; set; }
-        private int SpawnY { get; set; }
-        private int SpawnZ { get; set; }
-        /// <summary>
+
+		[TagName("SpawnX")]
+		public int SpawnX { get; set; }
+		[TagName("SpawnY")]
+		public int SpawnY { get; set; }
+		[TagName("SpawnZ")]
+		public int SpawnZ { get; set; }
+		
+		/// <summary>
         /// True if the level is currently raining.
         /// </summary>
         [TagName("raining")]
