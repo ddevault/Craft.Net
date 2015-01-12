@@ -120,7 +120,10 @@ namespace Craft.Net.Server
                         MathHelper.CreateAbsoluteInt(objectEntity.Position.Y), MathHelper.CreateAbsoluteInt(objectEntity.Position.Z), MathHelper.CreateRotationByte(objectEntity.Yaw),
                         MathHelper.CreateRotationByte(objectEntity.Pitch), objectEntity.Data, 0, 0, 0)); // TODO: Velocity stuff here
                     if (objectEntity.SendMetadataToClients)
-                        SendPacket(new EntityMetadataPacket(objectEntity.EntityId, objectEntity.Metadata));
+                    {
+                        // TODO: Find why this crash  client mebe metadata
+                        //SendPacket(new EntityMetadataPacket(objectEntity.EntityId, objectEntity.Metadata));
+                    }
                 }
             }
         }
@@ -181,6 +184,7 @@ namespace Craft.Net.Server
                 (int)(Entity.Position.Z) >> 4 != (int)(Entity.OldPosition.Z) >> 4)
             {
                 var newChunks = new List<Coordinates2D>();
+                // TODO: find where view distance incrase in solo...
                 for (int x = -Settings.ViewDistance; x < Settings.ViewDistance; x++)
                     for (int z = -Settings.ViewDistance; z < Settings.ViewDistance; z++)
                     {

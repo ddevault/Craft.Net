@@ -74,8 +74,8 @@ namespace Craft.Net.Server.Handlers
                             }
                         }
                     }
-                    //TODO : Fix here crash the client, its probably just coming from the Entity Metadata Paket
-					//client.World.MineBlock (position);
+
+					client.World.MineBlock (position);
 					client.Entity.FoodExhaustion += 0.025f;
 				}
 				break;
