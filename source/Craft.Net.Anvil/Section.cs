@@ -7,7 +7,7 @@ namespace Craft.Net.Anvil
     {
         public const byte Width = 16, Height = 16, Depth = 16;
 
-        public short[] Blocks { get; set; }
+        public byte[] Blocks { get; set; }
         [TagName("Data")]
         public NibbleArray Metadata { get; set; }
         public NibbleArray BlockLight { get; set; }
@@ -26,7 +26,7 @@ namespace Craft.Net.Anvil
         {
             const int size = Width * Height * Depth;
             this.Y = y;
-            Blocks = new short[size];
+            Blocks = new byte[size];
             Metadata = new NibbleArray(size);
             BlockLight = new NibbleArray(size);
             SkyLight = new NibbleArray(size);
