@@ -14,7 +14,7 @@ namespace Craft.Net.Server.Handlers
 		public static void PlayerDigging (RemoteClient client, MinecraftServer server, IPacket _packet)
 		{
 			var packet_ = (PlayerBlockActionPacket)_packet;
-			var position = new Coordinates3D ((int)packet_.Pos.getX(), (int)packet_.Pos.getY(), (int)packet_.Pos.getZ());
+            var position = new Coordinates3D(packet_.Pos.getX(), packet_.Pos.getY(), packet_.Pos.getZ());
 			// TODO: Enforce line-of-sight
 			var block = client.World.GetBlockInfo (position);
 			short damage;
@@ -54,22 +54,27 @@ namespace Craft.Net.Server.Handlers
 					if (client.ExpectedMiningEnd > DateTime.Now || client.ExpectedBlockToMine != position)
 						return;
 					Block.GetHarvestTime (block.BlockId, client.Entity.SelectedItem.Id, client.World, client.Entity, out damage);
-					if (damage != 0) {
-						var slot = client.Entity.Inventory [client.Entity.SelectedSlot];
-						if (!slot.Empty) {
-							if (slot.AsItem() != null) {
-								var item = slot.AsItem().Value;
-								if (Item.GetToolType (item.ItemId) != null) {
-									bool destroyed = Item.Damage (ref item, damage);
-									slot.Metadata = item.Metadata;
-									if (destroyed)
-										client.Entity.Inventory [client.Entity.SelectedSlot] = ItemStack.EmptyStack;
-									else
-										client.Entity.Inventory [client.Entity.SelectedSlot] = slot;
-								}
-							}
-						}
-					}
+                    if (damage != 0)
+                    {
+                        var slot = client.Entity.Inventory[client.Entity.SelectedSlot];
+                        if (!slot.Empty)
+                        {
+                            if (slot.AsItem() != null)
+                            {
+                                var item = slot.AsItem().Value;
+                                if (Item.GetToolType(item.ItemId) != null)
+                                {
+                                    bool destroyed = Item.Damage(ref item, damage);
+                                    slot.Metadata = item.Metadata;
+                                    if (destroyed)
+                                        client.Entity.Inventory[client.Entity.SelectedSlot] = ItemStack.EmptyStack;
+                                    else
+                                        client.Entity.Inventory[client.Entity.SelectedSlot] = slot;
+                                }
+                            }
+                        }
+                    }
+                    //TODO : Fix here crash the client, its probably just coming from the Entity Metadata Paket
 					client.World.MineBlock (position);
 					client.Entity.FoodExhaustion += 0.025f;
 				}
