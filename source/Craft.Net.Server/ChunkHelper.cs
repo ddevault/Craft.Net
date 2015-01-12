@@ -13,7 +13,7 @@ namespace Craft.Net.Server
         public static byte[] ChunkRemovalSequence = new byte[] { 0x78, 0x9C, 0x63, 0x64, 0x1C, 0xD9, 0x00, 0x00, 0x81, 0x80, 0x01, 0x01 };
 
         private const int BlockDataLength = Section.Width * Section.Depth * Section.Height;
-        private const int NibbleDataLength = BlockDataLength / 2;
+        private const int NibbleDataLength = BlockDataLength/2;
 
         public static ChunkDataPacket CreatePacket(Chunk chunk)
         {
@@ -24,6 +24,7 @@ namespace Craft.Net.Server
             byte[] metadata;
             byte[] blockLight;
             byte[] skyLight;
+            byte[] tempBlock;
 
             ushort mask = 1, chunkY = 0;
             bool nonAir = true;
@@ -43,24 +44,28 @@ namespace Craft.Net.Server
             mask = 1;
             chunkY = 0;
             nonAir = true;
-            blockData = new byte[totalSections * BlockDataLength];
-            metadata = new byte[totalSections * NibbleDataLength];
+
+            blockData = new byte[totalSections * BlockDataLength * 2];
             blockLight = new byte[totalSections * NibbleDataLength];
             skyLight = new byte[totalSections * NibbleDataLength];
-
-            ushort PrimaryBitMap = 0, AddBitMap = 0;
+            int pos = 0;
+            ushort PrimaryBitMap = 0;
 
             // Second pass produces the arrays
             for (int i = 15; i >= 0; i--)
             {
                 Section s = chunk.Sections[chunkY++];
-
                 if (s.IsAir)
                     nonAir = false;
                 if (nonAir)
                 {
-                    Array.Copy(s.Blocks, 0, blockData, (chunkY - 1) * BlockDataLength, BlockDataLength);
-                    Array.Copy(s.Metadata.Data, 0, metadata, (chunkY - 1) * NibbleDataLength, NibbleDataLength);
+                    for (int temp = 0; temp < s.Blocks.Length; temp++)
+                    {
+
+                        int blockId = (s.Blocks[temp] << 4) | 0;
+                        blockData[pos++] = (byte)(blockId);
+                        blockData[pos++] = (byte)(s.Blocks[temp] >> 4);
+                    }
                     Array.Copy(s.BlockLight.Data, 0, blockLight, (chunkY - 1) * NibbleDataLength, NibbleDataLength);
                     Array.Copy(s.SkyLight.Data, 0, skyLight, (chunkY - 1) * NibbleDataLength, NibbleDataLength);
 
@@ -72,24 +77,20 @@ namespace Craft.Net.Server
 
             // Create the final array
             // TODO: Merge this into the other loop, reduce objects
-            byte[] data = new byte[blockData.Length + metadata.Length +
+            byte[] data = new byte[blockData.Length +
                 blockLight.Length + skyLight.Length + chunk.Biomes.Length];
             int index = 0;
             Array.Copy(blockData, 0, data, index, blockData.Length);
             index += blockData.Length;
-            Array.Copy(metadata, 0, data, index, metadata.Length);
-            index += metadata.Length;
             Array.Copy(blockLight, 0, data, index, blockLight.Length);
             index += blockLight.Length;
             Array.Copy(skyLight, 0, data, index, skyLight.Length);
             index += skyLight.Length;
-            Array.Copy(chunk.Biomes, 0, data, index, chunk.Biomes.Length);
+            //Array.Copy(chunk.Biomes, 0, data, index, chunk.Biomes.Length);
 
-            // Compress the array
-            var result = ZlibStream.CompressBuffer(data);
-            var GroundUpContiguous = true;
+           var GroundUpContiguous = true;
 
-            return new ChunkDataPacket(X, Z, GroundUpContiguous, PrimaryBitMap, AddBitMap, result);
+            return new ChunkDataPacket(X, Z, GroundUpContiguous, PrimaryBitMap, data);
         }
     }
 }

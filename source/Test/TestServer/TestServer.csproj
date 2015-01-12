@@ -46,10 +46,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\externals\fNbt\fNbt\fNbt.csproj">
-      <Project>{4488498D-976D-4DA3-BF72-109531AF0488}</Project>
-      <Name>fNbt</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Craft.Net.Anvil\Craft.Net.Anvil.csproj">
       <Project>{02031C5C-5007-48D5-A253-F7C8BDF0C0B2}</Project>
       <Name>Craft.Net.Anvil</Name>
@@ -62,10 +58,6 @@
       <Project>{451B4EE5-D815-47BF-9CE6-08328B4A2BA7}</Project>
       <Name>Craft.Net.Entities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Craft.Net.Logic\Craft.Net.Logic.csproj">
-      <Project>{E001ADA1-6BCB-420E-B187-07FF361D60B8}</Project>
-      <Name>Craft.Net.Logic</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Craft.Net.Networking\Craft.Net.Networking.csproj">
       <Project>{C3BBAB7E-606F-420E-9461-C8CFAEC2476B}</Project>
       <Name>Craft.Net.Networking</Name>
@@ -77,6 +69,14 @@
     <ProjectReference Include="..\..\Craft.Net.Server\Craft.Net.Server.csproj">
       <Project>{81467141-9C7D-41EE-BFB0-D40251E10F8C}</Project>
       <Name>Craft.Net.Server</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\externals\fNbt\fNbt\fNbt.csproj">
+      <Project>{4488498D-976D-4DA3-BF72-109531AF0488}</Project>
+      <Name>fNbt</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Craft.Net.Logic\Craft.Net.Logic.csproj">
+      <Project>{E001ADA1-6BCB-420E-B187-07FF361D60B8}</Project>
+      <Name>Craft.Net.Logic</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

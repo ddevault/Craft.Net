@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Craft.Net.Anvil;
 using Craft.Net.Common;
 

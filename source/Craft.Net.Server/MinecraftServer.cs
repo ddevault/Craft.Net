@@ -228,8 +228,12 @@ namespace Craft.Net.Server
                 if (client.IsLoggedIn)
                 {
                     Level.SavePlayer(client);
+                    foreach (RemoteClient clients in Clients)
+                    {
+                        clients.SendPacket(new PlayerListItemPacket(4, 1, client.UUID, client.Username, true, (long)client.Ping, 1, (long)client.GameMode, client.Properties, false, ""));
+                    }
                     var args = new PlayerLogInEventArgs(client);
-                    OnPlayerLoggedOut(args);
+                    OnPlayerLoggedOut(args);                  
                     if (!args.Handled)
                         SendChat(new ChatMessage(string.Format("{0} left the game.", client.Username, ChatColor.YELLOW)));
                 }
@@ -264,7 +268,9 @@ namespace Craft.Net.Server
                     foreach (RemoteClient client in Clients)
                     {
                         if (client.IsLoggedIn)
-                            Clients[i].SendPacket(new PlayerListItemPacket(client.Username, true, client.Ping));
+                            Clients[i].SendPacket(new PlayerListItemPacket(1, 1, client.UUID, client.Username, true, (long)client.Ping, 1, (long)client.GameMode, client.Properties, false, ""));
+                        Clients[i].SendPacket(new PlayerListItemPacket(2, 1, client.UUID, client.Username, true, (long)client.Ping, 1, (long)client.GameMode, client.Properties, false, ""));
+                        Clients[i].SendPacket(new PlayerListItemPacket(3, 1, client.UUID, client.Username, true, (long)client.Ping, 1, (long)client.GameMode, client.Properties, false, ""));
                         Level.SavePlayer(client);
                     }
                 }
@@ -295,24 +301,29 @@ namespace Craft.Net.Server
             // Adding 0.1 to Y here prevents the client from falling through the ground upon logging in
             // Presumably, Minecraft runs some physics stuff and if it spawns exactly at ground level, it falls a little and
             // clips through the ground. This fixes that.
-            client.SendPacket(new PlayerPositionAndLookPacket(client.Entity.Position.X, client.Entity.Position.Y + 0.1 + PlayerEntity.Height,
+             client.SendPacket(new PlayerPositionAndLookPacket(client.Entity.Position.X, client.Entity.Position.Y + 0.1 + PlayerEntity.Height,
                 client.Entity.Position.Z, client.Entity.Position.Y + 0.1, client.Entity.Yaw, client.Entity.Pitch, false));
             client.SendPacket(new TimeUpdatePacket(Level.Time, Level.Time));
             client.SendPacket(new SetWindowItemsPacket(0, client.Entity.Inventory.GetSlots()));
             // Send initial chunks
             client.UpdateChunks(true);
-            UpdatePlayerList();
+            client.SendPacket(new SpawnPlayerPacket(client.Entity.EntityId, client.UUID, (int)client.Entity.Position.X, (int)client.Entity.Position.Y, (int)client.Entity.Position.Z, (byte)client.Entity.Yaw, (byte)client.Entity.Pitch, client.Entity.SelectedItem.Id, client.Entity.Metadata));
             client.SendPacket(new UpdateHealthPacket(client.Entity.Health, client.Entity.Food, client.Entity.FoodSaturation));
-            client.SendPacket(new EntityPropertiesPacket(client.Entity.EntityId,
-                new[] { new EntityProperty("generic.movementSpeed", client.Entity.Abilities.WalkingSpeed) }));
-
             // Send entities
             EntityManager.SendClientEntities(client);
+            /*
+            foreach (RemoteClient clients in Clients)
+            {
+                client.SendPacket(new PlayerListItemPacket(0, 1, clients.UUID, clients.Username, true, (long)clients.Ping, 1, (long)clients.GameMode, clients.Properties, false, ""));
+                clients.SendPacket(new PlayerListItemPacket(0, 1, client.UUID, client.Username, true, (long)client.Ping, 1, (long)client.GameMode, client.Properties, false, ""));
+            }
+             */
             client.LastKeepAliveSent = DateTime.Now;
             client.IsLoggedIn = true;
 
             var args = new PlayerLogInEventArgs(client);
             OnPlayerLoggedIn(args);
+
             //LogProvider.Log(client.Username + " joined the game.");
             if (!args.Handled)
                 SendChat(new ChatMessage(string.Format("{0} joined the game.", args.Username), ChatColor.YELLOW));

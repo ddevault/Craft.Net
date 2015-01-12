@@ -56,7 +56,9 @@
     <Compile Include="MetadataByte.cs" />
     <Compile Include="MetadataDictionary.cs" />
     <Compile Include="MetadataEntry.cs" />
-    <Compile Include="MetadataFloat.cs" />
+    <Compile Include="MetadataFloat.cs">
+      <DependentUpon>MathHelper.cs</DependentUpon>
+    </Compile>
     <Compile Include="MetadataInt.cs" />
     <Compile Include="MetadataShort.cs" />
     <Compile Include="MetadataSlot.cs" />
@@ -72,6 +74,7 @@
     <Compile Include="RuntimeInfo.cs" />
     <Compile Include="BlockFace.cs" />
     <Compile Include="Coordinates.cs" />
+    <Compile Include="Position.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

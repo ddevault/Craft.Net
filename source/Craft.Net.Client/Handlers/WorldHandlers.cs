@@ -25,7 +25,7 @@ namespace Craft.Net.Client.Handlers
             return sectionCount;
         }
 
-        private static void AddChunk(MinecraftClient client, int x, int z, ushort primaryBitMap, ushort addBitMap, bool lightIncluded, bool groundUp, byte[] data)
+        private static void AddChunk(MinecraftClient client, int x, int z, ushort primaryBitMap, bool lightIncluded, bool groundUp, byte[] data)
         {
             var coordinates = new Coordinates2D(x, z);
             var relativePosition = GetRelativeChunkPosition(coordinates);
@@ -70,11 +70,11 @@ namespace Craft.Net.Client.Handlers
             {
                 var chunkLength = (BlockDataLength + (NibbleDataLength * 2) + (packet.LightIncluded ? NibbleDataLength : 0)) *
                     GetSectionCount(metadata.PrimaryBitMap) +
-                        NibbleDataLength * GetSectionCount(metadata.AddBitMap) + (Chunk.Width * Chunk.Depth);
+                        NibbleDataLength * GetSectionCount(metadata.PrimaryBitMap) + (Chunk.Width * Chunk.Depth);
 
                 var chunkData = new byte[chunkLength];
                 Array.Copy(data, offset, chunkData, 0, chunkLength);
-                AddChunk(client, metadata.ChunkX, metadata.ChunkZ, metadata.PrimaryBitMap, metadata.AddBitMap, packet.LightIncluded, true, chunkData);
+                AddChunk(client, metadata.ChunkX, metadata.ChunkZ, metadata.PrimaryBitMap, packet.LightIncluded, true, chunkData);
 
                 offset += chunkLength;
             }
@@ -82,10 +82,11 @@ namespace Craft.Net.Client.Handlers
 
         public static void BlockChange(MinecraftClient client, IPacket _packet)
         {
-          var packet = (BlockChangePacket)_packet;
-          var position = new Coordinates3D(packet.X, packet.Y, packet.Z);
-          client.World.SetBlockId(position, (short)packet.BlockType);
-          client.World.SetMetadata(position, packet.BlockMetadata);
+          var packet = (Position)_packet;
+		  var packet_ = (BlockChangePacket)_packet;
+          var position = new Coordinates3D(packet.getX(), packet.getY(), packet.getZ());
+          client.World.SetBlockId(position, (short)packet_.BlockType);
+          client.World.SetMetadata(position, packet_.BlockData);
         }
 
         public static void ChunkData(MinecraftClient client, IPacket _packet)
@@ -99,7 +100,7 @@ namespace Craft.Net.Client.Handlers
 
             var data = ZlibStream.UncompressBuffer(packet.Data);
 
-            AddChunk(client, packet.X, packet.Z, packet.PrimaryBitMap, packet.AddBitMap, true, packet.GroundUpContinuous, data);
+            AddChunk(client, packet.X, packet.Z, packet.PrimaryBitMap, true, packet.GroundUpContinuous, data);
         }
 
         public static Coordinates2D GetRelativeChunkPosition(Coordinates2D coordinates)

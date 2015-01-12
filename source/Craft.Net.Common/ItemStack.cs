@@ -92,13 +92,13 @@ namespace Craft.Net.Common
             stream.WriteInt16(Metadata);
             if (Nbt == null)
             {
-                stream.WriteInt16(-1);
+                stream.WriteInt8(0);
                 return;
             }
             var mStream = new MemoryStream();
             var file = new NbtFile(Nbt);
             file.SaveToStream(mStream, NbtCompression.GZip);
-            stream.WriteInt16((short)mStream.Position);
+            stream.WriteInt8((sbyte)mStream.Position);
             stream.WriteUInt8Array(mStream.GetBuffer(), 0, (int)mStream.Position);
         }
 

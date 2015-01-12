@@ -65,7 +65,7 @@ namespace Craft.Net.Client.Handlers
         {
             var packet = (JoinGamePacket)_packet;
             // TODO: We might want to store the other packet fields somewhere
-            client.EntityId = packet.EntityId;
+            client.EntityId = (long)packet.EntityId;
             client.IsLoggedIn = true;
             client.World = new ReadOnlyWorld();
             client.OnLoggedIn();

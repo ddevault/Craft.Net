@@ -6,7 +6,9 @@ namespace Craft.Net.Classic.Networking
     public interface IPacket
     {
         byte Id { get; }
+
         void ReadPacket(MinecraftStream stream);
+
         void WritePacket(MinecraftStream stream);
     }
 
@@ -30,8 +32,8 @@ namespace Craft.Net.Classic.Networking
         /// </summary>
         public string KeyOrMOTD;
         public bool IsOP;
-
         public const byte PacketId = 0x00;
+
         public byte Id { get { return 0x00; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -55,6 +57,7 @@ namespace Craft.Net.Classic.Networking
     public struct PingPacket : IPacket
     {
         public const byte PacketId = 0x01;
+
         public byte Id { get { return 0x01; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -66,10 +69,11 @@ namespace Craft.Net.Classic.Networking
             stream.WriteUInt8(PacketId);
         }
     }
-    
+
     public struct LevelInitializePacket : IPacket
     {
         public const byte PacketId = 0x02;
+
         public byte Id { get { return 0x02; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -92,8 +96,8 @@ namespace Craft.Net.Classic.Networking
 
         public byte[] Data;
         public double Complete;
-
         public const byte PacketId = 0x03;
+
         public byte Id { get { return 0x03; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -124,8 +128,8 @@ namespace Craft.Net.Classic.Networking
         }
 
         public short XSize, YSize, ZSize;
-
         public const byte PacketId = 0x04;
+
         public byte Id { get { return 0x04; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -155,8 +159,8 @@ namespace Craft.Net.Classic.Networking
         public short X, Y, Z;
         public bool Destroy;
         public byte BlockType;
-
         public const byte PacketId = 0x05;
+
         public byte Id { get { return 0x05; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -191,8 +195,8 @@ namespace Craft.Net.Classic.Networking
 
         public short X, Y, Z;
         public byte BlockType;
-
         public const byte PacketId = 0x06;
+
         public byte Id { get { return 0x06; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -230,8 +234,8 @@ namespace Craft.Net.Classic.Networking
         public string Username;
         public short X, Y, Z;
         public byte Yaw, Pitch;
-
         public const byte PacketId = 0x07;
+
         public byte Id { get { return 0x07; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -273,8 +277,8 @@ namespace Craft.Net.Classic.Networking
         public sbyte PlayerID;
         public short X, Y, Z;
         public byte Yaw, Pitch;
-
         public const byte PacketId = 0x08;
+
         public byte Id { get { return 0x08; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -314,8 +318,8 @@ namespace Craft.Net.Classic.Networking
         public sbyte PlayerID;
         public sbyte DeltaX, DeltaY, DeltaZ;
         public byte Yaw, Pitch;
-
         public const byte PacketId = 0x09;
+
         public byte Id { get { return 0x09; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -352,8 +356,8 @@ namespace Craft.Net.Classic.Networking
 
         public sbyte PlayerID;
         public sbyte DeltaX, DeltaY, DeltaZ;
-
         public const byte PacketId = 0x0A;
+
         public byte Id { get { return 0x0A; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -385,8 +389,8 @@ namespace Craft.Net.Classic.Networking
 
         public sbyte PlayerID;
         public byte Yaw, Pitch;
-
         public const byte PacketId = 0x0B;
+
         public byte Id { get { return 0x0B; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -413,8 +417,8 @@ namespace Craft.Net.Classic.Networking
         }
 
         public sbyte PlayerId;
-
         public const byte PacketId = 0x0C;
+
         public byte Id { get { return 0x0C; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -439,8 +443,8 @@ namespace Craft.Net.Classic.Networking
 
         public string Message;
         public sbyte PlayerId;
-
         public const byte PacketId = 0x0D;
+
         public byte Id { get { return 0x0D; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -465,8 +469,8 @@ namespace Craft.Net.Classic.Networking
         }
 
         public string Reason;
-
         public const byte PacketId = 0x0E;
+
         public byte Id { get { return 0x0E; } }
 
         public void ReadPacket(MinecraftStream stream)
@@ -489,8 +493,8 @@ namespace Craft.Net.Classic.Networking
         }
 
         public bool IsOP;
-
         public const byte PacketId = 0x0E;
+
         public byte Id { get { return 0x0E; } }
 
         public void ReadPacket(MinecraftStream stream)

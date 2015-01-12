@@ -8,8 +8,8 @@ namespace Craft.Net.Networking
 {
     public class NetworkManager
     {
-        public const int ProtocolVersion = 4;
-        public const string FriendlyVersion = "1.7.5";
+        public const int ProtocolVersion = 47;
+        public const string FriendlyVersion = "1.8.0";
 
         public NetworkMode NetworkMode { get; private set; }
         public bool Strict { get; set; }
@@ -161,7 +161,7 @@ namespace Craft.Net.Networking
             clientbound.Add(typeof(TabCompletePacket));
             clientbound.Add(typeof(ScoreboardObjectivePacket));
             clientbound.Add(typeof(UpdateScorePacket));
-            clientbound.Add(typeof(DisplayScoreboardPacket));
+            clientbound.Add(typeof(CombatEventPacket));
             clientbound.Add(typeof(SetTeamsPacket));
             clientbound.Add(typeof(PluginMessagePacket));
             clientbound.Add(typeof(DisconnectPacket));
@@ -212,7 +212,7 @@ namespace Craft.Net.Networking
                 var packet = (IPacket)Activator.CreateInstance(NetworkModes[(int)NetworkMode][id][(int)direction]);
                 NetworkMode = packet.ReadPacket(ms, NetworkMode, direction);
                 if (ms.Position < data.Length)
-                    Console.WriteLine("Warning: did not completely read packet: {0}", packet.GetType().Name); // TODO: Find some other way to warn about this
+                	Console.WriteLine("Warning: did not completely read packet: {0}", packet.GetType().Name); // TODO: Find some other way to warn about this
                 return packet;
             }
         }
@@ -234,7 +234,7 @@ namespace Craft.Net.Networking
                         break;
                     }
                 }
-                if (id == -1)
+               if (id == -1)
                     throw new InvalidOperationException("Attempted to write invalid packet type.");
                 MinecraftStream.WriteVarInt((int)BufferedStream.PendingWrites + MinecraftStream.GetVarIntLength(id));
                 MinecraftStream.WriteVarInt(id);

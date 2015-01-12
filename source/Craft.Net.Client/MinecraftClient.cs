@@ -32,7 +32,7 @@ namespace Craft.Net.Client
         public IPEndPoint EndPoint { get; set; }
 
         public ReadOnlyWorld World { get; protected internal set; }
-        public int EntityId { get; protected internal set; }
+        public long EntityId { get; protected internal set; }
 
         protected internal NetworkStream NetworkStream { get; set; }
         protected internal NetworkManager NetworkManager { get; set; }
@@ -159,9 +159,8 @@ namespace Craft.Net.Client
                         {
                             SendPacket(new PlayerPositionPacket(
                                 Position.X,
-                                Position.Y,
+								Position.Y - 1.62,
                                 Position.Z,
-                                Position.Y - 1.62,
                                 OnGround
                             ));
                             _positionChanged = false;

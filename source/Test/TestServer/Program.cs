@@ -20,7 +20,7 @@ namespace TestServer
         static MinecraftServer server;
 
         static void Main(string[] args)
-        {
+		{
             if (Directory.Exists("world"))
                 Directory.Delete("world", true);
             level = new Level(new StandardGenerator(), "world");
@@ -39,15 +39,19 @@ namespace TestServer
             while (cki.KeyChar != 'q');
             server.Stop();
         }
-
         static void server_ChatMessage(object sender, ChatMessageEventArgs e)
         {
+            ItemStack[] thingToGive =  { new ItemStack((short)1, (sbyte)2) };
             if (e.Message.RawMessage.StartsWith("/"))
             {
                 string command = e.Message.FullText();
                 e.Handled = true;
                 if (command == "/creative")
                     e.Origin.GameMode = GameMode.Creative;
+                if (command == "/test")
+
+
+                    e.Origin.SendPacket(new SetSlotPacket((byte)1, (short)1, new ItemStack(1)));
                 else if (command == "/survival")
                     e.Origin.GameMode = GameMode.Survival;
                 else if (command == "/world2")

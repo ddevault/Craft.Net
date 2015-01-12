@@ -147,7 +147,7 @@ namespace Craft.Net.Client
             return Section.GetBlockLight(coordinates);
         }
 
-        public ReadOnlyCollection<byte> Blocks { get { return Array.AsReadOnly(Section.Blocks); } }
+        public ReadOnlyCollection<short> Blocks { get { return Array.AsReadOnly(Section.Blocks); } }
         public ReadOnlyNibbleArray Metadata { get { return new ReadOnlyNibbleArray(Section.Metadata); } }
         public ReadOnlyNibbleArray BlockLight { get { return new ReadOnlyNibbleArray(Section.BlockLight); } }
         public ReadOnlyNibbleArray SkyLight { get { return new ReadOnlyNibbleArray(Section.SkyLight); } }

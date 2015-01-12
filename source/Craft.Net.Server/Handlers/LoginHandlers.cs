@@ -90,7 +90,11 @@ namespace Craft.Net.Server.Handlers
                     client.Disconnect("Failed to verify username!");
                     return;
                 }
-                client.UUID = json["id"].Value<string>();
+                string uuid = WrapUUID(json["id"].Value<string>());
+                string name = json["properties"][0]["name"].Value<string>();
+                string value = json["properties"][0]["value"].Value<string>();
+                client.Properties = new PlayerListProperties(name, value, false, "");
+                client.UUID = uuid;
             }
             client.NetworkStream = new AesStream(client.NetworkClient.GetStream(), client.SharedKey);
             client.NetworkManager.BaseStream = client.NetworkStream;
@@ -101,6 +105,43 @@ namespace Craft.Net.Server.Handlers
                 server.LogInPlayer(client);
             else
                 client.Disconnect(eventArgs.DisconnectReason);
+        }
+
+        public static string WrapUUID(string uuid)
+        {
+            //Very un-efficient way to do it
+            StringBuilder sb = new StringBuilder(uuid);
+            int chars = 0;
+            int length = sb.Length;
+
+            for (int i = 0; i < length; i++)
+            {
+                //Just in case
+                if (sb[i] != '-')
+                {
+                    chars++;
+                }
+                //Number + 1
+                if (chars == 9)
+                {
+                    sb.Insert(i, "-");
+                }
+                if (chars == 14)
+                {
+                    sb.Insert(i, "-");
+                }
+                if (chars == 19)
+                {
+                    sb.Insert(i, "-");
+                }
+                if (chars == 24)
+                {
+                    sb.Insert(i, "-");
+                }
+            }
+
+            string str = sb.ToString();
+            return str;
         }
 
         public static void ClientStatus(RemoteClient client, MinecraftServer server, IPacket _packet)

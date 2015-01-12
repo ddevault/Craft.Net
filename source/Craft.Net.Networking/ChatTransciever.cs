@@ -54,7 +54,7 @@ namespace Craft.Net.Networking
         public string Text { get; protected set; }
 
         public ChatColor Color { get; protected set; }
-        
+
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="Craft.Net.Networking.ChatMessage"/> is bolded.
         /// Can be overriden by submessages with a different value.
@@ -72,7 +72,7 @@ namespace Craft.Net.Networking
         /// Can be overriden by submessages with a different value.
         /// </summary>
         public bool Underlined { get; protected set; }
-        
+
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="Craft.Net.Networking.ChatMessage"/> is struck through.
         /// Can be overriden by submessages with a different value.
@@ -258,17 +258,17 @@ namespace Craft.Net.Networking
             {
                 self.Add(new JProperty("clickEvent",
                                        new JObject(new JProperty("action", this.Action.ToString().ToLower())
-                                                  , new JProperty("value", this.ChatActionValue))
-                )
-                );
+                            , new JProperty("value", this.ChatActionValue))
+                                       )
+                         );
             }
             if (this.HoverAction != ChatHoverActionType.NONE)
             {
                 self.Add(new JProperty("hoverEvent",
                                        new JObject(new JProperty("action", this.HoverAction.ToString().ToLower())
-                                                 , new JProperty("value", this.ChatHoverActionValue))
-                )
-                );
+                            , new JProperty("value", this.ChatHoverActionValue))
+                                       )
+                         );
             }
             return self;
         }
