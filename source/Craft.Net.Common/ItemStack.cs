@@ -72,8 +72,8 @@ namespace Craft.Net.Common
                 return slot;
             slot.Count = stream.ReadInt8();
             slot.Metadata = stream.ReadInt16();
-            var length = stream.ReadInt16();
-            if (length == -1)
+            var length = stream.ReadInt8();
+            if (length == 0)
                 return slot;
             slot.Nbt = new NbtCompound();
             var buffer = stream.ReadUInt8Array(length);
