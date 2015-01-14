@@ -121,8 +121,7 @@ namespace Craft.Net.Server
                         MathHelper.CreateRotationByte(objectEntity.Pitch), objectEntity.Data, 0, 0, 0)); // TODO: Velocity stuff here
                     if (objectEntity.SendMetadataToClients)
                     {
-                        // TODO: Find why this crash  client mebe metadata
-                        //SendPacket(new EntityMetadataPacket(objectEntity.EntityId, objectEntity.Metadata));
+                        SendPacket(new EntityMetadataPacket(objectEntity.EntityId, objectEntity.Metadata));
                     }
                 }
             }
@@ -185,8 +184,8 @@ namespace Craft.Net.Server
             {
                 var newChunks = new List<Coordinates2D>();
                 // TODO: find where view distance incrase in solo...
-                for (int x = -Settings.ViewDistance; x < Settings.ViewDistance; x++)
-                    for (int z = -Settings.ViewDistance; z < Settings.ViewDistance; z++)
+                for (int x = -3; x < 3; x++)
+                    for (int z = -3; z < 3; z++)
                     {
                         newChunks.Add(new Coordinates2D(
                             ((int)Entity.Position.X >> 4) + x,
