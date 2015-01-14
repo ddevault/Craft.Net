@@ -11,7 +11,6 @@ namespace Craft.Net.Server
     public static class ChunkHelper
     {
         public static byte[] ChunkRemovalSequence = new byte[] { 0x78, 0x9C, 0x63, 0x64, 0x1C, 0xD9, 0x00, 0x00, 0x81, 0x80, 0x01, 0x01 };
-
         private const int BlockDataLength = Section.Width * Section.Depth * Section.Height;
         private const int NibbleDataLength = BlockDataLength/2;
 
@@ -21,10 +20,8 @@ namespace Craft.Net.Server
             var Z = chunk.Z;
 
             byte[] blockData;
-            byte[] metadata;
             byte[] blockLight;
             byte[] skyLight;
-            byte[] tempBlock;
 
             ushort mask = 1, chunkY = 0;
             bool nonAir = true;
@@ -61,10 +58,8 @@ namespace Craft.Net.Server
                 {
                     for (int temp = 0; temp < s.Blocks.Length; temp++)
                     {
-
-                        int blockId = (s.Blocks[temp] << 4) | 0;
-                        blockData[pos++] = (byte)(blockId);
-                        blockData[pos++] = (byte)(s.Blocks[temp] >> 4);
+                        blockData[pos++] = (byte)(s.Blocks[temp] & 0xff);
+                        blockData[pos++] = (byte)(s.Blocks[temp] >> 8);
                     }
                     Array.Copy(s.BlockLight.Data, 0, blockLight, (chunkY - 1) * NibbleDataLength, NibbleDataLength);
                     Array.Copy(s.SkyLight.Data, 0, skyLight, (chunkY - 1) * NibbleDataLength, NibbleDataLength);
