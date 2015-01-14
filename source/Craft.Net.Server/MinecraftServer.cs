@@ -453,7 +453,7 @@ namespace Craft.Net.Server
         private void DoClientUpdates(RemoteClient client)
         {
             // Update keep alive, chunks, etc
-            if (client.LastKeepAliveSent.AddSeconds(20) < DateTime.Now)
+            if (client.LastKeepAliveSent.AddSeconds(15) < DateTime.Now)
             {
                 client.SendPacket(new KeepAlivePacket(MathHelper.Random.Next()));
                 client.LastKeepAliveSent = DateTime.Now;
