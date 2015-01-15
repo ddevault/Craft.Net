@@ -41,7 +41,7 @@ Minecraft.
 Craft.Net, please use `git clone --recursive git://github.com/SirCmpwn/Craft.Net.git`. If you've already cloned
 it, you can fetch submodules manually with `git submodule update --init`.
 
-The latest supported Minecraft version is **1.7.5**.
+The latest supported Minecraft version is **1.8.1**.
 
 ## Classic Support
 
