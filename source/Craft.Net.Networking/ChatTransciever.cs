@@ -136,7 +136,7 @@ namespace Craft.Net.Networking
             // Try to parse enumerations
             if (obj["color"] != null)
             {
-                var color = obj.Value<string>("color").ToUpper();
+                var color = obj.Value<string>("color");
                 ChatColor c;
                 if (!ChatColor.TryParse(color, out c))
                     this.Color = ChatColor.RESET;

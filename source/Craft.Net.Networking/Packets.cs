@@ -354,9 +354,9 @@ namespace Craft.Net.Networking
             AboveActionBar = (byte)2
         }
 
-        public ChatMessagePacket(string message, ChatType chattype = 0)
+        public ChatMessagePacket(ChatMessage message, ChatType chattype = 0)
         {
-            Message = new ChatMessage(message);
+            Message = message;
             chatType = chattype;
         }
 
