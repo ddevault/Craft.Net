@@ -8,6 +8,8 @@ namespace Craft.Net.Logic.Windows
 {
     public abstract class Window
     {
+        public abstract byte Id{get; protected set;}
+
         public abstract WindowArea[] WindowAreas { get; protected set; }
 
         public event EventHandler<WindowChangeEventArgs> WindowChange;

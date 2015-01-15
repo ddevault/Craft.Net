@@ -62,25 +62,29 @@ namespace Craft.Net.Server.Handlers
                 if (packet.WindowId == 0)
                     window = client.Entity.Inventory;
                 // TODO: Fetch appropriate furnace/crafting bench/etc window
+                // TODO : Find a way to manage multi windows from the Client Entity
+                if (client.Entity.WorkBench != null)
+                    if(packet.WindowId == client.Entity.WorkBench.Id)
+                        window = client.Entity.WorkBench;
                 if (window == null)
                     return;
                 var heldItem = client.Entity.ItemInMouse;
                 ItemStack clickedItem = ItemStack.EmptyStack;
-                if (packet.SlotIndex >= 0 && packet.SlotIndex < client.Entity.Inventory.Length)
-                    clickedItem = client.Entity.Inventory[packet.SlotIndex];
+                if (packet.SlotIndex >= 0 && packet.SlotIndex < window.Length)
+                    clickedItem = window[packet.SlotIndex];
                 switch (packet.Action)
                 {
                     case ClickWindowPacket.ClickAction.LeftClick:
                         if (heldItem.Empty) // Pick up item
                         {
                             client.Entity.ItemInMouse = clickedItem;
-                            client.Entity.Inventory[packet.SlotIndex] = ItemStack.EmptyStack;
+                            window[packet.SlotIndex] = ItemStack.EmptyStack;
                         }
                         else
                         {
                             if (clickedItem.Empty)
                             {
-                                client.Entity.Inventory[packet.SlotIndex] = heldItem;
+                                window[packet.SlotIndex] = heldItem;
                                 client.Entity.ItemInMouse = ItemStack.EmptyStack;
                             }
                             else if (heldItem.CanMerge(clickedItem))
@@ -92,7 +96,7 @@ namespace Craft.Net.Server.Handlers
                                 if (newSize < maxSize)
                                 {
                                     clickedItem.Count = (sbyte)newSize;
-                                    client.Entity.Inventory[packet.SlotIndex] = clickedItem;
+                                    window[packet.SlotIndex] = clickedItem;
                                     client.Entity.ItemInMouse = ItemStack.EmptyStack;
                                 }
                                 else
@@ -101,7 +105,7 @@ namespace Craft.Net.Server.Handlers
                                     newSize = newSize - maxSize;
                                     clickedItem.Count = (sbyte)maxSize;
                                     heldItem.Count = (sbyte)newSize;
-                                    client.Entity.Inventory[packet.SlotIndex] = clickedItem;
+                                    window[packet.SlotIndex] = clickedItem;
                                     client.Entity.ItemInMouse = heldItem;
                                 }
                             }
@@ -109,7 +113,7 @@ namespace Craft.Net.Server.Handlers
                             {
                                 // Swap stacks with the mouse and the clicked slot
                                 client.Entity.ItemInMouse = clickedItem;
-                                client.Entity.Inventory[packet.SlotIndex] = heldItem;
+                                window[packet.SlotIndex] = heldItem;
                             }
                         }
                         break;
@@ -119,8 +123,8 @@ namespace Craft.Net.Server.Handlers
                             var heldCount = (sbyte)(clickedItem.Count / 2 + (clickedItem.Count % 2));
                             var leftCount = (sbyte)(clickedItem.Count / 2);
                             client.Entity.ItemInMouse = new ItemStack(clickedItem.Id, heldCount, clickedItem.Metadata);
-                            var old = client.Entity.Inventory[packet.SlotIndex];
-                            client.Entity.Inventory[packet.SlotIndex] = new ItemStack(old.Id, leftCount, old.Metadata, old.Nbt);
+                            var old = window[packet.SlotIndex];
+                            window[packet.SlotIndex] = new ItemStack(old.Id, leftCount, old.Metadata, old.Nbt);
                         }
                         else
                         {
@@ -129,7 +133,7 @@ namespace Craft.Net.Server.Handlers
                             {
                                 clickedItem = (ItemStack)heldItem.Clone();
                                 clickedItem.Count = 1;
-                                client.Entity.Inventory[packet.SlotIndex] = clickedItem;
+                                window[packet.SlotIndex] = clickedItem;
                                 heldItem.Count--;
                                 client.Entity.ItemInMouse = heldItem;
                             }
@@ -143,14 +147,14 @@ namespace Craft.Net.Server.Handlers
                                     clickedItem.Count++;
                                     heldItem.Count--;
                                     client.Entity.ItemInMouse = heldItem;
-                                    client.Entity.Inventory[packet.SlotIndex] = clickedItem;
+                                    window[packet.SlotIndex] = clickedItem;
                                 }
                             }
                             else
                             {
                                 // Swap stacks with the mouse and the clicked slot
                                 client.Entity.ItemInMouse = clickedItem;
-                                client.Entity.Inventory[packet.SlotIndex] = heldItem;
+                                window[packet.SlotIndex] = heldItem;
                             }
                         }
                         break;
@@ -189,10 +193,10 @@ namespace Craft.Net.Server.Handlers
                             client.PaintedSlots.Add(packet.SlotIndex);
                         break;
                     case ClickWindowPacket.ClickAction.EndLeftMousePaint:
-                        FinishPaint(client, heldItem, false);
+                        FinishPaint(client,window, heldItem, false);
                         break;
                     case ClickWindowPacket.ClickAction.EndRightMousePaint:
-                        FinishPaint(client, heldItem, true);
+                        FinishPaint(client,window, heldItem, true);
                         break;
                 }
             }
@@ -202,7 +206,7 @@ namespace Craft.Net.Server.Handlers
             }
         }
 
-        private static void FinishPaint(RemoteClient client, ItemStack heldItem, bool onePerSlot)
+        private static void FinishPaint(RemoteClient client,Window window, ItemStack heldItem, bool onePerSlot)
         {
             //sbyte maxStack = (sbyte)Item.GetMaximumStackSize(new ItemDescriptor(heldItem.Id, heldItem.Metadata));
             sbyte maxStack = 64; // TODO
@@ -210,7 +214,7 @@ namespace Craft.Net.Server.Handlers
                 client.PaintedSlots.RemoveAt(client.PaintedSlots.Count - 1);
             for (int i = 0; i < client.PaintedSlots.Count; i++)
             {
-                if (!client.Entity.Inventory[client.PaintedSlots[i]].CanMerge(heldItem))
+                if (!window[client.PaintedSlots[i]].CanMerge(heldItem))
                 {
                     client.PaintedSlots.RemoveAt(i);
                     i--;
@@ -223,27 +227,27 @@ namespace Craft.Net.Server.Handlers
             item.Count = (sbyte)itemsPerSlot;
             foreach (var slot in client.PaintedSlots)
             {
-                if (client.Entity.Inventory[slot].Empty)
+                if (window[slot].Empty)
                 {
-                    client.Entity.Inventory[slot] = item;
+                    window[slot] = item;
                     heldItem.Count -= item.Count;
                 }
                 else // Merge
                 {
-                    sbyte total = (sbyte)(client.Entity.Inventory[slot].Count + item.Count);
+                    sbyte total = (sbyte)(window[slot].Count + item.Count);
                     if (total <= maxStack)
                     {
-                        var newSlot = (ItemStack)client.Entity.Inventory[slot].Clone();
+                        var newSlot = (ItemStack)window[slot].Clone();
                         newSlot.Count = total;
-                        client.Entity.Inventory[slot] = newSlot;
+                        window[slot] = newSlot;
                         heldItem.Count -= item.Count;
                     }
                     else
                     {
-                        heldItem.Count -= (sbyte)(maxStack - client.Entity.Inventory[slot].Count);
-                        var newSlot = (ItemStack)client.Entity.Inventory[slot].Clone();
+                        heldItem.Count -= (sbyte)(maxStack - window[slot].Count);
+                        var newSlot = (ItemStack)window[slot].Clone();
                         newSlot.Count = maxStack;
-                        client.Entity.Inventory[slot] = newSlot;
+                        window[slot] = newSlot;
                     }
                 }
             }

@@ -117,7 +117,7 @@ namespace Craft.Net.Server.Handlers
 			}
 			bool use = true;
 			if (block != null)
-				use = client.World.RightClickBlock (position, packet.Face, cursorPosition, slot.AsItem());
+				use = client.World.RightClickBlock (client.Entity,position, packet.Face, cursorPosition, slot.AsItem());
 			if (!slot.Empty) {
 				var item = slot.AsItem();
 				if (use) {

@@ -10,6 +10,7 @@ namespace Craft.Net.Logic.Windows
     {
         public InventoryWindow()
         {
+            Id = 0;
             WindowAreas = new[]
                 {
                     new CraftingWindowArea(CraftingOutputIndex),
@@ -31,6 +32,8 @@ namespace Craft.Net.Logic.Windows
         public const int MainIndex = 9;
 
         public override WindowArea[] WindowAreas { get; protected set; }
+
+        public override byte Id { get; protected set; }
 
         #region Properties
 

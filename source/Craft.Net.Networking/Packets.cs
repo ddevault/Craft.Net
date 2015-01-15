@@ -2185,13 +2185,12 @@ namespace Craft.Net.Networking
     public struct OpenWindowPacket : IPacket
     {
         public OpenWindowPacket(byte windowId, string inventoryType, string windowTitle,
-                           byte slotCount, bool useProvidedTitle, int? entityId)
+                           byte slotCount, int? entityId)
         {
             WindowId = windowId;
             InventoryType = inventoryType;
             WindowTitle = windowTitle;
             SlotCount = slotCount;
-            UseProvidedTitle = useProvidedTitle;
             EntityId = entityId;
         }
 
@@ -2199,7 +2198,6 @@ namespace Craft.Net.Networking
         public string InventoryType;
         public string WindowTitle;
         public byte SlotCount;
-        public bool UseProvidedTitle;
         public int? EntityId;
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
@@ -2208,7 +2206,6 @@ namespace Craft.Net.Networking
             InventoryType = stream.ReadUInt8().ToString();
             WindowTitle = stream.ReadString();
             SlotCount = stream.ReadUInt8();
-            UseProvidedTitle = stream.ReadBoolean();
             if (InventoryType == "11")
                 EntityId = stream.ReadInt32();
             return mode;
@@ -2220,7 +2217,6 @@ namespace Craft.Net.Networking
             stream.WriteString(InventoryType);
             stream.WriteString(WindowTitle);
             stream.WriteUInt8(SlotCount);
-            stream.WriteBoolean(UseProvidedTitle);
             if (InventoryType == "11")
                 stream.WriteInt32(EntityId.GetValueOrDefault());
             return mode;

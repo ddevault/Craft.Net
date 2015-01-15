@@ -25,9 +25,9 @@ namespace Craft.Net.Logic
             Block.OnBlockMined(world, coordinates);
         }
         
-        public static bool RightClickBlock(this World world, Coordinates3D coordinates, BlockFace face, Coordinates3D cursor, ItemInfo? item)
+        public static bool RightClickBlock(this World world,PlayerEntity player, Coordinates3D coordinates, BlockFace face, Coordinates3D cursor, ItemInfo? item)
         {
-            return Block.OnBlockRightClicked(world, coordinates, face, cursor, item);
+            return Block.OnBlockRightClicked(world, player, coordinates, face, cursor, item);
         }
         
         public static void UseItemOnBlock(this World world, Coordinates3D coordinates, BlockFace face, Coordinates3D cursor, ItemInfo item)

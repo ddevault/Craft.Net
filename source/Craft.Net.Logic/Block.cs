@@ -14,7 +14,7 @@ namespace Craft.Net.Logic
         public delegate BoundingBox? BoundingBoxHandler(BlockInfo info);
         public delegate bool IsSolidOnFaceHandler(BlockInfo info, BlockFace face);
         public delegate void BlockMinedHandler(World world, Coordinates3D coordinates, BlockInfo info);
-        public delegate bool BlockRightClickedHandler(World world, Coordinates3D coordinates, BlockInfo info, BlockFace face, Coordinates3D cursor, ItemInfo? item);
+        public delegate bool BlockRightClickedHandler(World world,PlayerEntity player, Coordinates3D coordinates, BlockInfo info, BlockFace face, Coordinates3D cursor, ItemInfo? item);
         
         private static Dictionary<short, string> BlockNames { get; set; }
         private static Dictionary<short, double> BlockHardness { get; set; }
@@ -140,11 +140,11 @@ namespace Craft.Net.Logic
                 DefaultBlockMinedHandler(world, coordinates, info);
         }
         
-        internal static bool OnBlockRightClicked(World world, Coordinates3D coordinates, BlockFace face, Coordinates3D cursor, ItemInfo? item)
+        internal static bool OnBlockRightClicked(World world,PlayerEntity player, Coordinates3D coordinates, BlockFace face, Coordinates3D cursor, ItemInfo? item)
         {
             var info = world.GetBlockInfo(coordinates);
             if (BlockRightClickedHandlers.ContainsKey(info.BlockId))
-                return BlockRightClickedHandlers[info.BlockId](world, coordinates, info, face, cursor, item);
+                return BlockRightClickedHandlers[info.BlockId](world, player, coordinates, info, face, cursor, item);
             else
                 return DefaultBlockRightClickedHandler(world, coordinates, info, face, item);
         }
