@@ -105,7 +105,6 @@ namespace Craft.Net.Server
                     var player = entity as PlayerEntity;
                     var selectedItem = player.SelectedItem.Id;
                     if (selectedItem == -1) selectedItem = 0;
-                    Console.WriteLine("Test");
                     SendPacket(new SpawnPlayerPacket(player.EntityId, UUID, MathHelper.CreateAbsoluteInt(player.Position.X),
                        MathHelper.CreateAbsoluteInt(player.Position.Y), MathHelper.CreateAbsoluteInt(player.Position.Z),
                         MathHelper.CreateRotationByte(player.Yaw), MathHelper.CreateRotationByte(player.Pitch), selectedItem, player.Metadata));

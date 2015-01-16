@@ -309,15 +309,16 @@ namespace Craft.Net.Server
             client.UpdateChunks(true);
             client.SendPacket(new SpawnPlayerPacket(client.Entity.EntityId, client.UUID, (int)client.Entity.Position.X, (int)client.Entity.Position.Y, (int)client.Entity.Position.Z, (byte)client.Entity.Yaw, (byte)client.Entity.Pitch, client.Entity.SelectedItem.Id, client.Entity.Metadata));
             client.SendPacket(new UpdateHealthPacket(client.Entity.Health, client.Entity.Food, client.Entity.FoodSaturation));
-            // Send entities
-            EntityManager.SendClientEntities(client);
             
             foreach (RemoteClient clients in Clients)
             {
                 client.SendPacket(new PlayerListItemPacket(0, 1, clients.UUID, clients.Username, true, (long)clients.Ping, 1, (long)clients.GameMode, clients.Properties, false, ""));
                 clients.SendPacket(new PlayerListItemPacket(0, 1, client.UUID, client.Username, true, (long)client.Ping, 1, (long)client.GameMode, client.Properties, false, ""));
             }
-            
+
+            // Send entities
+            EntityManager.SendClientEntities(client);
+
             client.LastKeepAliveSent = DateTime.Now;
             client.IsLoggedIn = true;
 
