@@ -50,9 +50,12 @@ namespace Craft.Net.Server.Handlers
                     client.UUID = Guid.NewGuid().ToString();
                 }
                 if (server.Settings.EnableEncryption)
-                   client.SendPacket(CreateEncryptionRequest(client, server));
+                    client.SendPacket(CreateEncryptionRequest(client, server));
                 else
+                {
+                    client.Properties = new PlayerListProperties(client.Username, "", false, "");
                     server.LogInPlayer(client);
+                }
             }
         }
 
