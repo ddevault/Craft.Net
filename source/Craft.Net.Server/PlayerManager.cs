@@ -18,6 +18,7 @@ namespace Craft.Net.Server
             Server = server;
             SendInventoryUpdates = true;
             client.Entity.PickUpItem += Entity_PickUpItem;
+            client.Entity.InteractBlock += Interact_Block;
             client.Entity.Inventory.WindowChange += Inventory_WindowChange;
             client.PropertyChanged += client_PropertyChanged;
         }
