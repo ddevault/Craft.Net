@@ -62,6 +62,7 @@ namespace Craft.Net.Server.Handlers
         public static void Animation(RemoteClient client, MinecraftServer server, IPacket _packet)
         {
             var packet = (AnimationPacket)_packet;
+            packet.EntityId = client.Entity.EntityId;
             var clients = server.EntityManager.GetKnownClients(client.Entity);
             foreach (var _client in clients)
                 _client.SendPacket(packet);

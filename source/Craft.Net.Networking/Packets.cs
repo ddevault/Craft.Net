@@ -780,8 +780,8 @@ namespace Craft.Net.Networking
 
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
-            // stream.WriteVarInt(EntityId);
-            //stream.WriteUInt8((byte)Animation);
+            stream.WriteVarInt(EntityId);
+            stream.WriteUInt8((byte)Animation);
             return mode;
         }
     }
