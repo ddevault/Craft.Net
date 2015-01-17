@@ -183,8 +183,8 @@ namespace Craft.Net.Server
             {
                 var newChunks = new List<Coordinates2D>();
                 // TODO: find where view distance incrase in solo...
-                for (int x = -3; x < 3; x++)
-                    for (int z = -3; z < 3; z++)
+                for (int x = -Settings.ViewDistance; x < Settings.ViewDistance; x++)
+                    for (int z = -Settings.ViewDistance; z < Settings.ViewDistance; z++)
                     {
                         newChunks.Add(new Coordinates2D(
                             ((int)Entity.Position.X >> 4) + x,
