@@ -13,12 +13,12 @@ namespace Craft.Net.Server.Handlers
 	{
 		public static void PlayerDigging (RemoteClient client, MinecraftServer server, IPacket _packet)
 		{
-			var packet_ = (PlayerBlockActionPacket)_packet;
-            var position = new Coordinates3D(packet_.Pos.getX(), packet_.Pos.getY(), packet_.Pos.getZ());
+			var packet = (PlayerBlockActionPacket)_packet;
+            var position = new Coordinates3D((int)packet.Pos.getX(), (int)packet.Pos.getY(), (int)packet.Pos.getZ());
 			// TODO: Enforce line-of-sight
 			var block = client.World.GetBlockInfo (position);
 			short damage;
-			switch (packet_.Action) {
+			switch (packet.Action) {
 			case PlayerBlockActionPacket.BlockAction.StartDigging:
 				if (client.Entity.Position.DistanceTo (position) <= client.MaxDigDistance) {
 					// TODO: Block stuff
@@ -84,7 +84,7 @@ namespace Craft.Net.Server.Handlers
 				var SlotItem = client.Entity.Inventory [client.Entity.SelectedSlot];
 				if (!SlotItem.Empty) {
 					var ItemCopy = (ItemStack)SlotItem.Clone();
-					if (packet_.Action == PlayerBlockActionPacket.BlockAction.DropItemStack)
+					if (packet.Action == PlayerBlockActionPacket.BlockAction.DropItemStack)
 						client.Entity.Inventory [client.Entity.SelectedSlot] = ItemStack.EmptyStack;
 					else {
 						ItemCopy.Count = 1;
@@ -107,7 +107,7 @@ namespace Craft.Net.Server.Handlers
 		{
 			var packet = (RightClickPacket)_packet;
 			var slot = client.Entity.Inventory [client.Entity.SelectedSlot];
-			var position = new Coordinates3D (packet.Pos.getX(), packet.Pos.getY(), packet.Pos.getZ());
+            var position = new Coordinates3D((int)packet.Pos.getX(), (int)packet.Pos.getY(), (int)packet.Pos.getZ());
 			var cursorPosition = new Coordinates3D (packet.CursorX, packet.CursorY, packet.CursorZ);
 			BlockInfo? block = null;
 			if (position != -Coordinates3D.One) {
