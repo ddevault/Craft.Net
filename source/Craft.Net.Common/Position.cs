@@ -4,9 +4,9 @@ namespace Craft.Net.Common
 {
 	public class Position {
 
-		private int x;
-		private int y;
-		private int z;
+		private long x;
+		private long y;
+		private long z;
 
 		public Position(int x, int y, int z) {
 			this.x = x;
@@ -14,22 +14,18 @@ namespace Craft.Net.Common
 			this.z = z;
 		}
 
-		public int getX() {
+		public long getX() {
 			return this.x;
 		}
 
-		public int getY() {
+		public long getY() {
 			return this.y;
 		}
 
-		public int getZ() {
+		public long getZ() {
 			return this.z;
 		}
-		private static int POSITION_X_SIZE = 26;
-		private static int POSITION_Z_SIZE = POSITION_X_SIZE;
-		private static int POSITION_Y_SIZE = 64 - POSITION_X_SIZE - POSITION_Z_SIZE;
-		private static int POSITION_Y_SHIFT = POSITION_Z_SIZE;
-		private static int POSITION_X_SHIFT = POSITION_Y_SHIFT + POSITION_Y_SIZE;
+
 		public static Position readPosition(MinecraftStream stream) {
 			long value = stream.ReadInt64();
 			long tempx = (value >> 38);
@@ -40,8 +36,8 @@ namespace Craft.Net.Common
 
 		public static long writePosition (Position pos)
 		{
-			return ((pos.getX() & 0x3FFFFFF) << 38 | (pos.getY() & 0xFFF) << 26 | (pos.getZ() & 0x3FFFFFF));
-          //  return ((pos.getX() & POSITION_X_MASK) << POSITION_X_SHIFT | (pos.getY() & POSITION_Y_MASK) << POSITION_Y_SHIFT | (pos.getZ() & POSITION_Z_MASK));
+            Console.WriteLine(string.Format("X:{0} Y:{1} Z:{2}",pos.x,pos.y,pos.z));
+            return ((pos.x & 0x3FFFFFF) << 38) | ((pos.y & 0xFFF) << 26) | (pos.z & 0x3FFFFFF);
 		}
 
 	}
