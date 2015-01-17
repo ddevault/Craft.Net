@@ -3393,26 +3393,52 @@ namespace Craft.Net.Networking
 
     public struct UseEntityPacket : IPacket
     {
-        public UseEntityPacket(int target, bool leftClick)
+        public UseEntityPacket(int target, UseEntityType type,float targetX,float targetY,float targetZ)
         {
             Target = target;
-            RightClick = leftClick;
+            Type = type;
+            TargetX = targetX;
+            TargetY = targetY;
+            TargetZ = targetZ;
+        }
+
+        public enum UseEntityType
+        {
+            Interact,
+            Attack,
+            Interact_At
         }
 
         public int Target;
-        public bool RightClick;
+        public UseEntityType Type;
+        public float TargetX;
+        public float TargetY;
+        public float TargetZ;
+
 
         public NetworkMode ReadPacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
-            Target = stream.ReadInt32();
-            RightClick = stream.ReadBoolean();
+            Target = stream.ReadVarInt();
+            Type = (UseEntityType)stream.ReadVarInt();
+            if(Type == UseEntityType.Interact_At)
+            {
+                TargetX = stream.ReadSingle();
+                TargetY = stream.ReadSingle();
+                TargetZ = stream.ReadSingle();
+            }
             return mode;
         }
 
         public NetworkMode WritePacket(MinecraftStream stream, NetworkMode mode, PacketDirection direction)
         {
-            stream.WriteInt32(Target);
-            stream.WriteBoolean(RightClick);
+            stream.WriteVarInt(Target);
+            stream.WriteVarInt((int)Type);
+            if(Type == UseEntityType.Interact_At)
+            {
+                stream.WriteSingle(TargetX);
+                stream.WriteSingle(TargetY);
+                stream.WriteSingle(TargetZ);
+            }
             return mode;
         }
     }
