@@ -58,7 +58,8 @@ namespace Craft.Net
             public int MaxPlayers { get; set; }
             [JsonProperty("online")]
             public int OnlinePlayers { get; set; }
-            [JsonProperty("sample")]
+            // TODO : Find why this make freeze the server when player are online old code -> [JsonProperty("sample")]
+            [JsonIgnore]
             public Player[] Players { get; set; }
         }
 
