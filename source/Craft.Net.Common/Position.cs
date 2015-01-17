@@ -36,7 +36,6 @@ namespace Craft.Net.Common
 
 		public static long writePosition (Position pos)
 		{
-            Console.WriteLine(string.Format("X:{0} Y:{1} Z:{2}",pos.x,pos.y,pos.z));
             return ((pos.x & 0x3FFFFFF) << 38) | ((pos.y & 0xFFF) << 26) | (pos.z & 0x3FFFFFF);
 		}
 
