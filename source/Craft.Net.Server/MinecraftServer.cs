@@ -473,7 +473,8 @@ namespace Craft.Net.Server
             if (NextChunkUpdate < DateTime.Now) // Once per second
             {
                 // Update chunks
-                if (client.Settings.ViewDistance < client.Settings.MaxViewDistance)
+                //Corect the way we retrive client setting this make an enormus loop  old value -> client.Settings.MaxViewDistance
+                if (client.Settings.ViewDistance < 10)
                 {
                     client.Settings.ViewDistance++;
                     client.ForceUpdateChunksAsync();
