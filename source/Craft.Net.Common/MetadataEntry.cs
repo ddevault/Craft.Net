@@ -18,6 +18,11 @@ namespace Craft.Net.Common
             return new MetadataByte(value);
         }
 
+        public static implicit operator MetadataEntry(sbyte value)
+        {
+            return new MetadataSByte(value);
+        }
+
         public static implicit operator MetadataEntry(short value)
         {
             return new MetadataShort(value);

@@ -53,6 +53,7 @@
     <Compile Include="GameRules.cs" />
     <Compile Include="ItemStack.cs" />
     <Compile Include="MathHelper.cs" />
+    <Compile Include="MetadataSByte.cs" />
     <Compile Include="MetadataByte.cs" />
     <Compile Include="MetadataDictionary.cs" />
     <Compile Include="MetadataEntry.cs" />
