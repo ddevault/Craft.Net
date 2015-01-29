@@ -50,8 +50,8 @@ namespace Craft.Net.Anvil
 
         public Chunk GetChunk(Coordinates2D coordinates)
         {
-            int regionX = coordinates.X / Region.Width - ((coordinates.X < 0) ? 1 : 0);
-            int regionZ = coordinates.Z / Region.Depth - ((coordinates.Z < 0) ? 1 : 0);
+			int regionX = (coordinates.X + ((coordinates.X < 0) ? 1 : 0)) / Region.Width - ((coordinates.X < 0) ? 1 : 0);
+            int regionZ = (coordinates.Z + ((coordinates.Z < 0) ? 1 : 0)) / Region.Depth - ((coordinates.Z < 0) ? 1 : 0);
 
             var region = LoadOrGenerateRegion(new Coordinates2D(regionX, regionZ));
             return region.GetChunk(new Coordinates2D(coordinates.X - regionX * 32, coordinates.Z - regionZ * 32));
