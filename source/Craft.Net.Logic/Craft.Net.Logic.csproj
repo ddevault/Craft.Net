@@ -40,6 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Blocks\BlockCobble.cs" />
+    <Compile Include="Blocks\BlockStone.cs" />
     <Compile Include="Blocks\GlassBlock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Windows\ArmorWindowArea.cs" />

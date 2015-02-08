@@ -10,6 +10,7 @@ namespace Craft.Net.Logic.Blocks
 
         public WheatBlock() : base("minecraft:seeds")
         {
+            base.SetToolQuality(0);
             base.SetBoundingBoxHandler(BoundingBox);
         }
         

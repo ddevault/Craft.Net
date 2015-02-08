@@ -11,6 +11,7 @@ namespace Craft.Net.Logic.Blocks
 
         public GlassBlock() : base("minecraft:glass", hardness: 0.3)
         {
+            base.SetToolQuality(0);
             base.SetPlacementSoundEffect(SoundEffect.RandomGlass);            
             base.SetDropHandler((world, coordinates, info) => new ItemStack[] { });
         }
