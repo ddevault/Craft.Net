@@ -204,5 +204,30 @@ namespace Craft.Net.Client
         [JsonProperty("user")]
         public MojangUser User { get; set; }
 
+        public static IList<ServiceStatus> ServiceStatuses()
+        {
+            using (WebClient wc = new WebClient())
+            {
+                string status = wc.DownloadString("http://status.mojang.com/check");
+                JArray ja = JArray.Parse(status);
+                IList<ServiceStatus> list = new List<ServiceStatus>();
+                foreach (JObject item in ja)
+                {
+                    ServiceStatus statusItem = new ServiceStatus();
+                    statusItem.Name = item.Properties().Select(p => p.Name).First();
+                    statusItem.Status = item.Value<string>(statusItem.Name);
+                    list.Add(statusItem);
+                }
+                return list;
+            }
+        }
+        public class ServiceStatus
+        {
+            public ServiceStatus()
+            {
+            }
+            public string Name { get; set; }
+            public string Status { get; set; }
+        }
     }
 }
