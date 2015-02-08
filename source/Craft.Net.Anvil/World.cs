@@ -29,6 +29,13 @@ namespace Craft.Net.Anvil
             WorldGenerator = worldGenerator;
         }
 
+        private Coordinates2D ChunkCoordinatesToRegion(Coordinates2D coordinates)
+        {
+            return new Coordinates2D(
+                (coordinates.X + ((coordinates.X < 0) ? 1 : 0)) / Region.Width - ((coordinates.X < 0) ? 1 : 0),
+                (coordinates.Z + ((coordinates.Z < 0) ? 1 : 0)) / Region.Depth - ((coordinates.Z < 0) ? 1 : 0));
+        }
+
         public static World LoadWorld(string baseDirectory)
         {
             if (!Directory.Exists(baseDirectory))
@@ -50,43 +57,38 @@ namespace Craft.Net.Anvil
 
         public Chunk GetChunk(Coordinates2D coordinates)
         {
-            int regionX = coordinates.X / Region.Width - ((coordinates.X < 0) ? 1 : 0);
-            int regionZ = coordinates.Z / Region.Depth - ((coordinates.Z < 0) ? 1 : 0);
+            var regionPosition = ChunkCoordinatesToRegion(coordinates);
 
-            var region = LoadOrGenerateRegion(new Coordinates2D(regionX, regionZ));
-            return region.GetChunk(new Coordinates2D(coordinates.X - regionX * 32, coordinates.Z - regionZ * 32));
+            var region = LoadOrGenerateRegion(regionPosition);
+            return region.GetChunk(new Coordinates2D(coordinates.X - regionPosition.X * 32, coordinates.Z - regionPosition.Z * 32));
         }
 
         public void GenerateChunk(Coordinates2D coordinates)
         {
-            int regionX = coordinates.X / Region.Width - ((coordinates.X < 0) ? 1 : 0);
-            int regionZ = coordinates.Z / Region.Depth - ((coordinates.Z < 0) ? 1 : 0);
+            var regionPosition = ChunkCoordinatesToRegion(coordinates);
 
-            var region = LoadOrGenerateRegion(new Coordinates2D(regionX, regionZ));
-            region.GenerateChunk(new Coordinates2D(coordinates.X - regionX * 32, coordinates.Z - regionZ * 32));
+            var region = LoadOrGenerateRegion(regionPosition);
+            region.GenerateChunk(new Coordinates2D(coordinates.X - regionPosition.X * 32, coordinates.Z - regionPosition.Z * 32));
         }
 
         public Chunk GetChunkWithoutGeneration(Coordinates2D coordinates)
         {
-            int regionX = coordinates.X / Region.Width - ((coordinates.X < 0) ? 1 : 0);
-            int regionZ = coordinates.Z / Region.Depth - ((coordinates.Z < 0) ? 1 : 0);
+            var regionPosition = ChunkCoordinatesToRegion(coordinates);
 
-            var regionPosition = new Coordinates2D(regionX, regionZ);
             if (!Regions.ContainsKey(regionPosition)) return null;
             return Regions[regionPosition].GetChunkWithoutGeneration(
-                new Coordinates2D(coordinates.X - regionX * 32, coordinates.Z - regionZ * 32));
+                new Coordinates2D(coordinates.X - regionPosition.X * 32, coordinates.Z - regionPosition.Z * 32));
         }
 
         public void SetChunk(Coordinates2D coordinates, Chunk chunk)
         {
-            int regionX = coordinates.X / Region.Width - ((coordinates.X < 0) ? 1 : 0);
-            int regionZ = coordinates.Z / Region.Depth - ((coordinates.Z < 0) ? 1 : 0);
+            var regionPosition = ChunkCoordinatesToRegion(coordinates);
 
-            var region = LoadOrGenerateRegion(new Coordinates2D(regionX, regionZ));
+            var region = LoadOrGenerateRegion(regionPosition);
             lock (region)
             {
                 chunk.IsModified = true;
-                region.SetChunk(new Coordinates2D(coordinates.X - regionX * 32, coordinates.Z - regionZ * 32), chunk);
+                region.SetChunk(new Coordinates2D(coordinates.X - regionPosition.X * 32, coordinates.Z - regionPosition.Z * 32), chunk);
             }
         }
 
@@ -101,13 +103,11 @@ namespace Craft.Net.Anvil
 
         public void UnloadChunk(Coordinates2D coordinates)
         {
-            int regionX = coordinates.X / Region.Width - ((coordinates.X < 0) ? 1 : 0);
-            int regionZ = coordinates.Z / Region.Depth - ((coordinates.Z < 0) ? 1 : 0);
+            var regionPosition = ChunkCoordinatesToRegion(coordinates);
 
-            var regionPosition = new Coordinates2D(regionX, regionZ);
             if (!Regions.ContainsKey(regionPosition))
                 throw new ArgumentOutOfRangeException("coordinates");
-            Regions[regionPosition].UnloadChunk(new Coordinates2D(coordinates.X - regionX * 32, coordinates.Z - regionZ * 32));
+            Regions[regionPosition].UnloadChunk(new Coordinates2D(coordinates.X - regionPosition.X * 32, coordinates.Z - regionPosition.Z * 32));
         }
 
         public short GetBlockId(Coordinates3D coordinates)
