@@ -38,6 +38,7 @@ namespace Craft.Net.Logic
         public double PositiveDeltaY { get; set; }
         public PlayerAbilities Abilities { get; set; }
         public InventoryWindow Inventory { get; set; }
+        public WorkBenchWindow WorkBench { get; set; }
 
         protected short _SelectedSlot;
         public short SelectedSlot
@@ -105,6 +106,12 @@ namespace Craft.Net.Logic
         public void OnPickUpItem(ItemEntity item)
         {
             if (PickUpItem != null) PickUpItem(this, new EntityEventArgs(item));
+        }
+
+        public event EventHandler<InteractionEventArgs> InteractBlock;
+        public void OnInteractBlock()
+        {
+            if (InteractBlock != null) InteractBlock(this, new InteractionEventArgs());
         }
     }
 }

@@ -18,6 +18,7 @@ namespace Craft.Net.Server
             Server = server;
             SendInventoryUpdates = true;
             client.Entity.PickUpItem += Entity_PickUpItem;
+            client.Entity.InteractBlock += Interact_Block;
             client.Entity.Inventory.WindowChange += Inventory_WindowChange;
             client.PropertyChanged += client_PropertyChanged;
         }
@@ -25,6 +26,37 @@ namespace Craft.Net.Server
         public MinecraftServer Server { get; set; }
         public RemoteClient Client { get; set; }
         internal bool SendInventoryUpdates { get; set; }
+
+        private void Interact_Block(object sender, InteractionEventArgs e)
+        {
+            //TODO : Find a way to do multiple intration block here EAT Craft Boat..
+            //For now its hard implement a load from save here load item for save in the workbech if item in it...
+            ItemStack[] items = new ItemStack[]
+            {
+                ItemStack.EmptyStack,//output
+                ItemStack.EmptyStack,ItemStack.EmptyStack,ItemStack.EmptyStack,
+                ItemStack.EmptyStack,ItemStack.EmptyStack,ItemStack.EmptyStack,
+                ItemStack.EmptyStack,ItemStack.EmptyStack,ItemStack.EmptyStack
+            };
+            
+            WorkBenchWindow window = new WorkBenchWindow();
+            window.LoadWorkBenchItem(items);
+            //load the windows item from the player inventory
+            window.WindowAreas[1].Items = Client.Entity.Inventory.MainInventory.Items;
+            window.WindowAreas[2].Items = Client.Entity.Inventory.Hotbar.Items;
+            Client.Entity.WorkBench = window;
+            Client.Entity.WorkBench.WindowChange += WorkBench_WindowChange;
+
+            Client.SendPacket(new OpenWindowPacket(window.Id, "minecraft:crafting_table", "Crafting", 0, null));
+            Client.SendPacket(new SetWindowItemsPacket(window.Id, items));
+        }
+
+        private void WorkBench_WindowChange(object sender, WindowChangeEventArgs e)
+        {
+            if (SendInventoryUpdates)
+                Client.SendPacket(new SetSlotPacket(120, (short)e.SlotIndex, e.Value));
+            //Implement a way to work whit crafting recipe
+        }
 
         private void Entity_PickUpItem(object sender, EntityEventArgs e)
         {

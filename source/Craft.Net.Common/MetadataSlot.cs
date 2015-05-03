@@ -46,7 +46,7 @@ namespace Craft.Net.Common
                     stream.WriteUInt8Array(data);
                 }
                 else
-                    stream.WriteInt16(-1);
+                    stream.WriteInt8(0);
             }
         }
     }

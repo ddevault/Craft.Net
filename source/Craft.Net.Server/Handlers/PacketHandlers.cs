@@ -62,7 +62,7 @@ namespace Craft.Net.Server.Handlers
                 //if (team != null)
                 //    chat = string.Format("<{0}{1}{2}> {3}", team.PlayerPrefix, client.Username, team.PlayerSuffix, packet.Message);
                 //else
-                    chat = new ChatMessage(string.Format("<{0}> {1}", client.Username, packet.Message));
+                    chat = new ChatMessage(string.Format("<{0}> {1}", client.Username, packet.Message),ChatColor.WHITE);
                 server.SendChat(chat);
             }
         }

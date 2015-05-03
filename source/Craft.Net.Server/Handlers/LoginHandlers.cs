@@ -47,12 +47,15 @@ namespace Craft.Net.Server.Handlers
                 else
                 {
                     client.ServerId = CreateId();
-                    client.UUID = Guid.NewGuid().ToJavaUUID();
+                    client.UUID = Guid.NewGuid().ToString();
                 }
                 if (server.Settings.EnableEncryption)
-                   client.SendPacket(CreateEncryptionRequest(client, server));
+                    client.SendPacket(CreateEncryptionRequest(client, server));
                 else
+                {
+                    client.Properties = new PlayerListProperties(client.Username, "", false, "");
                     server.LogInPlayer(client);
+                }
             }
         }
 
@@ -95,6 +98,10 @@ namespace Craft.Net.Server.Handlers
                 string value = json["properties"][0]["value"].Value<string>();
                 client.Properties = new PlayerListProperties(name, value, false, "");
                 client.UUID = uuid;
+            }
+            else
+            {
+                client.Properties = new PlayerListProperties(client.Username, "", false, "");
             }
             client.NetworkStream = new AesStream(client.NetworkClient.GetStream(), client.SharedKey);
             client.NetworkManager.BaseStream = client.NetworkStream;

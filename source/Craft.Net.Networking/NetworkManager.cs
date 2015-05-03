@@ -161,10 +161,20 @@ namespace Craft.Net.Networking
             clientbound.Add(typeof(TabCompletePacket));
             clientbound.Add(typeof(ScoreboardObjectivePacket));
             clientbound.Add(typeof(UpdateScorePacket));
-            clientbound.Add(typeof(CombatEventPacket));
+            clientbound.Add(typeof(DisplayScoreboardPacket));
             clientbound.Add(typeof(SetTeamsPacket));
             clientbound.Add(typeof(PluginMessagePacket));
             clientbound.Add(typeof(DisconnectPacket));
+            clientbound.Add(typeof(ServerDifficulty));
+            clientbound.Add(typeof(CombatEventPacket));
+            clientbound.Add(typeof(CameraPacket));
+            // Todo:
+            //WorldBorder
+            //Title
+            //SetCompresion
+            //Player List Header/Footer
+            //Resource Pack Send
+            //Update Entity NBT
             PlayPackets = Populate(serverbound, clientbound);
 
             NetworkModes = new Type[][][]

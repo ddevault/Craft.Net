@@ -13,12 +13,12 @@ namespace Craft.Net.Server.Handlers
 	{
 		public static void PlayerDigging (RemoteClient client, MinecraftServer server, IPacket _packet)
 		{
-			var packet_ = (PlayerBlockActionPacket)_packet;
-			var position = new Coordinates3D ((int)packet_.Pos.getX(), (int)packet_.Pos.getY(), (int)packet_.Pos.getZ());
+			var packet = (PlayerBlockActionPacket)_packet;
+            var position = new Coordinates3D((int)packet.Pos.getX(), (int)packet.Pos.getY(), (int)packet.Pos.getZ());
 			// TODO: Enforce line-of-sight
 			var block = client.World.GetBlockInfo (position);
 			short damage;
-			switch (packet_.Action) {
+			switch (packet.Action) {
 			case PlayerBlockActionPacket.BlockAction.StartDigging:
 				if (client.Entity.Position.DistanceTo (position) <= client.MaxDigDistance) {
 					// TODO: Block stuff
@@ -54,22 +54,27 @@ namespace Craft.Net.Server.Handlers
 					if (client.ExpectedMiningEnd > DateTime.Now || client.ExpectedBlockToMine != position)
 						return;
 					Block.GetHarvestTime (block.BlockId, client.Entity.SelectedItem.Id, client.World, client.Entity, out damage);
-					if (damage != 0) {
-						var slot = client.Entity.Inventory [client.Entity.SelectedSlot];
-						if (!slot.Empty) {
-							if (slot.AsItem() != null) {
-								var item = slot.AsItem().Value;
-								if (Item.GetToolType (item.ItemId) != null) {
-									bool destroyed = Item.Damage (ref item, damage);
-									slot.Metadata = item.Metadata;
-									if (destroyed)
-										client.Entity.Inventory [client.Entity.SelectedSlot] = ItemStack.EmptyStack;
-									else
-										client.Entity.Inventory [client.Entity.SelectedSlot] = slot;
-								}
-							}
-						}
-					}
+                    if (damage != 0)
+                    {
+                        var slot = client.Entity.Inventory[client.Entity.SelectedSlot];
+                        if (!slot.Empty)
+                        {
+                            if (slot.AsItem() != null)
+                            {
+                                var item = slot.AsItem().Value;
+                                if (Item.GetToolType(item.ItemId) != null)
+                                {
+                                    bool destroyed = Item.Damage(ref item, damage);
+                                    slot.Metadata = item.Metadata;
+                                    if (destroyed)
+                                        client.Entity.Inventory[client.Entity.SelectedSlot] = ItemStack.EmptyStack;
+                                    else
+                                        client.Entity.Inventory[client.Entity.SelectedSlot] = slot;
+                                }
+                            }
+                        }
+                    }
+
 					client.World.MineBlock (position);
 					client.Entity.FoodExhaustion += 0.025f;
 				}
@@ -79,7 +84,7 @@ namespace Craft.Net.Server.Handlers
 				var SlotItem = client.Entity.Inventory [client.Entity.SelectedSlot];
 				if (!SlotItem.Empty) {
 					var ItemCopy = (ItemStack)SlotItem.Clone();
-					if (packet_.Action == PlayerBlockActionPacket.BlockAction.DropItemStack)
+					if (packet.Action == PlayerBlockActionPacket.BlockAction.DropItemStack)
 						client.Entity.Inventory [client.Entity.SelectedSlot] = ItemStack.EmptyStack;
 					else {
 						ItemCopy.Count = 1;
@@ -102,7 +107,7 @@ namespace Craft.Net.Server.Handlers
 		{
 			var packet = (RightClickPacket)_packet;
 			var slot = client.Entity.Inventory [client.Entity.SelectedSlot];
-			var position = new Coordinates3D (packet.Pos.getX(), packet.Pos.getY(), packet.Pos.getZ());
+            var position = new Coordinates3D((int)packet.Pos.getX(), (int)packet.Pos.getY(), (int)packet.Pos.getZ());
 			var cursorPosition = new Coordinates3D (packet.CursorX, packet.CursorY, packet.CursorZ);
 			BlockInfo? block = null;
 			if (position != -Coordinates3D.One) {
@@ -112,7 +117,7 @@ namespace Craft.Net.Server.Handlers
 			}
 			bool use = true;
 			if (block != null)
-				use = client.World.RightClickBlock (position, packet.Face, cursorPosition, slot.AsItem());
+				use = client.World.RightClickBlock (client.Entity,position, packet.Face, cursorPosition, slot.AsItem());
 			if (!slot.Empty) {
 				var item = slot.AsItem();
 				if (use) {
