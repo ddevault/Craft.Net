@@ -102,7 +102,7 @@ namespace Craft.Net.Client
 
         public void SendChat(string message)
         {
-            SendPacket(new ChatMessagePacket(message));
+            SendPacket(new ChatMessagePacket(new ChatMessage(message)));
         }
 
         private DateTime nextPhysicsUpdate = DateTime.MinValue;

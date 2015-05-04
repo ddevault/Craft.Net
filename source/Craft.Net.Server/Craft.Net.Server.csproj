@@ -14,9 +14,9 @@
     <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
+    <DebugSymbols>True</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>False</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -24,7 +24,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>True</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -68,22 +68,31 @@
     <Compile Include="Channels\TexturePackChannel.cs" />
     <Compile Include="ExtensionMethods.cs" />
   </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\Craft.Net.Anvil\Craft.Net.Anvil.csproj">
-      <Project>{02031C5C-5007-48D5-A253-F7C8BDF0C0B2}</Project>
-      <Name>Craft.Net.Anvil</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Craft.Net.Common\Craft.Net.Common.csproj">
-      <Project>{50462849-2223-4E39-B5D9-A928A9A58A33}</Project>
-      <Name>Craft.Net.Common</Name>
+    <ProjectReference Include="..\Craft.Net.Networking\Craft.Net.Networking.csproj">
+      <Project>{C3BBAB7E-606F-420E-9461-C8CFAEC2476B}</Project>
+      <Name>Craft.Net.Networking</Name>
     </ProjectReference>
     <ProjectReference Include="..\Craft.Net.Logic\Craft.Net.Logic.csproj">
       <Project>{E001ADA1-6BCB-420E-B187-07FF361D60B8}</Project>
       <Name>Craft.Net.Logic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Craft.Net.Networking\Craft.Net.Networking.csproj">
-      <Project>{C3BBAB7E-606F-420E-9461-C8CFAEC2476B}</Project>
-      <Name>Craft.Net.Networking</Name>
+    <ProjectReference Include="..\Craft.Net.Common\Craft.Net.Common.csproj">
+      <Project>{50462849-2223-4E39-B5D9-A928A9A58A33}</Project>
+      <Name>Craft.Net.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Craft.Net.Anvil\Craft.Net.Anvil.csproj">
+      <Project>{02031C5C-5007-48D5-A253-F7C8BDF0C0B2}</Project>
+      <Name>Craft.Net.Anvil</Name>
     </ProjectReference>
     <ProjectReference Include="..\Craft.Net.Physics\Craft.Net.Physics.csproj">
       <Project>{C04C72EF-5FD5-42DA-B1DC-F232D3E86636}</Project>
@@ -94,13 +103,4 @@
       <Name>fNbt</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
-  <ItemGroup />
 </Project>

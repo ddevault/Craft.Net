@@ -40,9 +40,6 @@ namespace Craft.Net.Client.Handlers
                 {
                     // Blocks
                     Array.Copy(data, y * BlockDataLength, chunk.Sections[y].Blocks, 0, BlockDataLength);
-                    // Metadata
-                    Array.Copy(data, (BlockDataLength * sectionCount) + (y * NibbleDataLength),
-                        chunk.Sections[y].Metadata.Data, 0, NibbleDataLength);
                     // Light
                     Array.Copy(data, ((BlockDataLength + NibbleDataLength) * sectionCount) + (y * NibbleDataLength),
                         chunk.Sections[y].BlockLight.Data, 0, NibbleDataLength);
@@ -84,7 +81,7 @@ namespace Craft.Net.Client.Handlers
         {
           var packet = (Position)_packet;
 		  var packet_ = (BlockChangePacket)_packet;
-          var position = new Coordinates3D(packet.getX(), packet.getY(), packet.getZ());
+          var position = new Coordinates3D((int)packet.getX(), (int)packet.getY(), (int)packet.getZ());
           client.World.SetBlockId(position, (short)packet_.BlockType);
           client.World.SetMetadata(position, packet_.BlockData);
         }
