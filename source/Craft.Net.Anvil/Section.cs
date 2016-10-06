@@ -44,7 +44,7 @@ namespace Craft.Net.Anvil
 
         public short GetBlockId(Coordinates3D coordinates)
         {
-            int index = coordinates.X + (coordinates.Z * Width) + (coordinates.Y * Height * Width);
+            int index = coordinates.X + (coordinates.Z * Width) + (coordinates.Y * Depth * Width);
             short value = Blocks[index];
             if (Add != null)
                 value |= (short)(Add[index] << 8);
@@ -53,25 +53,25 @@ namespace Craft.Net.Anvil
 
         public byte GetMetadata(Coordinates3D coordinates)
         {
-            int index = coordinates.X + (coordinates.Z * Width) + (coordinates.Y * Height * Width);
+            int index = coordinates.X + (coordinates.Z * Width) + (coordinates.Y * Depth * Width);
             return Metadata[index];
         }
 
         public byte GetSkyLight(Coordinates3D coordinates)
         {
-            int index = coordinates.X + (coordinates.Z * Width) + (coordinates.Y * Height * Width);
+            int index = coordinates.X + (coordinates.Z * Width) + (coordinates.Y * Depth * Width);
             return SkyLight[index];
         }
 
         public byte GetBlockLight(Coordinates3D coordinates)
         {
-            int index = coordinates.X + (coordinates.Z * Width) + (coordinates.Y * Height * Width);
+            int index = coordinates.X + (coordinates.Z * Width) + (coordinates.Y * Depth * Width);
             return BlockLight[index];
         }
 
         public void SetBlockId(Coordinates3D coordinates, short value)
         {
-            int index = coordinates.X + (coordinates.Z * Width) + (coordinates.Y * Height * Width);
+            int index = coordinates.X + (coordinates.Z * Width) + (coordinates.Y * Depth * Width);
             if (value == 0)
             {
                 if (Blocks[index] != 0)
@@ -88,23 +88,27 @@ namespace Craft.Net.Anvil
                 if (Add == null) Add = new NibbleArray(Width * Height * Depth);
                 Add[index] = (byte)((ushort)value >> 8);
             }
+            else if (Add != null)
+            {
+                Add[index] = 0;
+            }
         }
 
         public void SetMetadata(Coordinates3D coordinates, byte value)
         {
-            int index = coordinates.X + (coordinates.Z * Width) + (coordinates.Y * Height * Width);
+            int index = coordinates.X + (coordinates.Z * Width) + (coordinates.Y * Depth * Width);
             Metadata[index] = value;
         }
 
         public void SetSkyLight(Coordinates3D coordinates, byte value)
         {
-            int index = coordinates.X + (coordinates.Z * Width) + (coordinates.Y * Height * Width);
+            int index = coordinates.X + (coordinates.Z * Width) + (coordinates.Y * Depth * Width);
             SkyLight[index] = value;
         }
 
         public void SetBlockLight(Coordinates3D coordinates, byte value)
         {
-            int index = coordinates.X + (coordinates.Z * Width) + (coordinates.Y * Height * Width);
+            int index = coordinates.X + (coordinates.Z * Width) + (coordinates.Y * Depth * Width);
             BlockLight[index] = value;
         }
 
